@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["chrome >= 50", "firefox >= 50", "ie >= 11", "iOS >= 9"],
+          "uglify": true
+        },
+        "useBuiltIns": true,
+        "modules": false
+      }
+    ],
+    "stage-2"
+  ]
+}
