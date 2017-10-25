@@ -117,11 +117,12 @@ export default {
         if (data.headers['set-cookie'] && data.headers['set-cookie'][0]) {
           this.cookie = data.headers['set-cookie'][0]
         }
-
-        console.log('login response', data.headers)
+        console.log('data: ', data.data)
         return data
       } catch (e) {
         this.errors.push(e)
+      } finally {
+        console.log('finally')
       }
     },
 

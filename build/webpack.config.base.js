@@ -1,20 +1,6 @@
-const path = require('path')
-
 module.exports = {
   module: {
     rules: [
-      {
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        include: [
-          path.join(__dirname, '..', 'src'),
-          path.join(__dirname, '..', 'test')
-        ],
-        options: {
-          formatter: require('eslint-friendly-formatter')
-        }
-      },
       {
         test: /\.js$/,
         loader: 'babel-loader',
@@ -37,5 +23,10 @@ module.exports = {
         }
       }
     ]
+  },
+  resolve: {
+    alias: {
+      vue: 'vue/dist/vue.js'
+    }
   }
 }
