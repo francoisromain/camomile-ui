@@ -11,13 +11,13 @@ export default {
       return rootState.camomile.api
         .login(options.user.name, options.user.password)
         .then(r => {
-          commit('userSet', options.user)
-          return dispatch('userAuthentication')
+          commit('set', options.user)
+          return dispatch('authentication')
         })
         .catch(e => {
           console.log(e)
           commit('error', e.message)
-          commit('userUnset')
+          commit('unset')
         })
     },
 
@@ -25,16 +25,16 @@ export default {
       return rootState.camomile.api
         .logout()
         .then(r => {
-          commit('userUnset')
+          commit('unset')
         })
         .catch(e => {
           console.log(e)
           commit('error', e.message)
-          commit('userUnset')
+          commit('unset')
         })
     },
 
-    userAuthentication ({ commit, state, rootState }) {
+    authentication ({ commit, state, rootState }) {
       return rootState.camomile.api
         .me()
         .then(user => {
@@ -43,18 +43,17 @@ export default {
         .catch(err => {
           console.log('err', err)
           commit('error', e.message)
-          commit('userUnset')
+          commit('unset')
         })
     }
   },
   mutations: {
-    userSet (state, user) {
-      console.log('mutaa', user)
+    set (state, user) {
       state.name = user.name
       state.password = user.password
       state.loggedin = true
     },
-    userUnset (state) {
+    unset (state) {
       state.name = ''
       state.password = ''
       state.loggedin = false

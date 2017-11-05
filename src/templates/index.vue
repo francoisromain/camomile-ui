@@ -1,20 +1,20 @@
 <template>
   <div class="container pt-xl">
     <h1>{{ title }}</h1>
-    <login></login>
+    <user></user>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import store from '../js/store.js'
-import login from './components/login.vue'
+import user from './components/user.vue'
 
 export default {
   store,
   name: 'camomile-ui',
   components: {
-    login
+    user
   },
   data () {
     return {

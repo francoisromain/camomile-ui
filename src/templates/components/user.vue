@@ -1,6 +1,5 @@
 <template>
   <div>
-    user: {{ user }}
     <div class="blobs" v-if="user.loggedin">
       <div class="blob-1-4 p-s">
         {{ api.url }}
