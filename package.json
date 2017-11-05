@@ -16,7 +16,9 @@
     "build": "poi build",
     "poi": "poi"
   },
-  "dependencies": {},
+  "dependencies": {
+    "camomile-client": "^0.8.0"
+  },
   "devDependencies": {
     "@storybook/vue": "^3.2.13",
     "autoprefixer": "^7.1.6",
@@ -28,7 +30,6 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
-    "camomile-client": "^0.8.0",
     "copy-webpack-plugin": "^4.2.0",
     "cross-env": "^5.1.0",
     "css-loader": "^0.28.7",
@@ -52,7 +53,6 @@
     "object-fit-images": "^3.2.3",
     "pixrem": "^4.0.1",
     "pleeease-filters": "^4.0.0",
-    "poi": "^9.4.3",
     "postcss": "^6.0.13",
     "postcss-attribute-case-insensitive": "^2.0.0",
     "postcss-browser-reporter": "^0.5.0",
@@ -98,14 +98,14 @@
     "vue": "^2.5.2",
     "vue-hot-reload-api": "^2.2.0",
     "vue-html-loader": "^1.2.4",
-    "vue-i18n": "^7.3.2",
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "^2.5.2",
     "vuex": "^3.0.0",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "webpack-monitor": "^1.0.13"
   },
   "eslintConfig": {
     "extends": "standard",

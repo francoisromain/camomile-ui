@@ -4,7 +4,7 @@
 */
 
 @typescale {
-  scale: 1.33;
+  scale: 1;
   font-size: var(--base-font-size);
   line-height: var(--unit);
 }

@@ -9,7 +9,6 @@ import Index from './templates/index.vue'
 // new App().$mount('#app')
 
 new Vue({
-  el: '#app',
   template: '<Index/>',
   components: { Index }
-})
+}).$mount('#app')

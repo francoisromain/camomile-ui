@@ -7,10 +7,6 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.json$/,
-        loader: 'json-loader'
-      },
-      {
         test: /\.html$/,
         loader: 'vue-html-loader'
       },
@@ -28,5 +24,11 @@ module.exports = {
     alias: {
       vue: 'vue/dist/vue.js'
     }
+  },
+  node: {
+    console: false,
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
   }
 }

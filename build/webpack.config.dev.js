@@ -4,6 +4,7 @@ var merge = require('webpack-merge')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 var webpackConfigBase = require('./webpack.config.base')
+// var webpackMonitor = require('webpack-monitor')
 
 module.exports = merge(webpackConfigBase, {
   devtool: 'cheap-module-eval-source-map',
@@ -58,9 +59,15 @@ module.exports = merge(webpackConfigBase, {
         from: 'assets',
         to: 'assets'
       }
-    ]),
-    new webpack.ProvidePlugin({
-      Camomile: 'camomile-client/camomile.js'
-    })
+    ])
+    // new webpack.ProvidePlugin({
+    //   Camomile: './camomile-client-javascript.js'
+    // })
+    // new webpackMonitor({
+    //   capture: true, // -> default 'true'
+    //   target: '../monitor/myStatsStore.json', // default -> '../monitor/stats.json'
+    //   launch: true, // -> default 'false'
+    //   port: 3030 // default -> 8081
+    // })
   ]
 })
