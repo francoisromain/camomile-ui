@@ -12,9 +12,7 @@
     "dist": "cross-env NODE_ENV=production node build/dist.js",
     "dev": "cross-env NODE_ENV=development node build/dev.js",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "build": "poi build",
-    "poi": "poi"
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "camomile-client": "^0.8.0"
