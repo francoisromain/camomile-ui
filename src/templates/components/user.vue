@@ -10,7 +10,7 @@
       </div>
       
       <div class="blob-1-4 p-s">
-        <i>password</i>
+        <i>••••••••</i>
       </div>
       <div class="blob-1-4">
         <button v-on:click="logout" class="btn p-s full-x mr home">Logout</button>
@@ -33,7 +33,6 @@
         <button v-on:click="login(api)" class="btn p-s full-x mr home">Login</button>
       </div>
     </div>
-    <div class="bg-error px-m py-s mb color-bg" v-if="error">{{ error }}</div>
   </div>
 </template>
 
@@ -54,23 +53,14 @@ export default {
   },
   computed: {
     ...mapState({
-      user: state => state.camomile.user,
-      error: state => state.camomile.error
+      user: state => state.camomile.user
     })
   },
   methods: {
     ...mapActions({
-      login: 'camomile/login',
-      logout: 'camomile/logout'
+      login: 'camomile/user/login',
+      logout: 'camomile/user/logout'
     })
   }
 }
 </script>
-<style scoped>
-@import '../../css/settings.css';
-@media (--viewport-mobile) {
-  .home {
-    color: var(--color-brand);
-  }
-}
-</style>

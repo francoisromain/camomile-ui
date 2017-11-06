@@ -2,28 +2,24 @@
 import Camomile from 'camomile-client'
 // import camomile from '../camomile-api' /* axios api */
 
-import user from './camomile-user'
+import user from './user'
+import messages from './messages'
 
 export default {
   namespaced: true,
   state: {
     url: '',
-    api: null,
-    error: ''
+    api: null
   },
-  actions: {},
   mutations: {
-    error (state, message) {
-      state.error = message
-    },
     apiCreate (state, url) {
-      console.log('api create', url)
       state.url = url
       state.api = new Camomile(url)
       // state.api = camomile(url) /* axios api */
     }
   },
   modules: {
-    user
+    user,
+    messages
   }
 }

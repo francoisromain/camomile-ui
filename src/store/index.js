@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import viewport from './modules/viewport'
-import camomile from './modules/camomile'
+import camomile from './camomile'
 
 Vue.use(Vuex)
 

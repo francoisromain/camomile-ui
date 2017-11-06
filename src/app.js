@@ -1,7 +1,6 @@
 import './css/styles.css'
 import 'babel-polyfill'
 import Vue from 'vue'
-import './js/store.js'
 
 import Index from './templates/index.vue'
 
