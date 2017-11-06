@@ -18,19 +18,23 @@ export default {
             {
               name: 'user',
               type: 'success',
-              content: r
+              content: r.success
             },
             { root: true }
           )
           return dispatch('authentication')
         })
         .catch(e => {
+          const content = e.response
+            ? e.response[rootState.camomile._axios ? 'data' : 'body'].error
+            : 'Network error'
+
           commit(
             'camomile/messages/create',
             {
               name: 'user',
               type: 'error',
-              content: e.message
+              content: content
             },
             { root: true }
           )
@@ -48,7 +52,7 @@ export default {
             {
               name: 'user',
               type: 'success',
-              content: r
+              content: r.success
             },
             { root: true }
           )
@@ -60,7 +64,8 @@ export default {
             {
               name: 'user',
               type: 'error',
-              content: e.message
+              content:
+                e.response[rootState.camomile._axios ? 'data' : 'body'].error
             },
             { root: true }
           )
@@ -89,7 +94,8 @@ export default {
             {
               name: 'user',
               type: 'error',
-              content: e.message
+              content:
+                e.response[rootState.camomile._axios ? 'data' : 'body'].error
             },
             { root: true }
           )
