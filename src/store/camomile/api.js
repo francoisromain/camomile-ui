@@ -9,10 +9,10 @@ export default url => {
   const _get = async uri => {
     try {
       const response = await api.get(uri)
-      console.log(uri, response.data)
+      console.log('get: ', uri, response.data)
       return response.data
     } catch (e) {
-      console.log('error', uri, e)
+      console.log('get error: ', uri, e)
       throw e
     }
   }
@@ -20,10 +20,10 @@ export default url => {
   const _post = async (uri, data) => {
     try {
       const response = await api.post(uri, data)
-      console.log(uri, response.data)
+      console.log('post: ', uri, response.data)
       return response.data
     } catch (e) {
-      console.log('error', uri, e)
+      console.log('post error: ', uri, e)
       throw e
     }
   }
@@ -31,10 +31,10 @@ export default url => {
   const _put = async (uri, data) => {
     try {
       const response = await api.put(uri, data)
-      console.log(uri, response.data)
+      console.log('put: ', uri, response.data)
       return response.data
     } catch (e) {
-      console.log('error', uri, e)
+      console.log('put error: ', uri, e)
       throw e
     }
   }

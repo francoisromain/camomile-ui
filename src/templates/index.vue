@@ -1,39 +1,49 @@
 <template>
-  <div>
-    <div class="bg-alt">
-      <div class="container mb relative">
-        <div class="right"><cml-user /></div>
-        <h1 class="mb-0">{{ $store.state.camomile.config.title }} | {{ $store.getters['camomile/__a'] ? 'axios' : 'rp' }} | {{ url }}</h1>
+  <div class="relative full-y">
+    <div class="bg-inverse color-bg header">
+      <div class="container">
+        <div class="blobs">
+          <cml-title class="blob-1-4 mb-0" />
+          <cml-infos class="blob-1-4 mb-0" />
+          <cml-user-button  class="blob-icon mb-0 flex-right" />
+        </div>
       </div>
     </div>
-    <div class="container">
-      <cml-messages />
-      <cml-user-login />
+    
+    <div class="container pt relative">
+      {{ $store.state.camomile.api }}
+      <cml-user-dropdown />
     </div>
+    <cml-user-login />
+    <cml-user-settings />
+    <cml-messages />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import store from '../store'
 import viewport from './components/viewport.vue'
+import cmlTitle from './camomile/title.vue'
+import cmlInfos from './camomile/infos.vue'
 import cmlMessages from './camomile/messages.vue'
 import cmlUserLogin from './camomile/user-login.vue'
-import cmlUser from './camomile/user.vue'
+import cmlUserButton from './camomile/user-button.vue'
+import cmlUserSettings from './camomile/user-settings.vue'
+import cmlUserDropdown from './camomile/user-dropdown.vue'
 
 export default {
   store,
   name: 'camomile-ui',
   components: {
     viewport,
+    cmlTitle,
+    cmlInfos,
     cmlMessages,
     cmlUserLogin,
-    cmlUser,
-  },
-  computed: {
-    ...mapState({
-      url: state => state.camomile.url
-    })
+    cmlUserButton,
+    cmlUserDropdown,
+    cmlUserSettings
   }
 }
 </script>
+

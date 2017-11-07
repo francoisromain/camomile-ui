@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown">
+  <div class="dropdown" v-if="user.dropdown">
     <div>
       <button @click="settingsShow" class="btn px-m py-s full-x">Settings</button>
     </div>
@@ -20,11 +20,10 @@ export default {
   },
   methods: {
     logout () {
-      this.$emit('logout')
       this.$store.dispatch('camomile/user/logout')
     },
     settingsShow () {
-      this.$emit('settings-show')
+      this.$store.commit('camomile/user/settingsShow')
     }
   }
 }
@@ -32,11 +31,15 @@ export default {
 
 <style scoped>
 @import '../../css/settings.css';
-
 .dropdown {
-  position: absolute;
-  right: var(--gutter);
-  top: var(--unit-xl);
+  margin-bottom: var(--unit);
+}
+@media (--viewport-tablet) {
+  .dropdown {
+    position: absolute;
+    right: var(--gutter);
+    top: 0;
+  }
 }
 </style>
 

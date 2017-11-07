@@ -1,6 +1,10 @@
 <template>
-  <div>
-    user settings <button @click="hide">Hide</button>
+  <div v-if="user.settings" class="absolute full bg-alpha">
+    <div class="relative full-y">
+      <div class="pophover absolute full bg-highlight p">
+        user settings <button @click="hide">Hide</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -15,19 +19,8 @@ export default {
   },
   methods: {
     hide () {
-      this.$emit('settings-hide')
+      this.$store.commit('camomile/user/settingsHide')
     }
   }
 }
 </script>
-
-<style scoped>
-@import '../../css/settings.css';
-
-.dropdown {
-  position: absolute;
-  right: var(--gutter);
-  top: var(--unit-xl);
-}
-</style>
-

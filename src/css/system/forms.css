@@ -45,7 +45,7 @@ textarea {
 textarea:focus,
 input:focus,
 select:focus {
-  border-right: var(--unit-s) solid var(--color-brand);
+  border-right: var(--unit-s) solid var(--color-highlight);
 }
 
 input[type='text'].input-alt,

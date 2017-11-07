@@ -4,7 +4,7 @@
 */
 
 @typescale {
-  scale: 1;
+  scale: 1.25;
   font-size: var(--base-font-size);
   line-height: var(--unit);
 }
@@ -33,12 +33,12 @@ pre {
 
 h1,
 .h1 {
-  typescale: 4 2;
+  typescale: 0 2;
 }
 
 h2,
 .h2 {
-  typescale: 2.5 2;
+  typescale: 0 1;
 }
 
 h3,
@@ -48,7 +48,7 @@ h4 {
 
 h3,
 .h3 {
-  typescale: 1 1.5;
+  typescale: 0 1;
 }
 
 h4,
@@ -61,10 +61,6 @@ h5,
   typescale: -1 0.5;
 }
 
-h5 {
-  font-weight: 700;
-}
-
 h6,
 .h6,
 small {
@@ -74,6 +70,11 @@ small {
 label,
 h6 {
   margin-bottom: var(--unit-s);
+}
+
+h1,
+h5 {
+  font-weight: 700;
 }
 
 blockquote {
@@ -98,16 +99,16 @@ hr {
 
 a {
   text-decoration: none;
-  color: var(--color-brand);
+  color: var(--color-highlight);
 
   &:visited {
-    color: var(--color-brand);
+    color: var(--color-highlight);
   }
 
   &:hover,
   &:active,
   &:focus {
-    color: var(--color-brand);
+    color: var(--color-highlight);
   }
 }
 

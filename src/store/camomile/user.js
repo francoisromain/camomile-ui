@@ -5,17 +5,18 @@ export default {
   state: {
     name: '',
     password: '',
-    loggedin: false
+    loggedin: false,
+    settings: false,
+    dropdown: false
   },
   actions: {
     login ({ commit, state, dispatch, rootState }, options) {
       commit('camomile/create', options.url, { root: true })
-      message(commit, 'reset', { name: 'user' })
       return rootState.camomile.api
         .login(options.user.name, options.user.password)
         .then(r => {
           commit('set', options.user)
-          message(commit, 'create', {
+          message(dispatch, {
             name: 'user',
             type: 'success',
             content: r.success
@@ -24,10 +25,11 @@ export default {
         })
         .catch(e => {
           const content = e.response
-            ? e.response[rootState.camomile.__a ? 'data' : 'body'].error
+            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
+              .error
             : 'Network error'
 
-          message(commit, 'create', {
+          message(dispatch, {
             name: 'user',
             type: 'error',
             content: content
@@ -42,19 +44,21 @@ export default {
         .then(r => {
           commit('unset')
           commit('camomile/delete', null, { root: true })
-          message(commit, 'create', {
+          message(dispatch, {
             name: 'user',
-            type: 'success',
+            type: 'warning',
             content: r.success
           })
         })
         .catch(e => {
           console.log(e)
 
-          message(commit, 'create', {
+          message(dispatch, {
             name: 'user',
             type: 'error',
-            content: e.response[rootState.camomile.__a ? 'data' : 'body'].error
+            content:
+              e.response[rootState.camomile.config.axios ? 'data' : 'body']
+                .error
           })
 
           commit('unset')
@@ -78,10 +82,12 @@ export default {
         .catch(e => {
           console.log('e', e)
 
-          message(commit, 'create', {
+          message(dispatch, {
             name: 'user',
             type: 'error',
-            content: e.response[rootState.camomile.__a ? 'data' : 'body'].error
+            content:
+              e.response[rootState.camomile.config.axios ? 'data' : 'body']
+                .error
           })
 
           commit('unset')
@@ -98,6 +104,18 @@ export default {
       state.name = ''
       state.password = ''
       state.loggedin = false
+      state.dropdown = false
+      state.settings = false
+    },
+    settingsShow (state) {
+      state.dropdown = false
+      state.settings = true
+    },
+    settingsHide (state) {
+      state.settings = false
+    },
+    dropdownToggle (state) {
+      state.dropdown = !state.dropdown
     }
   },
   getters: {

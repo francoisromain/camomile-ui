@@ -43,6 +43,10 @@ http://cssmojo.com/the-very-latest-clearfix-reloaded/
   float: right;
 }
 
+.flex-right {
+  margin-left: auto;
+}
+
 .relative {
   position: relative;
 }

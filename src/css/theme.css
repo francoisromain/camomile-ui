@@ -3,6 +3,10 @@
 -------------------------------
 */
 
+:root {
+  --header-height: calc(var(--unit) * 2);
+}
+
 [v-cloak] {
   display: none;
 }
@@ -41,9 +45,50 @@
   margin-right: auto;
 }
 
+.btn-menubar {
+  button-color: var(--color-bg) var(--color-inverse) var(--color-bg);
+  button-background: var(--color-transparent) var(--color-alt)
+    var(--color-highlight);
+}
+
+.messages {
+  bottom: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  margin-bottom: calc(var(--unit-xxl) * -1);
+}
+
 @media (--viewport-tablet) {
+  --header-height: calc(var(--unit) * 2);
+
   .container {
     width: calc(2 * var(--col-width) + var(--gutter));
+  }
+
+  .blob-icon {
+    margin-right: var(--gutter);
+    flex: 0 1 calc(var(--unit) * 2);
+  }
+
+  .pophover {
+    width: calc(2 * var(--col-width) - var(--gutter));
+    transform: translate(-50%, 0);
+    top: var(--header-height);
+    left: 50%;
+    right: auto;
+    bottom: auto;
+  }
+
+  .messages {
+    width: calc(2 * var(--col-width) - var(--gutter));
   }
 }
 

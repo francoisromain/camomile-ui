@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <div class="px-m py-s mb color-bg" :class="`bg-${message.type}`" v-if="message.content" v-for="(message, name) in messages" :key="name">{{ message.content }}</div>
+  <div class="messages absolute center">
+    <transition-group name="fade" tag="div">
+      <div class="px-m py-s mb color-bg" :class="`bg-${message.type}`" v-if="message.content" v-for="(message, index) in messages" :key="message.id">
+        {{ message.content }}
+      </div>
+    </transition-group>
   </div>
 </template>
 
@@ -14,7 +18,7 @@ export default {
   },
   computed: {
     ...mapState({
-      messages: state => state.camomile.messages
+      messages: state => state.camomile.messages.list
     })
   }
 }
