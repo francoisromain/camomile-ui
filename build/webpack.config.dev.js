@@ -50,6 +50,7 @@ module.exports = merge(webpackConfigBase, {
       'process.env': '"development"'
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: true
@@ -60,9 +61,6 @@ module.exports = merge(webpackConfigBase, {
         to: 'assets'
       }
     ])
-    // new webpack.ProvidePlugin({
-    //   Camomile: './camomile-client-javascript.js'
-    // })
     // new webpackMonitor({
     //   capture: true, // -> default 'true'
     //   target: '../monitor/myStatsStore.json', // default -> '../monitor/stats.json'

@@ -1,3 +1,5 @@
+import { message } from './_utils'
+
 export default {
   namespaced: true,
   state: {
@@ -7,37 +9,29 @@ export default {
   },
   actions: {
     login ({ commit, state, dispatch, rootState }, options) {
-      commit('camomile/apiCreate', options.url, { root: true })
-      commit('camomile/messages/reset', 'user', { root: true })
+      commit('camomile/create', options.url, { root: true })
+      message(commit, 'reset', { name: 'user' })
       return rootState.camomile.api
         .login(options.user.name, options.user.password)
         .then(r => {
           commit('set', options.user)
-          commit(
-            'camomile/messages/create',
-            {
-              name: 'user',
-              type: 'success',
-              content: r.success
-            },
-            { root: true }
-          )
+          message(commit, 'create', {
+            name: 'user',
+            type: 'success',
+            content: r.success
+          })
           return dispatch('authentication')
         })
         .catch(e => {
           const content = e.response
-            ? e.response[rootState.camomile._axios ? 'data' : 'body'].error
+            ? e.response[rootState.camomile.__a ? 'data' : 'body'].error
             : 'Network error'
 
-          commit(
-            'camomile/messages/create',
-            {
-              name: 'user',
-              type: 'error',
-              content: content
-            },
-            { root: true }
-          )
+          message(commit, 'create', {
+            name: 'user',
+            type: 'error',
+            content: content
+          })
           commit('unset')
         })
     },
@@ -47,28 +41,22 @@ export default {
         .logout()
         .then(r => {
           commit('unset')
-          commit(
-            'camomile/messages/create',
-            {
-              name: 'user',
-              type: 'success',
-              content: r.success
-            },
-            { root: true }
-          )
+          commit('camomile/delete', null, { root: true })
+          message(commit, 'create', {
+            name: 'user',
+            type: 'success',
+            content: r.success
+          })
         })
         .catch(e => {
           console.log(e)
-          commit(
-            'camomile/messages/create',
-            {
-              name: 'user',
-              type: 'error',
-              content:
-                e.response[rootState.camomile._axios ? 'data' : 'body'].error
-            },
-            { root: true }
-          )
+
+          message(commit, 'create', {
+            name: 'user',
+            type: 'error',
+            content: e.response[rootState.camomile.__a ? 'data' : 'body'].error
+          })
+
           commit('unset')
         })
     },
@@ -89,16 +77,13 @@ export default {
         })
         .catch(e => {
           console.log('e', e)
-          commit(
-            'camomile/messageCreate',
-            {
-              name: 'user',
-              type: 'error',
-              content:
-                e.response[rootState.camomile._axios ? 'data' : 'body'].error
-            },
-            { root: true }
-          )
+
+          message(commit, 'create', {
+            name: 'user',
+            type: 'error',
+            content: e.response[rootState.camomile.__a ? 'data' : 'body'].error
+          })
+
           commit('unset')
         })
     }

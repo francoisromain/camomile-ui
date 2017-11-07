@@ -40,6 +40,7 @@ export default url => {
   }
 
   return {
+    // User
     login (name, password) {
       return _post('login', {
         username: name,

@@ -4,8 +4,8 @@ export default {
     user: {}
   },
   mutations: {
-    reset (state, name) {
-      state[name] = {}
+    reset (state, message) {
+      state[message.name] = {}
     },
     create (state, message) {
       state[message.name] = message
