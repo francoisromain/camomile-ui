@@ -62,3 +62,7 @@
 .bg-success {
   background: var(--color-success);
 }
+
+.border-bg {
+  border-color: var(--color-bg);
+}

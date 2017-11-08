@@ -10,18 +10,17 @@ export default {
     dropdown: false
   },
   actions: {
-    login ({ commit, state, dispatch, rootState }, options) {
-      commit('camomile/create', options.url, { root: true })
+    login ({ commit, state, dispatch, rootState }, config) {
+      commit('camomile/create', config.url, { root: true })
       return rootState.camomile.api
-        .login(options.user.name, options.user.password)
+        .login(config.user.name, config.user.password)
         .then(r => {
-          commit('set', options.user)
+          commit('passwordSet', config.user)
           message(dispatch, {
-            name: 'user',
             type: 'success',
             content: r.success
           })
-          return dispatch('authentication')
+          return dispatch('me')
         })
         .catch(e => {
           const content = e.response
@@ -30,7 +29,6 @@ export default {
             : 'Network error'
 
           message(dispatch, {
-            name: 'user',
             type: 'error',
             content: content
           })
@@ -45,16 +43,13 @@ export default {
           commit('unset')
           commit('camomile/delete', null, { root: true })
           message(dispatch, {
-            name: 'user',
-            type: 'warning',
+            type: 'success',
             content: r.success
           })
         })
         .catch(e => {
           console.log(e)
-
           message(dispatch, {
-            name: 'user',
             type: 'error',
             content:
               e.response[rootState.camomile.config.axios ? 'data' : 'body']
@@ -65,39 +60,57 @@ export default {
         })
     },
 
-    authentication ({ commit, state, rootState }) {
+    me ({ commit, dispatch, state, rootState }) {
       return rootState.camomile.api
         .me()
-        .then(r => {
-          // commit(
-          //   'camomile/messages/create',
-          //   {
-          //     name: 'me',
-          //     type: 'success',
-          //     content: r
-          //   },
-          //   { root: true }
-          // )
+        .then(user => {
+          console.log('me', user)
+          commit('set', user)
         })
         .catch(e => {
           console.log('e', e)
-
           message(dispatch, {
-            name: 'user',
             type: 'error',
             content:
               e.response[rootState.camomile.config.axios ? 'data' : 'body']
                 .error
           })
-
           commit('unset')
+        })
+    },
+
+    update ({ commit, dispatch, state, rootState }, user) {
+      return rootState.camomile.api
+        .updateUser(user.id, {
+          password: user.password,
+          role: user.role,
+          description: user.description
+        })
+        .then(r => {
+          console.log('rrr', r)
+          commit('settingsHide')
+          message(dispatch, {
+            type: 'success',
+            content: 'User updated'
+          })
+        })
+        .catch(e => {
+          console.log(e)
+          message(dispatch, {
+            type: 'error',
+            content:
+              e.response[rootState.camomile.config.axios ? 'data' : 'body']
+                .error
+          })
         })
     }
   },
   mutations: {
     set (state, user) {
-      state.name = user.name
-      state.password = user.password
+      state.name = user.username
+      state.id = user._id
+      state.description = user.description
+      state.role = user.role
       state.loggedin = true
     },
     unset (state) {
@@ -116,6 +129,9 @@ export default {
     },
     dropdownToggle (state) {
       state.dropdown = !state.dropdown
+    },
+    passwordSet (state, user) {
+      state.password = user.password
     }
   },
   getters: {

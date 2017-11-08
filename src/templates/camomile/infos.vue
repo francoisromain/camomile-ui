@@ -1,5 +1,5 @@
 <template>
-  <div class="h6">{{ api }} <br>{{ url }}</div>
+  <div class="h6 mt-m">{{ api }} : {{ url }}</div>
 </template>
 
 <script>

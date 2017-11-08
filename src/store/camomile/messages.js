@@ -5,7 +5,7 @@ export default {
   },
   actions: {
     create ({ commit }, message) {
-      message.id = new Date().getUTCMilliseconds()
+      message.id = new Date().valueOf()
       commit('create', message)
       setTimeout(() => {
         commit('remove', message)

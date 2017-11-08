@@ -11,11 +11,14 @@
     </div>
     
     <div class="container pt relative">
-      {{ $store.state.camomile.api }}
-      <cml-user-dropdown />
+      <transition name="transition-fade">
+        <cml-user-dropdown  v-if="user.dropdown" />
+      </transition>
     </div>
-    <cml-user-login />
-    <cml-user-settings />
+    <transition name="transition-top">
+      <cml-user-settings v-if="user.settings" />
+      <cml-user-login  v-if="!user.loggedin" />
+    </transition>
     <cml-messages />
   </div>
 </template>
@@ -43,6 +46,11 @@ export default {
     cmlUserButton,
     cmlUserDropdown,
     cmlUserSettings
+  },
+  computed: {
+    user () {
+      return this.$store.state.camomile.user
+    }
   }
 }
 </script>

@@ -6,6 +6,18 @@ export default url => {
     withCredentials: true
   })
 
+  const _opt = (n, id) => {
+    return id ? `${n}/${id}` : n
+  }
+
+  const _user = id => _opt('user', id)
+  const _group = id => _opt('group', id)
+  const _corpus = id => _opt('corpus', id)
+  const _medium = id => _opt('medium', id)
+  const _layer = id => _opt('layer', id)
+  const _annotation = id => _opt('annotation', id)
+  const _queue = id => _opt('queue', id)
+
   const _get = async uri => {
     try {
       const response = await api.get(uri)
@@ -53,10 +65,13 @@ export default url => {
     me () {
       return _get('me')
     },
-    update_password (password) {
+    updatePassword (password) {
       return _put('me', {
         password: password
       })
+    },
+    updateUser (id, fields = {}) {
+      return _put(_user(id), fields)
     }
   }
 }

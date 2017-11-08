@@ -1,6 +1,6 @@
 <template>
   <div class="messages absolute center">
-    <transition-group name="fade" tag="div">
+    <transition-group name="transition-bottom" tag="div">
       <div class="px-m py-s mb color-bg" :class="`bg-${message.type}`" v-if="message.content" v-for="(message, index) in messages" :key="message.id">
         {{ message.content }}
       </div>

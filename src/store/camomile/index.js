@@ -11,7 +11,10 @@ export default {
   state: {
     url: '',
     api: null,
-    config: config
+    config: config,
+    admin: {
+      roles: ['admin', 'user']
+    }
   },
   mutations: {
     create (state, url) {

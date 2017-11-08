@@ -79,7 +79,7 @@ http://francoisromain.github.io/postcss-structure
 
   /* hr */
   --border-style: dotted;
-  --border-color: var(--color-text);
+  --border-color: var(--color-neutral);
 }
 
 /* media queries: x * col-width + gutter */

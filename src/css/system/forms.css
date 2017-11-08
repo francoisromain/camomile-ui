@@ -15,6 +15,7 @@ textarea {
   border: 0 none;
   background-color: var(--color-alt);
   height: auto;
+  color: inherit;
 }
 
 select {
@@ -53,8 +54,8 @@ input[type='email'].input-alt,
 input[type='search'].input-alt,
 input[type='password'].input-alt,
 input[type='tel'].input-alt,
-select.input-alt,
-textarea.input-alt {
+select.select-alt,
+textarea.textarea-alt {
   background-color: var(--color-bg);
 }
 
@@ -64,4 +65,14 @@ input.success {
 
 input.error {
   border-right: var(--unit-s) solid var(--color-error);
+}
+
+input:disabled,
+textarea:disabled {
+  background-color: color(var(--color-alt) alpha(50%));
+}
+
+input.input-alt:disabled,
+textarea.input-alt:disabled {
+  background-color: color(var(--color-bg) alpha(50%));
 }

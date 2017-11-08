@@ -35,6 +35,14 @@ http://cssmojo.com/the-very-latest-clearfix-reloaded/
   display: inline-block;
 }
 
+.flex {
+  display: flex;
+}
+
+.flex-start {
+  align-items: flex-start;
+}
+
 .left {
   float: left;
 }
