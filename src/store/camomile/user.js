@@ -1,13 +1,12 @@
-import { message } from './_utils'
+import { message } from './_helpers'
 
 export default {
   namespaced: true,
   state: {
     name: '',
     password: '',
-    loggedin: false,
-    settings: false,
-    dropdown: false
+    role: '',
+    description: ''
   },
   actions: {
     login ({ commit, state, dispatch, rootState }, config) {
@@ -16,6 +15,7 @@ export default {
         .login(config.user.name, config.user.password)
         .then(r => {
           commit('passwordSet', config.user)
+          commit('camomile/logIn', null, { root: true })
           message(dispatch, {
             type: 'success',
             content: r.success
@@ -41,7 +41,9 @@ export default {
         .logout()
         .then(r => {
           commit('unset')
+          commit('camomile/logOut', null, { root: true })
           commit('camomile/delete', null, { root: true })
+          dispatch('camomile/utils/userReset', null, { root: true })
           message(dispatch, {
             type: 'success',
             content: r.success
@@ -86,7 +88,7 @@ export default {
           description: user.description
         })
         .then(r => {
-          commit('settingsHide')
+          commit('camomile/utils/userPopupHide', null, { root: true })
           message(dispatch, {
             type: 'success',
             content: 'User updated'
@@ -109,24 +111,10 @@ export default {
       state.id = user._id
       state.description = user.description
       state.role = user.role
-      state.loggedin = true
     },
     unset (state) {
       state.name = ''
       state.password = ''
-      state.loggedin = false
-      state.dropdown = false
-      state.settings = false
-    },
-    settingsShow (state) {
-      state.dropdown = false
-      state.settings = true
-    },
-    settingsHide (state) {
-      state.settings = false
-    },
-    dropdownToggle (state) {
-      state.dropdown = !state.dropdown
     },
     passwordSet (state, user) {
       state.password = user.password

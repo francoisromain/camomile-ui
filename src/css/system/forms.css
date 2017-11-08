@@ -68,11 +68,13 @@ input.error {
 }
 
 input:disabled,
-textarea:disabled {
+textarea:disabled,
+select:disabled {
   background-color: color(var(--color-alt) alpha(50%));
 }
 
 input.input-alt:disabled,
-textarea.input-alt:disabled {
+textarea.textarea-alt:disabled,
+select.select-alt:disabled {
   background-color: color(var(--color-bg) alpha(50%));
 }

@@ -5,5 +5,6 @@ export default {
     password: 'roO7p4s5wOrD'
   },
   url: 'http://localhost:3000',
-  axios: true
+  axios: true,
+  roles: ['admin', 'user']
 }

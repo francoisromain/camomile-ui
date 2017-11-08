@@ -78,7 +78,7 @@ http://francoisromain.github.io/postcss-structure
     box-shadow 0.5s, fill 0.5s;
 
   /* hr */
-  --border-style: dotted;
+  --border-style: solid;
   --border-color: var(--color-neutral);
 }
 

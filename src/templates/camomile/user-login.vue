@@ -1,5 +1,5 @@
 <template>
-  <pophover title="Login">
+  <popup title="Login">
     <div class="blobs">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Api url</h3>
@@ -28,16 +28,16 @@
         <button @click="login(config)" class="btn-alt p-s full-x">Login</button>
       </div>
     </div>
-  </pophover>
+  </popup>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import pophover from './_pophover.vue'
+import popup from './_popup.vue'
 
 export default {
   components: {
-    pophover
+    popup
   },
   computed: {
     ...mapState({

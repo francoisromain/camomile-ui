@@ -1,10 +1,11 @@
 // import Camomile from require('../../../../camomile-client-javascript') /* debug with local version */
 import Camomile from 'camomile-client'
 import camomile from './api' /* axios api */
+import config from '../../config.js'
 
+import utils from './utils'
 import user from './user'
 import messages from './messages'
-import config from '../../config.js'
 
 export default {
   namespaced: true,
@@ -12,9 +13,7 @@ export default {
     url: '',
     api: null,
     config: config,
-    admin: {
-      roles: ['admin', 'user']
-    }
+    logged: false
   },
   mutations: {
     create (state, url) {
@@ -24,9 +23,16 @@ export default {
     delete (state) {
       state.url = ''
       state.api = null
+    },
+    logIn (state) {
+      state.logged = true
+    },
+    logOut (state) {
+      state.logged = false
     }
   },
   modules: {
+    utils,
     user,
     messages
   }

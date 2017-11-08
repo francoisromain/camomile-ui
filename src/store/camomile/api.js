@@ -70,6 +70,15 @@ export default url => {
         password: password
       })
     },
+    createUser (
+      name,
+      password,
+      description = {},
+      role = 'user',
+      { returns_id } = {}
+    ) {
+      return _post('user', { name, password, description, role })
+    },
     updateUser (id, fields = {}) {
       return _put(_user(id), fields)
     }
