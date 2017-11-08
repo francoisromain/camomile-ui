@@ -45,10 +45,19 @@
   margin-right: auto;
 }
 
+.menubar-infos {
+  padding-top: 0;
+  padding-bottom: var(--unit-s);
+}
+
 .btn-menubar {
   button-color: var(--color-bg) var(--color-inverse) var(--color-bg);
   button-background: var(--color-transparent) var(--color-alt)
     var(--color-highlight);
+}
+
+.content {
+  flex: 1;
 }
 
 .messages {
@@ -78,6 +87,10 @@ hr.border-bg {
   .blob-icon {
     margin-right: var(--gutter);
     flex: 0 1 calc(var(--unit) * 2);
+  }
+
+  .menubar-infos {
+    padding-top: var(--unit-s);
   }
 
   .pophover {

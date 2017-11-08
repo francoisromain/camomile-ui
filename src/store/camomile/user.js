@@ -64,7 +64,6 @@ export default {
       return rootState.camomile.api
         .me()
         .then(user => {
-          console.log('me', user)
           commit('set', user)
         })
         .catch(e => {
@@ -87,7 +86,6 @@ export default {
           description: user.description
         })
         .then(r => {
-          console.log('rrr', r)
           commit('settingsHide')
           message(dispatch, {
             type: 'success',
