@@ -35,12 +35,28 @@ http://cssmojo.com/the-very-latest-clearfix-reloaded/
   display: inline-block;
 }
 
+.flex {
+  display: flex;
+}
+
+.flex-start {
+  align-items: flex-start;
+}
+
+.flex-direction-column {
+  flex-direction: column;
+}
+
 .left {
   float: left;
 }
 
 .right {
   float: right;
+}
+
+.flex-right {
+  margin-left: auto;
 }
 
 .relative {

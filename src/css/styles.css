@@ -28,8 +28,7 @@
 @import 'system/colors.css';
 @import 'system/ui.css';
 @import 'system/code.css';
-
-/* @import 'icons.css'; */
+@import 'system/icons.css';
 
 /* Tools          ------------------------------- */
 
@@ -39,5 +38,6 @@
 
 @import 'system/footer.css';
 @import 'theme.css';
+@import 'transitions.css';
 @import 'system/prismjs.css';
 @import 'spinner.css';

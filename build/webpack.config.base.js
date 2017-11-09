@@ -26,7 +26,6 @@ module.exports = {
     }
   },
   node: {
-    console: false,
     fs: 'empty',
     net: 'empty',
     tls: 'empty'

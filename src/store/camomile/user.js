@@ -1,40 +1,39 @@
+import { message } from './_helpers'
+
 export default {
   namespaced: true,
   state: {
     name: '',
     password: '',
-    loggedin: false
+    role: '',
+    description: ''
   },
   actions: {
-    login ({ commit, state, dispatch, rootState }, options) {
-      commit('camomile/apiCreate', options.url, { root: true })
-      commit('camomile/messages/reset', 'user', { root: true })
+    login ({ commit, state, dispatch, rootState }, config) {
+      commit('camomile/create', config.url, { root: true })
       return rootState.camomile.api
-        .login(options.user.name, options.user.password)
+        .login(config.user.name, config.user.password)
         .then(r => {
-          commit('set', options.user)
-          commit(
-            'camomile/messages/create',
-            {
-              name: 'user',
-              type: 'success',
-              content: r
-            },
-            { root: true }
-          )
-          return dispatch('authentication')
+          commit('passwordSet', config.user)
+          dispatch('camomile/login', null, { root: true })
+          message(dispatch, {
+            type: 'success',
+            content: r.success
+          })
+          return dispatch('set')
         })
         .catch(e => {
-          commit(
-            'camomile/messages/create',
-            {
-              name: 'user',
-              type: 'error',
-              content: e.message
-            },
-            { root: true }
-          )
+          const error = e.response
+            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
+              .error
+            : 'Network error'
+
+          message(dispatch, {
+            type: 'error',
+            content: error
+          })
           commit('unset')
+          throw error
         })
     },
 
@@ -43,75 +42,60 @@ export default {
         .logout()
         .then(r => {
           commit('unset')
-          commit(
-            'camomile/messages/create',
-            {
-              name: 'user',
-              type: 'success',
-              content: r
-            },
-            { root: true }
-          )
+          dispatch('camomile/logout', null, { root: true })
+          message(dispatch, {
+            type: 'success',
+            content: r.success
+          })
+          return r.success
         })
         .catch(e => {
           console.log(e)
-          commit(
-            'camomile/messages/create',
-            {
-              name: 'user',
-              type: 'error',
-              content: e.message
-            },
-            { root: true }
-          )
+          const error =
+            e.response[rootState.camomile.config.axios ? 'data' : 'body'].error
+          message(dispatch, {
+            type: 'error',
+            content: error
+          })
           commit('unset')
+          throw error
         })
     },
 
-    authentication ({ commit, state, rootState }) {
+    set ({ commit, dispatch, state, rootState }) {
       return rootState.camomile.api
         .me()
-        .then(r => {
-          // commit(
-          //   'camomile/messages/create',
-          //   {
-          //     name: 'me',
-          //     type: 'success',
-          //     content: r
-          //   },
-          //   { root: true }
-          // )
+        .then(user => {
+          commit('set', user)
+          dispatch('camomile/set', user, { root: true })
+          return user
         })
         .catch(e => {
           console.log('e', e)
-          commit(
-            'camomile/messageCreate',
-            {
-              name: 'user',
-              type: 'error',
-              content: e.message
-            },
-            { root: true }
-          )
+          const error =
+            e.response[rootState.camomile.config.axios ? 'data' : 'body'].error
+          message(dispatch, {
+            type: 'error',
+            content: error
+          })
           commit('unset')
+          throw error
         })
     }
   },
   mutations: {
     set (state, user) {
-      state.name = user.name
-      state.password = user.password
-      state.loggedin = true
+      state.name = user.username
+      state.id = user._id
+      state.description = user.description
+      state.role = user.role
     },
     unset (state) {
       state.name = ''
       state.password = ''
-      state.loggedin = false
-    }
-  },
-  getters: {
-    getUser (state) {
-      return state.name
+    },
+    passwordSet (state, user) {
+      state.password = user.password
     }
   }
 }

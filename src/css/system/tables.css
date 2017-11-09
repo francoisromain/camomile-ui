@@ -13,6 +13,7 @@ table {
 th {
   text-align: left;
   font-weight: 700;
+  typescale: -1 0.5;
 }
 
 tr {

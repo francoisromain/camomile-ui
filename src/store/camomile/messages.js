@@ -1,14 +1,23 @@
 export default {
   namespaced: true,
   state: {
-    user: {}
+    list: []
+  },
+  actions: {
+    add ({ commit }, message) {
+      message.id = new Date().valueOf()
+      commit('add', message)
+      setTimeout(() => {
+        commit('remove', message)
+      }, 2000)
+    }
   },
   mutations: {
-    reset (state, name) {
-      state[name] = {}
+    remove (state, message) {
+      state.list.shift()
     },
-    create (state, message) {
-      state[message.name] = message
+    add (state, message) {
+      state.list.push(message)
     }
   }
 }

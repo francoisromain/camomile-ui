@@ -17,7 +17,7 @@ export default {
 @import '../../css/settings.css';
 @media (--viewport-mobile) {
   .home {
-    color: var(--color-brand);
+    color: var(--color-highlight);
   }
 }
 </style>

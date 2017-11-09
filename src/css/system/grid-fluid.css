@@ -7,7 +7,7 @@ https://github.com/francoisromain/postcss-grid-fluid
 
 @gf {
   gutter: var(--gutter);
-  display: float;
+  display: flex;
 }
 
 .bloc-code,
