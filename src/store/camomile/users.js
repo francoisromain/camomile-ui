@@ -6,7 +6,7 @@ export default {
     list: []
   },
   actions: {
-    create ({ commit, state, dispatch, rootState }, user) {
+    add ({ commit, state, dispatch, rootState }, user) {
       console.log('user', user, user.name)
       return rootState.camomile.api
         .createUser(user.name, user.password, user.description, user.role)
@@ -34,7 +34,7 @@ export default {
           description: user.description
         })
         .then(r => {
-          commit('camomile/utils/userPopupHide', null, { root: true })
+          commit('camomile/utils/userEditPopupHide', null, { root: true })
           message(dispatch, {
             type: 'success',
             content: 'User updated'
@@ -53,11 +53,29 @@ export default {
         })
     },
 
+    remove ({ commit, state, dispatch, rootState }, user) {
+      return rootState.camomile.api
+        .deleteUser(user.id)
+        .then(r => {
+          message(dispatch, { type: 'success', content: r })
+          dispatch('list')
+          return r
+        })
+        .catch(e => {
+          const error = e.response
+            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
+              .error
+            : 'Network error'
+
+          message(dispatch, { type: 'error', content: error })
+          throw error
+        })
+    },
+
     list ({ commit, dispatch, state, rootState }) {
       return rootState.camomile.api
         .getUsers()
         .then(r => {
-          console.log('ror', r)
           const users = r.map(u => ({
             name: u.username,
             id: u._id,
@@ -81,7 +99,6 @@ export default {
       state.list.push(message)
     },
     listUpdate (state, users) {
-      console.log('users', users)
       state.list = users
     }
   }

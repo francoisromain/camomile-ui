@@ -34,7 +34,7 @@ export default {
   methods: {
     ...mapMutations({
       hide: 'camomile/utils/userDropdownHide',
-      settingsPopup: 'camomile/utils/userPopupShow'
+      settingsPopup: 'camomile/utils/userEditPopupShow'
     }),
     ...mapActions({
       logout: 'camomile/user/logout'

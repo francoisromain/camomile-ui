@@ -1,7 +1,10 @@
 <template>
   <div>
     <transition name="transition-top">
-      <cml-user-popup v-if="utils.userPopup.visible" />
+      <cml-user-edit-popup v-if="utils.userEditPopup.visible" />
+    </transition>
+    <transition name="transition-top">
+      <cml-user-remove-popup v-if="utils.userRemovePopup.visible" />
     </transition>
     <transition name="transition-top">
       <cml-user-dropdown  v-if="utils.userDropdown.visible" />
@@ -16,14 +19,16 @@
 <script>
 import cmlMessages from './messages.vue'
 import cmlUserLogin from './user-login.vue'
-import cmlUserPopup from './user-popup.vue'
+import cmlUserEditPopup from './user-edit-popup.vue'
 import cmlUserDropdown from './user-dropdown.vue'
+import cmlUserRemovePopup from './user-remove-popup.vue'
 
 export default {
   components: {
     cmlMessages,
     cmlUserLogin,
-    cmlUserPopup,
+    cmlUserEditPopup,
+    cmlUserRemovePopup,
     cmlUserDropdown
   },
   computed: {

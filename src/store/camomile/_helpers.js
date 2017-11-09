@@ -1,3 +1,3 @@
 export function message (dispatch, message) {
-  dispatch('camomile/messages/create', message, { root: true })
+  dispatch('camomile/messages/add', message, { root: true })
 }

@@ -1,5 +1,5 @@
 <template>
-  <popup :title="config.title" :close-btn="true" commit="camomile/utils/userPopupHide">
+  <popup :title="config.title" :close-btn="true" commit="camomile/utils/userEditPopupHide">
     <div class="blobs" v-if="user.id">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Id</h3>
@@ -44,7 +44,7 @@
       <div class="blob-1-4">
       </div>
       <div class="blob-3-4 mb-0">
-        <button @click="save" @keyup.enter="update" class="btn-alt p-s full-x">Save</button>
+        <button @click="save" @keyup.enter="save" class="btn-alt p-s full-x">Save</button>
       </div>
     </div>
   </popup>
@@ -62,8 +62,8 @@ export default {
     ...mapState({
       userCurrent: state => state.camomile.user,
       roles: state => state.camomile.config.roles,
-      config: state => state.camomile.utils.userPopup.config,
-      user: state => Object.assign({}, state.camomile.utils.userPopup.config.user)
+      config: state => state.camomile.utils.userEditPopup.config,
+      user: state => Object.assign({}, state.camomile.utils.userEditPopup.config.user)
     }),
     rolesPermission () {
       return this.userCurrent.role === 'admin' && this.userCurrent.id !== this.user.id
@@ -77,9 +77,9 @@ export default {
       if (this.user.id) {
         this.$store.dispatch('camomile/users/update', this.user)
       } else {
-        this.$store.dispatch('camomile/users/create', this.user)
+        this.$store.dispatch('camomile/users/add', this.user)
       }
-      this.$store.commit('camomile/utils/userPopupHide')
+      this.$store.commit('camomile/utils/userEditPopupHide')
     },
     keypress (e) {
       if ((e.which || e.keyCode) === 13) {

@@ -4,9 +4,9 @@ export default {
     list: []
   },
   actions: {
-    create ({ commit }, message) {
+    add ({ commit }, message) {
       message.id = new Date().valueOf()
-      commit('create', message)
+      commit('add', message)
       setTimeout(() => {
         commit('remove', message)
       }, 2000)
@@ -16,7 +16,7 @@ export default {
     remove (state, message) {
       state.list.shift()
     },
-    create (state, message) {
+    add (state, message) {
       state.list.push(message)
     }
   }

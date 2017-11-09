@@ -1,7 +1,11 @@
 export default {
   namespaced: true,
   state: {
-    userPopup: {
+    userEditPopup: {
+      visible: false,
+      config: {}
+    },
+    userRemovePopup: {
       visible: false,
       config: {}
     },
@@ -13,27 +17,48 @@ export default {
     userReset ({ commit }) {
       console.log('userReset')
       commit('userDropdownHide')
-      commit('userPopupHide')
+      commit('userEditPopupHide')
     }
   },
   mutations: {
-    userPopupShow (
+    userEditPopupShow (
       state,
       config = {
         user: { role: 'user' },
-        title: '',
-        closeBtn: false,
-        commit: ''
+        title: 'Edit user',
+        closeBtn: true,
+        commit: 'camomile/utils/userEditPopupHide'
       }
     ) {
       state.userDropdown.visible = false
-      state.userPopup = {
+      state.userEditPopup = {
         visible: true,
         config: config
       }
     },
-    userPopupHide (state) {
-      state.userPopup = {
+    userRemovePopupShow (
+      state,
+      config = {
+        user: {},
+        title: 'Remove user',
+        closeBtn: true,
+        commit: 'camomile/utils/userRemovePopupHide'
+      }
+    ) {
+      console.log('remove popup')
+      state.userRemovePopup = {
+        visible: true,
+        config: config
+      }
+    },
+    userEditPopupHide (state) {
+      state.userEditPopup = {
+        visible: false,
+        config: {}
+      }
+    },
+    userRemovePopupHide (state) {
+      state.userRemovePopup = {
         visible: false,
         config: {}
       }
