@@ -1,5 +1,5 @@
 <template>
-  <popup title="Login">
+  <div>
     <div class="blobs">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Api url</h3>
@@ -28,17 +28,14 @@
         <button @click="login(config)" class="btn-alt p-s full-x">Login</button>
       </div>
     </div>
-  </popup>
+  </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import popup from './_popup.vue'
 
 export default {
-  components: {
-    popup
-  },
+  name: 'camomile-login',
   computed: {
     ...mapState({
       user: state => state.camomile.user,
@@ -49,17 +46,17 @@ export default {
     ...mapActions({
       login: 'camomile/user/login'
     }),
-    keypress (e) {
+    keyup (e) {
       if ((e.which || e.keyCode) === 13) {
         this.login(this.config)
       }
     }
   },
   created () {
-    document.addEventListener('keypress', this.keypress)
+    document.addEventListener('keyup', this.keyup)
   },
   beforeDestroy () {
-    document.removeEventListener('keypress', this.keypress)
+    document.removeEventListener('keyup', this.keyup)
   }
 
 }

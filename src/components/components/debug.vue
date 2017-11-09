@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  name: 'debug',
   data () {
     return {
       visible: false

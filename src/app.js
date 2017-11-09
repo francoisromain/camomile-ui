@@ -2,7 +2,7 @@ import './css/styles.css'
 import 'babel-polyfill'
 import Vue from 'vue'
 
-import Index from './templates/index.vue'
+import Index from './components/index.vue'
 
 // const App = Vue.extend(Index)
 // new App().$mount('#app')

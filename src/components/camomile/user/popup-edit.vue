@@ -1,5 +1,5 @@
 <template>
-  <popup :title="config.title" :close-btn="true" commit="camomile/utils/userEditPopupHide">
+  <div>
     <div class="blobs" v-if="user.id">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Id</h3>
@@ -47,23 +47,19 @@
         <button @click="save" @keyup.enter="save" class="btn-alt p-s full-x">Save</button>
       </div>
     </div>
-  </popup>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import popup from './_popup.vue'
 
 export default {
-  components: {
-    popup
-  },
+  name: 'camomile-popup-user-edit',
   computed: {
     ...mapState({
       userCurrent: state => state.camomile.user,
       roles: state => state.camomile.config.roles,
-      config: state => state.camomile.utils.userEditPopup.config,
-      user: state => Object.assign({}, state.camomile.utils.userEditPopup.config.user)
+      user: state => Object.assign({}, state.camomile.popup.config.user)
     }),
     rolesPermission () {
       return this.userCurrent.role === 'admin' && this.userCurrent.id !== this.user.id
@@ -79,19 +75,19 @@ export default {
       } else {
         this.$store.dispatch('camomile/users/add', this.user)
       }
-      this.$store.commit('camomile/utils/userEditPopupHide')
+      this.$store.commit('camomile/popup/close')
     },
-    keypress (e) {
+    keyup (e) {
       if ((e.which || e.keyCode) === 13) {
         this.save()
       }
     }
   },
   created () {
-    document.addEventListener('keypress', this.keypress)
+    document.addEventListener('keyup', this.keyup)
   },
   beforeDestroy () {
-    document.removeEventListener('keypress', this.keypress)
+    document.removeEventListener('keyup', this.keyup)
   }
 }
 </script>

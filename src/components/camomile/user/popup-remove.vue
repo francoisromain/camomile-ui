@@ -1,5 +1,5 @@
 <template>
-  <popup title="Remove user" :close-btn="true" commit="camomile/utils/userEditPopupHide">
+  <div>
     <div class="blobs" v-if="user.id">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Id</h3>
@@ -21,40 +21,35 @@
         <button @click="remove" @keyup.enter="remove" class="btn-alt p-s full-x">Remove</button>
       </div>
     </div>
-  </popup>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import popup from './_popup.vue'
 
 export default {
-  components: {
-    popup
-  },
+  name: 'camomile-popup-user-remove',
   computed: {
     ...mapState({
-      userCurrent: state => state.camomile.user,
-      config: state => state.camomile.utils.userRemovePopup.config,
-      user: state => state.camomile.utils.userRemovePopup.config.user
+      user: state => state.camomile.popup.config.user
     })
   },
   methods: {
     remove () {
       this.$store.dispatch('camomile/users/remove', this.user)
-      this.$store.commit('camomile/utils/userRemovePopupHide')
+      this.$store.commit(this.closeCommit)
     },
-    keypress (e) {
+    keyup (e) {
       if ((e.which || e.keyCode) === 13) {
         this.remove()
       }
     }
   },
   created () {
-    document.addEventListener('keypress', this.keypress)
+    document.addEventListener('keyup', this.keyup)
   },
   beforeDestroy () {
-    document.removeEventListener('keypress', this.keypress)
+    document.removeEventListener('keyup', this.keyup)
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div v-if="visible">
     <div class="flex flex-start">
       <h2 class="mt-s">Users</h2>
-      <button @click="userEditPopup(userAddConfig)" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="open(userAddConfig)" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,8 +13,8 @@
           <td>{{ user.name }}</td>
           <td>{{ user.role }}</td>
           <td class="text-right">
-            <button @click="userEditPopup({ user: user, closeBtn: true, title: 'Edit user' })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="userRemovePopup({ user: user, closeBtn: true, title: 'Edit user' })" class="btn px-s py-s my--s h5">Remove</button>
+            <button @click="open({ user: user, closeBtn: true, title: 'Edit user', content: 'popupUserEdit' })" class="btn px-s py-s my--s h5">Edit</button>
+            <button @click="open({ user: user, closeBtn: true, title: 'Remove user', content: 'popupUserRemove' })" class="btn px-s py-s my--s h5">Remove</button>
           </td>
         </tr>
       </table>
@@ -22,33 +22,33 @@
   </div>
 </template>
 
-
 <script>
 import { mapMutations, mapActions, mapState } from 'vuex'
 
 export default {
+  name: 'camomile-users',
   data () {
     return {
       userAddConfig: {
         user: {},
         closeBtn: true,
-        title: 'Add user'
+        title: 'Add user',
+        content: 'popupUserEdit'
       }
     }
   },
   computed: {
     ...mapState({
-      user: state => state.camomile.user,
+      userCurrent: state => state.camomile.user,
       users: state => state.camomile.users.list
     }),
     visible () {
-      return this.user.role === 'admin' && this.$store.state.camomile.logged
+      return this.userCurrent.role === 'admin' && this.$store.state.camomile.logged
     }
   },
   methods: {
     ...mapMutations({
-      userEditPopup: 'camomile/utils/userEditPopupShow',
-      userRemovePopup: 'camomile/utils/userRemovePopupShow'
+      open: 'camomile/popup/open'
     })
   }
 }
