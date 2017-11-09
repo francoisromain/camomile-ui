@@ -5,6 +5,7 @@ import config from '../../config.js'
 
 import utils from './utils'
 import user from './user'
+import users from './users'
 import messages from './messages'
 
 export default {
@@ -15,6 +16,22 @@ export default {
     config: config,
     logged: false
   },
+  actions: {
+    login ({ commit, dispatch, state }) {
+      commit('login')
+    },
+    logout ({ commit, dispatch, state }) {
+      console.log('logout')
+      dispatch('camomile/utils/userReset', null, { root: true })
+      commit('logout')
+      commit('delete')
+    },
+    set ({ commit, dispatch, state }, user) {
+      if (user.role === 'admin') {
+        dispatch('camomile/users/list', null, { root: true })
+      }
+    }
+  },
   mutations: {
     create (state, url) {
       state.url = url
@@ -24,16 +41,17 @@ export default {
       state.url = ''
       state.api = null
     },
-    logIn (state) {
+    login (state) {
       state.logged = true
     },
-    logOut (state) {
+    logout (state) {
       state.logged = false
     }
   },
   modules: {
     utils,
+    messages,
     user,
-    messages
+    users
   }
 }

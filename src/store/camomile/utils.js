@@ -11,12 +11,21 @@ export default {
   },
   actions: {
     userReset ({ commit }) {
+      console.log('userReset')
       commit('userDropdownHide')
       commit('userPopupHide')
     }
   },
   mutations: {
-    userPopupShow (state, config) {
+    userPopupShow (
+      state,
+      config = {
+        user: { role: 'user' },
+        title: '',
+        closeBtn: false,
+        commit: ''
+      }
+    ) {
       state.userDropdown.visible = false
       state.userPopup = {
         visible: true,

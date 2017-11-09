@@ -81,6 +81,11 @@ export default url => {
     },
     updateUser (id, fields = {}) {
       return _put(_user(id), fields)
+    },
+    getUsers ({ returns_id, filter: { username, role } = {} } = {}) {
+      return _get('user', { username, role }).then(r =>
+        console.log('getUsers', r, returns_id)
+      )
     }
   }
 }

@@ -9,7 +9,6 @@ export default {
       return this.$store.state.camomile.url
     },
     api () {
-      console.log(this.$store.state.camomile.config.axios)
       return this.$store.state.camomile.config.axios ? 'axios api' : 'rp api';
     }
   }

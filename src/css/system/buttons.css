@@ -11,6 +11,7 @@
 
 .btn {
   button: default;
+  font-weight: 700;
 }
 
 .btn-border {

@@ -131,3 +131,11 @@ select {
   -webkit-appearance: none;
   border-radius: 0;
 }
+
+/* https://github.com/necolas/normalize.css/pull/697/commits/c3762f068feca8e218e69f54daf397cd0f33176d */
+button,
+html [type='button'],
+[type='reset'],
+[type='submit'] {
+  border-radius: 0;
+}

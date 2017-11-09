@@ -15,24 +15,25 @@ export default {
         .login(config.user.name, config.user.password)
         .then(r => {
           commit('passwordSet', config.user)
-          commit('camomile/logIn', null, { root: true })
+          dispatch('camomile/login', null, { root: true })
           message(dispatch, {
             type: 'success',
             content: r.success
           })
-          return dispatch('me')
+          return dispatch('set')
         })
         .catch(e => {
-          const content = e.response
+          const error = e.response
             ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
               .error
             : 'Network error'
 
           message(dispatch, {
             type: 'error',
-            content: content
+            content: error
           })
           commit('unset')
+          throw error
         })
     },
 
@@ -41,67 +42,44 @@ export default {
         .logout()
         .then(r => {
           commit('unset')
-          commit('camomile/logOut', null, { root: true })
-          commit('camomile/delete', null, { root: true })
-          dispatch('camomile/utils/userReset', null, { root: true })
+          dispatch('camomile/logout', null, { root: true })
           message(dispatch, {
             type: 'success',
             content: r.success
           })
+          return r.success
         })
         .catch(e => {
           console.log(e)
+          const error =
+            e.response[rootState.camomile.config.axios ? 'data' : 'body'].error
           message(dispatch, {
             type: 'error',
-            content:
-              e.response[rootState.camomile.config.axios ? 'data' : 'body']
-                .error
+            content: error
           })
-
           commit('unset')
+          throw error
         })
     },
 
-    me ({ commit, dispatch, state, rootState }) {
+    set ({ commit, dispatch, state, rootState }) {
       return rootState.camomile.api
         .me()
         .then(user => {
           commit('set', user)
+          dispatch('camomile/set', user, { root: true })
+          return user
         })
         .catch(e => {
           console.log('e', e)
+          const error =
+            e.response[rootState.camomile.config.axios ? 'data' : 'body'].error
           message(dispatch, {
             type: 'error',
-            content:
-              e.response[rootState.camomile.config.axios ? 'data' : 'body']
-                .error
+            content: error
           })
           commit('unset')
-        })
-    },
-
-    update ({ commit, dispatch, state, rootState }, user) {
-      return rootState.camomile.api
-        .updateUser(user.id, {
-          password: user.password,
-          role: user.role,
-          description: user.description
-        })
-        .then(r => {
-          commit('camomile/utils/userPopupHide', null, { root: true })
-          message(dispatch, {
-            type: 'success',
-            content: 'User updated'
-          })
-        })
-        .catch(e => {
-          console.log(e)
-          message(dispatch, {
-            type: 'error',
-            content:
-              e.response[rootState.camomile.config.axios ? 'data' : 'body']
-                .error
-          })
+          throw error
         })
     }
   },
@@ -118,11 +96,6 @@ export default {
     },
     passwordSet (state, user) {
       state.password = user.password
-    }
-  },
-  getters: {
-    getUser (state) {
-      return state.name
     }
   }
 }

@@ -54,6 +54,7 @@
   button-color: var(--color-bg) var(--color-inverse) var(--color-bg);
   button-background: var(--color-transparent) var(--color-alt)
     var(--color-highlight);
+  font-weight: 700;
 }
 
 .page {
