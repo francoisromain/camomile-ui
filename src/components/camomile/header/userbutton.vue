@@ -4,9 +4,10 @@
 
 <script>
 import { mapState } from 'vuex'
+import userbuttonDropdown from './userbutton-dropdown.vue'
 
 export default {
-  name: 'camomile-button',
+  name: 'camomile-userbutton',
   computed: {
     ...mapState({
       user: state => state.camomile.user,
@@ -19,7 +20,7 @@ export default {
         this.$store.commit('camomile/dropdown/close')
       } else {
         this.$store.commit('camomile/dropdown/open', {
-          content: 'dropdownUser'
+          component: userbuttonDropdown
         })
       }
     }

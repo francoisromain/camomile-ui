@@ -10,3 +10,12 @@ export function userFormat (user) {
     role: user.role
   }
 }
+
+export function groupFormat (group) {
+  return {
+    name: group.name,
+    id: group._id,
+    description: group.description,
+    users: group.users
+  }
+}

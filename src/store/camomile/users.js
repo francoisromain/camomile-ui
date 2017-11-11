@@ -7,11 +7,13 @@ export default {
   },
   actions: {
     add ({ commit, state, dispatch, rootState }, user) {
-      console.log('user', user, user.name)
       return rootState.camomile.api
         .createUser(user.name, user.password, user.description, user.role)
         .then(r => {
-          message(dispatch, { type: 'success', content: r })
+          message(dispatch, {
+            type: 'success',
+            content: 'Success: user added.'
+          })
           dispatch('list')
           return r
         })
@@ -40,7 +42,7 @@ export default {
             content: 'User updated'
           })
 
-          if (user.username === rootState.camomile.user.name) {
+          if (user.name === rootState.camomile.user.name) {
             commit('camomile/user/set', user, { root: true })
           }
           dispatch('list')
@@ -82,7 +84,7 @@ export default {
         .then(r => {
           const users = r.map(user => userFormat(user))
           commit('listUpdate', users)
-          return r
+          return users
         })
         .catch(e => {
           console.log(e)

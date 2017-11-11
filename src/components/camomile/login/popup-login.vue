@@ -38,7 +38,6 @@ export default {
   name: 'camomile-login',
   computed: {
     ...mapState({
-      user: state => state.camomile.user,
       config: state => state.camomile.config
     })
   },

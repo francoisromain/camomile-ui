@@ -67,7 +67,6 @@ export default {
         .me()
         .then(r => {
           const user = userFormat(r)
-          console.log('user', user)
           commit('set', user)
           dispatch('camomile/set', user, { root: true })
           return user

@@ -37,7 +37,7 @@ export default {
   methods: {
     remove () {
       this.$store.dispatch('camomile/users/remove', this.user)
-      this.$store.commit(this.closeCommit)
+      this.$store.commit('camomile/popup/close')
     },
     keyup (e) {
       if ((e.which || e.keyCode) === 13) {

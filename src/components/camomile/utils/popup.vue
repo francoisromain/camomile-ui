@@ -8,24 +8,16 @@
         <button @click="close" v-if="config.closeBtn" class="flex-right btn p-s mt--m"><i class="icon-24 icon-24-close"></i></button>
       </div>
       <hr class="border-bg">
-      <component :is="config.content"></component>
+      <component :is="config.component"></component>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import popupUserRemove from '../user/popup-remove.vue'
-import popupUserLogin from '../user/popup-login.vue'
-import popupUserEdit from '../user/popup-edit.vue'
 
 export default {
   name: 'camomile-popup',
-  components: {
-    popupUserRemove,
-    popupUserLogin,
-    popupUserEdit
-  },
   props: {
     config: Object
   },

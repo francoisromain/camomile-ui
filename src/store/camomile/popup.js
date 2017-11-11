@@ -6,7 +6,6 @@ export default {
   },
   mutations: {
     open (state, config) {
-      console.log('open', config)
       state.visible = true
       state.config = config
     },
