@@ -43,7 +43,7 @@
       </div>
       <div class="blob-1-4">
       </div>
-      <div class="blob-3-4 mb-0">
+      <div class="blob-3-4">
         <button @click="save" @keyup.enter="save" class="btn-alt p-s full-x">Save</button>
       </div>
     </div>
@@ -55,11 +55,15 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'camomile-popup-user-edit',
+  data () {
+    return {
+      user: Object.assign({}, this.$store.state.camomile.users.list.find(user => user.id === this.$store.state.camomile.popup.config.userId))
+    }
+  },
   computed: {
     ...mapState({
       userCurrent: state => state.camomile.user,
-      roles: state => state.camomile.config.roles,
-      user: state => Object.assign({}, state.camomile.popup.config.user)
+      roles: state => state.camomile.config.roles
     }),
     rolesPermission () {
       return this.userCurrent.role === 'admin' && this.userCurrent.id !== this.user.id

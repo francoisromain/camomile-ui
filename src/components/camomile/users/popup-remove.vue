@@ -17,7 +17,7 @@
       </div>
       <div class="blob-1-4">
       </div>
-      <div class="blob-3-4 mb-0">
+      <div class="blob-3-4">
         <button @click="remove" @keyup.enter="remove" class="btn-alt p-s full-x">Remove</button>
       </div>
     </div>
@@ -31,7 +31,7 @@ export default {
   name: 'camomile-popup-user-remove',
   computed: {
     ...mapState({
-      user: state => state.camomile.popup.config.user
+      user: state => state.camomile.users.list.find(user => user.id === state.camomile.popup.config.userId)
     })
   },
   methods: {

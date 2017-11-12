@@ -24,7 +24,7 @@
 
       <div class="blob-1-4">
       </div>
-      <div class="blob-3-4 mb-0">
+      <div class="blob-3-4">
         <button @click="login(config)" class="btn-alt p-s full-x">Login</button>
       </div>
     </div>

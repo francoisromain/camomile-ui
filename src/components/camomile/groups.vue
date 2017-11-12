@@ -2,7 +2,7 @@
   <div v-if="visible">
     <div class="flex flex-start">
       <h2 class="mt-s">Groups</h2>
-      <button @click="open({ group: {}, closeBtn: true, title: 'Add group', component: popupGroupEdit })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ group: {}, closeBtn: true, title: 'Add group', component: popupGroupEdit })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -11,10 +11,11 @@
         </tr>
         <tr v-for="group in groups" :key="group.id">
           <td>{{ group.name }}</td>
-          <td>{{ group.users.length }}</td>
+          <td>{{ group.userIds.length }}</td>
           <td class="text-right">
-            <button @click="open({ group: group, closeBtn: true, title: 'Edit group', component: popupGroupEdit })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="open({ group: group, closeBtn: true, title: 'Remove group', component: popupGroupRemove })" class="btn px-s py-s my--s h5">Remove</button>
+            <button @click="popupOpen({ groupId: group.id, closeBtn: true, title: 'Group users', component: popupGroupUsers })" class="btn px-s py-s my--s h5">Users</button>
+            <button @click="popupOpen({ groupId: group.id, closeBtn: true, title: 'Edit group', component: popupGroupEdit })" class="btn px-s py-s my--s h5">Edit</button>
+            <button @click="popupOpen({ groupId: group.id, closeBtn: true, title: 'Remove group', component: popupGroupRemove })" class="btn px-s py-s my--s h5">Remove</button>
           </td>
         </tr>
       </table>
@@ -26,13 +27,15 @@
 import { mapMutations, mapActions, mapState } from 'vuex'
 import popupGroupEdit from './groups/popup-edit.vue'
 import popupGroupRemove from './groups/popup-remove.vue'
+import popupGroupUsers from './groups/popup-users.vue'
 
 export default {
   name: 'camomile-groups',
   data () {
     return {
-      popupGroupEdit: popupGroupEdit,
-      popupGroupRemove: popupGroupRemove
+      popupGroupEdit,
+      popupGroupRemove,
+      popupGroupUsers
     }
   },
   computed: {
@@ -46,7 +49,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      open: 'camomile/popup/open'
+      popupOpen: 'camomile/popup/open'
     })
   }
 }

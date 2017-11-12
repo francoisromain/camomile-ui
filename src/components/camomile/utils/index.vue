@@ -4,7 +4,7 @@
       <cml-dropdown v-if="dropdown.visible" />
     </transition>
     <transition name="transition-top">
-      <cml-popup  v-if="popup.visible" :config="popup.config" />
+      <cml-popup  v-if="popup.visible" />
     </transition>
     <cml-messages />
   </div>

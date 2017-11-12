@@ -90,11 +90,33 @@ export default {
           console.log(e)
           throw e
         })
+    },
+
+    groupIdsList ({ commit, dispatch, state, rootState }, user) {
+      return rootState.camomile.api
+        .getUserGroups(user.id)
+        .then(groupIds => {
+          commit('groupIdsListUpdate', { groupIds, user })
+          return 'truc'
+        })
+        .catch(e => {
+          const error = e.response
+            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
+              .error
+            : 'Network error'
+
+          message(dispatch, { type: 'error', content: error })
+          throw error
+        })
     }
   },
   mutations: {
     listUpdate (state, users) {
       state.list = users
+    },
+    groupIdsListUpdate (state, { groupIds, user }) {
+      const u = state.list.find(us => us.id === user.id)
+      u.groupIds = groupIds
     }
   }
 }

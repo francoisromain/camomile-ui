@@ -2,7 +2,7 @@
   <div>
     <div @click="close" class="absolute full bg-alpha">
     </div>
-    <div class="pophover absolute full bg-alt p-l">
+    <div class="pophover absolute full bg-alt p-l pb-s">
       <div class="flex flex-start">
         <h2>{{ config.title }}</h2>
         <button @click="close" v-if="config.closeBtn" class="flex-right btn p-s mt--m"><i class="icon-24 icon-24-close"></i></button>
@@ -18,8 +18,10 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'camomile-popup',
-  props: {
-    config: Object
+  computed: {
+    ...mapState({
+      config: state => state.camomile.popup.config
+    })
   },
   methods: {
     close () {

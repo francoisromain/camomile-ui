@@ -1,13 +1,5 @@
 <template>
   <div>
-    <div class="blobs" v-if="group.id">
-      <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Id</h3>
-      </div>
-      <div class="blob-3-4">
-        <input type="text" v-model="group.id" class="input-alt" placeholder="Id" disabled>
-      </div>
-    </div>
     <div class="blobs">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Name</h3>
@@ -17,7 +9,7 @@
       </div>
       <div class="blob-1-4">
       </div>
-      <div class="blob-3-4 mb-0">
+      <div class="blob-3-4">
         <button @click="remove" @keyup.enter="remove" class="btn-alt p-s full-x">Remove</button>
       </div>
     </div>
@@ -30,9 +22,9 @@ import { mapState } from 'vuex'
 export default {
   name: 'camomile-popup-group-remove',
   computed: {
-    ...mapState({
-      group: state => state.camomile.popup.config.group
-    })
+    group () {
+      return this.$store.state.camomile.groups.list.find(group => group.id === this.$store.state.camomile.popup.config.groupId)
+    }
   },
   methods: {
     remove () {

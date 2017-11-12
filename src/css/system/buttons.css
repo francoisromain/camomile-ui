@@ -22,9 +22,10 @@
   button-classes: active disabled;
 }
 
+.tag .btn,
 .btn-alt {
   button-color: var(--color-bg) var(--color-bg) var(--color-bg);
-  button-background: var(--color-neutral) var(--color-highlight)
+  button-background: var(--color-neutral) var(--color-inverse)
     var(--color-highlight);
   button-classes: active disabled;
   font-weight: 700;

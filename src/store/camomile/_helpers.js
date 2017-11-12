@@ -7,7 +7,8 @@ export function userFormat (user) {
     name: user.username,
     id: user._id,
     description: user.description,
-    role: user.role
+    role: user.role,
+    groupIds: []
   }
 }
 
@@ -16,6 +17,6 @@ export function groupFormat (group) {
     name: group.name,
     id: group._id,
     description: group.description,
-    users: group.users
+    userIds: group.users
   }
 }
