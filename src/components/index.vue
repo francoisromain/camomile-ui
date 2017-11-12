@@ -8,6 +8,9 @@
           <cml-users class="blob-1-2 p border" />
           <cml-groups class="blob-1-2 p border" />
         </div>
+        <div class="blobs">
+          <cml-corpus class="blob-1-2 p border" />
+        </div>
       </div> 
       <debug />
     </div>
@@ -23,8 +26,11 @@ import viewport from './components/viewport.vue'
 import cmlUtils from './camomile/utils/index.vue'
 import cmlHeader from './camomile/header/index.vue'
 import cmlLogin from './camomile/login.vue'
+
 import cmlUsers from './camomile/users.vue'
 import cmlGroups from './camomile/groups.vue'
+
+import cmlCorpus from './camomile/corpus.vue'
 
 export default {
   store,
@@ -36,7 +42,8 @@ export default {
     cmlLogin,
     cmlUtils,
     cmlUsers,
-    cmlGroups
+    cmlGroups,
+    cmlCorpus
   }
 }
 </script>

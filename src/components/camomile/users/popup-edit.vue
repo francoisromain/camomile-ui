@@ -1,13 +1,5 @@
 <template>
   <div>
-    <div class="blobs" v-if="user.id">
-      <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Id</h3>
-      </div>
-      <div class="blob-3-4">
-        <input type="text" v-model="user.id" class="input-alt" placeholder="Id" disabled>
-      </div>
-    </div>
     <div class="blobs">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Name</h3>
@@ -16,7 +8,7 @@
         <input type="text" v-model="user.name" class="input-alt" placeholder="Name" :disabled="user.id">
       </div>
     </div>
-    <div class="blobs" v-if="rolesVisible">
+    <div class="blobs" v-if="adminIs">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Role</h3>
       </div>
@@ -63,13 +55,11 @@ export default {
   computed: {
     ...mapState({
       userCurrent: state => state.camomile.user,
-      roles: state => state.camomile.config.roles
+      roles: state => state.camomile.config.roles,
+      adminIs: state => state.camomile.adminIs
     }),
     rolesPermission () {
-      return this.userCurrent.role === 'admin' && this.userCurrent.id !== this.user.id
-    },
-    rolesVisible () {
-      return this.userCurrent.role === 'admin'
+      return this.adminIs && this.userCurrent.id !== this.user.id
     }
   },
   methods: {

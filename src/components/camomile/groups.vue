@@ -1,8 +1,8 @@
 <template>
-  <div v-if="visible">
+  <div v-if="adminIs">
     <div class="flex flex-start">
       <h2 class="mt-s">Groups</h2>
-      <button @click="popupOpen({ group: {}, closeBtn: true, title: 'Add group', component: popupGroupEdit })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ groupId: null, closeBtn: true, title: 'Add group', component: popupGroupEdit })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -40,12 +40,9 @@ export default {
   },
   computed: {
     ...mapState({
-      userCurrent: state => state.camomile.user,
-      groups: state => state.camomile.groups.list
-    }),
-    visible () {
-      return this.userCurrent.role === 'admin' && this.$store.state.camomile.logged
-    }
+      groups: state => state.camomile.groups.list,
+      adminIs: state => state.camomile.adminIs
+    })
   },
   methods: {
     ...mapMutations({
