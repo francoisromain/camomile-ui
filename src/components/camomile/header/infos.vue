@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  name: 'camomile-infos',
   computed: {
     url () {
       return this.$store.state.camomile.url
