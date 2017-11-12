@@ -1,10 +1,10 @@
-import { message } from './_helpers'
+import { message, userFormat } from './_helpers'
 
 export default {
   namespaced: true,
   state: {
+    id: '',
     name: '',
-    password: '',
     role: '',
     description: ''
   },
@@ -14,13 +14,13 @@ export default {
       return rootState.camomile.api
         .login(config.user.name, config.user.password)
         .then(r => {
-          commit('passwordSet', config.user)
           dispatch('camomile/login', null, { root: true })
           message(dispatch, {
             type: 'success',
             content: r.success
           })
-          return dispatch('set')
+          dispatch('set')
+          return r
         })
         .catch(e => {
           const error = e.response
@@ -65,7 +65,8 @@ export default {
     set ({ commit, dispatch, state, rootState }) {
       return rootState.camomile.api
         .me()
-        .then(user => {
+        .then(r => {
+          const user = userFormat(r)
           commit('set', user)
           dispatch('camomile/set', user, { root: true })
           return user
@@ -85,17 +86,14 @@ export default {
   },
   mutations: {
     set (state, user) {
-      state.name = user.username
-      state.id = user._id
+      state.name = user.name
       state.description = user.description
+      state.id = user.id
       state.role = user.role
     },
     unset (state) {
       state.name = ''
       state.password = ''
-    },
-    passwordSet (state, user) {
-      state.password = user.password
     }
   }
 }

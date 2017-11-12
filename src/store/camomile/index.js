@@ -1,12 +1,14 @@
-// import Camomile from require('../../../../camomile-client-javascript') /* debug with local version */
+// import Camomile from '../../../../camomile-client-javascript' /* debug with local version */
 import Camomile from 'camomile-client'
 import camomile from './api' /* axios api */
 import config from '../../config.js'
 
-import utils from './utils'
+import popup from './popup'
+import dropdown from './dropdown'
+import messages from './messages'
 import user from './user'
 import users from './users'
-import messages from './messages'
+import groups from './groups'
 
 export default {
   namespaced: true,
@@ -19,16 +21,18 @@ export default {
   actions: {
     login ({ commit, dispatch, state }) {
       commit('login')
+      commit('camomile/popup/close', null, { root: true })
     },
     logout ({ commit, dispatch, state }) {
-      console.log('logout')
-      dispatch('camomile/utils/userReset', null, { root: true })
+      commit('camomile/popup/close', null, { root: true })
+      commit('camomile/dropdown/close', null, { root: true })
       commit('logout')
       commit('delete')
     },
     set ({ commit, dispatch, state }, user) {
       if (user.role === 'admin') {
         dispatch('camomile/users/list', null, { root: true })
+        dispatch('camomile/groups/list', null, { root: true })
       }
     }
   },
@@ -49,9 +53,11 @@ export default {
     }
   },
   modules: {
-    utils,
+    popup,
+    dropdown,
     messages,
     user,
-    users
+    users,
+    groups
   }
 }

@@ -1,4 +1,4 @@
-import { message } from './_helpers'
+import { message, userFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -7,11 +7,13 @@ export default {
   },
   actions: {
     add ({ commit, state, dispatch, rootState }, user) {
-      console.log('user', user, user.name)
       return rootState.camomile.api
         .createUser(user.name, user.password, user.description, user.role)
         .then(r => {
-          message(dispatch, { type: 'success', content: r })
+          message(dispatch, {
+            type: 'success',
+            content: 'Success: user added.'
+          })
           dispatch('list')
           return r
         })
@@ -34,13 +36,17 @@ export default {
           description: user.description
         })
         .then(r => {
-          commit('camomile/utils/userEditPopupHide', null, { root: true })
+          const user = userFormat(r)
           message(dispatch, {
             type: 'success',
             content: 'User updated'
           })
+
+          if (user.name === rootState.camomile.user.name) {
+            commit('camomile/user/set', user, { root: true })
+          }
           dispatch('list')
-          return r
+          return user
         })
         .catch(e => {
           console.log(e)
@@ -76,30 +82,41 @@ export default {
       return rootState.camomile.api
         .getUsers()
         .then(r => {
-          const users = r.map(u => ({
-            name: u.username,
-            id: u._id,
-            description: u.description,
-            role: u.role
-          }))
+          const users = r.map(user => userFormat(user))
           commit('listUpdate', users)
-          return r
+          return users
         })
         .catch(e => {
           console.log(e)
           throw e
         })
+    },
+
+    groupIdsList ({ commit, dispatch, state, rootState }, user) {
+      return rootState.camomile.api
+        .getUserGroups(user.id)
+        .then(groupIds => {
+          commit('groupIdsListUpdate', { groupIds, user })
+          return 'truc'
+        })
+        .catch(e => {
+          const error = e.response
+            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
+              .error
+            : 'Network error'
+
+          message(dispatch, { type: 'error', content: error })
+          throw error
+        })
     }
   },
   mutations: {
-    remove (state, message) {
-      state.list.shift()
-    },
-    add (state, user) {
-      state.list.push(message)
-    },
     listUpdate (state, users) {
       state.list = users
+    },
+    groupIdsListUpdate (state, { groupIds, user }) {
+      const u = state.list.find(us => us.id === user.id)
+      u.groupIds = groupIds
     }
   }
 }
