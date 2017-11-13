@@ -19,8 +19,13 @@ export default {
         })
         .catch(e => {
           console.log(e)
-          message(dispatch, { type: 'error', content: e })
-          throw e
+          const error = e.response
+            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
+              .error
+            : 'Network error'
+
+          message(dispatch, { type: 'error', content: error })
+          throw error
         })
     },
 

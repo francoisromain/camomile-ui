@@ -2,7 +2,7 @@
   <div v-if="loggedIs">
     <div class="flex flex-start">
       <h2 class="mt-s">Corpus</h2>
-      <button @click="popupOpen({ corpu: {}, closeBtn: true, title: 'Add corpu', component: popupcorpuEdit })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ corpu: {}, closeBtn: true, title: 'Add corpus', component: popupcorpuEdit })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">

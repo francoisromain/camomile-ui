@@ -31,7 +31,7 @@ export default {
       return this.$store.state.camomile.groups.list
     },
     user () {
-      return this.$store.state.camomile.users.list.find(user => user.id === this.$store.state.camomile.popup.config.userId)
+      return this.$store.state.camomile.users.list.find(user => user.id === this.$store.state.camomile.popup.config.id)
     }
   },
   methods: {
