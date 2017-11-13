@@ -1,5 +1,5 @@
 <template>
-  <login v-if="!loggedIs" />
+  <login v-if="!isLogged" />
 </template>
 
 <script>
@@ -11,8 +11,8 @@ export default {
     login
   },
   computed: {
-    loggedIs () {
-      return this.$store.state.camomile.loggedIs
+    isLogged () {
+      return this.$store.state.camomile.isLogged
     }
   }
 }

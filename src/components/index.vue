@@ -9,7 +9,7 @@
           <cml-groups class="blob-1-2 p border" />
         </div>
         <div class="blobs">
-          <cml-corpus class="blob-1-2 p border" />
+          <cml-corpus class="blob-1-3 p border" />
         </div>
       </div> 
       <debug />

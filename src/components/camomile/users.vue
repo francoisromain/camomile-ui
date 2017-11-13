@@ -1,8 +1,8 @@
 <template>
-  <div v-if="adminIs">
+  <div v-if="isLogged">
     <div class="flex flex-start">
       <h2 class="mt-s">Users</h2>
-      <button @click="popupOpen({ id: null, ...popupEditConfig })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ ...popupEditConfig, id: null, title: 'Add user' })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,9 +13,9 @@
           <td>{{ user.name }}</td>
           <td>{{ user.role }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ id: user.id, ...popupGroupsConfig })" class="btn px-s py-s my--s h5">Groups</button>
-            <button @click="popupOpen({ id: user.id, ...popupEditConfig })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="popupOpen({ id: user.id, ...popupRemoveConfig })" class="btn px-s py-s my--s h5">Remove</button>
+            <button @click="popupOpen({ ...popupGroupsConfig, id: user.id })" class="btn px-s py-s my--s h5" v-if="isAdmin">Groups</button>
+            <button @click="popupOpen({ ...popupEditConfig, id: user.id })" class="btn px-s py-s my--s h5" v-if="isAdmin">Edit</button>
+            <button @click="popupOpen({ ...popupRemoveConfig, id: user.id })" class="btn px-s py-s my--s h5" v-if="isAdmin">Remove</button>
           </td>
         </tr>
       </table>
@@ -55,7 +55,8 @@ export default {
   computed: {
     ...mapState({
       users: state => state.camomile.users.list,
-      adminIs: state => state.camomile.adminIs
+      isAdmin: state => state.camomile.isAdmin,
+      isLogged: state => state.camomile.isLogged
     })
   },
   methods: {

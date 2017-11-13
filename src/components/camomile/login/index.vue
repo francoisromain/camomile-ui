@@ -5,7 +5,7 @@
 import popupLogin from './popup-login.vue'
 
 export default {
-  name: 'camomile-login-index',
+  name: 'camomile-login',
   data () {
     return {
       popupLogin: popupLogin

@@ -1,8 +1,8 @@
 <template>
-  <div v-if="loggedIs">
+  <div v-if="isLogged">
     <div class="flex flex-start">
       <h2 class="mt-s">Corpus</h2>
-      <button @click="popupOpen({ corpu: {}, closeBtn: true, title: 'Add corpus', component: popupcorpuEdit })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ ...popupEditConfig, id: null, title: 'Add corpus' })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -21,18 +21,25 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
+import popupEdit from './utils/popup-edit.vue'
 
 export default {
   name: 'camomile-corpus',
   data () {
     return {
+      popupEditConfig: {
+        type: 'corpus',
+        closeBtn: true,
+        title: 'Edit corpus',
+        component: popupEdit
+      }
     }
   },
   computed: {
     ...mapState({
       corpus: state => state.camomile.corpus.list,
-      loggedIs: state => state.camomile.loggedIs,
-      adminIs: state => state.camomile.adminIs
+      isLogged: state => state.camomile.isLogged,
+      isAdmin: state => state.camomile.isAdmin
     })
   },
   methods: {

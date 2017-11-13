@@ -1,8 +1,8 @@
 <template>
-  <div v-if="adminIs">
+  <div v-if="isLogged">
     <div class="flex flex-start">
       <h2 class="mt-s">Groups</h2>
-      <button @click="popupOpen({ id: null, ...popupEditConfig })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ ...popupEditConfig, id: null, title: 'Add group' })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,9 +13,9 @@
           <td>{{ group.name }}</td>
           <td>{{ group.userIds.length }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ id: group.id, ...popupUsersConfig })" class="btn px-s py-s my--s h5">Users</button>
-            <button @click="popupOpen({ id: group.id, ...popupEditConfig })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="popupOpen({ id: group.id, ...popupRemoveConfig })" class="btn px-s py-s my--s h5">Remove</button>
+            <button @click="popupOpen({ ...popupUsersConfig, id: group.id })" class="btn px-s py-s my--s h5" v-if="isAdmin">Users</button>
+            <button @click="popupOpen({ ...popupEditConfig, id: group.id })" class="btn px-s py-s my--s h5" v-if="isAdmin">Edit</button>
+            <button @click="popupOpen({ ...popupRemoveConfig, id: group.id })" class="btn px-s py-s my--s h5" v-if="isRoot">Remove</button>
           </td>
         </tr>
       </table>
@@ -43,7 +43,7 @@ export default {
         type: 'groups',
         closeBtn: true,
         title: 'Edit group',
-        component: popupRemove
+        component: popupEdit
       },
       popupUsersConfig: {
         closeBtn: true,
@@ -55,7 +55,9 @@ export default {
   computed: {
     ...mapState({
       groups: state => state.camomile.groups.list,
-      adminIs: state => state.camomile.adminIs
+      isLogged: state => state.camomile.isLogged,
+      isAdmin: state => state.camomile.isAdmin,
+      isRoot: state => state.camomile.isRoot
     })
   },
   methods: {
