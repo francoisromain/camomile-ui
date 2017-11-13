@@ -20,3 +20,11 @@ export function groupFormat (group) {
     userIds: group.users
   }
 }
+
+export function corpusFormat (corpus) {
+  return {
+    name: corpus.name,
+    id: corpus._id,
+    description: corpus.description
+  }
+}

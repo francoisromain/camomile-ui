@@ -8,35 +8,34 @@
     "url": "https://github.com/francoisromain/camomile-ui"
   },
   "scripts": {
-    "cli":
-      "cross-env NODE_ENV=dev webpack-dev-server --inline --hot --config build/webpack.config.cli",
+    "cli": "cross-env NODE_ENV=dev webpack-dev-server --inline --hot --config build/webpack.config.cli",
     "dist": "cross-env NODE_ENV=production node build/dist.js",
     "dev": "cross-env NODE_ENV=development node build/dev.js",
     "styleguide": "vue-styleguidist server",
     "styleguide:build": "vue-styleguidist build"
   },
   "dependencies": {
-    "camomile-client": "^0.8.0"
+    "camomile-client": "^0.8.0",
+    "babel-polyfill": "^6.26.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",
-    "axios": "^0.17.0",
+    "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.2",
     "babel-loader": "^7.1.2",
     "babel-minify-webpack-plugin": "^0.2.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
     "copy-webpack-plugin": "^4.2.0",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
-    "eslint": "^4.10.0",
+    "eslint": "^4.11.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-compat": "^2.1.0",
-    "eslint-plugin-html": "^3.2.2",
+    "eslint-plugin-html": "^4.0.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
@@ -98,7 +97,7 @@
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^13.5.0",
     "vue-style-loader": "^3.0.3",
-    "vue-styleguidist": "^1.3.2",
+    "vue-styleguidist": "^1.3.3",
     "vue-template-compiler": "^2.5.3",
     "vuex": "^3.0.1",
     "webpack": "^3.8.1",
@@ -111,10 +110,10 @@
     "env": {
       "browser": true
     },
-    "plugins": ["html", "compat"],
-    "settings": {
-      "polyfills": ["fetch"]
-    },
+    "plugins": [
+      "html",
+      "compat"
+    ],
     "rules": {
       "compat/compat": 2,
       "arrow-parens": 0,
@@ -122,17 +121,29 @@
     }
   },
   "stylelint": {
-    "processors": ["stylelint-processor-html"],
+    "processors": [
+      "stylelint-processor-html"
+    ],
     "extends": "stylelint-config-standard",
     "rules": {
       "property-no-unknown": [
         true,
         {
-          "ignoreProperties": ["typescale", "gf", "/button-/"]
+          "ignoreProperties": [
+            "typescale",
+            "gf",
+            "/button-/"
+          ]
         }
       ]
     },
-    "ignoreFiles": ["./dist/**/*"]
+    "ignoreFiles": [
+      "./dist/**/*"
+    ]
   },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }

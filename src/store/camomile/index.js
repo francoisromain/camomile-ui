@@ -9,14 +9,25 @@ import messages from './messages'
 import user from './user'
 import users from './users'
 import groups from './groups'
+import corpus from './corpus'
 
 export default {
   namespaced: true,
+  modules: {
+    popup,
+    dropdown,
+    messages,
+    user,
+    users,
+    groups,
+    corpus
+  },
   state: {
     url: '',
     api: null,
     config: config,
-    logged: false
+    loggedIs: false,
+    adminIs: false
   },
   actions: {
     login ({ commit, dispatch, state }) {
@@ -31,6 +42,7 @@ export default {
     },
     set ({ commit, dispatch, state }, user) {
       if (user.role === 'admin') {
+        commit('adminSet')
         dispatch('camomile/users/list', null, { root: true })
         dispatch('camomile/groups/list', null, { root: true })
       }
@@ -46,18 +58,14 @@ export default {
       state.api = null
     },
     login (state) {
-      state.logged = true
+      state.loggedIs = true
     },
     logout (state) {
-      state.logged = false
+      state.loggedIs = false
+      state.adminIs = false
+    },
+    adminSet (state) {
+      state.adminIs = true
     }
-  },
-  modules: {
-    popup,
-    dropdown,
-    messages,
-    user,
-    users,
-    groups
   }
 }

@@ -18,6 +18,7 @@ export default {
           return r
         })
         .catch(e => {
+          console.log(e)
           const error = e.response
             ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
               .error
@@ -63,11 +64,15 @@ export default {
       return rootState.camomile.api
         .deleteUser(user.id)
         .then(r => {
-          message(dispatch, { type: 'success', content: r })
+          message(dispatch, {
+            type: 'success',
+            content: 'Success: user removed.'
+          })
           dispatch('list')
           return r
         })
         .catch(e => {
+          console.log(e)
           const error = e.response
             ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
               .error
@@ -100,6 +105,7 @@ export default {
           return 'truc'
         })
         .catch(e => {
+          console.log(e)
           const error = e.response
             ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
               .error

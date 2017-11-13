@@ -1,4 +1,4 @@
-import { message, groupFormat } from './_helpers'
+import { message, corpusFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -19,13 +19,8 @@ export default {
         })
         .catch(e => {
           console.log(e)
-          const error = e.response
-            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
-              .error
-            : 'Network error'
-
-          message(dispatch, { type: 'error', content: error })
-          throw error
+          message(dispatch, { type: 'error', content: e })
+          throw e
         })
     },
 
@@ -63,51 +58,13 @@ export default {
         })
     },
 
-    userAdd ({ commit, dispatch, state, rootState }, { user, group }) {
-      return rootState.camomile.api
-        .addUserToGroup(user.id, group.id)
-        .then(r => {
-          const group = groupFormat(r)
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: user added to group.'
-          })
-          dispatch('list')
-          return group
-        })
-        .catch(e => {
-          console.log(e)
-          message(dispatch, { type: 'error', content: e })
-          throw e
-        })
-    },
-
-    userRemove ({ commit, dispatch, state, rootState }, { user, group }) {
-      return rootState.camomile.api
-        .removeUserFromGroup(user.id, group.id)
-        .then(r => {
-          const group = groupFormat(r)
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: user removed from group.'
-          })
-          dispatch('list')
-          return group
-        })
-        .catch(e => {
-          console.log(e)
-          message(dispatch, { type: 'error', content: e })
-          throw e
-        })
-    },
-
     list ({ commit, dispatch, state, rootState }) {
       return rootState.camomile.api
-        .getGroups()
+        .getCorpus()
         .then(r => {
-          const groups = r.map(group => groupFormat(group))
-          commit('listUpdate', groups)
-          return groups
+          const corpus = r.map(corpus => corpusFormat(corpus))
+          commit('listUpdate', corpus)
+          return corpus
         })
         .catch(e => {
           console.log(e)
@@ -116,8 +73,8 @@ export default {
     }
   },
   mutations: {
-    listUpdate (state, groups) {
-      state.list = groups
+    listUpdate (state, corpus) {
+      state.list = corpus
     }
   }
 }
