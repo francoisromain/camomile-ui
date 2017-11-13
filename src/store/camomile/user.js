@@ -1,4 +1,4 @@
-import { message, userFormat } from './_helpers'
+import { messageDispatch, userFormat, errorFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -15,23 +15,13 @@ export default {
         .login(config.user.name, config.user.password)
         .then(r => {
           dispatch('camomile/login', null, { root: true })
-          message(dispatch, {
-            type: 'success',
-            content: r.success
-          })
+          messageDispatch('success', r.success, dispatch)
           dispatch('set')
           return r
         })
         .catch(e => {
-          const error = e.response
-            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
-              .error
-            : 'Network error'
-
-          message(dispatch, {
-            type: 'error',
-            content: error
-          })
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
           commit('unset')
           throw error
         })
@@ -43,20 +33,12 @@ export default {
         .then(r => {
           commit('unset')
           dispatch('camomile/logout', null, { root: true })
-          message(dispatch, {
-            type: 'success',
-            content: r.success
-          })
+          messageDispatch('success', r.success, dispatch)
           return r.success
         })
         .catch(e => {
-          console.log(e)
-          const error =
-            e.response[rootState.camomile.config.axios ? 'data' : 'body'].error
-          message(dispatch, {
-            type: 'error',
-            content: error
-          })
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
           commit('unset')
           throw error
         })
@@ -72,13 +54,8 @@ export default {
           return user
         })
         .catch(e => {
-          console.log('e', e)
-          const error =
-            e.response[rootState.camomile.config.axios ? 'data' : 'body'].error
-          message(dispatch, {
-            type: 'error',
-            content: error
-          })
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
           commit('unset')
           throw error
         })

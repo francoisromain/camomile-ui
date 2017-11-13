@@ -1,4 +1,4 @@
-import { message, corpusFormat } from './_helpers'
+import { messageDispatch, corpusFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -6,20 +6,17 @@ export default {
     list: []
   },
   actions: {
-    add ({ commit, dispatch, state, rootState }, group) {
+    add ({ commit, dispatch, state, rootState }, corpus) {
       return rootState.camomile.api
-        .createGroup(group.name, group.description)
+        .createCorpus(corpus.name, corpus.description)
         .then(r => {
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: group added.'
-          })
+          messageDispatch('success', 'Success: corpus added.', dispatch)
           dispatch('list')
           return r
         })
         .catch(e => {
           console.log(e)
-          message(dispatch, { type: 'error', content: e })
+          messageDispatch({ type: 'error', content: e }, dispatch)
           throw e
         })
     },
@@ -28,13 +25,13 @@ export default {
       return rootState.camomile.api
         .deleteGroup(group.id)
         .then(r => {
-          message(dispatch, { type: 'success', content: r })
+          messageDispatch('success', r, dispatch)
           dispatch('list')
           return r
         })
         .catch(e => {
           console.log(e)
-          message(dispatch, { type: 'error', content: e })
+          messageDispatch('error', e, dispatch)
           throw e
         })
     },
@@ -43,17 +40,14 @@ export default {
       return rootState.camomile.api
         .updateGroup(group.id, { description: group.description })
         .then(r => {
-          const group = groupFormat(r)
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: group updated.'
-          })
+          const group = corpusFormat(r)
+          messageDispatch('success', 'Success: group updated.', dispatch)
           dispatch('list')
           return group
         })
         .catch(e => {
           console.log(e)
-          message(dispatch, { type: 'error', content: e })
+          messageDispatch('error', e, dispatch)
           throw e
         })
     },

@@ -1,4 +1,4 @@
-import { message, userFormat } from './_helpers'
+import { messageDispatch, userFormat, errorFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -10,21 +10,13 @@ export default {
       return rootState.camomile.api
         .createUser(user.name, user.password, user.description, user.role)
         .then(r => {
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: user added.'
-          })
+          messageDispatch('success', 'Success: user added.', dispatch)
           dispatch('list')
           return r
         })
         .catch(e => {
-          console.log(e)
-          const error = e.response
-            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
-              .error
-            : 'Network error'
-
-          message(dispatch, { type: 'error', content: error })
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
           throw error
         })
     },
@@ -38,11 +30,7 @@ export default {
         })
         .then(r => {
           const user = userFormat(r)
-          message(dispatch, {
-            type: 'success',
-            content: 'User updated'
-          })
-
+          messageDispatch('success', 'User updated', dispatch)
           if (user.name === rootState.camomile.user.name) {
             commit('camomile/user/set', user, { root: true })
           }
@@ -50,12 +38,9 @@ export default {
           return user
         })
         .catch(e => {
-          console.log(e)
-          const error = 'Error: request failed.'
-          message(dispatch, {
-            type: 'error',
-            content: error
-          })
+          // const error = 'Error: request failed.'
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
           throw error
         })
     },
@@ -64,21 +49,13 @@ export default {
       return rootState.camomile.api
         .deleteUser(user.id)
         .then(r => {
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: user removed.'
-          })
+          messageDispatch('success', 'Success: user removed.', dispatch)
           dispatch('list')
           return r
         })
         .catch(e => {
-          console.log(e)
-          const error = e.response
-            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
-              .error
-            : 'Network error'
-
-          message(dispatch, { type: 'error', content: error })
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
           throw error
         })
     },
@@ -105,13 +82,8 @@ export default {
           return 'truc'
         })
         .catch(e => {
-          console.log(e)
-          const error = e.response
-            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
-              .error
-            : 'Network error'
-
-          message(dispatch, { type: 'error', content: error })
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
           throw error
         })
     }

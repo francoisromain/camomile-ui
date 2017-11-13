@@ -1,4 +1,4 @@
-import { message, groupFormat } from './_helpers'
+import { messageDispatch, groupFormat, errorFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -10,21 +10,13 @@ export default {
       return rootState.camomile.api
         .createGroup(group.name, group.description)
         .then(r => {
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: group added.'
-          })
+          messageDispatch('success', 'Success: group added.', dispatch)
           dispatch('list')
           return r
         })
         .catch(e => {
-          console.log(e)
-          const error = e.response
-            ? e.response[rootState.camomile.config.axios ? 'data' : 'body']
-              .error
-            : 'Network error'
-
-          message(dispatch, { type: 'error', content: error })
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
           throw error
         })
     },
@@ -33,13 +25,13 @@ export default {
       return rootState.camomile.api
         .deleteGroup(group.id)
         .then(r => {
-          message(dispatch, { type: 'success', content: r })
+          messageDispatch('success', r, dispatch)
           dispatch('list')
           return r
         })
         .catch(e => {
           console.log(e)
-          message(dispatch, { type: 'error', content: e })
+          messageDispatch('error', e, dispatch)
           throw e
         })
     },
@@ -49,17 +41,14 @@ export default {
         .updateGroup(group.id, { description: group.description })
         .then(r => {
           const group = groupFormat(r)
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: group updated.'
-          })
+          messageDispatch('success', 'Success: group updated.', dispatch)
           dispatch('list')
           return group
         })
         .catch(e => {
-          console.log(e)
-          message(dispatch, { type: 'error', content: e })
-          throw e
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+          throw error
         })
     },
 
@@ -68,17 +57,14 @@ export default {
         .addUserToGroup(user.id, group.id)
         .then(r => {
           const group = groupFormat(r)
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: user added to group.'
-          })
+          messageDispatch('success', 'Success: user added to group.', dispatch)
           dispatch('list')
           return group
         })
         .catch(e => {
-          console.log(e)
-          message(dispatch, { type: 'error', content: e })
-          throw e
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+          throw error
         })
     },
 
@@ -87,17 +73,18 @@ export default {
         .removeUserFromGroup(user.id, group.id)
         .then(r => {
           const group = groupFormat(r)
-          message(dispatch, {
-            type: 'success',
-            content: 'Success: user removed from group.'
-          })
+          messageDispatch(
+            'success',
+            'Success: user removed from group.',
+            dispatch
+          )
           dispatch('list')
           return group
         })
         .catch(e => {
-          console.log(e)
-          message(dispatch, { type: 'error', content: e })
-          throw e
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+          throw error
         })
     },
 
