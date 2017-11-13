@@ -114,11 +114,6 @@
       "html",
       "compat"
     ],
-    "settings": {
-      "polyfills": [
-        "fetch"
-      ]
-    },
     "rules": {
       "compat/compat": 2,
       "arrow-parens": 0,
