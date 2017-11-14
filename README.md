@@ -37,14 +37,20 @@ See `contributing.md` for further infos.
 
 Create a local [Camomile API server](https://github.com/camomile-project/camomile-server).
 
-Create one additional folder next to this one, resulting in the following structure:
+Create one additional `camomile-data` folder next to this one, resulting in the following structure:
 
-```
+``` txt
 
 .
 +-- camomile-ui
 +-- camomile-server
 +-- camomile-data
+    +-- mongodb
+        +-- files
+    +-- camomile
+        +-- logs
+    +-- media
+    +-- upload
 
 ```
 

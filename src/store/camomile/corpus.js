@@ -57,6 +57,7 @@ export default {
         .getCorpora()
         .then(r => {
           const corpus = r.map(corpu => corpusFormat(corpu))
+          console.log('corpus', corpus)
           corpus.forEach(corpu => dispatch('permissionsList', corpu))
           commit('listUpdate', corpus)
           return corpus
@@ -73,7 +74,6 @@ export default {
         .then(permissions => {
           commit('permissionsUserListUpdate', { permissions, corpu })
           commit('permissionsGroupListUpdate', { permissions, corpu })
-          // console.log('corpu.userIds', Object.keys(corpu.userIds))
           dispatch('permissionsUsercurrent', corpu)
 
           return permissions

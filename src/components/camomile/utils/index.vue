@@ -1,10 +1,10 @@
 <template>
   <div>
     <transition name="transition-top">
-      <cml-dropdown v-if="dropdown.visible" />
+      <cml-popup  v-if="popup.visible" />
     </transition>
     <transition name="transition-top">
-      <cml-popup  v-if="popup.visible" />
+      <cml-dropdown v-if="dropdown.visible" />
     </transition>
     <cml-messages />
   </div>

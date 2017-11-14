@@ -8,7 +8,7 @@
         <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id">
       </div>
     </div>
-    <div class="blobs" v-if="isAdmin && typeUsers">
+    <div class="blobs" v-if="typeUsers">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Role</h3>
       </div>
@@ -58,11 +58,10 @@ export default {
   },
   computed: {
     ...mapState({
-      isAdmin: state => state.camomile.isAdmin,
       id: state => state.camomile.popup.config.id,
       type: state => state.camomile.popup.config.type,
       typeUsers: state => state.camomile.popup.config.type === 'users',
-      rolesPermission: state => state.camomile.isAdmin && state.camomile.user.id !== state.camomile.popup.config.id,
+      rolesPermission: state => state.camomile.user.id !== state.camomile.popup.config.id,
       roles: state => state.camomile.config.roles
     })
   },

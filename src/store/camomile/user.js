@@ -49,7 +49,9 @@ export default {
         .me()
         .then(r => {
           const user = userFormat(r)
-          dispatch('camomile/users/groupIdsList', user, { root: true })
+          if (user.role === 'admin') {
+            dispatch('camomile/users/groupIdsList', user, { root: true })
+          }
           commit('set', user)
           dispatch('camomile/set', user, { root: true })
           return user

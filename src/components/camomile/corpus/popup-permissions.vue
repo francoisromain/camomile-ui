@@ -61,20 +61,20 @@ export default {
     },
     groupPermissionsConfig () {
       return {
-        parent: this.corpu,
+        resource: this.corpu,
         permissionSetAction: 'camomile/corpus/permissionsGroupSet',
         permissionRemoveAction: 'camomile/corpus/permissionsGroupRemove',
         elementType: 'group',
-        parentType: 'corpu'
+        resourceType: 'corpu'
       }
     },
     userPermissionsConfig () {
       return {
-        parent: this.corpu,
+        resource: this.corpu,
         permissionSetAction: 'camomile/corpus/permissionsUserSet',
         permissionRemoveAction: 'camomile/corpus/permissionsUserRemove',
         elementType: 'user',
-        parentType: 'corpu'
+        resourceType: 'corpu'
       }
     }
   },

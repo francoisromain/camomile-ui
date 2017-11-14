@@ -22,13 +22,13 @@ export default {
   methods: {
     toggle (permission) {
       if (this.isActive(permission)) {
-        this.$store.dispatch(this.config.permissionRemoveAction, { [this.config.parentType]: this.config.parent, [this.config.elementType]: this.element })
+        this.$store.dispatch(this.config.permissionRemoveAction, { [this.config.resourceType]: this.config.resource, [this.config.elementType]: this.element })
       } else {
-        this.$store.dispatch(this.config.permissionSetAction, { [this.config.parentType]: this.config.parent, [this.config.elementType]: this.element, permission: permission })
+        this.$store.dispatch(this.config.permissionSetAction, { [this.config.resourceType]: this.config.resource, [this.config.elementType]: this.element, permission: permission })
       }
     },
     isActive (permission) {
-      return this.config.parent[`${this.config.elementType}Ids`].hasOwnProperty(this.element.id) && this.config.parent[`${this.config.elementType}Ids`][this.element.id] === permission
+      return this.config.resource[`${this.config.elementType}Ids`].hasOwnProperty(this.element.id) && this.config.resource[`${this.config.elementType}Ids`][this.element.id] === permission
     }
   }
 }
