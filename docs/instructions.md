@@ -1,0 +1,2 @@
+export CMML_DB=/Volumes/Fr-01-Work/Sites/camomile-data/mongodb/files && export CMML_LOGS=/Volumes/Fr-01-Work/Sites/camomile-data/camomile/logs && export 	CMML_MEDIA=/Volumes/Fr-01-Work/Sites/camomile-data/media && export CMML_UPLOAD=/Volumes/Fr-01-Work/Sites/camomile-data/upload && export CMML_PORT=3000 
+	CMML_PASSWORD=roO7p4s5wOrD && docker-compose -f /Volumes/Fr-01-Work/Sites/camomile-server/docker-compose.yml up -d

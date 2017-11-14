@@ -4,7 +4,7 @@
       <div class="blobs">
         <cml-title class="blob-1-4 mb-0" />
         <cml-infos class="blob-1-4 mb-0" />
-        <cml-userbutton class="blob-icon mb-0 flex-right" v-if="loggedIs" />
+        <cml-userbutton class="blob-icon mb-0 flex-right" v-if="isLogged" />
       </div>
     </div>
   </div>
@@ -24,8 +24,8 @@ export default {
     cmlUserbutton
   },
   computed: {
-    loggedIs () {
-      return this.$store.state.camomile.loggedIs
+    isLogged () {
+      return this.$store.state.camomile.isLogged
     }
   }
 }

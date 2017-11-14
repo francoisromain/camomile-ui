@@ -1,5 +1,12 @@
-export function message (dispatch, message) {
-  dispatch('camomile/messages/add', message, { root: true })
+export function messageDispatch (type, content, dispatch) {
+  dispatch('camomile/messages/add', { type, content }, { root: true })
+}
+
+export function errorFormat (error, rootState) {
+  console.log(error)
+  return error.response
+    ? error.response[rootState.camomile.config.axios ? 'data' : 'body'].error
+    : 'Network error'
 }
 
 export function userFormat (user) {
@@ -25,6 +32,9 @@ export function corpusFormat (corpus) {
   return {
     name: corpus.name,
     id: corpus._id,
-    description: corpus.description
+    description: corpus.description,
+    groupIds: {},
+    userIds: {},
+    permission: null
   }
 }

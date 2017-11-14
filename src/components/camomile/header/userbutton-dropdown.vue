@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown">
     <div>
-      <button @click="popupOpen({ type: 'users', id: user.id, title: 'User settings', closeBtn: true, component: popupEdit })" class="btn px-m py-s full-x">Settings…</button>
+      <button @click="popupOpen({ type: 'users', id: user.id, title: 'User settings', closeBtn: true, component: popupEdit })" class="btn px-m py-s full-x" v-if="isAdmin">Settings…</button>
     </div>
     <div>
       <button @click="logout" class="btn px-m py-s full-x mr home">Logout</button>

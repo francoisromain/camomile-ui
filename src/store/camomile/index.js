@@ -26,8 +26,9 @@ export default {
     url: '',
     api: null,
     config: config,
-    loggedIs: false,
-    adminIs: false
+    isLogged: false,
+    isAdmin: false,
+    isRoot: false
   },
   actions: {
     login ({ commit, dispatch, state }) {
@@ -42,10 +43,15 @@ export default {
     },
     set ({ commit, dispatch, state }, user) {
       if (user.role === 'admin') {
+        console.log('adminnnnn')
         commit('adminSet')
         dispatch('camomile/users/list', null, { root: true })
         dispatch('camomile/groups/list', null, { root: true })
       }
+      if (user.name === 'root') {
+        commit('rootSet')
+      }
+      dispatch('camomile/corpus/list', null, { root: true })
     }
   },
   mutations: {
@@ -58,14 +64,18 @@ export default {
       state.api = null
     },
     login (state) {
-      state.loggedIs = true
+      state.isLogged = true
     },
     logout (state) {
-      state.loggedIs = false
-      state.adminIs = false
+      state.isLogged = false
+      state.isAdmin = false
+      state.isRoot = false
     },
     adminSet (state) {
-      state.adminIs = true
+      state.isAdmin = true
+    },
+    rootSet (state) {
+      state.isRoot = true
     }
   }
 }

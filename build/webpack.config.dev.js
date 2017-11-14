@@ -22,15 +22,15 @@ module.exports = merge(webpackConfigBase, {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
-        // options: {
-        //   buble: {
-        //     objectAssign: 'Object.assign',
-        //     transforms: {
-        //       stripWith: false
-        //     }
-        //   }
-        // }
+        loader: 'vue-loader',
+        options: {
+          buble: {
+            objectAssign: 'Object.assign',
+            transforms: {
+              stripWith: true
+            }
+          }
+        }
       },
       {
         test: /\.css$/,
