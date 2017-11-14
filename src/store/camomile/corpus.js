@@ -54,9 +54,10 @@ export default {
 
     list ({ commit, dispatch, state, rootState }) {
       return rootState.camomile.api
-        .getCorpus()
+        .getCorpora()
         .then(r => {
-          const corpus = r.map(corpus => corpusFormat(corpus))
+          const corpus = r.map(corpu => corpusFormat(corpu))
+          corpus.forEach(corpu => dispatch('permissionsList', corpu))
           commit('listUpdate', corpus)
           return corpus
         })
@@ -66,12 +67,16 @@ export default {
         })
     },
 
-    permissionIdsList ({ commit, dispatch, state, rootState }, corpu) {
+    permissionsList ({ commit, dispatch, state, rootState }, corpu) {
       return rootState.camomile.api
         .getCorpusPermissions(corpu.id)
         .then(permissions => {
-          commit('permissionIdsListUpdate', { permissions, corpu })
-          return 'truc'
+          commit('permissionsUserListUpdate', { permissions, corpu })
+          commit('permissionsGroupListUpdate', { permissions, corpu })
+          // console.log('corpu.userIds', Object.keys(corpu.userIds))
+          dispatch('permissionsUsercurrent', corpu)
+
+          return permissions
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
@@ -80,7 +85,29 @@ export default {
         })
     },
 
-    groupPermissionSet (
+    permissionsUsercurrent ({ commit, dispatch, state, rootState }, corpu) {
+      const permissionUser =
+        Object.keys(corpu.userIds).find(
+          userId => userId === rootState.camomile.user.id
+        ) && corpu.userIds[rootState.camomile.user.id]
+      const permissionGroup = Object.keys(corpu.groupIds).reduce(
+        (permission, groupId) => {
+          return (
+            !!rootState.camomile.user.groupIds[groupId] &&
+            corpu.groupIds[groupId] > permission &&
+            corpu.groupIds[groupId]
+          )
+        },
+        false
+      )
+
+      commit('permissionsUsercurrentSet', {
+        permission: Math.max(permissionUser, permissionGroup),
+        corpu
+      })
+    },
+
+    permissionsGroupSet (
       { commit, dispatch, state, rootState },
       { corpu, group, permission }
     ) {
@@ -88,7 +115,7 @@ export default {
         .setCorpusPermissionsForGroup(corpu.id, group.id, permission)
         .then(permissions => {
           messageDispatch('success', `Group permissions updated`, dispatch)
-          commit('permissionIdsListUpdate', { permissions, corpu })
+          commit('permissionsGroupListUpdate', { permissions, corpu })
           return permissions
         })
         .catch(e => {
@@ -98,7 +125,7 @@ export default {
         })
     },
 
-    groupPermissionRemove (
+    permissionsGroupRemove (
       { commit, dispatch, state, rootState },
       { corpu, group }
     ) {
@@ -106,7 +133,7 @@ export default {
         .removeCorpusPermissionsForGroup(corpu.id, group.id)
         .then(permissions => {
           messageDispatch('success', 'Group permissions updated', dispatch)
-          commit('permissionIdsListUpdate', { permissions, corpu })
+          commit('permissionsGroupListUpdate', { permissions, corpu })
           return permissions
         })
         .catch(e => {
@@ -116,7 +143,7 @@ export default {
         })
     },
 
-    userPermissionSet (
+    permissionsUserSet (
       { commit, dispatch, state, rootState },
       { corpu, user, permission }
     ) {
@@ -124,7 +151,7 @@ export default {
         .setCorpusPermissionsForUser(corpu.id, user.id, permission)
         .then(permissions => {
           messageDispatch('success', 'User permissions updated', dispatch)
-          commit('permissionIdsListUpdate', { permissions, corpu })
+          commit('permissionsUserListUpdate', { permissions, corpu })
           return permissions
         })
         .catch(e => {
@@ -134,7 +161,7 @@ export default {
         })
     },
 
-    userPermissionRemove (
+    permissionsUserRemove (
       { commit, dispatch, state, rootState },
       { corpu, user }
     ) {
@@ -142,7 +169,7 @@ export default {
         .removeCorpusPermissionsForUser(corpu.id, user.id)
         .then(permissions => {
           messageDispatch('success', 'User permissions updated', dispatch)
-          commit('permissionIdsListUpdate', { permissions, corpu })
+          commit('permissionsUserListUpdate', { permissions, corpu })
           return permissions
         })
         .catch(e => {
@@ -156,9 +183,14 @@ export default {
     listUpdate (state, corpus) {
       state.list = corpus
     },
-    permissionIdsListUpdate (state, { permissions, corpu }) {
+    permissionsUserListUpdate (state, { permissions, corpu }) {
       corpu.userIds = permissions.users || {}
+    },
+    permissionsGroupListUpdate (state, { permissions, corpu }) {
       corpu.groupIds = permissions.groups || {}
+    },
+    permissionsUsercurrentSet (state, { permission, corpu }) {
+      corpu.permission = permission
     }
   }
 }

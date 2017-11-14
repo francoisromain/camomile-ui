@@ -12,9 +12,9 @@
         <tr v-for="corpu in corpus" :key="corpu.id">
           <td>{{ corpu.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupPermissionsConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="isAdmin">Permissions</button>
-            <button @click="popupOpen({ ...popupEditConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="isAdmin">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="isAdmin">Remove</button>
+            <button @click="popupOpen({ ...popupPermissionsConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission">Permissions</button>
+            <button @click="popupOpen({ ...popupEditConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission">Edit</button>
+            <button @click="popupOpen({ ...popupRemoveConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission">Remove</button>
           </td>
         </tr>
       </table>

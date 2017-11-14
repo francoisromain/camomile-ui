@@ -5,8 +5,8 @@
       <cml-utils />
       <div class="container pt">
         <div class="blobs">
-          <cml-users class="blob-1-2 p border" />
-          <cml-groups class="blob-1-2 p border" />
+          <cml-users class="blob-1-2 p border" v-if="isAdmin"/>
+          <cml-groups class="blob-1-2 p border" v-if="isAdmin"/>
         </div>
         <cml-corpus class="p border" />
       </div> 
@@ -42,6 +42,11 @@ export default {
     cmlUsers,
     cmlGroups,
     cmlCorpus
+  },
+  computed: {
+    isAdmin () {
+      return this.$store.state.camomile.isAdmin
+    }
   }
 }
 </script>

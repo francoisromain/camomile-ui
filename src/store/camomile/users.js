@@ -79,7 +79,7 @@ export default {
         .getUserGroups(user.id)
         .then(groupIds => {
           commit('groupIdsListUpdate', { groupIds, user })
-          return 'truc'
+          return groupIds
         })
         .catch(e => {
           const error = errorFormat(e, rootState)

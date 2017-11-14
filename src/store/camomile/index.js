@@ -43,14 +43,15 @@ export default {
     },
     set ({ commit, dispatch, state }, user) {
       if (user.role === 'admin') {
+        console.log('adminnnnn')
         commit('adminSet')
         dispatch('camomile/users/list', null, { root: true })
         dispatch('camomile/groups/list', null, { root: true })
-        dispatch('camomile/corpus/list', null, { root: true })
       }
       if (user.name === 'root') {
         commit('rootSet')
       }
+      dispatch('camomile/corpus/list', null, { root: true })
     }
   },
   mutations: {
