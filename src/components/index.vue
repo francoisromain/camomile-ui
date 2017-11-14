@@ -8,9 +8,7 @@
           <cml-users class="blob-1-2 p border" />
           <cml-groups class="blob-1-2 p border" />
         </div>
-        <div class="blobs">
-          <cml-corpus class="blob-1-3 p border" />
-        </div>
+        <cml-corpus class="p border" />
       </div> 
       <debug />
     </div>

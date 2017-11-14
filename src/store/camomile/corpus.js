@@ -1,4 +1,4 @@
-import { messageDispatch, corpusFormat } from './_helpers'
+import { messageDispatch, corpusFormat, errorFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -8,22 +8,22 @@ export default {
   actions: {
     add ({ commit, dispatch, state, rootState }, corpus) {
       return rootState.camomile.api
-        .createCorpus(corpus.name, corpus.description)
+        .createCorpus(corpus.name, corpus.description, {})
         .then(r => {
           messageDispatch('success', 'Success: corpus added.', dispatch)
           dispatch('list')
           return r
         })
         .catch(e => {
-          console.log(e)
-          messageDispatch({ type: 'error', content: e }, dispatch)
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
           throw e
         })
     },
 
-    remove ({ commit, dispatch, state, rootState }, group) {
+    remove ({ commit, dispatch, state, rootState }, corpus) {
       return rootState.camomile.api
-        .deleteGroup(group.id)
+        .deleteCorpus(corpus.id)
         .then(r => {
           messageDispatch('success', r, dispatch)
           dispatch('list')
@@ -36,14 +36,14 @@ export default {
         })
     },
 
-    update ({ commit, dispatch, state, rootState }, group) {
+    update ({ commit, dispatch, state, rootState }, corpus) {
       return rootState.camomile.api
-        .updateGroup(group.id, { description: group.description })
+        .updateCorpus(corpus.id, { description: corpus.description })
         .then(r => {
-          const group = corpusFormat(r)
-          messageDispatch('success', 'Success: group updated.', dispatch)
+          const corpus = corpusFormat(r)
+          messageDispatch('success', 'Success: corpus updated.', dispatch)
           dispatch('list')
-          return group
+          return corpus
         })
         .catch(e => {
           console.log(e)
@@ -64,11 +64,101 @@ export default {
           console.log(e)
           throw e
         })
+    },
+
+    permissionIdsList ({ commit, dispatch, state, rootState }, corpu) {
+      return rootState.camomile.api
+        .getCorpusPermissions(corpu.id)
+        .then(permissions => {
+          commit('permissionIdsListUpdate', { permissions, corpu })
+          return 'truc'
+        })
+        .catch(e => {
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+          throw error
+        })
+    },
+
+    groupPermissionSet (
+      { commit, dispatch, state, rootState },
+      { corpu, group, permission }
+    ) {
+      return rootState.camomile.api
+        .setCorpusPermissionsForGroup(corpu.id, group.id, permission)
+        .then(permissions => {
+          messageDispatch('success', permissions, dispatch)
+          commit('permissionIdsListUpdate', { permissions, corpu })
+          return 'truc'
+        })
+        .catch(e => {
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+          throw error
+        })
+    },
+
+    groupPermissionRemove (
+      { commit, dispatch, state, rootState },
+      { corpu, group }
+    ) {
+      return rootState.camomile.api
+        .removeCorpusPermissionsForGroup(corpu.id, group.id)
+        .then(permissions => {
+          messageDispatch('success', permissions, dispatch)
+          commit('permissionIdsListUpdate', { permissions, corpu })
+          return 'truc'
+        })
+        .catch(e => {
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+          throw error
+        })
+    },
+
+    userPermissionSet (
+      { commit, dispatch, state, rootState },
+      { corpu, user, permission }
+    ) {
+      return rootState.camomile.api
+        .setCorpusPermissionsForUser(corpu.id, user.id, permission)
+        .then(permissions => {
+          messageDispatch('success', permissions, dispatch)
+          commit('permissionIdsListUpdate', { permissions, corpu })
+          return 'truc'
+        })
+        .catch(e => {
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+          throw error
+        })
+    },
+
+    userPermissionRemove (
+      { commit, dispatch, state, rootState },
+      { corpu, user }
+    ) {
+      return rootState.camomile.api
+        .removeCorpusPermissionsForUser(corpu.id, user.id)
+        .then(permissions => {
+          messageDispatch('success', permissions, dispatch)
+          commit('permissionIdsListUpdate', { permissions, corpu })
+          return 'truc'
+        })
+        .catch(e => {
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+          throw error
+        })
     }
   },
   mutations: {
     listUpdate (state, corpus) {
       state.list = corpus
+    },
+    permissionIdsListUpdate (state, { permissions, corpu }) {
+      corpu.userIds = permissions.users || {}
+      corpu.groupIds = permissions.groups || {}
     }
   }
 }

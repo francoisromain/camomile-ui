@@ -93,8 +93,7 @@ export default {
       state.list = users
     },
     groupIdsListUpdate (state, { groupIds, user }) {
-      const u = state.list.find(us => us.id === user.id)
-      u.groupIds = groupIds
+      user.groupIds = groupIds
     }
   }
 }

@@ -32,6 +32,8 @@ export function corpusFormat (corpus) {
   return {
     name: corpus.name,
     id: corpus._id,
-    description: corpus.description
+    description: corpus.description,
+    groupIds: {},
+    userIds: {}
   }
 }

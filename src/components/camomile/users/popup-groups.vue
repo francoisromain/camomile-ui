@@ -43,7 +43,6 @@ export default {
         this.$store.dispatch('camomile/groups/userAdd', { user: this.user, group: group })
           .then(r => this.groupIdsList())
       }
-
     },
     groupActive (groupId) {
       return this.user.groupIds.indexOf(groupId) > -1

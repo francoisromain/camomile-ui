@@ -46,6 +46,7 @@ export default {
         commit('adminSet')
         dispatch('camomile/users/list', null, { root: true })
         dispatch('camomile/groups/list', null, { root: true })
+        dispatch('camomile/corpus/list', null, { root: true })
       }
       if (user.name === 'root') {
         commit('rootSet')
