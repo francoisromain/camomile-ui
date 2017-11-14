@@ -16,17 +16,7 @@
                 {{ group.name }}
               </div>
               <div class="blob-2-3 mb-xs">
-                <ul class="list-inline">
-                  <li class="tag" :class="{ active: groupActive(group.id, 1) }">
-                    <button class="btn px-s py-xs h5 pill" @click="groupToggle(group, 1)">R</button>
-                  </li>
-                  <li class="tag" :class="{ active: groupActive(group.id, 2) }">
-                    <button class="btn px-s py-xs h5 pill" @click="groupToggle(group, 2)">W</button>
-                  </li>
-                  <li class="tag" :class="{ active: groupActive(group.id, 3) }">
-                    <button class="btn px-s py-xs h5 pill" @click="groupToggle(group, 3)">A</button>
-                  </li>
-                </ul>
+                <permissions :config="groupPermissionsConfig" :element="group" />
               </div>
             </div>
           </li>
@@ -41,17 +31,7 @@
                 {{ user.name }}
               </div>
               <div class="blob-2-3 mb-xs">
-                <ul class="list-inline">
-                  <li class="tag" :class="{ active: userActive(user.id, 1) }">
-                    <button class="btn px-s py-xs h5 pill" @click="userToggle(user, 1)">R</button>
-                  </li>
-                  <li class="tag" :class="{ active: userActive(user.id, 2) }">
-                    <button class="btn px-s py-xs h5 pill" @click="userToggle(user, 2)">W</button>
-                  </li>
-                  <li class="tag" :class="{ active: userActive(user.id, 3) }">
-                    <button class="btn px-s py-xs h5 pill" @click="userToggle(user, 3)">A</button>
-                  </li>
-                </ul>
+                <permissions :config="userPermissionsConfig" :element="user" />
               </div>
             </div>
           </li>
@@ -62,10 +42,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import permissions from '../utils/permissions.vue'
 
 export default {
   name: 'camomile-popup-user-edit',
+  components: {
+    permissions
+  },
   computed: {
     users () {
       return this.$store.state.camomile.users.list
@@ -75,29 +58,27 @@ export default {
     },
     corpu () {
       return this.$store.state.camomile.corpus.list.find(corpu => corpu.id === this.$store.state.camomile.popup.config.id)
+    },
+    groupPermissionsConfig () {
+      return {
+        parent: this.corpu,
+        permissionSetAction: 'camomile/corpus/groupPermissionSet',
+        permissionRemoveAction: 'camomile/corpus/groupPermissionRemove',
+        elementType: 'group',
+        parentType: 'corpu'
+      }
+    },
+    userPermissionsConfig () {
+      return {
+        parent: this.corpu,
+        permissionSetAction: 'camomile/corpus/userPermissionSet',
+        permissionRemoveAction: 'camomile/corpus/userPermissionRemove',
+        elementType: 'user',
+        parentType: 'corpu'
+      }
     }
   },
   methods: {
-    userToggle (user, permission) {
-      if (this.userActive(user.id, permission)) {
-        this.$store.dispatch('camomile/corpus/userPermissionRemove', { corpu: this.corpu, user: user })
-      } else {
-        this.$store.dispatch('camomile/corpus/userPermissionSet', { corpu: this.corpu, user: user, permission: permission })
-      }
-    },
-    groupToggle (group, permission) {
-      if (this.groupActive(group.id, permission)) {
-        this.$store.dispatch('camomile/corpus/groupPermissionRemove', { corpu: this.corpu, group: group })
-      } else {
-        this.$store.dispatch('camomile/corpus/groupPermissionSet', { corpu: this.corpu, group: group, permission: permission })
-      }
-    },
-    userActive (userId, permission) {
-      return this.corpu.userIds.hasOwnProperty(userId) && this.corpu.userIds[userId] === permission
-    },
-    groupActive (groupId, permission) {
-      return this.corpu.groupIds.hasOwnProperty(groupId) && this.corpu.groupIds[groupId] === permission
-    },
     permissionIdsList () {
       this.$store.dispatch('camomile/corpus/permissionIdsList', this.corpu)
     }

@@ -87,9 +87,9 @@ export default {
       return rootState.camomile.api
         .setCorpusPermissionsForGroup(corpu.id, group.id, permission)
         .then(permissions => {
-          messageDispatch('success', permissions, dispatch)
+          messageDispatch('success', `Group permissions updated`, dispatch)
           commit('permissionIdsListUpdate', { permissions, corpu })
-          return 'truc'
+          return permissions
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
@@ -105,9 +105,9 @@ export default {
       return rootState.camomile.api
         .removeCorpusPermissionsForGroup(corpu.id, group.id)
         .then(permissions => {
-          messageDispatch('success', permissions, dispatch)
+          messageDispatch('success', 'Group permissions updated', dispatch)
           commit('permissionIdsListUpdate', { permissions, corpu })
-          return 'truc'
+          return permissions
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
@@ -123,9 +123,9 @@ export default {
       return rootState.camomile.api
         .setCorpusPermissionsForUser(corpu.id, user.id, permission)
         .then(permissions => {
-          messageDispatch('success', permissions, dispatch)
+          messageDispatch('success', 'User permissions updated', dispatch)
           commit('permissionIdsListUpdate', { permissions, corpu })
-          return 'truc'
+          return permissions
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
@@ -141,9 +141,9 @@ export default {
       return rootState.camomile.api
         .removeCorpusPermissionsForUser(corpu.id, user.id)
         .then(permissions => {
-          messageDispatch('success', permissions, dispatch)
+          messageDispatch('success', 'User permissions updated', dispatch)
           commit('permissionIdsListUpdate', { permissions, corpu })
-          return 'truc'
+          return permissions
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
