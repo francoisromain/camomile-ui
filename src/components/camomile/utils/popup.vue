@@ -20,13 +20,13 @@ export default {
   name: 'camomile-popup',
   computed: {
     ...mapState({
-      config: state => state.camomile.popup.config
+      config: state => state.cml.popup.config
     })
   },
   methods: {
     close () {
       if (this.config.closeBtn) {
-        this.$store.commit('camomile/popup/close')
+        this.$store.commit('cml/popup/close')
       }
     },
     keyup (e) {

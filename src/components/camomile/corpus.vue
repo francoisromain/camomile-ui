@@ -12,9 +12,9 @@
         <tr v-for="corpu in corpus" :key="corpu.id">
           <td>{{ corpu.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupPermissionsConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission">Permissions</button>
-            <button @click="popupOpen({ ...popupEditConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission">Remove</button>
+            <button @click="popupOpen({ ...popupPermissionsConfig, corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Permissions</button>
+            <button @click="popupOpen({ ...popupEditConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Edit</button>
+            <button @click="popupOpen({ ...popupRemoveConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Remove</button>
           </td>
         </tr>
       </table>
@@ -54,14 +54,14 @@ export default {
   },
   computed: {
     ...mapState({
-      corpus: state => state.camomile.corpus.list,
-      isLogged: state => state.camomile.isLogged,
-      isAdmin: state => state.camomile.isAdmin
+      corpus: state => state.cml.corpus.list,
+      isLogged: state => state.cml.isLogged,
+      isAdmin: state => state.cml.isAdmin
     })
   },
   methods: {
     ...mapMutations({
-      popupOpen: 'camomile/popup/open'
+      popupOpen: 'cml/popup/open'
     })
   }
 }

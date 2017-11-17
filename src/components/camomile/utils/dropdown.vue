@@ -12,12 +12,12 @@ export default {
   name: 'camomile-dropdown-user',
   computed: {
     config () {
-      return this.$store.state.camomile.dropdown.config
+      return this.$store.state.cml.dropdown.config
     }
   },
   methods: {
     close () {
-      this.$store.commit('camomile/dropdown/close')
+      this.$store.commit('cml/dropdown/close')
     }
   }
 }

@@ -37,14 +37,20 @@ See `contributing.md` for further infos.
 
 Create a local [Camomile API server](https://github.com/camomile-project/camomile-server).
 
-Create one additional folder next to this one, resulting in the following structure:
+Create one additional `camomile-data` folder next to this one, resulting in the following structure:
 
-```
+``` txt
 
 .
 +-- camomile-ui
 +-- camomile-server
 +-- camomile-data
+    +-- mongodb
+        +-- files
+    +-- camomile
+        +-- logs
+    +-- media
+    +-- upload
 
 ```
 
@@ -52,6 +58,8 @@ Start the server
 
 ``` bash
 
-export CMML_DB=../camomile-data/mongodb/files && export CMML_LOGS=../camomile-data/camomile/logs && export 	CMML_MEDIA=../camomile-data/media && export CMML_UPLOAD=../camomile-data/upload && export CMML_PORT=3000 && export CMML_PASSWORD=roO7p4s5wOrD && docker-compose -f ../camomile-server/docker-compose.yml up -d
+export CMML_DB=../camomile-data/mongodb/files && export CMML_LOGS=../camomile-data/camomile/logs && export CMML_MEDIA=../camomile-data/media && export CMML_UPLOAD=../camomile-data/upload && export CMML_PORT=3000 && export CMML_PASSWORD=roO7p4s5wOrD && docker-compose -f ../camomile-server/docker-compose.dev.yml up -d
 
 ```
+
+node app.js

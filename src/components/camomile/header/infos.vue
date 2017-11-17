@@ -7,10 +7,10 @@ export default {
   name: 'camomile-infos',
   computed: {
     url () {
-      return this.$store.state.camomile.url
+      return this.$store.state.cml.url
     },
     api () {
-      return this.$store.state.camomile.config.axios ? 'axios api' : 'rp api';
+      return this.$store.state.cml.config.axios ? 'axios api' : 'rp api';
     }
   }
 }

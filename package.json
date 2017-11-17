@@ -8,7 +8,8 @@
     "url": "https://github.com/francoisromain/camomile-ui"
   },
   "scripts": {
-    "cli": "cross-env NODE_ENV=dev webpack-dev-server --inline --hot --config build/webpack.config.cli",
+    "cli":
+      "cross-env NODE_ENV=dev webpack-dev-server --inline --hot --config build/webpack.config.cli",
     "dist": "cross-env NODE_ENV=production node build/dist.js",
     "dev": "cross-env NODE_ENV=development node build/dev.js",
     "styleguide": "vue-styleguidist server",
@@ -53,7 +54,7 @@
     "postcss": "^6.0.14",
     "postcss-attribute-case-insensitive": "^2.0.0",
     "postcss-browser-reporter": "^0.5.0",
-    "postcss-button": "^0.2.8",
+    "postcss-button": "^0.3.6",
     "postcss-calc": "^6.0.1",
     "postcss-color-function": "^4.0.1",
     "postcss-color-gray": "^4.0.0",
@@ -91,14 +92,15 @@
     "stylelint": "^8.2.0",
     "stylelint-config-standard": "^17.0.0",
     "stylelint-processor-html": "^1.0.0",
+    "uglifyjs-webpack-plugin": "^1.0.1",
     "url-loader": "^0.6.2",
-    "vue": "^2.5.3",
+    "vue": "^2.5.4",
     "vue-hot-reload-api": "^2.2.3",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^13.5.0",
     "vue-style-loader": "^3.0.3",
     "vue-styleguidist": "^1.3.3",
-    "vue-template-compiler": "^2.5.3",
+    "vue-template-compiler": "^2.5.4",
     "vuex": "^3.0.1",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4",
@@ -110,10 +112,7 @@
     "env": {
       "browser": true
     },
-    "plugins": [
-      "html",
-      "compat"
-    ],
+    "plugins": ["html", "compat"],
     "rules": {
       "compat/compat": 2,
       "arrow-parens": 0,
@@ -121,29 +120,17 @@
     }
   },
   "stylelint": {
-    "processors": [
-      "stylelint-processor-html"
-    ],
+    "processors": ["stylelint-processor-html"],
     "extends": "stylelint-config-standard",
     "rules": {
       "property-no-unknown": [
         true,
         {
-          "ignoreProperties": [
-            "typescale",
-            "gf",
-            "/button-/"
-          ]
+          "ignoreProperties": ["typescale", "gf", "/button-/"]
         }
       ]
     },
-    "ignoreFiles": [
-      "./dist/**/*"
-    ]
+    "ignoreFiles": ["./dist/**/*"]
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["chrome >= 60", "firefox >= 57", "iOS >= 10"]
 }

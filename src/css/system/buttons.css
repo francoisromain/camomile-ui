@@ -7,6 +7,7 @@
   button-border-width: 0;
   button-color: var(--color-text) var(--color-inverse) var(--color-bg);
   button-background: var(--color-alt) var(--color-alt) var(--color-highlight);
+  button-class: active disabled active;
 }
 
 .btn {
@@ -19,7 +20,7 @@
   button-background: var(--color-alt) var(--color-bg) var(--color-bg);
   button-border: var(--unit-line) var(--color-neutral) var(--color-highlight)
     var(--color-highlight);
-  button-classes: active disabled;
+  button-class: active disabled;
 }
 
 .tag .btn,
@@ -27,7 +28,7 @@
   button-color: var(--color-bg) var(--color-bg) var(--color-bg);
   button-background: var(--color-neutral) var(--color-inverse)
     var(--color-highlight);
-  button-classes: active disabled;
+  button-class: active disabled;
   font-weight: 700;
 }
 

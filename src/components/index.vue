@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     isAdmin () {
-      return this.$store.state.camomile.isAdmin
+      return this.$store.state.cml.isAdmin
     }
   }
 }

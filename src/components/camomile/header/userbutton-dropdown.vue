@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown">
-    <div>
-      <button @click="popupOpen({ type: 'users', id: user.id, title: 'User settings', closeBtn: true, component: popupEdit })" class="btn px-m py-s full-x" v-if="isAdmin">Settings…</button>
+    <div v-if="isAdmin">
+      <button @click="popupOpen({ type: 'users', id: user.id, title: 'User settings', closeBtn: true, component: popupEdit })" class="btn px-m py-s full-x">Settings…</button>
     </div>
     <div>
       <button @click="logout" class="btn px-m py-s full-x mr home">Logout</button>
@@ -22,18 +22,21 @@ export default {
   },
   computed: {
     user () {
-      return this.$store.state.camomile.user
+      return this.$store.state.cml.user
+    },
+    isAdmin () {
+      return this.$store.state.cml.isAdmin
     }
   },
   methods: {
     close () {
-      this.$store.commit('camomile/dropdown/close')
+      this.$store.commit('cml/dropdown/close')
     },
     logout () {
-      return this.$store.dispatch('camomile/user/logout')
+      return this.$store.dispatch('cml/user/logout')
     },
     popupOpen (config) {
-      this.$store.commit('camomile/popup/open', config)
+      this.$store.commit('cml/popup/open', config)
       this.close()
     }
   }

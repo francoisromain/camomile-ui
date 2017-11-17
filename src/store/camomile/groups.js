@@ -7,7 +7,7 @@ export default {
   },
   actions: {
     add ({ commit, dispatch, state, rootState }, group) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .createGroup(group.name, group.description)
         .then(r => {
           messageDispatch('success', 'Success: group added.', dispatch)
@@ -22,7 +22,7 @@ export default {
     },
 
     remove ({ commit, dispatch, state, rootState }, group) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .deleteGroup(group.id)
         .then(r => {
           messageDispatch('success', r, dispatch)
@@ -37,7 +37,7 @@ export default {
     },
 
     update ({ commit, dispatch, state, rootState }, group) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .updateGroup(group.id, { description: group.description })
         .then(r => {
           const group = groupFormat(r)
@@ -53,7 +53,7 @@ export default {
     },
 
     userAdd ({ commit, dispatch, state, rootState }, { user, group }) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .addUserToGroup(user.id, group.id)
         .then(r => {
           const group = groupFormat(r)
@@ -69,7 +69,7 @@ export default {
     },
 
     userRemove ({ commit, dispatch, state, rootState }, { user, group }) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .removeUserFromGroup(user.id, group.id)
         .then(r => {
           const group = groupFormat(r)
@@ -88,8 +88,18 @@ export default {
         })
     },
 
+    get ({ commit, dispatch, state, rootState }, groupId) {
+      return rootState.cml.api
+        .getGroup(groupId)
+        .then(group => groupFormat(group))
+        .catch(e => {
+          console.log(e)
+          throw e
+        })
+    },
+
     list ({ commit, dispatch, state, rootState }) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .getGroups()
         .then(r => {
           const groups = r.map(group => groupFormat(group))

@@ -4,10 +4,11 @@
       "env",
       {
         "targets": {
-          "browsers": ["chrome >= 50", "firefox >= 50", "ie >= 11", "iOS >= 9"]
+          "browsers": ["chrome >= 60", "firefox >= 57", "iOS >= 10"]
         },
         "useBuiltIns": true,
-        "modules": false
+        "modules": false,
+        "loose": true
       }
     ],
     "stage-2"

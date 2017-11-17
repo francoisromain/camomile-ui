@@ -38,12 +38,12 @@ export default {
   name: 'camomile-login',
   computed: {
     ...mapState({
-      config: state => state.camomile.config
+      config: state => state.cml.config
     })
   },
   methods: {
     ...mapActions({
-      login: 'camomile/user/login'
+      login: 'cml/user/login'
     }),
     keyup (e) {
       if ((e.which || e.keyCode) === 13) {

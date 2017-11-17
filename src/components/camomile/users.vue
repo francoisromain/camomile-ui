@@ -2,7 +2,7 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Users</h2>
-      <button @click="popupOpen({ ...popupEditConfig, id: null, title: 'Add user' })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ ...popupEditConfig, element: {}, title: 'Add user' })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,9 +13,9 @@
           <td>{{ user.name }}</td>
           <td>{{ user.role }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupGroupsConfig, id: user.id })" class="btn px-s py-s my--s h5">Groups</button>
-            <button @click="popupOpen({ ...popupEditConfig, id: user.id })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, id: user.id })" class="btn px-s py-s my--s h5">Remove</button>
+            <button @click="popupOpen({ ...popupGroupsConfig, userId: user.id })" class="btn px-s py-s my--s h5">Groups</button>
+            <button @click="popupOpen({ ...popupEditConfig, element: user })" class="btn px-s py-s my--s h5">Edit</button>
+            <button @click="popupOpen({ ...popupRemoveConfig, element: user })" class="btn px-s py-s my--s h5">Remove</button>
           </td>
         </tr>
       </table>
@@ -54,13 +54,13 @@ export default {
   },
   computed: {
     ...mapState({
-      users: state => state.camomile.users.list,
-      isLogged: state => state.camomile.isLogged
+      users: state => state.cml.users.list,
+      isLogged: state => state.cml.isLogged
     })
   },
   methods: {
     ...mapMutations({
-      popupOpen: 'camomile/popup/open'
+      popupOpen: 'cml/popup/open'
     })
   }
 }

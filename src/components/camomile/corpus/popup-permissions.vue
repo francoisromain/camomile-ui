@@ -10,7 +10,7 @@
       <div class="blob-1-2">
         <h3 class="pt-s">Groups</h3>
         <ul class="list-sans">
-          <li v-for="group in groups" :key="group.id">
+          <li v-for="group in corpu.groups" :key="group.id">
             <div class="blobs">
               <div class="blob-1-3 mb-xs">
                 {{ group.name }}
@@ -25,7 +25,7 @@
       <div class="blob-1-2">
         <h3 class="pt-s">Users</h3>
         <ul class="list-sans">
-          <li v-for="user in users" :key="user.id">
+          <li v-for="user in corpu.users" :key="user.id">
             <div class="blobs">
               <div class="blob-1-3 mb-xs">
                 {{ user.name }}
@@ -43,6 +43,7 @@
 
 <script>
 import permissions from '../utils/permissions.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'camomile-popup-user-edit',
@@ -50,37 +51,31 @@ export default {
     permissions
   },
   computed: {
-    users () {
-      return this.$store.state.camomile.users.list
-    },
-    groups () {
-      return this.$store.state.camomile.groups.list
-    },
-    corpu () {
-      return this.$store.state.camomile.corpus.list.find(corpu => corpu.id === this.$store.state.camomile.popup.config.id)
-    },
+    ...mapState({
+      corpu: state => state.cml.popup.config.corpu
+    }),
     groupPermissionsConfig () {
       return {
-        parent: this.corpu,
-        permissionSetAction: 'camomile/corpus/permissionsGroupSet',
-        permissionRemoveAction: 'camomile/corpus/permissionsGroupRemove',
+        resource: this.corpu,
+        permissionSetAction: 'cml/corpus/permissionsGroupSet',
+        permissionRemoveAction: 'cml/corpus/permissionsGroupRemove',
         elementType: 'group',
-        parentType: 'corpu'
+        resourceType: 'corpu'
       }
     },
     userPermissionsConfig () {
       return {
-        parent: this.corpu,
-        permissionSetAction: 'camomile/corpus/permissionsUserSet',
-        permissionRemoveAction: 'camomile/corpus/permissionsUserRemove',
+        resource: this.corpu,
+        permissionSetAction: 'cml/corpus/permissionsUserSet',
+        permissionRemoveAction: 'cml/corpus/permissionsUserRemove',
         elementType: 'user',
-        parentType: 'corpu'
+        resourceType: 'corpu'
       }
     }
   },
   methods: {
     permissionsList () {
-      this.$store.dispatch('camomile/corpus/permissionsList', this.corpu)
+      this.$store.dispatch('cml/corpus/permissionsList', this.corpu)
     }
   },
   created () {
