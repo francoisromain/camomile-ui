@@ -88,7 +88,6 @@ export default {
       return rootState.cml.api
         .getUserGroups(user.id)
         .then(groupIds => {
-          console.log('groupIdsList', groupIds)
           commit('groupIdsListUpdate', { groupIds, user })
           return groupIds
         })

@@ -1,4 +1,9 @@
-import { messageDispatch, corpuFormat, errorFormat } from './_helpers'
+import {
+  messageDispatch,
+  corpuFormat,
+  errorFormat,
+  permissionsUsercurrent
+} from './_helpers'
 
 export default {
   namespaced: true,
@@ -36,12 +41,14 @@ export default {
         })
     },
 
-    update ({ commit, dispatch, state, rootState }, corpus) {
+    update ({ commit, dispatch, state, rootState }, corpu) {
       return rootState.cml.api
-        .updateCorpus(corpus.id, { description: corpus.description })
+        .updateCorpus(corpu.id, { description: corpu.description })
         .then(r => {
+          r.permission = corpu.permission
           const corpus = corpuFormat(
             r,
+            rootState.cml.user,
             rootState.cml.users.list,
             rootState.cml.groups.list
           )
@@ -78,31 +85,59 @@ export default {
         })
     },
 
-    permissionsSet ({ commit, rootState }, { corpu, permissions }) {
+    permissionsSet ({ commit, dispatch, rootState }, { corpu, permissions }) {
       rootState.cml.users.list.forEach(user => {
-        commit('userUpdate', {
-          corpu,
-          userId: user.id,
+        commit('permissionUpdate', {
+          elements: corpu.users,
+          elementId: user.id,
           permission: (permissions.users && permissions.users[user.id]) || null
         })
       })
 
-      rootState.cml.groups.list.forEach(group =>
-        commit('groupUpdate', {
-          corpu,
-          groupId: group.id,
+      rootState.cml.groups.list.forEach(group => {
+        commit('permissionUpdate', {
+          elements: corpu.groups,
+          elementId: group.id,
           permission:
             (permissions.groups && permissions.groups[group.id]) || null
         })
-      )
+      })
+
+      dispatch('userAdminTest', { corpu, permissions })
     },
 
-    usercurrentUnset ({ commit, dispatch, state, rootState }) {
-      console.log('user unset')
+    userAdminTest ({ commit, rootState }, { corpu, permissions }) {
+      const currentUserIsAdmin =
+        permissions &&
+        permissions.users &&
+        permissions.users[rootState.cml.user.id] === 3
+
+      const currentUserIsInAdminGroup =
+        permissions &&
+        permissions.groups &&
+        Object.keys(permissions.groups).reduce((p, id) => {
+          const groupIsAdmin = permissions.groups[id] === 3
+          const userIsInGroup = rootState.cml.user.groupIds.reduce(
+            (t, groupId) => {
+              return t || groupId === id
+            },
+            false
+          )
+          return p || (groupIsAdmin && userIsInGroup)
+        }, false)
+
+      if (!currentUserIsAdmin && !currentUserIsInAdminGroup) {
+        commit('permissionUpdate', {
+          elements: rootState.cml.corpus.list,
+          elementId: corpu.id,
+          permission: permissionsUsercurrent(permissions, rootState.cml.user)
+        })
+        commit(`cml/popup/close`, null, { root: true })
+      }
     },
 
     permissionsList ({ commit, dispatch, state, rootState }, corpu) {
-      dispatch('permissionsSet', { corpu, permissions: {} })
+      // dispatch('permissionsSet', { corpu, permissions: {} })
       return rootState.cml.api
         .getCorpusPermissions(corpu.id)
         .then(permissions => {
@@ -193,16 +228,10 @@ export default {
     listUpdate (state, corpus) {
       state.list = corpus
     },
-    userUpdate (state, { corpu, userId, permission }) {
-      const user = corpu.users.find(u => u.id === userId)
-      if (user) {
-        user.permission = permission
-      }
-    },
-    groupUpdate (state, { corpu, groupId, permission }) {
-      const group = corpu.groups.find(group => group.id === groupId)
-      if (group) {
-        group.permission = permission
+    permissionUpdate (state, { elements, elementId, permission }) {
+      const element = elements.find(e => e.id === elementId)
+      if (element) {
+        element.permission = permission
       }
     }
   }

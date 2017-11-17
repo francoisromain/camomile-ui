@@ -30,7 +30,7 @@ export function groupFormat (group) {
   }
 }
 
-function permissionsUsercurrent (permissions, user) {
+export function permissionsUsercurrent (permissions, user) {
   const permissionUser = permissions.users
     ? Object.keys(permissions.users).find(userId => userId === user.id) &&
       permissions.users[user.id]
@@ -53,7 +53,8 @@ export function corpuFormat (corpu, user, users, groups) {
     name: corpu.name,
     id: corpu._id,
     description: corpu.description,
-    permission: permissionsUsercurrent(corpu.permissions, user),
+    permission:
+      corpu.permission || permissionsUsercurrent(corpu.permissions, user),
     users: [...users],
     groups: [...groups]
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown">
     <div v-if="isAdmin">
-      <button @click="popupOpen({ type: 'users', id: user.id, title: 'User settings', closeBtn: true, component: popupEdit })" class="btn px-m py-s full-x">Settings…</button>
+      <button @click="popupOpen({ ...popupEditConfig, element: user })" class="btn px-m py-s full-x">Settings…</button>
     </div>
     <div>
       <button @click="logout" class="btn px-m py-s full-x mr home">Logout</button>
@@ -17,7 +17,12 @@ export default {
   name: 'camomile-userbutton-dropdown',
   data () {
     return {
-      popupEdit
+      popupEditConfig: {
+        type: 'users',
+        closeBtn: true,
+        title: 'Edit user',
+        component: popupEdit
+      }
     }
   },
   computed: {
