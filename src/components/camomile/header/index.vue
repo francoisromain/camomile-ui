@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     isLogged () {
-      return this.$store.state.camomile.isLogged
+      return this.$store.state.cml.isLogged
     }
   }
 }

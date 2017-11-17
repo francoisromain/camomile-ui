@@ -25,8 +25,8 @@ export default {
   },
   computed: {
     ...mapState({
-      popup: state => state.camomile.popup,
-      dropdown: state => state.camomile.dropdown
+      popup: state => state.cml.popup,
+      dropdown: state => state.cml.dropdown
     })
   }
 }

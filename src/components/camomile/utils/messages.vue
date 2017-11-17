@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     ...mapState({
-      messages: state => state.camomile.messages.list
+      messages: state => state.cml.messages.list
     })
   }
 }

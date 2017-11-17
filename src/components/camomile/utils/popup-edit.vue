@@ -51,28 +51,26 @@ export default {
   name: 'camomile-popup-edit',
   data () {
     return {
-      element: this.$store.state.camomile.popup.config.id === this.$store.state.camomile.user.id
-        ? { ...this.$store.state.camomile.user }
-        : { ...this.$store.state.camomile[this.$store.state.camomile.popup.config.type].list.find(element => element.id === this.$store.state.camomile.popup.config.id) }
+      element: { ...this.$store.state.cml.popup.config.element }
     }
   },
   computed: {
     ...mapState({
-      id: state => state.camomile.popup.config.id,
-      type: state => state.camomile.popup.config.type,
-      typeUsers: state => state.camomile.popup.config.type === 'users',
-      rolesPermission: state => state.camomile.user.id !== state.camomile.popup.config.id,
-      roles: state => state.camomile.config.roles
+      id: state => state.cml.popup.config.id,
+      type: state => state.cml.popup.config.type,
+      typeUsers: state => state.cml.popup.config.type === 'users',
+      rolesPermission: state => state.cml.user.id !== state.cml.popup.config.id,
+      roles: state => state.cml.config.roles
     })
   },
   methods: {
     save () {
       if (this.element.id) {
-        this.$store.dispatch(`camomile/${this.type}/update`, this.element)
+        this.$store.dispatch(`cml/${this.type}/update`, this.element)
       } else {
-        this.$store.dispatch(`camomile/${this.type}/add`, this.element)
+        this.$store.dispatch(`cml/${this.type}/add`, this.element)
       }
-      this.$store.commit('camomile/popup/close')
+      this.$store.commit('cml/popup/close')
     },
     keyup (e) {
       if ((e.which || e.keyCode) === 13) {

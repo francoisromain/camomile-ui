@@ -28,19 +28,19 @@ export default {
   name: 'camomile-popup-user-edit',
   computed: {
     groups () {
-      return this.$store.state.camomile.groups.list
+      return this.$store.state.cml.groups.list
     },
     user () {
-      return this.$store.state.camomile.users.list.find(user => user.id === this.$store.state.camomile.popup.config.id)
+      return this.$store.state.cml.users.list.find(user => user.id === this.$store.state.cml.popup.config.userId)
     }
   },
   methods: {
     groupToggle (group) {
       if (this.groupActive(group.id)) {
-        this.$store.dispatch('camomile/groups/userRemove', { user: this.user, group: group })
+        this.$store.dispatch('cml/groups/userRemove', { user: this.user, group: group })
           .then(r => this.groupIdsList())
       } else {
-        this.$store.dispatch('camomile/groups/userAdd', { user: this.user, group: group })
+        this.$store.dispatch('cml/groups/userAdd', { user: this.user, group: group })
           .then(r => this.groupIdsList())
       }
     },
@@ -48,7 +48,7 @@ export default {
       return this.user.groupIds.indexOf(groupId) > -1
     },
     groupIdsList () {
-      this.$store.dispatch('camomile/users/groupIdsList', this.user)
+      this.$store.dispatch('cml/users/groupIdsList', this.user)
     }
   },
   created () {

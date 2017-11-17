@@ -6,15 +6,16 @@ export default {
     id: '',
     name: '',
     role: '',
-    description: ''
+    description: '',
+    groupIds: []
   },
   actions: {
     login ({ commit, state, dispatch, rootState }, config) {
-      commit('camomile/create', config.url, { root: true })
-      return rootState.camomile.api
+      commit('cml/create', config.url, { root: true })
+      return rootState.cml.api
         .login(config.user.name, config.user.password)
         .then(r => {
-          dispatch('camomile/login', null, { root: true })
+          dispatch('cml/login', null, { root: true })
           messageDispatch('success', r.success, dispatch)
           dispatch('set')
           return r
@@ -28,11 +29,11 @@ export default {
     },
 
     logout ({ commit, state, dispatch, rootState }) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .logout()
         .then(r => {
           commit('unset')
-          dispatch('camomile/logout', null, { root: true })
+          dispatch('cml/logout', null, { root: true })
           messageDispatch('success', r.success, dispatch)
           return r.success
         })
@@ -45,15 +46,12 @@ export default {
     },
 
     set ({ commit, dispatch, state, rootState }) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .me()
         .then(r => {
           const user = userFormat(r)
-          if (user.role === 'admin') {
-            dispatch('camomile/users/groupIdsList', user, { root: true })
-          }
           commit('set', user)
-          dispatch('camomile/set', user, { root: true })
+          dispatch('cml/set', user, { root: true })
           return user
         })
         .catch(e => {

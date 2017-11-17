@@ -7,7 +7,7 @@ export default {
   name: 'camomile-title',
   computed: {
     title () {
-      return this.$store.state.camomile.config.title
+      return this.$store.state.cml.config.title
     }
   }
 }

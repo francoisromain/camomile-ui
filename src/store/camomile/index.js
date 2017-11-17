@@ -33,25 +33,35 @@ export default {
   actions: {
     login ({ commit, dispatch, state }) {
       commit('login')
-      commit('camomile/popup/close', null, { root: true })
+      commit('cml/popup/close', null, { root: true })
     },
     logout ({ commit, dispatch, state }) {
-      commit('camomile/popup/close', null, { root: true })
-      commit('camomile/dropdown/close', null, { root: true })
+      commit('cml/popup/close', null, { root: true })
+      commit('cml/dropdown/close', null, { root: true })
       commit('logout')
       commit('delete')
     },
     set ({ commit, dispatch, state }, user) {
       if (user.role === 'admin') {
-        console.log('adminnnnn')
         commit('adminSet')
-        dispatch('camomile/users/list', null, { root: true })
-        dispatch('camomile/groups/list', null, { root: true })
       }
       if (user.name === 'root') {
         commit('rootSet')
       }
-      dispatch('camomile/corpus/list', null, { root: true })
+      Promise.all([
+        new Promise((resolve, reject) =>
+          dispatch('cml/users/list', null, { root: true })
+            .then(r => resolve(r))
+            .catch(e => reject(e))
+        ),
+        new Promise((resolve, reject) =>
+          dispatch('cml/groups/list', null, { root: true })
+            .then(r => resolve(r))
+            .catch(e => reject(e))
+        )
+      ]).then(res => {
+        dispatch('cml/corpus/list', null, { root: true })
+      })
     }
   },
   mutations: {

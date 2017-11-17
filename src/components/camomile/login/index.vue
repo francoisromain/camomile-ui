@@ -12,7 +12,7 @@ export default {
     }
   },
   created () {
-    this.$store.commit('camomile/popup/open', {
+    this.$store.commit('cml/popup/open', {
       title: 'Login',
       closeBtn: false,
       component: this.popupLogin

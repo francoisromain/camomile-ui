@@ -1,4 +1,4 @@
-import { messageDispatch, corpusFormat, errorFormat } from './_helpers'
+import { messageDispatch, corpuFormat, errorFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -7,7 +7,7 @@ export default {
   },
   actions: {
     add ({ commit, dispatch, state, rootState }, corpus) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .createCorpus(corpus.name, corpus.description, {})
         .then(r => {
           messageDispatch('success', 'Success: corpus added.', dispatch)
@@ -22,7 +22,7 @@ export default {
     },
 
     remove ({ commit, dispatch, state, rootState }, corpus) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .deleteCorpus(corpus.id)
         .then(r => {
           messageDispatch('success', r, dispatch)
@@ -37,10 +37,14 @@ export default {
     },
 
     update ({ commit, dispatch, state, rootState }, corpus) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .updateCorpus(corpus.id, { description: corpus.description })
         .then(r => {
-          const corpus = corpusFormat(r)
+          const corpus = corpuFormat(
+            r,
+            rootState.cml.users.list,
+            rootState.cml.groups.list
+          )
           messageDispatch('success', 'Success: corpus updated.', dispatch)
           dispatch('list')
           return corpus
@@ -53,12 +57,18 @@ export default {
     },
 
     list ({ commit, dispatch, state, rootState }) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .getCorpora()
         .then(r => {
-          const corpus = r.map(corpu => corpusFormat(corpu))
-          console.log('corpus', corpus)
-          corpus.forEach(corpu => dispatch('permissionsList', corpu))
+          const corpus = r.map(corpu =>
+            corpuFormat(
+              corpu,
+              rootState.cml.user,
+              rootState.cml.users.list,
+              rootState.cml.groups.list
+            )
+          )
+
           commit('listUpdate', corpus)
           return corpus
         })
@@ -68,13 +78,35 @@ export default {
         })
     },
 
+    permissionsSet ({ commit, rootState }, { corpu, permissions }) {
+      rootState.cml.users.list.forEach(user => {
+        commit('userUpdate', {
+          corpu,
+          userId: user.id,
+          permission: (permissions.users && permissions.users[user.id]) || null
+        })
+      })
+
+      rootState.cml.groups.list.forEach(group =>
+        commit('groupUpdate', {
+          corpu,
+          groupId: group.id,
+          permission:
+            (permissions.groups && permissions.groups[group.id]) || null
+        })
+      )
+    },
+
+    usercurrentUnset ({ commit, dispatch, state, rootState }) {
+      console.log('user unset')
+    },
+
     permissionsList ({ commit, dispatch, state, rootState }, corpu) {
-      return rootState.camomile.api
+      dispatch('permissionsSet', { corpu, permissions: {} })
+      return rootState.cml.api
         .getCorpusPermissions(corpu.id)
         .then(permissions => {
-          commit('permissionsUserListUpdate', { permissions, corpu })
-          commit('permissionsGroupListUpdate', { permissions, corpu })
-          dispatch('permissionsUsercurrent', corpu)
+          dispatch('permissionsSet', { corpu, permissions })
 
           return permissions
         })
@@ -85,37 +117,15 @@ export default {
         })
     },
 
-    permissionsUsercurrent ({ commit, dispatch, state, rootState }, corpu) {
-      const permissionUser =
-        Object.keys(corpu.userIds).find(
-          userId => userId === rootState.camomile.user.id
-        ) && corpu.userIds[rootState.camomile.user.id]
-      const permissionGroup = Object.keys(corpu.groupIds).reduce(
-        (permission, groupId) => {
-          return (
-            !!rootState.camomile.user.groupIds[groupId] &&
-            corpu.groupIds[groupId] > permission &&
-            corpu.groupIds[groupId]
-          )
-        },
-        false
-      )
-
-      commit('permissionsUsercurrentSet', {
-        permission: Math.max(permissionUser, permissionGroup),
-        corpu
-      })
-    },
-
     permissionsGroupSet (
       { commit, dispatch, state, rootState },
       { corpu, group, permission }
     ) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .setCorpusPermissionsForGroup(corpu.id, group.id, permission)
         .then(permissions => {
+          dispatch('permissionsSet', { corpu, permissions })
           messageDispatch('success', `Group permissions updated`, dispatch)
-          commit('permissionsGroupListUpdate', { permissions, corpu })
           return permissions
         })
         .catch(e => {
@@ -129,11 +139,11 @@ export default {
       { commit, dispatch, state, rootState },
       { corpu, group }
     ) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .removeCorpusPermissionsForGroup(corpu.id, group.id)
         .then(permissions => {
+          dispatch('permissionsSet', { corpu, permissions })
           messageDispatch('success', 'Group permissions updated', dispatch)
-          commit('permissionsGroupListUpdate', { permissions, corpu })
           return permissions
         })
         .catch(e => {
@@ -147,11 +157,11 @@ export default {
       { commit, dispatch, state, rootState },
       { corpu, user, permission }
     ) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .setCorpusPermissionsForUser(corpu.id, user.id, permission)
         .then(permissions => {
+          dispatch('permissionsSet', { corpu, permissions })
           messageDispatch('success', 'User permissions updated', dispatch)
-          commit('permissionsUserListUpdate', { permissions, corpu })
           return permissions
         })
         .catch(e => {
@@ -165,11 +175,11 @@ export default {
       { commit, dispatch, state, rootState },
       { corpu, user }
     ) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .removeCorpusPermissionsForUser(corpu.id, user.id)
         .then(permissions => {
+          dispatch('permissionsSet', { corpu, permissions })
           messageDispatch('success', 'User permissions updated', dispatch)
-          commit('permissionsUserListUpdate', { permissions, corpu })
           return permissions
         })
         .catch(e => {
@@ -183,14 +193,17 @@ export default {
     listUpdate (state, corpus) {
       state.list = corpus
     },
-    permissionsUserListUpdate (state, { permissions, corpu }) {
-      corpu.userIds = permissions.users || {}
+    userUpdate (state, { corpu, userId, permission }) {
+      const user = corpu.users.find(u => u.id === userId)
+      if (user) {
+        user.permission = permission
+      }
     },
-    permissionsGroupListUpdate (state, { permissions, corpu }) {
-      corpu.groupIds = permissions.groups || {}
-    },
-    permissionsUsercurrentSet (state, { permission, corpu }) {
-      corpu.permission = permission
+    groupUpdate (state, { corpu, groupId, permission }) {
+      const group = corpu.groups.find(group => group.id === groupId)
+      if (group) {
+        group.permission = permission
+      }
     }
   }
 }

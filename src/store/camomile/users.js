@@ -7,7 +7,7 @@ export default {
   },
   actions: {
     add ({ commit, state, dispatch, rootState }, user) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .createUser(user.name, user.password, user.description, user.role)
         .then(r => {
           messageDispatch('success', 'Success: user added.', dispatch)
@@ -22,7 +22,7 @@ export default {
     },
 
     update ({ commit, dispatch, state, rootState }, user) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .updateUser(user.id, {
           password: user.password,
           role: user.role,
@@ -31,8 +31,8 @@ export default {
         .then(r => {
           const user = userFormat(r)
           messageDispatch('success', 'User updated', dispatch)
-          if (user.name === rootState.camomile.user.name) {
-            commit('camomile/user/set', user, { root: true })
+          if (user.name === rootState.cml.user.name) {
+            commit('cml/user/set', user, { root: true })
           }
           dispatch('list')
           return user
@@ -46,7 +46,7 @@ export default {
     },
 
     remove ({ commit, state, dispatch, rootState }, user) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .deleteUser(user.id)
         .then(r => {
           messageDispatch('success', 'Success: user removed.', dispatch)
@@ -60,8 +60,18 @@ export default {
         })
     },
 
+    get ({ commit, dispatch, state, rootState }, userId) {
+      return rootState.cml.api
+        .getUser(userId)
+        .then(user => userFormat(user))
+        .catch(e => {
+          console.log(e)
+          throw e
+        })
+    },
+
     list ({ commit, dispatch, state, rootState }) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .getUsers()
         .then(r => {
           const users = r.map(user => userFormat(user))
@@ -75,9 +85,10 @@ export default {
     },
 
     groupIdsList ({ commit, dispatch, state, rootState }, user) {
-      return rootState.camomile.api
+      return rootState.cml.api
         .getUserGroups(user.id)
         .then(groupIds => {
+          console.log('groupIdsList', groupIds)
           commit('groupIdsListUpdate', { groupIds, user })
           return groupIds
         })

@@ -28,18 +28,18 @@ export default {
   name: 'camomile-popup-user-edit',
   computed: {
     users () {
-      return this.$store.state.camomile.users.list
+      return this.$store.state.cml.users.list
     },
     group () {
-      return this.$store.state.camomile.groups.list.find(group => group.id === this.$store.state.camomile.popup.config.id)
+      return this.$store.state.cml.groups.list.find(group => group.id === this.$store.state.cml.popup.config.groupId)
     }
   },
   methods: {
     userToggle (user) {
       if (this.userActive(user.id)) {
-        this.$store.dispatch('camomile/groups/userRemove', { user: user, group: this.group })
+        this.$store.dispatch('cml/groups/userRemove', { user: user, group: this.group })
       } else {
-        this.$store.dispatch('camomile/groups/userAdd', { user: user, group: this.group })
+        this.$store.dispatch('cml/groups/userAdd', { user: user, group: this.group })
       }
     },
     userActive (userId) {

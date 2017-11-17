@@ -23,15 +23,15 @@ export default {
   name: 'camomile-popup-element-remove',
   computed: {
     ...mapState({
-      element: state => state.camomile[state.camomile.popup.config.type].list.find(element => element.id === state.camomile.popup.config.id),
-      id: state => state.camomile.popup.config.id,
-      type: state => state.camomile.popup.config.type
+      element: state => state.cml.popup.config.element,
+      id: state => state.cml.popup.config.id,
+      type: state => state.cml.popup.config.type
     })
   },
   methods: {
     remove () {
-      this.$store.dispatch(`camomile/${this.type}/remove`, this.element)
-      this.$store.commit(`camomile/popup/close`)
+      this.$store.dispatch(`cml/${this.type}/remove`, this.element)
+      this.$store.commit(`cml/popup/close`)
     },
     keyup (e) {
       if ((e.which || e.keyCode) === 13) {

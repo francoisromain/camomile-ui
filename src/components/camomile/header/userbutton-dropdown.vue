@@ -22,21 +22,21 @@ export default {
   },
   computed: {
     user () {
-      return this.$store.state.camomile.user
+      return this.$store.state.cml.user
     },
     isAdmin () {
-      return this.$store.state.camomile.isAdmin
+      return this.$store.state.cml.isAdmin
     }
   },
   methods: {
     close () {
-      this.$store.commit('camomile/dropdown/close')
+      this.$store.commit('cml/dropdown/close')
     },
     logout () {
-      return this.$store.dispatch('camomile/user/logout')
+      return this.$store.dispatch('cml/user/logout')
     },
     popupOpen (config) {
-      this.$store.commit('camomile/popup/open', config)
+      this.$store.commit('cml/popup/open', config)
       this.close()
     }
   }

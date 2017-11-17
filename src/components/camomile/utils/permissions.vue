@@ -28,7 +28,7 @@ export default {
       }
     },
     isActive (permission) {
-      return this.config.resource[`${this.config.elementType}Ids`].hasOwnProperty(this.element.id) && this.config.resource[`${this.config.elementType}Ids`][this.element.id] === permission
+      return this.element.permission === permission
     }
   }
 }

@@ -2,7 +2,7 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Groups</h2>
-      <button @click="popupOpen({ ...popupEditConfig, id: null, title: 'Add group' })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ ...popupEditConfig, element: {}, title: 'Add group' })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,9 +13,9 @@
           <td>{{ group.name }}</td>
           <td>{{ group.userIds.length }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupUsersConfig, id: group.id })" class="btn px-s py-s my--s h5">Users</button>
-            <button @click="popupOpen({ ...popupEditConfig, id: group.id })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, id: group.id })" class="btn px-s py-s my--s h5" v-if="isRoot">Remove</button>
+            <button @click="popupOpen({ ...popupUsersConfig, groupId: group.id })" class="btn px-s py-s my--s h5">Users</button>
+            <button @click="popupOpen({ ...popupEditConfig, element: group })" class="btn px-s py-s my--s h5">Edit</button>
+            <button @click="popupOpen({ ...popupRemoveConfig, element: group })" class="btn px-s py-s my--s h5" v-if="isRoot">Remove</button>
           </td>
         </tr>
       </table>
@@ -54,18 +54,15 @@ export default {
   },
   computed: {
     ...mapState({
-      groups: state => state.camomile.groups.list,
-      isLogged: state => state.camomile.isLogged,
-      isRoot: state => state.camomile.isRoot
+      groups: state => state.cml.groups.list,
+      isLogged: state => state.cml.isLogged,
+      isRoot: state => state.cml.isRoot
     })
   },
   methods: {
     ...mapMutations({
-      popupOpen: 'camomile/popup/open'
+      popupOpen: 'cml/popup/open'
     })
-  },
-  created () {
-    console.log('grrrourprprprp')
   }
 }
 </script>
