@@ -50,12 +50,12 @@ export default {
       }
       Promise.all([
         new Promise((resolve, reject) =>
-          dispatch('cml/users/list', null, { root: true })
+          dispatch('cml/users/list', { messageHide: true }, { root: true })
             .then(r => resolve(r))
             .catch(e => reject(e))
         ),
         new Promise((resolve, reject) =>
-          dispatch('cml/groups/list', null, { root: true })
+          dispatch('cml/groups/list', { messageHide: true }, { root: true })
             .then(r => resolve(r))
             .catch(e => reject(e))
         )

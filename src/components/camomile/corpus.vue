@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import popupEdit from './utils/popup-edit.vue'
 import popupRemove from './utils/popup-remove.vue'
 import popupPermissions from './corpus/popup-permissions.vue'
@@ -60,9 +60,9 @@ export default {
     })
   },
   methods: {
-    ...mapMutations({
-      popupOpen: 'cml/popup/open'
-    })
+    popupOpen (config) {
+      return this.$store.commit('cml/popup/open', config)
+    }
   }
 }
 </script>

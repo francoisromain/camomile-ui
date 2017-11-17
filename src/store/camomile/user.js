@@ -16,14 +16,13 @@ export default {
         .login(config.user.name, config.user.password)
         .then(r => {
           dispatch('cml/login', null, { root: true })
-          messageDispatch('success', r.success, dispatch)
           dispatch('set')
           return r
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
-          commit('unset')
+          commit('reset')
           throw error
         })
     },
@@ -32,15 +31,14 @@ export default {
       return rootState.cml.api
         .logout()
         .then(r => {
-          commit('unset')
+          commit('reset')
           dispatch('cml/logout', null, { root: true })
-          messageDispatch('success', r.success, dispatch)
           return r.success
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
-          commit('unset')
+          commit('reset')
           throw error
         })
     },
@@ -57,7 +55,7 @@ export default {
         .catch(e => {
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
-          commit('unset')
+          commit('reset')
           throw error
         })
     }
@@ -70,7 +68,7 @@ export default {
       state.role = user.role
       state.groupIds = user.groupIds
     },
-    unset (state) {
+    reset (state) {
       state.name = ''
       state.password = ''
     }

@@ -10,8 +10,8 @@ export default {
       return rootState.cml.api
         .createUser(user.name, user.password, user.description, user.role)
         .then(r => {
-          messageDispatch('success', 'Success: user added.', dispatch)
-          dispatch('list')
+          messageDispatch('success', 'User added', dispatch)
+          commit('add', user)
           return r
         })
         .catch(e => {
@@ -34,7 +34,7 @@ export default {
           if (user.name === rootState.cml.user.name) {
             commit('cml/user/set', user, { root: true })
           }
-          dispatch('list')
+          commit('update', user)
           return user
         })
         .catch(e => {
@@ -49,8 +49,8 @@ export default {
       return rootState.cml.api
         .deleteUser(user.id)
         .then(r => {
-          messageDispatch('success', 'Success: user removed.', dispatch)
-          dispatch('list')
+          messageDispatch('success', 'User removed', dispatch)
+          commit('remove', user)
           return r
         })
         .catch(e => {
@@ -70,12 +70,15 @@ export default {
         })
     },
 
-    list ({ commit, dispatch, state, rootState }) {
+    list ({ commit, dispatch, state, rootState }, { messageHide = false } = {}) {
       return rootState.cml.api
         .getUsers()
         .then(r => {
           const users = r.map(user => userFormat(user))
-          commit('listUpdate', users)
+          if (!messageHide) {
+            messageDispatch('success', 'Groups updated', dispatch)
+          }
+          commit('list', users)
           return users
         })
         .catch(e => {
@@ -99,7 +102,22 @@ export default {
     }
   },
   mutations: {
-    listUpdate (state, users) {
+    add (state, user) {
+      const userExisting = state.list.find(u => u.id === user.id)
+      if (!userExisting) {
+        state.list.push(user)
+      }
+    },
+    update (state, user) {
+      Object.assign(state.list.find(u => u.id === user.id), user)
+    },
+    remove (state, user) {
+      const index = state.list.findIndex(u => u.id === user.id)
+      if (index !== -1) {
+        state.list.splice(index, 1)
+      }
+    },
+    list (state, users) {
       state.list = users
     },
     groupIdsListUpdate (state, { groupIds, user }) {

@@ -2,7 +2,7 @@ import {
   messageDispatch,
   corpuFormat,
   errorFormat,
-  permissionsUsercurrent
+  permissionsUser
 } from './_helpers'
 
 export default {
@@ -15,8 +15,11 @@ export default {
       return rootState.cml.api
         .createCorpus(corpus.name, corpus.description, {})
         .then(r => {
-          messageDispatch('success', 'Success: corpus added.', dispatch)
-          dispatch('list')
+          r.permission = 3
+          const corpu = corpuFormat(r, rootState.cml)
+
+          messageDispatch('success', 'Corpus added.', dispatch)
+          commit('add', corpu)
           return r
         })
         .catch(e => {
@@ -26,12 +29,12 @@ export default {
         })
     },
 
-    remove ({ commit, dispatch, state, rootState }, corpus) {
+    remove ({ commit, dispatch, state, rootState }, corpu) {
       return rootState.cml.api
-        .deleteCorpus(corpus.id)
+        .deleteCorpus(corpu.id)
         .then(r => {
-          messageDispatch('success', r, dispatch)
-          dispatch('list')
+          messageDispatch('success', 'Corpus removed', dispatch)
+          commit('remove', corpu)
           return r
         })
         .catch(e => {
@@ -46,14 +49,9 @@ export default {
         .updateCorpus(corpu.id, { description: corpu.description })
         .then(r => {
           r.permission = corpu.permission
-          const corpus = corpuFormat(
-            r,
-            rootState.cml.user,
-            rootState.cml.users.list,
-            rootState.cml.groups.list
-          )
-          messageDispatch('success', 'Success: corpus updated.', dispatch)
-          dispatch('list')
+          const corpus = corpuFormat(r, rootState.cml)
+          messageDispatch('success', 'Corpus updated', dispatch)
+          commit('update', corpu)
           return corpus
         })
         .catch(e => {
@@ -67,16 +65,9 @@ export default {
       return rootState.cml.api
         .getCorpora()
         .then(r => {
-          const corpus = r.map(corpu =>
-            corpuFormat(
-              corpu,
-              rootState.cml.user,
-              rootState.cml.users.list,
-              rootState.cml.groups.list
-            )
-          )
+          const corpus = r.map(corpu => corpuFormat(corpu, rootState.cml))
 
-          commit('listUpdate', corpus)
+          commit('list', corpus)
           return corpus
         })
         .catch(e => {
@@ -85,59 +76,7 @@ export default {
         })
     },
 
-    permissionsSet ({ commit, dispatch, rootState }, { corpu, permissions }) {
-      rootState.cml.users.list.forEach(user => {
-        commit('permissionUpdate', {
-          elements: corpu.users,
-          elementId: user.id,
-          permission: (permissions.users && permissions.users[user.id]) || null
-        })
-      })
-
-      rootState.cml.groups.list.forEach(group => {
-        commit('permissionUpdate', {
-          elements: corpu.groups,
-          elementId: group.id,
-          permission:
-            (permissions.groups && permissions.groups[group.id]) || null
-        })
-      })
-
-      dispatch('userAdminTest', { corpu, permissions })
-    },
-
-    userAdminTest ({ commit, rootState }, { corpu, permissions }) {
-      const currentUserIsAdmin =
-        permissions &&
-        permissions.users &&
-        permissions.users[rootState.cml.user.id] === 3
-
-      const currentUserIsInAdminGroup =
-        permissions &&
-        permissions.groups &&
-        Object.keys(permissions.groups).reduce((p, id) => {
-          const groupIsAdmin = permissions.groups[id] === 3
-          const userIsInGroup = rootState.cml.user.groupIds.reduce(
-            (t, groupId) => {
-              return t || groupId === id
-            },
-            false
-          )
-          return p || (groupIsAdmin && userIsInGroup)
-        }, false)
-
-      if (!currentUserIsAdmin && !currentUserIsInAdminGroup) {
-        commit('permissionUpdate', {
-          elements: rootState.cml.corpus.list,
-          elementId: corpu.id,
-          permission: permissionsUsercurrent(permissions, rootState.cml.user)
-        })
-        commit(`cml/popup/close`, null, { root: true })
-      }
-    },
-
     permissionsList ({ commit, dispatch, state, rootState }, corpu) {
-      // dispatch('permissionsSet', { corpu, permissions: {} })
       return rootState.cml.api
         .getCorpusPermissions(corpu.id)
         .then(permissions => {
@@ -222,10 +161,76 @@ export default {
           messageDispatch('error', error, dispatch)
           throw error
         })
+    },
+
+    permissionsSet ({ commit, dispatch, rootState }, { corpu, permissions }) {
+      rootState.cml.users.list.forEach(user => {
+        commit('permissionUpdate', {
+          elements: corpu.users,
+          elementId: user.id,
+          permission: (permissions.users && permissions.users[user.id]) || null
+        })
+      })
+
+      rootState.cml.groups.list.forEach(group => {
+        commit('permissionUpdate', {
+          elements: corpu.groups,
+          elementId: group.id,
+          permission:
+            (permissions.groups && permissions.groups[group.id]) || null
+        })
+      })
+
+      dispatch('userAdminTest', { corpu, permissions })
+    },
+
+    userAdminTest ({ commit, rootState }, { corpu, permissions }) {
+      const currentUserIsAdmin =
+        permissions &&
+        permissions.users &&
+        permissions.users[rootState.cml.user.id] === 3
+
+      const currentUserIsInAdminGroup =
+        permissions &&
+        permissions.groups &&
+        Object.keys(permissions.groups).reduce((p, id) => {
+          const groupIsAdmin = permissions.groups[id] === 3
+          const userIsInGroup = rootState.cml.user.groupIds.reduce(
+            (t, groupId) => {
+              return t || groupId === id
+            },
+            false
+          )
+          return p || (groupIsAdmin && userIsInGroup)
+        }, false)
+
+      if (!currentUserIsAdmin && !currentUserIsInAdminGroup) {
+        commit('permissionUpdate', {
+          elements: rootState.cml.corpus.list,
+          elementId: corpu.id,
+          permission: permissionsUser(permissions, rootState.cml.user)
+        })
+        commit(`cml/popup/close`, null, { root: true })
+      }
     }
   },
   mutations: {
-    listUpdate (state, corpus) {
+    add (state, corpu) {
+      const corpuExisting = state.list.find(c => c.id === corpu.id)
+      if (!corpuExisting) {
+        state.list.push(corpu)
+      }
+    },
+    update (state, corpu) {
+      Object.assign(state.list.find(c => c.id === corpu.id), corpu)
+    },
+    remove (state, corpu) {
+      const index = state.list.findIndex(c => c.id === corpu.id)
+      if (index !== -1) {
+        state.list.splice(index, 1)
+      }
+    },
+    list (state, corpus) {
       state.list = corpus
     },
     permissionUpdate (state, { elements, elementId, permission }) {

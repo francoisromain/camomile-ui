@@ -10,8 +10,9 @@ export default {
       return rootState.cml.api
         .createGroup(group.name, group.description)
         .then(r => {
-          messageDispatch('success', 'Success: group added.', dispatch)
-          dispatch('list')
+          const group = groupFormat(r)
+          messageDispatch('success', 'Group added', dispatch)
+          commit('add', group)
           return r
         })
         .catch(e => {
@@ -25,8 +26,8 @@ export default {
       return rootState.cml.api
         .deleteGroup(group.id)
         .then(r => {
-          messageDispatch('success', r, dispatch)
-          dispatch('list')
+          messageDispatch('success', 'Group removed', dispatch)
+          commit('remove', group)
           return r
         })
         .catch(e => {
@@ -41,8 +42,8 @@ export default {
         .updateGroup(group.id, { description: group.description })
         .then(r => {
           const group = groupFormat(r)
-          messageDispatch('success', 'Success: group updated.', dispatch)
-          dispatch('list')
+          messageDispatch('success', 'Group updated', dispatch)
+          commit('update', group)
           return group
         })
         .catch(e => {
@@ -57,8 +58,8 @@ export default {
         .addUserToGroup(user.id, group.id)
         .then(r => {
           const group = groupFormat(r)
-          messageDispatch('success', 'Success: user added to group.', dispatch)
-          dispatch('list')
+          messageDispatch('success', 'User added to group', dispatch)
+          commit('update', group)
           return group
         })
         .catch(e => {
@@ -73,12 +74,8 @@ export default {
         .removeUserFromGroup(user.id, group.id)
         .then(r => {
           const group = groupFormat(r)
-          messageDispatch(
-            'success',
-            'Success: user removed from group.',
-            dispatch
-          )
-          dispatch('list')
+          messageDispatch('success', 'User removed from group', dispatch)
+          commit('update', group)
           return group
         })
         .catch(e => {
@@ -98,12 +95,15 @@ export default {
         })
     },
 
-    list ({ commit, dispatch, state, rootState }) {
+    list ({ commit, dispatch, state, rootState }, { messageHide = false } = {}) {
       return rootState.cml.api
         .getGroups()
         .then(r => {
           const groups = r.map(group => groupFormat(group))
-          commit('listUpdate', groups)
+          if (!messageHide) {
+            messageDispatch('success', 'Groups updated', dispatch)
+          }
+          commit('list', groups)
           return groups
         })
         .catch(e => {
@@ -113,7 +113,22 @@ export default {
     }
   },
   mutations: {
-    listUpdate (state, groups) {
+    add (state, group) {
+      const groupExisting = state.list.find(g => g.id === group.id)
+      if (!groupExisting) {
+        state.list.push(group)
+      }
+    },
+    update (state, group) {
+      Object.assign(state.list.find(g => g.id === group.id), group)
+    },
+    remove (state, group) {
+      const index = state.list.findIndex(g => g.id === group.id)
+      if (index !== -1) {
+        state.list.splice(index, 1)
+      }
+    },
+    list (state, groups) {
       state.list = groups
     }
   }

@@ -2,7 +2,8 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Groups</h2>
-      <button @click="popupOpen({ ...popupEditConfig, element: {}, title: 'Add group' })" class="flex-right btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="refresh" class="flex-right btn p-s mr-s"><i class="icon-24 icon-24-reload"></i></button>
+      <button @click="popupOpen({ ...popupEditConfig, element: {}, title: 'Add group' })" class="btn p-s"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import popupEdit from './utils/popup-edit.vue'
 import popupRemove from './utils/popup-remove.vue'
 import popupUsers from './groups/popup-users.vue'
@@ -60,9 +61,12 @@ export default {
     })
   },
   methods: {
-    ...mapMutations({
-      popupOpen: 'cml/popup/open'
-    })
+    popupOpen (config) {
+      return this.$store.commit('cml/popup/open', config)
+    },
+    refresh () {
+      return this.$store.dispatch('cml/groups/list')
+    }
   }
 }
 </script>
