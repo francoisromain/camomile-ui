@@ -1,9 +1,9 @@
-var webpack = require('webpack')
-var WebpackDevServer = require('webpack-dev-server')
-var webpackConfigDev = require('./webpack.config.dev')
+const webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
+const webpackConfigDev = require('./webpack.config.dev')
 
-var compiler = webpack(webpackConfigDev)
-var server = new WebpackDevServer(compiler, {
+const compiler = webpack(webpackConfigDev)
+const server = new WebpackDevServer(compiler, {
   stats: {
     colors: true
   },

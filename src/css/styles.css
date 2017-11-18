@@ -37,6 +37,7 @@
 /* Theme          ------------------------------- */
 
 @import 'system/footer.css';
+@import 'loader.css';
 @import 'theme.css';
 @import 'transitions.css';
 @import 'system/prismjs.css';

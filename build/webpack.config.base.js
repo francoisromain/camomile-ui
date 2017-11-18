@@ -1,3 +1,5 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
 module.exports = {
   module: {
     rules: [
@@ -22,12 +24,21 @@ module.exports = {
   },
   resolve: {
     alias: {
-      vue: 'vue/dist/vue.js'
+      vue: 'vue/dist/vue.esm.js'
     }
   },
   node: {
     fs: 'empty',
     net: 'empty',
     tls: 'empty'
-  }
+  },
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: 'assets',
+        to: 'assets',
+        ignore: '.DS_Store'
+      }
+    ])
+  ]
 }

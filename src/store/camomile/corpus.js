@@ -91,10 +91,7 @@ export default {
         })
     },
 
-    permissionsGroupSet (
-      { commit, dispatch, state, rootState },
-      { corpu, group, permission }
-    ) {
+    permissionsGroupSet ({ dispatch, rootState }, { corpu, group, permission }) {
       return rootState.cml.api
         .setCorpusPermissionsForGroup(corpu.id, group.id, permission)
         .then(permissions => {
@@ -109,10 +106,7 @@ export default {
         })
     },
 
-    permissionsGroupRemove (
-      { commit, dispatch, state, rootState },
-      { corpu, group }
-    ) {
+    permissionsGroupRemove ({ dispatch, rootState }, { corpu, group }) {
       return rootState.cml.api
         .removeCorpusPermissionsForGroup(corpu.id, group.id)
         .then(permissions => {
@@ -127,10 +121,7 @@ export default {
         })
     },
 
-    permissionsUserSet (
-      { commit, dispatch, state, rootState },
-      { corpu, user, permission }
-    ) {
+    permissionsUserSet ({ dispatch, rootState }, { corpu, user, permission }) {
       return rootState.cml.api
         .setCorpusPermissionsForUser(corpu.id, user.id, permission)
         .then(permissions => {
@@ -145,10 +136,7 @@ export default {
         })
     },
 
-    permissionsUserRemove (
-      { commit, dispatch, state, rootState },
-      { corpu, user }
-    ) {
+    permissionsUserRemove ({ dispatch, rootState }, { corpu, user }) {
       return rootState.cml.api
         .removeCorpusPermissionsForUser(corpu.id, user.id)
         .then(permissions => {
