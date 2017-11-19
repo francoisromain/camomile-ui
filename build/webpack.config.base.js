@@ -1,5 +1,3 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-
 module.exports = {
   module: {
     rules: [
@@ -31,14 +29,5 @@ module.exports = {
     fs: 'empty',
     net: 'empty',
     tls: 'empty'
-  },
-  plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: 'assets',
-        to: 'assets',
-        ignore: '.DS_Store'
-      }
-    ])
-  ]
+  }
 }

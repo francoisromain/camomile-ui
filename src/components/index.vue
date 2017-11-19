@@ -19,8 +19,8 @@
 
 <script>
 import store from '../store'
-import debug from './components/debug.vue'
-import viewport from './components/viewport.vue'
+import debug from './camomile/debug.vue'
+import viewport from './camomile/viewport.vue'
 import cmlUtils from './camomile/utils/index.vue'
 import cmlHeader from './camomile/header/index.vue'
 import cmlLogin from './camomile/login.vue'

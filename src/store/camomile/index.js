@@ -1,7 +1,7 @@
 // import Camomile from '../../../../camomile-client-javascript' /* debug with local version */
 import Camomile from 'camomile-client'
-import camomile from './api' /* axios api */
-import config from '../../config.js'
+import camomile from '../../js/api' /* axios api */
+import config from './_config.js'
 
 import popup from './popup'
 import dropdown from './dropdown'
@@ -10,10 +10,12 @@ import user from './user'
 import users from './users'
 import groups from './groups'
 import corpus from './corpus'
+import viewport from './viewport'
 
 export default {
   namespaced: true,
   modules: {
+    viewport,
     popup,
     dropdown,
     messages,
