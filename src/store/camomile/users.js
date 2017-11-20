@@ -10,13 +10,17 @@ export default {
       return rootState.cml.api
         .createUser(user.name, user.password, user.description, user.role)
         .then(r => {
-          messageDispatch('success', 'User added', dispatch)
+          const user = userFormat(r)
           commit('add', user)
-          return r
+          commit('cml/corpus/userAdd', user.id, { root: true })
+          messageDispatch('success', 'User added', dispatch)
+
+          return user
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
+
           throw error
         })
     },
@@ -30,11 +34,12 @@ export default {
         })
         .then(r => {
           const user = userFormat(r)
-          messageDispatch('success', 'User updated', dispatch)
+          commit('update', user)
           if (user.name === rootState.cml.user.name) {
             commit('cml/user/set', user, { root: true })
           }
-          commit('update', user)
+          messageDispatch('success', 'User updated', dispatch)
+
           return user
         })
         .catch(e => {
@@ -49,13 +54,16 @@ export default {
       return rootState.cml.api
         .deleteUser(user.id)
         .then(r => {
-          messageDispatch('success', 'User removed', dispatch)
           commit('remove', user)
+          commit('cml/corpus/userRemove', user.id, { root: true })
+          messageDispatch('success', 'User removed', dispatch)
+
           return r
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
+
           throw error
         })
     },
@@ -66,6 +74,7 @@ export default {
         .then(user => userFormat(user))
         .catch(e => {
           console.log(e)
+
           throw e
         })
     },
@@ -75,29 +84,16 @@ export default {
         .getUsers()
         .then(r => {
           const users = r.map(user => userFormat(user))
-          if (!messageHide) {
-            messageDispatch('success', 'Groups updated', dispatch)
-          }
           commit('list', users)
+          if (!messageHide) {
+            messageDispatch('success', 'Users updated', dispatch)
+          }
+
           return users
         })
         .catch(e => {
           console.log(e)
           throw e
-        })
-    },
-
-    groupIdsList ({ commit, dispatch, state, rootState }, user) {
-      return rootState.cml.api
-        .getUserGroups(user.id)
-        .then(groupIds => {
-          commit('groupIdsListUpdate', { groupIds, user })
-          return groupIds
-        })
-        .catch(e => {
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
-          throw error
         })
     }
   },
@@ -108,20 +104,20 @@ export default {
         state.list.push(user)
       }
     },
+
     update (state, user) {
       Object.assign(state.list.find(u => u.id === user.id), user)
     },
+
     remove (state, user) {
       const index = state.list.findIndex(u => u.id === user.id)
       if (index !== -1) {
         state.list.splice(index, 1)
       }
     },
+
     list (state, users) {
       state.list = users
-    },
-    groupIdsListUpdate (state, { groupIds, user }) {
-      user.groupIds = groupIds
     }
   }
 }

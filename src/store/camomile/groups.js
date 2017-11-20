@@ -11,13 +11,17 @@ export default {
         .createGroup(group.name, group.description)
         .then(r => {
           const group = groupFormat(r)
-          messageDispatch('success', 'Group added', dispatch)
           commit('add', group)
-          return r
+          commit('cml/corpus/groupAdd', group.id, { root: true })
+          messageDispatch('success', 'Group added', dispatch)
+
+          return group
         })
         .catch(e => {
+          console.log(e)
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
+
           throw error
         })
     },
@@ -26,13 +30,16 @@ export default {
       return rootState.cml.api
         .deleteGroup(group.id)
         .then(r => {
-          messageDispatch('success', 'Group removed', dispatch)
           commit('remove', group)
-          return r
+          commit('cml/corpus/groupRemove', group.id, { root: true })
+          messageDispatch('success', 'Group removed', dispatch)
+
+          return group.id
         })
         .catch(e => {
           console.log(e)
           messageDispatch('error', e, dispatch)
+
           throw e
         })
     },
@@ -42,45 +49,15 @@ export default {
         .updateGroup(group.id, { description: group.description })
         .then(r => {
           const group = groupFormat(r)
+          commit('update', group)
           messageDispatch('success', 'Group updated', dispatch)
-          commit('update', group)
-          return group
-        })
-        .catch(e => {
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
-          throw error
-        })
-    },
 
-    userAdd ({ commit, dispatch, state, rootState }, { user, group }) {
-      return rootState.cml.api
-        .addUserToGroup(user.id, group.id)
-        .then(r => {
-          const group = groupFormat(r)
-          messageDispatch('success', 'User added to group', dispatch)
-          commit('update', group)
           return group
         })
         .catch(e => {
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
-          throw error
-        })
-    },
 
-    userRemove ({ commit, dispatch, state, rootState }, { user, group }) {
-      return rootState.cml.api
-        .removeUserFromGroup(user.id, group.id)
-        .then(r => {
-          const group = groupFormat(r)
-          messageDispatch('success', 'User removed from group', dispatch)
-          commit('update', group)
-          return group
-        })
-        .catch(e => {
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
           throw error
         })
     },
@@ -91,6 +68,7 @@ export default {
         .then(group => groupFormat(group))
         .catch(e => {
           console.log(e)
+
           throw e
         })
     },
@@ -100,20 +78,71 @@ export default {
         .getGroups()
         .then(r => {
           const groups = r.map(group => groupFormat(group))
+          commit('list', groups)
           if (!messageHide) {
             messageDispatch('success', 'Groups updated', dispatch)
           }
-          commit('list', groups)
+
           return groups
         })
         .catch(e => {
           console.log(e)
+
           throw e
+        })
+    },
+
+    userAdd ({ commit, dispatch, state, rootState }, { user, group }) {
+      return rootState.cml.api
+        .addUserToGroup(user.id, group.id)
+        .then(r => {
+          const group = groupFormat(r)
+          commit('update', group)
+          messageDispatch('success', 'User added to group', dispatch)
+          if (user.id === rootState.cml.user.id) {
+            commit('cml/user/groupAdd', group.id, { root: true })
+            dispatch('cml/corpus/list', null, {
+              root: true
+            })
+          }
+
+          return group
+        })
+        .catch(e => {
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+
+          throw error
+        })
+    },
+
+    userRemove ({ commit, dispatch, state, rootState }, { user, group }) {
+      return rootState.cml.api
+        .removeUserFromGroup(user.id, group.id)
+        .then(r => {
+          const group = groupFormat(r)
+          commit('update', group)
+          messageDispatch('success', 'User removed from group', dispatch)
+          if (user.id === rootState.cml.user.id) {
+            commit('cml/user/groupRemove', group.id, { root: true })
+            dispatch('cml/corpus/list', null, {
+              root: true
+            })
+          }
+
+          return group
+        })
+        .catch(e => {
+          const error = errorFormat(e, rootState)
+          messageDispatch('error', error, dispatch)
+
+          throw error
         })
     }
   },
   mutations: {
     add (state, group) {
+      console.log('group add', group)
       const groupExisting = state.list.find(g => g.id === group.id)
       if (!groupExisting) {
         state.list.push(group)

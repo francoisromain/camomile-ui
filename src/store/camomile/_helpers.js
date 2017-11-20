@@ -14,9 +14,7 @@ export function userFormat (user) {
     name: user.username,
     id: user._id,
     description: user.description,
-    role: user.role,
-    groupIds: user.groups || [],
-    permission: null
+    role: user.role
   }
 }
 
@@ -25,33 +23,30 @@ export function groupFormat (group) {
     name: group.name,
     id: group._id,
     description: group.description,
-    userIds: group.users,
-    permission: null
+    userIds: group.users
   }
 }
 
-export function permissionsUser ({ users = {}, groups = {} }, user) {
-  const permissionUser =
-    Object.keys(users).find(userId => userId === user.id) && users[user.id]
-
-  const permissionGroup = Object.keys(groups).reduce((permission, groupId) => {
-    return (
-      !!user.groupIds[groupId] &&
-      groups[groupId] > permission &&
-      groups[groupId]
-    )
-  }, false)
-  return Math.max(permissionUser, permissionGroup) || null
+export function permissionsSet (elements, permissions) {
+  return elements.reduce(
+    (res, element) =>
+      Object.assign(res, {
+        [element.id]:
+          permissions && permissions[element.id] ? permissions[element.id] : 0
+      }),
+    {}
+  )
 }
 
-export function corpuFormat (corpu, state) {
+export function corpuFormat (corpu, users, groups) {
   return {
     name: corpu.name,
     id: corpu._id,
     description: corpu.description,
-    permission:
-      corpu.permission || permissionsUser(corpu.permissions, state.user),
-    users: [...state.users.list],
-    groups: [...state.groups.list]
+    permission: corpu.permission,
+    permissions: {
+      groups: permissionsSet(groups, corpu.permissions.groups),
+      users: permissionsSet(users, corpu.permissions.users)
+    }
   }
 }

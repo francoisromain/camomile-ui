@@ -12,7 +12,7 @@
         <tr v-for="corpu in corpus" :key="corpu.id">
           <td>{{ corpu.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupPermissionsConfig, corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Permissions</button>
+            <button @click="popupOpen({ ...popupPermissionsConfig, corpuId: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Permissions</button>
             <button @click="popupOpen({ ...popupEditConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Edit</button>
             <button @click="popupOpen({ ...popupRemoveConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Remove</button>
           </td>
@@ -45,7 +45,6 @@ export default {
         component: popupRemove
       },
       popupPermissionsConfig: {
-        type: 'corpus',
         closeBtn: true,
         title: 'Corpus permissions',
         component: popupPermissions

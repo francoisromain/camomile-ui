@@ -16,7 +16,7 @@
           <td class="text-right">
             <button @click="popupOpen({ ...popupGroupsConfig, userId: user.id })" class="btn px-s py-s my--s h5">Groups</button>
             <button @click="popupOpen({ ...popupEditConfig, element: user })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, element: user })" class="btn px-s py-s my--s h5">Remove</button>
+            <button @click="popupOpen({ ...popupRemoveConfig, element: user })" class="btn px-s py-s my--s h5" v-if="user.id !== adminId">Remove</button>
           </td>
         </tr>
       </table>
@@ -56,7 +56,7 @@ export default {
   computed: {
     ...mapState({
       users: state => state.cml.users.list,
-      isLogged: state => state.cml.isLogged
+      adminId: state => state.cml.user.id
     })
   },
   methods: {

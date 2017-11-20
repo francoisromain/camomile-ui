@@ -47,7 +47,8 @@ export default {
       if (user.role === 'admin') {
         commit('adminSet')
       }
-      if (user.name === 'root') {
+
+      if (user.username === 'root') {
         commit('rootSet')
       }
       Promise.all([
@@ -71,21 +72,26 @@ export default {
       state.url = url
       state.api = state.config.axios ? camomile(url) : new Camomile(url)
     },
+
     delete (state) {
       state.url = ''
       state.api = null
     },
+
     login (state) {
       state.isLogged = true
     },
+
     logout (state) {
       state.isLogged = false
       state.isAdmin = false
       state.isRoot = false
     },
+
     adminSet (state) {
       state.isAdmin = true
     },
+
     rootSet (state) {
       state.isRoot = true
     }

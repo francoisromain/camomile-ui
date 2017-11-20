@@ -28,7 +28,7 @@ export default {
       }
     },
     isActive (permission) {
-      return this.element.permission === permission
+      return this.config.resource.permissions && this.config.resource.permissions[this.config.elementType + 's'] ? this.config.resource.permissions[this.config.elementType + 's'][this.element.id] === permission : 0
     }
   }
 }

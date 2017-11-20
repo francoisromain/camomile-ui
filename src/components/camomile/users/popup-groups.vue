@@ -12,8 +12,7 @@
       </div>
       <div class="blob-3-4">
         <ul class="list-inline">
-          <li v-for="group in groups" :key="group.id" :class="{ active: groupActive(group.id) }" class="tag">
-            <button class="btn px-s py-xs h5 pill" @click="groupToggle(group)">{{ group.name }}</button>
+          <li v-for="group in groups" :key="group.id" :class="{ active: groupActive(group.id) }" class="tag"><button class="btn px-s py-xs h5 pill" @click="groupToggle(group)">{{ group.name }}</button>
           </li>
         </ul>
       </div>
@@ -38,21 +37,14 @@ export default {
     groupToggle (group) {
       if (this.groupActive(group.id)) {
         this.$store.dispatch('cml/groups/userRemove', { user: this.user, group: group })
-          .then(r => this.groupIdsList())
       } else {
         this.$store.dispatch('cml/groups/userAdd', { user: this.user, group: group })
-          .then(r => this.groupIdsList())
       }
     },
     groupActive (groupId) {
-      return this.user.groupIds.indexOf(groupId) > -1
-    },
-    groupIdsList () {
-      this.$store.dispatch('cml/users/groupIdsList', this.user)
+      return this.groups.find(group => group.id === groupId)
+        .userIds.indexOf(this.user.id) !== -1
     }
-  },
-  created () {
-    this.groupIdsList()
   }
 }
 </script>
