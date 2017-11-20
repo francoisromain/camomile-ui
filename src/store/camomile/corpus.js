@@ -7,14 +7,18 @@ import {
 
 export default {
   namespaced: true,
+
   state: {
     list: []
   },
+
   actions: {
     add ({ commit, dispatch, state, rootState }, corpus) {
+      commit('cml/sync/add', 'corpusAdd', { root: true })
       return rootState.cml.api
         .createCorpus(corpus.name, corpus.description, {})
         .then(r => {
+          commit('cml/sync/remove', 'corpusAdd', { root: true })
           const corpu = {
             name: r.name,
             id: r._id,
@@ -42,9 +46,11 @@ export default {
     },
 
     remove ({ commit, dispatch, state, rootState }, corpu) {
+      commit('cml/sync/add', 'corpusRemove', { root: true })
       return rootState.cml.api
         .deleteCorpus(corpu.id)
         .then(r => {
+          commit('cml/sync/remove', 'corpusRemove', { root: true })
           commit('remove', corpu)
           messageDispatch('success', 'Corpus removed', dispatch)
 
@@ -59,9 +65,11 @@ export default {
     },
 
     update ({ commit, dispatch, state, rootState }, corpu) {
+      commit('cml/sync/add', 'corpusUpdate', { root: true })
       return rootState.cml.api
         .updateCorpus(corpu.id, { description: corpu.description })
         .then(r => {
+          commit('cml/sync/remove', 'corpusUpdate', { root: true })
           // update api to update from server:
           // should receive an object with a permissions property
           // to process with corpuFormat
@@ -79,6 +87,7 @@ export default {
     },
 
     list ({ state, dispatch, commit, rootState, rootGetters }) {
+      commit('cml/sync/add', 'corpusList', { root: true })
       return rootState.cml.api
         .getCorpora()
         .then(r => {
@@ -93,8 +102,9 @@ export default {
               rootState.cml.groups.list
             )
           })
-
+          commit('cml/sync/remove', 'corpusList', { root: true })
           commit('list', corpus)
+
           return corpus
         })
         .catch(e => {
@@ -108,9 +118,11 @@ export default {
       { commit, dispatch, rootState },
       { corpu, group, permission }
     ) {
+      commit('cml/sync/add', 'corpusGroupPermissionSet', { root: true })
       return rootState.cml.api
         .setCorpusPermissionsForGroup(corpu.id, group.id, permission)
         .then(permissions => {
+          commit('cml/sync/remove', 'corpusGroupPermissionSet', { root: true })
           commit('elementPermissionsUpdate', {
             corpu: corpu,
             elementId: group.id,
@@ -135,9 +147,13 @@ export default {
     },
 
     groupPermissionRemove ({ commit, dispatch, rootState }, { corpu, group }) {
+      commit('cml/sync/add', 'corpusGroupPermissionRemove', { root: true })
       return rootState.cml.api
         .removeCorpusPermissionsForGroup(corpu.id, group.id)
         .then(permissions => {
+          commit('cml/sync/remove', 'corpusGroupPermissionRemove', {
+            root: true
+          })
           commit('elementPermissionsUpdate', {
             corpu: corpu,
             elementId: group.id,
@@ -164,9 +180,11 @@ export default {
       { commit, dispatch, rootState },
       { corpu, user, permission }
     ) {
+      commit('cml/sync/add', 'corpusUserPermissionSet', { root: true })
       return rootState.cml.api
         .setCorpusPermissionsForUser(corpu.id, user.id, permission)
         .then(permissions => {
+          commit('cml/sync/remove', 'corpusUserPermissionSet', { root: true })
           commit('elementPermissionsUpdate', {
             corpu: corpu,
             elementId: user.id,
@@ -190,9 +208,13 @@ export default {
     },
 
     userPermissionRemove ({ commit, dispatch, rootState }, { corpu, user }) {
+      commit('cml/sync/add', 'corpusUserPermissionRemove', { root: true })
       return rootState.cml.api
         .removeCorpusPermissionsForUser(corpu.id, user.id)
         .then(permissions => {
+          commit('cml/sync/remove', 'corpusUserPermissionRemove', {
+            root: true
+          })
           commit('elementPermissionsUpdate', {
             corpu: corpu,
             elementId: user.id,
@@ -224,7 +246,12 @@ export default {
       }
     }
   },
+
   mutations: {
+    reset (state) {
+      state.list = []
+    },
+
     add (state, corpu) {
       const corpuExisting = state.list.find(c => c.id === corpu.id)
       if (!corpuExisting) {

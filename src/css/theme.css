@@ -51,6 +51,24 @@ hr.border-bg {
   background-color: var(--color-alt);
 }
 
+.blobs-default {
+  gf: row;
+}
+
+.blob-default {
+  margin-right: var(--gutter);
+  flex: 0 1 0;
+}
+
+.blob-auto {
+  margin-right: var(--gutter);
+  flex: 0 1 auto;
+}
+
+.menubar-infos {
+  margin-top: var(--unit-s);
+}
+
 @media (--viewport-tablet) {
   --header-height: calc(var(--unit) * 2);
 
@@ -58,13 +76,14 @@ hr.border-bg {
     width: calc(2 * var(--col-width) + var(--gutter));
   }
 
-  .blob-icon {
+  .blob {
     margin-right: var(--gutter);
-    flex: 0 1 calc(var(--unit) * 2);
+    flex: 0 1 0;
   }
 
   .menubar-infos {
     padding-top: var(--unit-s);
+    margin-top: 0;
   }
 
   .pophover {

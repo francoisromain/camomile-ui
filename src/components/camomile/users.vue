@@ -2,8 +2,7 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Users</h2>
-      <button @click="refresh" class="flex-right btn p-s mr-s"><i class="icon-24 icon-24-reload"></i></button>
-      <button @click="popupOpen({ ...popupEditConfig, element: {}, title: 'Add user' })" class="btn p-s"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ ...popupEditConfig, element: {}, title: 'Add user' })" class="btn p-s flex-right"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">

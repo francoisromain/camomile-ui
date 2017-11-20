@@ -11,11 +11,14 @@ import users from './users'
 import groups from './groups'
 import corpus from './corpus'
 import viewport from './viewport'
+import sync from './sync'
 
 export default {
   namespaced: true,
+
   modules: {
     viewport,
+    sync,
     popup,
     dropdown,
     messages,
@@ -24,6 +27,7 @@ export default {
     groups,
     corpus
   },
+
   state: {
     url: '',
     api: null,
@@ -32,18 +36,21 @@ export default {
     isAdmin: false,
     isRoot: false
   },
+
   actions: {
     login ({ commit, dispatch, state }) {
-      commit('login')
       commit('cml/popup/close', null, { root: true })
     },
+
     logout ({ commit, dispatch, state }) {
+      dispatch('reset')
       commit('cml/popup/close', null, { root: true })
       commit('cml/dropdown/close', null, { root: true })
-      commit('logout')
-      commit('delete')
     },
-    set ({ commit, dispatch, state }, user) {
+
+    set ({ state, dispatch, commit }, user) {
+      commit('login')
+
       if (user.role === 'admin') {
         commit('adminSet')
       }
@@ -53,18 +60,33 @@ export default {
       }
       Promise.all([
         new Promise((resolve, reject) =>
-          dispatch('cml/users/list', { messageHide: true }, { root: true })
+          dispatch('cml/users/list', null, { root: true })
             .then(r => resolve(r))
             .catch(e => reject(e))
         ),
         new Promise((resolve, reject) =>
-          dispatch('cml/groups/list', { messageHide: true }, { root: true })
+          dispatch('cml/groups/list', null, { root: true })
             .then(r => resolve(r))
             .catch(e => reject(e))
         )
       ]).then(res => {
         dispatch('cml/corpus/list', null, { root: true })
       })
+    },
+
+    reset ({ state, dispatch, commit }) {
+      commit('logout')
+      commit('delete')
+      commit('cml/corpus/reset', null, { root: true })
+      commit('cml/user/reset', null, { root: true })
+      commit('cml/users/reset', null, { root: true })
+      commit('cml/groups/reset', null, { root: true })
+    },
+
+    sync ({ state, dispatch, commit }) {
+      dispatch('cml/users/list', {}, { root: true })
+      dispatch('cml/groups/list', {}, { root: true })
+      dispatch('cml/corpus/list', {}, { root: true })
     }
   },
   mutations: {

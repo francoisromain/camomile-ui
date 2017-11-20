@@ -2,14 +2,18 @@ import { messageDispatch, userFormat, errorFormat } from './_helpers'
 
 export default {
   namespaced: true,
+
   state: {
     list: []
   },
+
   actions: {
     add ({ commit, state, dispatch, rootState }, user) {
+      commit('cml/sync/add', 'usersAdd', { root: true })
       return rootState.cml.api
         .createUser(user.name, user.password, user.description, user.role)
         .then(r => {
+          commit('cml/sync/remove', 'usersAdd', { root: true })
           const user = userFormat(r)
           commit('add', user)
           commit('cml/corpus/userAdd', user.id, { root: true })
@@ -26,6 +30,7 @@ export default {
     },
 
     update ({ commit, dispatch, state, rootState }, user) {
+      commit('cml/sync/add', 'usersUpdate', { root: true })
       return rootState.cml.api
         .updateUser(user.id, {
           password: user.password,
@@ -33,6 +38,7 @@ export default {
           description: user.description
         })
         .then(r => {
+          commit('cml/sync/remove', 'usersUpdate', { root: true })
           const user = userFormat(r)
           commit('update', user)
           if (user.name === rootState.cml.user.name) {
@@ -46,14 +52,17 @@ export default {
           // const error = 'Error: request failed.'
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
+
           throw error
         })
     },
 
     remove ({ commit, state, dispatch, rootState }, user) {
+      commit('cml/sync/add', 'usersRemove', { root: true })
       return rootState.cml.api
         .deleteUser(user.id)
         .then(r => {
+          commit('cml/sync/remove', 'usersRemove', { root: true })
           commit('remove', user)
           commit('cml/corpus/userRemove', user.id, { root: true })
           messageDispatch('success', 'User removed', dispatch)
@@ -69,9 +78,14 @@ export default {
     },
 
     get ({ commit, dispatch, state, rootState }, userId) {
+      commit('cml/sync/add', 'usersGet', { root: true })
       return rootState.cml.api
         .getUser(userId)
-        .then(user => userFormat(user))
+        .then(r => {
+          commit('cml/sync/remove', 'usersRemove', { root: true })
+          const user = userFormat(r)
+          return user
+        })
         .catch(e => {
           console.log(e)
 
@@ -79,15 +93,14 @@ export default {
         })
     },
 
-    list ({ commit, dispatch, state, rootState }, { messageHide = false } = {}) {
+    list ({ commit, dispatch, state, rootState }) {
+      commit('cml/sync/add', 'usersList', { root: true })
       return rootState.cml.api
         .getUsers()
         .then(r => {
+          commit('cml/sync/remove', 'usersList', { root: true })
           const users = r.map(user => userFormat(user))
           commit('list', users)
-          if (!messageHide) {
-            messageDispatch('success', 'Users updated', dispatch)
-          }
 
           return users
         })
@@ -97,7 +110,12 @@ export default {
         })
     }
   },
+
   mutations: {
+    reset (state) {
+      state.list = []
+    },
+
     add (state, user) {
       const userExisting = state.list.find(u => u.id === user.id)
       if (!userExisting) {

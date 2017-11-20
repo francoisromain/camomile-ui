@@ -2,9 +2,22 @@
   <div class="bg-inverse color-bg header">
     <div class="container">
       <div class="blobs">
-        <cml-title class="blob-1-4 mb-0" />
-        <cml-infos class="blob-1-4 mb-0" />
-        <cml-userbutton class="blob-icon mb-0 flex-right" v-if="isLogged" />
+        <div class="blob-1-4 mb-0">
+          <cml-title />
+        </div>
+        <div class="blob-1-2 mb-0">
+          <div class="blobs-default">
+            <div class="blob-default">
+              <cml-syncbutton class="mb-0 left" v-if="isLogged" />
+            </div>
+            <div class="blob-auto mb-0">  
+              <cml-infos v-if="isLogged" />
+            </div>
+          </div>
+        </div>
+        <div class="blob mb-0 flex-right">
+          <cml-userbutton  v-if="isLogged" />
+        </div>
       </div>
     </div>
   </div>
@@ -15,13 +28,15 @@
 import cmlTitle from './title.vue'
 import cmlInfos from './infos.vue'
 import cmlUserbutton from './userbutton.vue'
+import cmlSyncbutton from './syncbutton.vue'
 
 export default {
   name: 'camomile-header',
   components: {
     cmlTitle,
     cmlInfos,
-    cmlUserbutton
+    cmlUserbutton,
+    cmlSyncbutton
   },
   computed: {
     isLogged () {

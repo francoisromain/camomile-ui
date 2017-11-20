@@ -1,5 +1,5 @@
 <template>
-  <h6 class="menubar-infos">{{ api }} : {{ url }}</h6>
+  <h6 class="menubar-infos mb-0">{{ api }} : {{ url }}</h6>
 </template>
 
 <script>

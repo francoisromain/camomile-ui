@@ -2,6 +2,7 @@ import { messageDispatch, userFormat, errorFormat } from './_helpers'
 
 export default {
   namespaced: true,
+
   state: {
     id: '',
     name: '',
@@ -12,10 +13,12 @@ export default {
 
   actions: {
     login ({ commit, state, dispatch, rootState }, config) {
+      commit('cml/sync/add', 'userLogin', { root: true })
       commit('cml/create', config.url, { root: true })
       return rootState.cml.api
         .login(config.user.name, config.user.password)
         .then(r => {
+          commit('cml/sync/remove', 'userLogin', { root: true })
           dispatch('cml/login', null, { root: true })
           dispatch('set')
 
@@ -31,9 +34,11 @@ export default {
     },
 
     logout ({ commit, state, dispatch, rootState }) {
+      commit('cml/sync/add', 'userLogout', { root: true })
       return rootState.cml.api
         .logout()
         .then(r => {
+          commit('cml/sync/remove', 'userLogout', { root: true })
           commit('reset')
           dispatch('cml/logout', null, { root: true })
 
@@ -49,9 +54,11 @@ export default {
     },
 
     set ({ commit, dispatch, state, rootState }) {
+      commit('cml/sync/add', 'userSet', { root: true })
       return rootState.cml.api
         .me()
         .then(user => {
+          commit('cml/sync/remove', 'userSet', { root: true })
           commit('set', user)
           dispatch('cml/set', user, { root: true })
 
@@ -113,8 +120,11 @@ export default {
     },
 
     reset (state) {
+      state.id = ''
       state.name = ''
-      state.password = ''
+      state.role = ''
+      state.description = ''
+      state.groupIds = []
     },
 
     groupAdd (state, groupId) {
