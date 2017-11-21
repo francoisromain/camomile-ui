@@ -8,7 +8,7 @@ export default {
   },
 
   actions: {
-    all ({ state, dispatch, commit }) {
+    all ({ state, dispatch, commit, rootState }) {
       Promise.all([
         new Promise((resolve, reject) =>
           dispatch('cml/users/list', {}, { root: true })
@@ -22,6 +22,13 @@ export default {
         ),
         new Promise((resolve, reject) =>
           dispatch('cml/corpus/list', {}, { root: true })
+            .then(r => resolve(r))
+            .catch(e => reject(e))
+        ),
+        new Promise((resolve, reject) =>
+          dispatch('cml/medias/list', rootState.cml.corpus.selected, {
+            root: true
+          })
             .then(r => resolve(r))
             .catch(e => reject(e))
         )
@@ -38,11 +45,11 @@ export default {
   },
 
   mutations: {
-    add (state, name) {
+    start (state, name) {
       state.list.push(name)
     },
 
-    remove (state, name) {
+    stop (state, name) {
       state.list = state.list.filter(n => n !== name)
     }
   }

@@ -13,18 +13,19 @@ export default {
 
   actions: {
     login ({ commit, state, dispatch, rootState }, config) {
-      commit('cml/sync/add', 'userLogin', { root: true })
+      commit('cml/sync/start', 'userLogin', { root: true })
       commit('cml/create', config.url, { root: true })
       return rootState.cml.api
         .login(config.user.name, config.user.password)
         .then(r => {
-          commit('cml/sync/remove', 'userLogin', { root: true })
+          commit('cml/sync/stop', 'userLogin', { root: true })
           dispatch('cml/login', null, { root: true })
           dispatch('set')
 
           return r
         })
         .catch(e => {
+          commit('cml/sync/stop', 'userLogin', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
           commit('reset')
@@ -34,17 +35,18 @@ export default {
     },
 
     logout ({ commit, state, dispatch, rootState }) {
-      commit('cml/sync/add', 'userLogout', { root: true })
+      commit('cml/sync/start', 'userLogout', { root: true })
       return rootState.cml.api
         .logout()
         .then(r => {
-          commit('cml/sync/remove', 'userLogout', { root: true })
+          commit('cml/sync/stop', 'userLogout', { root: true })
           commit('reset')
           dispatch('cml/logout', null, { root: true })
 
           return r.success
         })
         .catch(e => {
+          commit('cml/sync/stop', 'userLogout', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
           commit('reset')
@@ -54,17 +56,18 @@ export default {
     },
 
     set ({ commit, dispatch, state, rootState }) {
-      commit('cml/sync/add', 'userSet', { root: true })
+      commit('cml/sync/start', 'userSet', { root: true })
       return rootState.cml.api
         .me()
         .then(user => {
-          commit('cml/sync/remove', 'userSet', { root: true })
+          commit('cml/sync/stop', 'userSet', { root: true })
           commit('set', user)
           dispatch('cml/set', user, { root: true })
 
           return user
         })
         .catch(e => {
+          commit('cml/sync/stop', 'userSet', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
           commit('reset')

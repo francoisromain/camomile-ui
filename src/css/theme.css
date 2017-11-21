@@ -28,6 +28,7 @@
   button-background: var(--color-transparent) var(--color-alt)
     var(--color-highlight);
   font-weight: 700;
+  height: 3rem;
 }
 
 .page {

@@ -5,10 +5,10 @@
         <h3 class="pt-s mb-0">Name</h3>
       </div>
       <div class="blob-3-4">
-        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id">
+        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id && type === 'users' || type === 'groups'">
       </div>
     </div>
-    <div class="blobs" v-if="typeUsers">
+    <div class="blobs" v-if="type === 'users'">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Role</h3>
       </div>
@@ -20,12 +20,20 @@
         </select>
       </div>
     </div>
-    <div class="blobs" v-if="typeUsers">
+    <div class="blobs" v-if="type === 'users'">
       <div class="blob-1-4">
         <h3 class="pt-s mb-0">Password</h3>
       </div>
       <div class="blob-3-4">
         <input type="password" v-model="element.password" class="input-alt" placeholder="••••••••">
+      </div>
+    </div>
+    <div class="blobs" v-if="type === 'medias'">
+      <div class="blob-1-4">
+        <h3 class="pt-s mb-0">Url</h3>
+      </div>
+      <div class="blob-3-4">
+        <input type="text" v-model="element.url" class="input-alt" placeholder="http://…">
       </div>
     </div>
     <div class="blobs">
@@ -58,7 +66,6 @@ export default {
     ...mapState({
       id: state => state.cml.popup.config.id,
       type: state => state.cml.popup.config.type,
-      typeUsers: state => state.cml.popup.config.type === 'users',
       rolesPermission: state => state.cml.user.id !== state.cml.popup.config.id,
       roles: state => state.cml.config.roles
     })

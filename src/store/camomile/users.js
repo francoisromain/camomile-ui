@@ -9,11 +9,11 @@ export default {
 
   actions: {
     add ({ commit, state, dispatch, rootState }, user) {
-      commit('cml/sync/add', 'usersAdd', { root: true })
+      commit('cml/sync/start', 'usersAdd', { root: true })
       return rootState.cml.api
         .createUser(user.name, user.password, user.description, user.role)
         .then(r => {
-          commit('cml/sync/remove', 'usersAdd', { root: true })
+          commit('cml/sync/stop', 'usersAdd', { root: true })
           const user = userFormat(r)
           commit('add', user)
           commit('cml/corpus/userAdd', user.id, { root: true })
@@ -22,6 +22,7 @@ export default {
           return user
         })
         .catch(e => {
+          commit('cml/sync/stop', 'usersAdd', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 
@@ -30,7 +31,7 @@ export default {
     },
 
     update ({ commit, dispatch, state, rootState }, user) {
-      commit('cml/sync/add', 'usersUpdate', { root: true })
+      commit('cml/sync/start', 'usersUpdate', { root: true })
       return rootState.cml.api
         .updateUser(user.id, {
           password: user.password,
@@ -38,7 +39,7 @@ export default {
           description: user.description
         })
         .then(r => {
-          commit('cml/sync/remove', 'usersUpdate', { root: true })
+          commit('cml/sync/stop', 'usersUpdate', { root: true })
           const user = userFormat(r)
           commit('update', user)
           if (user.name === rootState.cml.user.name) {
@@ -49,6 +50,7 @@ export default {
           return user
         })
         .catch(e => {
+          commit('cml/sync/stop', 'usersUpdate', { root: true })
           // const error = 'Error: request failed.'
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
@@ -58,11 +60,11 @@ export default {
     },
 
     remove ({ commit, state, dispatch, rootState }, user) {
-      commit('cml/sync/add', 'usersRemove', { root: true })
+      commit('cml/sync/start', 'usersRemove', { root: true })
       return rootState.cml.api
         .deleteUser(user.id)
         .then(r => {
-          commit('cml/sync/remove', 'usersRemove', { root: true })
+          commit('cml/sync/stop', 'usersRemove', { root: true })
           commit('remove', user)
           commit('cml/corpus/userRemove', user.id, { root: true })
           messageDispatch('success', 'User removed', dispatch)
@@ -70,6 +72,7 @@ export default {
           return r
         })
         .catch(e => {
+          commit('cml/sync/stop', 'usersRemove', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 
@@ -78,15 +81,16 @@ export default {
     },
 
     get ({ commit, dispatch, state, rootState }, userId) {
-      commit('cml/sync/add', 'usersGet', { root: true })
+      commit('cml/sync/start', 'usersGet', { root: true })
       return rootState.cml.api
         .getUser(userId)
         .then(r => {
-          commit('cml/sync/remove', 'usersRemove', { root: true })
+          commit('cml/sync/stop', 'usersRemove', { root: true })
           const user = userFormat(r)
           return user
         })
         .catch(e => {
+          commit('cml/sync/stop', 'usersRemove', { root: true })
           console.log(e)
 
           throw e
@@ -94,17 +98,18 @@ export default {
     },
 
     list ({ commit, dispatch, state, rootState }) {
-      commit('cml/sync/add', 'usersList', { root: true })
+      commit('cml/sync/start', 'usersList', { root: true })
       return rootState.cml.api
         .getUsers()
         .then(r => {
-          commit('cml/sync/remove', 'usersList', { root: true })
+          commit('cml/sync/stop', 'usersList', { root: true })
           const users = r.map(user => userFormat(user))
           commit('list', users)
 
           return users
         })
         .catch(e => {
+          commit('cml/sync/stop', 'usersList', { root: true })
           console.log(e)
           throw e
         })

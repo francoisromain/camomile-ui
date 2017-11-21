@@ -3,6 +3,8 @@ import Camomile from 'camomile-client'
 import camomile from '../../js/api' /* axios api */
 import config from './_config.js'
 
+import viewport from './viewport'
+import sync from './sync'
 import popup from './popup'
 import dropdown from './dropdown'
 import messages from './messages'
@@ -10,8 +12,7 @@ import user from './user'
 import users from './users'
 import groups from './groups'
 import corpus from './corpus'
-import viewport from './viewport'
-import sync from './sync'
+import medias from './medias'
 
 export default {
   namespaced: true,
@@ -25,7 +26,8 @@ export default {
     user,
     users,
     groups,
-    corpus
+    corpus,
+    medias
   },
 
   state: {
@@ -70,7 +72,16 @@ export default {
             .catch(e => reject(e))
         )
       ]).then(res => {
-        dispatch('cml/corpus/list', null, { root: true })
+        dispatch('cml/corpus/list', null, { root: true }).then(res => {
+          const corpuSelectedDefault =
+            state.corpus.list[0] && state.corpus.list[0].id
+          if (corpuSelectedDefault) {
+            commit('cml/corpus/corpuSelect', corpuSelectedDefault, {
+              root: true
+            })
+            dispatch('cml/medias/list', corpuSelectedDefault, { root: true })
+          }
+        })
       })
     },
 

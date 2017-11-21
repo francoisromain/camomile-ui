@@ -9,16 +9,17 @@ export default {
   namespaced: true,
 
   state: {
-    list: []
+    list: [],
+    selected: ''
   },
 
   actions: {
     add ({ commit, dispatch, state, rootState }, corpus) {
-      commit('cml/sync/add', 'corpusAdd', { root: true })
+      commit('cml/sync/start', 'corpusAdd', { root: true })
       return rootState.cml.api
         .createCorpus(corpus.name, corpus.description, {})
         .then(r => {
-          commit('cml/sync/remove', 'corpusAdd', { root: true })
+          commit('cml/sync/stop', 'corpusAdd', { root: true })
           const corpu = {
             name: r.name,
             id: r._id,
@@ -38,6 +39,7 @@ export default {
           return r
         })
         .catch(e => {
+          commit('cml/sync/stop', 'corpusAdd', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 
@@ -46,17 +48,18 @@ export default {
     },
 
     remove ({ commit, dispatch, state, rootState }, corpu) {
-      commit('cml/sync/add', 'corpusRemove', { root: true })
+      commit('cml/sync/start', 'corpusRemove', { root: true })
       return rootState.cml.api
         .deleteCorpus(corpu.id)
         .then(r => {
-          commit('cml/sync/remove', 'corpusRemove', { root: true })
+          commit('cml/sync/stop', 'corpusRemove', { root: true })
           commit('remove', corpu)
           messageDispatch('success', 'Corpus removed', dispatch)
 
           return r
         })
         .catch(e => {
+          commit('cml/sync/stop', 'corpusRemove', { root: true })
           console.log(e)
           messageDispatch('error', e, dispatch)
 
@@ -65,11 +68,14 @@ export default {
     },
 
     update ({ commit, dispatch, state, rootState }, corpu) {
-      commit('cml/sync/add', 'corpusUpdate', { root: true })
+      commit('cml/sync/start', 'corpusUpdate', { root: true })
       return rootState.cml.api
-        .updateCorpus(corpu.id, { description: corpu.description })
+        .updateCorpus(corpu.id, {
+          name: corpu.name,
+          description: corpu.description
+        })
         .then(r => {
-          commit('cml/sync/remove', 'corpusUpdate', { root: true })
+          commit('cml/sync/stop', 'corpusUpdate', { root: true })
           // update api to update from server:
           // should receive an object with a permissions property
           // to process with corpuFormat
@@ -79,6 +85,7 @@ export default {
           return r
         })
         .catch(e => {
+          commit('cml/sync/stop', 'corpusUpdate', { root: true })
           console.log(e)
           messageDispatch('error', e, dispatch)
 
@@ -87,10 +94,11 @@ export default {
     },
 
     list ({ state, dispatch, commit, rootState, rootGetters }) {
-      commit('cml/sync/add', 'corpusList', { root: true })
+      commit('cml/sync/start', 'corpusList', { root: true })
       return rootState.cml.api
         .getCorpora()
         .then(r => {
+          commit('cml/sync/stop', 'corpusList', { root: true })
           const corpus = r.map(corpu => {
             corpu.permission = rootGetters['cml/user/permission'](
               corpu.permissions
@@ -102,12 +110,12 @@ export default {
               rootState.cml.groups.list
             )
           })
-          commit('cml/sync/remove', 'corpusList', { root: true })
           commit('list', corpus)
 
           return corpus
         })
         .catch(e => {
+          commit('cml/sync/stop', 'corpusList', { root: true })
           console.log(e)
 
           throw e
@@ -118,11 +126,11 @@ export default {
       { commit, dispatch, rootState },
       { corpu, group, permission }
     ) {
-      commit('cml/sync/add', 'corpusGroupPermissionSet', { root: true })
+      commit('cml/sync/start', 'corpusGroupPermissionSet', { root: true })
       return rootState.cml.api
         .setCorpusPermissionsForGroup(corpu.id, group.id, permission)
         .then(permissions => {
-          commit('cml/sync/remove', 'corpusGroupPermissionSet', { root: true })
+          commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true })
           commit('elementPermissionsUpdate', {
             corpu: corpu,
             elementId: group.id,
@@ -139,6 +147,7 @@ export default {
           return permissions
         })
         .catch(e => {
+          commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 
@@ -147,11 +156,11 @@ export default {
     },
 
     groupPermissionRemove ({ commit, dispatch, rootState }, { corpu, group }) {
-      commit('cml/sync/add', 'corpusGroupPermissionRemove', { root: true })
+      commit('cml/sync/start', 'corpusGroupPermissionRemove', { root: true })
       return rootState.cml.api
         .removeCorpusPermissionsForGroup(corpu.id, group.id)
         .then(permissions => {
-          commit('cml/sync/remove', 'corpusGroupPermissionRemove', {
+          commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
             root: true
           })
           commit('elementPermissionsUpdate', {
@@ -169,6 +178,9 @@ export default {
           return permissions
         })
         .catch(e => {
+          commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
+            root: true
+          })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 
@@ -180,11 +192,11 @@ export default {
       { commit, dispatch, rootState },
       { corpu, user, permission }
     ) {
-      commit('cml/sync/add', 'corpusUserPermissionSet', { root: true })
+      commit('cml/sync/start', 'corpusUserPermissionSet', { root: true })
       return rootState.cml.api
         .setCorpusPermissionsForUser(corpu.id, user.id, permission)
         .then(permissions => {
-          commit('cml/sync/remove', 'corpusUserPermissionSet', { root: true })
+          commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true })
           commit('elementPermissionsUpdate', {
             corpu: corpu,
             elementId: user.id,
@@ -200,6 +212,7 @@ export default {
           return permissions
         })
         .catch(e => {
+          commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 
@@ -208,11 +221,11 @@ export default {
     },
 
     userPermissionRemove ({ commit, dispatch, rootState }, { corpu, user }) {
-      commit('cml/sync/add', 'corpusUserPermissionRemove', { root: true })
+      commit('cml/sync/start', 'corpusUserPermissionRemove', { root: true })
       return rootState.cml.api
         .removeCorpusPermissionsForUser(corpu.id, user.id)
         .then(permissions => {
-          commit('cml/sync/remove', 'corpusUserPermissionRemove', {
+          commit('cml/sync/stop', 'corpusUserPermissionRemove', {
             root: true
           })
           commit('elementPermissionsUpdate', {
@@ -229,6 +242,9 @@ export default {
           return permissions
         })
         .catch(e => {
+          commit('cml/sync/stop', 'corpusUserPermissionRemove', {
+            root: true
+          })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 
@@ -244,6 +260,11 @@ export default {
         dispatch('list')
         commit(`cml/popup/close`, null, { root: true })
       }
+    },
+
+    corpuSelect ({ state, dispatch, commit }, corpuId) {
+      commit('corpuSelect', corpuId)
+      dispatch('cml/medias/list', state.selected, { root: true })
     }
   },
 
@@ -307,6 +328,10 @@ export default {
       state.list.forEach(corpu => {
         delete corpu.permissions.users[userId]
       })
+    },
+
+    corpuSelect (state, corpuId) {
+      state.selected = corpuId
     }
   }
 }

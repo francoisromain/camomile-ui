@@ -9,11 +9,11 @@ export default {
 
   actions: {
     add ({ commit, dispatch, state, rootState }, group) {
-      commit('cml/sync/add', 'groupsAdd', { root: true })
+      commit('cml/sync/start', 'groupsAdd', { root: true })
       return rootState.cml.api
         .createGroup(group.name, group.description)
         .then(r => {
-          commit('cml/sync/remove', 'groupsAdd', { root: true })
+          commit('cml/sync/stop', 'groupsAdd', { root: true })
           const group = groupFormat(r)
           commit('add', group)
           commit('cml/corpus/groupAdd', group.id, { root: true })
@@ -22,6 +22,7 @@ export default {
           return group
         })
         .catch(e => {
+          commit('cml/sync/stop', 'groupsAdd', { root: true })
           console.log(e)
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
@@ -31,11 +32,11 @@ export default {
     },
 
     remove ({ commit, dispatch, state, rootState }, group) {
-      commit('cml/sync/add', 'groupsRemove', { root: true })
+      commit('cml/sync/start', 'groupsRemove', { root: true })
       return rootState.cml.api
         .deleteGroup(group.id)
         .then(r => {
-          commit('cml/sync/remove', 'groupsRemove', { root: true })
+          commit('cml/sync/stop', 'groupsRemove', { root: true })
           commit('remove', group)
           commit('cml/corpus/groupRemove', group.id, { root: true })
           messageDispatch('success', 'Group removed', dispatch)
@@ -43,6 +44,7 @@ export default {
           return group.id
         })
         .catch(e => {
+          commit('cml/sync/stop', 'groupsRemove', { root: true })
           console.log(e)
           messageDispatch('error', e, dispatch)
 
@@ -51,11 +53,11 @@ export default {
     },
 
     update ({ commit, dispatch, state, rootState }, group) {
-      commit('cml/sync/add', 'groupsUpdate', { root: true })
+      commit('cml/sync/start', 'groupsUpdate', { root: true })
       return rootState.cml.api
         .updateGroup(group.id, { description: group.description })
         .then(r => {
-          commit('cml/sync/remove', 'groupsUpdate', { root: true })
+          commit('cml/sync/stop', 'groupsUpdate', { root: true })
           const group = groupFormat(r)
           commit('update', group)
           messageDispatch('success', 'Group updated', dispatch)
@@ -63,6 +65,7 @@ export default {
           return group
         })
         .catch(e => {
+          commit('cml/sync/stop', 'groupsUpdate', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 
@@ -71,15 +74,16 @@ export default {
     },
 
     get ({ commit, dispatch, state, rootState }, groupId) {
-      commit('cml/sync/add', 'groupsGet', { root: true })
+      commit('cml/sync/start', 'groupsGet', { root: true })
       return rootState.cml.api
         .getGroup(groupId)
         .then(r => {
-          commit('cml/sync/remove', 'groupsGet', { root: true })
+          commit('cml/sync/stop', 'groupsGet', { root: true })
           const group = groupFormat(r)
           return group
         })
         .catch(e => {
+          commit('cml/sync/stop', 'groupsGet', { root: true })
           console.log(e)
 
           throw e
@@ -87,17 +91,18 @@ export default {
     },
 
     list ({ commit, dispatch, state, rootState }) {
-      commit('cml/sync/add', 'groupsList', { root: true })
+      commit('cml/sync/start', 'groupsList', { root: true })
       return rootState.cml.api
         .getGroups()
         .then(r => {
-          commit('cml/sync/remove', 'groupsList', { root: true })
+          commit('cml/sync/stop', 'groupsList', { root: true })
           const groups = r.map(group => groupFormat(group))
           commit('list', groups)
 
           return groups
         })
         .catch(e => {
+          commit('cml/sync/stop', 'groupsList', { root: true })
           console.log(e)
 
           throw e
@@ -105,11 +110,11 @@ export default {
     },
 
     userAdd ({ commit, dispatch, state, rootState }, { user, group }) {
-      commit('cml/sync/add', 'groupsUserAdd', { root: true })
+      commit('cml/sync/start', 'groupsUserAdd', { root: true })
       return rootState.cml.api
         .addUserToGroup(user.id, group.id)
         .then(r => {
-          commit('cml/sync/remove', 'groupsUserAdd', { root: true })
+          commit('cml/sync/stop', 'groupsUserAdd', { root: true })
           const group = groupFormat(r)
           commit('update', group)
           messageDispatch('success', 'User added to group', dispatch)
@@ -123,6 +128,7 @@ export default {
           return group
         })
         .catch(e => {
+          commit('cml/sync/stop', 'groupsUserAdd', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 
@@ -131,11 +137,11 @@ export default {
     },
 
     userRemove ({ commit, dispatch, state, rootState }, { user, group }) {
-      commit('cml/sync/add', 'groupsUserRemove', { root: true })
+      commit('cml/sync/start', 'groupsUserRemove', { root: true })
       return rootState.cml.api
         .removeUserFromGroup(user.id, group.id)
         .then(r => {
-          commit('cml/sync/remove', 'groupsUserRemove', { root: true })
+          commit('cml/sync/stop', 'groupsUserRemove', { root: true })
           const group = groupFormat(r)
           commit('update', group)
           messageDispatch('success', 'User removed from group', dispatch)
@@ -149,6 +155,7 @@ export default {
           return group
         })
         .catch(e => {
+          commit('cml/sync/stop', 'groupsUserRemove', { root: true })
           const error = errorFormat(e, rootState)
           messageDispatch('error', error, dispatch)
 

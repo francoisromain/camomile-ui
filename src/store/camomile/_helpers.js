@@ -50,3 +50,13 @@ export function corpuFormat (corpu, users, groups) {
     }
   }
 }
+
+export function mediaFormat (media) {
+  return {
+    name: media.name,
+    id: media._id,
+    url: media.url,
+    corpuId: media.id_corpus,
+    description: media.description
+  }
+}

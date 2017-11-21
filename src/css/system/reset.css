@@ -27,7 +27,7 @@ html {
   text-rendering: optimizeLegibility;
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: 'Montserrat', sans-serif;
+  font-family: system-ui;
   typescale: 0 1;
 }
 

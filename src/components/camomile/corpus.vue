@@ -1,15 +1,17 @@
 <template>
   <div v-if="isLogged">
     <div class="flex flex-start">
-      <h2 class="mt-s">Corpus</h2>
+      <h2 class="mt-s">Corpora</h2>
       <button @click="popupOpen({ ...popupEditConfig, id: null, title: 'Add corpus' })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
         <tr>
-          <th>Name</th><th></th>
+          <th></th><th>Name</th><th></th>
         </tr>
         <tr v-for="corpu in corpus" :key="corpu.id">
+          <td><input type="radio" @change="corpuSelect" :value="corpu.id"
+         :checked="corpu.id === corpuSelected"></td>
           <td>{{ corpu.name }}</td>
           <td class="text-right">
             <button @click="popupOpen({ ...popupPermissionsConfig, corpuId: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Permissions</button>
@@ -54,13 +56,17 @@ export default {
   computed: {
     ...mapState({
       corpus: state => state.cml.corpus.list,
+      corpuSelected: state => state.cml.corpus.selected,
       isLogged: state => state.cml.isLogged,
       isAdmin: state => state.cml.isAdmin
     })
   },
   methods: {
     popupOpen (config) {
-      return this.$store.commit('cml/popup/open', config)
+      this.$store.commit('cml/popup/open', config)
+    },
+    corpuSelect (e) {
+      this.$store.dispatch('cml/corpus/corpuSelect', e.target.value)
     }
   }
 }
