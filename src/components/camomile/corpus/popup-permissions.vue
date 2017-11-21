@@ -10,7 +10,7 @@
       <div class="blob-1-2">
         <h3 class="pt-s">Groups</h3>
         <ul class="list-sans">
-          <li v-for="group in corpu.groups" :key="group.id">
+          <li v-for="group in groups" :key="group.id">
             <div class="blobs">
               <div class="blob-1-3 mb-xs">
                 {{ group.name }}
@@ -25,7 +25,7 @@
       <div class="blob-1-2">
         <h3 class="pt-s">Users</h3>
         <ul class="list-sans">
-          <li v-for="user in corpu.users" :key="user.id">
+          <li v-for="user in users" :key="user.id">
             <div class="blobs">
               <div class="blob-1-3 mb-xs">
                 {{ user.name }}
@@ -52,34 +52,28 @@ export default {
   },
   computed: {
     ...mapState({
-      corpu: state => state.cml.popup.config.corpu
+      corpu: state => state.cml.corpus.list.find(corpu => corpu.id === state.cml.popup.config.corpuId),
+      users: state => state.cml.users.list,
+      groups: state => state.cml.groups.list
     }),
     groupPermissionsConfig () {
       return {
         resource: this.corpu,
-        permissionSetAction: 'cml/corpus/permissionsGroupSet',
-        permissionRemoveAction: 'cml/corpus/permissionsGroupRemove',
-        elementType: 'group',
-        resourceType: 'corpu'
+        resourceType: 'corpu',
+        permissionSetAction: 'cml/corpus/groupPermissionSet',
+        permissionRemoveAction: 'cml/corpus/groupPermissionRemove',
+        elementType: 'group'
       }
     },
     userPermissionsConfig () {
       return {
         resource: this.corpu,
-        permissionSetAction: 'cml/corpus/permissionsUserSet',
-        permissionRemoveAction: 'cml/corpus/permissionsUserRemove',
-        elementType: 'user',
-        resourceType: 'corpu'
+        resourceType: 'corpu',
+        permissionSetAction: 'cml/corpus/userPermissionSet',
+        permissionRemoveAction: 'cml/corpus/userPermissionRemove',
+        elementType: 'user'
       }
     }
-  },
-  methods: {
-    permissionsList () {
-      this.$store.dispatch('cml/corpus/permissionsList', this.corpu)
-    }
-  },
-  created () {
-    this.permissionsList()
   }
 }
 </script>

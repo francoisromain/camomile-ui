@@ -1,16 +1,16 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "targets": {
           "browsers": ["chrome >= 60", "firefox >= 57", "iOS >= 10"]
         },
-        "useBuiltIns": true,
+        "useBuiltIns": "entry",
         "modules": false,
         "loose": true
       }
     ],
-    "stage-2"
+    "@babel/preset-stage-2"
   ]
 }

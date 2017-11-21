@@ -1,5 +1,5 @@
 <template>
-  <button @click="dropdownToggle" class="btn-menubar px-m py-s full-x" :class="{ active: user.dropdown }">{{ user.name }}</button>
+  <button @click="dropdownToggle" class="btn-menubar px-m py-s full-x" :class="{ active: visible }">{{ user.name }}</button>
 </template>
 
 <script>

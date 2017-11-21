@@ -1,3 +1,5 @@
+import log from '../../js/log'
+
 export default {
   namespaced: true,
   state: {
@@ -19,23 +21,23 @@ export default {
     },
     viewportSet (state, payload) {
       if (window.matchMedia('(min-width: 83.5em)').matches) {
-        console.log('[viewport: large]')
+        log.simple('Viewport', 'Large')
         state.viewport.name = 'large'
         state.animate = true
       } else if (window.matchMedia('(min-width: 63em)').matches) {
-        console.log('[viewport: desktop]')
+        log.simple('Viewport', 'Desktop')
         state.viewport.name = 'desktop'
         state.animate = true
       } else if (window.matchMedia('(min-width: 42.5em)').matches) {
-        console.log('[viewport: tablet]')
+        log.simple('Viewport', 'Tablet')
         state.viewport.name = 'tablet'
         state.animate = false
       } else if (window.matchMedia('(min-width: 22em)').matches) {
-        console.log('[viewport: mobile]')
+        log.simple('Viewport', 'Mobile')
         state.viewport.name = 'mobile'
         state.animate = false
       } else {
-        console.log('[viewport: default]')
+        log.simple('Viewport', 'Default')
         state.viewport.name = 'default'
         state.animate = false
       }

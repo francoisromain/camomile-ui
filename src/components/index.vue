@@ -8,7 +8,10 @@
           <cml-users class="blob-1-2 p border" v-if="isAdmin"/>
           <cml-groups class="blob-1-2 p border" v-if="isAdmin"/>
         </div>
-        <cml-corpus class="p border" />
+        <div class="blobs">
+          <cml-corpus class="blob-1-2 p border" />
+          <cml-medias class="blob-1-2 p border" />
+        </div>
       </div> 
       <debug />
     </div>
@@ -19,8 +22,8 @@
 
 <script>
 import store from '../store'
-import debug from './components/debug.vue'
-import viewport from './components/viewport.vue'
+import debug from './camomile/debug.vue'
+import viewport from './camomile/viewport.vue'
 import cmlUtils from './camomile/utils/index.vue'
 import cmlHeader from './camomile/header/index.vue'
 import cmlLogin from './camomile/login.vue'
@@ -29,6 +32,7 @@ import cmlUsers from './camomile/users.vue'
 import cmlGroups from './camomile/groups.vue'
 
 import cmlCorpus from './camomile/corpus.vue'
+import cmlMedias from './camomile/medias.vue'
 
 export default {
   store,
@@ -41,7 +45,8 @@ export default {
     cmlUtils,
     cmlUsers,
     cmlGroups,
-    cmlCorpus
+    cmlCorpus,
+    cmlMedias
   },
   computed: {
     isAdmin () {

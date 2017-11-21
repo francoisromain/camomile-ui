@@ -9,7 +9,7 @@ export default {
   name: 'viewport',
   methods: {
     ...mapActions({
-      resize: 'viewport/set'
+      resize: 'cml/viewport/set'
     })
   },
   mounted () {

@@ -1,5 +1,5 @@
 import './css/styles.css'
-// import 'babel-polyfill'
+import 'babel-polyfill'
 import Vue from 'vue'
 
 import Index from './components/index.vue'

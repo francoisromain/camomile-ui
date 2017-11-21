@@ -1,18 +1,22 @@
-var path = require('path')
-var webpack = require('webpack')
-var merge = require('webpack-merge')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var CopyWebpackPlugin = require('copy-webpack-plugin')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
-var webpackConfigBase = require('./webpack.config.base')
-var MinifyPlugin = require('babel-minify-webpack-plugin')
+const path = require('path')
+const webpack = require('webpack')
+const merge = require('webpack-merge')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
+const webpackConfigBase = require('./webpack.config.base')
+const MinifyPlugin = require('babel-minify-webpack-plugin')
+const WebpackMonitor = require('webpack-monitor')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
+const npmPackage = require('../package.json')
+const date = new Date().toISOString().slice(0, 10)
 
 module.exports = merge(webpackConfigBase, {
   devtool: false,
   entry: {
-    app: ['babel-polyfill', './src/app.js'],
-    loader: './src/loader.js'
+    app: './src/app.js',
+    loader: './src/js/loader.js'
   },
   output: {
     filename: '[name].[hash].js',
@@ -59,18 +63,23 @@ module.exports = merge(webpackConfigBase, {
       'process.env': {
         NODE_ENV: '"production"'
       },
-      version: JSON.stringify(require('../package.json').version)
+      npmVersion: JSON.stringify(npmPackage.version),
+      webpackDate: JSON.stringify(date),
+      npmName: JSON.stringify(npmPackage.name),
+      npmAuthorUrl: JSON.stringify(npmPackage.author.url)
     }),
     new webpack.ExtendedAPIPlugin(),
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new MinifyPlugin(),
-    new CopyWebpackPlugin([
+    new MinifyPlugin(
       {
-        from: 'assets',
-        to: 'assets',
-        ignore: '.DS_Store'
-      }
-    ]),
+        mangle: {
+          keepFnName: true, // should be false, but creates an error on process.nextTick. wtf?
+          topLevel: true
+        },
+        removeConsole: true,
+        removeDebugger: true
+      },
+      { comments: false }
+    ),
     new ExtractTextPlugin({
       filename: 'styles.[hash].css',
       allChunks: true
@@ -85,6 +94,26 @@ module.exports = merge(webpackConfigBase, {
       },
       excludeAssets: [/app.*.js/]
     }),
-    new HtmlWebpackExcludeAssetsPlugin()
+    new HtmlWebpackExcludeAssetsPlugin(),
+    // new WebpackMonitor({
+    //   capture: true, // -> default 'true'
+    //   target: '../build/monitor/camomile-ui-stats.json', // default -> '../monitor/stats.json'
+    //   launch: true, // -> default 'false'
+    //   port: 3030 // default -> 8081
+    // }),
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: 'server', // `server`, `static` or `disabled` (json file)
+    //   analyzerHost: '127.0.0.1', // used in `server` mode
+    //   analyzerPort: 8888, // used in `server` mode
+    //   reportFilename: 'report.html', // generated in `static` mode
+    //   defaultSizes: 'parsed', // module size: `stats` (input), `parsed` (output) or `gzip` (compressed output)
+    //   openAnalyzer: true, // open report in browser
+    //   generateStatsFile: false, // generate Webpack Stats JSON file in bundles directory
+    //   statsFilename: 'stats.json', // used if `generateStatsFile` is `true`
+    //   statsOptions: null, // Options for `stats.toJson()`
+    //   // https://github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
+    //   logLevel: 'info' // log level: 'info', 'warn', 'error' or 'silent'
+    // }),
+    new webpack.optimize.ModuleConcatenationPlugin()
   ]
 })

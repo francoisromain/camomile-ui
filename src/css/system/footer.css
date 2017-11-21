@@ -4,19 +4,24 @@
 http://mystrd.at/modern-clean-css-sticky-footer/
 */
 
+:root {
+  --footer-height: 0;
+}
+
 html {
-  min-height: 100%;
   position: relative;
+  height: 100%;
 }
 
 body {
-  margin: 0 0 4.5rem;
+  margin: 0 0 var(--footer-height);
+  min-height: 100%;
 }
 
 footer {
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 4.5rem;
+  height: var(--footer-height);
   width: 100%;
 }

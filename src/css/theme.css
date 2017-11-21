@@ -11,33 +11,6 @@
   display: none;
 }
 
-#loader {
-  overflow: hidden;
-  min-height: 100%;
-  background-color: #f8f7f3;
-  position: relative;
-}
-
-#loader-app {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-
-#loader-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  background-color: #2e3538;
-}
-
-#app {
-  overflow: hidden;
-}
-
 .container {
   padding-left: var(--container-padding);
   padding-right: var(--container-padding);
@@ -55,6 +28,7 @@
   button-background: var(--color-transparent) var(--color-alt)
     var(--color-highlight);
   font-weight: 700;
+  height: 3rem;
 }
 
 .page {
@@ -78,6 +52,24 @@ hr.border-bg {
   background-color: var(--color-alt);
 }
 
+.blobs-default {
+  gf: row;
+}
+
+.blob-default {
+  margin-right: var(--gutter);
+  flex: 0 1 0;
+}
+
+.blob-auto {
+  margin-right: var(--gutter);
+  flex: 0 1 auto;
+}
+
+.menubar-infos {
+  margin-top: var(--unit-s);
+}
+
 @media (--viewport-tablet) {
   --header-height: calc(var(--unit) * 2);
 
@@ -85,13 +77,14 @@ hr.border-bg {
     width: calc(2 * var(--col-width) + var(--gutter));
   }
 
-  .blob-icon {
+  .blob {
     margin-right: var(--gutter);
-    flex: 0 1 calc(var(--unit) * 2);
+    flex: 0 1 0;
   }
 
   .menubar-infos {
     padding-top: var(--unit-s);
+    margin-top: 0;
   }
 
   .pophover {

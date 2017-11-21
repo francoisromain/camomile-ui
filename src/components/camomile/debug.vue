@@ -12,7 +12,7 @@ export default {
   },
   computed: {
     state () {
-      return this.$store.state.cml
+      return this.$store.state.cml.popup
     }
   },
   methods: {

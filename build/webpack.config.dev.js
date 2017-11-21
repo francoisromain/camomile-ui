@@ -1,10 +1,8 @@
-var path = require('path')
-var webpack = require('webpack')
-var merge = require('webpack-merge')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var CopyWebpackPlugin = require('copy-webpack-plugin')
-var webpackConfigBase = require('./webpack.config.base')
-// var webpackMonitor = require('webpack-monitor')
+const path = require('path')
+const webpack = require('webpack')
+const merge = require('webpack-merge')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpackConfigBase = require('./webpack.config.base')
 
 module.exports = merge(webpackConfigBase, {
   devtool: 'cheap-module-eval-source-map',
@@ -62,18 +60,6 @@ module.exports = merge(webpackConfigBase, {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: true
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: 'assets',
-        to: 'assets'
-      }
-    ])
-    // new webpackMonitor({
-    //   capture: true, // -> default 'true'
-    //   target: '../monitor/myStatsStore.json', // default -> '../monitor/stats.json'
-    //   launch: true, // -> default 'false'
-    //   port: 3030 // default -> 8081
-    // })
+    })
   ]
 })
