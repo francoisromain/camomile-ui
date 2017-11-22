@@ -28,7 +28,7 @@
 import { mapState } from 'vuex'
 import popupEdit from './utils/popup-edit.vue'
 import popupRemove from './utils/popup-remove.vue'
-import popupPermissions from './corpus/popup-permissions.vue'
+import popupPermissions from './utils/popup-permissions.vue'
 
 export default {
   name: 'camomile-corpus',

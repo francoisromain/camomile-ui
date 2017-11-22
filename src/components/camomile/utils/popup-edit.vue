@@ -36,22 +36,8 @@
         <input type="text" v-model="element.url" class="input-alt" placeholder="http://…">
       </div>
     </div>
-    <div class="blobs" v-if="type === 'layers'">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Fragment</h4>
-      </div>
-      <div class="blob-3-4">
-        <textarea v-model="element.fragment" class="textarea-alt" placeholder="Fragment"></textarea>
-      </div>
-    </div>
-    <div class="blobs" v-if="type === 'data'">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Data</h4>
-      </div>
-      <div class="blob-3-4">
-        <textarea v-model="element.data" class="textarea-alt" placeholder="Data"></textarea>
-      </div>
-    </div>
+    <object-field :name="'fragment'" v-if="type === 'layers'"/>
+    <object-field :name="'metadata'" v-if="type === 'layers'"/>
     <object-field :name="'description'"/>
     <div class="blobs">
       <div class="blob-1-4">

@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import permissions from '../utils/permissions.vue'
+import permissions from './popup-permissions-edit.vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     ...mapState({
-      corpu: state => state.cml.corpus.list.find(corpu => corpu.id === state.cml.popup.config.corpuId),
+      corpu: state => state.cml.corpus.list.find(e => e.id === state.cml.popup.config.corpuId),
       users: state => state.cml.users.list,
       groups: state => state.cml.groups.list
     }),

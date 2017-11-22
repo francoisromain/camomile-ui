@@ -2,7 +2,7 @@
   <div v-if="isLogged">
     <div class="flex flex-start">
       <h2 class="mt-s">Layers</h2>
-      <button @click="popupOpen({ ...popupEditConfig, title: 'Add layer', element: { id: null, corpuId, description: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ ...popupEditConfig, title: 'Add layer', element: { id: null, corpuId, description: {}, metadata: {}, fragment: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -25,6 +25,7 @@
 import { mapState } from 'vuex'
 import popupEdit from './utils/popup-edit.vue'
 import popupRemove from './utils/popup-remove.vue'
+import popupPermissions from './utils/popup-permissions.vue'
 
 export default {
   name: 'camomile-layers',
@@ -33,14 +34,19 @@ export default {
       popupEditConfig: {
         type: 'layers',
         closeBtn: true,
-        title: 'Edit medium',
+        title: 'Edit layer',
         component: popupEdit
       },
       popupRemoveConfig: {
         type: 'layers',
         closeBtn: true,
-        title: 'Remove medium',
+        title: 'Remove layer',
         component: popupRemove
+      },
+      popupPermissionsConfig: {
+        closeBtn: true,
+        title: 'Layer permissions',
+        component: popupPermissions
       }
     }
   },

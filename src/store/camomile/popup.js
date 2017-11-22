@@ -20,6 +20,9 @@ export default {
     },
     objectFieldRemove (state, { name, key }) {
       Vue.delete(state.config.element[name], key)
+    },
+    objectFieldUpdate (state, { name, field }) {
+      state.config.element[name][field.key] = field.value
     }
   }
 }

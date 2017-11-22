@@ -1,4 +1,4 @@
-import { layerFormat } from './_helpers'
+import { observerClean } from './_helpers'
 import { api } from '../../config'
 
 export default {
@@ -11,13 +11,20 @@ export default {
   actions: {
     add (
       { commit, dispatch, rootState, rootGetters },
-      { corpuId, name, description, fragment, data, annotations }
+      { corpuId, name, description, fragment, metadata, annotations }
     ) {
       commit('cml/sync/start', 'layersAdd', { root: true })
       return api
-        .createLayer(corpuId, name, {}, {}, {}, [])
+        .createLayer(
+          corpuId,
+          name,
+          observerClean(description),
+          observerClean(fragment),
+          observerClean(metadata),
+          annotations
+        )
         .then(r => {
-          console.log('createLayer', r)
+          console.log(r)
           commit('cml/sync/stop', 'layersAdd', { root: true })
           const layer = {
             name: r.name,
@@ -27,16 +34,16 @@ export default {
               users: rootGetters['cml/users/permissions']({}),
               groups: rootGetters['cml/groups/permissions']({})
             },
-            description: r.description,
-            fragment: r.fragment_type,
-            data: r.data_type,
+            description: r.description || {},
+            fragment: r.fragment_type || {},
+            metadata: r.data_type || {},
             annotations: r.annotations
           }
 
           layer.permissions.users[rootState.cml.user.id] = 3
 
           commit('add', layer)
-          dispatch('cml/messages/success', 'Medium added.', { root: true })
+          dispatch('cml/messages/success', 'Layer added.', { root: true })
 
           return layer
         })
@@ -53,11 +60,11 @@ export default {
     remove ({ commit, dispatch, state, rootState }, layer) {
       commit('cml/sync/start', 'layersRemove', { root: true })
       return api
-        .deleteMedium(layer.id)
+        .deleteLayer(layer.id)
         .then(r => {
           commit('cml/sync/stop', 'layersRemove', { root: true })
           commit('remove', layer)
-          dispatch('cml/messages/success', 'Medium removed', { root: true })
+          dispatch('cml/messages/success', 'Layer removed', { root: true })
 
           return r
         })
@@ -72,17 +79,20 @@ export default {
     update ({ commit, dispatch, state, rootState }, layer) {
       commit('cml/sync/start', 'layersUpdate', { root: true })
       return api
-        .updateMedium(layer.id, {
+        .updateLayer(layer.id, {
           name: layer.name,
-          description: layer.description
+          description: observerClean(layer.description),
+          fragment_type: observerClean(layer.fragment),
+          data_type: observerClean(layer.metadata)
         })
         .then(r => {
+          console.log('update', r)
           commit('cml/sync/stop', 'layersUpdate', { root: true })
           // update api to update from server:
           // should receive an object with a permissions property
           // to process with layerFormat
           commit('update', layer)
-          dispatch('cml/messages/success', 'Medium updated', { root: true })
+          dispatch('cml/messages/success', 'Layer updated', { root: true })
 
           return r
         })
@@ -94,24 +104,26 @@ export default {
         })
     },
 
-    list ({ state, dispatch, commit, rootState, rootGetters }, corpuId) {
+    list ({ commit, rootGetters }, corpuId) {
       commit('cml/sync/start', 'layersList', { root: true })
       return api
         .getLayers({ filter: { id_corpus: corpuId } })
         .then(r => {
           console.log('layers', r)
           commit('cml/sync/stop', 'layersList', { root: true })
-          const layers = r.map(layer => {
-            layer.permission = rootGetters['cml/user/permission'](
-              layer.permissions
-            )
-
-            return layerFormat(
-              layer,
-              rootState.cml.users.list,
-              rootState.cml.groups.list
-            )
-          })
+          const layers = r.map(layer => ({
+            name: layer.name,
+            id: layer._id,
+            description: layer.description || {},
+            permission: rootGetters['cml/user/permission'](layer.permissions),
+            permissions: {
+              users: rootGetters['cml/users/permissions']({}),
+              groups: rootGetters['cml/groups/permissions']({})
+            },
+            fragment: layer.fragment_type || {},
+            metadata: layer.data_type || {},
+            annotations: layer.annotations
+          }))
           commit('list', layers)
 
           return layers

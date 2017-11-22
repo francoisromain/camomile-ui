@@ -50,17 +50,9 @@ export function mediaFormat (media) {
   }
 }
 
-export function layerFormat (layer, users, groups) {
-  return {
-    name: layer.name,
-    id: layer._id,
-    description: layer.description,
-    permission: layer.permission,
-    permissions: {
-      groups: permissionsSet(groups, layer.permissions.groups),
-      users: permissionsSet(users, layer.permissions.users)
-    },
-    fragment: layer.fragment,
-    data: layer.data
-  }
+export function observerClean (obj) {
+  return Object.keys(obj).reduce(
+    (res, e) => Object.assign(res, { [e]: obj[e] }),
+    {}
+  )
 }

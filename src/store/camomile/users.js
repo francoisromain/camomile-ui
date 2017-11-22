@@ -1,5 +1,5 @@
 import { api } from '../../config'
-import { userFormat } from './_helpers'
+import { userFormat, observerClean } from './_helpers'
 
 export default {
   namespaced: true,
@@ -12,7 +12,12 @@ export default {
     add ({ commit, dispatch }, user) {
       commit('cml/sync/start', 'usersAdd', { root: true })
       return api
-        .createUser(user.name, user.password, user.description, user.role)
+        .createUser(
+          user.name,
+          user.password,
+          observerClean(user.description),
+          user.role
+        )
         .then(r => {
           commit('cml/sync/stop', 'usersAdd', { root: true })
           const user = userFormat(r)
@@ -103,6 +108,7 @@ export default {
       return api
         .getUsers()
         .then(r => {
+          console.log('users', r)
           commit('cml/sync/stop', 'usersList', { root: true })
           const users = r.map(user => userFormat(user))
           commit('list', users)

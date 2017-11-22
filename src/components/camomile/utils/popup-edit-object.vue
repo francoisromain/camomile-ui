@@ -6,7 +6,7 @@
         <h4 class="pt-s mb-0">{{ key }}</h4>
       </div>
       <div class="blob-3-4-btn">
-        <input type="text" v-model="fields[key]" class="input-alt" placeholder="key">
+        <input type="text" v-model="fields[key]" @change="update(key, $event)" class="input-alt" placeholder="key">
       </div>
       <div class="blob-btn">
         <button class="btn-alt p-s btn-icon" @click="remove(key)"><i class="icon-24 icon-24-minus"></i></button>
@@ -53,6 +53,9 @@ export default {
     },
     remove (key) {
       this.$store.commit('cml/popup/objectFieldRemove', { name: this.name, key })
+    },
+    update (key, event) {
+      this.$store.commit('cml/popup/objectFieldUpdate', { name: this.name, field: { key: key, value: event.target.value } })
     }
   }
 }
