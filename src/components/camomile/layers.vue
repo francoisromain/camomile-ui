@@ -1,19 +1,19 @@
 <template>
   <div v-if="isLogged">
     <div class="flex flex-start">
-      <h2 class="mt-s">Media</h2>
-      <button @click="popupOpen({ ...popupEditConfig, title: 'Add medium', element: { id: null, corpuId, description: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <h2 class="mt-s">Layers</h2>
+      <button @click="popupOpen({ ...popupEditConfig, title: 'Add layer', element: { id: null, corpuId, description: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
         <tr>
           <th>Name</th><th></th>
         </tr>
-        <tr v-for="media in medias" :key="media.id">
-          <td>{{ media.name }}</td>
+        <tr v-for="layer in layers" :key="layer.id">
+          <td>{{ layer.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupEditConfig, element: media })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, element: media })" class="btn px-s py-s my--s h5" v-if="permission === 3">Remove</button>
+            <button @click="popupOpen({ ...popupEditConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
+            <button @click="popupOpen({ ...popupRemoveConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="permission === 3">Remove</button>
           </td>
         </tr>
       </table>
@@ -27,17 +27,17 @@ import popupEdit from './utils/popup-edit.vue'
 import popupRemove from './utils/popup-remove.vue'
 
 export default {
-  name: 'camomile-medias',
+  name: 'camomile-layers',
   data () {
     return {
       popupEditConfig: {
-        type: 'medias',
+        type: 'layers',
         closeBtn: true,
         title: 'Edit medium',
         component: popupEdit
       },
       popupRemoveConfig: {
-        type: 'medias',
+        type: 'layers',
         closeBtn: true,
         title: 'Remove medium',
         component: popupRemove
@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     ...mapState({
-      medias: state => state.cml.medias.list,
+      layers: state => state.cml.layers.list,
       isLogged: state => state.cml.isLogged,
       isAdmin: state => state.cml.isAdmin,
       corpuId: state => state.cml.corpus.id

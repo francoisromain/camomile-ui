@@ -1,4 +1,5 @@
-import { messageDispatch, userFormat, errorFormat } from './_helpers'
+import { api } from '../../config'
+import { userFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -8,31 +9,31 @@ export default {
   },
 
   actions: {
-    add ({ commit, state, dispatch, rootState }, user) {
+    add ({ commit, dispatch }, user) {
       commit('cml/sync/start', 'usersAdd', { root: true })
-      return rootState.cml.api
+      return api
         .createUser(user.name, user.password, user.description, user.role)
         .then(r => {
           commit('cml/sync/stop', 'usersAdd', { root: true })
           const user = userFormat(r)
           commit('add', user)
           commit('cml/corpus/userAdd', user.id, { root: true })
-          messageDispatch('success', 'User added', dispatch)
+          dispatch('cml/messages/success', 'User added', { root: true })
 
           return user
         })
         .catch(e => {
           commit('cml/sync/stop', 'usersAdd', { root: true })
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
+          const error = e.response ? e.response.body.error : 'Network error'
+          dispatch('cml/messages/error', error, { root: true })
 
           throw error
         })
     },
 
-    update ({ commit, dispatch, state, rootState }, user) {
+    update ({ commit, dispatch, rootState }, user) {
       commit('cml/sync/start', 'usersUpdate', { root: true })
-      return rootState.cml.api
+      return api
         .updateUser(user.id, {
           password: user.password,
           role: user.role,
@@ -45,48 +46,48 @@ export default {
           if (user.name === rootState.cml.user.name) {
             commit('cml/user/set', user, { root: true })
           }
-          messageDispatch('success', 'User updated', dispatch)
+          dispatch('cml/messages/success', 'User updated', { root: true })
 
           return user
         })
         .catch(e => {
           commit('cml/sync/stop', 'usersUpdate', { root: true })
-          // const error = 'Error: request failed.'
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
+          const error = e.response ? e.response.body.error : 'Network error'
+          dispatch('cml/messages/error', error, { root: true })
 
           throw error
         })
     },
 
-    remove ({ commit, state, dispatch, rootState }, user) {
+    remove ({ commit, dispatch }, user) {
       commit('cml/sync/start', 'usersRemove', { root: true })
-      return rootState.cml.api
+      return api
         .deleteUser(user.id)
         .then(r => {
           commit('cml/sync/stop', 'usersRemove', { root: true })
           commit('remove', user)
           commit('cml/corpus/userRemove', user.id, { root: true })
-          messageDispatch('success', 'User removed', dispatch)
+          dispatch('cml/messages/success', 'User removed', { root: true })
 
           return r
         })
         .catch(e => {
           commit('cml/sync/stop', 'usersRemove', { root: true })
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
+          const error = e.response ? e.response.body.error : 'Network error'
+          dispatch('cml/messages/error', error, { root: true })
 
           throw error
         })
     },
 
-    get ({ commit, dispatch, state, rootState }, userId) {
+    get ({ commit }, userId) {
       commit('cml/sync/start', 'usersGet', { root: true })
-      return rootState.cml.api
+      return api
         .getUser(userId)
         .then(r => {
           commit('cml/sync/stop', 'usersRemove', { root: true })
           const user = userFormat(r)
+
           return user
         })
         .catch(e => {
@@ -97,9 +98,9 @@ export default {
         })
     },
 
-    list ({ commit, dispatch, state, rootState }) {
+    list ({ commit }) {
       commit('cml/sync/start', 'usersList', { root: true })
-      return rootState.cml.api
+      return api
         .getUsers()
         .then(r => {
           commit('cml/sync/stop', 'usersList', { root: true })
@@ -113,6 +114,21 @@ export default {
           console.log(e)
           throw e
         })
+    }
+  },
+
+  getters: {
+    permissions: state => permissions => {
+      return state.list.reduce(
+        (res, element) =>
+          Object.assign(res, {
+            [element.id]:
+              permissions && permissions[element.id]
+                ? permissions[element.id]
+                : 0
+          }),
+        {}
+      )
     }
   },
 

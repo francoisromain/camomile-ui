@@ -65,9 +65,24 @@
   );
 }
 
+.btn-alt .icon-24-plus,
+.btn-alt:hover .icon-24-plus,
 .btn:hover .icon-24-plus {
   background-image: svg-load(
     './icons/24-plus.svg',
+    fill=none,
+    stroke=var(--color-bg),
+    stroke-linecap=round,
+    stroke-linejoin=round,
+    stroke-miterlimit=10,
+    stroke-width=1px
+  );
+}
+
+.btn-alt .icon-24-minus,
+.btn-alt:hover .icon-24-minus {
+  background-image: svg-load(
+    './icons/24-minus.svg',
     fill=none,
     stroke=var(--color-bg),
     stroke-linecap=round,

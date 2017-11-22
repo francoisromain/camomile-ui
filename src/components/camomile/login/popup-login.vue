@@ -1,22 +1,16 @@
 <template>
   <div>
     <div class="blobs">
-      <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Api url</h3>
-      </div>
-      <div class="blob-3-4">
-        <input type="text" v-model="config.url" class="input-alt" placeholder="Url">
-      </div>
       
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Name</h3>
+        <h4 class="pt-s mb-0">Name</h4>
       </div>
       <div class="blob-3-4">
         <input type="text" v-model="config.user.name" class="input-alt" placeholder="Name">
       </div>
       
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Password</h3>
+        <h4 class="pt-s mb-0">Password</h4>
       </div>
       <div class="blob-3-4">
         <input type="password" v-model="config.user.password" class="input-alt" placeholder="Password">

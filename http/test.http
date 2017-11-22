@@ -18,3 +18,16 @@ GET http://localhost:3000/me HTTP/1.1
 ###
 # Get corpus
 GET http://localhost:3000/corpus HTTP/1.1
+
+###
+# Post Layer
+POST http://localhost:3000/corpus/5a136cbc4cac0b0001259df1/layer HTTP/1.1
+content-type: application/json
+
+{
+	"name": "test",
+	"description": {},
+	"fragment_type": {},
+	"data_type": {},
+	"annotations": []
+}

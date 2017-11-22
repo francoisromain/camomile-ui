@@ -1,14 +1,3 @@
-export function messageDispatch (type, content, dispatch) {
-  dispatch('cml/messages/add', { type, content }, { root: true })
-}
-
-export function errorFormat (error, rootState) {
-  console.log(error)
-  return error.response
-    ? error.response[rootState.cml.config.axios ? 'data' : 'body'].error
-    : 'Network error'
-}
-
 export function userFormat (user) {
   return {
     name: user.username,
@@ -58,5 +47,20 @@ export function mediaFormat (media) {
     url: media.url,
     corpuId: media.id_corpus,
     description: media.description
+  }
+}
+
+export function layerFormat (layer, users, groups) {
+  return {
+    name: layer.name,
+    id: layer._id,
+    description: layer.description,
+    permission: layer.permission,
+    permissions: {
+      groups: permissionsSet(groups, layer.permissions.groups),
+      users: permissionsSet(users, layer.permissions.users)
+    },
+    fragment: layer.fragment,
+    data: layer.data
   }
 }

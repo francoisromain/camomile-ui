@@ -1,4 +1,5 @@
-import { messageDispatch, errorFormat, mediaFormat } from './_helpers'
+import { api } from '../../config'
+import { mediaFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -13,21 +14,21 @@ export default {
       { corpuId, name, url, description }
     ) {
       commit('cml/sync/start', 'mediasAdd', { root: true })
-      return rootState.cml.api
+      return api
         .createMedium(corpuId, name, url, description)
         .then(r => {
           commit('cml/sync/stop', 'mediasAdd', { root: true })
           const media = mediaFormat(r)
           commit('add', media)
-          messageDispatch('success', 'Medium added.', dispatch)
+          dispatch('cml/messages/success', 'Medium added.', { root: true })
 
           return media
         })
         .catch(e => {
           commit('cml/sync/stop', 'mediasAdd', { root: true })
           console.log(e)
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
+          const error = e.response ? e.response.body.error : 'Network error'
+          dispatch('cml/messages/error', error, { root: true })
 
           throw e
         })
@@ -35,18 +36,18 @@ export default {
 
     remove ({ commit, dispatch, state, rootState }, media) {
       commit('cml/sync/start', 'mediasRemove', { root: true })
-      return rootState.cml.api
+      return api
         .deleteMedium(media.id)
         .then(r => {
           commit('cml/sync/stop', 'mediasRemove', { root: true })
           commit('remove', media)
-          messageDispatch('success', 'Medium removed', dispatch)
+          dispatch('cml/messages/success', 'Medium removed', { root: true })
 
           return r
         })
         .catch(e => {
           console.log(e)
-          messageDispatch('error', e, dispatch)
+          dispatch('cml/messages/error', e, { root: true })
 
           throw e
         })
@@ -54,7 +55,7 @@ export default {
 
     update ({ commit, dispatch, state, rootState }, media) {
       commit('cml/sync/start', 'mediasUpdate', { root: true })
-      return rootState.cml.api
+      return api
         .updateMedium(media.id, {
           name: media.name,
           description: media.description
@@ -65,13 +66,13 @@ export default {
           // should receive an object with a permissions property
           // to process with mediaFormat
           commit('update', media)
-          messageDispatch('success', 'Medium updated', dispatch)
+          dispatch('cml/messages/success', 'Medium updated', { root: true })
 
           return r
         })
         .catch(e => {
           console.log(e)
-          messageDispatch('error', e, dispatch)
+          dispatch('cml/messages/error', e, { root: true })
 
           throw e
         })
@@ -79,7 +80,7 @@ export default {
 
     list ({ state, dispatch, commit, rootState, rootGetters }, corpuId) {
       commit('cml/sync/start', 'mediasList', { root: true })
-      return rootState.cml.api
+      return api
         .getMedia({ filter: { id_corpus: corpuId } })
         .then(r => {
           commit('cml/sync/stop', 'mediasList', { root: true })

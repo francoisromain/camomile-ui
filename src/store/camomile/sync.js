@@ -1,5 +1,3 @@
-import { messageDispatch } from './_helpers'
-
 export default {
   namespaced: true,
 
@@ -10,30 +8,26 @@ export default {
   actions: {
     all ({ state, dispatch, commit, rootState }) {
       Promise.all([
-        new Promise((resolve, reject) =>
-          dispatch('cml/users/list', {}, { root: true })
-            .then(r => resolve(r))
-            .catch(e => reject(e))
+        ...['users', 'groups', 'corpus'].map(
+          type =>
+            new Promise((resolve, reject) =>
+              dispatch(`cml/${type}/list`, {}, { root: true })
+                .then(r => resolve(r))
+                .catch(e => reject(e))
+            )
         ),
-        new Promise((resolve, reject) =>
-          dispatch('cml/groups/list', {}, { root: true })
-            .then(r => resolve(r))
-            .catch(e => reject(e))
-        ),
-        new Promise((resolve, reject) =>
-          dispatch('cml/corpus/list', {}, { root: true })
-            .then(r => resolve(r))
-            .catch(e => reject(e))
-        ),
-        new Promise((resolve, reject) =>
-          dispatch('cml/medias/list', rootState.cml.corpus.selected, {
-            root: true
-          })
-            .then(r => resolve(r))
-            .catch(e => reject(e))
+        ...['medias', 'layers'].map(
+          type =>
+            new Promise((resolve, reject) =>
+              dispatch(`cml/${type}/list`, rootState.cml.corpus.id, {
+                root: true
+              })
+                .then(r => resolve(r))
+                .catch(e => reject(e))
+            )
         )
       ]).then(v => {
-        messageDispatch('success', 'Synced with server', dispatch)
+        dispatch('cml/messages/success', 'Synced with server', { root: true })
       })
     }
   },

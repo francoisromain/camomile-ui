@@ -1,7 +1,4 @@
-// import Camomile from '../../../../camomile-client-javascript' /* debug with local version */
-import Camomile from 'camomile-client'
-import camomile from '../../js/api' /* axios api */
-import config from './_config.js'
+import config from '../../config.js'
 
 import viewport from './viewport'
 import sync from './sync'
@@ -13,6 +10,7 @@ import users from './users'
 import groups from './groups'
 import corpus from './corpus'
 import medias from './medias'
+import layers from './layers'
 
 export default {
   namespaced: true,
@@ -27,11 +25,11 @@ export default {
     users,
     groups,
     corpus,
-    medias
+    medias,
+    layers
   },
 
   state: {
-    url: '',
     api: null,
     config: config,
     isLogged: false,
@@ -73,13 +71,13 @@ export default {
         )
       ]).then(res => {
         dispatch('cml/corpus/list', null, { root: true }).then(res => {
-          const corpuSelectedDefault =
-            state.corpus.list[0] && state.corpus.list[0].id
-          if (corpuSelectedDefault) {
-            commit('cml/corpus/corpuSelect', corpuSelectedDefault, {
+          const corpuIdDefault = state.corpus.list[0] && state.corpus.list[0].id
+          if (corpuIdDefault) {
+            commit('cml/corpus/corpuSet', corpuIdDefault, {
               root: true
             })
-            dispatch('cml/medias/list', corpuSelectedDefault, { root: true })
+            dispatch('cml/medias/list', corpuIdDefault, { root: true })
+            dispatch('cml/layers/list', corpuIdDefault, { root: true })
           }
         })
       })
@@ -101,11 +99,6 @@ export default {
     }
   },
   mutations: {
-    create (state, url) {
-      state.url = url
-      state.api = state.config.axios ? camomile(url) : new Camomile(url)
-    },
-
     delete (state) {
       state.url = ''
       state.api = null

@@ -2,7 +2,7 @@
   <div>
     <div class="blobs">
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Name</h3>
+        <h4 class="pt-s">Name</h4>
       </div>
       <div class="blob-3-4">
         <input type="text" v-model="corpu.name" class="input-alt" placeholder="Name" disabled>

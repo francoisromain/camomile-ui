@@ -1,4 +1,4 @@
-import { messageDispatch, userFormat, errorFormat } from './_helpers'
+import { api } from '../../config'
 
 export default {
   namespaced: true,
@@ -12,10 +12,9 @@ export default {
   },
 
   actions: {
-    login ({ commit, state, dispatch, rootState }, config) {
+    login ({ commit, dispatch }, config) {
       commit('cml/sync/start', 'userLogin', { root: true })
-      commit('cml/create', config.url, { root: true })
-      return rootState.cml.api
+      return api
         .login(config.user.name, config.user.password)
         .then(r => {
           commit('cml/sync/stop', 'userLogin', { root: true })
@@ -26,17 +25,17 @@ export default {
         })
         .catch(e => {
           commit('cml/sync/stop', 'userLogin', { root: true })
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
+          const error = e.response ? e.response.body.error : 'Network error'
+          dispatch('cml/messages/error', error, { root: true })
           commit('reset')
 
           throw error
         })
     },
 
-    logout ({ commit, state, dispatch, rootState }) {
+    logout ({ commit, dispatch }) {
       commit('cml/sync/start', 'userLogout', { root: true })
-      return rootState.cml.api
+      return api
         .logout()
         .then(r => {
           commit('cml/sync/stop', 'userLogout', { root: true })
@@ -47,17 +46,17 @@ export default {
         })
         .catch(e => {
           commit('cml/sync/stop', 'userLogout', { root: true })
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
+          const error = e.response ? e.response.body.error : 'Network error'
+          dispatch('cml/messages/error', error, { root: true })
           commit('reset')
 
           throw error
         })
     },
 
-    set ({ commit, dispatch, state, rootState }) {
+    set ({ commit, dispatch }) {
       commit('cml/sync/start', 'userSet', { root: true })
-      return rootState.cml.api
+      return api
         .me()
         .then(user => {
           commit('cml/sync/stop', 'userSet', { root: true })
@@ -68,8 +67,8 @@ export default {
         })
         .catch(e => {
           commit('cml/sync/stop', 'userSet', { root: true })
-          const error = errorFormat(e, rootState)
-          messageDispatch('error', error, dispatch)
+          const error = e.response ? e.response.body.error : 'Network error'
+          dispatch('cml/messages/error', error, { root: true })
           commit('reset')
 
           throw error

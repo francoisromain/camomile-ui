@@ -24,8 +24,8 @@ td,
 th {
   vertical-align: top;
   word-wrap: break-word;
-  padding-top: var(--unit-s);
-  padding-bottom: calc(var(--unit-s) - var(--unit-line));
+  padding-bottom: var(--unit-s);
+  padding-top: calc(var(--unit-s) - var(--unit-line));
 }
 
 .table-xs td,
