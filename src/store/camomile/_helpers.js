@@ -1,14 +1,3 @@
-export function messageDispatch (type, content, dispatch) {
-  dispatch('cml/messages/add', { type, content }, { root: true })
-}
-
-export function errorFormat (error, rootState) {
-  console.log(error)
-  return error.response
-    ? error.response[rootState.cml.config.axios ? 'data' : 'body'].error
-    : 'Network error'
-}
-
 export function userFormat (user) {
   return {
     name: user.username,
@@ -59,4 +48,11 @@ export function mediaFormat (media) {
     corpuId: media.id_corpus,
     description: media.description
   }
+}
+
+export function observerClean (obj) {
+  return Object.keys(obj).reduce(
+    (res, e) => Object.assign(res, { [e]: obj[e] }),
+    {}
+  )
 }

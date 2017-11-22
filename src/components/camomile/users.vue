@@ -2,7 +2,7 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Users</h2>
-      <button @click="popupOpen({ ...popupEditConfig, element: {}, title: 'Add user' })" class="btn p-s flex-right"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ ...popupEditConfig, element: { description: {} }, title: 'Add user' })" class="btn p-s flex-right"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">

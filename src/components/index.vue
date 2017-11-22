@@ -11,6 +11,7 @@
         <div class="blobs">
           <cml-corpus class="blob-1-2 p border" />
           <cml-medias class="blob-1-2 p border" />
+          <cml-layers class="blob-1-2 p border" />
         </div>
       </div> 
       <debug />
@@ -33,6 +34,7 @@ import cmlGroups from './camomile/groups.vue'
 
 import cmlCorpus from './camomile/corpus.vue'
 import cmlMedias from './camomile/medias.vue'
+import cmlLayers from './camomile/layers.vue'
 
 export default {
   store,
@@ -46,7 +48,8 @@ export default {
     cmlUsers,
     cmlGroups,
     cmlCorpus,
-    cmlMedias
+    cmlMedias,
+    cmlLayers
   },
   computed: {
     isAdmin () {

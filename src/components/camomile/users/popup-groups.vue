@@ -2,16 +2,16 @@
   <div>
     <div class="blobs">
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Name</h3>
+        <h4 class="pt-s mb-0">Name</h4>
       </div>
       <div class="blob-3-4">
         <input type="text" v-model="user.name" class="input-alt" placeholder="Name" disabled>
       </div>
-      <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Users</h3>
-      </div>
-      <div class="blob-3-4">
-        <ul class="list-inline">
+    </div>
+    <div class="blobs">
+      <div class="blob-1">
+        <h3 class="mb-s">Groups</h3>
+        <ul class="list-inline clearfix">
           <li v-for="group in groups" :key="group.id" :class="{ active: groupActive(group.id) }" class="tag"><button class="btn px-s py-xs h5 pill" @click="groupToggle(group)">{{ group.name }}</button>
           </li>
         </ul>

@@ -7,7 +7,7 @@ export default {
   name: 'camomile-infos',
   computed: {
     url () {
-      return this.$store.state.cml.url
+      return this.$store.state.cml.config.url
     },
     api () {
       return this.$store.state.cml.config.axios ? 'axios' : 'rp';

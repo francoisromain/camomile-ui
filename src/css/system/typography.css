@@ -49,6 +49,9 @@ h4 {
 h3,
 .h3 {
   typescale: 0 1;
+  border-bottom: var(--unit-line) var(--border-style) var(--border-color);
+  padding-bottom: var(--unit-s);
+  margin-bottom: calc(var(--unit) - var(--unit-line));
 }
 
 h4,

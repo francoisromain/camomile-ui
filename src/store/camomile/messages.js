@@ -4,16 +4,21 @@ export default {
     list: []
   },
   actions: {
-    add ({ commit }, message) {
-      message.id = new Date().valueOf()
-      commit('add', message)
-      setTimeout(() => {
-        commit('remove', message)
+    success ({ commit }, content) {
+      commit('add', { content, type: 'success', id: new Date().valueOf() })
+      setTimeout(_ => {
+        commit('remove')
+      }, 2000)
+    },
+    error ({ commit }, content) {
+      commit('add', { content, type: 'error', id: new Date().valueOf() })
+      setTimeout(_ => {
+        commit('remove')
       }, 2000)
     }
   },
   mutations: {
-    remove (state, message) {
+    remove (state) {
       state.list.shift()
     },
     add (state, message) {

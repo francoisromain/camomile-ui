@@ -2,7 +2,7 @@
   <div>
     <div class="blobs">
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Name</h3>
+        <h4 class="pt-s">Name</h4>
       </div>
       <div class="blob-3-4">
         <input type="text" v-model="corpu.name" class="input-alt" placeholder="Name" disabled>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import permissions from '../utils/permissions.vue'
+import permissions from './popup-permissions-edit.vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     ...mapState({
-      corpu: state => state.cml.corpus.list.find(corpu => corpu.id === state.cml.popup.config.corpuId),
+      corpu: state => state.cml.corpus.list.find(e => e.id === state.cml.popup.config.corpuId),
       users: state => state.cml.users.list,
       groups: state => state.cml.groups.list
     }),

@@ -2,15 +2,15 @@
   <div>
     <div class="blobs">
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Name</h3>
+        <h4 class="pt-s mb-0">Name</h4>
       </div>
       <div class="blob-3-4">
-        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id && type === 'users' || type === 'groups'">
+        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id && (type === 'users' || type === 'groups')">
       </div>
     </div>
     <div class="blobs" v-if="type === 'users'">
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Role</h3>
+        <h4 class="pt-s mb-0">Role</h4>
       </div>
       <div class="blob-3-4">
         <select type="text" v-model="element.role" class="select-alt" :disabled="!rolesPermission">
@@ -22,7 +22,7 @@
     </div>
     <div class="blobs" v-if="type === 'users'">
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Password</h3>
+        <h4 class="pt-s mb-0">Password</h4>
       </div>
       <div class="blob-3-4">
         <input type="password" v-model="element.password" class="input-alt" placeholder="••••••••">
@@ -30,23 +30,20 @@
     </div>
     <div class="blobs" v-if="type === 'medias'">
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Url</h3>
+        <h4 class="pt-s mb-0">Url</h4>
       </div>
       <div class="blob-3-4">
         <input type="text" v-model="element.url" class="input-alt" placeholder="http://…">
       </div>
     </div>
+    <object-field :name="'fragment'" v-if="type === 'layers'"/>
+    <object-field :name="'metadata'" v-if="type === 'layers'"/>
+    <object-field :name="'description'"/>
     <div class="blobs">
       <div class="blob-1-4">
-        <h3 class="pt-s mb-0">Description</h3>
       </div>
       <div class="blob-3-4">
-        <textarea v-model="element.description" class="textarea-alt" placeholder="Description"></textarea>
-      </div>
-      <div class="blob-1-4">
-      </div>
-      <div class="blob-3-4">
-        <button @click="save" @keyup.enter="save" class="btn-alt p-s full-x">Save</button>
+        <button @click="save" @keyup.enter="save" class="btn-alt p-s full-x" :disabled="!element.name">Save</button>
       </div>
     </div>
   </div>
@@ -54,9 +51,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import objectField from './popup-edit-object.vue'
 
 export default {
   name: 'camomile-popup-edit',
+  components: {
+    objectField
+  },
   data () {
     return {
       element: { ...this.$store.state.cml.popup.config.element }
