@@ -14,7 +14,7 @@
          :checked="corpu.id === corpuId"></td>
           <td>{{ corpu.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupPermissionsConfig, corpuId: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Permissions</button>
+            <button @click="popupOpen({ ...popupPermissionsConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Permissions</button>
             <button @click="popupOpen({ ...popupEditConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Edit</button>
             <button @click="popupOpen({ ...popupRemoveConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Remove</button>
           </td>
@@ -32,6 +32,7 @@ import popupPermissions from './utils/popup-permissions.vue'
 
 export default {
   name: 'camomile-corpus',
+
   data () {
     return {
       popupEditConfig: {
@@ -47,12 +48,14 @@ export default {
         component: popupRemove
       },
       popupPermissionsConfig: {
+        type: 'corpus',
         closeBtn: true,
         title: 'Corpus permissions',
         component: popupPermissions
       }
     }
   },
+
   computed: {
     ...mapState({
       corpus: state => state.cml.corpus.list,
@@ -61,6 +64,7 @@ export default {
       isAdmin: state => state.cml.isAdmin
     })
   },
+
   methods: {
     popupOpen (config) {
       this.$store.commit('cml/popup/open', config)

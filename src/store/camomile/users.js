@@ -108,7 +108,6 @@ export default {
       return api
         .getUsers()
         .then(r => {
-          console.log('users', r)
           commit('cml/sync/stop', 'usersList', { root: true })
           const users = r.map(user => userFormat(user))
           commit('list', users)

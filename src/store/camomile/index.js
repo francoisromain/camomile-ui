@@ -73,11 +73,7 @@ export default {
         dispatch('cml/corpus/list', null, { root: true }).then(res => {
           const corpuIdDefault = state.corpus.list[0] && state.corpus.list[0].id
           if (corpuIdDefault) {
-            commit('cml/corpus/corpuSet', corpuIdDefault, {
-              root: true
-            })
-            dispatch('cml/medias/list', corpuIdDefault, { root: true })
-            dispatch('cml/layers/list', corpuIdDefault, { root: true })
+            dispatch('cml/corpus/corpuSet', corpuIdDefault, { root: true })
           }
         })
       })
