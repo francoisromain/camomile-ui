@@ -5,7 +5,7 @@
         <h4 class="pt-s">Name</h4>
       </div>
       <div class="blob-3-4">
-        <input type="text" v-model="corpu.name" class="input-alt" placeholder="Name" disabled>
+        <input type="text" v-model="resource.name" class="input-alt" placeholder="Name" disabled>
       </div>
       <div class="blob-1-2">
         <h3 class="pt-s">Groups</h3>
@@ -52,25 +52,26 @@ export default {
   },
   computed: {
     ...mapState({
-      corpu: state => state.cml.corpus.list.find(e => e.id === state.cml.popup.config.corpuId),
+      resource: state => state.cml[state.cml.popup.config.type].list.find(e => e.id === state.cml.popup.config.id),
       users: state => state.cml.users.list,
-      groups: state => state.cml.groups.list
+      groups: state => state.cml.groups.list,
+      type: state => state.cml.popup.config.type
     }),
     groupPermissionsConfig () {
       return {
-        resource: this.corpu,
-        resourceType: 'corpu',
-        permissionSetAction: 'cml/corpus/groupPermissionSet',
-        permissionRemoveAction: 'cml/corpus/groupPermissionRemove',
+        resource: this.resource,
+        resourceType: this.type.slice(0, -1),
+        permissionSetAction: `cml/${this.type}/groupPermissionSet`,
+        permissionRemoveAction: `cml/${this.type}/groupPermissionRemove`,
         elementType: 'group'
       }
     },
     userPermissionsConfig () {
       return {
-        resource: this.corpu,
-        resourceType: 'corpu',
-        permissionSetAction: 'cml/corpus/userPermissionSet',
-        permissionRemoveAction: 'cml/corpus/userPermissionRemove',
+        resource: this.resource,
+        resourceType: this.type.slice(0, -1),
+        permissionSetAction: `cml/${this.type}/userPermissionSet`,
+        permissionRemoveAction: `cml/${this.type}/userPermissionRemove`,
         elementType: 'user'
       }
     }

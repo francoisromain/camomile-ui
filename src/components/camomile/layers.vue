@@ -12,6 +12,7 @@
         <tr v-for="layer in layers" :key="layer.id">
           <td>{{ layer.name }}</td>
           <td class="text-right">
+            <button @click="popupOpen({ ...popupPermissionsConfig, id: layer.id })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Permissions</button>
             <button @click="popupOpen({ ...popupEditConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
             <button @click="popupOpen({ ...popupRemoveConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="permission === 3">Remove</button>
           </td>
@@ -44,6 +45,7 @@ export default {
         component: popupRemove
       },
       popupPermissionsConfig: {
+        type: 'layers',
         closeBtn: true,
         title: 'Layer permissions',
         component: popupPermissions
