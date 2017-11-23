@@ -24,7 +24,6 @@ export default {
           annotations
         )
         .then(r => {
-          console.log(r)
           commit('cml/sync/stop', 'layersAdd', { root: true })
           const layer = {
             name: r.name,
@@ -108,7 +107,7 @@ export default {
       return api
         .getLayers({ filter: { id_corpus: corpuId } })
         .then(r => {
-          console.log('layers', r)
+          console.log('getLayers, id_corpus: ', corpuId, r)
           commit('cml/sync/stop', 'layersList', { root: true })
           const layers = r.map(l => ({
             name: l.name,
@@ -160,7 +159,7 @@ export default {
           })
 
           if (rootState.cml.user.groupIds.indexOf(group.id) !== -1) {
-            dispatch('currentUserIsAdminTest', { layer, p })
+            dispatch('currentUserIsAdminTest', p)
           }
 
           return p
@@ -192,7 +191,7 @@ export default {
           })
 
           if (rootState.cml.user.groupIds.indexOf(group.id) !== -1) {
-            dispatch('currentUserIsAdminTest', { layer, p })
+            dispatch('currentUserIsAdminTest', p)
           }
 
           return p
@@ -226,7 +225,7 @@ export default {
             root: true
           })
           if (user.id === rootState.cml.user.id) {
-            dispatch('currentUserIsAdminTest', { layer, p })
+            dispatch('currentUserIsAdminTest', p)
           }
 
           return p
@@ -257,7 +256,7 @@ export default {
             root: true
           })
           if (user.id === rootState.cml.user.id) {
-            dispatch('currentUserIsAdminTest', { layer, p })
+            dispatch('currentUserIsAdminTest', p)
           }
 
           return p
@@ -274,11 +273,11 @@ export default {
     },
 
     currentUserIsAdminTest (
-      { state, dispatch, commit, rootGetters },
-      { layer, permissions }
+      { dispatch, commit, rootState, rootGetters },
+      permissions
     ) {
       if (!rootGetters['cml/user/isAdmin'](permissions)) {
-        dispatch('list')
+        dispatch('list', rootState.cml.corpus.id)
         commit(`cml/popup/close`, null, { root: true })
       }
     }

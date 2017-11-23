@@ -144,7 +144,7 @@ export default {
           })
 
           if (rootState.cml.user.groupIds.indexOf(group.id) !== -1) {
-            dispatch('currentUserIsAdminTest', { corpu, p })
+            dispatch('currentUserIsAdminTest', p)
           }
 
           return p
@@ -176,7 +176,7 @@ export default {
           })
 
           if (rootState.cml.user.groupIds.indexOf(group.id) !== -1) {
-            dispatch('currentUserIsAdminTest', { corpu, p })
+            dispatch('currentUserIsAdminTest', p)
           }
 
           return p
@@ -210,7 +210,7 @@ export default {
             root: true
           })
           if (user.id === rootState.cml.user.id) {
-            dispatch('currentUserIsAdminTest', { corpu, p })
+            dispatch('currentUserIsAdminTest', p)
           }
 
           return p
@@ -241,7 +241,7 @@ export default {
             root: true
           })
           if (user.id === rootState.cml.user.id) {
-            dispatch('currentUserIsAdminTest', { corpu, p })
+            dispatch('currentUserIsAdminTest', p)
           }
 
           return p
@@ -257,10 +257,7 @@ export default {
         })
     },
 
-    currentUserIsAdminTest (
-      { state, dispatch, commit, rootGetters },
-      { corpu, permissions }
-    ) {
+    currentUserIsAdminTest ({ dispatch, commit, rootGetters }, permissions) {
       if (!rootGetters['cml/user/isAdmin'](permissions)) {
         dispatch('list')
         commit(`cml/popup/close`, null, { root: true })
