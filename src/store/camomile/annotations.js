@@ -40,7 +40,7 @@ export default {
     remove ({ commit, dispatch, state, rootState }, annotation) {
       commit('cml/sync/start', 'annotationsRemove', { root: true })
       return api
-        .deleteMedium(annotation.id)
+        .deleteAnnotation(annotation.id)
         .then(r => {
           commit('cml/sync/stop', 'annotationsRemove', { root: true })
           commit('remove', annotation)
@@ -59,17 +59,14 @@ export default {
     update ({ commit, dispatch, state, rootState }, annotation) {
       commit('cml/sync/start', 'annotationsUpdate', { root: true })
       return api
-        .updateMedium(annotation.id, {
+        .updateAnnotation(annotation.id, {
           name: annotation.name,
           description: annotation.description
         })
         .then(r => {
           commit('cml/sync/stop', 'annotationsUpdate', { root: true })
-          // update api to update from server:
-          // should receive an object with a permissions property
-          // to process with annotationFormat
           commit('update', annotation)
-          dispatch('cml/messages/success', 'Medium updated', { root: true })
+          dispatch('cml/messages/success', 'Annotation updated', { root: true })
 
           return r
         })

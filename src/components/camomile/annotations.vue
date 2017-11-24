@@ -2,7 +2,7 @@
   <div v-if="isLogged">
     <div class="flex flex-start">
       <h2 class="mt-s">Annotations</h2>
-      <button @click="popupOpen({ ...popupEditConfig, title: 'Add annotation', element: { id: null, layerId, mediaId, fragment: {}, data: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ config: { ...popupEditConfig, title: 'Add annotation' }, element: { id: null, layerId, mediaId, fragment: {}, data: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,8 +13,8 @@
           <td><input type="radio" @change="set" :value="annotation.id" :checked="annotation.id === annotationId"></td>
           <td>{{ annotation.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupEditConfig, element: annotation })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, element: annotation })" class="btn px-s py-s my--s h5" v-if="permission === 3">Remove</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: annotation })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: annotation })" class="btn px-s py-s my--s h5" v-if="permission === 3">Remove</button>
           </td>
         </tr>
       </table>
@@ -34,13 +34,13 @@ export default {
       popupEditConfig: {
         type: 'annotations',
         closeBtn: true,
-        title: 'Edit medium',
+        title: 'Edit annotation',
         component: popupEdit
       },
       popupRemoveConfig: {
         type: 'annotations',
         closeBtn: true,
-        title: 'Remove medium',
+        title: 'Remove annotation',
         component: popupRemove
       }
     }
@@ -60,8 +60,8 @@ export default {
     }
   },
   methods: {
-    popupOpen (config) {
-      return this.$store.commit('cml/popup/open', config)
+    popupOpen ({ config, element }) {
+      return this.$store.commit('cml/popup/open', { config, element })
     },
     set (e) {
       this.$store.dispatch('cml/annotations/set', e.target.value)

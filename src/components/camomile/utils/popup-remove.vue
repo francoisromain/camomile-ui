@@ -23,7 +23,7 @@ export default {
   name: 'camomile-popup-element-remove',
   computed: {
     ...mapState({
-      element: state => state.cml.popup.config.element,
+      element: state => state.cml.popup.element,
       id: state => state.cml.popup.config.id,
       type: state => state.cml.popup.config.type
     })

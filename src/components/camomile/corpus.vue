@@ -2,7 +2,7 @@
   <div v-if="isLogged">
     <div class="flex flex-start">
       <h2 class="mt-s">Corpora</h2>
-      <button @click="popupOpen({ ...popupEditConfig, title: 'Add corpus', element: { id: null, description: {} } })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ config: {...popupEditConfig, title: 'Add corpus'}, element: { id: null, description: {} } })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,9 +13,9 @@
           <td><input type="radio" @change="set" :value="corpu.id" :checked="corpu.id === corpuId"></td>
           <td>{{ corpu.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupPermissionsConfig, id: corpu.id })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Permissions</button>
-            <button @click="popupOpen({ ...popupEditConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="isAdmin && corpu.permission === 3">Remove</button>
+            <button @click="popupOpen({ config: popupPermissionsConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Permissions</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="isAdmin && corpu.permission === 3">Remove</button>
           </td>
         </tr>
       </table>
@@ -65,8 +65,8 @@ export default {
   },
 
   methods: {
-    popupOpen (config) {
-      this.$store.commit('cml/popup/open', config)
+    popupOpen ({ config, element }) {
+      this.$store.commit('cml/popup/open', { config, element })
     },
     set (e) {
       this.$store.dispatch('cml/corpus/set', e.target.value)

@@ -2,7 +2,7 @@
   <div v-if="isLogged">
     <div class="flex flex-start">
       <h2 class="mt-s">Media</h2>
-      <button @click="popupOpen({ ...popupEditConfig, title: 'Add medium', element: { id: null, corpuId, description: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ config: {...popupEditConfig, title: 'Add medium' }, element: { id: null, corpuId, description: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,8 +13,8 @@
           <td><input type="radio" @change="set" :value="media.id" :checked="media.id === mediaId"></td>
           <td>{{ media.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupEditConfig, element: media })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, element: media })" class="btn px-s py-s my--s h5" v-if="permission === 3">Remove</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: media })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: media })" class="btn px-s py-s my--s h5" v-if="permission === 3">Remove</button>
           </td>
         </tr>
       </table>
@@ -63,8 +63,8 @@ export default {
   },
 
   methods: {
-    popupOpen (config) {
-      return this.$store.commit('cml/popup/open', config)
+    popupOpen ({ config, element }) {
+      return this.$store.commit('cml/popup/open', { config, element })
     },
     set (e) {
       this.$store.dispatch('cml/medias/set', e.target.value)

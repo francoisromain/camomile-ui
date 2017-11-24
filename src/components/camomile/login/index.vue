@@ -13,9 +13,12 @@ export default {
   },
   created () {
     this.$store.commit('cml/popup/open', {
-      title: 'Login',
-      closeBtn: false,
-      component: this.popupLogin
+      config: {
+        title: 'Login',
+        closeBtn: false,
+        component: this.popupLogin
+      },
+      element: {}
     })
   }
 }

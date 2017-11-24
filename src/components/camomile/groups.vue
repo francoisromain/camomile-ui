@@ -2,7 +2,7 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Groups</h2>
-      <button @click="popupOpen({ ...popupEditConfig, element: { description: {} }, title: 'Add group' })" class="btn p-s flex-right"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ config: {...popupEditConfig, title: 'Add group'}, element: { description: {} } })" class="btn p-s flex-right"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,9 +13,9 @@
           <td>{{ group.name }}</td>
           <td>{{ group.userIds.length }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupUsersConfig, groupId: group.id })" class="btn px-s py-s my--s h5">Users</button>
-            <button @click="popupOpen({ ...popupEditConfig, element: group })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, element: group })" class="btn px-s py-s my--s h5" v-if="isRoot">Remove</button>
+            <button @click="popupOpen({ config: popupUsersConfig, element: group })" class="btn px-s py-s my--s h5">Users</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: group })" class="btn px-s py-s my--s h5">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: group })" class="btn px-s py-s my--s h5" v-if="isRoot">Remove</button>
           </td>
         </tr>
       </table>
@@ -63,8 +63,8 @@ export default {
   },
 
   methods: {
-    popupOpen (config) {
-      return this.$store.commit('cml/popup/open', config)
+    popupOpen ({ config, element }) {
+      return this.$store.commit('cml/popup/open', { config, element })
     },
     refresh () {
       return this.$store.dispatch('cml/groups/list')

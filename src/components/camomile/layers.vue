@@ -2,7 +2,7 @@
   <div v-if="isLogged">
     <div class="flex flex-start">
       <h2 class="mt-s">Layers</h2>
-      <button @click="popupOpen({ ...popupEditConfig, title: 'Add layer', element: { id: null, corpuId, description: {}, metadata: {}, fragment: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ config: { ...popupEditConfig, title: 'Add layer' }, element: { id: null, corpuId, description: {}, metadataType: {}, fragmentType: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -13,9 +13,9 @@
           <td><input type="radio" @change="set" :value="layer.id" :checked="layer.id === layerId"></td>
           <td>{{ layer.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ ...popupPermissionsConfig, id: layer.id })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Permissions</button>
-            <button @click="popupOpen({ ...popupEditConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Edit</button>
-            <button @click="popupOpen({ ...popupRemoveConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Remove</button>
+            <button @click="popupOpen({ config: popupPermissionsConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Permissions</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Remove</button>
           </td>
         </tr>
       </table>
