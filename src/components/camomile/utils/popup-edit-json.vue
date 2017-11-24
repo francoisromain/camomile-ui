@@ -22,7 +22,7 @@ export default {
   computed: {
     fields: {
       get () {
-        return JSON.stringify(this.$store.state.cml.popup.element[this.name], undefined, 4)
+        return JSON.stringify(this.$store.state.cml.popup.element[this.name], undefined, 2)
       },
       set (value) {
         if (this.jsonCheck(value)) {
