@@ -5,7 +5,8 @@ export default {
   namespaced: true,
 
   state: {
-    list: []
+    list: [],
+    id: null
   },
 
   actions: {
@@ -21,6 +22,7 @@ export default {
           const media = mediaFormat(r)
           commit('add', media)
           dispatch('cml/messages/success', 'Medium added.', { root: true })
+          dispatch('set', media.id)
 
           return media
         })
@@ -58,13 +60,14 @@ export default {
       return api
         .updateMedium(media.id, {
           name: media.name,
-          description: media.description
+          description: media.description,
+          url: media.url
         })
         .then(r => {
           commit('cml/sync/stop', 'mediasUpdate', { root: true })
-          // update api to update from server:
-          // should receive an object with a permissions property
-          // to process with mediaFormat
+          media.name = r.name
+          media.url = r.url
+          media.description = r.description || {}
           commit('update', media)
           dispatch('cml/messages/success', 'Medium updated', { root: true })
 
@@ -88,6 +91,7 @@ export default {
             return mediaFormat(media)
           })
           commit('list', medias)
+          dispatch('set')
 
           return medias
         })
@@ -97,7 +101,19 @@ export default {
 
           throw e
         })
+    },
+
+    set ({ getters, commit }, mediaId) {
+      commit('set', getters.id(mediaId))
     }
+  },
+
+  getters: {
+    id: state => id =>
+      id ||
+      (state.list.map(c => c.id).indexOf(state.id) !== -1 && state.id) ||
+      (state.list[0] && state.list[0].id) ||
+      null
   },
 
   mutations: {
@@ -125,6 +141,10 @@ export default {
 
     list (state, medias) {
       state.list = medias
+    },
+
+    set (state, id) {
+      state.id = id
     }
   }
 }

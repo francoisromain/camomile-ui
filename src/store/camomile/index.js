@@ -11,6 +11,7 @@ import groups from './groups'
 import corpus from './corpus'
 import medias from './medias'
 import layers from './layers'
+import annotations from './annotations'
 
 export default {
   namespaced: true,
@@ -26,7 +27,8 @@ export default {
     groups,
     corpus,
     medias,
-    layers
+    layers,
+    annotations
   },
 
   state: {
@@ -70,28 +72,25 @@ export default {
             .catch(e => reject(e))
         )
       ]).then(res => {
-        dispatch('cml/corpus/list', null, { root: true }).then(res => {
-          const corpuIdDefault = state.corpus.list[0] && state.corpus.list[0].id
-          if (corpuIdDefault) {
-            dispatch('cml/corpus/corpuSet', corpuIdDefault, { root: true })
-          }
-        })
+        dispatch('cml/corpus/list', null, { root: true })
       })
     },
 
     reset ({ state, dispatch, commit }) {
       commit('logout')
       commit('delete')
-      commit('cml/corpus/reset', null, { root: true })
       commit('cml/user/reset', null, { root: true })
       commit('cml/users/reset', null, { root: true })
       commit('cml/groups/reset', null, { root: true })
+      commit('cml/corpus/reset', null, { root: true })
+      commit('cml/medias/reset', null, { root: true })
+      commit('cml/layers/reset', null, { root: true })
     },
 
     sync ({ state, dispatch, commit }) {
-      dispatch('cml/users/list', {}, { root: true })
-      dispatch('cml/groups/list', {}, { root: true })
-      dispatch('cml/corpus/list', {}, { root: true })
+      dispatch('cml/users/list', null, { root: true })
+      dispatch('cml/groups/list', null, { root: true })
+      dispatch('cml/corpus/list', null, { root: true })
     }
   },
   mutations: {

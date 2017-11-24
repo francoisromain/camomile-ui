@@ -5,16 +5,19 @@
 <script>
 export default {
   name: 'debug',
+
   data () {
     return {
       visible: false
     }
   },
+
   computed: {
     state () {
       return this.$store.state.cml.popup
     }
   },
+
   methods: {
     keydown (e) {
       if (e.keyCode >= 65 && e.keyCode <= 90) {
@@ -25,6 +28,7 @@ export default {
       }
     }
   },
+
   created () {
     document.addEventListener('keydown', this.keydown)
   },

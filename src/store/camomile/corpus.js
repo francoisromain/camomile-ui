@@ -30,7 +30,7 @@ export default {
 
           commit('add', corpu)
           dispatch('cml/messages/success', 'Corpus added.', { root: true })
-          dispatch('corpuSet', corpu.id)
+          dispatch('set', corpu.id)
 
           return r
         })
@@ -52,8 +52,7 @@ export default {
           commit('remove', corpu)
           dispatch('cml/messages/success', 'Corpus removed', { root: true })
           if (state.id === corpu.id) {
-            commit('cml/medias/reset', null, { root: true })
-            commit('cml/layer/reset', null, { root: true })
+            dispatch('set')
           }
 
           return r
@@ -76,9 +75,9 @@ export default {
         })
         .then(r => {
           commit('cml/sync/stop', 'corpusUpdate', { root: true })
-          // update api to update from server:
-          // should receive an object with a permissions property
-          // to process with corpuFormat
+          console.log('corpus update', r)
+          corpu.name = r.name
+          corpu.description = r.description || {}
           commit('update', corpu)
           dispatch('cml/messages/success', 'Corpus updated', { root: true })
 
@@ -93,7 +92,7 @@ export default {
         })
     },
 
-    list ({ commit, rootState, rootGetters }) {
+    list ({ commit, dispatch, rootState, rootGetters }) {
       commit('cml/sync/start', 'corpusList', { root: true })
       return api
         .getCorpora()
@@ -102,7 +101,7 @@ export default {
           const corpus = r.map(c => ({
             name: c.name,
             id: c._id,
-            description: c.description,
+            description: c.description || {},
             permission: rootGetters['cml/user/permission'](c.permissions),
             permissions: {
               users: rootGetters['cml/users/permissions'](
@@ -114,6 +113,7 @@ export default {
             }
           }))
           commit('list', corpus)
+          dispatch('set')
 
           return corpus
         })
@@ -264,11 +264,24 @@ export default {
       }
     },
 
-    corpuSet ({ state, dispatch, commit }, corpuId) {
-      commit('corpuSet', corpuId)
-      dispatch('cml/medias/list', state.id, { root: true })
-      dispatch('cml/layers/list', state.id, { root: true })
+    set ({ state, getters, dispatch, commit }, corpuId) {
+      commit('set', getters.id(corpuId))
+      if (state.id) {
+        dispatch('cml/medias/list', state.id, { root: true })
+        dispatch('cml/layers/list', state.id, { root: true })
+      } else {
+        commit('cml/medias/reset', null, { root: true })
+        commit('cml/layers/reset', null, { root: true })
+      }
     }
+  },
+
+  getters: {
+    id: state => id =>
+      id ||
+      (state.list.map(c => c.id).indexOf(state.id) !== -1 && state.id) ||
+      (state.list[0] && state.list[0].id) ||
+      null
   },
 
   mutations: {
@@ -298,7 +311,7 @@ export default {
       state.list = corpus
     },
 
-    corpuSet (state, corpuId) {
+    set (state, corpuId) {
       state.id = corpuId
     },
 

@@ -4,14 +4,15 @@
     <div class="relative page">
       <cml-utils />
       <div class="container pt">
-        <div class="blobs">
-          <cml-users class="blob-1-2 p border" v-if="isAdmin"/>
-          <cml-groups class="blob-1-2 p border" v-if="isAdmin"/>
+        <div class="blobs" v-if="isAdmin">
+          <cml-users class="blob-1-2 p border"/>
+          <cml-groups class="blob-1-2 p border"/>
         </div>
         <div class="blobs">
           <cml-corpus class="blob-1-2 p border" />
           <cml-medias class="blob-1-2 p border" />
           <cml-layers class="blob-1-2 p border" />
+          <cml-annotations class="blob-1-2 p border" />
         </div>
       </div> 
       <debug />
@@ -35,10 +36,13 @@ import cmlGroups from './camomile/groups.vue'
 import cmlCorpus from './camomile/corpus.vue'
 import cmlMedias from './camomile/medias.vue'
 import cmlLayers from './camomile/layers.vue'
+import cmlAnnotations from './camomile/annotations.vue'
 
 export default {
   store,
+
   name: 'camomile-ui',
+
   components: {
     debug,
     viewport,
@@ -49,8 +53,10 @@ export default {
     cmlGroups,
     cmlCorpus,
     cmlMedias,
-    cmlLayers
+    cmlLayers,
+    cmlAnnotations
   },
+
   computed: {
     isAdmin () {
       return this.$store.state.cml.isAdmin

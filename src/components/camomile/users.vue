@@ -31,6 +31,7 @@ import popupGroups from './users/popup-groups.vue'
 
 export default {
   name: 'camomile-users',
+
   data () {
     return {
       popupEditConfig: {
@@ -52,12 +53,14 @@ export default {
       }
     }
   },
+
   computed: {
     ...mapState({
       users: state => state.cml.users.list,
       adminId: state => state.cml.user.id
     })
   },
+
   methods: {
     popupOpen (config) {
       return this.$store.commit('cml/popup/open', config)

@@ -1,11 +1,11 @@
-import { observerClean } from './_helpers'
 import { api } from '../../config'
 
 export default {
   namespaced: true,
 
   state: {
-    list: []
+    list: [],
+    id: null
   },
 
   actions: {
@@ -18,9 +18,9 @@ export default {
         .createLayer(
           corpuId,
           name,
-          observerClean(description),
-          observerClean(fragment),
-          observerClean(metadata),
+          description,
+          fragment,
+          metadata,
           annotations
         )
         .then(r => {
@@ -43,6 +43,7 @@ export default {
 
           commit('add', layer)
           dispatch('cml/messages/success', 'Layer added.', { root: true })
+          dispatch('set', layer.id)
 
           return layer
         })
@@ -86,9 +87,9 @@ export default {
         })
         .then(r => {
           commit('cml/sync/stop', 'layersUpdate', { root: true })
-          // update api to update from server:
-          // should receive an object with a permissions property
-          // to process with layerFormat
+          layer.description = r.description || {}
+          layer.fragment = r.fragment_type || {}
+          layer.metadata = r.data_type || {}
           commit('update', layer)
           dispatch('cml/messages/success', 'Layer updated', { root: true })
 
@@ -102,7 +103,7 @@ export default {
         })
     },
 
-    list ({ commit, rootGetters }, corpuId) {
+    list ({ dispatch, commit, rootGetters }, corpuId) {
       commit('cml/sync/start', 'layersList', { root: true })
       return api
         .getLayers({ filter: { id_corpus: corpuId } })
@@ -127,6 +128,7 @@ export default {
             annotations: l.annotations || []
           }))
           commit('list', layers)
+          dispatch('set')
 
           return layers
         })
@@ -280,7 +282,24 @@ export default {
         dispatch('list', rootState.cml.corpus.id)
         commit(`cml/popup/close`, null, { root: true })
       }
+    },
+
+    set ({ state, getters, dispatch, commit }, layerId) {
+      commit('set', getters.id(layerId))
+      if (state.id) {
+        dispatch('cml/annotations/list', state.id, { root: true })
+      } else {
+        commit('cml/annotations/reset', null, { root: true })
+      }
     }
+  },
+
+  getters: {
+    id: state => id =>
+      id ||
+      (state.list.map(c => c.id).indexOf(state.id) !== -1 && state.id) ||
+      (state.list[0] && state.list[0].id) ||
+      null
   },
 
   mutations: {
@@ -308,6 +327,10 @@ export default {
 
     list (state, layers) {
       state.list = layers
+    },
+
+    set (state, id) {
+      state.id = id
     },
 
     groupPermissionsUpdate (state, { layer, id, permission }) {

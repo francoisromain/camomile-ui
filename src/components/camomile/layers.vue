@@ -7,9 +7,10 @@
     <div>
       <table class="table mb-0">
         <tr>
-          <th>Name</th><th></th>
+          <th></th><th>Name</th><th></th>
         </tr>
         <tr v-for="layer in layers" :key="layer.id">
+          <td><input type="radio" @change="set" :value="layer.id" :checked="layer.id === layerId"></td>
           <td>{{ layer.name }}</td>
           <td class="text-right">
             <button @click="popupOpen({ ...popupPermissionsConfig, id: layer.id })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Permissions</button>
@@ -30,6 +31,7 @@ import popupPermissions from './utils/popup-permissions.vue'
 
 export default {
   name: 'camomile-layers',
+
   data () {
     return {
       popupEditConfig: {
@@ -52,21 +54,28 @@ export default {
       }
     }
   },
+
   computed: {
     ...mapState({
       layers: state => state.cml.layers.list,
       isLogged: state => state.cml.isLogged,
       isAdmin: state => state.cml.isAdmin,
-      corpuId: state => state.cml.corpus.id
+      corpuId: state => state.cml.corpus.id,
+      corpus: state => state.cml.corpus.list,
+      layerId: state => state.cml.layers.id
     }),
     permission () {
-      const corpu = this.$store.state.cml.corpus.list.find(corpu => corpu.id === this.corpuId)
+      const corpu = this.corpus.find(c => c.id === this.corpuId)
       return corpu ? corpu.permission : 0
     }
   },
+
   methods: {
     popupOpen (config) {
       return this.$store.commit('cml/popup/open', config)
+    },
+    set (e) {
+      this.$store.dispatch('cml/layers/set', e.target.value)
     }
   }
 }
