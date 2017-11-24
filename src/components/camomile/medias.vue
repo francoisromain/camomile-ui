@@ -7,9 +7,10 @@
     <div>
       <table class="table mb-0">
         <tr>
-          <th>Name</th><th></th>
+          <th></th><th>Name</th><th></th>
         </tr>
         <tr v-for="media in medias" :key="media.id">
+          <td><input type="radio" @change="set" :value="media.id" :checked="media.id === mediaId"></td>
           <td>{{ media.name }}</td>
           <td class="text-right">
             <button @click="popupOpen({ ...popupEditConfig, element: media })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
@@ -28,6 +29,7 @@ import popupRemove from './utils/popup-remove.vue'
 
 export default {
   name: 'camomile-medias',
+
   data () {
     return {
       popupEditConfig: {
@@ -44,21 +46,28 @@ export default {
       }
     }
   },
+
   computed: {
     ...mapState({
       medias: state => state.cml.medias.list,
       isLogged: state => state.cml.isLogged,
       isAdmin: state => state.cml.isAdmin,
-      corpuId: state => state.cml.corpus.id
+      corpus: state => state.cml.corpus.list,
+      corpuId: state => state.cml.corpus.id,
+      mediaId: state => state.cml.medias.id
     }),
     permission () {
-      const corpu = this.$store.state.cml.corpus.list.find(corpu => corpu.id === this.corpuId)
+      const corpu = this.corpus.find(corpu => corpu.id === this.corpuId)
       return corpu ? corpu.permission : 0
     }
   },
+
   methods: {
     popupOpen (config) {
       return this.$store.commit('cml/popup/open', config)
+    },
+    set (e) {
+      this.$store.dispatch('cml/medias/set', e.target.value)
     }
   }
 }

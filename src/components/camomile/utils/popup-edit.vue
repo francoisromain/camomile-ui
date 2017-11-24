@@ -5,7 +5,7 @@
         <h4 class="pt-s mb-0">Name</h4>
       </div>
       <div class="blob-3-4">
-        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id && (type === 'users' || type === 'groups')">
+        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id && (type === 'users' || type === 'groups')" ref="nameee">
       </div>
     </div>
     <div class="blobs" v-if="type === 'users'">
@@ -36,9 +36,9 @@
         <input type="text" v-model="element.url" class="input-alt" placeholder="http://…">
       </div>
     </div>
-    <object-field :name="'fragment'" v-if="type === 'layers'"/>
-    <object-field :name="'metadata'" v-if="type === 'layers'"/>
-    <object-field :name="'description'"/>
+    <object-field :name="'fragment'" v-if="type === 'layers' || type === 'annotations'"/>
+    <object-field :name="'metadata'" v-if="type === 'layers' || type === 'annotations'"/>
+    <object-field :name="'description'" v-if="type !== 'annotations'"/>
     <div class="blobs">
       <div class="blob-1-4">
       </div>
@@ -88,6 +88,9 @@ export default {
   },
   created () {
     document.addEventListener('keyup', this.keyup)
+  },
+  mounted () {
+    this.$refs.nameee.focus()
   },
   beforeDestroy () {
     document.removeEventListener('keyup', this.keyup)

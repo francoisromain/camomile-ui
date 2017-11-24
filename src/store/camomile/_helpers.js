@@ -26,6 +26,12 @@ export function mediaFormat (media) {
   }
 }
 
+export function annotationFormat (annotation) {
+  return {
+    name: annotation.name
+  }
+}
+
 export function observerClean (obj) {
   return Object.keys(obj).reduce(
     (res, e) => Object.assign(res, { [e]: obj[e] }),

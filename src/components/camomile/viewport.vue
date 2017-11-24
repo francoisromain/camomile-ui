@@ -7,11 +7,13 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'viewport',
+
   methods: {
     ...mapActions({
       resize: 'cml/viewport/set'
     })
   },
+
   mounted () {
     window.addEventListener('resize', this.resize)
     this.resize()
