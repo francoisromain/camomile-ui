@@ -1,5 +1,4 @@
 import { api } from '../../config'
-import { annotationFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -20,7 +19,13 @@ export default {
         .then(r => {
           console.log('annotationCreate', r)
           commit('cml/sync/stop', 'annotationsAdd', { root: true })
-          const annotation = annotationFormat(r)
+          const annotation = {
+            id: r._id,
+            fragment: r.fragment || {},
+            metadata: r.data || {},
+            layerId: r.id_layer,
+            mediaId: r.id_medium || null
+          }
           commit('add', annotation)
           dispatch('cml/messages/success', 'Annotation added.', { root: true })
           dispatch('set', annotation.id)
@@ -60,8 +65,8 @@ export default {
       commit('cml/sync/start', 'annotationsUpdate', { root: true })
       return api
         .updateAnnotation(annotation.id, {
-          name: annotation.name,
-          description: annotation.description
+          fragment: annotation.fragment,
+          metadata: annotation.data
         })
         .then(r => {
           commit('cml/sync/stop', 'annotationsUpdate', { root: true })
@@ -85,10 +90,13 @@ export default {
         .then(r => {
           console.log('annotations', r)
           commit('cml/sync/stop', 'annotationsList', { root: true })
-          const annotations = r.map(a => {
-            return a
-            // return annotationFormat(a)
-          })
+          const annotations = r.map(a => ({
+            id: a._id,
+            fragment: a.fragment || {},
+            metadata: a.data || {},
+            layerId: a.id_layer,
+            mediaId: a.id_medium || null
+          }))
           commit('list', annotations)
           dispatch('set')
 

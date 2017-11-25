@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="blobs">
+    <div class="blobs" v-if="type !== 'annotations'">
       <div class="blob-1-4">
         <h4 class="pt-s mb-0">Name</h4>
       </div>
       <div class="blob-3-4">
-        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id && (type === 'users' || type === 'groups')" ref="nameee">
+        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id && (type === 'users' || type === 'groups')" ref="name">
       </div>
     </div>
     <div class="blobs" v-if="type === 'users'">
@@ -45,7 +45,7 @@
       <div class="blob-1-4">
       </div>
       <div class="blob-3-4">
-        <button @click="save" @keyup.enter="save" class="btn-alt p-s full-x" :disabled="!element.name">Save</button>
+        <button @click="save" @keyup.enter="save" class="btn-alt p-s full-x" :disabled="!element.name && type !== 'annotations'">Save</button>
       </div>
     </div>
   </div>
@@ -92,7 +92,9 @@ export default {
     document.addEventListener('keyup', this.keyup)
   },
   mounted () {
-    this.$refs.nameee.focus()
+    if (this.type !== 'annotations') {
+      this.$refs.name.focus()
+    }
   },
   beforeDestroy () {
     document.removeEventListener('keyup', this.keyup)

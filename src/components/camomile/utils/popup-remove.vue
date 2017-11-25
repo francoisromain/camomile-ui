@@ -1,12 +1,22 @@
 <template>
   <div>
-    <div class="blobs">
+    <div class="blobs" v-if="type !== 'annotations'">
       <div class="blob-1-4">
         <h4 class="pt-s mb-0">Name</h4>
       </div>
       <div class="blob-3-4">
         <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id">
       </div>
+    </div>
+    <div class="blobs" v-if="type === 'annotations'">
+      <div class="blob-1-4">
+        <h4 class="pt-s mb-0">Id</h4>
+      </div>
+      <div class="blob-3-4">
+        <input type="text" v-model="element.id" class="input-alt" placeholder="Name" :disabled="element.id">
+      </div>
+    </div>
+    <div class="blobs">
       <div class="blob-1-4">
       </div>
       <div class="blob-3-4">
