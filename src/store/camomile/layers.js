@@ -11,7 +11,7 @@ export default {
   actions: {
     add (
       { commit, dispatch, rootState, rootGetters },
-      { corpuId, name, description, fragment, metadata, annotations }
+      { corpuId, name, description, fragmentType, metadataType, annotations }
     ) {
       commit('cml/sync/start', 'layersAdd', { root: true })
       return api
@@ -19,8 +19,8 @@ export default {
           corpuId,
           name,
           description,
-          fragment,
-          metadata,
+          fragmentType,
+          metadataType,
           annotations
         )
         .then(r => {
@@ -34,8 +34,8 @@ export default {
               groups: rootGetters['cml/groups/permissions']({})
             },
             description: r.description || {},
-            fragment: r.fragment_type || {},
-            metadata: r.data_type || {},
+            fragmentType: r.fragment_type || {},
+            metadataType: r.data_type || {},
             annotations: r.annotations
           }
 
@@ -82,14 +82,14 @@ export default {
         .updateLayer(layer.id, {
           name: layer.name,
           description: layer.description,
-          fragment_type: layer.fragment,
-          data_type: layer.metadata
+          fragment_type: layer.fragmentType,
+          data_type: layer.metadataType
         })
         .then(r => {
           commit('cml/sync/stop', 'layersUpdate', { root: true })
           layer.description = r.description || {}
-          layer.fragment = r.fragment_type || {}
-          layer.metadata = r.data_type || {}
+          layer.fragmentType = r.fragment_type || {}
+          layer.metadataType = r.data_type || {}
           commit('update', layer)
           dispatch('cml/messages/success', 'Layer updated', { root: true })
 
@@ -123,8 +123,8 @@ export default {
                 (l.permissions && l.permissions.groups) || {}
               )
             },
-            fragment: l.fragment_type || {},
-            metadata: l.data_type || {},
+            fragmentType: l.fragment_type || {},
+            metadataType: l.data_type || {},
             annotations: l.annotations || []
           }))
           commit('list', layers)

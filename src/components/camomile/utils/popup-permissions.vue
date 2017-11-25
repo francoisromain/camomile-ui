@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     ...mapState({
-      resource: state => state.cml[state.cml.popup.config.type].list.find(e => e.id === state.cml.popup.config.id),
+      resource: state => state.cml[state.cml.popup.config.type].list.find(e => e.id === state.cml.popup.element.id),
       users: state => state.cml.users.list,
       groups: state => state.cml.groups.list,
       type: state => state.cml.popup.config.type

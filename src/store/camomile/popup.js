@@ -4,25 +4,21 @@ export default {
   namespaced: true,
   state: {
     visible: false,
-    config: {}
+    config: {},
+    element: {}
   },
   mutations: {
-    open (state, config) {
+    open (state, { config, element }) {
       state.visible = true
       state.config = config
+      state.element = JSON.parse(JSON.stringify(element))
     },
     close (state) {
       state.visible = false
       state.config = {}
     },
-    objectFieldAdd (state, { name, field }) {
-      Vue.set(state.config.element[name], field.key, field.value)
-    },
-    objectFieldRemove (state, { name, key }) {
-      Vue.delete(state.config.element[name], key)
-    },
-    objectFieldUpdate (state, { name, field }) {
-      state.config.element[name][field.key] = field.value
+    fieldUpdate (state, { name, value }) {
+      Vue.set(state.element, name, value)
     }
   }
 }

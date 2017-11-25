@@ -1,5 +1,4 @@
 import { api } from '../../config'
-import { annotationFormat } from './_helpers'
 
 export default {
   namespaced: true,
@@ -20,7 +19,13 @@ export default {
         .then(r => {
           console.log('annotationCreate', r)
           commit('cml/sync/stop', 'annotationsAdd', { root: true })
-          const annotation = annotationFormat(r)
+          const annotation = {
+            id: r._id,
+            fragment: r.fragment || {},
+            metadata: r.data || {},
+            layerId: r.id_layer,
+            mediaId: r.id_medium || null
+          }
           commit('add', annotation)
           dispatch('cml/messages/success', 'Annotation added.', { root: true })
           dispatch('set', annotation.id)
@@ -40,7 +45,7 @@ export default {
     remove ({ commit, dispatch, state, rootState }, annotation) {
       commit('cml/sync/start', 'annotationsRemove', { root: true })
       return api
-        .deleteMedium(annotation.id)
+        .deleteAnnotation(annotation.id)
         .then(r => {
           commit('cml/sync/stop', 'annotationsRemove', { root: true })
           commit('remove', annotation)
@@ -59,17 +64,14 @@ export default {
     update ({ commit, dispatch, state, rootState }, annotation) {
       commit('cml/sync/start', 'annotationsUpdate', { root: true })
       return api
-        .updateMedium(annotation.id, {
-          name: annotation.name,
-          description: annotation.description
+        .updateAnnotation(annotation.id, {
+          fragment: annotation.fragment,
+          metadata: annotation.data
         })
         .then(r => {
           commit('cml/sync/stop', 'annotationsUpdate', { root: true })
-          // update api to update from server:
-          // should receive an object with a permissions property
-          // to process with annotationFormat
           commit('update', annotation)
-          dispatch('cml/messages/success', 'Medium updated', { root: true })
+          dispatch('cml/messages/success', 'Annotation updated', { root: true })
 
           return r
         })
@@ -88,10 +90,13 @@ export default {
         .then(r => {
           console.log('annotations', r)
           commit('cml/sync/stop', 'annotationsList', { root: true })
-          const annotations = r.map(a => {
-            return a
-            // return annotationFormat(a)
-          })
+          const annotations = r.map(a => ({
+            id: a._id,
+            fragment: a.fragment || {},
+            metadata: a.data || {},
+            layerId: a.id_layer,
+            mediaId: a.id_medium || null
+          }))
           commit('list', annotations)
           dispatch('set')
 

@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown">
     <div v-if="isAdmin">
-      <button @click="popupOpen({ ...popupEditConfig, element: user })" class="btn px-m py-s full-x">Settings…</button>
+      <button @click="popupOpen({ config: popupEditConfig, element: user })" class="btn px-m py-s full-x">Settings…</button>
     </div>
     <div>
       <button @click="logout" class="btn px-m py-s full-x mr home">Logout</button>
@@ -40,8 +40,8 @@ export default {
     logout () {
       return this.$store.dispatch('cml/user/logout')
     },
-    popupOpen (config) {
-      this.$store.commit('cml/popup/open', config)
+    popupOpen ({ config, element }) {
+      this.$store.commit('cml/popup/open', { config, element })
       this.close()
     }
   }

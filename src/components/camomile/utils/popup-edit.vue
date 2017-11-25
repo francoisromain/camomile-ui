@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="blobs">
+    <div class="blobs" v-if="type !== 'annotations'">
       <div class="blob-1-4">
         <h4 class="pt-s mb-0">Name</h4>
       </div>
       <div class="blob-3-4">
-        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id && (type === 'users' || type === 'groups')" ref="nameee">
+        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id && (type === 'users' || type === 'groups')" ref="name">
       </div>
     </div>
     <div class="blobs" v-if="type === 'users'">
@@ -36,14 +36,16 @@
         <input type="text" v-model="element.url" class="input-alt" placeholder="http://…">
       </div>
     </div>
-    <object-field :name="'fragment'" v-if="type === 'layers' || type === 'annotations'"/>
-    <object-field :name="'metadata'" v-if="type === 'layers' || type === 'annotations'"/>
-    <object-field :name="'description'" v-if="type !== 'annotations'"/>
+    <object-field :name="'fragment'" :title="'Fragment'" v-if="type === 'annotations'"/>
+    <object-field :name="'metadata'" :title="'Meta-data'" v-if="type === 'annotations'"/>
+    <object-field :name="'fragmentType'" :title="'Fragment type'" v-if="type === 'layers'"/>
+    <object-field :name="'metadataType'" :title="'Meta-data type'" v-if="type === 'layers'"/>
+    <object-field :name="'description'" :title="'Description'" v-if="type !== 'annotations'"/>
     <div class="blobs">
       <div class="blob-1-4">
       </div>
       <div class="blob-3-4">
-        <button @click="save" @keyup.enter="save" class="btn-alt p-s full-x" :disabled="!element.name">Save</button>
+        <button @click="save" @keyup.enter="save" class="btn-alt p-s full-x" :disabled="!element.name && type !== 'annotations'">Save</button>
       </div>
     </div>
   </div>
@@ -51,7 +53,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import objectField from './popup-edit-object.vue'
+import objectField from './popup-edit-json.vue'
 
 export default {
   name: 'camomile-popup-edit',
@@ -60,12 +62,11 @@ export default {
   },
   data () {
     return {
-      element: { ...this.$store.state.cml.popup.config.element }
+      element: this.$store.state.cml.popup.element
     }
   },
   computed: {
     ...mapState({
-      id: state => state.cml.popup.config.id,
       type: state => state.cml.popup.config.type,
       rolesPermission: state => state.cml.user.id !== state.cml.popup.config.id,
       roles: state => state.cml.config.roles
@@ -74,6 +75,7 @@ export default {
   methods: {
     save () {
       if (this.element.id) {
+        console.log('element', this.element)
         this.$store.dispatch(`cml/${this.type}/update`, this.element)
       } else {
         this.$store.dispatch(`cml/${this.type}/add`, this.element)
@@ -90,7 +92,9 @@ export default {
     document.addEventListener('keyup', this.keyup)
   },
   mounted () {
-    this.$refs.nameee.focus()
+    if (this.type !== 'annotations') {
+      this.$refs.name.focus()
+    }
   },
   beforeDestroy () {
     document.removeEventListener('keyup', this.keyup)

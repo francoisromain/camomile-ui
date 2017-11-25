@@ -31,7 +31,7 @@ export default {
       return this.$store.state.cml.users.list
     },
     group () {
-      return this.$store.state.cml.groups.list.find(group => group.id === this.$store.state.cml.popup.config.groupId)
+      return this.$store.state.cml.groups.list.find(group => group.id === this.$store.state.cml.popup.element.id)
     }
   },
   methods: {
