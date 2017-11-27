@@ -8,7 +8,10 @@ export default {
     name: '',
     role: '',
     description: '',
-    groupIds: []
+    groupIds: [],
+    isLogged: false,
+    isAdmin: false,
+    isRoot: false
   },
 
   actions: {
@@ -18,7 +21,7 @@ export default {
         .login(config.user.name, config.user.password)
         .then(r => {
           commit('cml/sync/stop', 'userLogin', { root: true })
-          dispatch('cml/login', null, { root: true })
+          commit('cml/popup/close', null, { root: true })
           dispatch('set')
 
           return r
@@ -27,28 +30,7 @@ export default {
           commit('cml/sync/stop', 'userLogin', { root: true })
           const error = e.response ? e.response.body.error : 'Network error'
           dispatch('cml/messages/error', error, { root: true })
-          commit('reset')
-
-          throw error
-        })
-    },
-
-    logout ({ commit, dispatch }) {
-      commit('cml/sync/start', 'userLogout', { root: true })
-      return api
-        .logout()
-        .then(r => {
-          commit('cml/sync/stop', 'userLogout', { root: true })
-          commit('reset')
-          dispatch('cml/logout', null, { root: true })
-
-          return r.success
-        })
-        .catch(e => {
-          commit('cml/sync/stop', 'userLogout', { root: true })
-          const error = e.response ? e.response.body.error : 'Network error'
-          dispatch('cml/messages/error', error, { root: true })
-          commit('reset')
+          dispatch('reset', null, { root: true })
 
           throw error
         })
@@ -61,7 +43,7 @@ export default {
         .then(user => {
           commit('cml/sync/stop', 'userSet', { root: true })
           commit('set', user)
-          dispatch('cml/set', user, { root: true })
+          dispatch('cml/set', null, { root: true })
 
           return user
         })
@@ -69,7 +51,29 @@ export default {
           commit('cml/sync/stop', 'userSet', { root: true })
           const error = e.response ? e.response.body.error : 'Network error'
           dispatch('cml/messages/error', error, { root: true })
-          commit('reset')
+          dispatch('reset', null, { root: true })
+
+          throw error
+        })
+    },
+
+    logout ({ commit, dispatch }) {
+      commit('cml/sync/start', 'userLogout', { root: true })
+      return api
+        .logout()
+        .then(r => {
+          commit('cml/sync/stop', 'userLogout', { root: true })
+          dispatch('reset', null, { root: true })
+          commit('cml/popup/close', null, { root: true })
+          commit('cml/dropdown/close', null, { root: true })
+
+          return r.success
+        })
+        .catch(e => {
+          commit('cml/sync/stop', 'userLogout', { root: true })
+          const error = e.response ? e.response.body.error : 'Network error'
+          dispatch('cml/messages/error', error, { root: true })
+          dispatch('reset', null, { root: true })
 
           throw error
         })
@@ -108,20 +112,28 @@ export default {
         0
       )
 
-      return Math.max(permissionUser, permissionGroup)
+      const permissionRoot = state.isRoot ? 3 : 0
+
+      return Math.max(permissionUser, permissionGroup, permissionRoot)
     }
   },
 
   mutations: {
     set (state, user) {
-      state.name = user.username
-      state.description = user.description
+      state.isLogged = true
+      state.isAdmin = user.role === 'admin'
+      state.isRoot = user.username === 'root'
       state.id = user._id
+      state.name = user.username
       state.role = user.role
+      state.description = user.description
       state.groupIds = user.groups
     },
 
     reset (state) {
+      state.isLogged = false
+      state.isAdmin = false
+      state.isRoot = false
       state.id = ''
       state.name = ''
       state.role = ''

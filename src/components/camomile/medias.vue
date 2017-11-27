@@ -50,8 +50,8 @@ export default {
   computed: {
     ...mapState({
       medias: state => state.cml.medias.list,
-      isLogged: state => state.cml.isLogged,
-      isAdmin: state => state.cml.isAdmin,
+      isLogged: state => state.cml.user.isLogged,
+      isAdmin: state => state.cml.user.isAdmin,
       corpus: state => state.cml.corpus.list,
       corpuId: state => state.cml.corpus.id,
       mediaId: state => state.cml.medias.id

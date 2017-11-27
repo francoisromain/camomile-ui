@@ -5,16 +5,18 @@
 ## Credits
 
 #### Production
-- Hervé Bredin, [LIMSI, CNRS](https://www.limsi.fr)
+
+* Hervé Bredin, [LIMSI, CNRS](https://www.limsi.fr)
 
 #### Development
-- [François Romain](http://francoisromain.com)
 
-* * * 
+* [François Romain](http://francoisromain.com)
+
+---
 
 ## Npm scripts
 
-``` bash
+```bash
 # Install dependencies.
 npm install
 
@@ -25,22 +27,23 @@ npm run dev
 npm run dist
 ```
 
-* * *
+---
 
 ## Contributing
 
 See `contributing.md` for further infos.
 
-* * *
+---
 
 ## Create a local API server
 
-Create a local [Camomile API server](https://github.com/camomile-project/camomile-server).
+Create a local
+[Camomile API server](https://github.com/camomile-project/camomile-server).
 
-Create one additional `camomile-data` folder next to this one, resulting in the following structure:
+Create one additional `camomile-data` folder next to this one, resulting in the
+following structure:
 
-``` txt
-
+```txt
 .
 +-- camomile-ui
 +-- camomile-server
@@ -51,15 +54,12 @@ Create one additional `camomile-data` folder next to this one, resulting in the 
         +-- logs
     +-- media
     +-- upload
-
 ```
 
-Start the server
+Start the server (from the _camomile-ui_ directory):
 
-``` bash
-
+```bash
 export CMML_DB=../camomile-data/mongodb/files && export CMML_LOGS=../camomile-data/camomile/logs && export CMML_MEDIA=../camomile-data/media && export CMML_UPLOAD=../camomile-data/upload && export CMML_PORT=3000 && export CMML_PASSWORD=roO7p4s5wOrD && docker-compose -f ../camomile-server/docker-compose.dev.yml up -d
-
 ```
 
 node app.js

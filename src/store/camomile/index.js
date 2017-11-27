@@ -32,34 +32,11 @@ export default {
   },
 
   state: {
-    api: null,
-    config: config,
-    isLogged: false,
-    isAdmin: false,
-    isRoot: false
+    config: config
   },
 
   actions: {
-    login ({ commit, dispatch, state }) {
-      commit('cml/popup/close', null, { root: true })
-    },
-
-    logout ({ commit, dispatch, state }) {
-      dispatch('reset')
-      commit('cml/popup/close', null, { root: true })
-      commit('cml/dropdown/close', null, { root: true })
-    },
-
-    set ({ state, dispatch, commit }, user) {
-      commit('login')
-
-      if (user.role === 'admin') {
-        commit('adminSet')
-      }
-
-      if (user.username === 'root') {
-        commit('rootSet')
-      }
+    set ({ dispatch }) {
       Promise.all([
         new Promise((resolve, reject) =>
           dispatch('cml/users/list', null, { root: true })
@@ -76,8 +53,7 @@ export default {
       })
     },
 
-    reset ({ state, dispatch, commit }) {
-      commit('logout')
+    reset ({ commit }) {
       commit('delete')
       commit('cml/user/reset', null, { root: true })
       commit('cml/users/reset', null, { root: true })
@@ -87,7 +63,7 @@ export default {
       commit('cml/layers/reset', null, { root: true })
     },
 
-    sync ({ state, dispatch, commit }) {
+    sync ({ dispatch }) {
       dispatch('cml/users/list', null, { root: true })
       dispatch('cml/groups/list', null, { root: true })
       dispatch('cml/corpus/list', null, { root: true })
@@ -97,24 +73,6 @@ export default {
     delete (state) {
       state.url = ''
       state.api = null
-    },
-
-    login (state) {
-      state.isLogged = true
-    },
-
-    logout (state) {
-      state.isLogged = false
-      state.isAdmin = false
-      state.isRoot = false
-    },
-
-    adminSet (state) {
-      state.isAdmin = true
-    },
-
-    rootSet (state) {
-      state.isRoot = true
     }
   }
 }
