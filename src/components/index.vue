@@ -59,7 +59,7 @@ export default {
 
   computed: {
     isAdmin () {
-      return this.$store.state.cml.isAdmin
+      return this.$store.state.cml.user.isAdmin
     }
   }
 }

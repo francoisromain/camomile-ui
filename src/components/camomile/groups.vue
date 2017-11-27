@@ -57,8 +57,8 @@ export default {
   computed: {
     ...mapState({
       groups: state => state.cml.groups.list,
-      isLogged: state => state.cml.isLogged,
-      isRoot: state => state.cml.isRoot
+      isLogged: state => state.cml.user.isLogged,
+      isRoot: state => state.cml.user.isRoot
     })
   },
 

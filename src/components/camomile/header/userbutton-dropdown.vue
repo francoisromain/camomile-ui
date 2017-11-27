@@ -30,7 +30,7 @@ export default {
       return this.$store.state.cml.user
     },
     isAdmin () {
-      return this.$store.state.cml.isAdmin
+      return this.$store.state.cml.user.isAdmin
     }
   },
   methods: {

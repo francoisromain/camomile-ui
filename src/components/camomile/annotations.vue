@@ -51,8 +51,8 @@ export default {
   computed: {
     ...mapState({
       annotations: state => state.cml.annotations.list,
-      isLogged: state => state.cml.isLogged,
-      isAdmin: state => state.cml.isAdmin,
+      isLogged: state => state.cml.user.isLogged,
+      isAdmin: state => state.cml.user.isAdmin,
       mediaId: state => state.cml.medias.id,
       layerId: state => state.cml.layers.id,
       annotationId: state => state.cml.annotations.id,

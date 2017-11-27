@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     isLogged () {
-      return this.$store.state.cml.isLogged
+      return this.$store.state.cml.user.isLogged
     }
   }
 }
