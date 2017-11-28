@@ -4,10 +4,22 @@
       "@babel/preset-env",
       {
         "useBuiltIns": "entry",
-        "modules": false,
-        "loose": true
+        "modules": false
       }
     ],
     "@babel/preset-stage-2"
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": { "node": "current" },
+            "useBuiltIns": "entry"
+          }
+        ]
+      ]
+    }
+  }
 }
