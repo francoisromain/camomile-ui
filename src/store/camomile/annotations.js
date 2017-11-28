@@ -17,7 +17,6 @@ export default {
       return api
         .createAnnotation(layerId, mediaId, fragment, data)
         .then(r => {
-          console.log('annotationCreate', r)
           commit('cml/sync/stop', 'annotationsAdd', { root: true })
           const annotation = {
             id: r._id,
@@ -88,7 +87,6 @@ export default {
       return api
         .getAnnotations({ filter: { id_layer: layerId } })
         .then(r => {
-          console.log('annotations', r)
           commit('cml/sync/stop', 'annotationsList', { root: true })
           const annotations = r.map(a => ({
             id: a._id,

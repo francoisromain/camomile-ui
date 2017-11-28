@@ -13,7 +13,7 @@
         <h3 class="pt-s mb-s">Users</h3>
         <ul class="list-inline">
           <li v-for="user in users" :key="user.id" class="tag" :class="{ active: userActive(user.id) }">
-            <button class="btn px-s py-xs h5 pill" @click="userToggle(user)">{{ user.name }}</button>
+            <button class="btn px-m py-xs h5 pill" @click="userToggle(user)">{{ user.name }}</button>
           </li>
         </ul>
       </div>

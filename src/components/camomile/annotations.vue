@@ -14,8 +14,8 @@
           <td><span class="h6 bold bg-neutral color-bg py-xxs px-xs rnd">…{{ annotation.id | stringEnd }}</span></td>
           <td>{{ mediaName(annotation.mediaId) }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupEditConfig, element: annotation })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: annotation })" class="btn px-s py-s my--s h5" v-if="permission === 3">Remove</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: annotation })" class="btn px-s py-s my--s h6" v-if="permission === 3">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: annotation })" class="btn px-s py-s my--s h6" v-if="permission === 3">Remove</button>
           </td>
         </tr>
       </table>

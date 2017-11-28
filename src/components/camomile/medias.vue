@@ -13,8 +13,8 @@
           <td><input type="radio" @change="set" :value="media.id" :checked="media.id === mediaId"></td>
           <td>{{ media.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupEditConfig, element: media })" class="btn px-s py-s my--s h5" v-if="permission === 3">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: media })" class="btn px-s py-s my--s h5" v-if="permission === 3">Remove</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: media })" class="btn px-s py-s my--s h6" v-if="permission === 3">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: media })" class="btn px-s py-s my--s h6" v-if="permission === 3">Remove</button>
           </td>
         </tr>
       </table>

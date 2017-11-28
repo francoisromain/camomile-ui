@@ -13,9 +13,9 @@
           <td><input type="radio" @change="set" :value="corpu.id" :checked="corpu.id === corpuId"></td>
           <td>{{ corpu.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupPermissionsConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Permissions</button>
-            <button @click="popupOpen({ config: popupEditConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="corpu.permission === 3">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: corpu })" class="btn px-s py-s my--s h5" v-if="isAdmin && corpu.permission === 3">Remove</button>
+            <button @click="popupOpen({ config: popupPermissionsConfig, element: corpu })" class="btn px-s py-s my--s h6" v-if="corpu.permission === 3">Permissions</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: corpu })" class="btn px-s py-s my--s h6" v-if="corpu.permission === 3">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: corpu })" class="btn px-s py-s my--s h6" v-if="isAdmin && corpu.permission === 3">Remove</button>
           </td>
         </tr>
       </table>

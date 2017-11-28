@@ -11,12 +11,9 @@ export default {
   actions: {
     add ({ commit, dispatch, state, rootState }, group) {
       commit('cml/sync/start', 'groupsAdd', { root: true })
-
-      console.log('groupapa', group)
       return api
         .createGroup(group.name, group.description)
         .then(r => {
-          console.log('grouppop', r)
           commit('cml/sync/stop', 'groupsAdd', { root: true })
           const group = groupFormat(r)
           commit('add', group)

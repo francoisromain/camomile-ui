@@ -13,9 +13,9 @@
           <td><input type="radio" @change="set" :value="layer.id" :checked="layer.id === layerId"></td>
           <td>{{ layer.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupPermissionsConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Permissions</button>
-            <button @click="popupOpen({ config: popupEditConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: layer })" class="btn px-s py-s my--s h5" v-if="layer.permission === 3">Remove</button>
+            <button @click="popupOpen({ config: popupPermissionsConfig, element: layer })" class="btn px-s py-s my--s h6" v-if="layer.permission === 3">Permissions</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: layer })" class="btn px-s py-s my--s h6" v-if="layer.permission === 3">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: layer })" class="btn px-s py-s my--s h6" v-if="layer.permission === 3">Remove</button>
           </td>
         </tr>
       </table>

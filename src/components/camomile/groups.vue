@@ -13,9 +13,9 @@
           <td>{{ group.name }}</td>
           <td>{{ group.userIds.length }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupUsersConfig, element: group })" class="btn px-s py-s my--s h5">Users</button>
-            <button @click="popupOpen({ config: popupEditConfig, element: group })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: group })" class="btn px-s py-s my--s h5" v-if="isRoot">Remove</button>
+            <button @click="popupOpen({ config: popupUsersConfig, element: group })" class="btn px-s py-s my--s h6">Users</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: group })" class="btn px-s py-s my--s h6">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: group })" class="btn px-s py-s my--s h6" v-if="isRoot">Remove</button>
           </td>
         </tr>
       </table>

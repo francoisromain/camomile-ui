@@ -12,10 +12,10 @@ dd {
   /* overflow: auto; */
 }
 
-ul ul,
-ul ol,
-ol ul,
-ol ol {
+ul > li > ul,
+ul > li > ol,
+ol > li > ul,
+ol > li > ol {
   margin-left: var(--unit-l);
 }
 
@@ -40,10 +40,16 @@ li {
   list-style: none;
   margin-bottom: calc(var(--unit) - var(--unit-xs));
 
-  & > li {
+  & > li:not(.right) {
     margin-bottom: var(--unit-xs);
     margin-right: var(--unit-xs);
     float: left;
+  }
+
+  & > li.right {
+    margin-bottom: var(--unit-xs);
+    margin-left: var(--unit-xs);
+    float: right;
   }
 }
 

@@ -12,10 +12,10 @@
         <ul class="list-sans">
           <li v-for="group in groups" :key="group.id">
             <div class="blobs">
-              <div class="blob-1-3 mb-xs">
+              <div class="blob-1-2 mb-s">
                 {{ group.name }}
               </div>
-              <div class="blob-2-3 mb-xs">
+              <div class="blob-1-2 mb-s">
                 <permissions-edit :resource="permissionsConfig" :element="{ id: group.id, type: 'group' }" />
               </div>
             </div>
@@ -27,10 +27,10 @@
         <ul class="list-sans">
           <li v-for="user in users" :key="user.id">
             <div class="blobs">
-              <div class="blob-1-3 mb-xs">
+              <div class="blob-1-2 mb-s">
                 {{ user.name }}
               </div>
-              <div class="blob-2-3 mb-xs">{{ typeof resource.permissions.users[user.id] }}
+              <div class="blob-1-2 mb-s">
                 <permissions-edit :resource="permissionsConfig" :element="{ id: user.id, type: 'user' }" />
               </div>
             </div>

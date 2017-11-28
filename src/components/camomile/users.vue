@@ -13,9 +13,9 @@
           <td>{{ user.name }}</td>
           <td>{{ user.role }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupGroupsConfig, element: user })" class="btn px-s py-s my--s h5">Groups</button>
-            <button @click="popupOpen({ config: popupEditConfig, element: user })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: user })" class="btn px-s py-s my--s h5" v-if="user.id !== userId">Remove</button>
+            <button @click="popupOpen({ config: popupGroupsConfig, element: user })" class="btn px-s py-s my--s h6">Groups</button>
+            <button @click="popupOpen({ config: popupEditConfig, element: user })" class="btn px-s py-s my--s h6">Edit</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: user })" class="btn px-s py-s my--s h6" v-if="user.id !== userId">Remove</button>
           </td>
         </tr>
       </table>
