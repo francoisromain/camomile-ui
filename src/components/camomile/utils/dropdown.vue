@@ -1,19 +1,22 @@
 <template>
-  <div @click.self="close" class="absolute full bg-alpha">
-    <div class="container relative">
-      <component :is="config.component"></component>
+  <transition name="transition-top">
+    <div @click.self="close" class="absolute full bg-alpha" v-if="dropdown.visible" >
+      <div class="container relative">
+        <component :is="dropdown.config.component"></component>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
-  name: 'camomile-dropdown-user',
+  name: 'camomile-utils-dropdown',
   computed: {
-    config () {
-      return this.$store.state.cml.dropdown.config
-    }
+    ...mapState({
+      dropdown: state => state.cml.dropdown,
+    })
   },
   methods: {
     close () {

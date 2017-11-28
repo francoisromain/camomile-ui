@@ -25,9 +25,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import popupEdit from './utils/popup-edit.vue'
-import popupRemove from './utils/popup-remove.vue'
-import popupUsers from './groups/popup-users.vue'
+import popupEdit from './popup/edit.vue'
+import popupRemove from './popup/remove.vue'
+import popupUsers from './popup/users.vue'
 
 export default {
   name: 'camomile-groups',

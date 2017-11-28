@@ -1,21 +1,21 @@
 <template>
-  <login v-if="!isLogged" />
 </template>
 
 <script>
-import login from './login/index.vue'
+import popupLogin from './popup/login.vue'
 
 export default {
   name: 'camomile-login',
 
-  components: {
-    login
-  },
-
-  computed: {
-    isLogged () {
-      return this.$store.state.cml.user.isLogged
-    }
+  created () {
+    this.$store.commit('cml/popup/open', {
+      config: {
+        title: 'Login',
+        closeBtn: false,
+        component: popupLogin
+      },
+      element: {}
+    })
   }
 }
 </script>

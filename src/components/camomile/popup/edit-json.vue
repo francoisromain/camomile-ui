@@ -13,7 +13,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'camomile-popup-edit',
+  name: 'camomile-popup-edit-json',
   props: {
     name: String,
     title: String

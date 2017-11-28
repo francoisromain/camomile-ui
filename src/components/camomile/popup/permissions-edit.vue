@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'camomile-permissions',
+  name: 'camomile-popup-permissions-edit',
   props: {
     element: Object,
     config: Object

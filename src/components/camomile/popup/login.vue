@@ -29,7 +29,7 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: 'camomile-login',
+  name: 'camomile-login-popup',
   computed: {
     ...mapState({
       config: state => state.cml.config

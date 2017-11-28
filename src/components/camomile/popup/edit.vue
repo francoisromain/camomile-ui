@@ -53,7 +53,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import objectField from './popup-edit-json.vue'
+import objectField from './edit-json.vue'
 
 export default {
   name: 'camomile-popup-edit',

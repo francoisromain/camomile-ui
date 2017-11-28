@@ -42,11 +42,11 @@
 </template>
 
 <script>
-import permissions from './popup-permissions-edit.vue'
+import permissions from './permissions-edit.vue'
 import { mapState } from 'vuex'
 
 export default {
-  name: 'camomile-popup-user-edit',
+  name: 'camomile-permissions',
   components: {
     permissions
   },

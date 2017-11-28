@@ -53,7 +53,6 @@
     "jest": "^21.2.1",
     "jest-vue-preprocessor": "^1.3.1",
     "json-loader": "^0.5.7",
-    "normalize.css": "^7.0.0",
     "object-fit-images": "^3.2.3",
     "pixrem": "^4.0.1",
     "pleeease-filters": "^4.0.0",
@@ -120,7 +119,10 @@
     "env": {
       "browser": true
     },
-    "plugins": ["html", "compat"],
+    "plugins": [
+      "html",
+      "compat"
+    ],
     "rules": {
       "compat/compat": 2,
       "arrow-parens": 0,
@@ -128,25 +130,40 @@
     }
   },
   "stylelint": {
-    "processors": ["stylelint-processor-html"],
+    "processors": [
+      "stylelint-processor-html"
+    ],
     "extends": "stylelint-config-standard",
     "rules": {
       "property-no-unknown": [
         true,
         {
-          "ignoreProperties": ["typescale", "gf", "/button-/"]
+          "ignoreProperties": [
+            "typescale",
+            "gf",
+            "/button-/"
+          ]
         }
       ]
     },
-    "ignoreFiles": ["./dist/**/*"]
+    "ignoreFiles": [
+      "./dist/**/*"
+    ]
   },
-  "browserslist": ["chrome >= 60", "firefox >= 57", "iOS >= 10"],
+  "browserslist": [
+    "chrome >= 60",
+    "firefox >= 57",
+    "iOS >= 10"
+  ],
   "jest": {
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",
       "^.+\\.(css)$": "<rootDir>/test/mocks/css.js"
     },
-    "moduleFileExtensions": ["js", "vue"],
+    "moduleFileExtensions": [
+      "js",
+      "vue"
+    ],
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"

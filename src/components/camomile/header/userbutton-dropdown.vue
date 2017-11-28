@@ -11,10 +11,10 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex'
-import popupEdit from '../utils/popup-edit.vue'
+import popupEdit from '../popup/edit.vue'
 
 export default {
-  name: 'camomile-userbutton-dropdown',
+  name: 'camomile-header-userbutton-dropdown',
   data () {
     return {
       popupEditConfig: {

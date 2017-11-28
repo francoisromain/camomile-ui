@@ -1,16 +1,18 @@
 <template>
-  <div>
-    <div @click="close" class="absolute full bg-alpha">
-    </div>
-    <div class="pophover absolute full bg-alt p-l pb-s">
-      <div class="flex flex-start">
-        <h2>{{ config.title }}</h2>
-        <button @click="close" v-if="config.closeBtn" class="flex-right btn p-s mt--m"><i class="icon-24 icon-24-close"></i></button>
+  <transition name="transition-top">
+    <div v-if="popup.visible">
+      <div @click="close" class="absolute full bg-alpha">
       </div>
-      <hr class="border-bg">
-      <component :is="config.component"></component>
+      <div class="pophover absolute full bg-alt p-l pb-s">
+        <div class="flex flex-start">
+          <h2>{{ config.title }}</h2>
+          <button @click="close" v-if="config.closeBtn" class="flex-right btn p-s mt--m"><i class="icon-24 icon-24-close"></i></button>
+        </div>
+        <hr class="border-bg">
+        <component :is="config.component"></component>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -20,7 +22,8 @@ export default {
   name: 'camomile-popup',
   computed: {
     ...mapState({
-      config: state => state.cml.popup.config
+      config: state => state.cml.popup.config,
+      popup: state => state.cml.popup
     })
   },
   methods: {

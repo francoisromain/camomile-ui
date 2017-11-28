@@ -30,7 +30,7 @@ export default {
           commit('cml/sync/stop', 'userLogin', { root: true })
           const error = e.response ? e.response.body.error : 'Network error'
           dispatch('cml/messages/error', error, { root: true })
-          dispatch('reset', null, { root: true })
+          dispatch('cml/reset', null, { root: true })
 
           throw error
         })
@@ -51,7 +51,7 @@ export default {
           commit('cml/sync/stop', 'userSet', { root: true })
           const error = e.response ? e.response.body.error : 'Network error'
           dispatch('cml/messages/error', error, { root: true })
-          dispatch('reset', null, { root: true })
+          dispatch('cml/reset', null, { root: true })
 
           throw error
         })
@@ -63,7 +63,7 @@ export default {
         .logout()
         .then(r => {
           commit('cml/sync/stop', 'userLogout', { root: true })
-          dispatch('reset', null, { root: true })
+          dispatch('cml/reset', null, { root: true })
           commit('cml/popup/close', null, { root: true })
           commit('cml/dropdown/close', null, { root: true })
 
@@ -73,7 +73,7 @@ export default {
           commit('cml/sync/stop', 'userLogout', { root: true })
           const error = e.response ? e.response.body.error : 'Network error'
           dispatch('cml/messages/error', error, { root: true })
-          dispatch('reset', null, { root: true })
+          dispatch('cml/reset', null, { root: true })
 
           throw error
         })

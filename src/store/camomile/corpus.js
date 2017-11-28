@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { api } from '../../config'
 
 export default {
@@ -317,7 +318,7 @@ export default {
 
     groupAdd (state, groupId) {
       state.list.forEach(corpu => {
-        corpu.permissions.groups = { ...corpu.permissions.groups, [groupId]: 0 }
+        Vue.set(corpu.permissions.groups, groupId, 0)
       })
     },
 
@@ -329,7 +330,7 @@ export default {
 
     userAdd (state, userId) {
       state.list.forEach(corpu => {
-        corpu.permissions.users = { ...corpu.permissions.users, [userId]: 0 }
+        Vue.set(corpu.permissions.users, userId, 0)
       })
     },
 

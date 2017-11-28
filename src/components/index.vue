@@ -2,7 +2,9 @@
   <div class="full-y flex flex-direction-column">
     <cml-header />
     <div class="relative page">
-      <cml-utils />
+      <cml-popup />
+      <cml-messages />
+      <cml-dropdown />
       <div class="container pt">
         <div class="blobs" v-if="isAdmin">
           <cml-users class="blob-1-2 p border"/>
@@ -18,15 +20,17 @@
       <debug />
     </div>
     <viewport />
-    <cml-login />
+    <cml-login v-if="!isLogged" />
   </div>
 </template>
 
 <script>
 import store from '../store'
-import debug from './camomile/debug.vue'
-import viewport from './camomile/viewport.vue'
-import cmlUtils from './camomile/utils/index.vue'
+import debug from './camomile/utils/debug.vue'
+import viewport from './camomile/utils/viewport.vue'
+import cmlDropdown from './camomile/utils/dropdown.vue'
+import cmlPopup from './camomile/popup/index.vue'
+import cmlMessages from './camomile/utils/messages.vue'
 import cmlHeader from './camomile/header/index.vue'
 import cmlLogin from './camomile/login.vue'
 
@@ -41,14 +45,16 @@ import cmlAnnotations from './camomile/annotations.vue'
 export default {
   store,
 
-  name: 'camomile-ui',
+  name: 'camomile',
 
   components: {
     debug,
     viewport,
     cmlHeader,
     cmlLogin,
-    cmlUtils,
+    cmlPopup,
+    cmlMessages,
+    cmlDropdown,
     cmlUsers,
     cmlGroups,
     cmlCorpus,
@@ -60,6 +66,9 @@ export default {
   computed: {
     isAdmin () {
       return this.$store.state.cml.user.isAdmin
+    },
+    isLogged () {
+      return this.$store.state.cml.user.isLogged
     }
   }
 }

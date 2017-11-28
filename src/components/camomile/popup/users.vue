@@ -25,7 +25,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'camomile-popup-user-edit',
+  name: 'camomile-popup-users',
   computed: {
     users () {
       return this.$store.state.cml.users.list

@@ -12,7 +12,7 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: 'camomile-messages',
+  name: 'camomile-utils-messages',
   data () {
     return {
     }

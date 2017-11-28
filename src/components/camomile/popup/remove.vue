@@ -30,7 +30,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'camomile-popup-element-remove',
+  name: 'camomile-popup-remove',
   computed: {
     ...mapState({
       element: state => state.cml.popup.element,

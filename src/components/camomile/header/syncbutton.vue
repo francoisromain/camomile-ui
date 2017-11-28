@@ -6,7 +6,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'camomile-sync',
+  name: 'camomile-header-syncbutton',
   computed: {
     active () {
       return this.$store.getters['cml/sync/active']

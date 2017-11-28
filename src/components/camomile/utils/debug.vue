@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'debug',
+  name: 'camomile-utils-debug',
 
   data () {
     return {

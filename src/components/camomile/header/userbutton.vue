@@ -7,7 +7,7 @@ import { mapState } from 'vuex'
 import userbuttonDropdown from './userbutton-dropdown.vue'
 
 export default {
-  name: 'camomile-userbutton',
+  name: 'camomile-header-userbutton',
   computed: {
     ...mapState({
       user: state => state.cml.user,

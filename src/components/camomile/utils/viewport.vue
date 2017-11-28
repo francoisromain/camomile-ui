@@ -1,12 +1,11 @@
-<<template>
-  
+<template>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: 'viewport',
+  name: 'camomile-utils-viewport',
 
   methods: {
     ...mapActions({
@@ -21,10 +20,10 @@ export default {
 }
 </script>
 <style scoped>
-@import '../../css/settings.css';
-@media (--viewport-mobile) {
+@import '../../../css/settings.css';
+@media (--viewport-desktop) {
   .home {
-    color: var(--color-highlight);
+    background-color: var(--color-highlight);
   }
 }
 </style>

@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'camomile-infos',
+  name: 'camomile-header-infos',
   computed: {
     url () {
       return this.$store.state.cml.config.url

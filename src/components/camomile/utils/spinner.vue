@@ -5,3 +5,8 @@
     <div class="bounce3"></div>
   </div>
 </template>
+<script>
+export default {
+  name: 'camomile-utils-spinner'
+}
+</script>
