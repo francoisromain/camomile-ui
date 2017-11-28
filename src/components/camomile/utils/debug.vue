@@ -32,6 +32,7 @@ export default {
   created () {
     document.addEventListener('keydown', this.keydown)
   },
+
   beforeDestroy () {
     document.removeEventListener('keydown', this.keydown)
   }

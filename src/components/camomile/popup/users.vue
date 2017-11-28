@@ -22,10 +22,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   name: 'camomile-popup-users',
+
   computed: {
     users () {
       return this.$store.state.cml.users.list
@@ -34,6 +33,7 @@ export default {
       return this.$store.state.cml.groups.list.find(group => group.id === this.$store.state.cml.popup.element.id)
     }
   },
+
   methods: {
     userToggle (user) {
       if (this.userActive(user.id)) {
@@ -42,6 +42,7 @@ export default {
         this.$store.dispatch('cml/groups/userAdd', { user: user, group: this.group })
       }
     },
+
     userActive (userId) {
       return this.group.userIds.indexOf(userId) > -1
     }

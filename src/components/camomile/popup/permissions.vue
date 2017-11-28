@@ -16,7 +16,7 @@
                 {{ group.name }}
               </div>
               <div class="blob-2-3 mb-xs">
-                <permissions :config="groupPermissionsConfig" :element="group" />
+                <permissions-edit :resource="permissionsConfig" :element="{ id: group.id, type: 'group' }" />
               </div>
             </div>
           </li>
@@ -30,8 +30,8 @@
               <div class="blob-1-3 mb-xs">
                 {{ user.name }}
               </div>
-              <div class="blob-2-3 mb-xs">
-                <permissions :config="userPermissionsConfig" :element="user" />
+              <div class="blob-2-3 mb-xs">{{ typeof resource.permissions.users[user.id] }}
+                <permissions-edit :resource="permissionsConfig" :element="{ id: user.id, type: 'user' }" />
               </div>
             </div>
           </li>
@@ -42,14 +42,16 @@
 </template>
 
 <script>
-import permissions from './permissions-edit.vue'
+import permissionsEdit from './permissions-edit.vue'
 import { mapState } from 'vuex'
 
 export default {
   name: 'camomile-permissions',
+
   components: {
-    permissions
+    permissionsEdit
   },
+
   computed: {
     ...mapState({
       resource: state => state.cml[state.cml.popup.config.type].list.find(e => e.id === state.cml.popup.element.id),
@@ -57,22 +59,11 @@ export default {
       groups: state => state.cml.groups.list,
       type: state => state.cml.popup.config.type
     }),
-    groupPermissionsConfig () {
+    permissionsConfig () {
       return {
-        resource: this.resource,
-        resourceType: this.type.slice(0, -1),
-        permissionSetAction: `cml/${this.type}/groupPermissionSet`,
-        permissionRemoveAction: `cml/${this.type}/groupPermissionRemove`,
-        elementType: 'group'
-      }
-    },
-    userPermissionsConfig () {
-      return {
-        resource: this.resource,
-        resourceType: this.type.slice(0, -1),
-        permissionSetAction: `cml/${this.type}/userPermissionSet`,
-        permissionRemoveAction: `cml/${this.type}/userPermissionRemove`,
-        elementType: 'user'
+        id: this.resource.id,
+        type: this.type.slice(0, -1),
+        permissions: this.resource.permissions.users
       }
     }
   }

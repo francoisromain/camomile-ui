@@ -9,18 +9,13 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-
 export default {
   name: 'camomile-utils-messages',
-  data () {
-    return {
-    }
-  },
+
   computed: {
-    ...mapState({
-      messages: state => state.cml.messages.list
-    })
+    messages () {
+      return this.$store.state.cml.messages.list
+    }
   }
 }
 </script>

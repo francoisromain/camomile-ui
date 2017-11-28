@@ -31,13 +31,14 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'camomile-popup-remove',
+
   computed: {
     ...mapState({
       element: state => state.cml.popup.element,
-      id: state => state.cml.popup.config.id,
       type: state => state.cml.popup.config.type
     })
   },
+
   methods: {
     remove () {
       this.$store.dispatch(`cml/${this.type}/remove`, this.element)

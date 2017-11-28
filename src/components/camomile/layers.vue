@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLogged">
+  <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Layers</h2>
       <button @click="popupOpen({ config: { ...popupEditConfig, title: 'Add layer' }, element: { id: null, corpuId, description: {}, metadataType: {}, fragmentType: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
@@ -58,8 +58,6 @@ export default {
   computed: {
     ...mapState({
       layers: state => state.cml.layers.list,
-      isLogged: state => state.cml.user.isLogged,
-      isAdmin: state => state.cml.user.isAdmin,
       corpuId: state => state.cml.corpus.id,
       corpus: state => state.cml.corpus.list,
       layerId: state => state.cml.layers.id

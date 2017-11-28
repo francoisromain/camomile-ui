@@ -15,7 +15,7 @@
           <td class="text-right">
             <button @click="popupOpen({ config: popupGroupsConfig, element: user })" class="btn px-s py-s my--s h5">Groups</button>
             <button @click="popupOpen({ config: popupEditConfig, element: user })" class="btn px-s py-s my--s h5">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: user })" class="btn px-s py-s my--s h5" v-if="user.id !== adminId">Remove</button>
+            <button @click="popupOpen({ config: popupRemoveConfig, element: user })" class="btn px-s py-s my--s h5" v-if="user.id !== userId">Remove</button>
           </td>
         </tr>
       </table>
@@ -57,16 +57,13 @@ export default {
   computed: {
     ...mapState({
       users: state => state.cml.users.list,
-      adminId: state => state.cml.user.id
+      userId: state => state.cml.user.id
     })
   },
 
   methods: {
     popupOpen ({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
-    },
-    refresh () {
-      return this.$store.dispatch('cml/users/list')
     }
   }
 }

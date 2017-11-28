@@ -15,20 +15,35 @@
 <script>
 export default {
   name: 'camomile-popup-permissions-edit',
+
   props: {
     element: Object,
-    config: Object
+    resource: Object
   },
+
+  computed: {
+    permissions () {
+      return this.$store.state.cml[`${this.resource.type}s`].list.find(r => r.id === this.resource.id).permissions[`${this.element.type}s`]
+    }
+  },
+
   methods: {
     toggle (permission) {
       if (this.isActive(permission)) {
-        this.$store.dispatch(this.config.permissionRemoveAction, { [this.config.resourceType]: this.config.resource, [this.config.elementType]: this.element })
+        this.$store.dispatch(`cml/${this.resource.type}s/${this.element.type}PermissionRemove`, {
+          [`${this.resource.type}Id`]: this.resource.id,
+          [`${this.element.type}Id`]: this.element.id
+        })
       } else {
-        this.$store.dispatch(this.config.permissionSetAction, { [this.config.resourceType]: this.config.resource, [this.config.elementType]: this.element, permission: permission })
+        this.$store.dispatch(`cml/${this.resource.type}s/${this.element.type}PermissionSet`, {
+          [`${this.resource.type}Id`]: this.resource.id,
+          [`${this.element.type}Id`]: this.element.id,
+          permission
+        })
       }
     },
     isActive (permission) {
-      return this.config.resource.permissions && this.config.resource.permissions[this.config.elementType + 's'] ? this.config.resource.permissions[this.config.elementType + 's'][this.element.id] === permission : 0
+      return this.permissions[this.element.id] === permission
     }
   }
 }

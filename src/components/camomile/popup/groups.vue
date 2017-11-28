@@ -21,10 +21,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   name: 'camomile-popup-groups',
+
   computed: {
     groups () {
       return this.$store.state.cml.groups.list
@@ -33,6 +32,7 @@ export default {
       return this.$store.state.cml.users.list.find(user => user.id === this.$store.state.cml.popup.element.id)
     }
   },
+
   methods: {
     groupToggle (group) {
       if (this.groupActive(group.id)) {

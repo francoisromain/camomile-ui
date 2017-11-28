@@ -10,17 +10,17 @@
           <cml-users class="blob-1-2 p border"/>
           <cml-groups class="blob-1-2 p border"/>
         </div>
-        <div class="blobs">
+        <div class="blobs" v-if="isLogged">
           <cml-corpus class="blob-1-2 p border" />
           <cml-medias class="blob-1-2 p border" />
           <cml-layers class="blob-1-2 p border" />
           <cml-annotations class="blob-1-2 p border" />
         </div>
       </div> 
-      <debug />
     </div>
-    <viewport />
     <cml-login v-if="!isLogged" />
+    <viewport />
+    <debug />
   </div>
 </template>
 

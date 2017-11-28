@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex'
 import popupEdit from '../popup/edit.vue'
 
 export default {
   name: 'camomile-header-userbutton-dropdown',
+
   data () {
     return {
       popupEditConfig: {
@@ -25,6 +25,7 @@ export default {
       }
     }
   },
+
   computed: {
     user () {
       return this.$store.state.cml.user
@@ -33,6 +34,7 @@ export default {
       return this.$store.state.cml.user.isAdmin
     }
   },
+
   methods: {
     close () {
       this.$store.commit('cml/dropdown/close')

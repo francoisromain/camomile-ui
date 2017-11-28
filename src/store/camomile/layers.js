@@ -108,7 +108,6 @@ export default {
       return api
         .getLayers({ filter: { id_corpus: corpuId } })
         .then(r => {
-          console.log('getLayers, id_corpus: ', corpuId, r)
           commit('cml/sync/stop', 'layersList', { root: true })
           const layers = r.map(l => ({
             name: l.name,
@@ -142,25 +141,23 @@ export default {
 
     groupPermissionSet (
       { commit, dispatch, rootState },
-      { layer, group, permission }
+      { layerId, groupId, permission }
     ) {
       commit('cml/sync/start', 'layersGroupPermissionSet', { root: true })
-      console.log('groupPermissionSet', layer, group, permission)
       return api
-        .setLayerPermissionsForGroup(layer.id, group.id, permission)
+        .setLayerPermissionsForGroup(layerId, groupId, permission)
         .then(p => {
-          console.log('groupPermissionSet p', p)
           commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true })
           commit('groupPermissionsUpdate', {
-            layer,
-            id: group.id,
-            permission: (p.groups && p.groups[group.id]) || 0
+            layerId,
+            groupId,
+            permission: (p.groups && p.groups[groupId]) || 0
           })
           dispatch('cml/messages/success', 'Group permissions updated', {
             root: true
           })
 
-          if (rootState.cml.user.groupIds.indexOf(group.id) !== -1) {
+          if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
             dispatch('currentUserIsAdminTest', p)
           }
 
@@ -175,24 +172,23 @@ export default {
         })
     },
 
-    groupPermissionRemove ({ commit, dispatch, rootState }, { layer, group }) {
+    groupPermissionRemove (
+      { commit, dispatch, rootState },
+      { layerId, groupId }
+    ) {
       commit('cml/sync/start', 'layersGroupPermissionRemove', { root: true })
       return api
-        .removeLayerPermissionsForGroup(layer.id, group.id)
+        .removeLayerPermissionsForGroup(layerId, groupId)
         .then(p => {
           commit('cml/sync/stop', 'layersGroupPermissionRemove', {
             root: true
           })
-          commit('groupPermissionsUpdate', {
-            layer: layer,
-            id: group.id,
-            permission: null
-          })
+          commit('groupPermissionsUpdate', { layerId, groupId, permission: 0 })
           dispatch('cml/messages/success', 'Group permissions updated', {
             root: true
           })
 
-          if (rootState.cml.user.groupIds.indexOf(group.id) !== -1) {
+          if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
             dispatch('currentUserIsAdminTest', p)
           }
 
@@ -211,22 +207,22 @@ export default {
 
     userPermissionSet (
       { commit, dispatch, rootState },
-      { layer, user, permission }
+      { layerId, userId, permission }
     ) {
       commit('cml/sync/start', 'layersUserPermissionSet', { root: true })
       return api
-        .setLayerPermissionsForUser(layer.id, user.id, permission)
+        .setLayerPermissionsForUser(layerId, userId, permission)
         .then(p => {
           commit('cml/sync/stop', 'layersUserPermissionSet', { root: true })
           commit('userPermissionsUpdate', {
-            layer: layer,
-            id: user.id,
-            permission: (p.users && p.users[user.id]) || 0
+            layerId,
+            userId,
+            permission: (p.users && p.users[userId]) || 0
           })
           dispatch('cml/messages/success', 'User permissions updated', {
             root: true
           })
-          if (user.id === rootState.cml.user.id) {
+          if (userId === rootState.cml.user.id) {
             dispatch('currentUserIsAdminTest', p)
           }
 
@@ -241,23 +237,23 @@ export default {
         })
     },
 
-    userPermissionRemove ({ commit, dispatch, rootState }, { layer, user }) {
+    userPermissionRemove ({ commit, dispatch, rootState }, { layerId, userId }) {
       commit('cml/sync/start', 'layersUserPermissionRemove', { root: true })
       return api
-        .removeLayerPermissionsForUser(layer.id, user.id)
+        .removeLayerPermissionsForUser(layerId, userId)
         .then(p => {
           commit('cml/sync/stop', 'layersUserPermissionRemove', {
             root: true
           })
           commit('userPermissionsUpdate', {
-            layer: layer,
-            id: user.id,
-            permission: null
+            layerId,
+            userId,
+            permission: 0
           })
           dispatch('cml/messages/success', 'User permissions updated', {
             root: true
           })
-          if (user.id === rootState.cml.user.id) {
+          if (userId === rootState.cml.user.id) {
             dispatch('currentUserIsAdminTest', p)
           }
 
@@ -333,12 +329,14 @@ export default {
       state.id = id
     },
 
-    groupPermissionsUpdate (state, { layer, id, permission }) {
-      layer.permissions.groups[id] = permission
+    groupPermissionsUpdate (state, { layerId, groupId, permission }) {
+      const layer = state.list.find(c => c.id === layerId)
+      layer.permissions.groups[groupId] = permission
     },
 
-    userPermissionsUpdate (state, { layer, id, permission }) {
-      layer.permissions.users[id] = permission
+    userPermissionsUpdate (state, { layerId, userId, permission }) {
+      const layer = state.list.find(c => c.id === layerId)
+      layer.permissions.users[userId] = permission
     },
 
     layerPermissionsUpdate (state, { layer, permission }) {

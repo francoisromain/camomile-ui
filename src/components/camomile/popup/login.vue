@@ -26,31 +26,32 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-
 export default {
   name: 'camomile-login-popup',
+
   computed: {
-    ...mapState({
-      config: state => state.cml.config
-    })
+    config () {
+      return this.$store.state.cml.config
+    }
   },
+
   methods: {
-    ...mapActions({
-      login: 'cml/user/login'
-    }),
+    login (config) {
+      return this.$store.dispatch('cml/user/login', config)
+    },
     keyup (e) {
       if ((e.which || e.keyCode) === 13) {
         this.login(this.config)
       }
     }
   },
+
   created () {
     document.addEventListener('keyup', this.keyup)
   },
+
   beforeDestroy () {
     document.removeEventListener('keyup', this.keyup)
   }
-
 }
 </script>

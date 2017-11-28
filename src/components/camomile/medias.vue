@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLogged">
+  <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Media</h2>
       <button @click="popupOpen({ config: {...popupEditConfig, title: 'Add medium' }, element: { id: null, corpuId, description: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
@@ -50,14 +50,12 @@ export default {
   computed: {
     ...mapState({
       medias: state => state.cml.medias.list,
-      isLogged: state => state.cml.user.isLogged,
-      isAdmin: state => state.cml.user.isAdmin,
       corpus: state => state.cml.corpus.list,
       corpuId: state => state.cml.corpus.id,
       mediaId: state => state.cml.medias.id
     }),
     permission () {
-      const corpu = this.corpus.find(corpu => corpu.id === this.corpuId)
+      const corpu = this.corpus.find(c => c.id === this.corpuId)
       return corpu ? corpu.permission : 0
     }
   },

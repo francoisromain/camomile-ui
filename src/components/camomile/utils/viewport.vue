@@ -2,15 +2,13 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-
 export default {
   name: 'camomile-utils-viewport',
 
   methods: {
-    ...mapActions({
-      resize: 'cml/viewport/set'
-    })
+    resize () {
+      return this.$store.dispatch('cml/viewport/set')
+    }
   },
 
   mounted () {

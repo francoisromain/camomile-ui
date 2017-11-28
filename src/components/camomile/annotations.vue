@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLogged">
+  <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Annotations</h2>
       <button @click="popupOpen({ config: { ...popupEditConfig, title: 'Add annotation' }, element: { id: null, layerId, mediaId, fragment: {}, metadata: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
@@ -51,8 +51,6 @@ export default {
   computed: {
     ...mapState({
       annotations: state => state.cml.annotations.list,
-      isLogged: state => state.cml.user.isLogged,
-      isAdmin: state => state.cml.user.isAdmin,
       mediaId: state => state.cml.medias.id,
       layerId: state => state.cml.layers.id,
       annotationId: state => state.cml.annotations.id,

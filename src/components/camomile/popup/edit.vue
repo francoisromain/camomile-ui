@@ -57,25 +57,28 @@ import objectField from './edit-json.vue'
 
 export default {
   name: 'camomile-popup-edit',
+
   components: {
     objectField
   },
+
   data () {
     return {
       element: this.$store.state.cml.popup.element
     }
   },
+
   computed: {
     ...mapState({
       type: state => state.cml.popup.config.type,
-      rolesPermission: state => state.cml.user.id !== state.cml.popup.config.id,
+      rolesPermission: state => state.cml.user.id !== state.cml.popup.element.id,
       roles: state => state.cml.config.roles
     })
   },
+
   methods: {
     save () {
       if (this.element.id) {
-        console.log('element', this.element)
         this.$store.dispatch(`cml/${this.type}/update`, this.element)
       } else {
         this.$store.dispatch(`cml/${this.type}/add`, this.element)
@@ -88,14 +91,17 @@ export default {
       }
     }
   },
+
   created () {
     document.addEventListener('keyup', this.keyup)
   },
+
   mounted () {
     if (this.type !== 'annotations') {
       this.$refs.name.focus()
     }
   },
+
   beforeDestroy () {
     document.removeEventListener('keyup', this.keyup)
   }

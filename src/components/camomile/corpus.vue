@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLogged">
+  <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Corpora</h2>
       <button @click="popupOpen({ config: {...popupEditConfig, title: 'Add corpus'}, element: { id: null, description: {} } })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
@@ -59,7 +59,6 @@ export default {
     ...mapState({
       corpus: state => state.cml.corpus.list,
       corpuId: state => state.cml.corpus.id,
-      isLogged: state => state.cml.user.isLogged,
       isAdmin: state => state.cml.user.isAdmin
     })
   },

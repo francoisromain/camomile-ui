@@ -5,6 +5,7 @@
 <script>
 export default {
   name: 'camomile-header-title',
+
   computed: {
     title () {
       return this.$store.state.cml.config.title

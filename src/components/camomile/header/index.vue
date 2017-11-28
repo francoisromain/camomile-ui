@@ -32,12 +32,14 @@ import cmlSyncbutton from './syncbutton.vue'
 
 export default {
   name: 'camomile-header',
+
   components: {
     cmlTitle,
     cmlInfos,
     cmlUserbutton,
     cmlSyncbutton
   },
+
   computed: {
     isLogged () {
       return this.$store.state.cml.user.isLogged

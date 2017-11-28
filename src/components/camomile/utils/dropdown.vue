@@ -9,15 +9,15 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   name: 'camomile-utils-dropdown',
+
   computed: {
-    ...mapState({
-      dropdown: state => state.cml.dropdown,
-    })
+    dropdown () {
+      return this.$store.state.cml.dropdown
+    }
   },
+
   methods: {
     close () {
       this.$store.commit('cml/dropdown/close')
