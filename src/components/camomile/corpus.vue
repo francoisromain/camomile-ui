@@ -2,7 +2,7 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Corpora</h2>
-      <button @click="popupOpen({ config: {...popupEditConfig, title: 'Add corpus'}, element: { id: null, description: {} } })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ config: popupAddConfig, element: { id: null, description: {} } })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -38,6 +38,12 @@ export default {
         type: 'corpus',
         closeBtn: true,
         title: 'Edit corpus',
+        component: popupEdit
+      },
+      popupAddConfig: {
+        type: 'corpus',
+        closeBtn: true,
+        title: 'Add corpus',
         component: popupEdit
       },
       popupRemoveConfig: {

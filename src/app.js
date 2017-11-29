@@ -1,13 +1,12 @@
 import './css/styles.css'
-import 'babel-polyfill'
 import Vue from 'vue'
 
-import Index from './components/index.vue'
+import app from './components/app.vue'
 
-// const App = Vue.extend(Index)
+// const App = Vue.extend(app)
 // new App().$mount('#app')
 
 new Vue({
-  template: '<Index/>',
-  components: { Index }
+  template: '<app/>',
+  components: { app }
 }).$mount('#app')

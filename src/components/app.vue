@@ -2,7 +2,9 @@
   <div class="full-y flex flex-direction-column">
     <cml-header />
     <div class="relative page">
-      <cml-popup />
+      <transition name="transition-top">
+        <cml-popup v-if="popup.visible"/>
+      </transition>
       <cml-messages />
       <cml-dropdown />
       <div class="container pt">
@@ -25,6 +27,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import store from '../store'
 import debug from './camomile/utils/debug.vue'
 import viewport from './camomile/utils/viewport.vue'
@@ -64,12 +67,11 @@ export default {
   },
 
   computed: {
-    isAdmin () {
-      return this.$store.state.cml.user.isAdmin
-    },
-    isLogged () {
-      return this.$store.state.cml.user.isLogged
-    }
+    ...mapState({
+      isAdmin: state => state.cml.user.isAdmin,
+      isLogged: state => state.cml.user.isLogged,
+      popup: state => state.cml.popup
+    })
   }
 }
 </script>

@@ -28,13 +28,7 @@ module.exports = merge(webpackConfigBase, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          extractCSS: true,
-          buble: {
-            objectAssign: 'Object.assign',
-            transforms: {
-              stripWith: true
-            }
-          }
+          extractCSS: true
         }
       },
       {
@@ -95,25 +89,25 @@ module.exports = merge(webpackConfigBase, {
       excludeAssets: [/app.*.js/]
     }),
     new HtmlWebpackExcludeAssetsPlugin(),
-    // new WebpackMonitor({
-    //   capture: true, // -> default 'true'
-    //   target: '../build/monitor/camomile-ui-stats.json', // default -> '../monitor/stats.json'
-    //   launch: true, // -> default 'false'
-    //   port: 3030 // default -> 8081
-    // }),
-    // new BundleAnalyzerPlugin({
-    //   analyzerMode: 'server', // `server`, `static` or `disabled` (json file)
-    //   analyzerHost: '127.0.0.1', // used in `server` mode
-    //   analyzerPort: 8888, // used in `server` mode
-    //   reportFilename: 'report.html', // generated in `static` mode
-    //   defaultSizes: 'parsed', // module size: `stats` (input), `parsed` (output) or `gzip` (compressed output)
-    //   openAnalyzer: true, // open report in browser
-    //   generateStatsFile: false, // generate Webpack Stats JSON file in bundles directory
-    //   statsFilename: 'stats.json', // used if `generateStatsFile` is `true`
-    //   statsOptions: null, // Options for `stats.toJson()`
-    //   // https://github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
-    //   logLevel: 'info' // log level: 'info', 'warn', 'error' or 'silent'
-    // }),
+    new WebpackMonitor({
+      capture: true, // -> default 'true'
+      target: '../build/monitor/camomile-ui-stats.json', // default -> '../monitor/stats.json'
+      launch: true, // -> default 'false'
+      port: 3030 // default -> 8081
+    }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'server', // `server`, `static` or `disabled` (json file)
+      analyzerHost: '127.0.0.1', // used in `server` mode
+      analyzerPort: 8888, // used in `server` mode
+      reportFilename: 'report.html', // generated in `static` mode
+      defaultSizes: 'parsed', // module size: `stats` (input), `parsed` (output) or `gzip` (compressed output)
+      openAnalyzer: true, // open report in browser
+      generateStatsFile: false, // generate Webpack Stats JSON file in bundles directory
+      statsFilename: 'stats.json', // used if `generateStatsFile` is `true`
+      statsOptions: null, // Options for `stats.toJson()`
+      // https://github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
+      logLevel: 'info' // log level: 'info', 'warn', 'error' or 'silent'
+    }),
     new webpack.optimize.ModuleConcatenationPlugin()
   ]
 })

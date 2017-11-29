@@ -6,8 +6,7 @@
         "useBuiltIns": "entry",
         "modules": false
       }
-    ],
-    "@babel/preset-stage-2"
+    ]
   ],
   "env": {
     "test": {
@@ -15,10 +14,25 @@
         [
           "@babel/preset-env",
           {
-            "targets": { "node": "current" }
+            "targets": { "node": "current" },
+            "useBuiltIns": "entry",
+            "modules": false
           }
         ]
       ]
     }
-  }
+  },
+  "plugins": [
+    // [
+    //   "@babel/plugin-transform-runtime",
+    //   {
+    //     "helpers": true,
+    //     "polyfill": false,
+    //     "regenerator": false,
+    //     "useBuiltIns": true,
+    //     "useESModules": true
+    //   }
+    // ],
+    "@babel/proposal-object-rest-spread"
+  ]
 }

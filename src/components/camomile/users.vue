@@ -2,7 +2,7 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Users</h2>
-      <button @click="popupOpen({ config: { ...popupEditConfig, title: 'Add user' }, element: { description: {} } })" class="btn p-s flex-right"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ config: popupAddConfig, element: { description: {} } })" class="btn p-s flex-right"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">
@@ -38,6 +38,12 @@ export default {
         type: 'users',
         closeBtn: true,
         title: 'Edit user',
+        component: popupEdit
+      },
+      popupAddConfig: {
+        type: 'users',
+        closeBtn: true,
+        title: 'Add user',
         component: popupEdit
       },
       popupGroupsConfig: {
