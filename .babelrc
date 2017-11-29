@@ -15,8 +15,7 @@
           "@babel/preset-env",
           {
             "targets": { "node": "current" },
-            "useBuiltIns": "entry",
-            "modules": false
+            "useBuiltIns": "entry"
           }
         ]
       ]
@@ -33,7 +32,6 @@
     //     "useESModules": true
     //   }
     // ],
-    "@babel/proposal-object-rest-spread",
-    "syntax-dynamic-import"
+    "@babel/proposal-object-rest-spread"
   ]
 }
