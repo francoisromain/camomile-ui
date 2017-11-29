@@ -18,7 +18,7 @@ export default {
 }
 </script>
 <style scoped>
-@import '../../../css/settings.css';
+@import '../../css/settings.css';
 @media (--viewport-desktop) {
   .home {
     background-color: var(--color-highlight);

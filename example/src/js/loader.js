@@ -1,8 +1,4 @@
 /* global __webpack_hash__  */
-
-import credits from './credits'
-import log from './log'
-
 const req = new XMLHttpRequest()
 const fileName = 'app.' + __webpack_hash__ + '.js' // eslint-disable-line camelcase
 const app = document.getElementById('loader-app')

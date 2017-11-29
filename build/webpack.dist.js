@@ -5,7 +5,7 @@ const ProgressPlugin = require('webpack/lib/ProgressPlugin')
 const webpackConfigDist = require('./webpack.config.dist')
 const compiler = webpack(webpackConfigDist)
 
-rm(path.join(__dirname, '../dist'), err => {
+rm(path.join(__dirname, '../example/dist'), err => {
   if (err) throw err
   compiler.apply(
     new ProgressPlugin((percentage, msg, current, active, modulepath) => {

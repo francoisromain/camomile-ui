@@ -1,4 +1,4 @@
-import log from '../../js/log'
+import log from '../js/log'
 
 export default {
   namespaced: true,

@@ -1,4 +1,4 @@
-import { api } from '../../config'
+import { api } from '../config'
 import { groupFormat } from './_helpers'
 
 export default {

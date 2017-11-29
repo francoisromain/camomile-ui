@@ -27,23 +27,24 @@
 </template>
 
 <script>
+import './css/styles.css'
 import { mapState } from 'vuex'
-import store from '../store'
-import debug from './camomile/utils/debug.vue'
-import viewport from './camomile/utils/viewport.vue'
-import cmlDropdown from './camomile/utils/dropdown.vue'
-import cmlPopup from './camomile/popup/index.vue'
-import cmlMessages from './camomile/utils/messages.vue'
-import cmlHeader from './camomile/header/index.vue'
-import cmlLogin from './camomile/login.vue'
+import store from './store/index'
+import debug from './components/utils/debug.vue'
+import viewport from './components/utils/viewport.vue'
+import cmlDropdown from './components/utils/dropdown.vue'
+import cmlPopup from './components/popup/index.vue'
+import cmlMessages from './components/utils/messages.vue'
+import cmlHeader from './components/header/index.vue'
+import cmlLogin from './components/login.vue'
 
-import cmlUsers from './camomile/users.vue'
-import cmlGroups from './camomile/groups.vue'
+import cmlUsers from './components/users.vue'
+import cmlGroups from './components/groups.vue'
 
-import cmlCorpus from './camomile/corpus.vue'
-import cmlMedias from './camomile/medias.vue'
-import cmlLayers from './camomile/layers.vue'
-import cmlAnnotations from './camomile/annotations.vue'
+import cmlCorpus from './components/corpus.vue'
+import cmlMedias from './components/medias.vue'
+import cmlLayers from './components/layers.vue'
+import cmlAnnotations from './components/annotations.vue'
 
 export default {
   store,

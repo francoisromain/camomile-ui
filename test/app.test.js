@@ -1,5 +1,5 @@
 import { mount } from 'vue-test-utils'
-import app from '../src/app'
+import app from '../example/app'
 
 describe('app', () => {
   // Now mount the component and you have the wrapper

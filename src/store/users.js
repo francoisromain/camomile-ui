@@ -1,4 +1,4 @@
-import { api } from '../../config'
+import { api } from '../config'
 import { userFormat, observerClean } from './_helpers'
 
 export default {
