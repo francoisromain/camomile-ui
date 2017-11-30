@@ -16,7 +16,7 @@
                 {{ group.name }}
               </div>
               <div class="blob-1-2 mb-s">
-                <permissions-edit :resource="permissionsConfig" :element="{ id: group.id, type: 'group' }" />
+                <permissions-edit :resource="permissionsConfig" :element="{ id: group.id, type: 'group' }"></permissions-edit>
               </div>
             </div>
           </li>
@@ -31,7 +31,7 @@
                 {{ user.name }}
               </div>
               <div class="blob-1-2 mb-s">
-                <permissions-edit :resource="permissionsConfig" :element="{ id: user.id, type: 'user' }" />
+                <permissions-edit :resource="permissionsConfig" :element="{ id: user.id, type: 'user' }"></permissions-edit>
               </div>
             </div>
           </li>

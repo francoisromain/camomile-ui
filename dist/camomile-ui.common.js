@@ -2425,6 +2425,16 @@ var debug = {
 };
 
 var viewport$1 = {
+  render: function render() {
+    var _vm = this;
+
+    var _h = _vm.$createElement;
+
+    var _c = _vm._self._c || _h;
+
+    return _c('div');
+  },
+  staticRenderFns: [],
   _scopeId: 'data-v-24d69054',
   name: 'camomile-utils-viewport',
   methods: {
@@ -2854,27 +2864,27 @@ var popupEdit = {
         "name": 'fragment',
         "title": 'Fragment'
       }
-    }, [_vm.type === 'annotations' ? _c('object-field', {
+    }) : _vm._e(), _vm._v(" "), _vm.type === 'annotations' ? _c('object-field', {
       attrs: {
         "name": 'metadata',
         "title": 'Meta-data'
       }
-    }, [_vm.type === 'layers' ? _c('object-field', {
+    }) : _vm._e(), _vm._v(" "), _vm.type === 'layers' ? _c('object-field', {
       attrs: {
         "name": 'fragmentType',
         "title": 'Fragment type'
       }
-    }, [_vm.type === 'layers' ? _c('object-field', {
+    }) : _vm._e(), _vm._v(" "), _vm.type === 'layers' ? _c('object-field', {
       attrs: {
         "name": 'metadataType',
         "title": 'Meta-data type'
       }
-    }, [_vm.type !== 'annotations' ? _c('object-field', {
+    }) : _vm._e(), _vm._v(" "), _vm.type !== 'annotations' ? _c('object-field', {
       attrs: {
         "name": 'description',
         "title": 'Description'
       }
-    }, [_c('div', {
+    }) : _vm._e(), _vm._v(" "), _c('div', {
       staticClass: "blobs"
     }, [_c('div', {
       staticClass: "blob-1-4"
@@ -2895,7 +2905,7 @@ var popupEdit = {
           _vm.save($event);
         }
       }
-    }, [_vm._v("Save")])])])]) : _vm._e()], 1) : _vm._e()], 1) : _vm._e()], 1) : _vm._e()], 1) : _vm._e()], 1);
+    }, [_vm._v("Save")])])])], 1);
   },
   staticRenderFns: [function () {
     var _vm = this;
@@ -3322,6 +3332,16 @@ var popupLogin = {
 };
 
 var cmlLogin = {
+  render: function render() {
+    var _vm = this;
+
+    var _h = _vm.$createElement;
+
+    var _c = _vm._self._c || _h;
+
+    return _c('div');
+  },
+  staticRenderFns: [],
   name: 'camomile-login',
 
   created() {
@@ -4727,31 +4747,31 @@ var app = {
 
     return _c('div', {
       staticClass: "full-y flex flex-direction-column"
-    }, [_c('cml-header', [_c('div', {
+    }, [_c('cml-header'), _vm._v(" "), _c('div', {
       staticClass: "relative page"
     }, [_c('transition', {
       attrs: {
         "name": "transition-top"
       }
-    }, [_vm.popup.visible ? _c('cml-popup') : _vm._e()], 1), _vm._v(" "), _c('cml-messages', [_c('cml-dropdown', [_c('div', {
+    }, [_vm.popup.visible ? _c('cml-popup') : _vm._e()], 1), _vm._v(" "), _c('cml-messages'), _vm._v(" "), _c('cml-dropdown'), _vm._v(" "), _c('div', {
       staticClass: "container pt"
     }, [_vm.isAdmin ? _c('div', {
       staticClass: "blobs"
     }, [_c('cml-users', {
       staticClass: "blob-1-2 p border"
-    }, [_c('cml-groups', {
+    }), _vm._v(" "), _c('cml-groups', {
       staticClass: "blob-1-2 p border"
-    })], 1)], 1) : _vm._e(), _vm._v(" "), _vm.isLogged ? _c('div', {
+    })], 1) : _vm._e(), _vm._v(" "), _vm.isLogged ? _c('div', {
       staticClass: "blobs"
     }, [_c('cml-corpus', {
       staticClass: "blob-1-2 p border"
-    }, [_c('cml-medias', {
+    }), _vm._v(" "), _c('cml-medias', {
       staticClass: "blob-1-2 p border"
-    }, [_c('cml-layers', {
+    }), _vm._v(" "), _c('cml-layers', {
       staticClass: "blob-1-2 p border"
-    }, [_c('cml-annotations', {
+    }), _vm._v(" "), _c('cml-annotations', {
       staticClass: "blob-1-2 p border"
-    })], 1)], 1)], 1)], 1) : _vm._e()])])], 1)], 1), _vm._v(" "), !_vm.isLogged ? _c('cml-login', [_c('viewport', [_c('debug')], 1)], 1) : _vm._e()], 1)], 1);
+    })], 1) : _vm._e()])], 1), _vm._v(" "), !_vm.isLogged ? _c('cml-login') : _vm._e(), _vm._v(" "), _c('viewport'), _vm._v(" "), _c('debug')], 1);
   },
   staticRenderFns: [],
   store,

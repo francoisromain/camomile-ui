@@ -36,11 +36,11 @@
         <input type="text" v-model="element.url" class="input-alt" placeholder="http://…">
       </div>
     </div>
-    <object-field :name="'fragment'" :title="'Fragment'" v-if="type === 'annotations'"/>
-    <object-field :name="'metadata'" :title="'Meta-data'" v-if="type === 'annotations'"/>
-    <object-field :name="'fragmentType'" :title="'Fragment type'" v-if="type === 'layers'"/>
-    <object-field :name="'metadataType'" :title="'Meta-data type'" v-if="type === 'layers'"/>
-    <object-field :name="'description'" :title="'Description'" v-if="type !== 'annotations'"/>
+    <object-field :name="'fragment'" :title="'Fragment'" v-if="type === 'annotations'"></object-field>
+    <object-field :name="'metadata'" :title="'Meta-data'" v-if="type === 'annotations'"></object-field>
+    <object-field :name="'fragmentType'" :title="'Fragment type'" v-if="type === 'layers'"></object-field>
+    <object-field :name="'metadataType'" :title="'Meta-data type'" v-if="type === 'layers'"></object-field>
+    <object-field :name="'description'" :title="'Description'" v-if="type !== 'annotations'"></object-field>
     <div class="blobs">
       <div class="blob-1-4">
       </div>

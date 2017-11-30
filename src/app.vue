@@ -1,28 +1,28 @@
 <template>
   <div class="full-y flex flex-direction-column">
-    <cml-header />
+    <cml-header></cml-header>
     <div class="relative page">
       <transition name="transition-top">
-        <cml-popup v-if="popup.visible"/>
+        <cml-popup v-if="popup.visible"></cml-popup>
       </transition>
-      <cml-messages />
-      <cml-dropdown />
+      <cml-messages></cml-messages>
+      <cml-dropdown></cml-dropdown>
       <div class="container pt">
         <div class="blobs" v-if="isAdmin">
-          <cml-users class="blob-1-2 p border"/>
-          <cml-groups class="blob-1-2 p border"/>
+          <cml-users class="blob-1-2 p border"></cml-users>
+          <cml-groups class="blob-1-2 p border"></cml-groups>
         </div>
         <div class="blobs" v-if="isLogged">
-          <cml-corpus class="blob-1-2 p border" />
-          <cml-medias class="blob-1-2 p border" />
-          <cml-layers class="blob-1-2 p border" />
-          <cml-annotations class="blob-1-2 p border" />
+          <cml-corpus class="blob-1-2 p border"></cml-corpus>
+          <cml-medias class="blob-1-2 p border"></cml-medias>
+          <cml-layers class="blob-1-2 p border"></cml-layers>
+          <cml-annotations class="blob-1-2 p border"></cml-annotations>
         </div>
       </div> 
     </div>
-    <cml-login v-if="!isLogged" />
-    <viewport />
-    <debug />
+    <cml-login v-if="!isLogged"></cml-login>
+    <viewport></viewport>
+    <debug></debug>
   </div>
 </template>
 

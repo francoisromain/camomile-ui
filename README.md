@@ -14,6 +14,13 @@
 
 ---
 
+Camomile UI is a UI library for [camomile](https://github.com/camomile-project).
+
+To start using this library, you can use
+[camomile-ui-boilerplate](https://github.com/francoisromain/camomile-ui-boilerplate)
+
+---
+
 ## Npm scripts
 
 ```bash
