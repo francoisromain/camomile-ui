@@ -4,24 +4,6 @@
 	(global['camomile-ui'] = factory());
 }(this, (function () { 'use strict';
 
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
 /**
  * vuex v3.0.1
  * (c) 2017 Evan You
@@ -37,7 +19,7 @@ var applyMixin = function (Vue) {
     // for 1.x backwards compatibility.
     var _init = Vue.prototype._init;
     Vue.prototype._init = function (options) {
-      if ( options === void 0 ) options = {};
+      if ( options === void 0 ) { options = {}; }
 
       options.init = options.init
         ? [vuexInit].concat(options.init)
@@ -209,7 +191,7 @@ ModuleCollection.prototype.update = function update$1 (rawRootModule) {
 
 ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
     var this$1 = this;
-    if ( runtime === void 0 ) runtime = true;
+    if ( runtime === void 0 ) { runtime = true; }
 
   if (process.env.NODE_ENV !== 'production') {
     assertRawModule(path, rawModule);
@@ -313,7 +295,7 @@ var Vue; // bind on install
 
 var Store = function Store (options) {
   var this$1 = this;
-  if ( options === void 0 ) options = {};
+  if ( options === void 0 ) { options = {}; }
 
   // Auto install if it is not done yet and `window` has `Vue`.
   // To allow users to avoid auto-installation in some cases,
@@ -328,10 +310,10 @@ var Store = function Store (options) {
     assert(this instanceof Store, "Store must be called with the new operator.");
   }
 
-  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
-  var strict = options.strict; if ( strict === void 0 ) strict = false;
+  var plugins = options.plugins; if ( plugins === void 0 ) { plugins = []; }
+  var strict = options.strict; if ( strict === void 0 ) { strict = false; }
 
-  var state = options.state; if ( state === void 0 ) state = {};
+  var state = options.state; if ( state === void 0 ) { state = {}; }
   if (typeof state === 'function') {
     state = state() || {};
   }
@@ -476,7 +458,7 @@ Store.prototype.replaceState = function replaceState (state) {
 };
 
 Store.prototype.registerModule = function registerModule (path, rawModule, options) {
-    if ( options === void 0 ) options = {};
+    if ( options === void 0 ) { options = {}; }
 
   if (typeof path === 'string') { path = [path]; }
 
@@ -839,8 +821,10 @@ var mapMutations = normalizeNamespace(function (namespace, mutations) {
     var val = ref.val;
 
     res[key] = function mappedMutation () {
+      var arguments$1 = arguments;
+
       var args = [], len = arguments.length;
-      while ( len-- ) args[ len ] = arguments[ len ];
+      while ( len-- ) { args[ len ] = arguments$1[ len ]; }
 
       var commit = this.$store.commit;
       if (namespace) {
@@ -888,8 +872,10 @@ var mapActions = normalizeNamespace(function (namespace, actions) {
     var val = ref.val;
 
     res[key] = function mappedAction () {
+      var arguments$1 = arguments;
+
       var args = [], len = arguments.length;
-      while ( len-- ) args[ len ] = arguments[ len ];
+      while ( len-- ) { args[ len ] = arguments$1[ len ]; }
 
       var dispatch = this.$store.dispatch;
       if (namespace) {
@@ -1693,7 +1679,7 @@ prototypeAccessors$1$1.child.get = function () {
 Object.defineProperties( VNode.prototype, prototypeAccessors$1$1 );
 
 var createEmptyVNode = function (text) {
-  if ( text === void 0 ) text = '';
+  if ( text === void 0 ) { text = ''; }
 
   var node = new VNode();
   node.text = text;
@@ -1768,8 +1754,10 @@ var arrayMethods = Object.create(arrayProto);[
   // cache original method
   var original = arrayProto[method];
   def(arrayMethods, method, function mutator () {
+    var arguments$1 = arguments;
+
     var args = [], len = arguments.length;
-    while ( len-- ) args[ len ] = arguments[ len ];
+    while ( len-- ) { args[ len ] = arguments$1[ len ]; }
 
     var result = original.apply(this, args);
     var ob = this.__ob__;
@@ -4263,7 +4251,7 @@ function initProps (vm, propsOptions) {
     }
   };
 
-  for (var key in propsOptions) loop( key );
+  for (var key in propsOptions) { loop( key ); }
   observerState.shouldConvert = true;
 }
 
@@ -4748,7 +4736,7 @@ function bindObjectProps (
         }
       };
 
-      for (var key in value) loop( key );
+      for (var key in value) { loop( key ); }
     }
   }
   return data
@@ -8654,7 +8642,7 @@ var TransitionGroup = {
       this._vnode,
       this.kept,
       false, // hydrating
-      true // removeOnly (!important, avoids unnecessary moves)
+      true // removeOnly (!important avoids unnecessary moves)
     );
     this._vnode = this.kept;
   },
@@ -8938,13 +8926,15 @@ var inherits = function(Child, Parent) {
     var hasProp = {}.hasOwnProperty;
 
     function T() {
+        var this$1 = this;
+
         this.constructor = Child;
         this.constructor$ = Parent;
         for (var propertyName in Parent.prototype) {
             if (hasProp.call(Parent.prototype, propertyName) &&
                 propertyName.charAt(propertyName.length-1) !== "$"
            ) {
-                this[propertyName + "$"] = Parent.prototype[propertyName];
+                this$1[propertyName + "$"] = Parent.prototype[propertyName];
             }
         }
     }
@@ -8966,7 +8956,7 @@ function isObject$2(value) {
 }
 
 function maybeWrapAsError(maybeError) {
-    if (!isPrimitive$1(maybeError)) return maybeError;
+    if (!isPrimitive$1(maybeError)) { return maybeError; }
 
     return new Error(safeToString(maybeError));
 }
@@ -8997,7 +8987,7 @@ function getDataPropertyOrDefault(obj, key, defaultValue) {
 }
 
 function notEnumerableProp(obj, name, value) {
-    if (isPrimitive$1(obj)) return obj;
+    if (isPrimitive$1(obj)) { return obj; }
     var descriptor = {
         value: value,
         configurable: true,
@@ -9042,7 +9032,7 @@ var inheritedDataKeys = (function() {
                 }
                 for (var i = 0; i < keys.length; ++i) {
                     var key = keys[i];
-                    if (visitedKeys[key]) continue;
+                    if (visitedKeys[key]) { continue; }
                     visitedKeys[key] = true;
                     var desc = Object.getOwnPropertyDescriptor(obj, key);
                     if (desc != null && desc.get == null && desc.set == null) {
@@ -9056,7 +9046,7 @@ var inheritedDataKeys = (function() {
     } else {
         var hasProp = {}.hasOwnProperty;
         return function(obj) {
-            if (isExcludedProto(obj)) return [];
+            if (isExcludedProto(obj)) { return []; }
             var ret = [];
 
             /*jshint forin:false */
@@ -9144,7 +9134,7 @@ function markAsOriginatingFromRejection(e) {
 }
 
 function originatesFromRejection(e) {
-    if (e == null) return false;
+    if (e == null) { return false; }
     return ((e instanceof Error["__BluebirdErrorTypes__"].OperationalError) ||
         e["isOperational"] === true);
 }
@@ -9156,13 +9146,13 @@ function canAttachTrace(obj) {
 var ensureErrorObject = (function() {
     if (!("stack" in new Error())) {
         return function(value) {
-            if (canAttachTrace(value)) return value;
+            if (canAttachTrace(value)) { return value; }
             try {throw new Error(safeToString(value));}
             catch(err) {return err;}
         };
     } else {
         return function(value) {
-            if (canAttachTrace(value)) return value;
+            if (canAttachTrace(value)) { return value; }
             return new Error(safeToString(value));
         };
     }
@@ -9280,7 +9270,7 @@ ret.isRecentNode = ret.isNode && (function() {
     return (version[0] === 0 && version[1] > 10) || (version[0] > 0);
 })();
 
-if (ret.isNode) ret.toFastProperties(process);
+if (ret.isNode) { ret.toFastProperties(process); }
 
 try {throw new Error(); } catch (e) {ret.lastLineError = e;}
 var util = ret;
@@ -9318,7 +9308,7 @@ if (util.isNode && typeof MutationObserver === "undefined") {
         o2.observe(div2, opts);
 
         var scheduleToggle = function() {
-            if (toggleScheduled) return;
+            if (toggleScheduled) { return; }
             toggleScheduled = true;
             div2.classList.toggle("foo");
         };
@@ -9483,13 +9473,13 @@ Async.prototype.throwLater = function(fn, arg) {
         setTimeout(function() {
             fn(arg);
         }, 0);
-    } else try {
+    } else { try {
         this._schedule(function() {
             fn(arg);
         });
     } catch (e) {
         throw new Error("No async scheduler available\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
-    }
+    } }
 };
 
 function AsyncInvokeLater(fn, receiver, arg) {
@@ -9588,7 +9578,7 @@ var notEnumerableProp$1 = util.notEnumerableProp;
 
 function subError(nameProperty, defaultMessage) {
     function SubError(message) {
-        if (!(this instanceof SubError)) return new SubError(message);
+        if (!(this instanceof SubError)) { return new SubError(message); }
         notEnumerableProp$1(this, "message",
             typeof message === "string" ? message : defaultMessage);
         notEnumerableProp$1(this, "name", nameProperty);
@@ -9634,12 +9624,14 @@ es5.defineProperty(AggregateError.prototype, "length", {
 AggregateError.prototype["isOperational"] = true;
 var level = 0;
 AggregateError.prototype.toString = function() {
+    var this$1 = this;
+
     var indent = Array(level * 4 + 1).join(" ");
     var ret = "\n" + indent + "AggregateError of:" + "\n";
     level++;
     indent = Array(level * 4 + 1).join(" ");
     for (var i = 0; i < this.length; ++i) {
-        var str = this[i] === this ? "[Circular AggregateError]" : this[i] + "";
+        var str = this$1[i] === this$1 ? "[Circular AggregateError]" : this$1[i] + "";
         var lines = str.split("\n");
         for (var j = 0; j < lines.length; ++j) {
             lines[j] = indent + lines[j];
@@ -9653,7 +9645,7 @@ AggregateError.prototype.toString = function() {
 
 function OperationalError(message) {
     if (!(this instanceof OperationalError))
-        return new OperationalError(message);
+        { return new OperationalError(message); }
     notEnumerableProp$1(this, "name", "OperationalError");
     notEnumerableProp$1(this, "message", message);
     this.cause = message;
@@ -9704,12 +9696,12 @@ var isObject = util$$2.isObject;
 
 function tryConvertToPromise(obj, context) {
     if (isObject(obj)) {
-        if (obj instanceof Promise) return obj;
+        if (obj instanceof Promise) { return obj; }
         var then = getThen(obj);
         if (then === errorObj) {
-            if (context) context._pushContext();
+            if (context) { context._pushContext(); }
             var ret = Promise.reject(then.e);
-            if (context) context._popContext();
+            if (context) { context._popContext(); }
             return ret;
         } else if (typeof then === "function") {
             if (isAnyBluebirdPromise(obj)) {
@@ -9754,9 +9746,9 @@ function isAnyBluebirdPromise(obj) {
 function doThenable(x, then, context) {
     var promise = new Promise(INTERNAL);
     var ret = promise;
-    if (context) context._pushContext();
+    if (context) { context._pushContext(); }
     promise._captureStackTrace();
-    if (context) context._popContext();
+    if (context) { context._popContext(); }
     var synchronous = true;
     var result = util$$2.tryCatch(then).call(x, resolve, reject);
     synchronous = false;
@@ -9767,13 +9759,13 @@ function doThenable(x, then, context) {
     }
 
     function resolve(value) {
-        if (!promise) return;
+        if (!promise) { return; }
         promise._resolveCallback(value);
         promise = null;
     }
 
     function reject(reason) {
-        if (!promise) return;
+        if (!promise) { return; }
         promise._rejectCallback(reason, synchronous, true);
         promise = null;
     }
@@ -9861,6 +9853,8 @@ PromiseArray.prototype._init = function init(_, resolveValueIfEmpty) {
 };
 
 PromiseArray.prototype._iterate = function(values) {
+    var this$1 = this;
+
     var len = this.getActualLength(values.length);
     this._length = len;
     this._values = this.shouldCopyValues() ? new Array(len) : this._values;
@@ -9883,20 +9877,20 @@ PromiseArray.prototype._iterate = function(values) {
             }
         } else if (bitField !== null) {
             if (((bitField & 50397184) === 0)) {
-                maybePromise._proxy(this, i);
-                this._values[i] = maybePromise;
+                maybePromise._proxy(this$1, i);
+                this$1._values[i] = maybePromise;
             } else if (((bitField & 33554432) !== 0)) {
-                isResolved = this._promiseFulfilled(maybePromise._value(), i);
+                isResolved = this$1._promiseFulfilled(maybePromise._value(), i);
             } else if (((bitField & 16777216) !== 0)) {
-                isResolved = this._promiseRejected(maybePromise._reason(), i);
+                isResolved = this$1._promiseRejected(maybePromise._reason(), i);
             } else {
-                isResolved = this._promiseCancelled(i);
+                isResolved = this$1._promiseCancelled(i);
             }
         } else {
-            isResolved = this._promiseFulfilled(maybePromise, i);
+            isResolved = this$1._promiseFulfilled(maybePromise, i);
         }
     }
-    if (!isResolved) result._setAsyncGuaranteed();
+    if (!isResolved) { result._setAsyncGuaranteed(); }
 };
 
 PromiseArray.prototype._isResolved = function () {
@@ -9909,7 +9903,7 @@ PromiseArray.prototype._resolve = function (value) {
 };
 
 PromiseArray.prototype._cancel = function() {
-    if (this._isResolved() || !this._promise._isCancellable()) return;
+    if (this._isResolved() || !this._promise._isCancellable()) { return; }
     this._values = null;
     this._promise._cancel();
 };
@@ -9941,7 +9935,7 @@ PromiseArray.prototype._promiseRejected = function (reason) {
 };
 
 PromiseArray.prototype._resultCancelled = function() {
-    if (this._isResolved()) return;
+    if (this._isResolved()) { return; }
     var values = this._values;
     this._cancel();
     if (values instanceof Promise) {
@@ -9996,7 +9990,7 @@ Context.prototype._popContext = function () {
 };
 
 function createContext() {
-    if (longStackTraces) return new Context();
+    if (longStackTraces) { return new Context(); }
 }
 
 function peekContext() {
@@ -10029,7 +10023,7 @@ Context.activateLongStackTraces = function() {
     Promise._peekContext = Promise.prototype._peekContext = peekContext;
     Promise.prototype._promiseCreated = function() {
         var ctx = this._peekContext();
-        if (ctx && ctx._promiseCreated == null) ctx._promiseCreated = this;
+        if (ctx && ctx._promiseCreated == null) { ctx._promiseCreated = this; }
     };
 };
 return Context;
@@ -10072,7 +10066,7 @@ Promise.prototype.suppressUnhandledRejections = function() {
 };
 
 Promise.prototype._ensurePossibleRejectionHandled = function () {
-    if ((this._bitField & 524288) !== 0) return;
+    if ((this._bitField & 524288) !== 0) { return; }
     this._setRejectionIsUnhandled();
     var self = this;
     setTimeout(function() {
@@ -10233,7 +10227,7 @@ var fireGlobalEvent = (function() {
         return function(name) {
             var methodName = "on" + name.toLowerCase();
             var method = util$$2.global[methodName];
-            if (!method) return false;
+            if (!method) { return false; }
             method.apply(util$$2.global, [].slice.call(arguments, 1));
             return true;
         };
@@ -10370,7 +10364,7 @@ function cancellationExecute(executor, resolve, reject) {
 }
 
 function cancellationAttachCancellationCallback(onCancel) {
-    if (!this._isCancellable()) return this;
+    if (!this._isCancellable()) { return this; }
 
     var previousOnCancel = this._onCancel();
     if (previousOnCancel !== undefined) {
@@ -10440,7 +10434,7 @@ function longStackTracesAttachExtraTrace(error, ignoreSelf) {
     if (canAttachTrace(error)) {
         var trace = this._trace;
         if (trace !== undefined) {
-            if (ignoreSelf) trace = trace._parent;
+            if (ignoreSelf) { trace = trace._parent; }
         }
         if (trace !== undefined) {
             trace.attachExtraTrace(error);
@@ -10457,10 +10451,10 @@ function checkForgottenReturns(returnValue, promiseCreated, name, promise,
                                parent) {
     if (returnValue === undefined && promiseCreated !== null &&
         wForgottenReturn) {
-        if (parent !== undefined && parent._returnedNonUndefined()) return;
-        if ((promise._bitField & 65535) === 0) return;
+        if (parent !== undefined && parent._returnedNonUndefined()) { return; }
+        if ((promise._bitField & 65535) === 0) { return; }
 
-        if (name) name = name + " ";
+        if (name) { name = name + " "; }
         var handlerLine = "";
         var creatorLine = "";
         if (promiseCreated._trace) {
@@ -10503,12 +10497,12 @@ function checkForgottenReturns(returnValue, promiseCreated, name, promise,
 function deprecated(name, replacement) {
     var message = name +
         " is deprecated and will be removed in a future version.";
-    if (replacement) message += " Use " + replacement + " instead.";
+    if (replacement) { message += " Use " + replacement + " instead."; }
     return warn(message);
 }
 
 function warn(message, shouldUseOwnTrace, promise) {
-    if (!config.warnings) return;
+    if (!config.warnings) { return; }
     var warning = new Warning(message);
     var ctx;
     if (shouldUseOwnTrace) {
@@ -10709,7 +10703,7 @@ function parseLineInfo(line) {
 }
 
 function setBounds(firstLineError, lastLineError) {
-    if (!longStackTracesIsSupported()) return;
+    if (!longStackTracesIsSupported()) { return; }
     var firstStackLines = firstLineError.stack.split("\n");
     var lastStackLines = lastLineError.stack.split("\n");
     var firstIndex = -1;
@@ -10738,7 +10732,7 @@ function setBounds(firstLineError, lastLineError) {
     }
 
     shouldIgnore = function(line) {
-        if (bluebirdFramePattern.test(line)) return true;
+        if (bluebirdFramePattern.test(line)) { return true; }
         var info = parseLineInfo(line);
         if (info) {
             if (info.fileName === firstFileName &&
@@ -10755,14 +10749,16 @@ function CapturedTrace(parent) {
     this._promisesCreated = 0;
     var length = this._length = 1 + (parent === undefined ? 0 : parent._length);
     captureStackTrace(this, CapturedTrace);
-    if (length > 32) this.uncycle();
+    if (length > 32) { this.uncycle(); }
 }
 util$$2.inherits(CapturedTrace, Error);
 Context.CapturedTrace = CapturedTrace;
 
 CapturedTrace.prototype.uncycle = function() {
+    var this$1 = this;
+
     var length = this._length;
-    if (length < 2) return;
+    if (length < 2) { return; }
     var nodes = [];
     var stackToIndex = {};
 
@@ -10787,7 +10783,7 @@ CapturedTrace.prototype.uncycle = function() {
             }
             nodes[i]._parent = undefined;
             nodes[i]._length = 1;
-            var cycleEdgeNode = i > 0 ? nodes[i - 1] : this;
+            var cycleEdgeNode = i > 0 ? nodes[i - 1] : this$1;
 
             if (index < length - 1) {
                 cycleEdgeNode._parent = nodes[index + 1];
@@ -10809,7 +10805,7 @@ CapturedTrace.prototype.uncycle = function() {
 };
 
 CapturedTrace.prototype.attachExtraTrace = function(error) {
-    if (error.__stackCleaned__) return;
+    if (error.__stackCleaned__) { return; }
     this.uncycle();
     var parsed = parseStackAndMessage(error);
     var message = parsed.message;
@@ -10829,7 +10825,7 @@ CapturedTrace.prototype.attachExtraTrace = function(error) {
 var captureStackTrace = (function stackDetection() {
     var v8stackFramePattern = /^\s*at\s*/;
     var v8stackFormatter = function(stack, error) {
-        if (typeof stack === "string") return stack;
+        if (typeof stack === "string") { return stack; }
 
         if (error.name !== undefined &&
             error.message !== undefined) {
@@ -10884,7 +10880,7 @@ var captureStackTrace = (function stackDetection() {
     }
 
     formatStack = function(stack, error) {
-        if (typeof stack === "string") return stack;
+        if (typeof stack === "string") { return stack; }
 
         if ((typeof error === "object" ||
             typeof error === "function") &&
@@ -10923,7 +10919,7 @@ var config = {
     monitoring: false
 };
 
-if (longStackTraces) Promise.longStackTraces();
+if (longStackTraces) { Promise.longStackTraces(); }
 
 return {
     longStackTraces: function() {
@@ -11039,7 +11035,7 @@ function succeed() {
     return finallyHandler.call(this, this.promise._target()._settledValue());
 }
 function fail(reason) {
-    if (checkCancel(this, reason)) return;
+    if (checkCancel(this, reason)) { return; }
     errorObj.e = reason;
     return errorObj;
 }
@@ -11087,7 +11083,7 @@ function finallyHandler(reasonOrValue) {
 }
 
 Promise.prototype._passThrough = function(handler, type, success, fail) {
-    if (typeof handler !== "function") return this.then();
+    if (typeof handler !== "function") { return this.then(); }
     return this._then(success,
                       fail,
                       undefined,
@@ -11109,6 +11105,8 @@ Promise.prototype.tap = function (handler) {
 };
 
 Promise.prototype.tapCatch = function (handlerOrPredicate) {
+    var arguments$1 = arguments;
+
     var len = arguments.length;
     if(len === 1) {
         return this._passThrough(handlerOrPredicate,
@@ -11119,7 +11117,7 @@ Promise.prototype.tapCatch = function (handlerOrPredicate) {
          var catchInstances = new Array(len - 1),
             j = 0, i;
         for (i = 0; i < len - 1; ++i) {
-            var item = arguments[i];
+            var item = arguments$1[i];
             if (util$$2.isObject(item)) {
                 catchInstances[j++] = item;
             } else {
@@ -11175,7 +11173,9 @@ function wrapAsOperationalError(obj) {
 
 function nodebackForPromise(promise, multiArgs) {
     return function(err, value) {
-        if (promise === null) return;
+        var arguments$1 = arguments;
+
+        if (promise === null) { return; }
         if (err) {
             var wrapped = wrapAsOperationalError(maybeWrapAsError$1(err));
             promise._attachExtraTrace(wrapped);
@@ -11183,7 +11183,7 @@ function nodebackForPromise(promise, multiArgs) {
         } else if (!multiArgs) {
             promise._fulfill(value);
         } else {
-            var $_len = arguments.length;var args = new Array(Math.max($_len - 1, 0)); for(var $_i = 1; $_i < $_len; ++$_i) {args[$_i - 1] = arguments[$_i];}
+            var $_len = arguments.length;var args = new Array(Math.max($_len - 1, 0)); for(var $_i = 1; $_i < $_len; ++$_i) {args[$_i - 1] = arguments$1[$_i];}
             promise._fulfill(args);
         }
         promise = null;
@@ -11265,7 +11265,7 @@ var bindingResolved = function(thisArg, context) {
 };
 
 var bindingRejected = function(e, context) {
-    if (!context.promiseRejectionQueued) this._reject(e);
+    if (!context.promiseRejectionQueued) { this._reject(e); }
 };
 
 Promise.prototype.bind = function (thisArg) {
@@ -11321,7 +11321,7 @@ var errorObj = util$$2.errorObj;
 var async = Promise._async;
 
 Promise.prototype["break"] = Promise.prototype.cancel = function() {
-    if (!debug.cancellation()) return this._warn("cancellation is disabled");
+    if (!debug.cancellation()) { return this._warn("cancellation is disabled"); }
 
     var promise = this;
     var child = promise;
@@ -11344,7 +11344,7 @@ Promise.prototype["break"] = Promise.prototype.cancel = function() {
             }
             break;
         } else {
-            if (promise._isFollowing()) promise._followee().cancel();
+            if (promise._isFollowing()) { promise._followee().cancel(); }
             promise._setWillBeCancelled();
             child = promise;
             promise = parent;
@@ -11383,13 +11383,13 @@ Promise.prototype._cancelBranched = function() {
 };
 
 Promise.prototype._cancel = function() {
-    if (!this._isCancellable()) return;
+    if (!this._isCancellable()) { return; }
     this._setCancelled();
     async.invoke(this._cancelPromises, this, undefined);
 };
 
 Promise.prototype._cancelPromises = function() {
-    if (this._length() > 0) this._settlePromises();
+    if (this._length() > 0) { this._settlePromises(); }
 };
 
 Promise.prototype._unsetOnCancel = function() {
@@ -11405,9 +11405,11 @@ Promise.prototype.isCancellable = function() {
 };
 
 Promise.prototype._doInvokeOnCancel = function(onCancelCallback, internalOnly) {
+    var this$1 = this;
+
     if (util$$2.isArray(onCancelCallback)) {
         for (var i = 0; i < onCancelCallback.length; ++i) {
-            this._doInvokeOnCancel(onCancelCallback[i], internalOnly);
+            this$1._doInvokeOnCancel(onCancelCallback[i], internalOnly);
         }
     } else if (onCancelCallback !== undefined) {
         if (typeof onCancelCallback === "function") {
@@ -11453,7 +11455,7 @@ function thrower() {
 
 Promise.prototype["return"] =
 Promise.prototype.thenReturn = function (value) {
-    if (value instanceof Promise) value.suppressUnhandledRejections();
+    if (value instanceof Promise) { value.suppressUnhandledRejections(); }
     return this._then(
         returner, undefined, undefined, {value: value}, undefined);
 };
@@ -11477,12 +11479,12 @@ Promise.prototype.catchThrow = function (reason) {
 
 Promise.prototype.catchReturn = function (value) {
     if (arguments.length <= 1) {
-        if (value instanceof Promise) value.suppressUnhandledRejections();
+        if (value instanceof Promise) { value.suppressUnhandledRejections(); }
         return this._then(
             undefined, returner, undefined, {value: value}, undefined);
     } else {
         var _value = arguments[1];
-        if (_value instanceof Promise) _value.suppressUnhandledRejections();
+        if (_value instanceof Promise) { _value.suppressUnhandledRejections(); }
         var handler = function() {return _value;};
         return this.caught(value, handler);
     }
@@ -11702,6 +11704,8 @@ if (canEvaluate) {
 }}
 
 Promise.join = function () {
+    var arguments$1 = arguments;
+
     var last = arguments.length - 1;
     var fn;
     if (last > 0 && typeof arguments[last] === "function") {
@@ -11715,7 +11719,7 @@ Promise.join = function () {
                 var callbacks = thenCallbacks;
 
                 for (var i = 0; i < last; ++i) {
-                    var maybePromise = tryConvertToPromise(arguments[i], ret);
+                    var maybePromise = tryConvertToPromise(arguments$1[i], ret);
                     if (maybePromise instanceof Promise) {
                         maybePromise = maybePromise._target();
                         var bitField = maybePromise._bitField;
@@ -11752,8 +11756,8 @@ Promise.join = function () {
             }
         }
     }
-    var $_len = arguments.length;var args = new Array($_len); for(var $_i = 0; $_i < $_len; ++$_i) {args[$_i] = arguments[$_i];}
-    if (fn) args.pop();
+    var $_len = arguments.length;var args = new Array($_len); for(var $_i = 0; $_i < $_len; ++$_i) {args[$_i] = arguments$1[$_i];}
+    if (fn) { args.pop(); }
     var ret = new PromiseArray(args).promise();
     return fn !== undefined ? ret.spread(fn) : ret;
 };
@@ -11805,7 +11809,7 @@ MappingPromiseArray.prototype._promiseFulfilled = function (value, index) {
         if (limit >= 1) {
             this._inFlight--;
             this._drainQueue();
-            if (this._isResolved()) return true;
+            if (this._isResolved()) { return true; }
         }
     } else {
         if (limit >= 1 && this._inFlight >= limit) {
@@ -11813,7 +11817,7 @@ MappingPromiseArray.prototype._promiseFulfilled = function (value, index) {
             this._queue.push(index);
             return false;
         }
-        if (preservedValues !== null) preservedValues[index] = value;
+        if (preservedValues !== null) { preservedValues[index] = value; }
 
         var promise = this._promise;
         var callback = this._callback;
@@ -11838,7 +11842,7 @@ MappingPromiseArray.prototype._promiseFulfilled = function (value, index) {
             var bitField = maybePromise._bitField;
             
             if (((bitField & 50397184) === 0)) {
-                if (limit >= 1) this._inFlight++;
+                if (limit >= 1) { this._inFlight++; }
                 values[index] = maybePromise;
                 maybePromise._proxy(this, (index + 1) * -1);
                 return false;
@@ -11867,13 +11871,15 @@ MappingPromiseArray.prototype._promiseFulfilled = function (value, index) {
 };
 
 MappingPromiseArray.prototype._drainQueue = function () {
+    var this$1 = this;
+
     var queue = this._queue;
     var limit = this._limit;
     var values = this._values;
     while (queue.length > 0 && this._inFlight < limit) {
-        if (this._isResolved()) return;
+        if (this$1._isResolved()) { return; }
         var index = queue.pop();
-        this._promiseFulfilled(values[index], index);
+        this$1._promiseFulfilled(values[index], index);
     }
 };
 
@@ -11882,7 +11888,7 @@ MappingPromiseArray.prototype._filter = function (booleans, values) {
     var ret = new Array(len);
     var j = 0;
     for (var i = 0; i < len; ++i) {
-        if (booleans[i]) ret[j++] = values[i];
+        if (booleans[i]) { ret[j++] = values[i]; }
     }
     ret.length = j;
     this._resolve(ret);
@@ -11979,7 +11985,7 @@ var getCompiled = function(name, compiler, cache) {
         cache[" size"]++;
         if (cache[" size"] > 512) {
             var keys = Object.keys(cache);
-            for (var i = 0; i < 256; ++i) delete cache[keys[i]];
+            for (var i = 0; i < 256; ++i) { delete cache[keys[i]]; }
             cache[" size"] = keys.length - 256;
         }
     }
@@ -11997,7 +12003,7 @@ getGetter = function(name) {
 
 function ensureMethod(obj, methodName) {
     var fn;
-    if (obj != null) fn = obj[methodName];
+    if (obj != null) { fn = obj[methodName]; }
     if (typeof fn !== "function") {
         var message = "Object " + util$$2.classString(obj) + " has no method '" +
             util$$2.toString(methodName) + "'";
@@ -12012,7 +12018,9 @@ function caller(obj) {
     return fn.apply(obj, this);
 }
 Promise.prototype.call = function (methodName) {
-    var $_len = arguments.length;var args = new Array(Math.max($_len - 1, 0)); for(var $_i = 1; $_i < $_len; ++$_i) {args[$_i - 1] = arguments[$_i];}
+    var arguments$1 = arguments;
+
+    var $_len = arguments.length;var args = new Array(Math.max($_len - 1, 0)); for(var $_i = 1; $_i < $_len; ++$_i) {args[$_i - 1] = arguments$1[$_i];}
     {
         if (canEvaluate) {
             var maybeCaller = getMethodCaller(methodName);
@@ -12031,7 +12039,7 @@ function namedGetter(obj) {
 }
 function indexedGetter(obj) {
     var index = +this;
-    if (index < 0) index = Math.max(0, index + obj.length);
+    if (index < 0) { index = Math.max(0, index + obj.length); }
     return obj[index];
 }
 Promise.prototype.get = function (propertyName) {
@@ -12079,7 +12087,7 @@ var using = function (Promise, apiRejection, tryConvertToPromise,
         var len = resources.length;
         var ret = new Promise(INTERNAL);
         function iterator() {
-            if (i >= len) return ret._fulfill();
+            if (i >= len) { return ret._fulfill(); }
             var maybePromise = castPreservingDisposable(resources[i++]);
             if (maybePromise instanceof Promise &&
                 maybePromise._isDisposable()) {
@@ -12125,10 +12133,10 @@ var using = function (Promise, apiRejection, tryConvertToPromise,
     Disposer.prototype.tryDispose = function(inspection) {
         var resource = this.resource();
         var context = this._context;
-        if (context !== undefined) context._pushContext();
+        if (context !== undefined) { context._pushContext(); }
         var ret = resource !== NULL
             ? this.doDispose(resource, inspection) : null;
-        if (context !== undefined) context._popContext();
+        if (context !== undefined) { context._popContext(); }
         this._promise._unsetDisposable();
         this._data = null;
         return ret;
@@ -12165,9 +12173,11 @@ var using = function (Promise, apiRejection, tryConvertToPromise,
     }
 
     ResourceList.prototype._resultCancelled = function() {
+        var this$1 = this;
+
         var len = this.length;
         for (var i = 0; i < len; ++i) {
-            var item = this[i];
+            var item = this$1[i];
             if (item instanceof Promise) {
                 item.cancel();
             }
@@ -12176,8 +12186,8 @@ var using = function (Promise, apiRejection, tryConvertToPromise,
 
     Promise.using = function () {
         var len = arguments.length;
-        if (len < 2) return apiRejection(
-                        "you must pass at least 2 arguments to Promise.using");
+        if (len < 2) { return apiRejection(
+                        "you must pass at least 2 arguments to Promise.using"); }
         var fn = arguments[len - 1];
         if (typeof fn !== "function") {
             return apiRejection("expecting a function but got " + util$$2.classString(fn));
@@ -12395,7 +12405,7 @@ function promiseFromYieldHandler(value, yieldHandlers, traceParent) {
             return ret;
         }
         var maybePromise = tryConvertToPromise(result, traceParent);
-        if (maybePromise instanceof Promise) return maybePromise;
+        if (maybePromise instanceof Promise) { return maybePromise; }
     }
     return null;
 }
@@ -12438,7 +12448,7 @@ PromiseSpawn.prototype._cleanup = function() {
 };
 
 PromiseSpawn.prototype._promiseCancelled = function() {
-    if (this._isResolved()) return;
+    if (this._isResolved()) { return; }
     var implementsReturn = typeof this._generator["return"] !== "undefined";
 
     var result;
@@ -12601,7 +12611,7 @@ var errorObj = util$$2.errorObj;
 
 function spreadAdapter(val, nodeback) {
     var promise = this;
-    if (!util$$2.isArray(val)) return successAdapter.call(promise, val, nodeback);
+    if (!util$$2.isArray(val)) { return successAdapter.call(promise, val, nodeback); }
     var ret =
         tryCatch(nodeback).apply(promise._boundValue(), [null].concat(val));
     if (ret === errorObj) {
@@ -12865,7 +12875,7 @@ function makeNodePromisifiedClosure(callback, receiver, _, fn, __, multiArgs) {
     }
     function promisified() {
         var _receiver = receiver;
-        if (receiver === THIS) _receiver = this;
+        if (receiver === THIS) { _receiver = this; }
         var promise = new Promise(INTERNAL);
         promise._captureStackTrace();
         var cb = typeof method === "string" && this !== defaultThis
@@ -12876,7 +12886,7 @@ function makeNodePromisifiedClosure(callback, receiver, _, fn, __, multiArgs) {
         } catch(e) {
             promise._rejectCallback(maybeWrapAsError(e), true, true);
         }
-        if (!promise._isFateSealed()) promise._setAsyncGuaranteed();
+        if (!promise._isFateSealed()) { promise._setAsyncGuaranteed(); }
         return promise;
     }
     util$$2.notEnumerableProp(promisified, "__isPromisified__", true);
@@ -12939,11 +12949,11 @@ Promise.promisifyAll = function (target, options) {
     options = Object(options);
     var multiArgs = !!options.multiArgs;
     var suffix = options.suffix;
-    if (typeof suffix !== "string") suffix = defaultSuffix;
+    if (typeof suffix !== "string") { suffix = defaultSuffix; }
     var filter = options.filter;
-    if (typeof filter !== "function") filter = defaultFilter;
+    if (typeof filter !== "function") { filter = defaultFilter; }
     var promisifier = options.promisifier;
-    if (typeof promisifier !== "function") promisifier = makeNodePromisified;
+    if (typeof promisifier !== "function") { promisifier = makeNodePromisified; }
 
     if (!util$$2.isIdentifier(suffix)) {
         throw new RangeError("suffix must be a valid identifier\u000a\u000a    See http://goo.gl/MqrFmX\u000a");
@@ -12970,7 +12980,7 @@ var util$$2 = util;
 var isObject = util$$2.isObject;
 var es5$$2 = es5;
 var Es6Map;
-if (typeof Map === "function") Es6Map = Map;
+if (typeof Map === "function") { Es6Map = Map; }
 
 var mapToEntries = (function() {
     var index = 0;
@@ -13027,6 +13037,8 @@ util$$2.inherits(PropertiesPromiseArray, PromiseArray);
 PropertiesPromiseArray.prototype._init = function () {};
 
 PropertiesPromiseArray.prototype._promiseFulfilled = function (value, index) {
+    var this$1 = this;
+
     this._values[index] = value;
     var totalResolved = ++this._totalResolved;
     if (totalResolved >= this._length) {
@@ -13037,7 +13049,7 @@ PropertiesPromiseArray.prototype._promiseFulfilled = function (value, index) {
             val = {};
             var keyOffset = this.length();
             for (var i = 0, len = this.length(); i < len; ++i) {
-                val[this._values[i + keyOffset]] = this._values[i];
+                val[this$1._values[i + keyOffset]] = this$1._values[i];
             }
         }
         this._resolve(val);
@@ -13100,7 +13112,7 @@ function race(promises, parent) {
     } else {
         promises = util$$2.asArray(promises);
         if (promises === null)
-            return apiRejection("expecting an array or an iterable object but got " + util$$2.classString(promises));
+            { return apiRejection("expecting an array or an iterable object but got " + util$$2.classString(promises)); }
     }
 
     var ret = new Promise(INTERNAL);
@@ -13195,8 +13207,8 @@ ReductionPromiseArray.prototype._resolve = function(value) {
 };
 
 ReductionPromiseArray.prototype._resultCancelled = function(sender) {
-    if (sender === this._initialValue) return this._cancel();
-    if (this._isResolved()) return;
+    if (sender === this._initialValue) { return this._cancel(); }
+    if (this._isResolved()) { return; }
     this._resultCancelled$();
     if (this._currentCancellable instanceof Promise) {
         this._currentCancellable.cancel();
@@ -13207,6 +13219,8 @@ ReductionPromiseArray.prototype._resultCancelled = function(sender) {
 };
 
 ReductionPromiseArray.prototype._iterate = function (values) {
+    var this$1 = this;
+
     this._values = values;
     var value;
     var i;
@@ -13228,7 +13242,7 @@ ReductionPromiseArray.prototype._iterate = function (values) {
                 value: values[i],
                 index: i,
                 length: length,
-                array: this
+                array: this$1
             };
             value = value._then(gotAccum, undefined, undefined, ctx, undefined);
         }
@@ -13425,11 +13439,13 @@ SomePromiseArray.prototype._promiseCancelled = function () {
 };
 
 SomePromiseArray.prototype._checkOutcome = function() {
+    var this$1 = this;
+
     if (this.howMany() > this._canPossiblyFulfill()) {
         var e = new AggregateError();
         for (var i = this.length(); i < this._values.length; ++i) {
-            if (this._values[i] !== CANCELLATION) {
-                e.push(this._values[i]);
+            if (this$1._values[i] !== CANCELLATION) {
+                e.push(this$1._values[i]);
             }
         }
         if (e.length > 0) {
@@ -13575,7 +13591,7 @@ var getDomain;
 if (util$$1.isNode) {
     getDomain = function() {
         var ret = process.domain;
-        if (ret === undefined) ret = null;
+        if (ret === undefined) { ret = null; }
         return ret;
     };
 } else {
@@ -13643,12 +13659,14 @@ Promise.prototype.toString = function () {
 };
 
 Promise.prototype.caught = Promise.prototype["catch"] = function (fn) {
+    var arguments$1 = arguments;
+
     var len = arguments.length;
     if (len > 1) {
         var catchInstances = new Array(len - 1),
             j = 0, i;
         for (i = 0; i < len - 1; ++i) {
-            var item = arguments[i];
+            var item = arguments$1[i];
             if (util$$1.isObject(item)) {
                 catchInstances[j++] = item;
             } else {
@@ -13738,7 +13756,7 @@ Promise.fromNode = Promise.fromCallback = function(fn) {
     if (result === errorObj) {
         ret._rejectCallback(result.e, true);
     }
-    if (!ret._isFateSealed()) ret._setAsyncGuaranteed();
+    if (!ret._isFateSealed()) { ret._setAsyncGuaranteed(); }
     return ret;
 };
 
@@ -13884,7 +13902,7 @@ Promise.prototype._setWillBeCancelled = function() {
 };
 
 Promise.prototype._setAsyncGuaranteed = function() {
-    if (async$$1.hasCustomScheduler()) return;
+    if (async$$1.hasCustomScheduler()) { return; }
     this._bitField = this._bitField | 134217728;
 };
 
@@ -13922,7 +13940,7 @@ Promise.prototype._migrateCallback0 = function (follower) {
     var reject = follower._rejectionHandler0;
     var promise = follower._promise0;
     var receiver = follower._receiverAt(0);
-    if (receiver === undefined) receiver = UNDEFINED_BINDING;
+    if (receiver === undefined) { receiver = UNDEFINED_BINDING; }
     this._addCallbacks(fulfill, reject, promise, receiver, null);
 };
 
@@ -13931,7 +13949,7 @@ Promise.prototype._migrateCallbackAt = function (follower, index) {
     var reject = follower._rejectionHandlerAt(index);
     var promise = follower._promiseAt(index);
     var receiver = follower._receiverAt(index);
-    if (receiver === undefined) receiver = UNDEFINED_BINDING;
+    if (receiver === undefined) { receiver = UNDEFINED_BINDING; }
     this._addCallbacks(fulfill, reject, promise, receiver, null);
 };
 
@@ -13982,13 +14000,15 @@ Promise.prototype._proxy = function (proxyable, arg) {
 };
 
 Promise.prototype._resolveCallback = function(value, shouldBind) {
-    if (((this._bitField & 117506048) !== 0)) return;
-    if (value === this)
-        return this._rejectCallback(makeSelfResolutionError(), false);
-    var maybePromise = tryConvertToPromise(value, this);
-    if (!(maybePromise instanceof Promise)) return this._fulfill(value);
+    var this$1 = this;
 
-    if (shouldBind) this._propagateFrom(maybePromise, 2);
+    if (((this._bitField & 117506048) !== 0)) { return; }
+    if (value === this)
+        { return this._rejectCallback(makeSelfResolutionError(), false); }
+    var maybePromise = tryConvertToPromise(value, this);
+    if (!(maybePromise instanceof Promise)) { return this._fulfill(value); }
+
+    if (shouldBind) { this._propagateFrom(maybePromise, 2); }
 
     var promise = maybePromise._target();
 
@@ -14000,9 +14020,9 @@ Promise.prototype._resolveCallback = function(value, shouldBind) {
     var bitField = promise._bitField;
     if (((bitField & 50397184) === 0)) {
         var len = this._length();
-        if (len > 0) promise._migrateCallback0(this);
+        if (len > 0) { promise._migrateCallback0(this); }
         for (var i = 1; i < len; ++i) {
-            promise._migrateCallbackAt(this, i);
+            promise._migrateCallbackAt(this$1, i);
         }
         this._setFollowing();
         this._setLength(0);
@@ -14032,7 +14052,7 @@ function(reason, synchronous, ignoreNonErrorWarnings) {
 };
 
 Promise.prototype._resolveFromExecutor = function (executor) {
-    if (executor === INTERNAL) return;
+    if (executor === INTERNAL) { return; }
     var promise = this;
     this._captureStackTrace();
     this._pushContext();
@@ -14054,7 +14074,7 @@ Promise.prototype._settlePromiseFromHandler = function (
     handler, receiver, value, promise
 ) {
     var bitField = promise._bitField;
-    if (((bitField & 65536) !== 0)) return;
+    if (((bitField & 65536) !== 0)) { return; }
     promise._pushContext();
     var x;
     if (receiver === APPLY) {
@@ -14070,7 +14090,7 @@ Promise.prototype._settlePromiseFromHandler = function (
     }
     var promiseCreated = promise._popContext();
     bitField = promise._bitField;
-    if (((bitField & 65536) !== 0)) return;
+    if (((bitField & 65536) !== 0)) { return; }
 
     if (x === NEXT_FILTER) {
         promise._reject(value);
@@ -14084,7 +14104,7 @@ Promise.prototype._settlePromiseFromHandler = function (
 
 Promise.prototype._target = function() {
     var ret = this;
-    while (ret._isFollowing()) ret = ret._followee();
+    while (ret._isFollowing()) { ret = ret._followee(); }
     return ret;
 };
 
@@ -14101,7 +14121,7 @@ Promise.prototype._settlePromise = function(promise, handler, receiver, value) {
     var bitField = this._bitField;
     var asyncGuaranteed = ((bitField & 134217728) !== 0);
     if (((bitField & 65536) !== 0)) {
-        if (isPromise) promise._invokeInternalOnCancel();
+        if (isPromise) { promise._invokeInternalOnCancel(); }
 
         if (receiver instanceof PassThroughHandlerContext &&
             receiver.isFinallyHandler()) {
@@ -14122,7 +14142,7 @@ Promise.prototype._settlePromise = function(promise, handler, receiver, value) {
         if (!isPromise) {
             handler.call(receiver, value, promise);
         } else {
-            if (asyncGuaranteed) promise._setAsyncGuaranteed();
+            if (asyncGuaranteed) { promise._setAsyncGuaranteed(); }
             this._settlePromiseFromHandler(handler, receiver, value, promise);
         }
     } else if (receiver instanceof Proxyable) {
@@ -14134,7 +14154,7 @@ Promise.prototype._settlePromise = function(promise, handler, receiver, value) {
             }
         }
     } else if (isPromise) {
-        if (asyncGuaranteed) promise._setAsyncGuaranteed();
+        if (asyncGuaranteed) { promise._setAsyncGuaranteed(); }
         if (((bitField & 33554432) !== 0)) {
             promise._fulfill(value);
         } else {
@@ -14181,7 +14201,7 @@ Promise.prototype._clearCallbackDataAtIndex = function(index) {
 
 Promise.prototype._fulfill = function (value) {
     var bitField = this._bitField;
-    if (((bitField & 117506048) >>> 16)) return;
+    if (((bitField & 117506048) >>> 16)) { return; }
     if (value === this) {
         var err = makeSelfResolutionError();
         this._attachExtraTrace(err);
@@ -14201,7 +14221,7 @@ Promise.prototype._fulfill = function (value) {
 
 Promise.prototype._reject = function (reason) {
     var bitField = this._bitField;
-    if (((bitField & 117506048) >>> 16)) return;
+    if (((bitField & 117506048) >>> 16)) { return; }
     this._setRejected();
     this._fulfillmentHandler0 = reason;
 
@@ -14217,22 +14237,26 @@ Promise.prototype._reject = function (reason) {
 };
 
 Promise.prototype._fulfillPromises = function (len, value) {
+    var this$1 = this;
+
     for (var i = 1; i < len; i++) {
-        var handler = this._fulfillmentHandlerAt(i);
-        var promise = this._promiseAt(i);
-        var receiver = this._receiverAt(i);
-        this._clearCallbackDataAtIndex(i);
-        this._settlePromise(promise, handler, receiver, value);
+        var handler = this$1._fulfillmentHandlerAt(i);
+        var promise = this$1._promiseAt(i);
+        var receiver = this$1._receiverAt(i);
+        this$1._clearCallbackDataAtIndex(i);
+        this$1._settlePromise(promise, handler, receiver, value);
     }
 };
 
 Promise.prototype._rejectPromises = function (len, reason) {
+    var this$1 = this;
+
     for (var i = 1; i < len; i++) {
-        var handler = this._rejectionHandlerAt(i);
-        var promise = this._promiseAt(i);
-        var receiver = this._receiverAt(i);
-        this._clearCallbackDataAtIndex(i);
-        this._settlePromise(promise, handler, receiver, reason);
+        var handler = this$1._rejectionHandlerAt(i);
+        var promise = this$1._promiseAt(i);
+        var receiver = this$1._receiverAt(i);
+        this$1._clearCallbackDataAtIndex(i);
+        this$1._settlePromise(promise, handler, receiver, reason);
     }
 };
 
@@ -14333,9 +14357,9 @@ any(Promise);
 });
 
 var old;
-if (typeof Promise !== "undefined") old = Promise;
+if (typeof Promise !== "undefined") { old = Promise; }
 function noConflict() {
-    try { if (Promise === bluebird) Promise = old; }
+    try { if (Promise === bluebird) { Promise = old; } }
     catch (e) {}
     return bluebird;
 }
@@ -15026,6 +15050,8 @@ var isPlainObject$1 = function isPlainObject(obj) {
 };
 
 var extend$1 = function extend() {
+	var arguments$1 = arguments;
+
 	var options, name, src, copy, copyIsArray, clone;
 	var target = arguments[0];
 	var i = 1;
@@ -15044,7 +15070,7 @@ var extend$1 = function extend() {
 	}
 
 	for (; i < length; ++i) {
-		options = arguments[i];
+		options = arguments$1[i];
 		// Only deal with non-null/undefined values
 		if (options != null) {
 			// Extend the base object
@@ -15687,10 +15713,12 @@ function drainQueue() {
     runClearTimeout(timeout);
 }
 function nextTick$1(fun) {
+    var arguments$1 = arguments;
+
     var args = new Array(arguments.length - 1);
     if (arguments.length > 1) {
         for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
+            args[i - 1] = arguments$1[i];
         }
     }
     queue$3.push(new Item(fun, args));
@@ -15843,10 +15871,12 @@ var inherits$3 = inherits$2;
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 var formatRegExp = /%[sdj%]/g;
 function format$1(f) {
+  var arguments$1 = arguments;
+
   if (!isString$2(f)) {
     var objects = [];
     for (var i = 0; i < arguments.length; i++) {
-      objects.push(inspect(arguments[i]));
+      objects.push(inspect(arguments$1[i]));
     }
     return objects.join(' ');
   }
@@ -15855,8 +15885,8 @@ function format$1(f) {
   var args = arguments;
   var len = args.length;
   var str = String(f).replace(formatRegExp, function(x) {
-    if (x === '%%') return '%';
-    if (i >= len) return x;
+    if (x === '%%') { return '%'; }
+    if (i >= len) { return x; }
     switch (x) {
       case '%s': return String(args[i++]);
       case '%d': return Number(args[i++]);
@@ -15919,7 +15949,7 @@ var debugs = {};
 var debugEnviron;
 function debuglog(set) {
   if (isUndefined$2(debugEnviron))
-    debugEnviron = process$1.env.NODE_DEBUG || '';
+    { debugEnviron = process$1.env.NODE_DEBUG || ''; }
   set = set.toUpperCase();
   if (!debugs[set]) {
     if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
@@ -15951,8 +15981,8 @@ function inspect(obj, opts) {
     stylize: stylizeNoColor
   };
   // legacy...
-  if (arguments.length >= 3) ctx.depth = arguments[2];
-  if (arguments.length >= 4) ctx.colors = arguments[3];
+  if (arguments.length >= 3) { ctx.depth = arguments[2]; }
+  if (arguments.length >= 4) { ctx.colors = arguments[3]; }
   if (isBoolean(opts)) {
     // legacy...
     ctx.showHidden = opts;
@@ -15961,11 +15991,11 @@ function inspect(obj, opts) {
     _extend(ctx, opts);
   }
   // set default options
-  if (isUndefined$2(ctx.showHidden)) ctx.showHidden = false;
-  if (isUndefined$2(ctx.depth)) ctx.depth = 2;
-  if (isUndefined$2(ctx.colors)) ctx.colors = false;
-  if (isUndefined$2(ctx.customInspect)) ctx.customInspect = true;
-  if (ctx.colors) ctx.stylize = stylizeWithColor;
+  if (isUndefined$2(ctx.showHidden)) { ctx.showHidden = false; }
+  if (isUndefined$2(ctx.depth)) { ctx.depth = 2; }
+  if (isUndefined$2(ctx.colors)) { ctx.colors = false; }
+  if (isUndefined$2(ctx.customInspect)) { ctx.customInspect = true; }
+  if (ctx.colors) { ctx.stylize = stylizeWithColor; }
   return formatValue(ctx, obj, ctx.depth);
 }
 
@@ -16143,7 +16173,7 @@ function formatValue(ctx, value, recurseTimes) {
 
 function formatPrimitive(ctx, value) {
   if (isUndefined$2(value))
-    return ctx.stylize('undefined', 'undefined');
+    { return ctx.stylize('undefined', 'undefined'); }
   if (isString$2(value)) {
     var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
                                              .replace(/'/g, "\\'")
@@ -16151,12 +16181,12 @@ function formatPrimitive(ctx, value) {
     return ctx.stylize(simple, 'string');
   }
   if (isNumber(value))
-    return ctx.stylize('' + value, 'number');
+    { return ctx.stylize('' + value, 'number'); }
   if (isBoolean(value))
-    return ctx.stylize('' + value, 'boolean');
+    { return ctx.stylize('' + value, 'boolean'); }
   // For some reason typeof null is "object", so special case here.
   if (isNull(value))
-    return ctx.stylize('null', 'null');
+    { return ctx.stylize('null', 'null'); }
 }
 
 
@@ -16245,10 +16275,8 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
 
 
 function reduceToSingleString(output, base, braces) {
-  var numLinesEst = 0;
   var length = output.reduce(function(prev, cur) {
-    numLinesEst++;
-    if (cur.indexOf('\n') >= 0) numLinesEst++;
+    if (cur.indexOf('\n') >= 0) {  }
     return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
   }, 0);
 
@@ -16377,7 +16405,7 @@ function log() {
  */
 function _extend(origin, add) {
   // Don't do anything if add isn't an object
-  if (!add || !isObject$5(add)) return origin;
+  if (!add || !isObject$5(add)) { return origin; }
 
   var keys = Object.keys(add);
   var i = keys.length;
@@ -16511,13 +16539,13 @@ function stringify (obj, sep, eq, name) {
 
   }
 
-  if (!name) return '';
+  if (!name) { return ''; }
   return encodeURIComponent(stringifyPrimitive(name)) + eq +
          encodeURIComponent(stringifyPrimitive(obj));
 }
 
 function map$3 (xs, f) {
-  if (xs.map) return xs.map(f);
+  if (xs.map) { return xs.map(f); }
   var res = [];
   for (var i = 0; i < xs.length; i++) {
     res.push(f(xs[i], i));
@@ -16528,7 +16556,7 @@ function map$3 (xs, f) {
 var objectKeys = Object.keys || function (obj) {
   var res = [];
   for (var key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) res.push(key);
+    if (Object.prototype.hasOwnProperty.call(obj, key)) { res.push(key); }
   }
   return res;
 };
@@ -16681,7 +16709,7 @@ var slashedProtocol = {
   };
 
 function urlParse$1(url, parseQueryString, slashesDenoteHost) {
-  if (url && isObject$5(url) && url instanceof Url) return url;
+  if (url && isObject$5(url) && url instanceof Url) { return url; }
 
   var u = new Url;
   u.parse(url, parseQueryString, slashesDenoteHost);
@@ -16778,7 +16806,7 @@ function parse$2(self, url, parseQueryString, slashesDenoteHost) {
     for (i = 0; i < hostEndingChars.length; i++) {
       hec = rest.indexOf(hostEndingChars[i]);
       if (hec !== -1 && (hostEnd === -1 || hec < hostEnd))
-        hostEnd = hec;
+        { hostEnd = hec; }
     }
 
     // at this point, either we have an explicit point where the
@@ -16806,11 +16834,11 @@ function parse$2(self, url, parseQueryString, slashesDenoteHost) {
     for (i = 0; i < nonHostChars.length; i++) {
       hec = rest.indexOf(nonHostChars[i]);
       if (hec !== -1 && (hostEnd === -1 || hec < hostEnd))
-        hostEnd = hec;
+        { hostEnd = hec; }
     }
     // if we still have not hit it, then the entire thing is a host.
     if (hostEnd === -1)
-      hostEnd = rest.length;
+      { hostEnd = rest.length; }
 
     self.host = rest.slice(0, hostEnd);
     rest = rest.slice(hostEnd);
@@ -16832,7 +16860,7 @@ function parse$2(self, url, parseQueryString, slashesDenoteHost) {
       var hostparts = self.hostname.split(/\./);
       for (i = 0, l = hostparts.length; i < l; i++) {
         var part = hostparts[i];
-        if (!part) continue;
+        if (!part) { continue; }
         if (!part.match(hostnamePartPattern)) {
           var newpart = '';
           for (var j = 0, k = part.length; j < k; j++) {
@@ -16904,7 +16932,7 @@ function parse$2(self, url, parseQueryString, slashesDenoteHost) {
     for (i = 0, l = autoEscape.length; i < l; i++) {
       var ae = autoEscape[i];
       if (rest.indexOf(ae) === -1)
-        continue;
+        { continue; }
       var esc = encodeURIComponent(ae);
       if (esc === ae) {
         esc = escape(ae);
@@ -16934,7 +16962,7 @@ function parse$2(self, url, parseQueryString, slashesDenoteHost) {
     self.search = '';
     self.query = {};
   }
-  if (rest) self.pathname = rest;
+  if (rest) { self.pathname = rest; }
   if (slashedProtocol[lowerProto] &&
     self.hostname && !self.pathname) {
     self.pathname = '/';
@@ -16958,7 +16986,7 @@ function urlFormat(obj) {
   // If it's an obj, this is a no-op.
   // this way, you can call url_format() on strings
   // to clean up potentially wonky urls.
-  if (isString$2(obj)) obj = parse$2({}, obj);
+  if (isString$2(obj)) { obj = parse$2({}, obj); }
   return format(obj);
 }
 
@@ -16995,20 +17023,20 @@ function format(self) {
 
   var search = self.search || (query && ('?' + query)) || '';
 
-  if (protocol && protocol.substr(-1) !== ':') protocol += ':';
+  if (protocol && protocol.substr(-1) !== ':') { protocol += ':'; }
 
   // only the slashedProtocols get the //.  Not mailto:, xmpp:, etc.
   // unless they had them to begin with.
   if (self.slashes ||
     (!protocol || slashedProtocol[protocol]) && host !== false) {
     host = '//' + (host || '');
-    if (pathname && pathname.charAt(0) !== '/') pathname = '/' + pathname;
+    if (pathname && pathname.charAt(0) !== '/') { pathname = '/' + pathname; }
   } else if (!host) {
     host = '';
   }
 
-  if (hash && hash.charAt(0) !== '#') hash = '#' + hash;
-  if (search && search.charAt(0) !== '?') search = '?' + search;
+  if (hash && hash.charAt(0) !== '#') { hash = '#' + hash; }
+  if (search && search.charAt(0) !== '?') { search = '?' + search; }
 
   pathname = pathname.replace(/[?#]/g, function(match) {
     return encodeURIComponent(match);
@@ -17031,11 +17059,13 @@ Url.prototype.resolve = function(relative) {
 };
 
 function urlResolveObject(source, relative) {
-  if (!source) return relative;
+  if (!source) { return relative; }
   return urlParse$1(source, false, true).resolveObject(relative);
 }
 
 Url.prototype.resolveObject = function(relative) {
+  var this$1 = this;
+
   if (isString$2(relative)) {
     var rel = new Url();
     rel.parse(relative, false, true);
@@ -17046,7 +17076,7 @@ Url.prototype.resolveObject = function(relative) {
   var tkeys = Object.keys(this);
   for (var tk = 0; tk < tkeys.length; tk++) {
     var tkey = tkeys[tk];
-    result[tkey] = this[tkey];
+    result[tkey] = this$1[tkey];
   }
 
   // hash is always overridden, no matter what.
@@ -17066,7 +17096,7 @@ Url.prototype.resolveObject = function(relative) {
     for (var rk = 0; rk < rkeys.length; rk++) {
       var rkey = rkeys[rk];
       if (rkey !== 'protocol')
-        result[rkey] = relative[rkey];
+        { result[rkey] = relative[rkey]; }
     }
 
     //urlParse appends trailing / to urls like http://www.example.com
@@ -17101,11 +17131,11 @@ Url.prototype.resolveObject = function(relative) {
     result.protocol = relative.protocol;
     if (!relative.host && !hostlessProtocol[relative.protocol]) {
       relPath = (relative.pathname || '').split('/');
-      while (relPath.length && !(relative.host = relPath.shift()));
-      if (!relative.host) relative.host = '';
-      if (!relative.hostname) relative.hostname = '';
-      if (relPath[0] !== '') relPath.unshift('');
-      if (relPath.length < 2) relPath.unshift('');
+      while (relPath.length && !(relative.host = relPath.shift())){  }
+      if (!relative.host) { relative.host = ''; }
+      if (!relative.hostname) { relative.hostname = ''; }
+      if (relPath[0] !== '') { relPath.unshift(''); }
+      if (relPath.length < 2) { relPath.unshift(''); }
       result.pathname = relPath.join('/');
     } else {
       result.pathname = relative.pathname;
@@ -17147,16 +17177,16 @@ Url.prototype.resolveObject = function(relative) {
     result.hostname = '';
     result.port = null;
     if (result.host) {
-      if (srcPath[0] === '') srcPath[0] = result.host;
-      else srcPath.unshift(result.host);
+      if (srcPath[0] === '') { srcPath[0] = result.host; }
+      else { srcPath.unshift(result.host); }
     }
     result.host = '';
     if (relative.protocol) {
       relative.hostname = null;
       relative.port = null;
       if (relative.host) {
-        if (relPath[0] === '') relPath[0] = relative.host;
-        else relPath.unshift(relative.host);
+        if (relPath[0] === '') { relPath[0] = relative.host; }
+        else { relPath.unshift(relative.host); }
       }
       relative.host = null;
     }
@@ -17176,7 +17206,7 @@ Url.prototype.resolveObject = function(relative) {
   } else if (relPath.length) {
     // it's relative
     // throw away the existing file, and take the new path instead.
-    if (!srcPath) srcPath = [];
+    if (!srcPath) { srcPath = []; }
     srcPath.pop();
     srcPath = srcPath.concat(relPath);
     result.search = relative.search;
@@ -17318,7 +17348,7 @@ function parseHost(self) {
     }
     host = host.substr(0, host.length - port.length);
   }
-  if (host) self.hostname = host;
+  if (host) { self.hostname = host; }
 }
 
 
@@ -18492,12 +18522,14 @@ Cookie$1.prototype.inspect = function inspect() {
 };
 
 Cookie$1.prototype.toJSON = function() {
+  var this$1 = this;
+
   var obj = {};
 
   var props = Cookie$1.serializableProperties;
   for (var i=0; i<props.length; i++) {
     var prop = props[i];
-    if (this[prop] === Cookie$1.prototype[prop]) {
+    if (this$1[prop] === Cookie$1.prototype[prop]) {
       continue; // leave as prototype default
     }
 
@@ -18505,21 +18537,21 @@ Cookie$1.prototype.toJSON = function() {
         prop === 'creation' ||
         prop === 'lastAccessed')
     {
-      if (this[prop] === null) {
+      if (this$1[prop] === null) {
         obj[prop] = null;
       } else {
-        obj[prop] = this[prop] == "Infinity" ? // intentionally not ===
-          "Infinity" : this[prop].toISOString();
+        obj[prop] = this$1[prop] == "Infinity" ? // intentionally not ===
+          "Infinity" : this$1[prop].toISOString();
       }
     } else if (prop === 'maxAge') {
-      if (this[prop] !== null) {
+      if (this$1[prop] !== null) {
         // again, intentionally not ===
-        obj[prop] = (this[prop] == Infinity || this[prop] == -Infinity) ?
-          this[prop].toString() : this[prop];
+        obj[prop] = (this$1[prop] == Infinity || this$1[prop] == -Infinity) ?
+          this$1[prop].toString() : this$1[prop];
       }
     } else {
-      if (this[prop] !== Cookie$1.prototype[prop]) {
-        obj[prop] = this[prop];
+      if (this$1[prop] !== Cookie$1.prototype[prop]) {
+        obj[prop] = this$1[prop];
       }
     }
   }
@@ -19211,19 +19243,19 @@ function stringify(obj, replacer, spaces, cycleReplacer) {
 function serializer(replacer, cycleReplacer) {
   var stack = [], keys = [];
 
-  if (cycleReplacer == null) cycleReplacer = function(key, value) {
-    if (stack[0] === value) return "[Circular ~]"
+  if (cycleReplacer == null) { cycleReplacer = function(key, value) {
+    if (stack[0] === value) { return "[Circular ~]" }
     return "[Circular ~." + keys.slice(0, stack.indexOf(value)).join(".") + "]"
-  };
+  }; }
 
   return function(key, value) {
     if (stack.length > 0) {
       var thisPos = stack.indexOf(this);
       ~thisPos ? stack.splice(thisPos + 1) : stack.push(this);
       ~thisPos ? keys.splice(thisPos, Infinity, key) : keys.push(key);
-      if (~stack.indexOf(value)) value = cycleReplacer.call(this, key, value);
+      if (~stack.indexOf(value)) { value = cycleReplacer.call(this, key, value); }
     }
-    else stack.push(value);
+    else { stack.push(value); }
 
     return replacer == null ? value : replacer.call(this, key, value)
   }
@@ -19745,7 +19777,7 @@ Buffer$2.compare = function compare (a, b) {
     throw new TypeError('Arguments must be Buffers')
   }
 
-  if (a === b) return 0
+  if (a === b) { return 0 }
 
   var x = a.length;
   var y = b.length;
@@ -19758,8 +19790,8 @@ Buffer$2.compare = function compare (a, b) {
     }
   }
 
-  if (x < y) return -1
-  if (y < x) return 1
+  if (x < y) { return -1 }
+  if (y < x) { return 1 }
   return 0
 };
 
@@ -19825,7 +19857,7 @@ function byteLength (string, encoding) {
   }
 
   var len = string.length;
-  if (len === 0) return 0
+  if (len === 0) { return 0 }
 
   // Use a for loop to avoid recursion
   var loweredCase = false;
@@ -19849,7 +19881,7 @@ function byteLength (string, encoding) {
       case 'base64':
         return base64ToBytes(string).length
       default:
-        if (loweredCase) return utf8ToBytes(string).length // assume utf8
+        if (loweredCase) { return utf8ToBytes(string).length } // assume utf8
         encoding = ('' + encoding).toLowerCase();
         loweredCase = true;
     }
@@ -19858,6 +19890,8 @@ function byteLength (string, encoding) {
 Buffer$2.byteLength = byteLength;
 
 function slowToString (encoding, start, end) {
+  var this$1 = this;
+
   var loweredCase = false;
 
   // No need to verify that "this.length <= MAX_UINT32" since it's a read-only
@@ -19892,35 +19926,35 @@ function slowToString (encoding, start, end) {
     return ''
   }
 
-  if (!encoding) encoding = 'utf8';
+  if (!encoding) { encoding = 'utf8'; }
 
   while (true) {
     switch (encoding) {
       case 'hex':
-        return hexSlice(this, start, end)
+        return hexSlice(this$1, start, end)
 
       case 'utf8':
       case 'utf-8':
-        return utf8Slice(this, start, end)
+        return utf8Slice(this$1, start, end)
 
       case 'ascii':
-        return asciiSlice(this, start, end)
+        return asciiSlice(this$1, start, end)
 
       case 'latin1':
       case 'binary':
-        return latin1Slice(this, start, end)
+        return latin1Slice(this$1, start, end)
 
       case 'base64':
-        return base64Slice(this, start, end)
+        return base64Slice(this$1, start, end)
 
       case 'ucs2':
       case 'ucs-2':
       case 'utf16le':
       case 'utf-16le':
-        return utf16leSlice(this, start, end)
+        return utf16leSlice(this$1, start, end)
 
       default:
-        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+        if (loweredCase) { throw new TypeError('Unknown encoding: ' + encoding) }
         encoding = (encoding + '').toLowerCase();
         loweredCase = true;
     }
@@ -19938,52 +19972,58 @@ function swap (b, n, m) {
 }
 
 Buffer$2.prototype.swap16 = function swap16 () {
+  var this$1 = this;
+
   var len = this.length;
   if (len % 2 !== 0) {
     throw new RangeError('Buffer size must be a multiple of 16-bits')
   }
   for (var i = 0; i < len; i += 2) {
-    swap(this, i, i + 1);
+    swap(this$1, i, i + 1);
   }
   return this
 };
 
 Buffer$2.prototype.swap32 = function swap32 () {
+  var this$1 = this;
+
   var len = this.length;
   if (len % 4 !== 0) {
     throw new RangeError('Buffer size must be a multiple of 32-bits')
   }
   for (var i = 0; i < len; i += 4) {
-    swap(this, i, i + 3);
-    swap(this, i + 1, i + 2);
+    swap(this$1, i, i + 3);
+    swap(this$1, i + 1, i + 2);
   }
   return this
 };
 
 Buffer$2.prototype.swap64 = function swap64 () {
+  var this$1 = this;
+
   var len = this.length;
   if (len % 8 !== 0) {
     throw new RangeError('Buffer size must be a multiple of 64-bits')
   }
   for (var i = 0; i < len; i += 8) {
-    swap(this, i, i + 7);
-    swap(this, i + 1, i + 6);
-    swap(this, i + 2, i + 5);
-    swap(this, i + 3, i + 4);
+    swap(this$1, i, i + 7);
+    swap(this$1, i + 1, i + 6);
+    swap(this$1, i + 2, i + 5);
+    swap(this$1, i + 3, i + 4);
   }
   return this
 };
 
 Buffer$2.prototype.toString = function toString () {
   var length = this.length | 0;
-  if (length === 0) return ''
-  if (arguments.length === 0) return utf8Slice(this, 0, length)
+  if (length === 0) { return '' }
+  if (arguments.length === 0) { return utf8Slice(this, 0, length) }
   return slowToString.apply(this, arguments)
 };
 
 Buffer$2.prototype.equals = function equals (b) {
-  if (!internalIsBuffer(b)) throw new TypeError('Argument must be a Buffer')
-  if (this === b) return true
+  if (!internalIsBuffer(b)) { throw new TypeError('Argument must be a Buffer') }
+  if (this === b) { return true }
   return Buffer$2.compare(this, b) === 0
 };
 
@@ -19992,7 +20032,7 @@ Buffer$2.prototype.inspect = function inspect () {
   var max = INSPECT_MAX_BYTES;
   if (this.length > 0) {
     str = this.toString('hex', 0, max).match(/.{2}/g).join(' ');
-    if (this.length > max) str += ' ... ';
+    if (this.length > max) { str += ' ... '; }
   }
   return '<Buffer ' + str + '>'
 };
@@ -20034,7 +20074,7 @@ Buffer$2.prototype.compare = function compare (target, start, end, thisStart, th
   thisStart >>>= 0;
   thisEnd >>>= 0;
 
-  if (this === target) return 0
+  if (this === target) { return 0 }
 
   var x = thisEnd - thisStart;
   var y = end - start;
@@ -20051,8 +20091,8 @@ Buffer$2.prototype.compare = function compare (target, start, end, thisStart, th
     }
   }
 
-  if (x < y) return -1
-  if (y < x) return 1
+  if (x < y) { return -1 }
+  if (y < x) { return 1 }
   return 0
 };
 
@@ -20067,7 +20107,7 @@ Buffer$2.prototype.compare = function compare (target, start, end, thisStart, th
 // - dir - true for indexOf, false for lastIndexOf
 function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
   // Empty buffer means no match
-  if (buffer.length === 0) return -1
+  if (buffer.length === 0) { return -1 }
 
   // Normalize byteOffset
   if (typeof byteOffset === 'string') {
@@ -20085,13 +20125,13 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
   }
 
   // Normalize byteOffset: negative offsets start from the end of the buffer
-  if (byteOffset < 0) byteOffset = buffer.length + byteOffset;
+  if (byteOffset < 0) { byteOffset = buffer.length + byteOffset; }
   if (byteOffset >= buffer.length) {
-    if (dir) return -1
-    else byteOffset = buffer.length - 1;
+    if (dir) { return -1 }
+    else { byteOffset = buffer.length - 1; }
   } else if (byteOffset < 0) {
-    if (dir) byteOffset = 0;
-    else return -1
+    if (dir) { byteOffset = 0; }
+    else { return -1 }
   }
 
   // Normalize val
@@ -20154,15 +20194,15 @@ function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
     var foundIndex = -1;
     for (i = byteOffset; i < arrLength; i++) {
       if (read$$1(arr, i) === read$$1(val, foundIndex === -1 ? 0 : i - foundIndex)) {
-        if (foundIndex === -1) foundIndex = i;
-        if (i - foundIndex + 1 === valLength) return foundIndex * indexSize
+        if (foundIndex === -1) { foundIndex = i; }
+        if (i - foundIndex + 1 === valLength) { return foundIndex * indexSize }
       } else {
-        if (foundIndex !== -1) i -= i - foundIndex;
+        if (foundIndex !== -1) { i -= i - foundIndex; }
         foundIndex = -1;
       }
     }
   } else {
-    if (byteOffset + valLength > arrLength) byteOffset = arrLength - valLength;
+    if (byteOffset + valLength > arrLength) { byteOffset = arrLength - valLength; }
     for (i = byteOffset; i >= 0; i--) {
       var found = true;
       for (var j = 0; j < valLength; j++) {
@@ -20171,7 +20211,7 @@ function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
           break
         }
       }
-      if (found) return i
+      if (found) { return i }
     }
   }
 
@@ -20204,14 +20244,14 @@ function hexWrite (buf, string, offset, length) {
 
   // must be an even number of digits
   var strLen = string.length;
-  if (strLen % 2 !== 0) throw new TypeError('Invalid hex string')
+  if (strLen % 2 !== 0) { throw new TypeError('Invalid hex string') }
 
   if (length > strLen / 2) {
     length = strLen / 2;
   }
   for (var i = 0; i < length; ++i) {
     var parsed = parseInt(string.substr(i * 2, 2), 16);
-    if (isNaN(parsed)) return i
+    if (isNaN(parsed)) { return i }
     buf[offset + i] = parsed;
   }
   return i
@@ -20238,6 +20278,8 @@ function ucs2Write (buf, string, offset, length) {
 }
 
 Buffer$2.prototype.write = function write$$1 (string, offset, length, encoding) {
+  var this$1 = this;
+
   // Buffer#write(string)
   if (offset === undefined) {
     encoding = 'utf8';
@@ -20253,7 +20295,7 @@ Buffer$2.prototype.write = function write$$1 (string, offset, length, encoding) 
     offset = offset | 0;
     if (isFinite(length)) {
       length = length | 0;
-      if (encoding === undefined) encoding = 'utf8';
+      if (encoding === undefined) { encoding = 'utf8'; }
     } else {
       encoding = length;
       length = undefined;
@@ -20266,43 +20308,43 @@ Buffer$2.prototype.write = function write$$1 (string, offset, length, encoding) 
   }
 
   var remaining = this.length - offset;
-  if (length === undefined || length > remaining) length = remaining;
+  if (length === undefined || length > remaining) { length = remaining; }
 
   if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
     throw new RangeError('Attempt to write outside buffer bounds')
   }
 
-  if (!encoding) encoding = 'utf8';
+  if (!encoding) { encoding = 'utf8'; }
 
   var loweredCase = false;
   for (;;) {
     switch (encoding) {
       case 'hex':
-        return hexWrite(this, string, offset, length)
+        return hexWrite(this$1, string, offset, length)
 
       case 'utf8':
       case 'utf-8':
-        return utf8Write(this, string, offset, length)
+        return utf8Write(this$1, string, offset, length)
 
       case 'ascii':
-        return asciiWrite(this, string, offset, length)
+        return asciiWrite(this$1, string, offset, length)
 
       case 'latin1':
       case 'binary':
-        return latin1Write(this, string, offset, length)
+        return latin1Write(this$1, string, offset, length)
 
       case 'base64':
         // Warning: maxLength not taken into account in base64Write
-        return base64Write(this, string, offset, length)
+        return base64Write(this$1, string, offset, length)
 
       case 'ucs2':
       case 'ucs-2':
       case 'utf16le':
       case 'utf-16le':
-        return ucs2Write(this, string, offset, length)
+        return ucs2Write(this$1, string, offset, length)
 
       default:
-        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+        if (loweredCase) { throw new TypeError('Unknown encoding: ' + encoding) }
         encoding = ('' + encoding).toLowerCase();
         loweredCase = true;
     }
@@ -20443,8 +20485,8 @@ function latin1Slice (buf, start, end) {
 function hexSlice (buf, start, end) {
   var len = buf.length;
 
-  if (!start || start < 0) start = 0;
-  if (!end || end < 0 || end > len) end = len;
+  if (!start || start < 0) { start = 0; }
+  if (!end || end < 0 || end > len) { end = len; }
 
   var out = '';
   for (var i = start; i < end; ++i) {
@@ -20463,25 +20505,27 @@ function utf16leSlice (buf, start, end) {
 }
 
 Buffer$2.prototype.slice = function slice (start, end) {
+  var this$1 = this;
+
   var len = this.length;
   start = ~~start;
   end = end === undefined ? len : ~~end;
 
   if (start < 0) {
     start += len;
-    if (start < 0) start = 0;
+    if (start < 0) { start = 0; }
   } else if (start > len) {
     start = len;
   }
 
   if (end < 0) {
     end += len;
-    if (end < 0) end = 0;
+    if (end < 0) { end = 0; }
   } else if (end > len) {
     end = len;
   }
 
-  if (end < start) end = start;
+  if (end < start) { end = start; }
 
   var newBuf;
   if (Buffer$2.TYPED_ARRAY_SUPPORT) {
@@ -20491,7 +20535,7 @@ Buffer$2.prototype.slice = function slice (start, end) {
     var sliceLen = end - start;
     newBuf = new Buffer$2(sliceLen, undefined);
     for (var i = 0; i < sliceLen; ++i) {
-      newBuf[i] = this[i + start];
+      newBuf[i] = this$1[i + start];
     }
   }
 
@@ -20502,26 +20546,30 @@ Buffer$2.prototype.slice = function slice (start, end) {
  * Need to make sure that buffer isn't trying to write out of bounds.
  */
 function checkOffset (offset, ext, length) {
-  if ((offset % 1) !== 0 || offset < 0) throw new RangeError('offset is not uint')
-  if (offset + ext > length) throw new RangeError('Trying to access beyond buffer length')
+  if ((offset % 1) !== 0 || offset < 0) { throw new RangeError('offset is not uint') }
+  if (offset + ext > length) { throw new RangeError('Trying to access beyond buffer length') }
 }
 
 Buffer$2.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
+  var this$1 = this;
+
   offset = offset | 0;
   byteLength = byteLength | 0;
-  if (!noAssert) checkOffset(offset, byteLength, this.length);
+  if (!noAssert) { checkOffset(offset, byteLength, this.length); }
 
   var val = this[offset];
   var mul = 1;
   var i = 0;
   while (++i < byteLength && (mul *= 0x100)) {
-    val += this[offset + i] * mul;
+    val += this$1[offset + i] * mul;
   }
 
   return val
 };
 
 Buffer$2.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
+  var this$1 = this;
+
   offset = offset | 0;
   byteLength = byteLength | 0;
   if (!noAssert) {
@@ -20531,29 +20579,29 @@ Buffer$2.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAsser
   var val = this[offset + --byteLength];
   var mul = 1;
   while (byteLength > 0 && (mul *= 0x100)) {
-    val += this[offset + --byteLength] * mul;
+    val += this$1[offset + --byteLength] * mul;
   }
 
   return val
 };
 
 Buffer$2.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 1, this.length);
+  if (!noAssert) { checkOffset(offset, 1, this.length); }
   return this[offset]
 };
 
 Buffer$2.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 2, this.length);
+  if (!noAssert) { checkOffset(offset, 2, this.length); }
   return this[offset] | (this[offset + 1] << 8)
 };
 
 Buffer$2.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 2, this.length);
+  if (!noAssert) { checkOffset(offset, 2, this.length); }
   return (this[offset] << 8) | this[offset + 1]
 };
 
 Buffer$2.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length);
+  if (!noAssert) { checkOffset(offset, 4, this.length); }
 
   return ((this[offset]) |
       (this[offset + 1] << 8) |
@@ -20562,7 +20610,7 @@ Buffer$2.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
 };
 
 Buffer$2.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length);
+  if (!noAssert) { checkOffset(offset, 4, this.length); }
 
   return (this[offset] * 0x1000000) +
     ((this[offset + 1] << 16) |
@@ -20571,61 +20619,65 @@ Buffer$2.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
 };
 
 Buffer$2.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
+  var this$1 = this;
+
   offset = offset | 0;
   byteLength = byteLength | 0;
-  if (!noAssert) checkOffset(offset, byteLength, this.length);
+  if (!noAssert) { checkOffset(offset, byteLength, this.length); }
 
   var val = this[offset];
   var mul = 1;
   var i = 0;
   while (++i < byteLength && (mul *= 0x100)) {
-    val += this[offset + i] * mul;
+    val += this$1[offset + i] * mul;
   }
   mul *= 0x80;
 
-  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+  if (val >= mul) { val -= Math.pow(2, 8 * byteLength); }
 
   return val
 };
 
 Buffer$2.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
+  var this$1 = this;
+
   offset = offset | 0;
   byteLength = byteLength | 0;
-  if (!noAssert) checkOffset(offset, byteLength, this.length);
+  if (!noAssert) { checkOffset(offset, byteLength, this.length); }
 
   var i = byteLength;
   var mul = 1;
   var val = this[offset + --i];
   while (i > 0 && (mul *= 0x100)) {
-    val += this[offset + --i] * mul;
+    val += this$1[offset + --i] * mul;
   }
   mul *= 0x80;
 
-  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+  if (val >= mul) { val -= Math.pow(2, 8 * byteLength); }
 
   return val
 };
 
 Buffer$2.prototype.readInt8 = function readInt8 (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 1, this.length);
-  if (!(this[offset] & 0x80)) return (this[offset])
+  if (!noAssert) { checkOffset(offset, 1, this.length); }
+  if (!(this[offset] & 0x80)) { return (this[offset]) }
   return ((0xff - this[offset] + 1) * -1)
 };
 
 Buffer$2.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 2, this.length);
+  if (!noAssert) { checkOffset(offset, 2, this.length); }
   var val = this[offset] | (this[offset + 1] << 8);
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 };
 
 Buffer$2.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 2, this.length);
+  if (!noAssert) { checkOffset(offset, 2, this.length); }
   var val = this[offset + 1] | (this[offset] << 8);
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 };
 
 Buffer$2.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length);
+  if (!noAssert) { checkOffset(offset, 4, this.length); }
 
   return (this[offset]) |
     (this[offset + 1] << 8) |
@@ -20634,7 +20686,7 @@ Buffer$2.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
 };
 
 Buffer$2.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length);
+  if (!noAssert) { checkOffset(offset, 4, this.length); }
 
   return (this[offset] << 24) |
     (this[offset + 1] << 16) |
@@ -20643,32 +20695,34 @@ Buffer$2.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
 };
 
 Buffer$2.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length);
+  if (!noAssert) { checkOffset(offset, 4, this.length); }
   return read(this, offset, true, 23, 4)
 };
 
 Buffer$2.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 4, this.length);
+  if (!noAssert) { checkOffset(offset, 4, this.length); }
   return read(this, offset, false, 23, 4)
 };
 
 Buffer$2.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 8, this.length);
+  if (!noAssert) { checkOffset(offset, 8, this.length); }
   return read(this, offset, true, 52, 8)
 };
 
 Buffer$2.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
-  if (!noAssert) checkOffset(offset, 8, this.length);
+  if (!noAssert) { checkOffset(offset, 8, this.length); }
   return read(this, offset, false, 52, 8)
 };
 
 function checkInt (buf, value, offset, ext, max, min) {
-  if (!internalIsBuffer(buf)) throw new TypeError('"buffer" argument must be a Buffer instance')
-  if (value > max || value < min) throw new RangeError('"value" argument is out of bounds')
-  if (offset + ext > buf.length) throw new RangeError('Index out of range')
+  if (!internalIsBuffer(buf)) { throw new TypeError('"buffer" argument must be a Buffer instance') }
+  if (value > max || value < min) { throw new RangeError('"value" argument is out of bounds') }
+  if (offset + ext > buf.length) { throw new RangeError('Index out of range') }
 }
 
 Buffer$2.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
+  var this$1 = this;
+
   value = +value;
   offset = offset | 0;
   byteLength = byteLength | 0;
@@ -20681,13 +20735,15 @@ Buffer$2.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength
   var i = 0;
   this[offset] = value & 0xFF;
   while (++i < byteLength && (mul *= 0x100)) {
-    this[offset + i] = (value / mul) & 0xFF;
+    this$1[offset + i] = (value / mul) & 0xFF;
   }
 
   return offset + byteLength
 };
 
 Buffer$2.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
+  var this$1 = this;
+
   value = +value;
   offset = offset | 0;
   byteLength = byteLength | 0;
@@ -20700,7 +20756,7 @@ Buffer$2.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength
   var mul = 1;
   this[offset + i] = value & 0xFF;
   while (--i >= 0 && (mul *= 0x100)) {
-    this[offset + i] = (value / mul) & 0xFF;
+    this$1[offset + i] = (value / mul) & 0xFF;
   }
 
   return offset + byteLength
@@ -20709,14 +20765,14 @@ Buffer$2.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength
 Buffer$2.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0);
-  if (!Buffer$2.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
+  if (!noAssert) { checkInt(this, value, offset, 1, 0xff, 0); }
+  if (!Buffer$2.TYPED_ARRAY_SUPPORT) { value = Math.floor(value); }
   this[offset] = (value & 0xff);
   return offset + 1
 };
 
 function objectWriteUInt16 (buf, value, offset, littleEndian) {
-  if (value < 0) value = 0xffff + value + 1;
+  if (value < 0) { value = 0xffff + value + 1; }
   for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
     buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
       (littleEndian ? i : 1 - i) * 8;
@@ -20726,7 +20782,7 @@ function objectWriteUInt16 (buf, value, offset, littleEndian) {
 Buffer$2.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+  if (!noAssert) { checkInt(this, value, offset, 2, 0xffff, 0); }
   if (Buffer$2.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value & 0xff);
     this[offset + 1] = (value >>> 8);
@@ -20739,7 +20795,7 @@ Buffer$2.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAsse
 Buffer$2.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+  if (!noAssert) { checkInt(this, value, offset, 2, 0xffff, 0); }
   if (Buffer$2.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8);
     this[offset + 1] = (value & 0xff);
@@ -20750,7 +20806,7 @@ Buffer$2.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAsse
 };
 
 function objectWriteUInt32 (buf, value, offset, littleEndian) {
-  if (value < 0) value = 0xffffffff + value + 1;
+  if (value < 0) { value = 0xffffffff + value + 1; }
   for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
     buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff;
   }
@@ -20759,7 +20815,7 @@ function objectWriteUInt32 (buf, value, offset, littleEndian) {
 Buffer$2.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+  if (!noAssert) { checkInt(this, value, offset, 4, 0xffffffff, 0); }
   if (Buffer$2.TYPED_ARRAY_SUPPORT) {
     this[offset + 3] = (value >>> 24);
     this[offset + 2] = (value >>> 16);
@@ -20774,7 +20830,7 @@ Buffer$2.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAsse
 Buffer$2.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+  if (!noAssert) { checkInt(this, value, offset, 4, 0xffffffff, 0); }
   if (Buffer$2.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 24);
     this[offset + 1] = (value >>> 16);
@@ -20787,6 +20843,8 @@ Buffer$2.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAsse
 };
 
 Buffer$2.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
+  var this$1 = this;
+
   value = +value;
   offset = offset | 0;
   if (!noAssert) {
@@ -20800,16 +20858,18 @@ Buffer$2.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, 
   var sub = 0;
   this[offset] = value & 0xFF;
   while (++i < byteLength && (mul *= 0x100)) {
-    if (value < 0 && sub === 0 && this[offset + i - 1] !== 0) {
+    if (value < 0 && sub === 0 && this$1[offset + i - 1] !== 0) {
       sub = 1;
     }
-    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
+    this$1[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
   }
 
   return offset + byteLength
 };
 
 Buffer$2.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
+  var this$1 = this;
+
   value = +value;
   offset = offset | 0;
   if (!noAssert) {
@@ -20823,10 +20883,10 @@ Buffer$2.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, 
   var sub = 0;
   this[offset + i] = value & 0xFF;
   while (--i >= 0 && (mul *= 0x100)) {
-    if (value < 0 && sub === 0 && this[offset + i + 1] !== 0) {
+    if (value < 0 && sub === 0 && this$1[offset + i + 1] !== 0) {
       sub = 1;
     }
-    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
+    this$1[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
   }
 
   return offset + byteLength
@@ -20835,9 +20895,9 @@ Buffer$2.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, 
 Buffer$2.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80);
-  if (!Buffer$2.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
-  if (value < 0) value = 0xff + value + 1;
+  if (!noAssert) { checkInt(this, value, offset, 1, 0x7f, -0x80); }
+  if (!Buffer$2.TYPED_ARRAY_SUPPORT) { value = Math.floor(value); }
+  if (value < 0) { value = 0xff + value + 1; }
   this[offset] = (value & 0xff);
   return offset + 1
 };
@@ -20845,7 +20905,7 @@ Buffer$2.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
 Buffer$2.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+  if (!noAssert) { checkInt(this, value, offset, 2, 0x7fff, -0x8000); }
   if (Buffer$2.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value & 0xff);
     this[offset + 1] = (value >>> 8);
@@ -20858,7 +20918,7 @@ Buffer$2.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert
 Buffer$2.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+  if (!noAssert) { checkInt(this, value, offset, 2, 0x7fff, -0x8000); }
   if (Buffer$2.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8);
     this[offset + 1] = (value & 0xff);
@@ -20871,7 +20931,7 @@ Buffer$2.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert
 Buffer$2.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+  if (!noAssert) { checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000); }
   if (Buffer$2.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value & 0xff);
     this[offset + 1] = (value >>> 8);
@@ -20886,8 +20946,8 @@ Buffer$2.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert
 Buffer$2.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
-  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
-  if (value < 0) value = 0xffffffff + value + 1;
+  if (!noAssert) { checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000); }
+  if (value < 0) { value = 0xffffffff + value + 1; }
   if (Buffer$2.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 24);
     this[offset + 1] = (value >>> 16);
@@ -20900,8 +20960,8 @@ Buffer$2.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert
 };
 
 function checkIEEE754 (buf, value, offset, ext, max, min) {
-  if (offset + ext > buf.length) throw new RangeError('Index out of range')
-  if (offset < 0) throw new RangeError('Index out of range')
+  if (offset + ext > buf.length) { throw new RangeError('Index out of range') }
+  if (offset < 0) { throw new RangeError('Index out of range') }
 }
 
 function writeFloat (buf, value, offset, littleEndian, noAssert) {
@@ -20938,25 +20998,27 @@ Buffer$2.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAsse
 
 // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
 Buffer$2.prototype.copy = function copy (target, targetStart, start, end) {
-  if (!start) start = 0;
-  if (!end && end !== 0) end = this.length;
-  if (targetStart >= target.length) targetStart = target.length;
-  if (!targetStart) targetStart = 0;
-  if (end > 0 && end < start) end = start;
+  var this$1 = this;
+
+  if (!start) { start = 0; }
+  if (!end && end !== 0) { end = this.length; }
+  if (targetStart >= target.length) { targetStart = target.length; }
+  if (!targetStart) { targetStart = 0; }
+  if (end > 0 && end < start) { end = start; }
 
   // Copy 0 bytes; we're done
-  if (end === start) return 0
-  if (target.length === 0 || this.length === 0) return 0
+  if (end === start) { return 0 }
+  if (target.length === 0 || this.length === 0) { return 0 }
 
   // Fatal error conditions
   if (targetStart < 0) {
     throw new RangeError('targetStart out of bounds')
   }
-  if (start < 0 || start >= this.length) throw new RangeError('sourceStart out of bounds')
-  if (end < 0) throw new RangeError('sourceEnd out of bounds')
+  if (start < 0 || start >= this.length) { throw new RangeError('sourceStart out of bounds') }
+  if (end < 0) { throw new RangeError('sourceEnd out of bounds') }
 
   // Are we oob?
-  if (end > this.length) end = this.length;
+  if (end > this.length) { end = this.length; }
   if (target.length - targetStart < end - start) {
     end = target.length - targetStart + start;
   }
@@ -20967,12 +21029,12 @@ Buffer$2.prototype.copy = function copy (target, targetStart, start, end) {
   if (this === target && start < targetStart && targetStart < end) {
     // descending copy from end
     for (i = len - 1; i >= 0; --i) {
-      target[i + targetStart] = this[i + start];
+      target[i + targetStart] = this$1[i + start];
     }
   } else if (len < 1000 || !Buffer$2.TYPED_ARRAY_SUPPORT) {
     // ascending copy from start
     for (i = 0; i < len; ++i) {
-      target[i + targetStart] = this[i + start];
+      target[i + targetStart] = this$1[i + start];
     }
   } else {
     Uint8Array.prototype.set.call(
@@ -20990,6 +21052,8 @@ Buffer$2.prototype.copy = function copy (target, targetStart, start, end) {
 //    buffer.fill(buffer[, offset[, end]])
 //    buffer.fill(string[, offset[, end]][, encoding])
 Buffer$2.prototype.fill = function fill (val, start, end, encoding) {
+  var this$1 = this;
+
   // Handle string cases:
   if (typeof val === 'string') {
     if (typeof start === 'string') {
@@ -21028,12 +21092,12 @@ Buffer$2.prototype.fill = function fill (val, start, end, encoding) {
   start = start >>> 0;
   end = end === undefined ? this.length : end >>> 0;
 
-  if (!val) val = 0;
+  if (!val) { val = 0; }
 
   var i;
   if (typeof val === 'number') {
     for (i = start; i < end; ++i) {
-      this[i] = val;
+      this$1[i] = val;
     }
   } else {
     var bytes = internalIsBuffer(val)
@@ -21041,7 +21105,7 @@ Buffer$2.prototype.fill = function fill (val, start, end, encoding) {
       : utf8ToBytes(new Buffer$2(val, encoding).toString());
     var len = bytes.length;
     for (i = 0; i < end - start; ++i) {
-      this[i + start] = bytes[i % len];
+      this$1[i + start] = bytes[i % len];
     }
   }
 
@@ -21057,7 +21121,7 @@ function base64clean (str) {
   // Node strips out invalid characters like \n and \t from the string, base64-js does not
   str = stringtrim(str).replace(INVALID_BASE64_RE, '');
   // Node converts strings with length < 2 to ''
-  if (str.length < 2) return ''
+  if (str.length < 2) { return '' }
   // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
   while (str.length % 4 !== 0) {
     str = str + '=';
@@ -21066,12 +21130,12 @@ function base64clean (str) {
 }
 
 function stringtrim (str) {
-  if (str.trim) return str.trim()
+  if (str.trim) { return str.trim() }
   return str.replace(/^\s+|\s+$/g, '')
 }
 
 function toHex (n) {
-  if (n < 16) return '0' + n.toString(16)
+  if (n < 16) { return '0' + n.toString(16) }
   return n.toString(16)
 }
 
@@ -21092,11 +21156,11 @@ function utf8ToBytes (string, units) {
         // no lead yet
         if (codePoint > 0xDBFF) {
           // unexpected trail
-          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+          if ((units -= 3) > -1) { bytes.push(0xEF, 0xBF, 0xBD); }
           continue
         } else if (i + 1 === length) {
           // unpaired lead
-          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+          if ((units -= 3) > -1) { bytes.push(0xEF, 0xBF, 0xBD); }
           continue
         }
 
@@ -21108,7 +21172,7 @@ function utf8ToBytes (string, units) {
 
       // 2 leads in a row
       if (codePoint < 0xDC00) {
-        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+        if ((units -= 3) > -1) { bytes.push(0xEF, 0xBF, 0xBD); }
         leadSurrogate = codePoint;
         continue
       }
@@ -21117,30 +21181,30 @@ function utf8ToBytes (string, units) {
       codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000;
     } else if (leadSurrogate) {
       // valid bmp char, but last char was a lead
-      if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+      if ((units -= 3) > -1) { bytes.push(0xEF, 0xBF, 0xBD); }
     }
 
     leadSurrogate = null;
 
     // encode utf8
     if (codePoint < 0x80) {
-      if ((units -= 1) < 0) break
+      if ((units -= 1) < 0) { break }
       bytes.push(codePoint);
     } else if (codePoint < 0x800) {
-      if ((units -= 2) < 0) break
+      if ((units -= 2) < 0) { break }
       bytes.push(
         codePoint >> 0x6 | 0xC0,
         codePoint & 0x3F | 0x80
       );
     } else if (codePoint < 0x10000) {
-      if ((units -= 3) < 0) break
+      if ((units -= 3) < 0) { break }
       bytes.push(
         codePoint >> 0xC | 0xE0,
         codePoint >> 0x6 & 0x3F | 0x80,
         codePoint & 0x3F | 0x80
       );
     } else if (codePoint < 0x110000) {
-      if ((units -= 4) < 0) break
+      if ((units -= 4) < 0) { break }
       bytes.push(
         codePoint >> 0x12 | 0xF0,
         codePoint >> 0xC & 0x3F | 0x80,
@@ -21168,7 +21232,7 @@ function utf16leToBytes (str, units) {
   var c, hi, lo;
   var byteArray = [];
   for (var i = 0; i < str.length; ++i) {
-    if ((units -= 2) < 0) break
+    if ((units -= 2) < 0) { break }
 
     c = str.charCodeAt(i);
     hi = c >> 8;
@@ -21187,7 +21251,7 @@ function base64ToBytes (str) {
 
 function blitBuffer (src, dst, offset, length) {
   for (var i = 0; i < length; ++i) {
-    if ((i + offset >= dst.length) || (i >= src.length)) break
+    if ((i + offset >= dst.length) || (i >= src.length)) { break }
     dst[i + offset] = src[i];
   }
   return i
@@ -21463,14 +21527,14 @@ EventEmitter.init = function() {
 // that to be increased. Set to zero for unlimited.
 EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
   if (typeof n !== 'number' || n < 0 || isNaN(n))
-    throw new TypeError('"n" argument must be a positive number');
+    { throw new TypeError('"n" argument must be a positive number'); }
   this._maxListeners = n;
   return this;
 };
 
 function $getMaxListeners(that) {
   if (that._maxListeners === undefined)
-    return EventEmitter.defaultMaxListeners;
+    { return EventEmitter.defaultMaxListeners; }
   return that._maxListeners;
 }
 
@@ -21485,66 +21549,68 @@ EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
 // inside them can execute faster.
 function emitNone(handler, isFn, self) {
   if (isFn)
-    handler.call(self);
+    { handler.call(self); }
   else {
     var len = handler.length;
     var listeners = arrayClone(handler, len);
     for (var i = 0; i < len; ++i)
-      listeners[i].call(self);
+      { listeners[i].call(self); }
   }
 }
 function emitOne(handler, isFn, self, arg1) {
   if (isFn)
-    handler.call(self, arg1);
+    { handler.call(self, arg1); }
   else {
     var len = handler.length;
     var listeners = arrayClone(handler, len);
     for (var i = 0; i < len; ++i)
-      listeners[i].call(self, arg1);
+      { listeners[i].call(self, arg1); }
   }
 }
 function emitTwo(handler, isFn, self, arg1, arg2) {
   if (isFn)
-    handler.call(self, arg1, arg2);
+    { handler.call(self, arg1, arg2); }
   else {
     var len = handler.length;
     var listeners = arrayClone(handler, len);
     for (var i = 0; i < len; ++i)
-      listeners[i].call(self, arg1, arg2);
+      { listeners[i].call(self, arg1, arg2); }
   }
 }
 function emitThree(handler, isFn, self, arg1, arg2, arg3) {
   if (isFn)
-    handler.call(self, arg1, arg2, arg3);
+    { handler.call(self, arg1, arg2, arg3); }
   else {
     var len = handler.length;
     var listeners = arrayClone(handler, len);
     for (var i = 0; i < len; ++i)
-      listeners[i].call(self, arg1, arg2, arg3);
+      { listeners[i].call(self, arg1, arg2, arg3); }
   }
 }
 
 function emitMany(handler, isFn, self, args) {
   if (isFn)
-    handler.apply(self, args);
+    { handler.apply(self, args); }
   else {
     var len = handler.length;
     var listeners = arrayClone(handler, len);
     for (var i = 0; i < len; ++i)
-      listeners[i].apply(self, args);
+      { listeners[i].apply(self, args); }
   }
 }
 
 EventEmitter.prototype.emit = function emit(type) {
+  var arguments$1 = arguments;
+
   var er, handler, len, args, i, events, domain;
   var needDomainExit = false;
   var doError = (type === 'error');
 
   events = this._events;
   if (events)
-    doError = (doError && events.error == null);
+    { doError = (doError && events.error == null); }
   else if (!doError)
-    return false;
+    { return false; }
 
   domain = this.domain;
 
@@ -21553,7 +21619,7 @@ EventEmitter.prototype.emit = function emit(type) {
     er = arguments[1];
     if (domain) {
       if (!er)
-        er = new Error('Uncaught, unspecified "error" event');
+        { er = new Error('Uncaught, unspecified "error" event'); }
       er.domainEmitter = this;
       er.domain = domain;
       er.domainThrown = false;
@@ -21572,7 +21638,7 @@ EventEmitter.prototype.emit = function emit(type) {
   handler = events[type];
 
   if (!handler)
-    return false;
+    { return false; }
 
   var isFn = typeof handler === 'function';
   len = arguments.length;
@@ -21594,12 +21660,12 @@ EventEmitter.prototype.emit = function emit(type) {
     default:
       args = new Array(len - 1);
       for (i = 1; i < len; i++)
-        args[i - 1] = arguments[i];
+        { args[i - 1] = arguments$1[i]; }
       emitMany(handler, isFn, this, args);
   }
 
   if (needDomainExit)
-    domain.exit();
+    { domain.exit(); }
 
   return true;
 };
@@ -21610,7 +21676,7 @@ function _addListener(target, type, listener, prepend) {
   var existing;
 
   if (typeof listener !== 'function')
-    throw new TypeError('"listener" argument must be a function');
+    { throw new TypeError('"listener" argument must be a function'); }
 
   events = target._events;
   if (!events) {
@@ -21696,7 +21762,7 @@ function _onceWrap(target, type, listener) {
 
 EventEmitter.prototype.once = function once(type, listener) {
   if (typeof listener !== 'function')
-    throw new TypeError('"listener" argument must be a function');
+    { throw new TypeError('"listener" argument must be a function'); }
   this.on(type, _onceWrap(this, type, listener));
   return this;
 };
@@ -21704,7 +21770,7 @@ EventEmitter.prototype.once = function once(type, listener) {
 EventEmitter.prototype.prependOnceListener =
     function prependOnceListener(type, listener) {
       if (typeof listener !== 'function')
-        throw new TypeError('"listener" argument must be a function');
+        { throw new TypeError('"listener" argument must be a function'); }
       this.prependListener(type, _onceWrap(this, type, listener));
       return this;
     };
@@ -21715,23 +21781,23 @@ EventEmitter.prototype.removeListener =
       var list, events, position, i, originalListener;
 
       if (typeof listener !== 'function')
-        throw new TypeError('"listener" argument must be a function');
+        { throw new TypeError('"listener" argument must be a function'); }
 
       events = this._events;
       if (!events)
-        return this;
+        { return this; }
 
       list = events[type];
       if (!list)
-        return this;
+        { return this; }
 
       if (list === listener || (list.listener && list.listener === listener)) {
         if (--this._eventsCount === 0)
-          this._events = new EventHandlers();
+          { this._events = new EventHandlers(); }
         else {
           delete events[type];
           if (events.removeListener)
-            this.emit('removeListener', type, list.listener || listener);
+            { this.emit('removeListener', type, list.listener || listener); }
         }
       } else if (typeof list !== 'function') {
         position = -1;
@@ -21746,7 +21812,7 @@ EventEmitter.prototype.removeListener =
         }
 
         if (position < 0)
-          return this;
+          { return this; }
 
         if (list.length === 1) {
           list[0] = undefined;
@@ -21761,7 +21827,7 @@ EventEmitter.prototype.removeListener =
         }
 
         if (events.removeListener)
-          this.emit('removeListener', type, originalListener || listener);
+          { this.emit('removeListener', type, originalListener || listener); }
       }
 
       return this;
@@ -21769,11 +21835,13 @@ EventEmitter.prototype.removeListener =
 
 EventEmitter.prototype.removeAllListeners =
     function removeAllListeners(type) {
+      var this$1 = this;
+
       var listeners, events;
 
       events = this._events;
       if (!events)
-        return this;
+        { return this; }
 
       // not listening for removeListener, no need to emit
       if (!events.removeListener) {
@@ -21782,9 +21850,9 @@ EventEmitter.prototype.removeAllListeners =
           this._eventsCount = 0;
         } else if (events[type]) {
           if (--this._eventsCount === 0)
-            this._events = new EventHandlers();
+            { this._events = new EventHandlers(); }
           else
-            delete events[type];
+            { delete events[type]; }
         }
         return this;
       }
@@ -21794,8 +21862,8 @@ EventEmitter.prototype.removeAllListeners =
         var keys = Object.keys(events);
         for (var i = 0, key; i < keys.length; ++i) {
           key = keys[i];
-          if (key === 'removeListener') continue;
-          this.removeAllListeners(key);
+          if (key === 'removeListener') { continue; }
+          this$1.removeAllListeners(key);
         }
         this.removeAllListeners('removeListener');
         this._events = new EventHandlers();
@@ -21810,7 +21878,7 @@ EventEmitter.prototype.removeAllListeners =
       } else if (listeners) {
         // LIFO order
         do {
-          this.removeListener(type, listeners[listeners.length - 1]);
+          this$1.removeListener(type, listeners[listeners.length - 1]);
         } while (listeners[0]);
       }
 
@@ -21823,15 +21891,15 @@ EventEmitter.prototype.listeners = function listeners(type) {
   var events = this._events;
 
   if (!events)
-    ret = [];
+    { ret = []; }
   else {
     evlistener = events[type];
     if (!evlistener)
-      ret = [];
+      { ret = []; }
     else if (typeof evlistener === 'function')
-      ret = [evlistener.listener || evlistener];
+      { ret = [evlistener.listener || evlistener]; }
     else
-      ret = unwrapListeners(evlistener);
+      { ret = unwrapListeners(evlistener); }
   }
 
   return ret;
@@ -21869,14 +21937,14 @@ EventEmitter.prototype.eventNames = function eventNames() {
 // About 1.5x faster than the two-arg version of Array#splice().
 function spliceOne(list, index) {
   for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1)
-    list[i] = list[k];
+    { list[i] = list[k]; }
   list.pop();
 }
 
 function arrayClone(arr, i) {
   var copy = new Array(i);
   while (i--)
-    copy[i] = arr[i];
+    { copy[i] = arr[i]; }
   return copy;
 }
 
@@ -21902,22 +21970,22 @@ function BufferList$1() {
 
 BufferList$1.prototype.push = function (v) {
   var entry = { data: v, next: null };
-  if (this.length > 0) this.tail.next = entry;else this.head = entry;
+  if (this.length > 0) { this.tail.next = entry; }else { this.head = entry; }
   this.tail = entry;
   ++this.length;
 };
 
 BufferList$1.prototype.unshift = function (v) {
   var entry = { data: v, next: this.head };
-  if (this.length === 0) this.tail = entry;
+  if (this.length === 0) { this.tail = entry; }
   this.head = entry;
   ++this.length;
 };
 
 BufferList$1.prototype.shift = function () {
-  if (this.length === 0) return;
+  if (this.length === 0) { return; }
   var ret = this.head.data;
-  if (this.length === 1) this.head = this.tail = null;else this.head = this.head.next;
+  if (this.length === 1) { this.head = this.tail = null; }else { this.head = this.head.next; }
   --this.length;
   return ret;
 };
@@ -21928,7 +21996,7 @@ BufferList$1.prototype.clear = function () {
 };
 
 BufferList$1.prototype.join = function (s) {
-  if (this.length === 0) return '';
+  if (this.length === 0) { return ''; }
   var p = this.head;
   var ret = '' + p.data;
   while (p = p.next) {
@@ -21937,8 +22005,8 @@ BufferList$1.prototype.join = function (s) {
 };
 
 BufferList$1.prototype.concat = function (n) {
-  if (this.length === 0) return Buffer$2.alloc(0);
-  if (this.length === 1) return this.head.data;
+  if (this.length === 0) { return Buffer$2.alloc(0); }
+  if (this.length === 1) { return this.head.data; }
   var ret = Buffer$2.allocUnsafe(n >>> 0);
   var p = this.head;
   var i = 0;
@@ -22038,19 +22106,21 @@ function StringDecoder(encoding) {
 // Buffer#write) will replace incomplete surrogates with the unicode
 // replacement character. See https://codereview.chromium.org/121173009/ .
 StringDecoder.prototype.write = function(buffer) {
+  var this$1 = this;
+
   var charStr = '';
   // if our last write ended with an incomplete multibyte character
   while (this.charLength) {
     // determine how many remaining bytes this buffer has to offer for this char
-    var available = (buffer.length >= this.charLength - this.charReceived) ?
-        this.charLength - this.charReceived :
+    var available = (buffer.length >= this$1.charLength - this$1.charReceived) ?
+        this$1.charLength - this$1.charReceived :
         buffer.length;
 
     // add the new bytes to the char buffer
-    buffer.copy(this.charBuffer, this.charReceived, 0, available);
-    this.charReceived += available;
+    buffer.copy(this$1.charBuffer, this$1.charReceived, 0, available);
+    this$1.charReceived += available;
 
-    if (this.charReceived < this.charLength) {
+    if (this$1.charReceived < this$1.charLength) {
       // still not enough chars in this buffer? wait for more ...
       return '';
     }
@@ -22059,16 +22129,16 @@ StringDecoder.prototype.write = function(buffer) {
     buffer = buffer.slice(available, buffer.length);
 
     // get the character that was split
-    charStr = this.charBuffer.slice(0, this.charLength).toString(this.encoding);
+    charStr = this$1.charBuffer.slice(0, this$1.charLength).toString(this$1.encoding);
 
     // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
     var charCode = charStr.charCodeAt(charStr.length - 1);
     if (charCode >= 0xD800 && charCode <= 0xDBFF) {
-      this.charLength += this.surrogateSize;
+      this$1.charLength += this$1.surrogateSize;
       charStr = '';
       continue;
     }
-    this.charReceived = this.charLength = 0;
+    this$1.charReceived = this$1.charLength = 0;
 
     // if there are no more bytes in this buffer, just emit our char
     if (buffer.length === 0) {
@@ -22110,6 +22180,8 @@ StringDecoder.prototype.write = function(buffer) {
 // length that character, and sets this.charReceived to the number of bytes
 // that are available for this character.
 StringDecoder.prototype.detectIncompleteChar = function(buffer) {
+  var this$1 = this;
+
   // determine how many bytes we have to check at the end of this buffer
   var i = (buffer.length >= 3) ? 3 : buffer.length;
 
@@ -22122,19 +22194,19 @@ StringDecoder.prototype.detectIncompleteChar = function(buffer) {
 
     // 110XXXXX
     if (i == 1 && c >> 5 == 0x06) {
-      this.charLength = 2;
+      this$1.charLength = 2;
       break;
     }
 
     // 1110XXXX
     if (i <= 2 && c >> 4 == 0x0E) {
-      this.charLength = 3;
+      this$1.charLength = 3;
       break;
     }
 
     // 11110XXX
     if (i <= 3 && c >> 3 == 0x1E) {
-      this.charLength = 4;
+      this$1.charLength = 4;
       break;
     }
   }
@@ -22144,7 +22216,7 @@ StringDecoder.prototype.detectIncompleteChar = function(buffer) {
 StringDecoder.prototype.end = function(buffer) {
   var res = '';
   if (buffer && buffer.length)
-    res = this.write(buffer);
+    { res = this.write(buffer); }
 
   if (this.charReceived) {
     var cr = this.charReceived;
@@ -22190,11 +22262,11 @@ function prependListener(emitter, event, fn) {
     // to continue to work with older versions of Node.js that do not include
     // the prependListener() method. The goal is to eventually remove this hack.
     if (!emitter._events || !emitter._events[event])
-      emitter.on(event, fn);
+      { emitter.on(event, fn); }
     else if (Array.isArray(emitter._events[event]))
-      emitter._events[event].unshift(fn);
+      { emitter._events[event].unshift(fn); }
     else
-      emitter._events[event] = [fn, emitter._events[event]];
+      { emitter._events[event] = [fn, emitter._events[event]]; }
   }
 }
 function listenerCount$1 (emitter, type) {
@@ -22208,7 +22280,7 @@ function ReadableState(options, stream) {
   // make all the buffer merging and length checks go away
   this.objectMode = !!options.objectMode;
 
-  if (stream instanceof Duplex$1) this.objectMode = this.objectMode || !!options.readableObjectMode;
+  if (stream instanceof Duplex$1) { this.objectMode = this.objectMode || !!options.readableObjectMode; }
 
   // the point at which it stops calling _read() to fill the buffer
   // Note: 0 is a valid value, means "don't call _read preemptively ever"
@@ -22268,14 +22340,14 @@ function ReadableState(options, stream) {
 }
 function Readable$1(options) {
 
-  if (!(this instanceof Readable$1)) return new Readable$1(options);
+  if (!(this instanceof Readable$1)) { return new Readable$1(options); }
 
   this._readableState = new ReadableState(options, this);
 
   // legacy
   this.readable = true;
 
-  if (options && typeof options.read === 'function') this._read = options.read;
+  if (options && typeof options.read === 'function') { this._read = options.read; }
 
   EventEmitter.call(this);
 }
@@ -22329,7 +22401,7 @@ function readableAddChunk(stream, state, chunk, encoding, addToFront) {
         skipAdd = !state.objectMode && chunk.length === 0;
       }
 
-      if (!addToFront) state.reading = false;
+      if (!addToFront) { state.reading = false; }
 
       // Don't add to the buffer if we've decoded to an empty string chunk and
       // we're not in object mode
@@ -22341,9 +22413,9 @@ function readableAddChunk(stream, state, chunk, encoding, addToFront) {
         } else {
           // update the buffer info.
           state.length += state.objectMode ? 1 : chunk.length;
-          if (addToFront) state.buffer.unshift(chunk);else state.buffer.push(chunk);
+          if (addToFront) { state.buffer.unshift(chunk); }else { state.buffer.push(chunk); }
 
-          if (state.needReadable) emitReadable(stream);
+          if (state.needReadable) { emitReadable(stream); }
         }
       }
 
@@ -22396,15 +22468,15 @@ function computeNewHighWaterMark(n) {
 // This function is designed to be inlinable, so please take care when making
 // changes to the function body.
 function howMuchToRead(n, state) {
-  if (n <= 0 || state.length === 0 && state.ended) return 0;
-  if (state.objectMode) return 1;
+  if (n <= 0 || state.length === 0 && state.ended) { return 0; }
+  if (state.objectMode) { return 1; }
   if (n !== n) {
     // Only flow one buffer at a time
-    if (state.flowing && state.length) return state.buffer.head.data.length;else return state.length;
+    if (state.flowing && state.length) { return state.buffer.head.data.length; }else { return state.length; }
   }
   // If we're asking for more than the current hwm, then raise the hwm.
-  if (n > state.highWaterMark) state.highWaterMark = computeNewHighWaterMark(n);
-  if (n <= state.length) return n;
+  if (n > state.highWaterMark) { state.highWaterMark = computeNewHighWaterMark(n); }
+  if (n <= state.length) { return n; }
   // Don't have enough
   if (!state.ended) {
     state.needReadable = true;
@@ -22420,14 +22492,14 @@ Readable$1.prototype.read = function (n) {
   var state = this._readableState;
   var nOrig = n;
 
-  if (n !== 0) state.emittedReadable = false;
+  if (n !== 0) { state.emittedReadable = false; }
 
   // if we're doing read(0) to trigger a readable event, but we
   // already have a bunch of data in the buffer, then just trigger
   // the 'readable' event and move on.
   if (n === 0 && state.needReadable && (state.length >= state.highWaterMark || state.ended)) {
     debug$1('read: emitReadable', state.length, state.ended);
-    if (state.length === 0 && state.ended) endReadable(this);else emitReadable(this);
+    if (state.length === 0 && state.ended) { endReadable(this); }else { emitReadable(this); }
     return null;
   }
 
@@ -22435,7 +22507,7 @@ Readable$1.prototype.read = function (n) {
 
   // if we've ended, and we're now clear, then finish it up.
   if (n === 0 && state.ended) {
-    if (state.length === 0) endReadable(this);
+    if (state.length === 0) { endReadable(this); }
     return null;
   }
 
@@ -22481,17 +22553,17 @@ Readable$1.prototype.read = function (n) {
     state.reading = true;
     state.sync = true;
     // if the length is currently zero, then we *need* a readable event.
-    if (state.length === 0) state.needReadable = true;
+    if (state.length === 0) { state.needReadable = true; }
     // call internal read method
     this._read(state.highWaterMark);
     state.sync = false;
     // If _read pushed data synchronously, then `reading` will be false,
     // and we need to re-evaluate how much data we can return to the user.
-    if (!state.reading) n = howMuchToRead(nOrig, state);
+    if (!state.reading) { n = howMuchToRead(nOrig, state); }
   }
 
   var ret;
-  if (n > 0) ret = fromList(n, state);else ret = null;
+  if (n > 0) { ret = fromList(n, state); }else { ret = null; }
 
   if (ret === null) {
     state.needReadable = true;
@@ -22503,13 +22575,13 @@ Readable$1.prototype.read = function (n) {
   if (state.length === 0) {
     // If we have nothing in the buffer, then we want to know
     // as soon as we *do* get something into the buffer.
-    if (!state.ended) state.needReadable = true;
+    if (!state.ended) { state.needReadable = true; }
 
     // If we tried to read() past the EOF, then emit end on the next tick.
-    if (nOrig !== n && state.ended) endReadable(this);
+    if (nOrig !== n && state.ended) { endReadable(this); }
   }
 
-  if (ret !== null) this.emit('data', ret);
+  if (ret !== null) { this.emit('data', ret); }
 
   return ret;
 };
@@ -22523,7 +22595,7 @@ function chunkInvalid(state, chunk) {
 }
 
 function onEofChunk(stream, state) {
-  if (state.ended) return;
+  if (state.ended) { return; }
   if (state.decoder) {
     var chunk = state.decoder.end();
     if (chunk && chunk.length) {
@@ -22546,7 +22618,7 @@ function emitReadable(stream) {
   if (!state.emittedReadable) {
     debug$1('emitReadable', state.flowing);
     state.emittedReadable = true;
-    if (state.sync) nextTick$1(emitReadable_, stream);else emitReadable_(stream);
+    if (state.sync) { nextTick$1(emitReadable_, stream); }else { emitReadable_(stream); }
   }
 }
 
@@ -22576,7 +22648,7 @@ function maybeReadMore_(stream, state) {
     stream.read(0);
     if (len === state.length)
       // didn't get any data, stop spinning.
-      break;else len = state.length;
+      { break; }else { len = state.length; }
   }
   state.readingMore = false;
 }
@@ -22610,7 +22682,7 @@ Readable$1.prototype.pipe = function (dest, pipeOpts) {
   var doEnd = (!pipeOpts || pipeOpts.end !== false);
 
   var endFn = doEnd ? onend : cleanup;
-  if (state.endEmitted) nextTick$1(endFn);else src.once('end', endFn);
+  if (state.endEmitted) { nextTick$1(endFn); }else { src.once('end', endFn); }
 
   dest.on('unpipe', onunpipe);
   function onunpipe(readable) {
@@ -22652,7 +22724,7 @@ Readable$1.prototype.pipe = function (dest, pipeOpts) {
     // flowing again.
     // So, if this is awaiting a drain, then we just call it now.
     // If we don't know, then assume that we are waiting for one.
-    if (state.awaitDrain && (!dest._writableState || dest._writableState.needDrain)) ondrain();
+    if (state.awaitDrain && (!dest._writableState || dest._writableState.needDrain)) { ondrain(); }
   }
 
   // If the user pushes more data while we're writing to dest then we'll end up
@@ -22685,7 +22757,7 @@ Readable$1.prototype.pipe = function (dest, pipeOpts) {
     debug$1('onerror', er);
     unpipe();
     dest.removeListener('error', onerror);
-    if (listenerCount$1(dest, 'error') === 0) dest.emit('error', er);
+    if (listenerCount$1(dest, 'error') === 0) { dest.emit('error', er); }
   }
 
   // Make sure our error handler is attached before userland ones.
@@ -22725,7 +22797,7 @@ function pipeOnDrain(src) {
   return function () {
     var state = src._readableState;
     debug$1('pipeOnDrain', state.awaitDrain);
-    if (state.awaitDrain) state.awaitDrain--;
+    if (state.awaitDrain) { state.awaitDrain--; }
     if (state.awaitDrain === 0 && src.listeners('data').length) {
       state.flowing = true;
       flow(src);
@@ -22734,23 +22806,25 @@ function pipeOnDrain(src) {
 }
 
 Readable$1.prototype.unpipe = function (dest) {
+  var this$1 = this;
+
   var state = this._readableState;
 
   // if we're not piping anywhere, then do nothing.
-  if (state.pipesCount === 0) return this;
+  if (state.pipesCount === 0) { return this; }
 
   // just one destination.  most common case.
   if (state.pipesCount === 1) {
     // passed in one, but it's not the right one.
-    if (dest && dest !== state.pipes) return this;
+    if (dest && dest !== state.pipes) { return this; }
 
-    if (!dest) dest = state.pipes;
+    if (!dest) { dest = state.pipes; }
 
     // got a match.
     state.pipes = null;
     state.pipesCount = 0;
     state.flowing = false;
-    if (dest) dest.emit('unpipe', this);
+    if (dest) { dest.emit('unpipe', this); }
     return this;
   }
 
@@ -22765,17 +22839,17 @@ Readable$1.prototype.unpipe = function (dest) {
     state.flowing = false;
 
     for (var _i = 0; _i < len; _i++) {
-      dests[_i].emit('unpipe', this);
+      dests[_i].emit('unpipe', this$1);
     }return this;
   }
 
   // try to find the right one.
   var i = indexOf(state.pipes, dest);
-  if (i === -1) return this;
+  if (i === -1) { return this; }
 
   state.pipes.splice(i, 1);
   state.pipesCount -= 1;
-  if (state.pipesCount === 1) state.pipes = state.pipes[0];
+  if (state.pipesCount === 1) { state.pipes = state.pipes[0]; }
 
   dest.emit('unpipe', this);
 
@@ -22789,7 +22863,7 @@ Readable$1.prototype.on = function (ev, fn) {
 
   if (ev === 'data') {
     // Start flowing on next tick if stream isn't explicitly paused
-    if (this._readableState.flowing !== false) this.resume();
+    if (this._readableState.flowing !== false) { this.resume(); }
   } else if (ev === 'readable') {
     var state = this._readableState;
     if (!state.endEmitted && !state.readableListening) {
@@ -22841,7 +22915,7 @@ function resume_(stream, state) {
   state.awaitDrain = 0;
   stream.emit('resume');
   flow(stream);
-  if (state.flowing && !state.reading) stream.read(0);
+  if (state.flowing && !state.reading) { stream.read(0); }
 }
 
 Readable$1.prototype.pause = function () {
@@ -22864,6 +22938,8 @@ function flow(stream) {
 // This is *not* part of the readable stream interface.
 // It is an ugly unfortunate mess of history.
 Readable$1.prototype.wrap = function (stream) {
+  var this$1 = this;
+
   var state = this._readableState;
   var paused = false;
 
@@ -22872,7 +22948,7 @@ Readable$1.prototype.wrap = function (stream) {
     debug$1('wrapped end');
     if (state.decoder && !state.ended) {
       var chunk = state.decoder.end();
-      if (chunk && chunk.length) self.push(chunk);
+      if (chunk && chunk.length) { self.push(chunk); }
     }
 
     self.push(null);
@@ -22880,10 +22956,10 @@ Readable$1.prototype.wrap = function (stream) {
 
   stream.on('data', function (chunk) {
     debug$1('wrapped data');
-    if (state.decoder) chunk = state.decoder.write(chunk);
+    if (state.decoder) { chunk = state.decoder.write(chunk); }
 
     // don't skip over falsy values in objectMode
-    if (state.objectMode && (chunk === null || chunk === undefined)) return;else if (!state.objectMode && (!chunk || !chunk.length)) return;
+    if (state.objectMode && (chunk === null || chunk === undefined)) { return; }else if (!state.objectMode && (!chunk || !chunk.length)) { return; }
 
     var ret = self.push(chunk);
     if (!ret) {
@@ -22895,8 +22971,8 @@ Readable$1.prototype.wrap = function (stream) {
   // proxy all the other methods.
   // important when wrapping filters and duplexes.
   for (var i in stream) {
-    if (this[i] === undefined && typeof stream[i] === 'function') {
-      this[i] = function (method) {
+    if (this$1[i] === undefined && typeof stream[i] === 'function') {
+      this$1[i] = function (method) {
         return function () {
           return stream[method].apply(stream, arguments);
         };
@@ -22932,12 +23008,12 @@ Readable$1._fromList = fromList;
 // changes to the function body.
 function fromList(n, state) {
   // nothing buffered
-  if (state.length === 0) return null;
+  if (state.length === 0) { return null; }
 
   var ret;
-  if (state.objectMode) ret = state.buffer.shift();else if (!n || n >= state.length) {
+  if (state.objectMode) { ret = state.buffer.shift(); }else if (!n || n >= state.length) {
     // read it all, truncate the list
-    if (state.decoder) ret = state.buffer.join('');else if (state.buffer.length === 1) ret = state.buffer.head.data;else ret = state.buffer.concat(state.length);
+    if (state.decoder) { ret = state.buffer.join(''); }else if (state.buffer.length === 1) { ret = state.buffer.head.data; }else { ret = state.buffer.concat(state.length); }
     state.buffer.clear();
   } else {
     // read part of list
@@ -22978,12 +23054,12 @@ function copyFromBufferString(n, list) {
   while (p = p.next) {
     var str = p.data;
     var nb = n > str.length ? str.length : n;
-    if (nb === str.length) ret += str;else ret += str.slice(0, n);
+    if (nb === str.length) { ret += str; }else { ret += str.slice(0, n); }
     n -= nb;
     if (n === 0) {
       if (nb === str.length) {
         ++c;
-        if (p.next) list.head = p.next;else list.head = list.tail = null;
+        if (p.next) { list.head = p.next; }else { list.head = list.tail = null; }
       } else {
         list.head = p;
         p.data = str.slice(nb);
@@ -23013,7 +23089,7 @@ function copyFromBuffer(n, list) {
     if (n === 0) {
       if (nb === buf.length) {
         ++c;
-        if (p.next) list.head = p.next;else list.head = list.tail = null;
+        if (p.next) { list.head = p.next; }else { list.head = list.tail = null; }
       } else {
         list.head = p;
         p.data = buf.slice(nb);
@@ -23031,7 +23107,7 @@ function endReadable(stream) {
 
   // If we get here before consuming all the bytes, then that is a
   // bug in node.  Should never happen.
-  if (state.length > 0) throw new Error('"endReadable()" called on non-empty stream');
+  if (state.length > 0) { throw new Error('"endReadable()" called on non-empty stream'); }
 
   if (!state.endEmitted) {
     state.ended = true;
@@ -23056,7 +23132,7 @@ function forEach$1(xs, f) {
 
 function indexOf(xs, x) {
   for (var i = 0, l = xs.length; i < l; i++) {
-    if (xs[i] === x) return i;
+    if (xs[i] === x) { return i; }
   }
   return -1;
 }
@@ -23090,7 +23166,7 @@ function WritableState(options, stream) {
   // contains buffers or objects.
   this.objectMode = !!options.objectMode;
 
-  if (stream instanceof Duplex$1) this.objectMode = this.objectMode || !!options.writableObjectMode;
+  if (stream instanceof Duplex$1) { this.objectMode = this.objectMode || !!options.writableObjectMode; }
 
   // the point at which write() starts returning false
   // Note: 0 is a valid value, means that we always return false if
@@ -23190,7 +23266,7 @@ function Writable$1(options) {
 
   // Writable ctor is applied to Duplexes, though they're not
   // instanceof Writable, they're instanceof Readable.
-  if (!(this instanceof Writable$1) && !(this instanceof Duplex$1)) return new Writable$1(options);
+  if (!(this instanceof Writable$1) && !(this instanceof Duplex$1)) { return new Writable$1(options); }
 
   this._writableState = new WritableState(options, this);
 
@@ -23198,9 +23274,9 @@ function Writable$1(options) {
   this.writable = true;
 
   if (options) {
-    if (typeof options.write === 'function') this._write = options.write;
+    if (typeof options.write === 'function') { this._write = options.write; }
 
-    if (typeof options.writev === 'function') this._writev = options.writev;
+    if (typeof options.writev === 'function') { this._writev = options.writev; }
   }
 
   EventEmitter.call(this);
@@ -23251,11 +23327,11 @@ Writable$1.prototype.write = function (chunk, encoding, cb) {
     encoding = null;
   }
 
-  if (Buffer$2.isBuffer(chunk)) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
+  if (Buffer$2.isBuffer(chunk)) { encoding = 'buffer'; }else if (!encoding) { encoding = state.defaultEncoding; }
 
-  if (typeof cb !== 'function') cb = nop;
+  if (typeof cb !== 'function') { cb = nop; }
 
-  if (state.ended) writeAfterEnd(this, cb);else if (validChunk(this, state, chunk, cb)) {
+  if (state.ended) { writeAfterEnd(this, cb); }else if (validChunk(this, state, chunk, cb)) {
     state.pendingcb++;
     ret = writeOrBuffer(this, state, chunk, encoding, cb);
   }
@@ -23275,14 +23351,14 @@ Writable$1.prototype.uncork = function () {
   if (state.corked) {
     state.corked--;
 
-    if (!state.writing && !state.corked && !state.finished && !state.bufferProcessing && state.bufferedRequest) clearBuffer(this, state);
+    if (!state.writing && !state.corked && !state.finished && !state.bufferProcessing && state.bufferedRequest) { clearBuffer(this, state); }
   }
 };
 
 Writable$1.prototype.setDefaultEncoding = function setDefaultEncoding(encoding) {
   // node::ParseEncoding() requires lower case.
-  if (typeof encoding === 'string') encoding = encoding.toLowerCase();
-  if (!(['hex', 'utf8', 'utf-8', 'ascii', 'binary', 'base64', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'raw'].indexOf((encoding + '').toLowerCase()) > -1)) throw new TypeError('Unknown encoding: ' + encoding);
+  if (typeof encoding === 'string') { encoding = encoding.toLowerCase(); }
+  if (!(['hex', 'utf8', 'utf-8', 'ascii', 'binary', 'base64', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'raw'].indexOf((encoding + '').toLowerCase()) > -1)) { throw new TypeError('Unknown encoding: ' + encoding); }
   this._writableState.defaultEncoding = encoding;
   return this;
 };
@@ -23300,14 +23376,14 @@ function decodeChunk(state, chunk, encoding) {
 function writeOrBuffer(stream, state, chunk, encoding, cb) {
   chunk = decodeChunk(state, chunk, encoding);
 
-  if (Buffer$2.isBuffer(chunk)) encoding = 'buffer';
+  if (Buffer$2.isBuffer(chunk)) { encoding = 'buffer'; }
   var len = state.objectMode ? 1 : chunk.length;
 
   state.length += len;
 
   var ret = state.length < state.highWaterMark;
   // we must ensure that previous needDrain will not be reset to false.
-  if (!ret) state.needDrain = true;
+  if (!ret) { state.needDrain = true; }
 
   if (state.writing || state.corked) {
     var last = state.lastBufferedRequest;
@@ -23330,13 +23406,13 @@ function doWrite(stream, state, writev, len, chunk, encoding, cb) {
   state.writecb = cb;
   state.writing = true;
   state.sync = true;
-  if (writev) stream._writev(chunk, state.onwrite);else stream._write(chunk, encoding, state.onwrite);
+  if (writev) { stream._writev(chunk, state.onwrite); }else { stream._write(chunk, encoding, state.onwrite); }
   state.sync = false;
 }
 
 function onwriteError(stream, state, sync, er, cb) {
   --state.pendingcb;
-  if (sync) nextTick$1(cb, er);else cb(er);
+  if (sync) { nextTick$1(cb, er); }else { cb(er); }
 
   stream._writableState.errorEmitted = true;
   stream.emit('error', er);
@@ -23356,7 +23432,7 @@ function onwrite(stream, er) {
 
   onwriteStateUpdate(state);
 
-  if (er) onwriteError(stream, state, sync, er, cb);else {
+  if (er) { onwriteError(stream, state, sync, er, cb); }else {
     // Check if we're actually ready to finish, but don't emit yet
     var finished = needFinish(state);
 
@@ -23375,7 +23451,7 @@ function onwrite(stream, er) {
 }
 
 function afterWrite(stream, state, finished, cb) {
-  if (!finished) onwriteDrain(stream, state);
+  if (!finished) { onwriteDrain(stream, state); }
   state.pendingcb--;
   cb();
   finishMaybe(stream, state);
@@ -23441,7 +23517,7 @@ function clearBuffer(stream, state) {
       }
     }
 
-    if (entry === null) state.lastBufferedRequest = null;
+    if (entry === null) { state.lastBufferedRequest = null; }
   }
 
   state.bufferedRequestCount = 0;
@@ -23467,7 +23543,7 @@ Writable$1.prototype.end = function (chunk, encoding, cb) {
     encoding = null;
   }
 
-  if (chunk !== null && chunk !== undefined) this.write(chunk, encoding);
+  if (chunk !== null && chunk !== undefined) { this.write(chunk, encoding); }
 
   // .end() fully uncorks
   if (state.corked) {
@@ -23476,7 +23552,7 @@ Writable$1.prototype.end = function (chunk, encoding, cb) {
   }
 
   // ignore unnecessary end() calls.
-  if (!state.ending && !state.finished) endWritable(this, state, cb);
+  if (!state.ending && !state.finished) { endWritable(this, state, cb); }
 };
 
 function needFinish(state) {
@@ -23508,7 +23584,7 @@ function endWritable(stream, state, cb) {
   state.ending = true;
   finishMaybe(stream, state);
   if (cb) {
-    if (state.finished) nextTick$1(cb);else stream.once('finish', cb);
+    if (state.finished) { nextTick$1(cb); }else { stream.once('finish', cb); }
   }
   state.ended = true;
   stream.writable = false;
@@ -23544,20 +23620,20 @@ inherits$3(Duplex$1, Readable$1);
 var keys = Object.keys(Writable$1.prototype);
 for (var v = 0; v < keys.length; v++) {
   var method$2 = keys[v];
-  if (!Duplex$1.prototype[method$2]) Duplex$1.prototype[method$2] = Writable$1.prototype[method$2];
+  if (!Duplex$1.prototype[method$2]) { Duplex$1.prototype[method$2] = Writable$1.prototype[method$2]; }
 }
 function Duplex$1(options) {
-  if (!(this instanceof Duplex$1)) return new Duplex$1(options);
+  if (!(this instanceof Duplex$1)) { return new Duplex$1(options); }
 
   Readable$1.call(this, options);
   Writable$1.call(this, options);
 
-  if (options && options.readable === false) this.readable = false;
+  if (options && options.readable === false) { this.readable = false; }
 
-  if (options && options.writable === false) this.writable = false;
+  if (options && options.writable === false) { this.writable = false; }
 
   this.allowHalfOpen = true;
-  if (options && options.allowHalfOpen === false) this.allowHalfOpen = false;
+  if (options && options.allowHalfOpen === false) { this.allowHalfOpen = false; }
 
   this.once('end', onend);
 }
@@ -23566,7 +23642,7 @@ function Duplex$1(options) {
 function onend() {
   // if we allow half-open state, or if the writable side ended,
   // then we're ok.
-  if (this.allowHalfOpen || this._writableState.ended) return;
+  if (this.allowHalfOpen || this._writableState.ended) { return; }
 
   // no more data can be written.
   // But allow more writes to happen in this tick.
@@ -23640,12 +23716,12 @@ function afterTransform(stream, er, data) {
 
   var cb = ts.writecb;
 
-  if (!cb) return stream.emit('error', new Error('no writecb in Transform class'));
+  if (!cb) { return stream.emit('error', new Error('no writecb in Transform class')); }
 
   ts.writechunk = null;
   ts.writecb = null;
 
-  if (data !== null && data !== undefined) stream.push(data);
+  if (data !== null && data !== undefined) { stream.push(data); }
 
   cb(er);
 
@@ -23656,7 +23732,7 @@ function afterTransform(stream, er, data) {
   }
 }
 function Transform$1(options) {
-  if (!(this instanceof Transform$1)) return new Transform$1(options);
+  if (!(this instanceof Transform$1)) { return new Transform$1(options); }
 
   Duplex$1.call(this, options);
 
@@ -23674,15 +23750,15 @@ function Transform$1(options) {
   this._readableState.sync = false;
 
   if (options) {
-    if (typeof options.transform === 'function') this._transform = options.transform;
+    if (typeof options.transform === 'function') { this._transform = options.transform; }
 
-    if (typeof options.flush === 'function') this._flush = options.flush;
+    if (typeof options.flush === 'function') { this._flush = options.flush; }
   }
 
   this.once('prefinish', function () {
-    if (typeof this._flush === 'function') this._flush(function (er) {
+    if (typeof this._flush === 'function') { this._flush(function (er) {
       done(stream, er);
-    });else done(stream);
+    }); }else { done(stream); }
   });
 }
 
@@ -23712,7 +23788,7 @@ Transform$1.prototype._write = function (chunk, encoding, cb) {
   ts.writeencoding = encoding;
   if (!ts.transforming) {
     var rs = this._readableState;
-    if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) this._read(rs.highWaterMark);
+    if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) { this._read(rs.highWaterMark); }
   }
 };
 
@@ -23733,23 +23809,23 @@ Transform$1.prototype._read = function (n) {
 };
 
 function done(stream, er) {
-  if (er) return stream.emit('error', er);
+  if (er) { return stream.emit('error', er); }
 
   // if there's nothing in the write buffer, then that means
   // that nothing more will ever be provided
   var ws = stream._writableState;
   var ts = stream._transformState;
 
-  if (ws.length) throw new Error('Calling transform done when ws.length != 0');
+  if (ws.length) { throw new Error('Calling transform done when ws.length != 0'); }
 
-  if (ts.transforming) throw new Error('Calling transform done when still transforming');
+  if (ts.transforming) { throw new Error('Calling transform done when still transforming'); }
 
   return stream.push(null);
 }
 
 inherits$3(PassThrough$1, Transform$1);
 function PassThrough$1(options) {
-  if (!(this instanceof PassThrough$1)) return new PassThrough$1(options);
+  if (!(this instanceof PassThrough$1)) { return new PassThrough$1(options); }
 
   Transform$1.call(this, options);
 }
@@ -23805,7 +23881,7 @@ Stream$1.prototype.pipe = function(dest, options) {
 
   var didOnEnd = false;
   function onend() {
-    if (didOnEnd) return;
+    if (didOnEnd) { return; }
     didOnEnd = true;
 
     dest.end();
@@ -23813,10 +23889,10 @@ Stream$1.prototype.pipe = function(dest, options) {
 
 
   function onclose() {
-    if (didOnEnd) return;
+    if (didOnEnd) { return; }
     didOnEnd = true;
 
-    if (typeof dest.destroy === 'function') dest.destroy();
+    if (typeof dest.destroy === 'function') { dest.destroy(); }
   }
 
   // don't leave dangling pipes when there are errors.
@@ -23913,7 +23989,7 @@ function IncomingMessage(xhr, response, mode) {
     read = function () {
       reader.read().then(function(result) {
         if (self._destroyed)
-          return
+          { return }
         if (result.done) {
           self.push(null);
           return
@@ -23960,7 +24036,7 @@ function IncomingMessage(xhr, response, mode) {
         }
       }
       if (!self._charset)
-        self._charset = 'utf-8'; // best guess
+        { self._charset = 'utf-8'; } // best guess
     }
   }
 }
@@ -23978,7 +24054,7 @@ IncomingMessage.prototype._onXHRProgress = function() {
   switch (self._mode) {
   case 'text:vbarray': // For IE9
     if (xhr.readyState !== rStates.DONE)
-      break
+      { break }
     try {
       // This fails in IE8
       response = new global.VBArray(xhr.responseBody).toArray();
@@ -24002,7 +24078,7 @@ IncomingMessage.prototype._onXHRProgress = function() {
       if (self._charset === 'x-user-defined') {
         var buffer = new Buffer(newData.length);
         for (var i = 0; i < newData.length; i++)
-          buffer[i] = newData.charCodeAt(i) & 0xff;
+          { buffer[i] = newData.charCodeAt(i) & 0xff; }
 
         self.push(buffer);
       } else {
@@ -24013,20 +24089,20 @@ IncomingMessage.prototype._onXHRProgress = function() {
     break
   case 'arraybuffer':
     if (xhr.readyState !== rStates.DONE || !xhr.response)
-      break
+      { break }
     response = xhr.response;
     self.push(new Buffer(new Uint8Array(response)));
     break
   case 'moz-chunked-arraybuffer': // take whole
     response = xhr.response;
     if (xhr.readyState !== rStates.LOADING || !response)
-      break
+      { break }
     self.push(new Buffer(new Uint8Array(response)));
     break
   case 'ms-stream':
     response = xhr.response;
     if (xhr.readyState !== rStates.LOADING)
-      break
+      { break }
     var reader = new global.MSStreamReader();
     reader.onprogress = function() {
       if (reader.result.byteLength > self._pos) {
@@ -24101,7 +24177,7 @@ function ClientRequest$1(opts) {
   self._body = [];
   self._headers = {};
   if (opts.auth)
-    self.setHeader('Authorization', 'Basic ' + new Buffer(opts.auth).toString('base64'));
+    { self.setHeader('Authorization', 'Basic ' + new Buffer(opts.auth).toString('base64')); }
   Object.keys(opts.headers).forEach(function(name) {
     self.setHeader(name, opts.headers[name]);
   });
@@ -24164,7 +24240,7 @@ ClientRequest$1.prototype.setHeader = function(name, value) {
     // headers. To be honest I'm not entirely sure hiding these warnings is a good thing, but
     // http-browserify did it, so I will too.
   if (unsafeHeaders.indexOf(lowerName) !== -1)
-    return
+    { return }
 
   self._headers[lowerName] = {
     name: name,
@@ -24186,7 +24262,7 @@ ClientRequest$1.prototype._onFinish = function() {
   var self = this;
 
   if (self._destroyed)
-    return
+    { return }
   var opts = self._opts;
 
   var headersObj = self._headers;
@@ -24234,13 +24310,13 @@ ClientRequest$1.prototype._onFinish = function() {
 
     // Can't set responseType on really old browsers
     if ('responseType' in xhr)
-      xhr.responseType = self._mode.split(':')[0];
+      { xhr.responseType = self._mode.split(':')[0]; }
 
     if ('withCredentials' in xhr)
-      xhr.withCredentials = !!opts.withCredentials;
+      { xhr.withCredentials = !!opts.withCredentials; }
 
     if (self._mode === 'text' && 'overrideMimeType' in xhr)
-      xhr.overrideMimeType('text/plain; charset=x-user-defined');
+      { xhr.overrideMimeType('text/plain; charset=x-user-defined'); }
 
     Object.keys(headersObj).forEach(function(name) {
       xhr.setRequestHeader(headersObj[name].name, headersObj[name].value);
@@ -24265,7 +24341,7 @@ ClientRequest$1.prototype._onFinish = function() {
 
     xhr.onerror = function() {
       if (self._destroyed)
-        return
+        { return }
       self.emit('error', new Error('XHR error'));
     };
 
@@ -24298,10 +24374,10 @@ ClientRequest$1.prototype._onXHRProgress = function() {
   var self = this;
 
   if (!statusValid(self._xhr) || self._destroyed)
-    return
+    { return }
 
   if (!self._response)
-    self._connect();
+    { self._connect(); }
 
   self._response._onXHRProgress();
 };
@@ -24310,7 +24386,7 @@ ClientRequest$1.prototype._connect = function() {
   var self = this;
 
   if (self._destroyed)
-    return
+    { return }
 
   self._response = new IncomingMessage(self._xhr, self._fetchResponse, self._mode);
   self.emit('response', self._response);
@@ -24327,9 +24403,9 @@ ClientRequest$1.prototype.abort = ClientRequest$1.prototype.destroy = function()
   var self = this;
   self._destroyed = true;
   if (self._response)
-    self._response._destroyed = true;
+    { self._response._destroyed = true; }
   if (self._xhr)
-    self._xhr.abort();
+    { self._xhr.abort(); }
     // Currently, there isn't a way to truly abort a fetch.
     // If you like bikeshedding, see https://github.com/whatwg/fetch/issues/27
 };
@@ -24380,7 +24456,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 function request$3(opts, cb) {
   if (typeof opts === 'string')
-    opts = urlParse$1(opts);
+    { opts = urlParse$1(opts); }
 
 
   // Normally, the page is loaded from http or https, so not specifying a protocol
@@ -24395,7 +24471,7 @@ function request$3(opts, cb) {
 
   // Necessary for IPv6 addresses
   if (host && host.indexOf(':') !== -1)
-    host = '[' + host + ']';
+    { host = '[' + host + ']'; }
 
   // This may be a relative url. The browser should always be able to interpret it correctly.
   opts.url = (host ? (protocol + '//' + host) : '') + (port ? ':' + port : '') + path;
@@ -24406,7 +24482,7 @@ function request$3(opts, cb) {
 
   var req = new ClientRequest$1(opts);
   if (cb)
-    req.on('response', cb);
+    { req.on('response', cb); }
   return req
 }
 
@@ -24508,10 +24584,10 @@ var STATUS_CODES = {
 
 var http = {
   request: request$3,
-  get,
-  Agent,
-  METHODS,
-  STATUS_CODES
+  get: get,
+  Agent: Agent,
+  METHODS: METHODS,
+  STATUS_CODES: STATUS_CODES
 };
 
 
@@ -29894,7 +29970,7 @@ var Z_UNKNOWN=                2;
 var Z_DEFLATED=               8;
 function Zlib$1(mode) {
   if (mode < DEFLATE || mode > UNZIP)
-    throw new TypeError('Bad argument');
+    { throw new TypeError('Bad argument'); }
 
   this.mode = mode;
   this.init_done = false;
@@ -29915,13 +29991,13 @@ Zlib$1.prototype.init = function(windowBits, level, memLevel, strategy, dictiona
   // dictionary not supported.
 
   if (this.mode === GZIP || this.mode === GUNZIP)
-    this.windowBits += 16;
+    { this.windowBits += 16; }
 
   if (this.mode === UNZIP)
-    this.windowBits += 32;
+    { this.windowBits += 32; }
 
   if (this.mode === DEFLATERAW || this.mode === INFLATERAW)
-    this.windowBits = -this.windowBits;
+    { this.windowBits = -this.windowBits; }
 
   this.strm = new ZStream();
   var status;
@@ -29966,16 +30042,16 @@ Zlib$1.prototype.params = function() {
 
 Zlib$1.prototype._writeCheck = function() {
   if (!this.init_done)
-    throw new Error('write before init');
+    { throw new Error('write before init'); }
 
   if (this.mode === NONE)
-    throw new Error('already finalized');
+    { throw new Error('already finalized'); }
 
   if (this.write_in_progress)
-    throw new Error('write already in progress');
+    { throw new Error('write already in progress'); }
 
   if (this.pending_close)
-    throw new Error('close is pending');
+    { throw new Error('close is pending'); }
 };
 
 Zlib$1.prototype.write = function(flush, input, in_off, in_len, out, out_off, out_len) {
@@ -29989,7 +30065,7 @@ Zlib$1.prototype.write = function(flush, input, in_off, in_len, out, out_off, ou
     self.callback(res[0], res[1]);
 
     if (self.pending_close)
-      self.close();
+      { self.close(); }
   });
 
   return this;
@@ -29997,8 +30073,10 @@ Zlib$1.prototype.write = function(flush, input, in_off, in_len, out, out_off, ou
 
 // set method for Node buffers, used by pako
 function bufferSet(data, offset) {
+  var this$1 = this;
+
   for (var i = 0; i < data.length; i++) {
-    this[offset + i] = data[i];
+    this$1[offset + i] = data[i];
   }
 }
 
@@ -30026,9 +30104,9 @@ Zlib$1.prototype._write = function(flush, input, in_off, in_len, out, out_off, o
   }
 
   if (out._set)
-    out.set = out._set;
+    { out.set = out._set; }
   else
-    out.set = bufferSet;
+    { out.set = bufferSet; }
 
   var strm = this.strm;
   strm.avail_in = in_len;
@@ -30101,7 +30179,7 @@ Zlib$1.prototype._error = function(status) {
 
   this.write_in_progress = false;
   if (this.pending_close)
-    this.close();
+    { this.close(); }
 };
 
 
@@ -30363,9 +30441,9 @@ function zlibBuffer(engine, buffer, callback) {
 
 function zlibBufferSync(engine, buffer) {
   if (typeof buffer === 'string')
-    buffer = new Buffer(buffer);
+    { buffer = new Buffer(buffer); }
   if (!Buffer.isBuffer(buffer))
-    throw new TypeError('Not a string or buffer');
+    { throw new TypeError('Not a string or buffer'); }
 
   var flushFlag = binding$1.Z_FINISH;
 
@@ -30375,12 +30453,12 @@ function zlibBufferSync(engine, buffer) {
 // generic zlib
 // minimal 2-byte header
 function Deflate(opts) {
-  if (!(this instanceof Deflate)) return new Deflate(opts);
+  if (!(this instanceof Deflate)) { return new Deflate(opts); }
   Zlib.call(this, opts, binding$1.DEFLATE);
 }
 
 function Inflate(opts) {
-  if (!(this instanceof Inflate)) return new Inflate(opts);
+  if (!(this instanceof Inflate)) { return new Inflate(opts); }
   Zlib.call(this, opts, binding$1.INFLATE);
 }
 
@@ -30388,12 +30466,12 @@ function Inflate(opts) {
 
 // gzip - bigger header, same deflate compression
 function Gzip(opts) {
-  if (!(this instanceof Gzip)) return new Gzip(opts);
+  if (!(this instanceof Gzip)) { return new Gzip(opts); }
   Zlib.call(this, opts, binding$1.GZIP);
 }
 
 function Gunzip(opts) {
-  if (!(this instanceof Gunzip)) return new Gunzip(opts);
+  if (!(this instanceof Gunzip)) { return new Gunzip(opts); }
   Zlib.call(this, opts, binding$1.GUNZIP);
 }
 
@@ -30401,19 +30479,19 @@ function Gunzip(opts) {
 
 // raw - no header
 function DeflateRaw(opts) {
-  if (!(this instanceof DeflateRaw)) return new DeflateRaw(opts);
+  if (!(this instanceof DeflateRaw)) { return new DeflateRaw(opts); }
   Zlib.call(this, opts, binding$1.DEFLATERAW);
 }
 
 function InflateRaw(opts) {
-  if (!(this instanceof InflateRaw)) return new InflateRaw(opts);
+  if (!(this instanceof InflateRaw)) { return new InflateRaw(opts); }
   Zlib.call(this, opts, binding$1.INFLATERAW);
 }
 
 
 // auto-detect header.
 function Unzip(opts) {
-  if (!(this instanceof Unzip)) return new Unzip(opts);
+  if (!(this instanceof Unzip)) { return new Unzip(opts); }
   Zlib.call(this, opts, binding$1.UNZIP);
 }
 
@@ -30502,10 +30580,10 @@ function Zlib(opts, mode) {
   };
 
   var level = binding$1.Z_DEFAULT_COMPRESSION;
-  if (typeof opts.level === 'number') level = opts.level;
+  if (typeof opts.level === 'number') { level = opts.level; }
 
   var strategy = binding$1.Z_DEFAULT_STRATEGY;
-  if (typeof opts.strategy === 'number') strategy = opts.strategy;
+  if (typeof opts.strategy === 'number') { strategy = opts.strategy; }
 
   this._binding.init(opts.windowBits || binding$1.Z_DEFAULT_WINDOWBITS,
                      level,
@@ -30544,7 +30622,7 @@ Zlib.prototype.params = function(level, strategy, callback) {
       if (!self._hadError) {
         self._level = level;
         self._strategy = strategy;
-        if (callback) callback();
+        if (callback) { callback(); }
       }
     });
   } else {
@@ -30572,10 +30650,10 @@ Zlib.prototype.flush = function(kind, callback) {
 
   if (ws.ended) {
     if (callback)
-      process.nextTick(callback);
+      { process.nextTick(callback); }
   } else if (ws.ending) {
     if (callback)
-      this.once('end', callback);
+      { this.once('end', callback); }
   } else if (ws.needDrain) {
     var self = this;
     this.once('drain', function() {
@@ -30589,10 +30667,10 @@ Zlib.prototype.flush = function(kind, callback) {
 
 Zlib.prototype.close = function(callback) {
   if (callback)
-    process.nextTick(callback);
+    { process.nextTick(callback); }
 
   if (this._closed)
-    return;
+    { return; }
 
   this._closed = true;
 
@@ -30611,14 +30689,14 @@ Zlib.prototype._transform = function(chunk, encoding, cb) {
   var last = ending && (!chunk || ws.length === chunk.length);
 
   if (!chunk === null && !Buffer.isBuffer(chunk))
-    return cb(new Error('invalid input'));
+    { return cb(new Error('invalid input')); }
 
   // If it's the last chunk, or a final flush, we use the Z_FINISH flush flag.
   // If it's explicitly flushing at some other time, then we use
   // Z_FULL_FLUSH. Otherwise, use Z_NO_FLUSH for maximum compression
   // goodness.
   if (last)
-    flushFlag = binding$1.Z_FINISH;
+    { flushFlag = binding$1.Z_FINISH; }
   else {
     flushFlag = this._flushFlag;
     // once we've flushed the last of the queue, stop flushing and
@@ -30632,6 +30710,8 @@ Zlib.prototype._transform = function(chunk, encoding, cb) {
 };
 
 Zlib.prototype._processChunk = function(chunk, flushFlag, cb) {
+  var this$1 = this;
+
   var availInBefore = chunk && chunk.length;
   var availOutBefore = this._chunkSize - this._offset;
   var inOff = 0;
@@ -30650,12 +30730,12 @@ Zlib.prototype._processChunk = function(chunk, flushFlag, cb) {
     });
 
     do {
-      var res = this._binding.writeSync(flushFlag,
+      var res = this$1._binding.writeSync(flushFlag,
                                         chunk, // in
                                         inOff, // in_off
                                         availInBefore, // in_len
-                                        this._buffer, // out
-                                        this._offset, //out_off
+                                        this$1._buffer, // out
+                                        this$1._offset, //out_off
                                         availOutBefore); // out_len
     } while (!this._hadError && callback(res[0], res[1]));
 
@@ -30682,7 +30762,7 @@ Zlib.prototype._processChunk = function(chunk, flushFlag, cb) {
 
   function callback(availInAfter, availOutAfter) {
     if (self._hadError)
-      return;
+      { return; }
 
     var have = availOutBefore - availOutAfter;
     assert$1(have >= 0, 'have should not go down');
@@ -30715,7 +30795,7 @@ Zlib.prototype._processChunk = function(chunk, flushFlag, cb) {
       availInBefore = availInAfter;
 
       if (!async)
-        return true;
+        { return true; }
 
       var newReq = self._binding.write(flushFlag,
                                        chunk,
@@ -30730,7 +30810,7 @@ Zlib.prototype._processChunk = function(chunk, flushFlag, cb) {
     }
 
     if (!async)
-      return false;
+      { return false; }
 
     // finished with the chunk.
     cb();
@@ -30874,11 +30954,13 @@ var splitPath = function(filename) {
 // path.resolve([from ...], to)
 // posix version
 function resolve() {
+  var arguments$1 = arguments;
+
   var resolvedPath = '',
       resolvedAbsolute = false;
 
   for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-    var path = (i >= 0) ? arguments[i] : '/';
+    var path = (i >= 0) ? arguments$1[i] : '/';
 
     // Skip empty and invalid entries
     if (typeof path !== 'string') {
@@ -30949,15 +31031,15 @@ function relative(from, to) {
   function trim(arr) {
     var start = 0;
     for (; start < arr.length; start++) {
-      if (arr[start] !== '') break;
+      if (arr[start] !== '') { break; }
     }
 
     var end = arr.length - 1;
     for (; end >= 0; end--) {
-      if (arr[end] !== '') break;
+      if (arr[end] !== '') { break; }
     }
 
-    if (start > end) return [];
+    if (start > end) { return []; }
     return arr.slice(start, end - start + 1);
   }
 
@@ -31030,10 +31112,10 @@ var path = {
   resolve: resolve
 };
 function filter$2 (xs, f) {
-    if (xs.filter) return xs.filter(f);
+    if (xs.filter) { return xs.filter(f); }
     var res = [];
     for (var i = 0; i < xs.length; i++) {
-        if (f(xs[i], i, xs)) res.push(xs[i]);
+        if (f(xs[i], i, xs)) { res.push(xs[i]); }
     }
     return res;
 }
@@ -31042,7 +31124,7 @@ function filter$2 (xs, f) {
 var substr = 'ab'.substr(-1) === 'b' ?
     function (str, start, len) { return str.substr(start, len) } :
     function (str, start, len) {
-        if (start < 0) start = str.length + start;
+        if (start < 0) { start = str.length + start; }
         return str.substr(start, len);
     };
 
@@ -31063,7 +31145,7 @@ var path$1 = Object.freeze({
 
 // Declare internals
 
-const internals = {};
+var internals = {};
 
 
 var escapeJavaScript = function (input) {
@@ -31072,11 +31154,11 @@ var escapeJavaScript = function (input) {
         return '';
     }
 
-    let escaped = '';
+    var escaped = '';
 
-    for (let i = 0; i < input.length; ++i) {
+    for (var i = 0; i < input.length; ++i) {
 
-        const charCode = input.charCodeAt(i);
+        var charCode = input.charCodeAt(i);
 
         if (internals.isSafe(charCode)) {
             escaped += input[i];
@@ -31096,11 +31178,11 @@ var escapeHtml = function (input) {
         return '';
     }
 
-    let escaped = '';
+    var escaped = '';
 
-    for (let i = 0; i < input.length; ++i) {
+    for (var i = 0; i < input.length; ++i) {
 
-        const charCode = input.charCodeAt(i);
+        var charCode = input.charCodeAt(i);
 
         if (internals.isSafe(charCode)) {
             escaped += input[i];
@@ -31120,14 +31202,14 @@ var escapeJson = function (input) {
         return '';
     }
 
-    const lessThan = 0x3C;
-    const greaterThan = 0x3E;
-    const andSymbol = 0x26;
-    const lineSeperator = 0x2028;
+    var lessThan = 0x3C;
+    var greaterThan = 0x3E;
+    var andSymbol = 0x26;
+    var lineSeperator = 0x2028;
 
     // replace method
-    let charCode;
-    return input.replace(/[<>&\u2028\u2029]/g, (match) => {
+    var charCode;
+    return input.replace(/[<>&\u2028\u2029]/g, function (match) {
 
         charCode = match.charCodeAt(0);
 
@@ -31154,14 +31236,14 @@ internals.escapeJavaScriptChar = function (charCode) {
         return '\\u' + internals.padLeft('' + charCode, 4);
     }
 
-    const hexValue = new Buffer(String.fromCharCode(charCode), 'ascii').toString('hex');
+    var hexValue = new Buffer(String.fromCharCode(charCode), 'ascii').toString('hex');
     return '\\x' + internals.padLeft(hexValue, 2);
 };
 
 
 internals.escapeHtmlChar = function (charCode) {
 
-    const namedEscape = internals.namedHtml[charCode];
+    var namedEscape = internals.namedHtml[charCode];
     if (typeof namedEscape !== 'undefined') {
         return namedEscape;
     }
@@ -31170,7 +31252,7 @@ internals.escapeHtmlChar = function (charCode) {
         return '&#' + charCode + ';';
     }
 
-    const hexValue = new Buffer(String.fromCharCode(charCode), 'ascii').toString('hex');
+    var hexValue = new Buffer(String.fromCharCode(charCode), 'ascii').toString('hex');
     return '&#x' + internals.padLeft(hexValue, 2) + ';';
 };
 
@@ -31207,9 +31289,9 @@ internals.namedHtml = {
 
 internals.safeCharCodes = (function () {
 
-    const safe = {};
+    var safe = {};
 
-    for (let i = 32; i < 123; ++i) {
+    for (var i = 32; i < 123; ++i) {
 
         if ((i >= 97) ||                    // a-z
             (i >= 65 && i <= 90) ||         // A-Z
@@ -31237,7 +31319,7 @@ var _escape = {
 var path$2 = ( path$1 && path ) || path$1;
 
 var lib$6 = createCommonjsModule(function (module, exports) {
-const internals = {};
+var internals = {};
 
 
 // Clone object or array
@@ -31252,13 +31334,13 @@ exports.clone = function (obj, seen) {
 
     seen = seen || new Map();
 
-    const lookup = seen.get(obj);
+    var lookup = seen.get(obj);
     if (lookup) {
         return lookup;
     }
 
-    let newObj;
-    let cloneDeep = false;
+    var newObj;
+    var cloneDeep = false;
 
     if (!Array.isArray(obj)) {
         if (Buffer.isBuffer(obj)) {
@@ -31271,7 +31353,7 @@ exports.clone = function (obj, seen) {
             newObj = new RegExp(obj);
         }
         else {
-            const proto = Object.getPrototypeOf(obj);
+            var proto = Object.getPrototypeOf(obj);
             if (proto &&
                 proto.isImmutable) {
 
@@ -31291,10 +31373,10 @@ exports.clone = function (obj, seen) {
     seen.set(obj, newObj);
 
     if (cloneDeep) {
-        const keys = Object.getOwnPropertyNames(obj);
-        for (let i = 0; i < keys.length; ++i) {
-            const key = keys[i];
-            const descriptor = Object.getOwnPropertyDescriptor(obj, key);
+        var keys = Object.getOwnPropertyNames(obj);
+        for (var i = 0; i < keys.length; ++i) {
+            var key = keys[i];
+            var descriptor = Object.getOwnPropertyDescriptor(obj, key);
             if (descriptor &&
                 (descriptor.get ||
                  descriptor.set)) {
@@ -31330,17 +31412,17 @@ exports.merge = function (target, source, isNullOverride /* = true */, isMergeAr
             target.length = 0;                                                          // Must not change target assignment
         }
 
-        for (let i = 0; i < source.length; ++i) {
+        for (var i = 0; i < source.length; ++i) {
             target.push(exports.clone(source[i]));
         }
 
         return target;
     }
 
-    const keys = Object.keys(source);
-    for (let i = 0; i < keys.length; ++i) {
-        const key = keys[i];
-        const value = source[key];
+    var keys = Object.keys(source);
+    for (var i$1 = 0; i$1 < keys.length; ++i$1) {
+        var key = keys[i$1];
+        var value = source[key];
         if (value &&
             typeof value === 'object') {
 
@@ -31384,7 +31466,7 @@ exports.applyToDefaults = function (defaults, options, isNullOverride) {
         return null;
     }
 
-    const copy = exports.clone(defaults);
+    var copy = exports.clone(defaults);
 
     if (options === true) {                                         // If options is set to true, use defaults
         return copy;
@@ -31404,8 +31486,8 @@ exports.cloneWithShallow = function (source, keys) {
         return source;
     }
 
-    const storage = internals.store(source, keys);    // Move shallow copy items to storage
-    const copy = exports.clone(source);               // Deep copy the rest
+    var storage = internals.store(source, keys);    // Move shallow copy items to storage
+    var copy = exports.clone(source);               // Deep copy the rest
     internals.restore(copy, source, storage);       // Shallow copy the stored items and restore
     return copy;
 };
@@ -31413,10 +31495,10 @@ exports.cloneWithShallow = function (source, keys) {
 
 internals.store = function (source, keys) {
 
-    const storage = {};
-    for (let i = 0; i < keys.length; ++i) {
-        const key = keys[i];
-        const value = exports.reach(source, key);
+    var storage = {};
+    for (var i = 0; i < keys.length; ++i) {
+        var key = keys[i];
+        var value = exports.reach(source, key);
         if (value !== undefined) {
             storage[key] = value;
             internals.reachSet(source, key, undefined);
@@ -31429,9 +31511,9 @@ internals.store = function (source, keys) {
 
 internals.restore = function (copy, source, storage) {
 
-    const keys = Object.keys(storage);
-    for (let i = 0; i < keys.length; ++i) {
-        const key = keys[i];
+    var keys = Object.keys(storage);
+    for (var i = 0; i < keys.length; ++i) {
+        var key = keys[i];
         internals.reachSet(copy, key, storage[key]);
         internals.reachSet(source, key, storage[key]);
     }
@@ -31440,10 +31522,10 @@ internals.restore = function (copy, source, storage) {
 
 internals.reachSet = function (obj, key, value) {
 
-    const path = key.split('.');
-    let ref = obj;
-    for (let i = 0; i < path.length; ++i) {
-        const segment = path[i];
+    var path = key.split('.');
+    var ref = obj;
+    for (var i = 0; i < path.length; ++i) {
+        var segment = path[i];
         if (i + 1 === path.length) {
             ref[segment] = value;
         }
@@ -31465,13 +31547,13 @@ exports.applyToDefaultsWithShallow = function (defaults, options, keys) {
         return null;
     }
 
-    const copy = exports.cloneWithShallow(defaults, keys);
+    var copy = exports.cloneWithShallow(defaults, keys);
 
     if (options === true) {                                         // If options is set to true, use defaults
         return copy;
     }
 
-    const storage = internals.store(options, keys);   // Move shallow copy items to storage
+    var storage = internals.store(options, keys);   // Move shallow copy items to storage
     exports.merge(copy, options, false, false);     // Deep copy the rest
     internals.restore(copy, options, storage);      // Shallow copy the stored items and restore
     return copy;
@@ -31484,7 +31566,7 @@ exports.deepEqual = function (obj, ref, options, seen) {
 
     options = options || { prototype: true };
 
-    const type = typeof obj;
+    var type = typeof obj;
 
     if (type !== typeof ref) {
         return false;
@@ -31517,10 +31599,10 @@ exports.deepEqual = function (obj, ref, options, seen) {
             return false;
         }
 
-        for (let i = 0; i < obj.length; ++i) {
+        for (var i = 0; i < obj.length; ++i) {
             if (options.part) {
-                let found = false;
-                for (let j = 0; j < ref.length; ++j) {
+                var found = false;
+                for (var j = 0; j < ref.length; ++j) {
                     if (exports.deepEqual(obj[i], ref[j], options)) {
                         found = true;
                         break;
@@ -31547,8 +31629,8 @@ exports.deepEqual = function (obj, ref, options, seen) {
             return false;
         }
 
-        for (let i = 0; i < obj.length; ++i) {
-            if (obj[i] !== ref[i]) {
+        for (var i$1 = 0; i$1 < obj.length; ++i$1) {
+            if (obj[i$1] !== ref[i$1]) {
                 return false;
             }
         }
@@ -31570,15 +31652,15 @@ exports.deepEqual = function (obj, ref, options, seen) {
         }
     }
 
-    const keys = Object.getOwnPropertyNames(obj);
+    var keys = Object.getOwnPropertyNames(obj);
 
     if (!options.part && keys.length !== Object.getOwnPropertyNames(ref).length) {
         return false;
     }
 
-    for (let i = 0; i < keys.length; ++i) {
-        const key = keys[i];
-        const descriptor = Object.getOwnPropertyDescriptor(obj, key);
+    for (var i$2 = 0; i$2 < keys.length; ++i$2) {
+        var key = keys[i$2];
+        var descriptor = Object.getOwnPropertyDescriptor(obj, key);
         if (descriptor.get) {
             if (!exports.deepEqual(descriptor, Object.getOwnPropertyDescriptor(ref, key), options, seen)) {
                 return false;
@@ -31595,15 +31677,15 @@ exports.deepEqual = function (obj, ref, options, seen) {
 
 // Remove duplicate items from array
 
-exports.unique = (array, key) => {
+exports.unique = function (array, key) {
 
-    let result;
+    var result;
     if (key) {
         result = [];
-        const index = new Set();
-        array.forEach((item) => {
+        var index = new Set();
+        array.forEach(function (item) {
 
-            const identifier = item[key];
+            var identifier = item[key];
             if (!index.has(identifier)) {
                 index.add(identifier);
                 result.push(item);
@@ -31626,8 +31708,8 @@ exports.mapToObject = function (array, key) {
         return null;
     }
 
-    const obj = {};
-    for (let i = 0; i < array.length; ++i) {
+    var obj = {};
+    for (var i = 0; i < array.length; ++i) {
         if (key) {
             if (array[i][key]) {
                 obj[array[i][key]] = true;
@@ -31650,10 +31732,10 @@ exports.intersect = function (array1, array2, justFirst) {
         return [];
     }
 
-    const common = [];
-    const hash = (Array.isArray(array1) ? exports.mapToObject(array1) : array1);
-    const found = {};
-    for (let i = 0; i < array2.length; ++i) {
+    var common = [];
+    var hash = (Array.isArray(array1) ? exports.mapToObject(array1) : array1);
+    var found = {};
+    for (var i = 0; i < array2.length; ++i) {
         if (hash[array2[i]] && !found[array2[i]]) {
             if (justFirst) {
                 return array2[i];
@@ -31679,7 +31761,7 @@ exports.contain = function (ref, values, options) {
         object -> object (key:value)
     */
 
-    let valuePairs = null;
+    var valuePairs = null;
     if (typeof ref === 'object' &&
         typeof values === 'object' &&
         !Array.isArray(ref) &&
@@ -31698,13 +31780,13 @@ exports.contain = function (ref, values, options) {
     exports.assert(typeof ref === 'string' || typeof ref === 'object', 'Reference must be string or an object');
     exports.assert(values.length, 'Values array cannot be empty');
 
-    let compare;
-    let compareFlags;
+    var compare;
+    var compareFlags;
     if (options.deep) {
         compare = exports.deepEqual;
 
-        const hasOnly = options.hasOwnProperty('only');
-        const hasPart = options.hasOwnProperty('part');
+        var hasOnly = options.hasOwnProperty('only');
+        var hasPart = options.hasOwnProperty('part');
 
         compareFlags = {
             prototype: hasOnly ? options.only : hasPart ? !options.part : false,
@@ -31712,27 +31794,27 @@ exports.contain = function (ref, values, options) {
         };
     }
     else {
-        compare = (a, b) => a === b;
+        compare = function (a, b) { return a === b; };
     }
 
-    let misses = false;
-    const matches = new Array(values.length);
-    for (let i = 0; i < matches.length; ++i) {
+    var misses = false;
+    var matches = new Array(values.length);
+    for (var i = 0; i < matches.length; ++i) {
         matches[i] = 0;
     }
 
     if (typeof ref === 'string') {
-        let pattern = '(';
-        for (let i = 0; i < values.length; ++i) {
-            const value = values[i];
+        var pattern = '(';
+        for (var i$1 = 0; i$1 < values.length; ++i$1) {
+            var value = values[i$1];
             exports.assert(typeof value === 'string', 'Cannot compare string reference to non-string value');
-            pattern += (i ? '|' : '') + exports.escapeRegex(value);
+            pattern += (i$1 ? '|' : '') + exports.escapeRegex(value);
         }
 
-        const regex = new RegExp(pattern + ')', 'g');
-        const leftovers = ref.replace(regex, ($0, $1) => {
+        var regex = new RegExp(pattern + ')', 'g');
+        var leftovers = ref.replace(regex, function ($0, $1) {
 
-            const index = values.indexOf($1);
+            var index = values.indexOf($1);
             ++matches[index];
             return '';          // Remove from string
         });
@@ -31740,10 +31822,10 @@ exports.contain = function (ref, values, options) {
         misses = !!leftovers;
     }
     else if (Array.isArray(ref)) {
-        for (let i = 0; i < ref.length; ++i) {
-            let matched = false;
-            for (let j = 0; j < values.length && matched === false; ++j) {
-                matched = compare(values[j], ref[i], compareFlags) && j;
+        for (var i$2 = 0; i$2 < ref.length; ++i$2) {
+            var matched = false;
+            for (var j = 0; j < values.length && matched === false; ++j) {
+                matched = compare(values[j], ref[i$2], compareFlags) && j;
             }
 
             if (matched !== false) {
@@ -31755,10 +31837,10 @@ exports.contain = function (ref, values, options) {
         }
     }
     else {
-        const keys = Object.getOwnPropertyNames(ref);
-        for (let i = 0; i < keys.length; ++i) {
-            const key = keys[i];
-            const pos = values.indexOf(key);
+        var keys = Object.getOwnPropertyNames(ref);
+        for (var i$3 = 0; i$3 < keys.length; ++i$3) {
+            var key = keys[i$3];
+            var pos = values.indexOf(key);
             if (pos !== -1) {
                 if (valuePairs &&
                     !compare(valuePairs[key], ref[key], compareFlags)) {
@@ -31774,11 +31856,11 @@ exports.contain = function (ref, values, options) {
         }
     }
 
-    let result = false;
-    for (let i = 0; i < matches.length; ++i) {
-        result = result || !!matches[i];
-        if ((options.once && matches[i] > 1) ||
-            (!options.part && !matches[i])) {
+    var result = false;
+    for (var i$4 = 0; i$4 < matches.length; ++i$4) {
+        result = result || !!matches[i$4];
+        if ((options.once && matches[i$4] > 1) ||
+            (!options.part && !matches[i$4])) {
 
             return false;
         }
@@ -31798,9 +31880,9 @@ exports.contain = function (ref, values, options) {
 
 exports.flatten = function (array, target) {
 
-    const result = target || [];
+    var result = target || [];
 
-    for (let i = 0; i < array.length; ++i) {
+    for (var i = 0; i < array.length; ++i) {
         if (Array.isArray(array[i])) {
             exports.flatten(array[i], result);
         }
@@ -31829,10 +31911,10 @@ exports.reach = function (obj, chain, options) {
         options = { separator: options };
     }
 
-    const path = chain.split(options.separator || '.');
-    let ref = obj;
-    for (let i = 0; i < path.length; ++i) {
-        let key = path[i];
+    var path = chain.split(options.separator || '.');
+    var ref = obj;
+    for (var i = 0; i < path.length; ++i) {
+        var key = path[i];
         if (key[0] === '-' && Array.isArray(ref)) {
             key = key.slice(1, key.length);
             key = ref.length - key;
@@ -31857,9 +31939,9 @@ exports.reach = function (obj, chain, options) {
 
 exports.reachTemplate = function (obj, template, options) {
 
-    return template.replace(/{([^}]+)}/g, ($0, chain) => {
+    return template.replace(/{([^}]+)}/g, function ($0, chain) {
 
-        const value = exports.reach(obj, chain, options);
+        var value = exports.reach(obj, chain, options);
         return (value === undefined || value === null ? '' : value);
     });
 };
@@ -31867,9 +31949,9 @@ exports.reachTemplate = function (obj, template, options) {
 
 exports.formatStack = function (stack) {
 
-    const trace = [];
-    for (let i = 0; i < stack.length; ++i) {
-        const item = stack[i];
+    var trace = [];
+    for (var i = 0; i < stack.length; ++i) {
+        var item = stack[i];
         trace.push([item.getFileName(), item.getLineNumber(), item.getColumnNumber(), item.getFunctionName(), item.isConstructor()]);
     }
 
@@ -31879,10 +31961,10 @@ exports.formatStack = function (stack) {
 
 exports.formatTrace = function (trace) {
 
-    const display = [];
+    var display = [];
 
-    for (let i = 0; i < trace.length; ++i) {
-        const row = trace[i];
+    for (var i = 0; i < trace.length; ++i) {
+        var row = trace[i];
         display.push((row[4] ? 'new ' : '') + row[3] + ' (' + row[0] + ':' + row[1] + ':' + row[2] + ')');
     }
 
@@ -31894,19 +31976,19 @@ exports.callStack = function (slice) {
 
     // http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi
 
-    const v8 = Error.prepareStackTrace;
+    var v8 = Error.prepareStackTrace;
     Error.prepareStackTrace = function (_, stack) {
 
         return stack;
     };
 
-    const capture = {};
+    var capture = {};
     Error.captureStackTrace(capture, this);     // arguments.callee is not supported in strict mode so we use this and slice the trace of this off the result
-    const stack = capture.stack;
+    var stack = capture.stack;
 
     Error.prepareStackTrace = v8;
 
-    const trace = exports.formatStack(stack);
+    var trace = exports.formatStack(stack);
 
     return trace.slice(1 + slice);
 };
@@ -31914,7 +31996,7 @@ exports.callStack = function (slice) {
 
 exports.displayStack = function (slice) {
 
-    const trace = exports.callStack(slice === undefined ? 1 : slice + 1);
+    var trace = exports.callStack(slice === undefined ? 1 : slice + 1);
 
     return exports.formatTrace(trace);
 };
@@ -31929,7 +32011,7 @@ exports.abort = function (message, hideStack) {
         throw new Error(message || 'Unknown error');
     }
 
-    let stack = '';
+    var stack = '';
     if (!hideStack) {
         stack = exports.displayStack(1).join('\n\t');
     }
@@ -31938,7 +32020,9 @@ exports.abort = function (message, hideStack) {
 };
 
 
-exports.assert = function (condition /*, msg1, msg2, msg3 */) {
+exports.assert = function (condition /* msg1, msg2, msg3 */) {
+    var arguments$1 = arguments;
+
 
     if (condition) {
         return;
@@ -31948,14 +32032,14 @@ exports.assert = function (condition /*, msg1, msg2, msg3 */) {
         throw arguments[1];
     }
 
-    let msgs = [];
-    for (let i = 1; i < arguments.length; ++i) {
-        if (arguments[i] !== '') {
-            msgs.push(arguments[i]);            // Avoids Array.slice arguments leak, allowing for V8 optimizations
+    var msgs = [];
+    for (var i = 1; i < arguments.length; ++i) {
+        if (arguments$1[i] !== '') {
+            msgs.push(arguments$1[i]);            // Avoids Array.slice arguments leak, allowing for V8 optimizations
         }
     }
 
-    msgs = msgs.map((msg) => {
+    msgs = msgs.map(function (msg) {
 
         return typeof msg === 'string' ? msg : msg instanceof Error ? msg.message : exports.stringify(msg);
     });
@@ -32004,7 +32088,7 @@ exports.Bench.prototype.elapsed = function () {
 
 exports.Bench.now = function () {
 
-    const ts = process.hrtime();
+    var ts = process.hrtime();
     return (ts[0] * 1e3) + (ts[1] / 1e6);
 };
 
@@ -32023,7 +32107,7 @@ exports.escapeRegex = function (string) {
 exports.base64urlEncode = function (value, encoding) {
 
     exports.assert(typeof value === 'string' || Buffer.isBuffer(value), 'value must be string or buffer');
-    const buf = (Buffer.isBuffer(value) ? value : new Buffer(value, encoding || 'binary'));
+    var buf = (Buffer.isBuffer(value) ? value : new Buffer(value, encoding || 'binary'));
     return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
 };
 
@@ -32042,7 +32126,7 @@ exports.base64urlDecode = function (value, encoding) {
         return new Error('Invalid character');
     }
 
-    const buf = new Buffer(value, 'base64');
+    var buf = new Buffer(value, 'base64');
     return (encoding === 'buffer' ? buf : buf.toString(encoding || 'binary'));
 };
 
@@ -32079,8 +32163,8 @@ exports.nextTick = function (callback) {
 
     return function () {
 
-        const args = arguments;
-        process.nextTick(() => {
+        var args = arguments;
+        process.nextTick(function () {
 
             callback.apply(null, args);
         });
@@ -32094,8 +32178,8 @@ exports.once = function (method) {
         return method;
     }
 
-    let once = false;
-    const wrapped = function () {
+    var once = false;
+    var wrapped = function () {
 
         if (!once) {
             once = true;
@@ -32124,28 +32208,28 @@ exports.format = util$4.format;
 exports.transform = function (source, transform, options) {
 
     exports.assert(source === null || source === undefined || typeof source === 'object' || Array.isArray(source), 'Invalid source object: must be null, undefined, an object, or an array');
-    const separator = (typeof options === 'object' && options !== null) ? (options.separator || '.') : '.';
+    var separator = (typeof options === 'object' && options !== null) ? (options.separator || '.') : '.';
 
     if (Array.isArray(source)) {
-        const results = [];
-        for (let i = 0; i < source.length; ++i) {
+        var results = [];
+        for (var i = 0; i < source.length; ++i) {
             results.push(exports.transform(source[i], transform, options));
         }
         return results;
     }
 
-    const result = {};
-    const keys = Object.keys(transform);
+    var result = {};
+    var keys = Object.keys(transform);
 
-    for (let i = 0; i < keys.length; ++i) {
-        const key = keys[i];
-        const path = key.split(separator);
-        const sourcePath = transform[key];
+    for (var i$1 = 0; i$1 < keys.length; ++i$1) {
+        var key = keys[i$1];
+        var path = key.split(separator);
+        var sourcePath = transform[key];
 
         exports.assert(typeof sourcePath === 'string', 'All mappings must be "." delineated strings');
 
-        let segment;
-        let res = result;
+        var segment = (void 0);
+        var res = result;
 
         while (path.length > 1) {
             segment = path.shift();
@@ -32172,7 +32256,7 @@ exports.uniqueFilename = function (path, extension) {
     }
 
     path = path$2.resolve(path);
-    const name = [Date.now(), process.pid, tls.randomBytes(8).toString('hex')].join('-') + extension;
+    var name = [Date.now(), process.pid, tls.randomBytes(8).toString('hex')].join('-') + extension;
     return path$2.join(path, name);
 };
 
@@ -32190,10 +32274,10 @@ exports.stringify = function () {
 
 exports.shallow = function (source) {
 
-    const target = {};
-    const keys = Object.keys(source);
-    for (let i = 0; i < keys.length; ++i) {
-        const key = keys[i];
+    var target = {};
+    var keys = Object.keys(source);
+    for (var i = 0; i < keys.length; ++i) {
+        var key = keys[i];
         target[key] = source[key];
     }
 
@@ -32242,7 +32326,7 @@ var lib_38 = lib$6.stringify;
 var lib_39 = lib$6.shallow;
 
 var lib$4 = createCommonjsModule(function (module, exports) {
-const internals = {
+var internals = {
     STATUS_CODES: Object.setPrototypeOf({
         '100': 'Continue',
         '101': 'Switching Protocols',
@@ -32329,7 +32413,7 @@ internals.create = function (statusCode, message, data, ctor) {
         return exports.wrap(message, statusCode);
     }
 
-    const error = new Error(message ? message : undefined);       // Avoids settings null message
+    var error = new Error(message ? message : undefined);       // Avoids settings null message
     Error.captureStackTrace(error, ctor);                       // Filter the stack to our external API
     error.data = data || null;
     internals.initialize(error, statusCode);
@@ -32339,7 +32423,7 @@ internals.create = function (statusCode, message, data, ctor) {
 
 internals.initialize = function (error, statusCode, message) {
 
-    const numberCode = parseInt(statusCode, 10);
+    var numberCode = parseInt(statusCode, 10);
     lib$6.assert(!isNaN(numberCode) && numberCode >= 400, 'First argument must be a number (400+):', statusCode);
 
     error.isBoom = true;
@@ -32396,13 +32480,13 @@ exports.badRequest = function (message, data) {
 
 exports.unauthorized = function (message, scheme, attributes) {          // Or function (message, wwwAuthenticate[])
 
-    const err = internals.create(401, message, undefined, exports.unauthorized);
+    var err = internals.create(401, message, undefined, exports.unauthorized);
 
     if (!scheme) {
         return err;
     }
 
-    let wwwAuthenticate = '';
+    var wwwAuthenticate = '';
 
     if (typeof scheme === 'string') {
 
@@ -32420,14 +32504,14 @@ exports.unauthorized = function (message, scheme, attributes) {          // Or f
                 err.output.payload.attributes = attributes;
             }
             else {
-                const names = Object.keys(attributes);
-                for (let i = 0; i < names.length; ++i) {
-                    const name = names[i];
+                var names = Object.keys(attributes);
+                for (var i = 0; i < names.length; ++i) {
+                    var name = names[i];
                     if (i) {
                         wwwAuthenticate = wwwAuthenticate + ',';
                     }
 
-                    let value = attributes[name];
+                    var value = attributes[name];
                     if (value === null ||
                         value === undefined) {              // Value can be zero
 
@@ -32455,13 +32539,13 @@ exports.unauthorized = function (message, scheme, attributes) {          // Or f
 
         // function (message, wwwAuthenticate[])
 
-        const wwwArray = scheme;
-        for (let i = 0; i < wwwArray.length; ++i) {
-            if (i) {
+        var wwwArray = scheme;
+        for (var i$1 = 0; i$1 < wwwArray.length; ++i$1) {
+            if (i$1) {
                 wwwAuthenticate = wwwAuthenticate + ', ';
             }
 
-            wwwAuthenticate = wwwAuthenticate + wwwArray[i];
+            wwwAuthenticate = wwwAuthenticate + wwwArray[i$1];
         }
     }
 
@@ -32491,7 +32575,7 @@ exports.notFound = function (message, data) {
 
 exports.methodNotAllowed = function (message, data, allow) {
 
-    const err = internals.create(405, message, data, exports.methodNotAllowed);
+    var err = internals.create(405, message, data, exports.methodNotAllowed);
 
     if (typeof allow === 'string') {
         allow = [allow];
@@ -32623,7 +32707,7 @@ exports.internal = function (message, data, statusCode) {
 
 internals.serverError = function (message, data, statusCode, ctor) {
 
-    let error;
+    var error;
     if (data instanceof Error) {
         error = exports.wrap(data, statusCode, message);
     }
@@ -32662,7 +32746,7 @@ exports.gatewayTimeout = function (message, data) {
 
 exports.badImplementation = function (message, data) {
 
-    const err = internals.serverError(message, data, 500, exports.badImplementation);
+    var err = internals.serverError(message, data, 500, exports.badImplementation);
     err.isDeveloperError = true;
     return err;
 };
@@ -32702,7 +32786,7 @@ var lib_31 = lib$4.gatewayTimeout;
 var lib_32 = lib$4.badImplementation;
 
 var lib$8 = createCommonjsModule(function (module, exports) {
-const internals = {};
+var internals = {};
 
 
 exports.time = function (options, callback) {
@@ -32712,19 +32796,19 @@ exports.time = function (options, callback) {
         options = {};
     }
 
-    const settings = lib$6.clone(options);
+    var settings = lib$6.clone(options);
     settings.host = settings.host || 'time.google.com';
     settings.port = settings.port || 123;
     settings.resolveReference = settings.resolveReference || false;
 
     // Declare variables used by callback
 
-    let timeoutId = null;
-    let sent = 0;
+    var timeoutId = null;
+    var sent = 0;
 
     // Ensure callback is only called once
 
-    const finish = lib$6.once((err, result) => {
+    var finish = lib$6.once(function (err, result) {
 
         clearTimeout(timeoutId);
 
@@ -32742,7 +32826,7 @@ exports.time = function (options, callback) {
     // Set timeout
 
     if (settings.timeout) {
-        timeoutId = setTimeout(() => {
+        timeoutId = setTimeout(function () {
 
             return finish(new Error('Timeout'));
         }, settings.timeout);
@@ -32750,17 +32834,17 @@ exports.time = function (options, callback) {
 
     // Create UDP socket
 
-    const socket = tls.createSocket('udp4');
+    var socket = tls.createSocket('udp4');
 
-    socket.once('error', (err) => finish(err));
+    socket.once('error', function (err) { return finish(err); });
 
     // Listen to incoming messages
 
-    socket.on('message', (buffer, rinfo) => {
+    socket.on('message', function (buffer, rinfo) {
 
-        const received = Date.now();
+        var received = Date.now();
 
-        const message = new internals.NtpMessage(buffer);
+        var message = new internals.NtpMessage(buffer);
         if (!message.isValid) {
             return finish(new Error('Invalid server response'), message);
         }
@@ -32780,10 +32864,10 @@ exports.time = function (options, callback) {
         //
         // d = (T4 - T1) - (T3 - T2)     t = ((T2 - T1) + (T3 - T4)) / 2
 
-        const T1 = message.originateTimestamp;
-        const T2 = message.receiveTimestamp;
-        const T3 = message.transmitTimestamp;
-        const T4 = received;
+        var T1 = message.originateTimestamp;
+        var T2 = message.receiveTimestamp;
+        var T3 = message.transmitTimestamp;
+        var T4 = received;
 
         message.d = (T4 - T1) - (T3 - T2);
         message.t = ((T2 - T1) + (T3 - T4)) / 2;
@@ -32797,7 +32881,7 @@ exports.time = function (options, callback) {
 
         // Resolve reference IP address
 
-        tls.reverse(message.referenceId, (err, domains) => {
+        tls.reverse(message.referenceId, function (err, domains) {
 
             if (/* $lab:coverage:off$ */ !err /* $lab:coverage:on$ */) {
                 message.referenceHost = domains[0];
@@ -32809,8 +32893,8 @@ exports.time = function (options, callback) {
 
     // Construct NTP message
 
-    const message = new Buffer(48);
-    for (let i = 0; i < 48; ++i) {                      // Zero message
+    var message = new Buffer(48);
+    for (var i = 0; i < 48; ++i) {                      // Zero message
         message[i] = 0;
     }
 
@@ -32820,7 +32904,7 @@ exports.time = function (options, callback) {
 
     // Send NTP request
 
-    socket.send(message, 0, message.length, settings.port, settings.host, (err, bytes) => {
+    socket.send(message, 0, message.length, settings.port, settings.host, function (err, bytes) {
 
         if (err ||
             bytes !== 48) {
@@ -32843,7 +32927,7 @@ internals.NtpMessage = function (buffer) {
 
     // Leap indicator
 
-    const li = (buffer[0] >> 6);
+    var li = (buffer[0] >> 6);
     switch (li) {
         case 0: this.leapIndicator = 'no-warning'; break;
         case 1: this.leapIndicator = 'last-minute-61'; break;
@@ -32853,12 +32937,12 @@ internals.NtpMessage = function (buffer) {
 
     // Version
 
-    const vn = ((buffer[0] & 0x38) >> 3);
+    var vn = ((buffer[0] & 0x38) >> 3);
     this.version = vn;
 
     // Mode
 
-    const mode = (buffer[0] & 0x7);
+    var mode = (buffer[0] & 0x7);
     switch (mode) {
         case 1: this.mode = 'symmetric-active'; break;
         case 2: this.mode = 'symmetric-passive'; break;
@@ -32872,7 +32956,7 @@ internals.NtpMessage = function (buffer) {
 
     // Stratum
 
-    const stratum = buffer[1];
+    var stratum = buffer[1];
     if (stratum === 0) {
         this.stratum = 'death';
     }
@@ -32896,7 +32980,7 @@ internals.NtpMessage = function (buffer) {
 
     // Root delay (msecs)
 
-    const rootDelay = 256 * (256 * (256 * buffer[4] + buffer[5]) + buffer[6]) + buffer[7];
+    var rootDelay = 256 * (256 * (256 * buffer[4] + buffer[5]) + buffer[6]) + buffer[7];
     this.rootDelay = 1000 * (rootDelay / 0x10000);
 
     // Root dispersion (msecs)
@@ -32950,15 +33034,15 @@ internals.NtpMessage = function (buffer) {
 
 internals.toMsecs = function (buffer, offset) {
 
-    let seconds = 0;
-    let fraction = 0;
+    var seconds = 0;
+    var fraction = 0;
 
-    for (let i = 0; i < 4; ++i) {
+    for (var i = 0; i < 4; ++i) {
         seconds = (seconds * 256) + buffer[offset + i];
     }
 
-    for (let i = 4; i < 8; ++i) {
-        fraction = (fraction * 256) + buffer[offset + i];
+    for (var i$1 = 4; i$1 < 8; ++i$1) {
+        fraction = (fraction * 256) + buffer[offset + i$1];
     }
 
     return ((seconds - 2208988800 + (fraction / Math.pow(2, 32))) * 1000);
@@ -32967,8 +33051,8 @@ internals.toMsecs = function (buffer, offset) {
 
 internals.fromMsecs = function (ts, buffer, offset) {
 
-    const seconds = Math.floor(ts / 1000) + 2208988800;
-    const fraction = Math.round((ts % 1000) / 1000 * Math.pow(2, 32));
+    var seconds = Math.floor(ts / 1000) + 2208988800;
+    var fraction = Math.round((ts % 1000) / 1000 * Math.pow(2, 32));
 
     buffer[offset + 0] = (seconds & 0xFF000000) >> 24;
     buffer[offset + 1] = (seconds & 0x00FF0000) >> 16;
@@ -32999,19 +33083,19 @@ exports.offset = function (options, callback) {
         options = {};
     }
 
-    const now = Date.now();
-    const clockSyncRefresh = options.clockSyncRefresh || 24 * 60 * 60 * 1000;                    // Daily
+    var now = Date.now();
+    var clockSyncRefresh = options.clockSyncRefresh || 24 * 60 * 60 * 1000;                    // Daily
 
     if (internals.last.offset &&
         internals.last.host === options.host &&
         internals.last.port === options.port &&
         now < internals.last.expires) {
 
-        process.nextTick(() => callback(null, internals.last.offset));
+        process.nextTick(function () { return callback(null, internals.last.offset); });
         return;
     }
 
-    exports.time(options, (err, time) => {
+    exports.time(options, function (err, time) {
 
         if (err) {
             return callback(err, 0);
@@ -33045,11 +33129,11 @@ exports.start = function (options, callback) {
     }
 
     if (internals.now.started) {
-        process.nextTick(() => callback());
+        process.nextTick(function () { return callback(); });
         return;
     }
 
-    const report = (err) => {
+    var report = function (err) {
 
         if (err &&
             options.onError) {
@@ -33059,11 +33143,11 @@ exports.start = function (options, callback) {
     };
 
     internals.now.started = true;
-    exports.offset(options, (err, offset) => {
+    exports.offset(options, function (err, offset) {
 
         report(err);
 
-        internals.now.intervalId = setInterval(() => {
+        internals.now.intervalId = setInterval(function () {
 
             exports.offset(options, report);
         }, options.clockSyncRefresh || 24 * 60 * 60 * 1000);                                // Daily
@@ -33093,7 +33177,7 @@ exports.isLive = function () {
 
 exports.now = function () {
 
-    const now = Date.now();
+    var now = Date.now();
     if (!exports.isLive() ||
         now >= internals.last.expires) {
 
@@ -33112,7 +33196,7 @@ var lib_5$3 = lib$8.isLive;
 var lib_6$3 = lib$8.now;
 
 var lib$12 = createCommonjsModule(function (module, exports) {
-const internals = {
+var internals = {
     STATUS_CODES: Object.setPrototypeOf({
         '100': 'Continue',
         '101': 'Switching Protocols',
@@ -33220,7 +33304,7 @@ internals.create = function (statusCode, message, data, ctor) {
         return exports.wrap(message, statusCode);
     }
 
-    const error = new Error(message ? message : undefined);         // Avoids settings null message
+    var error = new Error(message ? message : undefined);         // Avoids settings null message
     Error.captureStackTrace(error, ctor);                           // Filter the stack to our external API
     error.data = data || null;
     internals.initialize(error, statusCode);
@@ -33232,7 +33316,7 @@ internals.create = function (statusCode, message, data, ctor) {
 
 internals.initialize = function (error, statusCode, message) {
 
-    const numberCode = parseInt(statusCode, 10);
+    var numberCode = parseInt(statusCode, 10);
     lib$6.assert(!isNaN(numberCode) && numberCode >= 400, 'First argument must be a number (400+):', statusCode);
 
     error.isBoom = true;
@@ -33291,13 +33375,13 @@ exports.badRequest = function (message, data) {
 
 exports.unauthorized = function (message, scheme, attributes) {          // Or function (message, wwwAuthenticate[])
 
-    const err = internals.create(401, message, undefined, exports.unauthorized);
+    var err = internals.create(401, message, undefined, exports.unauthorized);
 
     if (!scheme) {
         return err;
     }
 
-    let wwwAuthenticate = '';
+    var wwwAuthenticate = '';
 
     if (typeof scheme === 'string') {
 
@@ -33315,14 +33399,14 @@ exports.unauthorized = function (message, scheme, attributes) {          // Or f
                 err.output.payload.attributes = attributes;
             }
             else {
-                const names = Object.keys(attributes);
-                for (let i = 0; i < names.length; ++i) {
-                    const name = names[i];
+                var names = Object.keys(attributes);
+                for (var i = 0; i < names.length; ++i) {
+                    var name = names[i];
                     if (i) {
                         wwwAuthenticate = wwwAuthenticate + ',';
                     }
 
-                    let value = attributes[name];
+                    var value = attributes[name];
                     if (value === null ||
                         value === undefined) {              // Value can be zero
 
@@ -33350,13 +33434,13 @@ exports.unauthorized = function (message, scheme, attributes) {          // Or f
 
         // function (message, wwwAuthenticate[])
 
-        const wwwArray = scheme;
-        for (let i = 0; i < wwwArray.length; ++i) {
-            if (i) {
+        var wwwArray = scheme;
+        for (var i$1 = 0; i$1 < wwwArray.length; ++i$1) {
+            if (i$1) {
                 wwwAuthenticate = wwwAuthenticate + ', ';
             }
 
-            wwwAuthenticate = wwwAuthenticate + wwwArray[i];
+            wwwAuthenticate = wwwAuthenticate + wwwArray[i$1];
         }
     }
 
@@ -33386,7 +33470,7 @@ exports.notFound = function (message, data) {
 
 exports.methodNotAllowed = function (message, data, allow) {
 
-    const err = internals.create(405, message, data, exports.methodNotAllowed);
+    var err = internals.create(405, message, data, exports.methodNotAllowed);
 
     if (typeof allow === 'string') {
         allow = [allow];
@@ -33524,7 +33608,7 @@ internals.serverError = function (message, data, statusCode, ctor) {
         return exports.wrap(data, statusCode, message);
     }
 
-    const error = internals.create(statusCode || 500, message, undefined, ctor);
+    var error = internals.create(statusCode || 500, message, undefined, ctor);
     error.data = data;
     return error;
 };
@@ -33556,7 +33640,7 @@ exports.gatewayTimeout = function (message, data) {
 
 exports.badImplementation = function (message, data) {
 
-    const err = internals.serverError(message, data, 500, exports.badImplementation);
+    var err = internals.serverError(message, data, 500, exports.badImplementation);
     err.isDeveloperError = true;
     return err;
 };
@@ -33599,12 +33683,12 @@ var lib_33$1 = lib$12.badImplementation;
 var lib$10 = createCommonjsModule(function (module, exports) {
 exports.randomString = function (size) {
 
-    const buffer = exports.randomBits((size + 1) * 6);
+    var buffer = exports.randomBits((size + 1) * 6);
     if (buffer instanceof Error) {
         return buffer;
     }
 
-    const string = buffer.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
+    var string = buffer.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
     return string.slice(0, size);
 };
 
@@ -33613,13 +33697,13 @@ exports.randomString = function (size) {
 
 exports.randomDigits = function (size) {
 
-    const buffer = exports.randomBits(size * 8);
+    var buffer = exports.randomBits(size * 8);
     if (buffer instanceof Error) {
         return buffer;
     }
 
-    const digits = [];
-    for (let i = 0; i < buffer.length; ++i) {
+    var digits = [];
+    for (var i = 0; i < buffer.length; ++i) {
         digits.push(Math.floor(buffer[i] / 25.6));
     }
 
@@ -33637,7 +33721,7 @@ exports.randomBits = function (bits) {
         return lib$12.internal('Invalid random bits count');
     }
 
-    const bytes = Math.ceil(bits / 8);
+    var bytes = Math.ceil(bits / 8);
     try {
         return tls.randomBytes(bytes);
     }
@@ -33657,14 +33741,14 @@ exports.fixedTimeComparison = function (a, b) {
         return false;
     }
 
-    let mismatch = (a.length === b.length ? 0 : 1);
+    var mismatch = (a.length === b.length ? 0 : 1);
     if (mismatch) {
         b = a;
     }
 
-    for (let i = 0; i < a.length; ++i) {
-        const ac = a.charCodeAt(i);
-        const bc = b.charCodeAt(i);
+    for (var i = 0; i < a.length; ++i) {
+        var ac = a.charCodeAt(i);
+        var bc = b.charCodeAt(i);
         mismatch |= (ac ^ bc);
     }
 
@@ -33777,7 +33861,7 @@ var _package$3 = Object.freeze({
 var require$$0$4 = ( _package$3 && _package$2 ) || _package$3;
 
 var utils = createCommonjsModule(function (module, exports) {
-const internals = {};
+var internals = {};
 
 
 exports.version = function () {
@@ -33800,7 +33884,7 @@ internals.hostHeaderRegex = /^(?:(?:\r\n)?\s)*((?:[^:]+)|(?:\[[^\]]+\]))(?::(\d+
 exports.parseHost = function (req, hostHeaderName) {
 
     hostHeaderName = (hostHeaderName ? hostHeaderName.toLowerCase() : 'host');
-    const hostHeader = req.headers[hostHeaderName];
+    var hostHeader = req.headers[hostHeaderName];
     if (!hostHeader) {
         return null;
     }
@@ -33809,7 +33893,7 @@ exports.parseHost = function (req, hostHeaderName) {
         return null;
     }
 
-    const hostParts = hostHeader.match(internals.hostHeaderRegex);
+    var hostParts = hostHeader.match(internals.hostHeaderRegex);
     if (!hostParts) {
         return null;
     }
@@ -33843,7 +33927,7 @@ exports.parseRequest = function (req, options) {
 
     // Obtain host and port information
 
-    let host;
+    var host;
     if (!options.host ||
         !options.port) {
 
@@ -33853,7 +33937,7 @@ exports.parseRequest = function (req, options) {
         }
     }
 
-    const request = {
+    var request = {
         method: req.method,
         url: req.url,
         host: options.host || host.name,
@@ -33896,24 +33980,24 @@ exports.parseAuthorizationHeader = function (header, keys) {
         return lib$4.badRequest('Header length too long');
     }
 
-    const headerParts = header.match(internals.authHeaderRegex);
+    var headerParts = header.match(internals.authHeaderRegex);
     if (!headerParts) {
         return lib$4.badRequest('Invalid header syntax');
     }
 
-    const scheme = headerParts[1];
+    var scheme = headerParts[1];
     if (scheme.toLowerCase() !== 'hawk') {
         return lib$4.unauthorized(null, 'Hawk');
     }
 
-    const attributesString = headerParts[2];
+    var attributesString = headerParts[2];
     if (!attributesString) {
         return lib$4.badRequest('Invalid header syntax');
     }
 
-    const attributes = {};
-    let errorMessage = '';
-    const verify = attributesString.replace(/(\w+)="([^"\\]*)"\s*(?:,\s*|$)/g, ($0, $1, $2) => {
+    var attributes = {};
+    var errorMessage = '';
+    var verify = attributesString.replace(/(\w+)="([^"\\]*)"\s*(?:,\s*|$)/g, function ($0, $1, $2) {
 
         // Check valid attribute names
 
@@ -33997,25 +34081,25 @@ exports.algorithms = ['sha1', 'sha256'];
 
 exports.calculateMac = function (type, credentials, options) {
 
-    const normalized = exports.generateNormalizedString(type, options);
+    var normalized = exports.generateNormalizedString(type, options);
 
-    const hmac = tls.createHmac(credentials.algorithm, credentials.key).update(normalized);
-    const digest = hmac.digest('base64');
+    var hmac = tls.createHmac(credentials.algorithm, credentials.key).update(normalized);
+    var digest = hmac.digest('base64');
     return digest;
 };
 
 
 exports.generateNormalizedString = function (type, options) {
 
-    let resource = options.resource || '';
+    var resource = options.resource || '';
     if (resource &&
         resource[0] !== '/') {
 
-        const url = url$2.parse(resource, false);
+        var url = url$2.parse(resource, false);
         resource = url.path;                        // Includes query
     }
 
-    let normalized = 'hawk.' + exports.headerVersion + '.' + type + '\n' +
+    var normalized = 'hawk.' + exports.headerVersion + '.' + type + '\n' +
                      options.ts + '\n' +
                      options.nonce + '\n' +
                      (options.method || '').toUpperCase() + '\n' +
@@ -34041,7 +34125,7 @@ exports.generateNormalizedString = function (type, options) {
 
 exports.calculatePayloadHash = function (payload, algorithm, contentType) {
 
-    const hash = exports.initializePayloadHash(algorithm, contentType);
+    var hash = exports.initializePayloadHash(algorithm, contentType);
     hash.update(payload || '');
     return exports.finalizePayloadHash(hash);
 };
@@ -34049,7 +34133,7 @@ exports.calculatePayloadHash = function (payload, algorithm, contentType) {
 
 exports.initializePayloadHash = function (algorithm, contentType) {
 
-    const hash = tls.createHash(algorithm);
+    var hash = tls.createHash(algorithm);
     hash.update('hawk.' + exports.headerVersion + '.payload\n');
     hash.update(utils.parseContentType(contentType) + '\n');
     return hash;
@@ -34065,7 +34149,7 @@ exports.finalizePayloadHash = function (hash) {
 
 exports.calculateTsMac = function (ts, credentials) {
 
-    const hmac = tls.createHmac(credentials.algorithm, credentials.key);
+    var hmac = tls.createHmac(credentials.algorithm, credentials.key);
     hmac.update('hawk.' + exports.headerVersion + '.ts\n' + ts + '\n');
     return hmac.digest('base64');
 };
@@ -34073,9 +34157,9 @@ exports.calculateTsMac = function (ts, credentials) {
 
 exports.timestampMessage = function (credentials, localtimeOffsetMsec) {
 
-    const now = utils.nowSecs(localtimeOffsetMsec);
-    const tsm = exports.calculateTsMac(now, credentials);
-    return { ts: now, tsm };
+    var now = utils.nowSecs(localtimeOffsetMsec);
+    var tsm = exports.calculateTsMac(now, credentials);
+    return { ts: now, tsm: tsm };
 };
 });
 
@@ -34100,7 +34184,7 @@ var crypto_9 = crypto.timestampMessage;
 
 // Declare internals
 
-const internals$1 = {};
+var internals$1 = {};
 
 
 // Hawk authentication
@@ -34184,25 +34268,25 @@ var authenticate = function (req, credentialsFunc, options, callback) {
 
     // Application time
 
-    const now = utils.now(options.localtimeOffsetMsec);                           // Measure now before any other processing
+    var now = utils.now(options.localtimeOffsetMsec);                           // Measure now before any other processing
 
     // Convert node Http request object to a request configuration object
 
-    const request = utils.parseRequest(req, options);
+    var request = utils.parseRequest(req, options);
     if (request instanceof Error) {
         return callback(lib$4.badRequest(request.message));
     }
 
     // Parse HTTP Authorization header
 
-    const attributes = utils.parseAuthorizationHeader(request.authorization);
+    var attributes = utils.parseAuthorizationHeader(request.authorization);
     if (attributes instanceof Error) {
         return callback(attributes);
     }
 
     // Construct artifacts container
 
-    const artifacts = {
+    var artifacts = {
         method: request.method,
         host: request.host,
         port: request.port,
@@ -34229,7 +34313,7 @@ var authenticate = function (req, credentialsFunc, options, callback) {
 
     // Fetch Hawk credentials
 
-    credentialsFunc(attributes.id, (err, credentials) => {
+    credentialsFunc(attributes.id, function (err, credentials) {
 
         if (err) {
             return callback(err, credentials || null, artifacts);
@@ -34251,7 +34335,7 @@ var authenticate = function (req, credentialsFunc, options, callback) {
 
         // Calculate MAC
 
-        const mac = crypto.calculateMac('header', credentials, artifacts);
+        var mac = crypto.calculateMac('header', credentials, artifacts);
         if (!lib$10.fixedTimeComparison(mac, attributes.mac)) {
             return callback(utils.unauthorized('Bad mac'), credentials, artifacts);
         }
@@ -34265,7 +34349,7 @@ var authenticate = function (req, credentialsFunc, options, callback) {
                 return callback(utils.unauthorized('Missing required payload hash'), credentials, artifacts);
             }
 
-            const hash = crypto.calculatePayloadHash(options.payload, credentials.algorithm, request.contentType);
+            var hash = crypto.calculatePayloadHash(options.payload, credentials.algorithm, request.contentType);
             if (!lib$10.fixedTimeComparison(hash, attributes.hash)) {
                 return callback(utils.unauthorized('Bad payload hash'), credentials, artifacts);
             }
@@ -34273,7 +34357,7 @@ var authenticate = function (req, credentialsFunc, options, callback) {
 
         // Check nonce
 
-        options.nonceFunc(credentials.key, attributes.nonce, attributes.ts, (err) => {
+        options.nonceFunc(credentials.key, attributes.nonce, attributes.ts, function (err) {
 
             if (err) {
                 return callback(utils.unauthorized('Invalid nonce'), credentials, artifacts);
@@ -34282,7 +34366,7 @@ var authenticate = function (req, credentialsFunc, options, callback) {
             // Check timestamp staleness
 
             if (Math.abs((attributes.ts * 1000) - now) > (options.timestampSkewSec * 1000)) {
-                const tsm = crypto.timestampMessage(credentials, options.localtimeOffsetMsec);
+                var tsm = crypto.timestampMessage(credentials, options.localtimeOffsetMsec);
                 return callback(utils.unauthorized('Stale timestamp', tsm), credentials, artifacts);
             }
 
@@ -34305,7 +34389,7 @@ var authenticate = function (req, credentialsFunc, options, callback) {
 
 var authenticatePayload = function (payload, credentials, artifacts, contentType) {
 
-    const calculatedHash = crypto.calculatePayloadHash(payload, credentials.algorithm, contentType);
+    var calculatedHash = crypto.calculatePayloadHash(payload, credentials.algorithm, contentType);
     return lib$10.fixedTimeComparison(calculatedHash, artifacts.hash);
 };
 
@@ -34376,11 +34460,11 @@ var header = function (credentials, artifacts, options) {
         artifacts.hash = crypto.calculatePayloadHash(options.payload, credentials.algorithm, options.contentType);
     }
 
-    const mac = crypto.calculateMac('response', credentials, artifacts);
+    var mac = crypto.calculateMac('response', credentials, artifacts);
 
     // Construct header
 
-    let header = 'Hawk mac="' + mac + '"' +
+    var header = 'Hawk mac="' + mac + '"' +
                  (artifacts.hash ? ', hash="' + artifacts.hash + '"' : '');
 
     if (artifacts.ext !== null &&
@@ -34410,11 +34494,11 @@ var authenticateBewit = function (req, credentialsFunc, options, callback) {
 
     // Application time
 
-    const now = utils.now(options.localtimeOffsetMsec);
+    var now = utils.now(options.localtimeOffsetMsec);
 
     // Convert node Http request object to a request configuration object
 
-    const request = utils.parseRequest(req, options);
+    var request = utils.parseRequest(req, options);
     if (request instanceof Error) {
         return callback(lib$4.badRequest(request.message));
     }
@@ -34425,7 +34509,7 @@ var authenticateBewit = function (req, credentialsFunc, options, callback) {
         return callback(lib$4.badRequest('Resource path exceeds max length'));
     }
 
-    const resource = request.url.match(internals$1.bewitRegex);
+    var resource = request.url.match(internals$1.bewitRegex);
     if (!resource) {
         return callback(utils.unauthorized());
     }
@@ -34452,19 +34536,19 @@ var authenticateBewit = function (req, credentialsFunc, options, callback) {
 
     // Parse bewit
 
-    const bewitString = lib$6.base64urlDecode(resource[3]);
+    var bewitString = lib$6.base64urlDecode(resource[3]);
     if (bewitString instanceof Error) {
         return callback(lib$4.badRequest('Invalid bewit encoding'));
     }
 
     // Bewit format: id\exp\mac\ext ('\' is used because it is a reserved header attribute character)
 
-    const bewitParts = bewitString.split('\\');
+    var bewitParts = bewitString.split('\\');
     if (bewitParts.length !== 4) {
         return callback(lib$4.badRequest('Invalid bewit structure'));
     }
 
-    const bewit = {
+    var bewit = {
         id: bewitParts[0],
         exp: parseInt(bewitParts[1], 10),
         mac: bewitParts[2],
@@ -34480,7 +34564,7 @@ var authenticateBewit = function (req, credentialsFunc, options, callback) {
 
     // Construct URL without bewit
 
-    let url = resource[1];
+    var url = resource[1];
     if (resource[4]) {
         url = url + resource[2] + resource[4];
     }
@@ -34493,7 +34577,7 @@ var authenticateBewit = function (req, credentialsFunc, options, callback) {
 
     // Fetch Hawk credentials
 
-    credentialsFunc(bewit.id, (err, credentials) => {
+    credentialsFunc(bewit.id, function (err, credentials) {
 
         if (err) {
             return callback(err, credentials || null, bewit.ext);
@@ -34515,7 +34599,7 @@ var authenticateBewit = function (req, credentialsFunc, options, callback) {
 
         // Calculate MAC
 
-        const mac = crypto.calculateMac('bewit', credentials, {
+        var mac = crypto.calculateMac('bewit', credentials, {
             ts: bewit.exp,
             nonce: '',
             method: 'GET',
@@ -34552,7 +34636,7 @@ var authenticateMessage = function (host, port, message, authorization, credenti
 
     // Application time
 
-    const now = utils.now(options.localtimeOffsetMsec);                       // Measure now before any other processing
+    var now = utils.now(options.localtimeOffsetMsec);                       // Measure now before any other processing
 
     // Validate authorization
 
@@ -34567,7 +34651,7 @@ var authenticateMessage = function (host, port, message, authorization, credenti
 
     // Fetch Hawk credentials
 
-    credentialsFunc(authorization.id, (err, credentials) => {
+    credentialsFunc(authorization.id, function (err, credentials) {
 
         if (err) {
             return callback(err, credentials || null);
@@ -34589,31 +34673,31 @@ var authenticateMessage = function (host, port, message, authorization, credenti
 
         // Construct artifacts container
 
-        const artifacts = {
+        var artifacts = {
             ts: authorization.ts,
             nonce: authorization.nonce,
-            host,
-            port,
+            host: host,
+            port: port,
             hash: authorization.hash
         };
 
         // Calculate MAC
 
-        const mac = crypto.calculateMac('message', credentials, artifacts);
+        var mac = crypto.calculateMac('message', credentials, artifacts);
         if (!lib$10.fixedTimeComparison(mac, authorization.mac)) {
             return callback(utils.unauthorized('Bad mac'), credentials);
         }
 
         // Check payload hash
 
-        const hash = crypto.calculatePayloadHash(message, credentials.algorithm);
+        var hash = crypto.calculatePayloadHash(message, credentials.algorithm);
         if (!lib$10.fixedTimeComparison(hash, authorization.hash)) {
             return callback(utils.unauthorized('Bad message hash'), credentials);
         }
 
         // Check nonce
 
-        options.nonceFunc(credentials.key, authorization.nonce, authorization.ts, (err) => {
+        options.nonceFunc(credentials.key, authorization.nonce, authorization.ts, function (err) {
 
             if (err) {
                 return callback(utils.unauthorized('Invalid nonce'), credentials);
@@ -34678,7 +34762,7 @@ var server = {
 
 var header$1 = function (uri, method, options) {
 
-    const result = {
+    var result = {
         field: '',
         artifacts: {}
     };
@@ -34695,11 +34779,11 @@ var header$1 = function (uri, method, options) {
 
     // Application time
 
-    const timestamp = options.timestamp || utils.nowSecs(options.localtimeOffsetMsec);
+    var timestamp = options.timestamp || utils.nowSecs(options.localtimeOffsetMsec);
 
     // Validate credentials
 
-    const credentials = options.credentials;
+    var credentials = options.credentials;
     if (!credentials ||
         !credentials.id ||
         !credentials.key ||
@@ -34722,10 +34806,10 @@ var header$1 = function (uri, method, options) {
 
     // Calculate signature
 
-    const artifacts = {
+    var artifacts = {
         ts: timestamp,
         nonce: options.nonce || lib$10.randomString(6),
-        method,
+        method: method,
         resource: uri.pathname + (uri.search || ''),                            // Maintain trailing '?'
         host: uri.hostname,
         port: uri.port || (uri.protocol === 'http:' ? 80 : 443),
@@ -34745,12 +34829,12 @@ var header$1 = function (uri, method, options) {
         artifacts.hash = crypto.calculatePayloadHash(options.payload, credentials.algorithm, options.contentType);
     }
 
-    const mac = crypto.calculateMac('header', credentials, artifacts);
+    var mac = crypto.calculateMac('header', credentials, artifacts);
 
     // Construct header
 
-    const hasExt = artifacts.ext !== null && artifacts.ext !== undefined && artifacts.ext !== '';       // Other falsey values allowed
-    let header = 'Hawk id="' + credentials.id +
+    var hasExt = artifacts.ext !== null && artifacts.ext !== undefined && artifacts.ext !== '';       // Other falsey values allowed
+    var header = 'Hawk id="' + credentials.id +
                  '", ts="' + artifacts.ts +
                  '", nonce="' + artifacts.nonce +
                  (artifacts.hash ? '", hash="' + artifacts.hash : '') +
@@ -34784,13 +34868,13 @@ var authenticate$1 = function (res, credentials, artifacts, options, callback) {
     artifacts = lib$6.clone(artifacts);
     options = options || {};
 
-    let wwwAttributes = null;
-    let serverAuthAttributes = null;
+    var wwwAttributes = null;
+    var serverAuthAttributes = null;
 
-    const finalize = function (err) {
+    var finalize = function (err) {
 
         if (callback) {
-            const headers = {
+            var headers = {
                 'www-authenticate': wwwAttributes,
                 'server-authorization': serverAuthAttributes
             };
@@ -34814,7 +34898,7 @@ var authenticate$1 = function (res, credentials, artifacts, options, callback) {
         // Validate server timestamp (not used to update clock since it is done via the SNPT client)
 
         if (wwwAttributes.ts) {
-            const tsm = crypto.calculateTsMac(wwwAttributes.ts, credentials);
+            var tsm = crypto.calculateTsMac(wwwAttributes.ts, credentials);
             if (tsm !== wwwAttributes.tsm) {
                 return finalize(new Error('Invalid server timestamp hash'));
             }
@@ -34838,7 +34922,7 @@ var authenticate$1 = function (res, credentials, artifacts, options, callback) {
     artifacts.ext = serverAuthAttributes.ext;
     artifacts.hash = serverAuthAttributes.hash;
 
-    const mac = crypto.calculateMac('response', credentials, artifacts);
+    var mac = crypto.calculateMac('response', credentials, artifacts);
     if (mac !== serverAuthAttributes.mac) {
         return finalize(new Error('Bad response mac'));
     }
@@ -34853,7 +34937,7 @@ var authenticate$1 = function (res, credentials, artifacts, options, callback) {
         return finalize(new Error('Missing response hash attribute'));
     }
 
-    const calculatedHash = crypto.calculatePayloadHash(options.payload, credentials.algorithm, res.headers['content-type']);
+    var calculatedHash = crypto.calculatePayloadHash(options.payload, credentials.algorithm, res.headers['content-type']);
     if (calculatedHash !== serverAuthAttributes.hash) {
         return finalize(new Error('Bad response payload mac'));
     }
@@ -34901,11 +34985,11 @@ var getBewit = function (uri, options) {
 
     // Application time
 
-    const now = utils.now(options.localtimeOffsetMsec);
+    var now = utils.now(options.localtimeOffsetMsec);
 
     // Validate credentials
 
-    const credentials = options.credentials;
+    var credentials = options.credentials;
     if (!credentials ||
         !credentials.id ||
         !credentials.key ||
@@ -34926,8 +35010,8 @@ var getBewit = function (uri, options) {
 
     // Calculate signature
 
-    const exp = Math.floor(now / 1000) + options.ttlSec;
-    const mac = crypto.calculateMac('bewit', credentials, {
+    var exp = Math.floor(now / 1000) + options.ttlSec;
+    var mac = crypto.calculateMac('bewit', credentials, {
         ts: exp,
         nonce: '',
         method: 'GET',
@@ -34939,7 +35023,7 @@ var getBewit = function (uri, options) {
 
     // Construct bewit: id\exp\mac\ext
 
-    const bewit = credentials.id + '\\' + exp + '\\' + mac + '\\' + options.ext;
+    var bewit = credentials.id + '\\' + exp + '\\' + mac + '\\' + options.ext;
     return lib$6.base64urlEncode(bewit);
 };
 
@@ -34982,11 +35066,11 @@ var message = function (host, port, message, options) {
 
     // Application time
 
-    const timestamp = options.timestamp || utils.nowSecs(options.localtimeOffsetMsec);
+    var timestamp = options.timestamp || utils.nowSecs(options.localtimeOffsetMsec);
 
     // Validate credentials
 
-    const credentials = options.credentials;
+    var credentials = options.credentials;
     if (!credentials ||
         !credentials.id ||
         !credentials.key ||
@@ -35002,17 +35086,17 @@ var message = function (host, port, message, options) {
 
     // Calculate signature
 
-    const artifacts = {
+    var artifacts = {
         ts: timestamp,
         nonce: options.nonce || lib$10.randomString(6),
-        host,
-        port,
+        host: host,
+        port: port,
         hash: crypto.calculatePayloadHash(message, credentials.algorithm)
     };
 
     // Construct authorization
 
-    const result = {
+    var result = {
         id: credentials.id,
         ts: artifacts.ts,
         nonce: artifacts.nonce,
@@ -35176,7 +35260,7 @@ var signQuery_1= signQuery;
 
 function stringToSign (options) {
   var headers = options.amazonHeaders || '';
-  if (headers) headers += '\n';
+  if (headers) { headers += '\n'; }
   var r = 
     [ options.verb
     , options.md5
@@ -35228,7 +35312,7 @@ function canonicalizeHeaders (headers) {
     var field = fields[i]
       , val = headers[field]
       , field = field.toLowerCase();
-    if (0 !== field.indexOf('x-amz')) continue
+    if (0 !== field.indexOf('x-amz')) { continue }
     buf.push(field + ':' + val);
   }
   return buf.sort().join('\n')
@@ -35252,7 +35336,7 @@ function canonicalizeResource (resource) {
     , buf = [];
 
   Object.keys(url.query).forEach(function(key){
-    if (!~keys$1.indexOf(key)) return
+    if (!~keys$1.indexOf(key)) { return }
     var val = '' == url.query[key] ? '' : '=' + encodeURIComponent(url.query[key]);
     buf.push(key + val);
   });
@@ -35282,7 +35366,7 @@ function LruCache(size) {
 
 LruCache.prototype.get = function(key) {
   var node = this.map[key];
-  if (node == null) return undefined
+  if (node == null) { return undefined }
   this.used(node);
   return node.val
 };
@@ -35292,8 +35376,8 @@ LruCache.prototype.set = function(key, val) {
   if (node != null) {
     node.val = val;
   } else {
-    if (!this.capacity) this.prune();
-    if (!this.capacity) return false
+    if (!this.capacity) { this.prune(); }
+    if (!this.capacity) { return false }
     node = new DoublyLinkedNode(key, val);
     this.map[key] = node;
     this.capacity--;
@@ -35321,7 +35405,7 @@ function DoublyLinkedList() {
 }
 
 DoublyLinkedList.prototype.moveToFront = function(node) {
-  if (this.firstNode == node) return
+  if (this.firstNode == node) { return }
 
   this.remove(node);
 
@@ -35394,7 +35478,7 @@ function encodeRfc3986(urlEncodedString) {
 // credentials: { accessKeyId, secretAccessKey, [sessionToken] }
 function RequestSigner(request, credentials) {
 
-  if (typeof request === 'string') request = url$2.parse(request);
+  if (typeof request === 'string') { request = url$2.parse(request); }
 
   var headers = request.headers = (request.headers || {}),
       hostParts = this.matchHost(request.hostname || request.host || headers.Host || headers.host);
@@ -35406,20 +35490,20 @@ function RequestSigner(request, credentials) {
   this.region = request.region || hostParts[1] || 'us-east-1';
 
   // SES uses a different domain from the service name
-  if (this.service === 'email') this.service = 'ses';
+  if (this.service === 'email') { this.service = 'ses'; }
 
   if (!request.method && request.body)
-    request.method = 'POST';
+    { request.method = 'POST'; }
 
   if (!headers.Host && !headers.host) {
     headers.Host = request.hostname || request.host || this.createHost();
 
     // If a port is specified explicitly, use it as is
     if (request.port)
-      headers.Host += ':' + request.port;
+      { headers.Host += ':' + request.port; }
   }
   if (!request.hostname && !request.host)
-    request.hostname = headers.Host || headers.host;
+    { request.hostname = headers.Host || headers.host; }
 
   this.isCodeCommitGit = this.service === 'codecommit' && request.method === 'GIT';
 }
@@ -35432,7 +35516,7 @@ RequestSigner.prototype.matchHost = function(host) {
   // to be region equals ‘es’ switch them back
   // e.g. search-cluster-name-aaaa00aaaa0aaa0aaaaaaa0aaa.us-east-1.es.amazonaws.com
   if (hostParts[1] === 'es')
-    hostParts = hostParts.reverse();
+    { hostParts = hostParts.reverse(); }
 
   return hostParts
 };
@@ -35440,7 +35524,7 @@ RequestSigner.prototype.matchHost = function(host) {
 // http://docs.aws.amazon.com/general/latest/gr/rande.html
 RequestSigner.prototype.isSingleRegion = function() {
   // Special case for S3 and SimpleDB in us-east-1
-  if (['s3', 'sdb'].indexOf(this.service) >= 0 && this.region === 'us-east-1') return true
+  if (['s3', 'sdb'].indexOf(this.service) >= 0 && this.region === 'us-east-1') { return true }
 
   return ['cloudfront', 'ls', 'route53', 'iam', 'importexport', 'sts']
     .indexOf(this.service) >= 0
@@ -35463,15 +35547,15 @@ RequestSigner.prototype.prepareRequest = function() {
     this.parsedPath.query = query = this.parsedPath.query || {};
 
     if (this.credentials.sessionToken)
-      query['X-Amz-Security-Token'] = this.credentials.sessionToken;
+      { query['X-Amz-Security-Token'] = this.credentials.sessionToken; }
 
     if (this.service === 's3' && !query['X-Amz-Expires'])
-      query['X-Amz-Expires'] = 86400;
+      { query['X-Amz-Expires'] = 86400; }
 
     if (query['X-Amz-Date'])
-      this.datetime = query['X-Amz-Date'];
+      { this.datetime = query['X-Amz-Date']; }
     else
-      query['X-Amz-Date'] = this.getDateTime();
+      { query['X-Amz-Date'] = this.getDateTime(); }
 
     query['X-Amz-Algorithm'] = 'AWS4-HMAC-SHA256';
     query['X-Amz-Credential'] = this.credentials.accessKeyId + '/' + this.credentialString();
@@ -35481,21 +35565,21 @@ RequestSigner.prototype.prepareRequest = function() {
 
     if (!request.doNotModifyHeaders && !this.isCodeCommitGit) {
       if (request.body && !headers['Content-Type'] && !headers['content-type'])
-        headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
+        { headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8'; }
 
       if (request.body && !headers['Content-Length'] && !headers['content-length'])
-        headers['Content-Length'] = Buffer.byteLength(request.body);
+        { headers['Content-Length'] = Buffer.byteLength(request.body); }
 
       if (this.credentials.sessionToken && !headers['X-Amz-Security-Token'] && !headers['x-amz-security-token'])
-        headers['X-Amz-Security-Token'] = this.credentials.sessionToken;
+        { headers['X-Amz-Security-Token'] = this.credentials.sessionToken; }
 
       if (this.service === 's3' && !headers['X-Amz-Content-Sha256'] && !headers['x-amz-content-sha256'])
-        headers['X-Amz-Content-Sha256'] = hash(this.request.body || '', 'hex');
+        { headers['X-Amz-Content-Sha256'] = hash(this.request.body || '', 'hex'); }
 
       if (headers['X-Amz-Date'] || headers['x-amz-date'])
-        this.datetime = headers['X-Amz-Date'] || headers['x-amz-date'];
+        { this.datetime = headers['X-Amz-Date'] || headers['x-amz-date']; }
       else
-        headers['X-Amz-Date'] = this.getDateTime();
+        { headers['X-Amz-Date'] = this.getDateTime(); }
     }
 
     delete headers.Authorization;
@@ -35504,7 +35588,7 @@ RequestSigner.prototype.prepareRequest = function() {
 };
 
 RequestSigner.prototype.sign = function() {
-  if (!this.parsedPath) this.prepareRequest();
+  if (!this.parsedPath) { this.prepareRequest(); }
 
   if (this.request.signQuery) {
     this.parsedPath.query['X-Amz-Signature'] = this.signature();
@@ -35525,7 +35609,7 @@ RequestSigner.prototype.getDateTime = function() {
     this.datetime = date.toISOString().replace(/[:\-]|\.\d{3}/g, '');
 
     // Remove the trailing 'Z' on the timestamp string for CodeCommit git access
-    if (this.isCodeCommitGit) this.datetime = this.datetime.slice(0, -1);
+    if (this.isCodeCommitGit) { this.datetime = this.datetime.slice(0, -1); }
   }
   return this.datetime
 };
@@ -35538,8 +35622,7 @@ RequestSigner.prototype.authHeader = function() {
   return [
     'AWS4-HMAC-SHA256 Credential=' + this.credentials.accessKeyId + '/' + this.credentialString(),
     'SignedHeaders=' + this.signedHeaders(),
-    'Signature=' + this.signature(),
-  ].join(', ')
+    'Signature=' + this.signature() ].join(', ')
 };
 
 RequestSigner.prototype.signature = function() {
@@ -35561,12 +35644,11 @@ RequestSigner.prototype.stringToSign = function() {
     'AWS4-HMAC-SHA256',
     this.getDateTime(),
     this.credentialString(),
-    hash(this.canonicalString(), 'hex'),
-  ].join('\n')
+    hash(this.canonicalString(), 'hex') ].join('\n')
 };
 
 RequestSigner.prototype.canonicalString = function() {
-  if (!this.parsedPath) this.prepareRequest();
+  if (!this.parsedPath) { this.prepareRequest(); }
 
   var pathStr = this.parsedPath.path,
       query = this.parsedPath.query,
@@ -35589,25 +35671,25 @@ RequestSigner.prototype.canonicalString = function() {
 
   if (query) {
     queryStr = encodeRfc3986(qs$2.stringify(Object.keys(query).sort().reduce(function(obj, key) {
-      if (!key) return obj
+      if (!key) { return obj }
       obj[key] = !Array.isArray(query[key]) ? query[key] :
         (firstValOnly ? query[key][0] : query[key].slice().sort());
       return obj
     }, {})));
   }
   if (pathStr !== '/') {
-    if (normalizePath) pathStr = pathStr.replace(/\/{2,}/g, '/');
+    if (normalizePath) { pathStr = pathStr.replace(/\/{2,}/g, '/'); }
     pathStr = pathStr.split('/').reduce(function(path, piece) {
       if (normalizePath && piece === '..') {
         path.pop();
       } else if (!normalizePath || piece !== '.') {
-        if (decodePath) piece = qs$2.unescape(piece);
+        if (decodePath) { piece = qs$2.unescape(piece); }
         path.push(encodeRfc3986(qs$2.escape(piece)));
       }
       return path
     }, []).join('/');
-    if (pathStr[0] !== '/') pathStr = '/' + pathStr;
-    if (decodeSlashesInPath) pathStr = pathStr.replace(/%2F/g, '/');
+    if (pathStr[0] !== '/') { pathStr = '/' + pathStr; }
+    if (decodeSlashesInPath) { pathStr = pathStr.replace(/%2F/g, '/'); }
   }
 
   return [
@@ -35616,8 +35698,7 @@ RequestSigner.prototype.canonicalString = function() {
     queryStr,
     this.canonicalHeaders() + '\n',
     this.signedHeaders(),
-    bodyHash,
-  ].join('\n')
+    bodyHash ].join('\n')
 };
 
 RequestSigner.prototype.canonicalHeaders = function() {
@@ -35643,8 +35724,7 @@ RequestSigner.prototype.credentialString = function() {
     this.getDate(),
     this.region,
     this.service,
-    'aws4_request',
-  ].join('/')
+    'aws4_request' ].join('/')
 };
 
 RequestSigner.prototype.defaultCredentials = function() {
@@ -35685,10 +35765,10 @@ RequestSigner.prototype.formatPath = function() {
   var path = this.parsedPath.path,
       query = this.parsedPath.query;
 
-  if (!query) return path
+  if (!query) { return path }
 
   // Services don't support empty query string keys
-  if (query[''] != null) delete query[''];
+  if (query[''] != null) { delete query['']; }
 
   return path + '?' + encodeRfc3986(qs$2.stringify(query))
 };
@@ -35729,7 +35809,7 @@ var hasOwn$2 = Object.prototype.hasOwnProperty;
 var objectKeys$1 = Object.keys || function (obj) {
   var keys = [];
   for (var key in obj) {
-    if (hasOwn$2.call(obj, key)) keys.push(key);
+    if (hasOwn$2.call(obj, key)) { keys.push(key); }
   }
   return keys;
 };
@@ -35797,7 +35877,7 @@ function isView(arrbuf) {
 // assert module must conform to the following interface.
 
 function assert$2(value, message) {
-  if (!value) fail(value, true, message, '==', ok);
+  if (!value) { fail(value, true, message, '==', ok); }
 }
 // 2. The AssertionError is defined in assert.
 // new assert.AssertionError({ message: message,
@@ -35910,7 +35990,7 @@ assert$2.fail = fail;
 // assert.strictEqual(true, guard, message_opt);.
 
 function ok(value, message) {
-  if (!value) fail(value, true, message, '==', ok);
+  if (!value) { fail(value, true, message, '==', ok); }
 }
 assert$2.ok = ok;
 // 5. The equality assertion tests shallow, coercive equality with
@@ -35918,7 +35998,7 @@ assert$2.ok = ok;
 // assert.equal(actual, expected, message_opt);
 assert$2.equal = equal;
 function equal(actual, expected, message) {
-  if (actual != expected) fail(actual, expected, message, '==', equal);
+  if (actual != expected) { fail(actual, expected, message, '==', equal); }
 }
 
 // 6. The non-equality assertion tests for whether two objects are not equal
@@ -36017,16 +36097,16 @@ function isArguments(object) {
 
 function objEquiv(a, b, strict, actualVisitedObjects) {
   if (a === null || a === undefined || b === null || b === undefined)
-    return false;
+    { return false; }
   // if one is a primitive, the other must be same
   if (isPrimitive$2(a) || isPrimitive$2(b))
-    return a === b;
+    { return a === b; }
   if (strict && Object.getPrototypeOf(a) !== Object.getPrototypeOf(b))
-    return false;
+    { return false; }
   var aIsArgs = isArguments(a);
   var bIsArgs = isArguments(b);
   if ((aIsArgs && !bIsArgs) || (!aIsArgs && bIsArgs))
-    return false;
+    { return false; }
   if (aIsArgs) {
     a = pSlice.call(a);
     b = pSlice.call(b);
@@ -36038,21 +36118,21 @@ function objEquiv(a, b, strict, actualVisitedObjects) {
   // having the same number of owned properties (keys incorporates
   // hasOwnProperty)
   if (ka.length !== kb.length)
-    return false;
+    { return false; }
   //the same set of keys (although not necessarily the same order),
   ka.sort();
   kb.sort();
   //~~~cheap key test
   for (i = ka.length - 1; i >= 0; i--) {
     if (ka[i] !== kb[i])
-      return false;
+      { return false; }
   }
   //equivalent values for every corresponding key, and
   //~~~possibly expensive deep test
   for (i = ka.length - 1; i >= 0; i--) {
     key = ka[i];
     if (!_deepEqual(a[key], b[key], strict, actualVisitedObjects))
-      return false;
+      { return false; }
   }
   return true;
 }
@@ -36179,7 +36259,7 @@ function doesNotThrow(block, /*optional*/error, /*optional*/message) {
 
 assert$2.ifError = ifError;
 function ifError(err) {
-  if (err) throw err;
+  if (err) { throw err; }
 }
 
 
@@ -36594,21 +36674,21 @@ var algs = {
 
 function FingerprintFormatError$1(fp, format) {
 	if (Error.captureStackTrace)
-		Error.captureStackTrace(this, FingerprintFormatError$1);
+		{ Error.captureStackTrace(this, FingerprintFormatError$1); }
 	this.name = 'FingerprintFormatError';
 	this.fingerprint = fp;
 	this.format = format;
 	this.message = 'Fingerprint format is not supported, or is invalid: ';
 	if (fp !== undefined)
-		this.message += ' fingerprint = ' + fp;
+		{ this.message += ' fingerprint = ' + fp; }
 	if (format !== undefined)
-		this.message += ' format = ' + format;
+		{ this.message += ' format = ' + format; }
 }
 util$4.inherits(FingerprintFormatError$1, Error);
 
 function InvalidAlgorithmError$4(alg) {
 	if (Error.captureStackTrace)
-		Error.captureStackTrace(this, InvalidAlgorithmError$4);
+		{ Error.captureStackTrace(this, InvalidAlgorithmError$4); }
 	this.name = 'InvalidAlgorithmError';
 	this.algorithm = alg;
 	this.message = 'Algorithm "' + alg + '" is not supported';
@@ -36617,7 +36697,7 @@ util$4.inherits(InvalidAlgorithmError$4, Error);
 
 function KeyParseError$1(name, format, innerErr) {
 	if (Error.captureStackTrace)
-		Error.captureStackTrace(this, KeyParseError$1);
+		{ Error.captureStackTrace(this, KeyParseError$1); }
 	this.name = 'KeyParseError';
 	this.format = format;
 	this.keyName = name;
@@ -36629,7 +36709,7 @@ util$4.inherits(KeyParseError$1, Error);
 
 function SignatureParseError(type, format, innerErr) {
 	if (Error.captureStackTrace)
-		Error.captureStackTrace(this, SignatureParseError);
+		{ Error.captureStackTrace(this, SignatureParseError); }
 	this.name = 'SignatureParseError';
 	this.type = type;
 	this.format = format;
@@ -36641,7 +36721,7 @@ util$4.inherits(SignatureParseError, Error);
 
 function CertificateParseError(name, format, innerErr) {
 	if (Error.captureStackTrace)
-		Error.captureStackTrace(this, CertificateParseError);
+		{ Error.captureStackTrace(this, CertificateParseError); }
 	this.name = 'CertificateParseError';
 	this.format = format;
 	this.certName = name;
@@ -36653,7 +36733,7 @@ util$4.inherits(CertificateParseError, Error);
 
 function KeyEncryptedError(name, format) {
 	if (Error.captureStackTrace)
-		Error.captureStackTrace(this, KeyEncryptedError);
+		{ Error.captureStackTrace(this, KeyEncryptedError); }
 	this.name = 'KeyEncryptedError';
 	this.format = format;
 	this.keyName = name;
@@ -36691,9 +36771,9 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // (public) Constructor
     function BigInteger(a,b,c) {
       if(a != null)
-        if("number" == typeof a) this.fromNumber(a,b,c);
-        else if(b == null && "string" != typeof a) this.fromString(a,256);
-        else this.fromString(a,b);
+        { if("number" == typeof a) { this.fromNumber(a,b,c); }
+        else if(b == null && "string" != typeof a) { this.fromString(a,256); }
+        else { this.fromString(a,b); } }
     }
 
     // return new, unset BigInteger
@@ -36708,8 +36788,10 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // max digit bits should be 26 because
     // max internal value = 2*dvalue^2-2*dvalue (< 2^53)
     function am1(i,x,w,j,c,n) {
+      var this$1 = this;
+
       while(--n >= 0) {
-        var v = x*this[i++]+w[j]+c;
+        var v = x*this$1[i++]+w[j]+c;
         c = Math.floor(v/0x4000000);
         w[j++] = v&0x3ffffff;
       }
@@ -36719,10 +36801,12 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // Max digit bits should be <= 30 because we do bitwise ops
     // on values up to 2*hdvalue^2-hdvalue-1 (< 2^31)
     function am2(i,x,w,j,c,n) {
+      var this$1 = this;
+
       var xl = x&0x7fff, xh = x>>15;
       while(--n >= 0) {
-        var l = this[i]&0x7fff;
-        var h = this[i++]>>15;
+        var l = this$1[i]&0x7fff;
+        var h = this$1[i++]>>15;
         var m = xh*l+h*xl;
         l = xl*l+((m&0x7fff)<<15)+w[j]+(c&0x3fffffff);
         c = (l>>>30)+(m>>>15)+xh*h+(c>>>30);
@@ -36733,10 +36817,12 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // Alternately, set max digit bits to 28 since some
     // browsers slow down when dealing with 32-bit numbers.
     function am3(i,x,w,j,c,n) {
+      var this$1 = this;
+
       var xl = x&0x3fff, xh = x>>14;
       while(--n >= 0) {
-        var l = this[i]&0x3fff;
-        var h = this[i++]>>14;
+        var l = this$1[i]&0x3fff;
+        var h = this$1[i++]>>14;
         var m = xh*l+h*xl;
         l = xl*l+((m&0x3fff)<<14)+w[j]+c;
         c = (l>>28)+(m>>14)+xh*h;
@@ -36772,11 +36858,11 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     var BI_RC = new Array();
     var rr,vv;
     rr = "0".charCodeAt(0);
-    for(vv = 0; vv <= 9; ++vv) BI_RC[rr++] = vv;
+    for(vv = 0; vv <= 9; ++vv) { BI_RC[rr++] = vv; }
     rr = "a".charCodeAt(0);
-    for(vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
+    for(vv = 10; vv < 36; ++vv) { BI_RC[rr++] = vv; }
     rr = "A".charCodeAt(0);
-    for(vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
+    for(vv = 10; vv < 36; ++vv) { BI_RC[rr++] = vv; }
 
     function int2char(n) { return BI_RM.charAt(n); }
     function intAt(s,i) {
@@ -36786,7 +36872,9 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (protected) copy this to r
     function bnpCopyTo(r) {
-      for(var i = this.t-1; i >= 0; --i) r[i] = this[i];
+      var this$1 = this;
+
+      for(var i = this.t-1; i >= 0; --i) { r[i] = this$1[i]; }
       r.t = this.t;
       r.s = this.s;
     }
@@ -36795,9 +36883,9 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     function bnpFromInt(x) {
       this.t = 1;
       this.s = (x<0)?-1:0;
-      if(x > 0) this[0] = x;
-      else if(x < -1) this[0] = x+this.DV;
-      else this.t = 0;
+      if(x > 0) { this[0] = x; }
+      else if(x < -1) { this[0] = x+this.DV; }
+      else { this.t = 0; }
     }
 
     // return bigint initialized to value
@@ -36805,13 +36893,15 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (protected) set from string and radix
     function bnpFromString(s,b) {
+      var this$1 = this;
+
       var k;
-      if(b == 16) k = 4;
-      else if(b == 8) k = 3;
-      else if(b == 256) k = 8; // byte array
-      else if(b == 2) k = 1;
-      else if(b == 32) k = 5;
-      else if(b == 4) k = 2;
+      if(b == 16) { k = 4; }
+      else if(b == 8) { k = 3; }
+      else if(b == 256) { k = 8; } // byte array
+      else if(b == 2) { k = 1; }
+      else if(b == 32) { k = 5; }
+      else if(b == 4) { k = 2; }
       else { this.fromRadix(s,b); return; }
       this.t = 0;
       this.s = 0;
@@ -36819,60 +36909,64 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
       while(--i >= 0) {
         var x = (k==8)?s[i]&0xff:intAt(s,i);
         if(x < 0) {
-          if(s.charAt(i) == "-") mi = true;
+          if(s.charAt(i) == "-") { mi = true; }
           continue;
         }
         mi = false;
         if(sh == 0)
-          this[this.t++] = x;
-        else if(sh+k > this.DB) {
-          this[this.t-1] |= (x&((1<<(this.DB-sh))-1))<<sh;
-          this[this.t++] = (x>>(this.DB-sh));
+          { this$1[this$1.t++] = x; }
+        else if(sh+k > this$1.DB) {
+          this$1[this$1.t-1] |= (x&((1<<(this$1.DB-sh))-1))<<sh;
+          this$1[this$1.t++] = (x>>(this$1.DB-sh));
         }
         else
-          this[this.t-1] |= x<<sh;
+          { this$1[this$1.t-1] |= x<<sh; }
         sh += k;
-        if(sh >= this.DB) sh -= this.DB;
+        if(sh >= this$1.DB) { sh -= this$1.DB; }
       }
       if(k == 8 && (s[0]&0x80) != 0) {
         this.s = -1;
-        if(sh > 0) this[this.t-1] |= ((1<<(this.DB-sh))-1)<<sh;
+        if(sh > 0) { this[this.t-1] |= ((1<<(this.DB-sh))-1)<<sh; }
       }
       this.clamp();
-      if(mi) BigInteger.ZERO.subTo(this,this);
+      if(mi) { BigInteger.ZERO.subTo(this,this); }
     }
 
     // (protected) clamp off excess high words
     function bnpClamp() {
+      var this$1 = this;
+
       var c = this.s&this.DM;
-      while(this.t > 0 && this[this.t-1] == c) --this.t;
+      while(this.t > 0 && this[this.t-1] == c) { --this$1.t; }
     }
 
     // (public) return string representation in given radix
     function bnToString(b) {
-      if(this.s < 0) return "-"+this.negate().toString(b);
+      var this$1 = this;
+
+      if(this.s < 0) { return "-"+this.negate().toString(b); }
       var k;
-      if(b == 16) k = 4;
-      else if(b == 8) k = 3;
-      else if(b == 2) k = 1;
-      else if(b == 32) k = 5;
-      else if(b == 4) k = 2;
-      else return this.toRadix(b);
+      if(b == 16) { k = 4; }
+      else if(b == 8) { k = 3; }
+      else if(b == 2) { k = 1; }
+      else if(b == 32) { k = 5; }
+      else if(b == 4) { k = 2; }
+      else { return this.toRadix(b); }
       var km = (1<<k)-1, d, m = false, r = "", i = this.t;
       var p = this.DB-(i*this.DB)%k;
       if(i-- > 0) {
         if(p < this.DB && (d = this[i]>>p) > 0) { m = true; r = int2char(d); }
         while(i >= 0) {
           if(p < k) {
-            d = (this[i]&((1<<p)-1))<<(k-p);
-            d |= this[--i]>>(p+=this.DB-k);
+            d = (this$1[i]&((1<<p)-1))<<(k-p);
+            d |= this$1[--i]>>(p+=this$1.DB-k);
           }
           else {
-            d = (this[i]>>(p-=k))&km;
-            if(p <= 0) { p += this.DB; --i; }
+            d = (this$1[i]>>(p-=k))&km;
+            if(p <= 0) { p += this$1.DB; --i; }
           }
-          if(d > 0) m = true;
-          if(m) r += int2char(d);
+          if(d > 0) { m = true; }
+          if(m) { r += int2char(d); }
         }
       }
       return m?r:"0";
@@ -36886,12 +36980,14 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (public) return + if this > a, - if this < a, 0 if equal
     function bnCompareTo(a) {
+      var this$1 = this;
+
       var r = this.s-a.s;
-      if(r != 0) return r;
+      if(r != 0) { return r; }
       var i = this.t;
       r = i-a.t;
-      if(r != 0) return (this.s<0)?-r:r;
-      while(--i >= 0) if((r=this[i]-a[i]) != 0) return r;
+      if(r != 0) { return (this.s<0)?-r:r; }
+      while(--i >= 0) { if((r=this$1[i]-a[i]) != 0) { return r; } }
       return 0;
     }
 
@@ -36908,37 +37004,43 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (public) return the number of bits in "this"
     function bnBitLength() {
-      if(this.t <= 0) return 0;
+      if(this.t <= 0) { return 0; }
       return this.DB*(this.t-1)+nbits(this[this.t-1]^(this.s&this.DM));
     }
 
     // (protected) r = this << n*DB
     function bnpDLShiftTo(n,r) {
+      var this$1 = this;
+
       var i;
-      for(i = this.t-1; i >= 0; --i) r[i+n] = this[i];
-      for(i = n-1; i >= 0; --i) r[i] = 0;
+      for(i = this.t-1; i >= 0; --i) { r[i+n] = this$1[i]; }
+      for(i = n-1; i >= 0; --i) { r[i] = 0; }
       r.t = this.t+n;
       r.s = this.s;
     }
 
     // (protected) r = this >> n*DB
     function bnpDRShiftTo(n,r) {
-      for(var i = n; i < this.t; ++i) r[i-n] = this[i];
+      var this$1 = this;
+
+      for(var i = n; i < this.t; ++i) { r[i-n] = this$1[i]; }
       r.t = Math.max(this.t-n,0);
       r.s = this.s;
     }
 
     // (protected) r = this << n
     function bnpLShiftTo(n,r) {
+      var this$1 = this;
+
       var bs = n%this.DB;
       var cbs = this.DB-bs;
       var bm = (1<<cbs)-1;
       var ds = Math.floor(n/this.DB), c = (this.s<<bs)&this.DM, i;
       for(i = this.t-1; i >= 0; --i) {
-        r[i+ds+1] = (this[i]>>cbs)|c;
-        c = (this[i]&bm)<<bs;
+        r[i+ds+1] = (this$1[i]>>cbs)|c;
+        c = (this$1[i]&bm)<<bs;
       }
-      for(i = ds-1; i >= 0; --i) r[i] = 0;
+      for(i = ds-1; i >= 0; --i) { r[i] = 0; }
       r[ds] = c;
       r.t = this.t+ds+1;
       r.s = this.s;
@@ -36947,6 +37049,8 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (protected) r = this >> n
     function bnpRShiftTo(n,r) {
+      var this$1 = this;
+
       r.s = this.s;
       var ds = Math.floor(n/this.DB);
       if(ds >= this.t) { r.t = 0; return; }
@@ -36955,28 +37059,30 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
       var bm = (1<<bs)-1;
       r[0] = this[ds]>>bs;
       for(var i = ds+1; i < this.t; ++i) {
-        r[i-ds-1] |= (this[i]&bm)<<cbs;
-        r[i-ds] = this[i]>>bs;
+        r[i-ds-1] |= (this$1[i]&bm)<<cbs;
+        r[i-ds] = this$1[i]>>bs;
       }
-      if(bs > 0) r[this.t-ds-1] |= (this.s&bm)<<cbs;
+      if(bs > 0) { r[this.t-ds-1] |= (this.s&bm)<<cbs; }
       r.t = this.t-ds;
       r.clamp();
     }
 
     // (protected) r = this - a
     function bnpSubTo(a,r) {
+      var this$1 = this;
+
       var i = 0, c = 0, m = Math.min(a.t,this.t);
       while(i < m) {
-        c += this[i]-a[i];
-        r[i++] = c&this.DM;
-        c >>= this.DB;
+        c += this$1[i]-a[i];
+        r[i++] = c&this$1.DM;
+        c >>= this$1.DB;
       }
       if(a.t < this.t) {
         c -= a.s;
         while(i < this.t) {
-          c += this[i];
-          r[i++] = c&this.DM;
-          c >>= this.DB;
+          c += this$1[i];
+          r[i++] = c&this$1.DM;
+          c >>= this$1.DB;
         }
         c += this.s;
       }
@@ -36984,14 +37090,14 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
         c += this.s;
         while(i < a.t) {
           c -= a[i];
-          r[i++] = c&this.DM;
-          c >>= this.DB;
+          r[i++] = c&this$1.DM;
+          c >>= this$1.DB;
         }
         c -= a.s;
       }
       r.s = (c<0)?-1:0;
-      if(c < -1) r[i++] = this.DV+c;
-      else if(c > 0) r[i++] = c;
+      if(c < -1) { r[i++] = this.DV+c; }
+      else if(c > 0) { r[i++] = c; }
       r.t = i;
       r.clamp();
     }
@@ -37002,18 +37108,18 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
       var x = this.abs(), y = a.abs();
       var i = x.t;
       r.t = i+y.t;
-      while(--i >= 0) r[i] = 0;
-      for(i = 0; i < y.t; ++i) r[i+x.t] = x.am(0,y[i],r,i,0,x.t);
+      while(--i >= 0) { r[i] = 0; }
+      for(i = 0; i < y.t; ++i) { r[i+x.t] = x.am(0,y[i],r,i,0,x.t); }
       r.s = 0;
       r.clamp();
-      if(this.s != a.s) BigInteger.ZERO.subTo(r,r);
+      if(this.s != a.s) { BigInteger.ZERO.subTo(r,r); }
     }
 
     // (protected) r = this^2, r != this (HAC 14.16)
     function bnpSquareTo(r) {
       var x = this.abs();
       var i = r.t = 2*x.t;
-      while(--i >= 0) r[i] = 0;
+      while(--i >= 0) { r[i] = 0; }
       for(i = 0; i < x.t-1; ++i) {
         var c = x.am(i,x[i],r,2*i,0,1);
         if((r[i+x.t]+=x.am(i+1,2*x[i],r,2*i+1,c,x.t-i-1)) >= x.DV) {
@@ -37021,7 +37127,7 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
           r[i+x.t+1] = 1;
         }
       }
-      if(r.t > 0) r[r.t-1] += x.am(i,x[i],r,2*i,0,1);
+      if(r.t > 0) { r[r.t-1] += x.am(i,x[i],r,2*i,0,1); }
       r.s = 0;
       r.clamp();
     }
@@ -37029,22 +37135,24 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // (protected) divide this by m, quotient and remainder to q, r (HAC 14.20)
     // r != q, this != m.  q or r may be null.
     function bnpDivRemTo(m,q,r) {
+      var this$1 = this;
+
       var pm = m.abs();
-      if(pm.t <= 0) return;
+      if(pm.t <= 0) { return; }
       var pt = this.abs();
       if(pt.t < pm.t) {
-        if(q != null) q.fromInt(0);
-        if(r != null) this.copyTo(r);
+        if(q != null) { q.fromInt(0); }
+        if(r != null) { this.copyTo(r); }
         return;
       }
-      if(r == null) r = nbi();
+      if(r == null) { r = nbi(); }
       var y = nbi(), ts = this.s, ms = m.s;
       var nsh = this.DB-nbits(pm[pm.t-1]);   // normalize modulus
       if(nsh > 0) { pm.lShiftTo(nsh,y); pt.lShiftTo(nsh,r); }
       else { pm.copyTo(y); pt.copyTo(r); }
       var ys = y.t;
       var y0 = y[ys-1];
-      if(y0 == 0) return;
+      if(y0 == 0) { return; }
       var yt = y0*(1<<this.F1)+((ys>1)?y[ys-2]>>this.F2:0);
       var d1 = this.FV/yt, d2 = (1<<this.F1)/yt, e = 1<<this.F2;
       var i = r.t, j = i-ys, t = (q==null)?nbi():q;
@@ -37055,39 +37163,39 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
       }
       BigInteger.ONE.dlShiftTo(ys,t);
       t.subTo(y,y);  // "negative" y so we can replace sub with am later
-      while(y.t < ys) y[y.t++] = 0;
+      while(y.t < ys) { y[y.t++] = 0; }
       while(--j >= 0) {
         // Estimate quotient digit
-        var qd = (r[--i]==y0)?this.DM:Math.floor(r[i]*d1+(r[i-1]+e)*d2);
+        var qd = (r[--i]==y0)?this$1.DM:Math.floor(r[i]*d1+(r[i-1]+e)*d2);
         if((r[i]+=y.am(0,qd,r,j,0,ys)) < qd) {   // Try it out
           y.dlShiftTo(j,t);
           r.subTo(t,r);
-          while(r[i] < --qd) r.subTo(t,r);
+          while(r[i] < --qd) { r.subTo(t,r); }
         }
       }
       if(q != null) {
         r.drShiftTo(ys,q);
-        if(ts != ms) BigInteger.ZERO.subTo(q,q);
+        if(ts != ms) { BigInteger.ZERO.subTo(q,q); }
       }
       r.t = ys;
       r.clamp();
-      if(nsh > 0) r.rShiftTo(nsh,r); // Denormalize remainder
-      if(ts < 0) BigInteger.ZERO.subTo(r,r);
+      if(nsh > 0) { r.rShiftTo(nsh,r); } // Denormalize remainder
+      if(ts < 0) { BigInteger.ZERO.subTo(r,r); }
     }
 
     // (public) this mod a
     function bnMod(a) {
       var r = nbi();
       this.abs().divRemTo(a,null,r);
-      if(this.s < 0 && r.compareTo(BigInteger.ZERO) > 0) a.subTo(r,r);
+      if(this.s < 0 && r.compareTo(BigInteger.ZERO) > 0) { a.subTo(r,r); }
       return r;
     }
 
     // Modular reduction using "classic" algorithm
     function Classic(m) { this.m = m; }
     function cConvert(x) {
-      if(x.s < 0 || x.compareTo(this.m) >= 0) return x.mod(this.m);
-      else return x;
+      if(x.s < 0 || x.compareTo(this.m) >= 0) { return x.mod(this.m); }
+      else { return x; }
     }
     function cRevert(x) { return x; }
     function cReduce(x) { x.divRemTo(this.m,null,x); }
@@ -37111,9 +37219,9 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // should reduce x and y(2-xy) by m^2 at each step to keep size bounded.
     // JS multiply "overflows" differently from C/C++, so care is needed here.
     function bnpInvDigit() {
-      if(this.t < 1) return 0;
+      if(this.t < 1) { return 0; }
       var x = this[0];
-      if((x&1) == 0) return 0;
+      if((x&1) == 0) { return 0; }
       var y = x&3;       // y == 1/x mod 2^2
       y = (y*(2-(x&0xf)*y))&0xf; // y == 1/x mod 2^4
       y = (y*(2-(x&0xff)*y))&0xff;   // y == 1/x mod 2^8
@@ -37140,7 +37248,7 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
       var r = nbi();
       x.abs().dlShiftTo(this.m.t,r);
       r.divRemTo(this.m,null,r);
-      if(x.s < 0 && r.compareTo(BigInteger.ZERO) > 0) this.m.subTo(r,r);
+      if(x.s < 0 && r.compareTo(BigInteger.ZERO) > 0) { this.m.subTo(r,r); }
       return r;
     }
 
@@ -37154,21 +37262,23 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // x = x/R mod m (HAC 14.32)
     function montReduce(x) {
+      var this$1 = this;
+
       while(x.t <= this.mt2) // pad x so am has enough room later
-        x[x.t++] = 0;
+        { x[x.t++] = 0; }
       for(var i = 0; i < this.m.t; ++i) {
         // faster way of calculating u0 = x[i]*mp mod DV
         var j = x[i]&0x7fff;
-        var u0 = (j*this.mpl+(((j*this.mph+(x[i]>>15)*this.mpl)&this.um)<<15))&x.DM;
+        var u0 = (j*this$1.mpl+(((j*this$1.mph+(x[i]>>15)*this$1.mpl)&this$1.um)<<15))&x.DM;
         // use am to combine the multiply-shift-add into one call
-        j = i+this.m.t;
-        x[j] += this.m.am(0,u0,x,i,0,this.m.t);
+        j = i+this$1.m.t;
+        x[j] += this$1.m.am(0,u0,x,i,0,this$1.m.t);
         // propagate carry
         while(x[j] >= x.DV) { x[j] -= x.DV; x[++j]++; }
       }
       x.clamp();
       x.drShiftTo(this.m.t,x);
-      if(x.compareTo(this.m) >= 0) x.subTo(this.m,x);
+      if(x.compareTo(this.m) >= 0) { x.subTo(this.m,x); }
     }
 
     // r = "x^2/R mod m"; x != r
@@ -37188,12 +37298,12 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (protected) this^e, e < 2^32, doing sqr and mul with "r" (HAC 14.79)
     function bnpExp(e,z) {
-      if(e > 0xffffffff || e < 1) return BigInteger.ONE;
+      if(e > 0xffffffff || e < 1) { return BigInteger.ONE; }
       var r = nbi(), r2 = nbi(), g = z.convert(this), i = nbits(e)-1;
       g.copyTo(r);
       while(--i >= 0) {
         z.sqrTo(r,r2);
-        if((e&(1<<i)) > 0) z.mulTo(r2,g,r);
+        if((e&(1<<i)) > 0) { z.mulTo(r2,g,r); }
         else { var t = r; r = r2; r2 = t; }
       }
       return z.revert(r);
@@ -37202,7 +37312,7 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // (public) this^e % m, 0 <= e < 2^32
     function bnModPowInt(e,m) {
       var z;
-      if(e < 256 || m.isEven()) z = new Classic(m); else z = new Montgomery(m);
+      if(e < 256 || m.isEven()) { z = new Classic(m); } else { z = new Montgomery(m); }
       return this.exp(e,z);
     }
 
@@ -37251,11 +37361,11 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // (public) return value as integer
     function bnIntValue() {
       if(this.s < 0) {
-        if(this.t == 1) return this[0]-this.DV;
-        else if(this.t == 0) return -1;
+        if(this.t == 1) { return this[0]-this.DV; }
+        else if(this.t == 0) { return -1; }
       }
-      else if(this.t == 1) return this[0];
-      else if(this.t == 0) return 0;
+      else if(this.t == 1) { return this[0]; }
+      else if(this.t == 0) { return 0; }
       // assumes 16 < DB < 32
       return ((this[1]&((1<<(32-this.DB))-1))<<this.DB)|this[0];
     }
@@ -37271,15 +37381,15 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (public) 0 if this == 0, 1 if this > 0
     function bnSigNum() {
-      if(this.s < 0) return -1;
-      else if(this.t <= 0 || (this.t == 1 && this[0] <= 0)) return 0;
-      else return 1;
+      if(this.s < 0) { return -1; }
+      else if(this.t <= 0 || (this.t == 1 && this[0] <= 0)) { return 0; }
+      else { return 1; }
     }
 
     // (protected) convert to radix string
     function bnpToRadix(b) {
-      if(b == null) b = 10;
-      if(this.signum() == 0 || b < 2 || b > 36) return "0";
+      if(b == null) { b = 10; }
+      if(this.signum() == 0 || b < 2 || b > 36) { return "0"; }
       var cs = this.chunkSize(b);
       var a = Math.pow(b,cs);
       var d = nbv(a), y = nbi(), z = nbi(), r = "";
@@ -37293,20 +37403,22 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (protected) convert from radix string
     function bnpFromRadix(s,b) {
+      var this$1 = this;
+
       this.fromInt(0);
-      if(b == null) b = 10;
+      if(b == null) { b = 10; }
       var cs = this.chunkSize(b);
       var d = Math.pow(b,cs), mi = false, j = 0, w = 0;
       for(var i = 0; i < s.length; ++i) {
         var x = intAt(s,i);
         if(x < 0) {
-          if(s.charAt(i) == "-" && this.signum() == 0) mi = true;
+          if(s.charAt(i) == "-" && this$1.signum() == 0) { mi = true; }
           continue;
         }
         w = b*w+x;
         if(++j >= cs) {
-          this.dMultiply(d);
-          this.dAddOffset(w,0);
+          this$1.dMultiply(d);
+          this$1.dAddOffset(w,0);
           j = 0;
           w = 0;
         }
@@ -37315,22 +37427,24 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
         this.dMultiply(Math.pow(b,j));
         this.dAddOffset(w,0);
       }
-      if(mi) BigInteger.ZERO.subTo(this,this);
+      if(mi) { BigInteger.ZERO.subTo(this,this); }
     }
 
     // (protected) alternate constructor
     function bnpFromNumber(a,b,c) {
+      var this$1 = this;
+
       if("number" == typeof b) {
         // new BigInteger(int,int,RNG)
-        if(a < 2) this.fromInt(1);
+        if(a < 2) { this.fromInt(1); }
         else {
           this.fromNumber(a,c);
           if(!this.testBit(a-1))	// force MSB set
-            this.bitwiseTo(BigInteger.ONE.shiftLeft(a-1),op_or,this);
-          if(this.isEven()) this.dAddOffset(1,0); // force odd
+            { this.bitwiseTo(BigInteger.ONE.shiftLeft(a-1),op_or,this); }
+          if(this.isEven()) { this.dAddOffset(1,0); } // force odd
           while(!this.isProbablePrime(b)) {
-            this.dAddOffset(2,0);
-            if(this.bitLength() > a) this.subTo(BigInteger.ONE.shiftLeft(a-1),this);
+            this$1.dAddOffset(2,0);
+            if(this$1.bitLength() > a) { this$1.subTo(BigInteger.ONE.shiftLeft(a-1),this$1); }
           }
         }
       }
@@ -37339,31 +37453,33 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
         var x = new Array(), t = a&7;
         x.length = (a>>3)+1;
         b.nextBytes(x);
-        if(t > 0) x[0] &= ((1<<t)-1); else x[0] = 0;
+        if(t > 0) { x[0] &= ((1<<t)-1); } else { x[0] = 0; }
         this.fromString(x,256);
       }
     }
 
     // (public) convert to bigendian byte array
     function bnToByteArray() {
+      var this$1 = this;
+
       var i = this.t, r = new Array();
       r[0] = this.s;
       var p = this.DB-(i*this.DB)%8, d, k = 0;
       if(i-- > 0) {
         if(p < this.DB && (d = this[i]>>p) != (this.s&this.DM)>>p)
-          r[k++] = d|(this.s<<(this.DB-p));
+          { r[k++] = d|(this.s<<(this.DB-p)); }
         while(i >= 0) {
           if(p < 8) {
-            d = (this[i]&((1<<p)-1))<<(8-p);
-            d |= this[--i]>>(p+=this.DB-8);
+            d = (this$1[i]&((1<<p)-1))<<(8-p);
+            d |= this$1[--i]>>(p+=this$1.DB-8);
           }
           else {
-            d = (this[i]>>(p-=8))&0xff;
-            if(p <= 0) { p += this.DB; --i; }
+            d = (this$1[i]>>(p-=8))&0xff;
+            if(p <= 0) { p += this$1.DB; --i; }
           }
-          if((d&0x80) != 0) d |= -256;
-          if(k == 0 && (this.s&0x80) != (d&0x80)) ++k;
-          if(k > 0 || d != this.s) r[k++] = d;
+          if((d&0x80) != 0) { d |= -256; }
+          if(k == 0 && (this$1.s&0x80) != (d&0x80)) { ++k; }
+          if(k > 0 || d != this$1.s) { r[k++] = d; }
         }
       }
       return r;
@@ -37375,16 +37491,18 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (protected) r = this op a (bitwise)
     function bnpBitwiseTo(a,op,r) {
+      var this$1 = this;
+
       var i, f, m = Math.min(a.t,this.t);
-      for(i = 0; i < m; ++i) r[i] = op(this[i],a[i]);
+      for(i = 0; i < m; ++i) { r[i] = op(this$1[i],a[i]); }
       if(a.t < this.t) {
         f = a.s&this.DM;
-        for(i = m; i < this.t; ++i) r[i] = op(this[i],f);
+        for(i = m; i < this.t; ++i) { r[i] = op(this$1[i],f); }
         r.t = this.t;
       }
       else {
         f = this.s&this.DM;
-        for(i = m; i < a.t; ++i) r[i] = op(f,a[i]);
+        for(i = m; i < a.t; ++i) { r[i] = op(f,a[i]); }
         r.t = a.t;
       }
       r.s = op(this.s,a.s);
@@ -37409,8 +37527,10 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (public) ~this
     function bnNot() {
+      var this$1 = this;
+
       var r = nbi();
-      for(var i = 0; i < this.t; ++i) r[i] = this.DM&~this[i];
+      for(var i = 0; i < this.t; ++i) { r[i] = this$1.DM&~this$1[i]; }
       r.t = this.t;
       r.s = ~this.s;
       return r;
@@ -37419,34 +37539,36 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // (public) this << n
     function bnShiftLeft(n) {
       var r = nbi();
-      if(n < 0) this.rShiftTo(-n,r); else this.lShiftTo(n,r);
+      if(n < 0) { this.rShiftTo(-n,r); } else { this.lShiftTo(n,r); }
       return r;
     }
 
     // (public) this >> n
     function bnShiftRight(n) {
       var r = nbi();
-      if(n < 0) this.lShiftTo(-n,r); else this.rShiftTo(n,r);
+      if(n < 0) { this.lShiftTo(-n,r); } else { this.rShiftTo(n,r); }
       return r;
     }
 
     // return index of lowest 1-bit in x, x < 2^31
     function lbit(x) {
-      if(x == 0) return -1;
+      if(x == 0) { return -1; }
       var r = 0;
       if((x&0xffff) == 0) { x >>= 16; r += 16; }
       if((x&0xff) == 0) { x >>= 8; r += 8; }
       if((x&0xf) == 0) { x >>= 4; r += 4; }
       if((x&3) == 0) { x >>= 2; r += 2; }
-      if((x&1) == 0) ++r;
+      if((x&1) == 0) { ++r; }
       return r;
     }
 
     // (public) returns index of lowest 1-bit (or -1 if none)
     function bnGetLowestSetBit() {
+      var this$1 = this;
+
       for(var i = 0; i < this.t; ++i)
-        if(this[i] != 0) return i*this.DB+lbit(this[i]);
-      if(this.s < 0) return this.t*this.DB;
+        { if(this$1[i] != 0) { return i*this$1.DB+lbit(this$1[i]); } }
+      if(this.s < 0) { return this.t*this.DB; }
       return -1;
     }
 
@@ -37459,15 +37581,17 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (public) return number of set bits
     function bnBitCount() {
+      var this$1 = this;
+
       var r = 0, x = this.s&this.DM;
-      for(var i = 0; i < this.t; ++i) r += cbit(this[i]^x);
+      for(var i = 0; i < this.t; ++i) { r += cbit(this$1[i]^x); }
       return r;
     }
 
     // (public) true iff nth bit is set
     function bnTestBit(n) {
       var j = Math.floor(n/this.DB);
-      if(j >= this.t) return(this.s!=0);
+      if(j >= this.t) { return(this.s!=0); }
       return((this[j]&(1<<(n%this.DB)))!=0);
     }
 
@@ -37489,18 +37613,20 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (protected) r = this + a
     function bnpAddTo(a,r) {
+      var this$1 = this;
+
       var i = 0, c = 0, m = Math.min(a.t,this.t);
       while(i < m) {
-        c += this[i]+a[i];
-        r[i++] = c&this.DM;
-        c >>= this.DB;
+        c += this$1[i]+a[i];
+        r[i++] = c&this$1.DM;
+        c >>= this$1.DB;
       }
       if(a.t < this.t) {
         c += a.s;
         while(i < this.t) {
-          c += this[i];
-          r[i++] = c&this.DM;
-          c >>= this.DB;
+          c += this$1[i];
+          r[i++] = c&this$1.DM;
+          c >>= this$1.DB;
         }
         c += this.s;
       }
@@ -37508,14 +37634,14 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
         c += this.s;
         while(i < a.t) {
           c += a[i];
-          r[i++] = c&this.DM;
-          c >>= this.DB;
+          r[i++] = c&this$1.DM;
+          c >>= this$1.DB;
         }
         c += a.s;
       }
       r.s = (c<0)?-1:0;
-      if(c > 0) r[i++] = c;
-      else if(c < -1) r[i++] = this.DV+c;
+      if(c > 0) { r[i++] = c; }
+      else if(c < -1) { r[i++] = this.DV+c; }
       r.t = i;
       r.clamp();
     }
@@ -37554,13 +37680,15 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (protected) this += n << w words, this >= 0
     function bnpDAddOffset(n,w) {
-      if(n == 0) return;
-      while(this.t <= w) this[this.t++] = 0;
+      var this$1 = this;
+
+      if(n == 0) { return; }
+      while(this.t <= w) { this$1[this$1.t++] = 0; }
       this[w] += n;
       while(this[w] >= this.DV) {
-        this[w] -= this.DV;
-        if(++w >= this.t) this[this.t++] = 0;
-        ++this[w];
+        this$1[w] -= this$1.DV;
+        if(++w >= this$1.t) { this$1[this$1.t++] = 0; }
+        ++this$1[w];
       }
     }
 
@@ -37581,25 +37709,29 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     // (protected) r = lower n words of "this * a", a.t <= n
     // "this" should be the larger one if appropriate.
     function bnpMultiplyLowerTo(a,n,r) {
+      var this$1 = this;
+
       var i = Math.min(this.t+a.t,n);
       r.s = 0; // assumes a,this >= 0
       r.t = i;
-      while(i > 0) r[--i] = 0;
+      while(i > 0) { r[--i] = 0; }
       var j;
-      for(j = r.t-this.t; i < j; ++i) r[i+this.t] = this.am(0,a[i],r,i,0,this.t);
-      for(j = Math.min(a.t,n); i < j; ++i) this.am(0,a[i],r,i,0,n-i);
+      for(j = r.t-this.t; i < j; ++i) { r[i+this$1.t] = this$1.am(0,a[i],r,i,0,this$1.t); }
+      for(j = Math.min(a.t,n); i < j; ++i) { this$1.am(0,a[i],r,i,0,n-i); }
       r.clamp();
     }
 
     // (protected) r = "this * a" without lower n words, n > 0
     // "this" should be the larger one if appropriate.
     function bnpMultiplyUpperTo(a,n,r) {
+      var this$1 = this;
+
       --n;
       var i = r.t = this.t+a.t-n;
       r.s = 0; // assumes a,this >= 0
-      while(--i >= 0) r[i] = 0;
+      while(--i >= 0) { r[i] = 0; }
       for(i = Math.max(n-this.t,0); i < a.t; ++i)
-        r[this.t+i-n] = this.am(n-i,a[i],r,0,0,this.t+i-n);
+        { r[this$1.t+i-n] = this$1.am(n-i,a[i],r,0,0,this$1.t+i-n); }
       r.clamp();
       r.drShiftTo(1,r);
     }
@@ -37615,8 +37747,8 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
     }
 
     function barrettConvert(x) {
-      if(x.s < 0 || x.t > 2*this.m.t) return x.mod(this.m);
-      else if(x.compareTo(this.m) < 0) return x;
+      if(x.s < 0 || x.t > 2*this.m.t) { return x.mod(this.m); }
+      else if(x.compareTo(this.m) < 0) { return x; }
       else { var r = nbi(); x.copyTo(r); this.reduce(r); return r; }
     }
 
@@ -37624,13 +37756,15 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // x = x mod m (HAC 14.42)
     function barrettReduce(x) {
+      var this$1 = this;
+
       x.drShiftTo(this.m.t-1,this.r2);
       if(x.t > this.m.t+1) { x.t = this.m.t+1; x.clamp(); }
       this.mu.multiplyUpperTo(this.r2,this.m.t+1,this.q3);
       this.m.multiplyLowerTo(this.q3,this.m.t+1,this.r2);
-      while(x.compareTo(this.r2) < 0) x.dAddOffset(1,this.m.t+1);
+      while(x.compareTo(this.r2) < 0) { x.dAddOffset(1,this$1.m.t+1); }
       x.subTo(this.r2,x);
-      while(x.compareTo(this.m) >= 0) x.subTo(this.m,x);
+      while(x.compareTo(this.m) >= 0) { x.subTo(this$1.m,x); }
     }
 
     // r = x^2 mod m; x != r
@@ -37647,19 +37781,21 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
     // (public) this^e % m (HAC 14.85)
     function bnModPow(e,m) {
+      var this$1 = this;
+
       var i = e.bitLength(), k, r = nbv(1), z;
-      if(i <= 0) return r;
-      else if(i < 18) k = 1;
-      else if(i < 48) k = 3;
-      else if(i < 144) k = 4;
-      else if(i < 768) k = 5;
-      else k = 6;
+      if(i <= 0) { return r; }
+      else if(i < 18) { k = 1; }
+      else if(i < 48) { k = 3; }
+      else if(i < 144) { k = 4; }
+      else if(i < 768) { k = 5; }
+      else { k = 6; }
       if(i < 8)
-        z = new Classic(m);
+        { z = new Classic(m); }
       else if(m.isEven())
-        z = new Barrett(m);
+        { z = new Barrett(m); }
       else
-        z = new Montgomery(m);
+        { z = new Montgomery(m); }
 
       // precomputation
       var g = new Array(), n = 3, k1 = k-1, km = (1<<k)-1;
@@ -37677,28 +37813,28 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
       var j = e.t-1, w, is1 = true, r2 = nbi(), t;
       i = nbits(e[j])-1;
       while(j >= 0) {
-        if(i >= k1) w = (e[j]>>(i-k1))&km;
+        if(i >= k1) { w = (e[j]>>(i-k1))&km; }
         else {
           w = (e[j]&((1<<(i+1))-1))<<(k1-i);
-          if(j > 0) w |= e[j-1]>>(this.DB+i-k1);
+          if(j > 0) { w |= e[j-1]>>(this$1.DB+i-k1); }
         }
 
         n = k;
         while((w&1) == 0) { w >>= 1; --n; }
-        if((i -= n) < 0) { i += this.DB; --j; }
+        if((i -= n) < 0) { i += this$1.DB; --j; }
         if(is1) {	// ret == 1, don't bother squaring or multiplying it
           g[w].copyTo(r);
           is1 = false;
         }
         else {
           while(n > 1) { z.sqrTo(r,r2); z.sqrTo(r2,r); n -= 2; }
-          if(n > 0) z.sqrTo(r,r2); else { t = r; r = r2; r2 = t; }
+          if(n > 0) { z.sqrTo(r,r2); } else { t = r; r = r2; r2 = t; }
           z.mulTo(r2,g[w],r);
         }
 
         while(j >= 0 && (e[j]&(1<<i)) == 0) {
           z.sqrTo(r,r2); t = r; r = r2; r2 = t;
-          if(--i < 0) { i = this.DB-1; --j; }
+          if(--i < 0) { i = this$1.DB-1; --j; }
         }
       }
       return z.revert(r);
@@ -37710,15 +37846,15 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
       var y = (a.s<0)?a.negate():a.clone();
       if(x.compareTo(y) < 0) { var t = x; x = y; y = t; }
       var i = x.getLowestSetBit(), g = y.getLowestSetBit();
-      if(g < 0) return x;
-      if(i < g) g = i;
+      if(g < 0) { return x; }
+      if(i < g) { g = i; }
       if(g > 0) {
         x.rShiftTo(g,x);
         y.rShiftTo(g,y);
       }
       while(x.signum() > 0) {
-        if((i = x.getLowestSetBit()) > 0) x.rShiftTo(i,x);
-        if((i = y.getLowestSetBit()) > 0) y.rShiftTo(i,y);
+        if((i = x.getLowestSetBit()) > 0) { x.rShiftTo(i,x); }
+        if((i = y.getLowestSetBit()) > 0) { y.rShiftTo(i,y); }
         if(x.compareTo(y) >= 0) {
           x.subTo(y,x);
           x.rShiftTo(1,x);
@@ -37728,60 +37864,64 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
           y.rShiftTo(1,y);
         }
       }
-      if(g > 0) y.lShiftTo(g,y);
+      if(g > 0) { y.lShiftTo(g,y); }
       return y;
     }
 
     // (protected) this % n, n < 2^26
     function bnpModInt(n) {
-      if(n <= 0) return 0;
+      var this$1 = this;
+
+      if(n <= 0) { return 0; }
       var d = this.DV%n, r = (this.s<0)?n-1:0;
       if(this.t > 0)
-        if(d == 0) r = this[0]%n;
-        else for(var i = this.t-1; i >= 0; --i) r = (d*r+this[i])%n;
+        { if(d == 0) { r = this[0]%n; }
+        else { for(var i = this.t-1; i >= 0; --i) { r = (d*r+this$1[i])%n; } } }
       return r;
     }
 
     // (public) 1/this % m (HAC 14.61)
     function bnModInverse(m) {
+      var this$1 = this;
+
       var ac = m.isEven();
-      if((this.isEven() && ac) || m.signum() == 0) return BigInteger.ZERO;
+      if((this.isEven() && ac) || m.signum() == 0) { return BigInteger.ZERO; }
       var u = m.clone(), v = this.clone();
       var a = nbv(1), b = nbv(0), c = nbv(0), d = nbv(1);
       while(u.signum() != 0) {
         while(u.isEven()) {
           u.rShiftTo(1,u);
           if(ac) {
-            if(!a.isEven() || !b.isEven()) { a.addTo(this,a); b.subTo(m,b); }
+            if(!a.isEven() || !b.isEven()) { a.addTo(this$1,a); b.subTo(m,b); }
             a.rShiftTo(1,a);
           }
-          else if(!b.isEven()) b.subTo(m,b);
+          else if(!b.isEven()) { b.subTo(m,b); }
           b.rShiftTo(1,b);
         }
         while(v.isEven()) {
           v.rShiftTo(1,v);
           if(ac) {
-            if(!c.isEven() || !d.isEven()) { c.addTo(this,c); d.subTo(m,d); }
+            if(!c.isEven() || !d.isEven()) { c.addTo(this$1,c); d.subTo(m,d); }
             c.rShiftTo(1,c);
           }
-          else if(!d.isEven()) d.subTo(m,d);
+          else if(!d.isEven()) { d.subTo(m,d); }
           d.rShiftTo(1,d);
         }
         if(u.compareTo(v) >= 0) {
           u.subTo(v,u);
-          if(ac) a.subTo(c,a);
+          if(ac) { a.subTo(c,a); }
           b.subTo(d,b);
         }
         else {
           v.subTo(u,v);
-          if(ac) c.subTo(a,c);
+          if(ac) { c.subTo(a,c); }
           d.subTo(b,d);
         }
       }
-      if(v.compareTo(BigInteger.ONE) != 0) return BigInteger.ZERO;
-      if(d.compareTo(m) >= 0) return d.subtract(m);
-      if(d.signum() < 0) d.addTo(m,d); else return d;
-      if(d.signum() < 0) return d.add(m); else return d;
+      if(v.compareTo(BigInteger.ONE) != 0) { return BigInteger.ZERO; }
+      if(d.compareTo(m) >= 0) { return d.subtract(m); }
+      if(d.signum() < 0) { d.addTo(m,d); } else { return d; }
+      if(d.signum() < 0) { return d.add(m); } else { return d; }
     }
 
     var lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997];
@@ -37792,40 +37932,42 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
       var i, x = this.abs();
       if(x.t == 1 && x[0] <= lowprimes[lowprimes.length-1]) {
         for(i = 0; i < lowprimes.length; ++i)
-          if(x[0] == lowprimes[i]) return true;
+          { if(x[0] == lowprimes[i]) { return true; } }
         return false;
       }
-      if(x.isEven()) return false;
+      if(x.isEven()) { return false; }
       i = 1;
       while(i < lowprimes.length) {
         var m = lowprimes[i], j = i+1;
-        while(j < lowprimes.length && m < lplim) m *= lowprimes[j++];
+        while(j < lowprimes.length && m < lplim) { m *= lowprimes[j++]; }
         m = x.modInt(m);
-        while(i < j) if(m%lowprimes[i++] == 0) return false;
+        while(i < j) { if(m%lowprimes[i++] == 0) { return false; } }
       }
       return x.millerRabin(t);
     }
 
     // (protected) true if probably prime (HAC 4.24, Miller-Rabin)
     function bnpMillerRabin(t) {
+      var this$1 = this;
+
       var n1 = this.subtract(BigInteger.ONE);
       var k = n1.getLowestSetBit();
-      if(k <= 0) return false;
+      if(k <= 0) { return false; }
       var r = n1.shiftRight(k);
       t = (t+1)>>1;
-      if(t > lowprimes.length) t = lowprimes.length;
+      if(t > lowprimes.length) { t = lowprimes.length; }
       var a = nbi();
       for(var i = 0; i < t; ++i) {
         //Pick bases at random, instead of starting at 2
         a.fromInt(lowprimes[Math.floor(Math.random()*lowprimes.length)]);
-        var y = a.modPow(r,this);
+        var y = a.modPow(r,this$1);
         if(y.compareTo(BigInteger.ONE) != 0 && y.compareTo(n1) != 0) {
           var j = 1;
           while(j++ < k && y.compareTo(n1) != 0) {
-            y = y.modPowInt(2,this);
-            if(y.compareTo(BigInteger.ONE) == 0) return false;
+            y = y.modPowInt(2,this$1);
+            if(y.compareTo(BigInteger.ONE) == 0) { return false; }
           }
-          if(y.compareTo(n1) != 0) return false;
+          if(y.compareTo(n1) != 0) { return false; }
         }
       }
       return true;
@@ -37912,7 +38054,7 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 	  rng_pool[rng_pptr++] ^= (x >> 8) & 255;
 	  rng_pool[rng_pptr++] ^= (x >> 16) & 255;
 	  rng_pool[rng_pptr++] ^= (x >> 24) & 255;
-	  if(rng_pptr >= rng_psize) rng_pptr -= rng_psize;
+	  if(rng_pptr >= rng_psize) { rng_pptr -= rng_psize; }
 	}
 
 	// Mix in the current time (w/milliseconds) into the pool
@@ -37931,13 +38073,13 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 		  var ua = new Uint8Array(32);
 		  window.crypto.getRandomValues(ua);
 		  for(t = 0; t < 32; ++t)
-			rng_pool[rng_pptr++] = ua[t];
+			{ rng_pool[rng_pptr++] = ua[t]; }
 		}
 		else if(navigator.appName == "Netscape" && navigator.appVersion < "5") {
 		  // Extract entropy (256 bits) from NS4 RNG if available
 		  var z = window.crypto.random(32);
 		  for(t = 0; t < z.length; ++t)
-			rng_pool[rng_pptr++] = z.charCodeAt(t) & 255;
+			{ rng_pool[rng_pptr++] = z.charCodeAt(t) & 255; }
 		}
 	  }
 	  while(rng_pptr < rng_psize) {  // extract some randomness from Math.random()
@@ -37957,7 +38099,7 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 		rng_state = prng_newstate();
 		rng_state.init(rng_pool);
 		for(rng_pptr = 0; rng_pptr < rng_pool.length; ++rng_pptr)
-		  rng_pool[rng_pptr] = 0;
+		  { rng_pool[rng_pptr] = 0; }
 		rng_pptr = 0;
 		//rng_pool = null;
 	  }
@@ -37967,7 +38109,7 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
 	function rng_get_bytes(ba) {
 	  var i;
-	  for(i = 0; i < ba.length; ++i) ba[i] = rng_get_byte();
+	  for(i = 0; i < ba.length; ++i) { ba[i] = rng_get_byte(); }
 	}
 
 	function SecureRandom() {}
@@ -37984,15 +38126,17 @@ var jsbn$1 = createCommonjsModule(function (module, exports) {
 
 	// Initialize arcfour context from key, an array of ints, each from [0..255]
 	function ARC4init(key) {
+	  var this$1 = this;
+
 	  var i, j, t;
 	  for(i = 0; i < 256; ++i)
-		this.S[i] = i;
+		{ this$1.S[i] = i; }
 	  j = 0;
 	  for(i = 0; i < 256; ++i) {
-		j = (j + this.S[i] + key[i % key.length]) & 255;
-		t = this.S[i];
-		this.S[i] = this.S[j];
-		this.S[j] = t;
+		j = (j + this$1.S[i] + key[i % key.length]) & 255;
+		t = this$1.S[i];
+		this$1.S[i] = this$1.S[j];
+		this$1.S[j] = t;
 	  }
 	  this.i = 0;
 	  this.j = 0;
@@ -38048,7 +38192,7 @@ function ECFieldElementFp(q,x) {
 }
 
 function feFpEquals(other) {
-    if(other == this) return true;
+    if(other == this) { return true; }
     return (this.q.equals(other.q) && this.x.equals(other.x));
 }
 
@@ -38128,20 +38272,20 @@ function pointFpGetY() {
 }
 
 function pointFpEquals(other) {
-    if(other == this) return true;
-    if(this.isInfinity()) return other.isInfinity();
-    if(other.isInfinity()) return this.isInfinity();
+    if(other == this) { return true; }
+    if(this.isInfinity()) { return other.isInfinity(); }
+    if(other.isInfinity()) { return this.isInfinity(); }
     var u, v;
     // u = Y2 * Z1 - Y1 * Z2
     u = other.y.toBigInteger().multiply(this.z).subtract(this.y.toBigInteger().multiply(other.z)).mod(this.curve.q);
-    if(!u.equals(BigInteger$1.ZERO)) return false;
+    if(!u.equals(BigInteger$1.ZERO)) { return false; }
     // v = X2 * Z1 - X1 * Z2
     v = other.x.toBigInteger().multiply(this.z).subtract(this.x.toBigInteger().multiply(other.z)).mod(this.curve.q);
     return v.equals(BigInteger$1.ZERO);
 }
 
 function pointFpIsInfinity() {
-    if((this.x == null) && (this.y == null)) return true;
+    if((this.x == null) && (this.y == null)) { return true; }
     return this.z.equals(BigInteger$1.ZERO) && !this.y.toBigInteger().equals(BigInteger$1.ZERO);
 }
 
@@ -38150,8 +38294,8 @@ function pointFpNegate() {
 }
 
 function pointFpAdd(b) {
-    if(this.isInfinity()) return b;
-    if(b.isInfinity()) return this;
+    if(this.isInfinity()) { return b; }
+    if(b.isInfinity()) { return this; }
 
     // u = Y2 * Z1 - Y1 * Z2
     var u = b.y.toBigInteger().multiply(this.z).subtract(this.y.toBigInteger().multiply(b.z)).mod(this.curve.q);
@@ -38187,8 +38331,8 @@ function pointFpAdd(b) {
 }
 
 function pointFpTwice() {
-    if(this.isInfinity()) return this;
-    if(this.y.toBigInteger().signum() == 0) return this.curve.getInfinity();
+    if(this.isInfinity()) { return this; }
+    if(this.y.toBigInteger().signum() == 0) { return this.curve.getInfinity(); }
 
     // TODO: optimized handling of constants
     var THREE = new BigInteger$1("3");
@@ -38219,8 +38363,10 @@ function pointFpTwice() {
 // Simple NAF (Non-Adjacent Form) multiplication algorithm
 // TODO: modularize the multiplication algorithm
 function pointFpMultiply(k) {
-    if(this.isInfinity()) return this;
-    if(k.signum() == 0) return this.curve.getInfinity();
+    var this$1 = this;
+
+    if(this.isInfinity()) { return this; }
+    if(k.signum() == 0) { return this.curve.getInfinity(); }
 
     var e = k;
     var h = e.multiply(new BigInteger$1("3"));
@@ -38236,7 +38382,7 @@ function pointFpMultiply(k) {
 	var eBit = e.testBit(i);
 
 	if (hBit != eBit) {
-	    R = R.add(hBit ? this : neg);
+	    R = R.add(hBit ? this$1 : neg);
 	}
     }
 
@@ -38245,11 +38391,13 @@ function pointFpMultiply(k) {
 
 // Compute this*j + x*k (simultaneous multiplication)
 function pointFpMultiplyTwo(j,x,k) {
+  var this$1 = this;
+
   var i;
   if(j.bitLength() > k.bitLength())
-    i = j.bitLength() - 1;
+    { i = j.bitLength() - 1; }
   else
-    i = k.bitLength() - 1;
+    { i = k.bitLength() - 1; }
 
   var R = this.curve.getInfinity();
   var both = this.add(x);
@@ -38260,7 +38408,7 @@ function pointFpMultiplyTwo(j,x,k) {
         R = R.add(both);
       }
       else {
-        R = R.add(this);
+        R = R.add(this$1);
       }
     }
     else {
@@ -38309,7 +38457,7 @@ function curveFpGetB() {
 }
 
 function curveFpEquals(other) {
-    if(other == this) return true;
+    if(other == this) { return true; }
     return(this.q.equals(other.q) && this.a.equals(other.a) && this.b.equals(other.b));
 }
 
@@ -38326,11 +38474,11 @@ function curveReduce(x) {
 }
 
 function curveFpEncodePointHex(p) {
-	if (p.isInfinity()) return "00";
+	if (p.isInfinity()) { return "00"; }
 	var xHex = p.getX().toBigInteger().toString(16);
 	var yHex = p.getY().toBigInteger().toString(16);
 	var oLen = this.getQ().toString(16).length;
-	if ((oLen % 2) != 0) oLen++;
+	if ((oLen % 2) != 0) { oLen++; }
 	while (xHex.length < oLen) {
 		xHex = "0" + xHex;
 	}
@@ -38360,14 +38508,14 @@ ECCurveFp.prototype.decodePointHex = function(s)
     case 2:
 	yIsEven = false;
     case 3:
-	if(yIsEven == undefined) yIsEven = true;
+	if(yIsEven == undefined) { yIsEven = true; }
 	var len = s.length - 2;
 	var xHex = s.substr(2, len);
 	var x = this.fromBigInteger(new BigInteger$1(xHex,16));
 	var alpha = x.multiply(x.square().add(this.getA())).add(this.getB());
 	var beta = alpha.sqrt();
 
-    if (beta == null) throw "Invalid point compression";
+    if (beta == null) { throw "Invalid point compression"; }
 
     var betaValue = beta.toBigInteger();
     if (betaValue.testBit(0) != yIsEven)
@@ -38393,15 +38541,15 @@ ECCurveFp.prototype.decodePointHex = function(s)
 };
 ECCurveFp.prototype.encodeCompressedPointHex = function(p)
 {
-	if (p.isInfinity()) return "00";
+	if (p.isInfinity()) { return "00"; }
 	var xHex = p.getX().toBigInteger().toString(16);
 	var oLen = this.getQ().toString(16).length;
-	if ((oLen % 2) != 0) oLen++;
+	if ((oLen % 2) != 0) { oLen++; }
 	while (xHex.length < oLen)
-		xHex = "0" + xHex;
+		{ xHex = "0" + xHex; }
 	var yPrefix;
-	if(p.getY().toBigInteger().isEven()) yPrefix = "02";
-	else                                 yPrefix = "03";
+	if(p.getY().toBigInteger().isEven()) { yPrefix = "02"; }
+	else                                 { yPrefix = "03"; }
 
 	return yPrefix + xHex;
 };
@@ -38409,7 +38557,7 @@ ECCurveFp.prototype.encodeCompressedPointHex = function(p)
 
 ECFieldElementFp.prototype.getR = function()
 {
-	if(this.r != undefined) return this.r;
+	if(this.r != undefined) { return this.r; }
 
     this.r = null;
     var bitLength = this.q.bitLength();
@@ -38429,6 +38577,8 @@ ECFieldElementFp.prototype.modMult = function(x1,x2)
 };
 ECFieldElementFp.prototype.modReduce = function(x)
 {
+    var this$1 = this;
+
     if (this.getR() != null)
     {
         var qLen = q.bitLength();
@@ -38436,9 +38586,9 @@ ECFieldElementFp.prototype.modReduce = function(x)
         {
             var u = x.shiftRight(qLen);
             var v = x.subtract(u.shiftLeft(qLen));
-            if (!this.getR().equals(BigInteger$1.ONE))
+            if (!this$1.getR().equals(BigInteger$1.ONE))
             {
-                u = u.multiply(this.getR());
+                u = u.multiply(this$1.getR());
             }
             x = u.add(v); 
         }
@@ -38455,7 +38605,9 @@ ECFieldElementFp.prototype.modReduce = function(x)
 };
 ECFieldElementFp.prototype.sqrt = function()
 {
-    if (!this.q.testBit(0)) throw "unsupported";
+    var this$1 = this;
+
+    if (!this.q.testBit(0)) { throw "unsupported"; }
 
     // p mod 4 == 3
     if (this.q.testBit(1))
@@ -38485,16 +38637,16 @@ ECFieldElementFp.prototype.sqrt = function()
         var P;
         do
         {
-            P = new BigInteger$1(this.q.bitLength(), new SecureRandom());
+            P = new BigInteger$1(this$1.q.bitLength(), new SecureRandom());
         }
         while (P.compareTo(this.q) >= 0
             || !(P.multiply(P).subtract(fourQ).modPow(legendreExponent, this.q).equals(qMinusOne)));
 
-        var result = this.lucasSequence(P, Q, k);
+        var result = this$1.lucasSequence(P, Q, k);
         U = result[0];
         V = result[1];
 
-        if (this.modMult(V, V).equals(fourQ))
+        if (this$1.modMult(V, V).equals(fourQ))
         {
             // Integer division by 2, mod q
             if (V.testBit(0))
@@ -38513,6 +38665,8 @@ ECFieldElementFp.prototype.sqrt = function()
 };
 ECFieldElementFp.prototype.lucasSequence = function(P,Q,k)
 {
+    var this$1 = this;
+
     var n = k.bitLength();
     var s = k.getLowestSetBit();
 
@@ -38524,21 +38678,21 @@ ECFieldElementFp.prototype.lucasSequence = function(P,Q,k)
 
     for (var j = n - 1; j >= s + 1; --j)
     {
-        Ql = this.modMult(Ql, Qh);
+        Ql = this$1.modMult(Ql, Qh);
 
         if (k.testBit(j))
         {
-            Qh = this.modMult(Ql, Q);
-            Uh = this.modMult(Uh, Vh);
-            Vl = this.modReduce(Vh.multiply(Vl).subtract(P.multiply(Ql)));
-            Vh = this.modReduce(Vh.multiply(Vh).subtract(Qh.shiftLeft(1)));
+            Qh = this$1.modMult(Ql, Q);
+            Uh = this$1.modMult(Uh, Vh);
+            Vl = this$1.modReduce(Vh.multiply(Vl).subtract(P.multiply(Ql)));
+            Vh = this$1.modReduce(Vh.multiply(Vh).subtract(Qh.shiftLeft(1)));
         }
         else
         {
             Qh = Ql;
-            Uh = this.modReduce(Uh.multiply(Vl).subtract(Ql));
-            Vh = this.modReduce(Vh.multiply(Vl).subtract(P.multiply(Ql)));
-            Vl = this.modReduce(Vl.multiply(Vl).subtract(Ql.shiftLeft(1)));
+            Uh = this$1.modReduce(Uh.multiply(Vl).subtract(Ql));
+            Vh = this$1.modReduce(Vh.multiply(Vl).subtract(P.multiply(Ql)));
+            Vl = this$1.modReduce(Vl.multiply(Vl).subtract(Ql.shiftLeft(1)));
         }
     }
 
@@ -38550,9 +38704,9 @@ ECFieldElementFp.prototype.lucasSequence = function(P,Q,k)
 
     for (var j = 1; j <= s; ++j)
     {
-        Uh = this.modMult(Uh, Vl);
-        Vl = this.modReduce(Vl.multiply(Vl).subtract(Ql.shiftLeft(1)));
-        Ql = this.modMult(Ql, Ql);
+        Uh = this$1.modMult(Uh, Vl);
+        Vl = this$1.modReduce(Vl.multiply(Vl).subtract(Ql.shiftLeft(1)));
+        Ql = this$1.modMult(Ql, Ql);
     }
 
     return [ Uh, Vl ];
@@ -38577,7 +38731,7 @@ var naclFast = createCommonjsModule(function (module) {
 (function(nacl) {
 var gf = function(init) {
   var i, r = new Float64Array(16);
-  if (init) for (i = 0; i < init.length; i++) r[i] = init[i];
+  if (init) { for (i = 0; i < init.length; i++) { r[i] = init[i]; } }
   return r;
 };
 
@@ -38609,7 +38763,7 @@ function ts64(x, i, h, l) {
 
 function vn(x, xi, y, yi, n) {
   var i,d = 0;
-  for (i = 0; i < n; i++) d |= x[xi+i]^y[yi+i];
+  for (i = 0; i < n; i++) { d |= x[xi+i]^y[yi+i]; }
   return (1 & ((d - 1) >>> 8)) - 1;
 }
 
@@ -38965,11 +39119,11 @@ var sigma = new Uint8Array([101, 120, 112, 97, 110, 100, 32, 51, 50, 45, 98, 121
 function crypto_stream_salsa20_xor(c,cpos,m,mpos,b,n,k) {
   var z = new Uint8Array(16), x = new Uint8Array(64);
   var u, i;
-  for (i = 0; i < 16; i++) z[i] = 0;
-  for (i = 0; i < 8; i++) z[i] = n[i];
+  for (i = 0; i < 16; i++) { z[i] = 0; }
+  for (i = 0; i < 8; i++) { z[i] = n[i]; }
   while (b >= 64) {
     crypto_core_salsa20(x,z,k,sigma);
-    for (i = 0; i < 64; i++) c[cpos+i] = m[mpos+i] ^ x[i];
+    for (i = 0; i < 64; i++) { c[cpos+i] = m[mpos+i] ^ x[i]; }
     u = 1;
     for (i = 8; i < 16; i++) {
       u = u + (z[i] & 0xff) | 0;
@@ -38982,7 +39136,7 @@ function crypto_stream_salsa20_xor(c,cpos,m,mpos,b,n,k) {
   }
   if (b > 0) {
     crypto_core_salsa20(x,z,k,sigma);
-    for (i = 0; i < b; i++) c[cpos+i] = m[mpos+i] ^ x[i];
+    for (i = 0; i < b; i++) { c[cpos+i] = m[mpos+i] ^ x[i]; }
   }
   return 0;
 }
@@ -38990,11 +39144,11 @@ function crypto_stream_salsa20_xor(c,cpos,m,mpos,b,n,k) {
 function crypto_stream_salsa20(c,cpos,b,n,k) {
   var z = new Uint8Array(16), x = new Uint8Array(64);
   var u, i;
-  for (i = 0; i < 16; i++) z[i] = 0;
-  for (i = 0; i < 8; i++) z[i] = n[i];
+  for (i = 0; i < 16; i++) { z[i] = 0; }
+  for (i = 0; i < 8; i++) { z[i] = n[i]; }
   while (b >= 64) {
     crypto_core_salsa20(x,z,k,sigma);
-    for (i = 0; i < 64; i++) c[cpos+i] = x[i];
+    for (i = 0; i < 64; i++) { c[cpos+i] = x[i]; }
     u = 1;
     for (i = 8; i < 16; i++) {
       u = u + (z[i] & 0xff) | 0;
@@ -39006,7 +39160,7 @@ function crypto_stream_salsa20(c,cpos,b,n,k) {
   }
   if (b > 0) {
     crypto_core_salsa20(x,z,k,sigma);
-    for (i = 0; i < b; i++) c[cpos+i] = x[i];
+    for (i = 0; i < b; i++) { c[cpos+i] = x[i]; }
   }
   return 0;
 }
@@ -39015,7 +39169,7 @@ function crypto_stream(c,cpos,d,n,k) {
   var s = new Uint8Array(32);
   crypto_core_hsalsa20(s,n,k,sigma);
   var sn = new Uint8Array(8);
-  for (var i = 0; i < 8; i++) sn[i] = n[i+16];
+  for (var i = 0; i < 8; i++) { sn[i] = n[i+16]; }
   return crypto_stream_salsa20(c,cpos,d,sn,s);
 }
 
@@ -39023,7 +39177,7 @@ function crypto_stream_xor(c,cpos,m,mpos,d,n,k) {
   var s = new Uint8Array(32);
   crypto_core_hsalsa20(s,n,k,sigma);
   var sn = new Uint8Array(8);
-  for (var i = 0; i < 8; i++) sn[i] = n[i+16];
+  for (var i = 0; i < 8; i++) { sn[i] = n[i+16]; }
   return crypto_stream_salsa20_xor(c,cpos,m,mpos,d,sn,s);
 }
 
@@ -39277,13 +39431,15 @@ poly1305.prototype.blocks = function(m, mpos, bytes) {
 };
 
 poly1305.prototype.finish = function(mac, macpos) {
+  var this$1 = this;
+
   var g = new Uint16Array(10);
   var c, mask, f, i;
 
   if (this.leftover) {
     i = this.leftover;
     this.buffer[i++] = 1;
-    for (; i < 16; i++) this.buffer[i] = 0;
+    for (; i < 16; i++) { this$1.buffer[i] = 0; }
     this.fin = 1;
     this.blocks(this.buffer, 0, 16);
   }
@@ -39291,9 +39447,9 @@ poly1305.prototype.finish = function(mac, macpos) {
   c = this.h[1] >>> 13;
   this.h[1] &= 0x1fff;
   for (i = 2; i < 10; i++) {
-    this.h[i] += c;
-    c = this.h[i] >>> 13;
-    this.h[i] &= 0x1fff;
+    this$1.h[i] += c;
+    c = this$1.h[i] >>> 13;
+    this$1.h[i] &= 0x1fff;
   }
   this.h[0] += (c * 5);
   c = this.h[0] >>> 13;
@@ -39307,16 +39463,16 @@ poly1305.prototype.finish = function(mac, macpos) {
   c = g[0] >>> 13;
   g[0] &= 0x1fff;
   for (i = 1; i < 10; i++) {
-    g[i] = this.h[i] + c;
+    g[i] = this$1.h[i] + c;
     c = g[i] >>> 13;
     g[i] &= 0x1fff;
   }
   g[9] -= (1 << 13);
 
   mask = (c ^ 1) - 1;
-  for (i = 0; i < 10; i++) g[i] &= mask;
+  for (i = 0; i < 10; i++) { g[i] &= mask; }
   mask = ~mask;
-  for (i = 0; i < 10; i++) this.h[i] = (this.h[i] & mask) | g[i];
+  for (i = 0; i < 10; i++) { this$1.h[i] = (this$1.h[i] & mask) | g[i]; }
 
   this.h[0] = ((this.h[0]       ) | (this.h[1] << 13)                    ) & 0xffff;
   this.h[1] = ((this.h[1] >>>  3) | (this.h[2] << 10)                    ) & 0xffff;
@@ -39330,8 +39486,8 @@ poly1305.prototype.finish = function(mac, macpos) {
   f = this.h[0] + this.pad[0];
   this.h[0] = f & 0xffff;
   for (i = 1; i < 8; i++) {
-    f = (((this.h[i] + this.pad[i]) | 0) + (f >>> 16)) | 0;
-    this.h[i] = f & 0xffff;
+    f = (((this$1.h[i] + this$1.pad[i]) | 0) + (f >>> 16)) | 0;
+    this$1.h[i] = f & 0xffff;
   }
 
   mac[macpos+ 0] = (this.h[0] >>> 0) & 0xff;
@@ -39353,19 +39509,21 @@ poly1305.prototype.finish = function(mac, macpos) {
 };
 
 poly1305.prototype.update = function(m, mpos, bytes) {
+  var this$1 = this;
+
   var i, want;
 
   if (this.leftover) {
     want = (16 - this.leftover);
     if (want > bytes)
-      want = bytes;
+      { want = bytes; }
     for (i = 0; i < want; i++)
-      this.buffer[this.leftover + i] = m[mpos+i];
+      { this$1.buffer[this$1.leftover + i] = m[mpos+i]; }
     bytes -= want;
     mpos += want;
     this.leftover += want;
     if (this.leftover < 16)
-      return;
+      { return; }
     this.blocks(this.buffer, 0, 16);
     this.leftover = 0;
   }
@@ -39379,7 +39537,7 @@ poly1305.prototype.update = function(m, mpos, bytes) {
 
   if (bytes) {
     for (i = 0; i < bytes; i++)
-      this.buffer[this.leftover + i] = m[mpos+i];
+      { this$1.buffer[this$1.leftover + i] = m[mpos+i]; }
     this.leftover += bytes;
   }
 };
@@ -39399,27 +39557,27 @@ function crypto_onetimeauth_verify(h, hpos, m, mpos, n, k) {
 
 function crypto_secretbox(c,m,d,n,k) {
   var i;
-  if (d < 32) return -1;
+  if (d < 32) { return -1; }
   crypto_stream_xor(c,0,m,0,d,n,k);
   crypto_onetimeauth(c, 16, c, 32, d - 32, c);
-  for (i = 0; i < 16; i++) c[i] = 0;
+  for (i = 0; i < 16; i++) { c[i] = 0; }
   return 0;
 }
 
 function crypto_secretbox_open(m,c,d,n,k) {
   var i;
   var x = new Uint8Array(32);
-  if (d < 32) return -1;
+  if (d < 32) { return -1; }
   crypto_stream(x,0,32,n,k);
-  if (crypto_onetimeauth_verify(c, 16,c, 32,d - 32,x) !== 0) return -1;
+  if (crypto_onetimeauth_verify(c, 16,c, 32,d - 32,x) !== 0) { return -1; }
   crypto_stream_xor(m,0,c,0,d,n,k);
-  for (i = 0; i < 32; i++) m[i] = 0;
+  for (i = 0; i < 32; i++) { m[i] = 0; }
   return 0;
 }
 
 function set25519(r, a) {
   var i;
-  for (i = 0; i < 16; i++) r[i] = a[i]|0;
+  for (i = 0; i < 16; i++) { r[i] = a[i]|0; }
 }
 
 function car25519(o) {
@@ -39444,7 +39602,7 @@ function sel25519(p, q, b) {
 function pack25519(o, n) {
   var i, j, b;
   var m = gf(), t = gf();
-  for (i = 0; i < 16; i++) t[i] = n[i];
+  for (i = 0; i < 16; i++) { t[i] = n[i]; }
   car25519(t);
   car25519(t);
   car25519(t);
@@ -39480,16 +39638,16 @@ function par25519(a) {
 
 function unpack25519(o, n) {
   var i;
-  for (i = 0; i < 16; i++) o[i] = n[2*i] + (n[2*i+1] << 8);
+  for (i = 0; i < 16; i++) { o[i] = n[2*i] + (n[2*i+1] << 8); }
   o[15] &= 0x7fff;
 }
 
 function A(o, a, b) {
-  for (var i = 0; i < 16; i++) o[i] = a[i] + b[i];
+  for (var i = 0; i < 16; i++) { o[i] = a[i] + b[i]; }
 }
 
 function Z(o, a, b) {
-  for (var i = 0; i < 16; i++) o[i] = a[i] - b[i];
+  for (var i = 0; i < 16; i++) { o[i] = a[i] - b[i]; }
 }
 
 function M(o, a, b) {
@@ -39870,23 +40028,23 @@ function S(o, a) {
 function inv25519(o, i) {
   var c = gf();
   var a;
-  for (a = 0; a < 16; a++) c[a] = i[a];
+  for (a = 0; a < 16; a++) { c[a] = i[a]; }
   for (a = 253; a >= 0; a--) {
     S(c, c);
-    if(a !== 2 && a !== 4) M(c, c, i);
+    if(a !== 2 && a !== 4) { M(c, c, i); }
   }
-  for (a = 0; a < 16; a++) o[a] = c[a];
+  for (a = 0; a < 16; a++) { o[a] = c[a]; }
 }
 
 function pow2523(o, i) {
   var c = gf();
   var a;
-  for (a = 0; a < 16; a++) c[a] = i[a];
+  for (a = 0; a < 16; a++) { c[a] = i[a]; }
   for (a = 250; a >= 0; a--) {
       S(c, c);
-      if(a !== 1) M(c, c, i);
+      if(a !== 1) { M(c, c, i); }
   }
-  for (a = 0; a < 16; a++) o[a] = c[a];
+  for (a = 0; a < 16; a++) { o[a] = c[a]; }
 }
 
 function crypto_scalarmult(q, n, p) {
@@ -39894,7 +40052,7 @@ function crypto_scalarmult(q, n, p) {
   var x = new Float64Array(80), r, i;
   var a = gf(), b = gf(), c = gf(),
       d = gf(), e = gf(), f = gf();
-  for (i = 0; i < 31; i++) z[i] = n[i];
+  for (i = 0; i < 31; i++) { z[i] = n[i]; }
   z[31]=(n[31]&127)|64;
   z[0]&=248;
   unpack25519(x,p);
@@ -40403,7 +40561,7 @@ function crypto_hash(out, m, n) {
   crypto_hashblocks_hl(hh, hl, m, n);
   n %= 128;
 
-  for (i = 0; i < n; i++) x[i] = m[b-n+i];
+  for (i = 0; i < n; i++) { x[i] = m[b-n+i]; }
   x[n] = 128;
 
   n = 256-128*(n<112?1:0);
@@ -40411,7 +40569,7 @@ function crypto_hash(out, m, n) {
   ts64(x, n-8,  (b / 0x20000000) | 0, b << 3);
   crypto_hashblocks_hl(hh, hl, x, n);
 
-  for (i = 0; i < 8; i++) ts64(out, 8*i, hh[i], hl[i]);
+  for (i = 0; i < 8; i++) { ts64(out, 8*i, hh[i], hl[i]); }
 
   return 0;
 }
@@ -40487,7 +40645,7 @@ function crypto_sign_keypair(pk, sk, seeded) {
   var p = [gf(), gf(), gf(), gf()];
   var i;
 
-  if (!seeded) randombytes(sk, 32);
+  if (!seeded) { randombytes(sk, 32); }
   crypto_hash(d, sk, 32);
   d[0] &= 248;
   d[31] &= 127;
@@ -40496,7 +40654,7 @@ function crypto_sign_keypair(pk, sk, seeded) {
   scalarbase(p, d);
   pack(pk, p);
 
-  for (i = 0; i < 32; i++) sk[i+32] = pk[i];
+  for (i = 0; i < 32; i++) { sk[i+32] = pk[i]; }
   return 0;
 }
 
@@ -40520,7 +40678,7 @@ function modL(r, x) {
     carry = x[j] >> 8;
     x[j] &= 255;
   }
-  for (j = 0; j < 32; j++) x[j] -= carry * L[j];
+  for (j = 0; j < 32; j++) { x[j] -= carry * L[j]; }
   for (i = 0; i < 32; i++) {
     x[i+1] += x[i] >> 8;
     r[i] = x[i] & 255;
@@ -40529,8 +40687,8 @@ function modL(r, x) {
 
 function reduce(r) {
   var x = new Float64Array(64), i;
-  for (i = 0; i < 64; i++) x[i] = r[i];
-  for (i = 0; i < 64; i++) r[i] = 0;
+  for (i = 0; i < 64; i++) { x[i] = r[i]; }
+  for (i = 0; i < 64; i++) { r[i] = 0; }
   modL(r, x);
 }
 
@@ -40546,20 +40704,20 @@ function crypto_sign(sm, m, n, sk) {
   d[31] |= 64;
 
   var smlen = n + 64;
-  for (i = 0; i < n; i++) sm[64 + i] = m[i];
-  for (i = 0; i < 32; i++) sm[32 + i] = d[32 + i];
+  for (i = 0; i < n; i++) { sm[64 + i] = m[i]; }
+  for (i = 0; i < 32; i++) { sm[32 + i] = d[32 + i]; }
 
   crypto_hash(r, sm.subarray(32), n+32);
   reduce(r);
   scalarbase(p, r);
   pack(sm, p);
 
-  for (i = 32; i < 64; i++) sm[i] = sk[i];
+  for (i = 32; i < 64; i++) { sm[i] = sk[i]; }
   crypto_hash(h, sm, n + 64);
   reduce(h);
 
-  for (i = 0; i < 64; i++) x[i] = 0;
-  for (i = 0; i < 32; i++) x[i] = r[i];
+  for (i = 0; i < 64; i++) { x[i] = 0; }
+  for (i = 0; i < 32; i++) { x[i] = r[i]; }
   for (i = 0; i < 32; i++) {
     for (j = 0; j < 32; j++) {
       x[i+j] += h[i] * d[j];
@@ -40596,13 +40754,13 @@ function unpackneg(r, p) {
 
   S(chk, r[0]);
   M(chk, chk, den);
-  if (neq25519(chk, num)) M(r[0], r[0], I);
+  if (neq25519(chk, num)) { M(r[0], r[0], I); }
 
   S(chk, r[0]);
   M(chk, chk, den);
-  if (neq25519(chk, num)) return -1;
+  if (neq25519(chk, num)) { return -1; }
 
-  if (par25519(r[0]) === (p[31]>>7)) Z(r[0], gf0, r[0]);
+  if (par25519(r[0]) === (p[31]>>7)) { Z(r[0], gf0, r[0]); }
 
   M(r[3], r[0], r[1]);
   return 0;
@@ -40615,12 +40773,12 @@ function crypto_sign_open(m, sm, n, pk) {
       q = [gf(), gf(), gf(), gf()];
 
   mlen = -1;
-  if (n < 64) return -1;
+  if (n < 64) { return -1; }
 
-  if (unpackneg(q, pk)) return -1;
+  if (unpackneg(q, pk)) { return -1; }
 
-  for (i = 0; i < n; i++) m[i] = sm[i];
-  for (i = 0; i < 32; i++) m[i+32] = pk[i];
+  for (i = 0; i < n; i++) { m[i] = sm[i]; }
+  for (i = 0; i < 32; i++) { m[i+32] = pk[i]; }
   crypto_hash(h, m, n);
   reduce(h);
   scalarmult(p, q, h);
@@ -40631,11 +40789,11 @@ function crypto_sign_open(m, sm, n, pk) {
 
   n -= 64;
   if (crypto_verify_32(sm, 0, t, 0)) {
-    for (i = 0; i < n; i++) m[i] = 0;
+    for (i = 0; i < n; i++) { m[i] = 0; }
     return -1;
   }
 
-  for (i = 0; i < n; i++) m[i] = sm[i + 64];
+  for (i = 0; i < n; i++) { m[i] = sm[i + 64]; }
   mlen = n;
   return mlen;
 }
@@ -40704,25 +40862,27 @@ nacl.lowlevel = {
 /* High-level API */
 
 function checkLengths(k, n) {
-  if (k.length !== crypto_secretbox_KEYBYTES) throw new Error('bad key size');
-  if (n.length !== crypto_secretbox_NONCEBYTES) throw new Error('bad nonce size');
+  if (k.length !== crypto_secretbox_KEYBYTES) { throw new Error('bad key size'); }
+  if (n.length !== crypto_secretbox_NONCEBYTES) { throw new Error('bad nonce size'); }
 }
 
 function checkBoxLengths(pk, sk) {
-  if (pk.length !== crypto_box_PUBLICKEYBYTES) throw new Error('bad public key size');
-  if (sk.length !== crypto_box_SECRETKEYBYTES) throw new Error('bad secret key size');
+  if (pk.length !== crypto_box_PUBLICKEYBYTES) { throw new Error('bad public key size'); }
+  if (sk.length !== crypto_box_SECRETKEYBYTES) { throw new Error('bad secret key size'); }
 }
 
 function checkArrayTypes() {
+  var arguments$1 = arguments;
+
   var t, i;
   for (i = 0; i < arguments.length; i++) {
-     if ((t = Object.prototype.toString.call(arguments[i])) !== '[object Uint8Array]')
-       throw new TypeError('unexpected type ' + t + ', use Uint8Array');
+     if ((t = Object.prototype.toString.call(arguments$1[i])) !== '[object Uint8Array]')
+       { throw new TypeError('unexpected type ' + t + ', use Uint8Array'); }
   }
 }
 
 function cleanup(arr) {
-  for (var i = 0; i < arr.length; i++) arr[i] = 0;
+  for (var i = 0; i < arr.length; i++) { arr[i] = 0; }
 }
 
 // TODO: Completely remove this in v0.15.
@@ -40744,7 +40904,7 @@ nacl.secretbox = function(msg, nonce, key) {
   checkLengths(key, nonce);
   var m = new Uint8Array(crypto_secretbox_ZEROBYTES + msg.length);
   var c = new Uint8Array(m.length);
-  for (var i = 0; i < msg.length; i++) m[i+crypto_secretbox_ZEROBYTES] = msg[i];
+  for (var i = 0; i < msg.length; i++) { m[i+crypto_secretbox_ZEROBYTES] = msg[i]; }
   crypto_secretbox(c, m, m.length, nonce, key);
   return c.subarray(crypto_secretbox_BOXZEROBYTES);
 };
@@ -40754,9 +40914,9 @@ nacl.secretbox.open = function(box, nonce, key) {
   checkLengths(key, nonce);
   var c = new Uint8Array(crypto_secretbox_BOXZEROBYTES + box.length);
   var m = new Uint8Array(c.length);
-  for (var i = 0; i < box.length; i++) c[i+crypto_secretbox_BOXZEROBYTES] = box[i];
-  if (c.length < 32) return false;
-  if (crypto_secretbox_open(m, c, c.length, nonce, key) !== 0) return false;
+  for (var i = 0; i < box.length; i++) { c[i+crypto_secretbox_BOXZEROBYTES] = box[i]; }
+  if (c.length < 32) { return false; }
+  if (crypto_secretbox_open(m, c, c.length, nonce, key) !== 0) { return false; }
   return m.subarray(crypto_secretbox_ZEROBYTES);
 };
 
@@ -40766,8 +40926,8 @@ nacl.secretbox.overheadLength = crypto_secretbox_BOXZEROBYTES;
 
 nacl.scalarMult = function(n, p) {
   checkArrayTypes(n, p);
-  if (n.length !== crypto_scalarmult_SCALARBYTES) throw new Error('bad n size');
-  if (p.length !== crypto_scalarmult_BYTES) throw new Error('bad p size');
+  if (n.length !== crypto_scalarmult_SCALARBYTES) { throw new Error('bad n size'); }
+  if (p.length !== crypto_scalarmult_BYTES) { throw new Error('bad p size'); }
   var q = new Uint8Array(crypto_scalarmult_BYTES);
   crypto_scalarmult(q, n, p);
   return q;
@@ -40775,7 +40935,7 @@ nacl.scalarMult = function(n, p) {
 
 nacl.scalarMult.base = function(n) {
   checkArrayTypes(n);
-  if (n.length !== crypto_scalarmult_SCALARBYTES) throw new Error('bad n size');
+  if (n.length !== crypto_scalarmult_SCALARBYTES) { throw new Error('bad n size'); }
   var q = new Uint8Array(crypto_scalarmult_BYTES);
   crypto_scalarmult_base(q, n);
   return q;
@@ -40816,7 +40976,7 @@ nacl.box.keyPair = function() {
 nacl.box.keyPair.fromSecretKey = function(secretKey) {
   checkArrayTypes(secretKey);
   if (secretKey.length !== crypto_box_SECRETKEYBYTES)
-    throw new Error('bad secret key size');
+    { throw new Error('bad secret key size'); }
   var pk = new Uint8Array(crypto_box_PUBLICKEYBYTES);
   crypto_scalarmult_base(pk, secretKey);
   return {publicKey: pk, secretKey: new Uint8Array(secretKey)};
@@ -40831,7 +40991,7 @@ nacl.box.overheadLength = nacl.secretbox.overheadLength;
 nacl.sign = function(msg, secretKey) {
   checkArrayTypes(msg, secretKey);
   if (secretKey.length !== crypto_sign_SECRETKEYBYTES)
-    throw new Error('bad secret key size');
+    { throw new Error('bad secret key size'); }
   var signedMsg = new Uint8Array(crypto_sign_BYTES+msg.length);
   crypto_sign(signedMsg, msg, msg.length, secretKey);
   return signedMsg;
@@ -40839,36 +40999,36 @@ nacl.sign = function(msg, secretKey) {
 
 nacl.sign.open = function(signedMsg, publicKey) {
   if (arguments.length !== 2)
-    throw new Error('nacl.sign.open accepts 2 arguments; did you mean to use nacl.sign.detached.verify?');
+    { throw new Error('nacl.sign.open accepts 2 arguments; did you mean to use nacl.sign.detached.verify?'); }
   checkArrayTypes(signedMsg, publicKey);
   if (publicKey.length !== crypto_sign_PUBLICKEYBYTES)
-    throw new Error('bad public key size');
+    { throw new Error('bad public key size'); }
   var tmp = new Uint8Array(signedMsg.length);
   var mlen = crypto_sign_open(tmp, signedMsg, signedMsg.length, publicKey);
-  if (mlen < 0) return null;
+  if (mlen < 0) { return null; }
   var m = new Uint8Array(mlen);
-  for (var i = 0; i < m.length; i++) m[i] = tmp[i];
+  for (var i = 0; i < m.length; i++) { m[i] = tmp[i]; }
   return m;
 };
 
 nacl.sign.detached = function(msg, secretKey) {
   var signedMsg = nacl.sign(msg, secretKey);
   var sig = new Uint8Array(crypto_sign_BYTES);
-  for (var i = 0; i < sig.length; i++) sig[i] = signedMsg[i];
+  for (var i = 0; i < sig.length; i++) { sig[i] = signedMsg[i]; }
   return sig;
 };
 
 nacl.sign.detached.verify = function(msg, sig, publicKey) {
   checkArrayTypes(msg, sig, publicKey);
   if (sig.length !== crypto_sign_BYTES)
-    throw new Error('bad signature size');
+    { throw new Error('bad signature size'); }
   if (publicKey.length !== crypto_sign_PUBLICKEYBYTES)
-    throw new Error('bad public key size');
+    { throw new Error('bad public key size'); }
   var sm = new Uint8Array(crypto_sign_BYTES + msg.length);
   var m = new Uint8Array(crypto_sign_BYTES + msg.length);
   var i;
-  for (i = 0; i < crypto_sign_BYTES; i++) sm[i] = sig[i];
-  for (i = 0; i < msg.length; i++) sm[i+crypto_sign_BYTES] = msg[i];
+  for (i = 0; i < crypto_sign_BYTES; i++) { sm[i] = sig[i]; }
+  for (i = 0; i < msg.length; i++) { sm[i+crypto_sign_BYTES] = msg[i]; }
   return (crypto_sign_open(m, sm, sm.length, publicKey) >= 0);
 };
 
@@ -40882,19 +41042,19 @@ nacl.sign.keyPair = function() {
 nacl.sign.keyPair.fromSecretKey = function(secretKey) {
   checkArrayTypes(secretKey);
   if (secretKey.length !== crypto_sign_SECRETKEYBYTES)
-    throw new Error('bad secret key size');
+    { throw new Error('bad secret key size'); }
   var pk = new Uint8Array(crypto_sign_PUBLICKEYBYTES);
-  for (var i = 0; i < pk.length; i++) pk[i] = secretKey[32+i];
+  for (var i = 0; i < pk.length; i++) { pk[i] = secretKey[32+i]; }
   return {publicKey: pk, secretKey: new Uint8Array(secretKey)};
 };
 
 nacl.sign.keyPair.fromSeed = function(seed) {
   checkArrayTypes(seed);
   if (seed.length !== crypto_sign_SEEDBYTES)
-    throw new Error('bad seed size');
+    { throw new Error('bad seed size'); }
   var pk = new Uint8Array(crypto_sign_PUBLICKEYBYTES);
   var sk = new Uint8Array(crypto_sign_SECRETKEYBYTES);
-  for (var i = 0; i < 32; i++) sk[i] = seed[i];
+  for (var i = 0; i < 32; i++) { sk[i] = seed[i]; }
   crypto_sign_keypair(pk, sk, true);
   return {publicKey: pk, secretKey: sk};
 };
@@ -40916,8 +41076,8 @@ nacl.hash.hashLength = crypto_hash_BYTES;
 nacl.verify = function(x, y) {
   checkArrayTypes(x, y);
   // Zero length arguments are considered not equal.
-  if (x.length === 0 || y.length === 0) return false;
-  if (x.length !== y.length) return false;
+  if (x.length === 0 || y.length === 0) { return false; }
+  if (x.length !== y.length) { return false; }
   return (vn(x, 0, y, 0, x.length) === 0) ? true : false;
 };
 
@@ -40937,7 +41097,7 @@ nacl.setPRNG = function(fn) {
       for (i = 0; i < n; i += QUOTA) {
         crypto.getRandomValues(v.subarray(i, i + Math.min(n - i, QUOTA)));
       }
-      for (i = 0; i < n; i++) x[i] = v[i];
+      for (i = 0; i < n; i++) { x[i] = v[i]; }
       cleanup(v);
     });
   } else if (typeof commonjsRequire !== 'undefined') {
@@ -40946,7 +41106,7 @@ nacl.setPRNG = function(fn) {
     if (crypto && crypto.randomBytes) {
       nacl.setPRNG(function(x, n) {
         var i, v = crypto.randomBytes(n);
-        for (i = 0; i < n; i++) x[i] = v[i];
+        for (i = 0; i < n; i++) { x[i] = v[i]; }
         cleanup(v);
       });
     }
@@ -40996,15 +41156,15 @@ function DiffieHellman$1(key$$1) {
 		this._p = key$$1.part.p;
 		this._g = key$$1.part.g;
 		if (this._isPriv)
-			this._dh.setPrivateKey(key$$1.part.x.data);
+			{ this._dh.setPrivateKey(key$$1.part.x.data); }
 		this._dh.setPublicKey(key$$1.part.y.data);
 
 	} else if (key$$1.type === 'ecdsa') {
 		if (!CRYPTO_HAVE_ECDH) {
 			if (ec === undefined)
-				ec = ec$1;
+				{ ec = ec$1; }
 			if (jsbn === undefined)
-				jsbn = jsbn$1.BigInteger;
+				{ jsbn = jsbn$1.BigInteger; }
 
 			this._ecParams = new X9ECParameters(this._curve);
 
@@ -41028,12 +41188,12 @@ function DiffieHellman$1(key$$1) {
 			return;
 		}
 		if (this._isPriv)
-			this._dh.setPrivateKey(key$$1.part.d.data);
+			{ this._dh.setPrivateKey(key$$1.part.d.data); }
 		this._dh.setPublicKey(key$$1.part.Q.data);
 
 	} else if (key$$1.type === 'curve25519') {
 		if (nacl$1 === undefined)
-			nacl$1 = naclFast;
+			{ nacl$1 = naclFast; }
 
 		if (this._isPriv) {
 			this._priv = key$$1.part.r.data;
@@ -41046,22 +41206,22 @@ function DiffieHellman$1(key$$1) {
 
 DiffieHellman$1.prototype.getPublicKey = function () {
 	if (this._isPriv)
-		return (this._key.toPublic());
+		{ return (this._key.toPublic()); }
 	return (this._key);
 };
 
 DiffieHellman$1.prototype.getPrivateKey = function () {
 	if (this._isPriv)
-		return (this._key);
+		{ return (this._key); }
 	else
-		return (undefined);
+		{ return (undefined); }
 };
 DiffieHellman$1.prototype.getKey = DiffieHellman$1.prototype.getPrivateKey;
 
 DiffieHellman$1.prototype._keyCheck = function (pk, isPub) {
 	assert_1.object(pk, 'key');
 	if (!isPub)
-		utils$4.assertCompatible(pk, privateKey, [1, 3], 'key');
+		{ utils$4.assertCompatible(pk, privateKey, [1, 3], 'key'); }
 	utils$4.assertCompatible(pk, key, [1, 4], 'key');
 
 	if (pk.type !== this._algo) {
@@ -41102,7 +41262,7 @@ DiffieHellman$1.prototype.setKey = function (pk) {
 	} else if (pk.type === 'curve25519') {
 		this._priv = pk.part.r.data;
 		if (this._priv[0] === 0x00)
-			this._priv = this._priv.slice(1);
+			{ this._priv = this._priv.slice(1); }
 		this._priv = this._priv.slice(0, 32);
 	}
 	this._key = pk;
@@ -41113,8 +41273,8 @@ DiffieHellman$1.prototype.setPrivateKey = DiffieHellman$1.prototype.setKey;
 DiffieHellman$1.prototype.computeSecret = function (otherpk) {
 	this._keyCheck(otherpk, true);
 	if (!this._isPriv)
-		throw (new Error('DH exchange has not been initialized with ' +
-		    'a private key yet'));
+		{ throw (new Error('DH exchange has not been initialized with ' +
+		    'a private key yet')); }
 
 	var pub;
 	if (this._algo === 'dsa') {
@@ -41134,7 +41294,7 @@ DiffieHellman$1.prototype.computeSecret = function (otherpk) {
 	} else if (this._algo === 'curve25519') {
 		pub = otherpk.part.R.data;
 		while (pub[0] === 0x00 && pub.length > 32)
-			pub = pub.slice(1);
+			{ pub = pub.slice(1); }
 		assert_1.strictEqual(pub.length, 32);
 		assert_1.strictEqual(this._priv.length, 64);
 
@@ -41259,7 +41419,7 @@ X9ECParameters.prototype.getH = function () { return (this.h); };
 function ECPublic(params, buffer) {
 	this._params = params;
 	if (buffer[0] === 0x00)
-		buffer = buffer.slice(1);
+		{ buffer = buffer.slice(1); }
 	this._pub = params.getCurve().decodePointHex(buffer.toString('hex'));
 }
 
@@ -41275,7 +41435,7 @@ ECPrivate.prototype.deriveSharedSecret = function (pubKey) {
 
 function generateED25519$1() {
 	if (nacl$1 === undefined)
-		nacl$1 = naclFast;
+		{ nacl$1 = naclFast; }
 
 	var pair = nacl$1.sign.keyPair();
 	var priv = new Buffer(pair.secretKey);
@@ -41329,9 +41489,9 @@ function generateECDSA$1(curve) {
 
 	} else {
 		if (ec === undefined)
-			ec = ec$1;
+			{ ec = ec$1; }
 		if (jsbn === undefined)
-			jsbn = jsbn$1.BigInteger;
+			{ jsbn = jsbn$1.BigInteger; }
 
 		var ecParams = new X9ECParameters(curve);
 
@@ -41380,11 +41540,11 @@ var nacl$2;
 
 function Verifier(key, hashAlgo) {
 	if (nacl$2 === undefined)
-		nacl$2 = naclFast;
+		{ nacl$2 = naclFast; }
 
 	if (hashAlgo.toLowerCase() !== 'sha512')
-		throw (new Error('ED25519 only supports the use of ' +
-		    'SHA-512 hashes'));
+		{ throw (new Error('ED25519 only supports the use of ' +
+		    'SHA-512 hashes')); }
 
 	this.key = key;
 	this.chunks = [];
@@ -41400,7 +41560,7 @@ Verifier.prototype._write = function (chunk, enc, cb) {
 
 Verifier.prototype.update = function (chunk) {
 	if (typeof (chunk) === 'string')
-		chunk = new Buffer(chunk, 'binary');
+		{ chunk = new Buffer(chunk, 'binary'); }
 	this.chunks.push(chunk);
 };
 
@@ -41408,7 +41568,7 @@ Verifier.prototype.verify = function (signature$$1, fmt) {
 	var sig;
 	if (signature.isSignature(signature$$1, [2, 0])) {
 		if (signature$$1.type !== 'ed25519')
-			return (false);
+			{ return (false); }
 		sig = signature$$1.toBuffer('raw');
 
 	} else if (typeof (signature$$1) === 'string') {
@@ -41428,11 +41588,11 @@ Verifier.prototype.verify = function (signature$$1, fmt) {
 
 function Signer(key, hashAlgo) {
 	if (nacl$2 === undefined)
-		nacl$2 = naclFast;
+		{ nacl$2 = naclFast; }
 
 	if (hashAlgo.toLowerCase() !== 'sha512')
-		throw (new Error('ED25519 only supports the use of ' +
-		    'SHA-512 hashes'));
+		{ throw (new Error('ED25519 only supports the use of ' +
+		    'SHA-512 hashes')); }
 
 	this.key = key;
 	this.chunks = [];
@@ -41448,7 +41608,7 @@ Signer.prototype._write = function (chunk, enc, cb) {
 
 Signer.prototype.update = function (chunk) {
 	if (typeof (chunk) === 'string')
-		chunk = new Buffer(chunk, 'binary');
+		{ chunk = new Buffer(chunk, 'binary'); }
 	this.chunks.push(chunk);
 };
 
@@ -41531,7 +41691,7 @@ var newInvalidAsn1Error = errors$8.newInvalidAsn1Error;
 
 function Reader(data) {
   if (!data || !Buffer.isBuffer(data))
-    throw new TypeError('data must be a node Buffer');
+    { throw new TypeError('data must be a node Buffer'); }
 
   this._buf = data;
   this._size = data.length;
@@ -41569,12 +41729,12 @@ Object.defineProperty(Reader.prototype, 'buffer', {
  */
 Reader.prototype.readByte = function(peek) {
   if (this._size - this._offset < 1)
-    return null;
+    { return null; }
 
   var b = this._buf[this._offset] & 0xff;
 
   if (!peek)
-    this._offset += 1;
+    { this._offset += 1; }
 
   return b;
 };
@@ -41597,31 +41757,33 @@ Reader.prototype.peek = function() {
  * @throws {InvalidAsn1Error} on bad ASN.1
  */
 Reader.prototype.readLength = function(offset) {
+  var this$1 = this;
+
   if (offset === undefined)
-    offset = this._offset;
+    { offset = this._offset; }
 
   if (offset >= this._size)
-    return null;
+    { return null; }
 
   var lenB = this._buf[offset++] & 0xff;
   if (lenB === null)
-    return null;
+    { return null; }
 
   if ((lenB & 0x80) == 0x80) {
     lenB &= 0x7f;
 
     if (lenB == 0)
-      throw newInvalidAsn1Error('Indefinite length not supported');
+      { throw newInvalidAsn1Error('Indefinite length not supported'); }
 
     if (lenB > 4)
-      throw newInvalidAsn1Error('encoding too long');
+      { throw newInvalidAsn1Error('encoding too long'); }
 
     if (this._size - offset < lenB)
-      return null;
+      { return null; }
 
     this._len = 0;
     for (var i = 0; i < lenB; i++)
-      this._len = (this._len << 8) + (this._buf[offset++] & 0xff);
+      { this$1._len = (this$1._len << 8) + (this$1._buf[offset++] & 0xff); }
 
   } else {
     // Wasn't a variable length
@@ -41642,14 +41804,14 @@ Reader.prototype.readLength = function(offset) {
 Reader.prototype.readSequence = function(tag) {
   var seq = this.peek();
   if (seq === null)
-    return null;
+    { return null; }
   if (tag !== undefined && tag !== seq)
-    throw newInvalidAsn1Error('Expected 0x' + tag.toString(16) +
-                              ': got 0x' + seq.toString(16));
+    { throw newInvalidAsn1Error('Expected 0x' + tag.toString(16) +
+                              ': got 0x' + seq.toString(16)); }
 
   var o = this.readLength(this._offset + 1); // stored in `length`
   if (o === null)
-    return null;
+    { return null; }
 
   this._offset = o;
   return seq;
@@ -41673,28 +41835,28 @@ Reader.prototype.readEnumeration = function() {
 
 Reader.prototype.readString = function(tag, retbuf) {
   if (!tag)
-    tag = types$1.OctetString;
+    { tag = types$1.OctetString; }
 
   var b = this.peek();
   if (b === null)
-    return null;
+    { return null; }
 
   if (b !== tag)
-    throw newInvalidAsn1Error('Expected 0x' + tag.toString(16) +
-                              ': got 0x' + b.toString(16));
+    { throw newInvalidAsn1Error('Expected 0x' + tag.toString(16) +
+                              ': got 0x' + b.toString(16)); }
 
   var o = this.readLength(this._offset + 1); // stored in `length`
 
   if (o === null)
-    return null;
+    { return null; }
 
   if (this.length > this._size - o)
-    return null;
+    { return null; }
 
   this._offset = o;
 
   if (this.length === 0)
-    return retbuf ? new Buffer(0) : '';
+    { return retbuf ? new Buffer(0) : ''; }
 
   var str = this._buf.slice(this._offset, this._offset + this.length);
   this._offset += this.length;
@@ -41704,11 +41866,11 @@ Reader.prototype.readString = function(tag, retbuf) {
 
 Reader.prototype.readOID = function(tag) {
   if (!tag)
-    tag = types$1.OID;
+    { tag = types$1.OID; }
 
   var b = this.readString(tag, true);
   if (b === null)
-    return null;
+    { return null; }
 
   var values = [];
   var value = 0;
@@ -41733,26 +41895,28 @@ Reader.prototype.readOID = function(tag) {
 
 
 Reader.prototype._readTag = function(tag) {
+  var this$1 = this;
+
   assert$5.ok(tag !== undefined);
 
   var b = this.peek();
 
   if (b === null)
-    return null;
+    { return null; }
 
   if (b !== tag)
-    throw newInvalidAsn1Error('Expected 0x' + tag.toString(16) +
-                              ': got 0x' + b.toString(16));
+    { throw newInvalidAsn1Error('Expected 0x' + tag.toString(16) +
+                              ': got 0x' + b.toString(16)); }
 
   var o = this.readLength(this._offset + 1); // stored in `length`
   if (o === null)
-    return null;
+    { return null; }
 
   if (this.length > 4)
-    throw newInvalidAsn1Error('Integer too long: ' + this.length);
+    { throw newInvalidAsn1Error('Integer too long: ' + this.length); }
 
   if (this.length > this._size - o)
-    return null;
+    { return null; }
   this._offset = o;
 
   var fb = this._buf[this._offset];
@@ -41760,11 +41924,11 @@ Reader.prototype._readTag = function(tag) {
 
   for (var i = 0; i < this.length; i++) {
     value <<= 8;
-    value |= (this._buf[this._offset++] & 0xff);
+    value |= (this$1._buf[this$1._offset++] & 0xff);
   }
 
   if ((fb & 0x80) == 0x80 && i !== 4)
-    value -= (1 << (i * 8));
+    { value -= (1 << (i * 8)); }
 
   return value >> 0;
 };
@@ -41792,7 +41956,7 @@ function merge(from, to) {
   var keys = Object.getOwnPropertyNames(from);
   keys.forEach(function(key) {
     if (to[key])
-      return;
+      { return; }
 
     var value = Object.getOwnPropertyDescriptor(from, key);
     Object.defineProperty(to, key, value);
@@ -41821,7 +41985,7 @@ function Writer(options) {
 Object.defineProperty(Writer.prototype, 'buffer', {
   get: function () {
     if (this._seq.length)
-      throw new InvalidAsn1Error(this._seq.length + ' unended sequence(s)');
+      { throw new InvalidAsn1Error(this._seq.length + ' unended sequence(s)'); }
 
     return (this._buf.slice(0, this._offset));
   }
@@ -41829,7 +41993,7 @@ Object.defineProperty(Writer.prototype, 'buffer', {
 
 Writer.prototype.writeByte = function(b) {
   if (typeof(b) !== 'number')
-    throw new TypeError('argument must be a Number');
+    { throw new TypeError('argument must be a Number'); }
 
   this._ensure(1);
   this._buf[this._offset++] = b;
@@ -41837,10 +42001,12 @@ Writer.prototype.writeByte = function(b) {
 
 
 Writer.prototype.writeInt = function(i, tag) {
+  var this$1 = this;
+
   if (typeof(i) !== 'number')
-    throw new TypeError('argument must be a Number');
+    { throw new TypeError('argument must be a Number'); }
   if (typeof(tag) !== 'number')
-    tag = types$1.Integer;
+    { tag = types$1.Integer; }
 
   var sz = 4;
 
@@ -41851,14 +42017,14 @@ Writer.prototype.writeInt = function(i, tag) {
   }
 
   if (sz > 4)
-    throw new InvalidAsn1Error('BER ints cannot be > 0xffffffff');
+    { throw new InvalidAsn1Error('BER ints cannot be > 0xffffffff'); }
 
   this._ensure(2 + sz);
   this._buf[this._offset++] = tag;
   this._buf[this._offset++] = sz;
 
   while (sz-- > 0) {
-    this._buf[this._offset++] = ((i & 0xff000000) >>> 24);
+    this$1._buf[this$1._offset++] = ((i & 0xff000000) >>> 24);
     i <<= 8;
   }
 
@@ -41873,9 +42039,9 @@ Writer.prototype.writeNull = function() {
 
 Writer.prototype.writeEnumeration = function(i, tag) {
   if (typeof(i) !== 'number')
-    throw new TypeError('argument must be a Number');
+    { throw new TypeError('argument must be a Number'); }
   if (typeof(tag) !== 'number')
-    tag = types$1.Enumeration;
+    { tag = types$1.Enumeration; }
 
   return this.writeInt(i, tag);
 };
@@ -41883,9 +42049,9 @@ Writer.prototype.writeEnumeration = function(i, tag) {
 
 Writer.prototype.writeBoolean = function(b, tag) {
   if (typeof(b) !== 'boolean')
-    throw new TypeError('argument must be a Boolean');
+    { throw new TypeError('argument must be a Boolean'); }
   if (typeof(tag) !== 'number')
-    tag = types$1.Boolean;
+    { tag = types$1.Boolean; }
 
   this._ensure(3);
   this._buf[this._offset++] = tag;
@@ -41896,9 +42062,9 @@ Writer.prototype.writeBoolean = function(b, tag) {
 
 Writer.prototype.writeString = function(s, tag) {
   if (typeof(s) !== 'string')
-    throw new TypeError('argument must be a string (was: ' + typeof(s) + ')');
+    { throw new TypeError('argument must be a string (was: ' + typeof(s) + ')'); }
   if (typeof(tag) !== 'number')
-    tag = types$1.OctetString;
+    { tag = types$1.OctetString; }
 
   var len = Buffer.byteLength(s);
   this.writeByte(tag);
@@ -41913,9 +42079,9 @@ Writer.prototype.writeString = function(s, tag) {
 
 Writer.prototype.writeBuffer = function(buf, tag) {
   if (typeof(tag) !== 'number')
-    throw new TypeError('tag must be a number');
+    { throw new TypeError('tag must be a number'); }
   if (!Buffer.isBuffer(buf))
-    throw new TypeError('argument must be a buffer');
+    { throw new TypeError('argument must be a buffer'); }
 
   this.writeByte(tag);
   this.writeLength(buf.length);
@@ -41927,7 +42093,7 @@ Writer.prototype.writeBuffer = function(buf, tag) {
 
 Writer.prototype.writeStringArray = function(strings) {
   if ((!strings instanceof Array))
-    throw new TypeError('argument must be an Array[String]');
+    { throw new TypeError('argument must be an Array[String]'); }
 
   var self = this;
   strings.forEach(function(s) {
@@ -41938,12 +42104,12 @@ Writer.prototype.writeStringArray = function(strings) {
 // This is really to solve DER cases, but whatever for now
 Writer.prototype.writeOID = function(s, tag) {
   if (typeof(s) !== 'string')
-    throw new TypeError('argument must be a string');
+    { throw new TypeError('argument must be a string'); }
   if (typeof(tag) !== 'number')
-    tag = types$1.OID;
+    { tag = types$1.OID; }
 
   if (!/^([0-9]+\.){3,}[0-9]+$/.test(s))
-    throw new Error('argument is not a valid OID string');
+    { throw new Error('argument is not a valid OID string'); }
 
   function encodeOctet(bytes, octet) {
     if (octet < 128) {
@@ -41988,7 +42154,7 @@ Writer.prototype.writeOID = function(s, tag) {
 
 Writer.prototype.writeLength = function(len) {
   if (typeof(len) !== 'number')
-    throw new TypeError('argument must be a Number');
+    { throw new TypeError('argument must be a Number'); }
 
   this._ensure(4);
 
@@ -42013,7 +42179,7 @@ Writer.prototype.writeLength = function(len) {
 
 Writer.prototype.startSequence = function(tag) {
   if (typeof(tag) !== 'number')
-    tag = types$1.Sequence | types$1.Constructor;
+    { tag = types$1.Sequence | types$1.Constructor; }
 
   this.writeByte(tag);
   this._seq.push(this._offset);
@@ -42065,7 +42231,7 @@ Writer.prototype._ensure = function(len) {
   if (this._size - this._offset < len) {
     var sz = this._size * this._options.growthFactor;
     if (sz - this._offset < len)
-      sz += len;
+      { sz += len; }
 
     var buf = new Buffer(sz);
 
@@ -42103,11 +42269,11 @@ module.exports = {
 
 for (var t in types$1) {
   if (types$1.hasOwnProperty(t))
-    module.exports[t] = types$1[t];
+    { module.exports[t] = types$1[t]; }
 }
 for (var e in errors$8) {
   if (errors$8.hasOwnProperty(e))
-    module.exports[e] = errors$8[e];
+    { module.exports[e] = errors$8[e]; }
 }
 });
 
@@ -42186,19 +42352,19 @@ function readPkcs8(alg, type, der) {
 	case '1.2.840.113549.1.1.1':
 		der._offset = next;
 		if (type === 'public')
-			return (readPkcs8RSAPublic(der));
+			{ return (readPkcs8RSAPublic(der)); }
 		else
-			return (readPkcs8RSAPrivate(der));
+			{ return (readPkcs8RSAPrivate(der)); }
 	case '1.2.840.10040.4.1':
 		if (type === 'public')
-			return (readPkcs8DSAPublic(der));
+			{ return (readPkcs8DSAPublic(der)); }
 		else
-			return (readPkcs8DSAPrivate(der));
+			{ return (readPkcs8DSAPrivate(der)); }
 	case '1.2.840.10045.2.1':
 		if (type === 'public')
-			return (readPkcs8ECDSAPublic(der));
+			{ return (readPkcs8ECDSAPublic(der)); }
 		else
-			return (readPkcs8ECDSAPrivate(der));
+			{ return (readPkcs8ECDSAPrivate(der)); }
 	default:
 		throw (new Error('Unknown key type OID ' + oid));
 	}
@@ -42361,7 +42527,7 @@ function readECDSACurve$1(der) {
 		curve.b = utils$4.mpNormalize(
 		    der.readString(lib$18.Ber.OctetString, true));
 		if (der.peek() === lib$18.Ber.BitString)
-			curve.s = der.readString(lib$18.Ber.BitString, true);
+			{ curve.s = der.readString(lib$18.Ber.BitString, true); }
 
 		// Combined Gx and Gy
 		curve.G = der.readString(lib$18.Ber.OctetString, true);
@@ -42384,7 +42550,7 @@ function readECDSACurve$1(der) {
 			for (var i = 0; i < ks.length; ++i) {
 				var k = ks[i];
 				if (cd[k] === undefined)
-					continue;
+					{ continue; }
 				if (typeof (cd[k]) === 'object' &&
 				    cd[k].equals !== undefined) {
 					if (!cd[k].equals(curve[k])) {
@@ -42473,23 +42639,23 @@ function writePkcs8(der, key$$2) {
 	case 'rsa':
 		der.writeOID('1.2.840.113549.1.1.1');
 		if (privateKey.isPrivateKey(key$$2))
-			writePkcs8RSAPrivate(key$$2, der);
+			{ writePkcs8RSAPrivate(key$$2, der); }
 		else
-			writePkcs8RSAPublic(key$$2, der);
+			{ writePkcs8RSAPublic(key$$2, der); }
 		break;
 	case 'dsa':
 		der.writeOID('1.2.840.10040.4.1');
 		if (privateKey.isPrivateKey(key$$2))
-			writePkcs8DSAPrivate(key$$2, der);
+			{ writePkcs8DSAPrivate(key$$2, der); }
 		else
-			writePkcs8DSAPublic(key$$2, der);
+			{ writePkcs8DSAPublic(key$$2, der); }
 		break;
 	case 'ecdsa':
 		der.writeOID('1.2.840.10045.2.1');
 		if (privateKey.isPrivateKey(key$$2))
-			writePkcs8ECDSAPrivate(key$$2, der);
+			{ writePkcs8ECDSAPrivate(key$$2, der); }
 		else
-			writePkcs8ECDSAPublic(key$$2, der);
+			{ writePkcs8ECDSAPublic(key$$2, der); }
 		break;
 	default:
 		throw (new Error('Unsupported key type: ' + key$$2.type));
@@ -42515,7 +42681,7 @@ function writePkcs8RSAPrivate(key$$2, der) {
 	der.writeBuffer(key$$2.part.p.data, lib$18.Ber.Integer);
 	der.writeBuffer(key$$2.part.q.data, lib$18.Ber.Integer);
 	if (!key$$2.part.dmodp || !key$$2.part.dmodq)
-		utils$4.addRSAMissing(key$$2);
+		{ utils$4.addRSAMissing(key$$2); }
 	der.writeBuffer(key$$2.part.dmodp.data, lib$18.Ber.Integer);
 	der.writeBuffer(key$$2.part.dmodq.data, lib$18.Ber.Integer);
 	der.writeBuffer(key$$2.part.iqmp.data, lib$18.Ber.Integer);
@@ -42591,7 +42757,7 @@ function writeECDSACurve(key$$2, der) {
 		der.startSequence();
 		var a = curve.p;
 		if (a[0] === 0x0)
-			a = a.slice(1);
+			{ a = a.slice(1); }
 		der.writeBuffer(a, lib$18.Ber.OctetString);
 		der.writeBuffer(curve.b, lib$18.Ber.OctetString);
 		der.writeBuffer(curve.s, lib$18.Ber.BitString);
@@ -42681,22 +42847,22 @@ function readPkcs1(alg, type, der) {
 	switch (alg) {
 	case 'RSA':
 		if (type === 'public')
-			return (readPkcs1RSAPublic(der));
+			{ return (readPkcs1RSAPublic(der)); }
 		else if (type === 'private')
-			return (readPkcs1RSAPrivate(der));
+			{ return (readPkcs1RSAPrivate(der)); }
 		throw (new Error('Unknown key type: ' + type));
 	case 'DSA':
 		if (type === 'public')
-			return (readPkcs1DSAPublic(der));
+			{ return (readPkcs1DSAPublic(der)); }
 		else if (type === 'private')
-			return (readPkcs1DSAPrivate(der));
+			{ return (readPkcs1DSAPrivate(der)); }
 		throw (new Error('Unknown key type: ' + type));
 	case 'EC':
 	case 'ECDSA':
 		if (type === 'private')
-			return (readPkcs1ECDSAPrivate(der));
+			{ return (readPkcs1ECDSAPrivate(der)); }
 		else if (type === 'public')
-			return (readPkcs1ECDSAPublic(der));
+			{ return (readPkcs1ECDSAPublic(der)); }
 		throw (new Error('Unknown key type: ' + type));
 	default:
 		throw (new Error('Unknown key algo: ' + alg));
@@ -42863,21 +43029,21 @@ function writePkcs1(der, key$$2) {
 	switch (key$$2.type) {
 	case 'rsa':
 		if (privateKey.isPrivateKey(key$$2))
-			writePkcs1RSAPrivate(der, key$$2);
+			{ writePkcs1RSAPrivate(der, key$$2); }
 		else
-			writePkcs1RSAPublic(der, key$$2);
+			{ writePkcs1RSAPublic(der, key$$2); }
 		break;
 	case 'dsa':
 		if (privateKey.isPrivateKey(key$$2))
-			writePkcs1DSAPrivate(der, key$$2);
+			{ writePkcs1DSAPrivate(der, key$$2); }
 		else
-			writePkcs1DSAPublic(der, key$$2);
+			{ writePkcs1DSAPublic(der, key$$2); }
 		break;
 	case 'ecdsa':
 		if (privateKey.isPrivateKey(key$$2))
-			writePkcs1ECDSAPrivate(der, key$$2);
+			{ writePkcs1ECDSAPrivate(der, key$$2); }
 		else
-			writePkcs1ECDSAPublic(der, key$$2);
+			{ writePkcs1ECDSAPublic(der, key$$2); }
 		break;
 	default:
 		throw (new Error('Unknown key algo: ' + key$$2.type));
@@ -42902,7 +43068,7 @@ function writePkcs1RSAPrivate(der, key$$2) {
 	der.writeBuffer(key$$2.part.p.data, lib$18.Ber.Integer);
 	der.writeBuffer(key$$2.part.q.data, lib$18.Ber.Integer);
 	if (!key$$2.part.dmodp || !key$$2.part.dmodq)
-		utils$4.addRSAMissing(key$$2);
+		{ utils$4.addRSAMissing(key$$2); }
 	der.writeBuffer(key$$2.part.dmodp.data, lib$18.Ber.Integer);
 	der.writeBuffer(key$$2.part.dmodq.data, lib$18.Ber.Integer);
 	der.writeBuffer(key$$2.part.iqmp.data, lib$18.Ber.Integer);
@@ -42971,7 +43137,7 @@ var sshBuffer = SSHBuffer;
 function SSHBuffer(opts) {
 	assert_1.object(opts, 'options');
 	if (opts.buffer !== undefined)
-		assert_1.buffer(opts.buffer, 'options.buffer');
+		{ assert_1.buffer(opts.buffer, 'options.buffer'); }
 
 	this._size = opts.buffer ? opts.buffer.length : 1024;
 	this._buffer = opts.buffer || (new Buffer(this._size));
@@ -43024,7 +43190,7 @@ SSHBuffer.prototype.readCString = function () {
 	var offset = this._offset;
 	while (offset < this._buffer.length &&
 	    this._buffer[offset] !== 0x00)
-		offset++;
+		{ offset++; }
 	assert_1.ok(offset < this._buffer.length, 'c string does not terminate');
 	var str = this._buffer.slice(this._offset, offset).toString();
 	this._offset = offset + 1;
@@ -43051,8 +43217,10 @@ SSHBuffer.prototype.readChar = function () {
 };
 
 SSHBuffer.prototype.writeBuffer = function (buf) {
+	var this$1 = this;
+
 	while (this._offset + 4 + buf.length > this._size)
-		this.expand();
+		{ this$1.expand(); }
 	this._buffer.writeUInt32BE(buf.length, this._offset);
 	this._offset += 4;
 	buf.copy(this._buffer, this._offset);
@@ -43064,21 +43232,27 @@ SSHBuffer.prototype.writeString = function (str) {
 };
 
 SSHBuffer.prototype.writeCString = function (str) {
+	var this$1 = this;
+
 	while (this._offset + 1 + str.length > this._size)
-		this.expand();
+		{ this$1.expand(); }
 	this._buffer.write(str, this._offset);
 	this._offset += str.length;
 	this._buffer[this._offset++] = 0;
 };
 
 SSHBuffer.prototype.writeInt = function (v) {
+	var this$1 = this;
+
 	while (this._offset + 4 > this._size)
-		this.expand();
+		{ this$1.expand(); }
 	this._buffer.writeUInt32BE(v, this._offset);
 	this._offset += 4;
 };
 
 SSHBuffer.prototype.writeInt64 = function (v) {
+	var this$1 = this;
+
 	assert_1.buffer(v, 'value');
 	if (v.length > 8) {
 		var lead = v.slice(0, v.length - 8);
@@ -43089,14 +43263,16 @@ SSHBuffer.prototype.writeInt64 = function (v) {
 		v = v.slice(v.length - 8, v.length);
 	}
 	while (this._offset + 8 > this._size)
-		this.expand();
+		{ this$1.expand(); }
 	v.copy(this._buffer, this._offset);
 	this._offset += 8;
 };
 
 SSHBuffer.prototype.writeChar = function (v) {
+	var this$1 = this;
+
 	while (this._offset + 1 > this._size)
-		this.expand();
+		{ this$1.expand(); }
 	this._buffer[this._offset++] = v;
 };
 
@@ -43105,8 +43281,10 @@ SSHBuffer.prototype.writePart = function (p) {
 };
 
 SSHBuffer.prototype.write = function (buf) {
+	var this$1 = this;
+
 	while (this._offset + buf.length > this._size)
-		this.expand();
+		{ this$1.expand(); }
 	buf.copy(this._buffer, this._offset);
 	this._offset += buf.length;
 };
@@ -43136,38 +43314,38 @@ var rfc4253 = {
 function algToKeyType(alg) {
 	assert_1.string(alg);
 	if (alg === 'ssh-dss')
-		return ('dsa');
+		{ return ('dsa'); }
 	else if (alg === 'ssh-rsa')
-		return ('rsa');
+		{ return ('rsa'); }
 	else if (alg === 'ssh-ed25519')
-		return ('ed25519');
+		{ return ('ed25519'); }
 	else if (alg === 'ssh-curve25519')
-		return ('curve25519');
+		{ return ('curve25519'); }
 	else if (alg.match(/^ecdsa-sha2-/))
-		return ('ecdsa');
+		{ return ('ecdsa'); }
 	else
-		throw (new Error('Unknown algorithm ' + alg));
+		{ throw (new Error('Unknown algorithm ' + alg)); }
 }
 
 function keyTypeToAlg(key$$2) {
 	assert_1.object(key$$2);
 	if (key$$2.type === 'dsa')
-		return ('ssh-dss');
+		{ return ('ssh-dss'); }
 	else if (key$$2.type === 'rsa')
-		return ('ssh-rsa');
+		{ return ('ssh-rsa'); }
 	else if (key$$2.type === 'ed25519')
-		return ('ssh-ed25519');
+		{ return ('ssh-ed25519'); }
 	else if (key$$2.type === 'curve25519')
-		return ('ssh-curve25519');
+		{ return ('ssh-curve25519'); }
 	else if (key$$2.type === 'ecdsa')
-		return ('ecdsa-sha2-' + key$$2.part.curve.data.toString());
+		{ return ('ecdsa-sha2-' + key$$2.part.curve.data.toString()); }
 	else
-		throw (new Error('Unknown key type ' + key$$2.type));
+		{ throw (new Error('Unknown key type ' + key$$2.type)); }
 }
 
 function read$6(partial, type, buf, options) {
 	if (typeof (buf) === 'string')
-		buf = new Buffer(buf);
+		{ buf = new Buffer(buf); }
 	assert_1.buffer(buf, 'buf');
 
 	var key$$2 = {};
@@ -43182,12 +43360,12 @@ function read$6(partial, type, buf, options) {
 
 	var partCount = algs.info[key$$2.type].parts.length;
 	if (type && type === 'private')
-		partCount = algs.privInfo[key$$2.type].parts.length;
+		{ partCount = algs.privInfo[key$$2.type].parts.length; }
 
 	while (!sshbuf.atEnd() && parts.length < partCount)
-		parts.push(sshbuf.readPart());
+		{ parts.push(sshbuf.readPart()); }
 	while (!partial && !sshbuf.atEnd())
-		parts.push(sshbuf.readPart());
+		{ parts.push(sshbuf.readPart()); }
 
 	assert_1.ok(parts.length >= 1,
 	    'key must have at least one part');
@@ -43223,7 +43401,7 @@ function read$6(partial, type, buf, options) {
 	}
 
 	if (normalized)
-		key$$2._rfc4253Cache = sshbuf.toBuffer();
+		{ key$$2._rfc4253Cache = sshbuf.toBuffer(); }
 
 	if (partial && typeof (partial) === 'object') {
 		partial.remainder = sshbuf.remainder();
@@ -43241,7 +43419,7 @@ function write$6(key$$2, options) {
 
 	var algInfo = algs.info[key$$2.type];
 	if (privateKey.isPrivateKey(key$$2))
-		algInfo = algs.privInfo[key$$2.type];
+		{ algInfo = algs.privInfo[key$$2.type]; }
 	var parts = algInfo.parts;
 
 	var buf = new sshBuffer({});
@@ -43251,7 +43429,7 @@ function write$6(key$$2, options) {
 	for (i = 0; i < parts.length; ++i) {
 		var data = key$$2.part[parts[i]].data;
 		if (algInfo.normalize !== false)
-			data = utils$4.mpNormalize(data);
+			{ data = utils$4.mpNormalize(data); }
 		buf.writeBuffer(data);
 	}
 
@@ -43622,15 +43800,17 @@ function F(S, x8, i) {
 }
 
 Blowfish.prototype.encipher = function(x, x8) {
+  var this$1 = this;
+
   if (x8 === undefined) {
     x8 = new Uint8Array(x.buffer);
     if (x.byteOffset !== 0)
-      x8 = x8.subarray(x.byteOffset);
+      { x8 = x8.subarray(x.byteOffset); }
   }
   x[0] ^= this.P[0];
   for (var i = 1; i < 16; i += 2) {
-    x[1] ^= F(this.S, x8, 0) ^ this.P[i];
-    x[0] ^= F(this.S, x8, 4) ^ this.P[i+1];
+    x[1] ^= F(this$1.S, x8, 0) ^ this$1.P[i];
+    x[0] ^= F(this$1.S, x8, 4) ^ this$1.P[i+1];
   }
   var t = x[0];
   x[0] = x[1] ^ this.P[17];
@@ -43638,13 +43818,15 @@ Blowfish.prototype.encipher = function(x, x8) {
 };
 
 Blowfish.prototype.decipher = function(x) {
+  var this$1 = this;
+
   var x8 = new Uint8Array(x.buffer);
   if (x.byteOffset !== 0)
-    x8 = x8.subarray(x.byteOffset);
+    { x8 = x8.subarray(x.byteOffset); }
   x[0] ^= this.P[17];
   for (var i = 16; i > 0; i -= 2) {
-    x[1] ^= F(this.S, x8, 0) ^ this.P[i];
-    x[0] ^= F(this.S, x8, 4) ^ this.P[i-1];
+    x[1] ^= F(this$1.S, x8, 0) ^ this$1.P[i];
+    x[0] ^= F(this$1.S, x8, 4) ^ this$1.P[i-1];
   }
   var t = x[0];
   x[0] = x[1] ^ this.P[0];
@@ -43654,72 +43836,80 @@ Blowfish.prototype.decipher = function(x) {
 function stream2word(data, databytes){
   var i, temp = 0;
   for (i = 0; i < 4; i++, BLF_J++) {
-    if (BLF_J >= databytes) BLF_J = 0;
+    if (BLF_J >= databytes) { BLF_J = 0; }
     temp = (temp << 8) | data[BLF_J];
   }
   return temp;
 }
 
 Blowfish.prototype.expand0state = function(key, keybytes) {
+  var this$1 = this;
+
   var d = new Uint32Array(2), i, k;
   var d8 = new Uint8Array(d.buffer);
 
   for (i = 0, BLF_J = 0; i < 18; i++) {
-    this.P[i] ^= stream2word(key, keybytes);
+    this$1.P[i] ^= stream2word(key, keybytes);
   }
   BLF_J = 0;
 
   for (i = 0; i < 18; i += 2) {
-    this.encipher(d, d8);
-    this.P[i]   = d[0];
-    this.P[i+1] = d[1];
+    this$1.encipher(d, d8);
+    this$1.P[i]   = d[0];
+    this$1.P[i+1] = d[1];
   }
 
   for (i = 0; i < 4; i++) {
     for (k = 0; k < 256; k += 2) {
-      this.encipher(d, d8);
-      this.S[i][k]   = d[0];
-      this.S[i][k+1] = d[1];
+      this$1.encipher(d, d8);
+      this$1.S[i][k]   = d[0];
+      this$1.S[i][k+1] = d[1];
     }
   }
 };
 
 Blowfish.prototype.expandstate = function(data, databytes, key, keybytes) {
+  var this$1 = this;
+
   var d = new Uint32Array(2), i, k;
 
   for (i = 0, BLF_J = 0; i < 18; i++) {
-    this.P[i] ^= stream2word(key, keybytes);
+    this$1.P[i] ^= stream2word(key, keybytes);
   }
 
   for (i = 0, BLF_J = 0; i < 18; i += 2) {
     d[0] ^= stream2word(data, databytes);
     d[1] ^= stream2word(data, databytes);
-    this.encipher(d);
-    this.P[i]   = d[0];
-    this.P[i+1] = d[1];
+    this$1.encipher(d);
+    this$1.P[i]   = d[0];
+    this$1.P[i+1] = d[1];
   }
 
   for (i = 0; i < 4; i++) {
     for (k = 0; k < 256; k += 2) {
       d[0] ^= stream2word(data, databytes);
       d[1] ^= stream2word(data, databytes);
-      this.encipher(d);
-      this.S[i][k]   = d[0];
-      this.S[i][k+1] = d[1];
+      this$1.encipher(d);
+      this$1.S[i][k]   = d[0];
+      this$1.S[i][k+1] = d[1];
     }
   }
   BLF_J = 0;
 };
 
 Blowfish.prototype.enc = function(data, blocks) {
+  var this$1 = this;
+
   for (var i = 0; i < blocks; i++) {
-    this.encipher(data.subarray(i*2));
+    this$1.encipher(data.subarray(i*2));
   }
 };
 
 Blowfish.prototype.dec = function(data, blocks) {
+  var this$1 = this;
+
   for (var i = 0; i < blocks; i++) {
-    this.decipher(data.subarray(i*2));
+    this$1.decipher(data.subarray(i*2));
   }
 };
 
@@ -43740,9 +43930,9 @@ function bcrypt_hash(sha2pass, sha2salt, out) {
   }
 
   for (i = 0; i < BCRYPT_BLOCKS; i++)
-    cdata[i] = stream2word(ciphertext, ciphertext.byteLength);
+    { cdata[i] = stream2word(ciphertext, ciphertext.byteLength); }
   for (i = 0; i < 64; i++)
-    state.enc(cdata, cdata.byteLength / 8);
+    { state.enc(cdata, cdata.byteLength / 8); }
 
   for (i = 0; i < BCRYPT_BLOCKS; i++) {
     out[4*i+3] = cdata[i] >>> 24;
@@ -43762,16 +43952,16 @@ function bcrypt_pbkdf(pass, passlen, salt, saltlen, key, keylen, rounds) {
       origkeylen = keylen;
 
   if (rounds < 1)
-    return -1;
+    { return -1; }
   if (passlen === 0 || saltlen === 0 || keylen === 0 ||
       keylen > (out.byteLength * out.byteLength) || saltlen > (1<<20))
-    return -1;
+    { return -1; }
 
   stride = Math.floor((keylen + out.byteLength - 1) / out.byteLength);
   amt = Math.floor((keylen + stride - 1) / stride);
 
   for (i = 0; i < saltlen; i++)
-    countsalt[i] = salt[i];
+    { countsalt[i] = salt[i]; }
 
   crypto_hash_sha512(sha2pass, pass, passlen);
 
@@ -43784,20 +43974,20 @@ function bcrypt_pbkdf(pass, passlen, salt, saltlen, key, keylen, rounds) {
     crypto_hash_sha512(sha2salt, countsalt, saltlen + 4);
     bcrypt_hash(sha2pass, sha2salt, tmpout);
     for (i = out.byteLength; i--;)
-      out[i] = tmpout[i];
+      { out[i] = tmpout[i]; }
 
     for (i = 1; i < rounds; i++) {
       crypto_hash_sha512(sha2salt, tmpout, tmpout.byteLength);
       bcrypt_hash(sha2pass, sha2salt, tmpout);
       for (j = 0; j < out.byteLength; j++)
-        out[j] ^= tmpout[j];
+        { out[j] ^= tmpout[j]; }
     }
 
     amt = Math.min(amt, keylen);
     for (i = 0; i < amt; i++) {
       dest = i * stride + (count - 1);
       if (dest >= origkeylen)
-        break;
+        { break; }
       key[dest] = out[i];
     }
     keylen -= i;
@@ -43920,7 +44110,7 @@ function readSSHPrivate(type, buf, options) {
 		cipherStream.write(privKeyBlob);
 		cipherStream.end();
 		while ((chunk = cipherStream.read()) !== null)
-			chunks.push(chunk);
+			{ chunks.push(chunk); }
 		privKeyBlob = Buffer.concat(chunks);
 		break;
 	default:
@@ -43951,9 +44141,9 @@ function readSSHPrivate(type, buf, options) {
 function write$5(key$$2, options) {
 	var pubKey;
 	if (privateKey.isPrivateKey(key$$2))
-		pubKey = key$$2.toPublic();
+		{ pubKey = key$$2.toPublic(); }
 	else
-		pubKey = key$$2;
+		{ pubKey = key$$2; }
 
 	var cipher = 'none';
 	var kdf = 'none';
@@ -43963,13 +44153,13 @@ function write$5(key$$2, options) {
 	if (options !== undefined) {
 		passphrase = options.passphrase;
 		if (typeof (passphrase) === 'string')
-			passphrase = new Buffer(passphrase, 'utf-8');
+			{ passphrase = new Buffer(passphrase, 'utf-8'); }
 		if (passphrase !== undefined) {
 			assert_1.buffer(passphrase, 'options.passphrase');
 			assert_1.optionalString(options.cipher, 'options.cipher');
 			cipher = options.cipher;
 			if (cipher === undefined)
-				cipher = 'aes128-ctr';
+				{ cipher = 'aes128-ctr'; }
 			cinf = utils$4.opensshCipherInfo(cipher);
 			kdf = 'bcrypt';
 		}
@@ -43986,7 +44176,7 @@ function write$5(key$$2, options) {
 
 		var n = 1;
 		while (privBuf._offset % cinf.blockSize !== 0)
-			privBuf.writeChar(n++);
+			{ privBuf.writeChar(n++); }
 		privBuf = privBuf.toBuffer();
 	}
 
@@ -44028,7 +44218,7 @@ function write$5(key$$2, options) {
 		cipherStream.write(privBuf);
 		cipherStream.end();
 		while ((chunk = cipherStream.read()) !== null)
-			chunks.push(chunk);
+			{ chunks.push(chunk); }
 		privBuf = Buffer.concat(chunks);
 		break;
 	default:
@@ -44046,15 +44236,15 @@ function write$5(key$$2, options) {
 	buf.writeBuffer(pubKey.toBuffer('rfc4253'));
 
 	if (privBuf)
-		buf.writeBuffer(privBuf);
+		{ buf.writeBuffer(privBuf); }
 
 	buf = buf.toBuffer();
 
 	var header;
 	if (privateKey.isPrivateKey(key$$2))
-		header = 'OPENSSH PRIVATE KEY';
+		{ header = 'OPENSSH PRIVATE KEY'; }
 	else
-		header = 'OPENSSH PUBLIC KEY';
+		{ header = 'OPENSSH PUBLIC KEY'; }
 
 	var tmp = buf.toString('base64');
 	var len = tmp.length + (tmp.length / 70) +
@@ -44065,7 +44255,7 @@ function write$5(key$$2, options) {
 	for (var i = 0; i < tmp.length; ) {
 		var limit = i + 70;
 		if (limit > tmp.length)
-			limit = tmp.length;
+			{ limit = tmp.length; }
 		o += buf.write(tmp.slice(i, limit), o);
 		buf[o++] = 10;
 		i = limit;
@@ -44135,7 +44325,7 @@ function read$2(buf, options, forceType) {
 		m = lines[0].match(/*JSSTYLED*/
 		    /^([A-Za-z0-9-]+): (.+)$/);
 		if (!m)
-			break;
+			{ break; }
 		headers[m[1].toLowerCase()] = m[2];
 	}
 
@@ -44178,15 +44368,15 @@ function read$2(buf, options, forceType) {
 		cipherStream.write(buf);
 		cipherStream.end();
 		while ((chunk = cipherStream.read()) !== null)
-			chunks.push(chunk);
+			{ chunks.push(chunk); }
 		buf = Buffer.concat(chunks);
 	}
 
 	/* The new OpenSSH internal format abuses PEM headers */
 	if (alg && alg.toLowerCase() === 'openssh')
-		return (sshPrivate.readSSHPrivate(type, buf, options));
+		{ return (sshPrivate.readSSHPrivate(type, buf, options)); }
 	if (alg && alg.toLowerCase() === 'ssh2')
-		return (rfc4253.readType(type, buf, options));
+		{ return (rfc4253.readType(type, buf, options)); }
 
 	var der = new lib$18.BerReader(buf);
 	der.originalInput = input;
@@ -44200,11 +44390,11 @@ function read$2(buf, options, forceType) {
 	/* PKCS#1 type keys name an algorithm in the banner explicitly */
 	if (alg) {
 		if (forceType)
-			assert_1.strictEqual(forceType, 'pkcs1');
+			{ assert_1.strictEqual(forceType, 'pkcs1'); }
 		return (pkcs1.readPkcs1(alg, type, der));
 	} else {
 		if (forceType)
-			assert_1.strictEqual(forceType, 'pkcs8');
+			{ assert_1.strictEqual(forceType, 'pkcs8'); }
 		return (pkcs8.readPkcs8(alg, type, der));
 	}
 }
@@ -44223,7 +44413,7 @@ function write$2(key$$2, options, type) {
 			pkcs8.writePkcs8(der, key$$2);
 		} else {
 			if (type)
-				assert_1.strictEqual(type, 'pkcs1');
+				{ assert_1.strictEqual(type, 'pkcs1'); }
 			header = alg + ' PRIVATE KEY';
 			pkcs1.writePkcs1(der, key$$2);
 		}
@@ -44234,7 +44424,7 @@ function write$2(key$$2, options, type) {
 			pkcs1.writePkcs1(der, key$$2);
 		} else {
 			if (type)
-				assert_1.strictEqual(type, 'pkcs8');
+				{ assert_1.strictEqual(type, 'pkcs8'); }
 			header = 'PUBLIC KEY';
 			pkcs8.writePkcs8(der, key$$2);
 		}
@@ -44252,7 +44442,7 @@ function write$2(key$$2, options, type) {
 	for (var i = 0; i < tmp.length; ) {
 		var limit = i + 64;
 		if (limit > tmp.length)
-			limit = tmp.length;
+			{ limit = tmp.length; }
 		o += buf.write(tmp.slice(i, limit), o);
 		buf[o++] = 10;
 		i = limit;
@@ -44291,7 +44481,7 @@ function read$7(buf, options) {
 	var trimmed = buf.trim().replace(/[\\\r]/g, '');
 	var m = trimmed.match(SSHKEY_RE);
 	if (!m)
-		m = trimmed.match(SSHKEY_RE2);
+		{ m = trimmed.match(SSHKEY_RE2); }
 	assert_1.ok(m, 'key must match regex');
 
 	var type = rfc4253.algToKeyType(m[1]);
@@ -44344,16 +44534,16 @@ function read$7(buf, options) {
 		var padding = ret.consumed % 3;
 		if (padding > 0 &&
 		    data.slice(realOffset - 1, realOffset) !== '=')
-			realOffset--;
+			{ realOffset--; }
 		while (data.slice(realOffset, realOffset + 1) === '=')
-			realOffset++;
+			{ realOffset++; }
 
 		/* Finally, grab what we think is the comment & clean it up. */
 		var trailer = data.slice(realOffset);
 		trailer = trailer.replace(/[\r\n]/g, ' ').
 		    replace(/^\s+/, '');
 		if (trailer.match(/^[a-zA-Z0-9]/))
-			key$$2.comment = trailer;
+			{ key$$2.comment = trailer; }
 	}
 
 	return (key$$2);
@@ -44362,7 +44552,7 @@ function read$7(buf, options) {
 function write$7(key$$2, options) {
 	assert_1.object(key$$2);
 	if (!key.isKey(key$$2))
-		throw (new Error('Must be a public key'));
+		{ throw (new Error('Must be a public key')); }
 
 	var parts = [];
 	var alg = rfc4253.keyTypeToAlg(key$$2);
@@ -44372,7 +44562,7 @@ function write$7(key$$2, options) {
 	parts.push(buf.toString('base64'));
 
 	if (key$$2.comment)
-		parts.push(key$$2.comment);
+		{ parts.push(key$$2.comment); }
 
 	return (new Buffer(parts.join(' ')));
 }
@@ -44396,21 +44586,21 @@ var auto = {
 function read$1(buf, options) {
 	if (typeof (buf) === 'string') {
 		if (buf.trim().match(/^[-]+[ ]*BEGIN/))
-			return (pem.read(buf, options));
+			{ return (pem.read(buf, options)); }
 		if (buf.match(/^\s*ssh-[a-z]/))
-			return (ssh.read(buf, options));
+			{ return (ssh.read(buf, options)); }
 		if (buf.match(/^\s*ecdsa-/))
-			return (ssh.read(buf, options));
+			{ return (ssh.read(buf, options)); }
 		buf = new Buffer(buf, 'binary');
 	} else {
 		assert_1.buffer(buf);
 		if (findPEMHeader(buf))
-			return (pem.read(buf, options));
+			{ return (pem.read(buf, options)); }
 		if (findSSHHeader(buf))
-			return (ssh.read(buf, options));
+			{ return (ssh.read(buf, options)); }
 	}
 	if (buf.readUInt32BE(0) < buf.length)
-		return (rfc4253.read(buf, options));
+		{ return (rfc4253.read(buf, options)); }
 	throw (new Error('Failed to auto-detect format of key'));
 }
 
@@ -44418,13 +44608,13 @@ function findSSHHeader(buf) {
 	var offset = 0;
 	while (offset < buf.length &&
 	    (buf[offset] === 32 || buf[offset] === 10 || buf[offset] === 9))
-		++offset;
+		{ ++offset; }
 	if (offset + 4 <= buf.length &&
 	    buf.slice(offset, offset + 4).toString('ascii') === 'ssh-')
-		return (true);
+		{ return (true); }
 	if (offset + 6 <= buf.length &&
 	    buf.slice(offset, offset + 6).toString('ascii') === 'ecdsa-')
-		return (true);
+		{ return (true); }
 	return (false);
 }
 
@@ -44432,18 +44622,18 @@ function findPEMHeader(buf) {
 	var offset = 0;
 	while (offset < buf.length &&
 	    (buf[offset] === 32 || buf[offset] === 10))
-		++offset;
+		{ ++offset; }
 	if (buf[offset] !== 45)
-		return (false);
+		{ return (false); }
 	while (offset < buf.length &&
 	    (buf[offset] === 45))
-		++offset;
+		{ ++offset; }
 	while (offset < buf.length &&
 	    (buf[offset] === 32))
-		++offset;
+		{ ++offset; }
 	if (offset + 5 > buf.length ||
 	    buf.slice(offset, offset + 5).toString('ascii') !== 'BEGIN')
-		return (false);
+		{ return (false); }
 	return (true);
 }
 
@@ -44500,7 +44690,7 @@ PrivateKey.formats = formats$2;
 
 PrivateKey.prototype.toBuffer = function (format, options) {
 	if (format === undefined)
-		format = 'pkcs1';
+		{ format = 'pkcs1'; }
 	assert_1.string(format, 'format');
 	assert_1.object(formats$2[format], 'formats[format]');
 	assert_1.optionalObject(options, 'options');
@@ -44513,14 +44703,16 @@ PrivateKey.prototype.hash = function (algo) {
 };
 
 PrivateKey.prototype.toPublic = function () {
+	var this$1 = this;
+
 	if (this._pubCache)
-		return (this._pubCache);
+		{ return (this._pubCache); }
 
 	var algInfo = algs.info[this.type];
 	var pubParts = [];
 	for (var i = 0; i < algInfo.parts.length; ++i) {
 		var p = algInfo.parts[i];
-		pubParts.push(this.part[p]);
+		pubParts.push(this$1.part[p]);
 	}
 
 	this._pubCache = new key({
@@ -44529,7 +44721,7 @@ PrivateKey.prototype.toPublic = function () {
 		parts: pubParts
 	});
 	if (this.comment)
-		this._pubCache.comment = this.comment;
+		{ this._pubCache.comment = this.comment; }
 	return (this._pubCache);
 };
 
@@ -44539,11 +44731,11 @@ PrivateKey.prototype.derive = function (newType) {
 
 	if (this.type === 'ed25519' && newType === 'curve25519') {
 		if (nacl === undefined)
-			nacl = naclFast;
+			{ nacl = naclFast; }
 
 		priv = this.part.r.data;
 		if (priv[0] === 0x00)
-			priv = priv.slice(1);
+			{ priv = priv.slice(1); }
 		priv = priv.slice(0, 32);
 
 		pair = nacl.box.keyPair.fromSecretKey(new Uint8Array(priv));
@@ -44559,11 +44751,11 @@ PrivateKey.prototype.derive = function (newType) {
 		}));
 	} else if (this.type === 'curve25519' && newType === 'ed25519') {
 		if (nacl === undefined)
-			nacl = naclFast;
+			{ nacl = naclFast; }
 
 		priv = this.part.r.data;
 		if (priv[0] === 0x00)
-			priv = priv.slice(1);
+			{ priv = priv.slice(1); }
 		priv = priv.slice(0, 32);
 
 		pair = nacl.sign.keyPair.fromSeed(new Uint8Array(priv));
@@ -44588,15 +44780,15 @@ PrivateKey.prototype.createVerify = function (hashAlgo) {
 
 PrivateKey.prototype.createSign = function (hashAlgo) {
 	if (hashAlgo === undefined)
-		hashAlgo = this.defaultHashAlgorithm();
+		{ hashAlgo = this.defaultHashAlgorithm(); }
 	assert_1.string(hashAlgo, 'hash algorithm');
 
 	/* ED25519 is not supported by OpenSSL, use a javascript impl. */
 	if (this.type === 'ed25519' && edCompat$1 !== undefined)
-		return (new edCompat$1.Signer(this, hashAlgo));
+		{ return (new edCompat$1.Signer(this, hashAlgo)); }
 	if (this.type === 'curve25519')
-		throw (new Error('Curve25519 keys are not suitable for ' +
-		    'signing or verification'));
+		{ throw (new Error('Curve25519 keys are not suitable for ' +
+		    'signing or verification')); }
 
 	var v, nm, err;
 	try {
@@ -44619,7 +44811,7 @@ PrivateKey.prototype.createSign = function (hashAlgo) {
 	v.sign = function () {
 		var sig = oldSign(key$$1);
 		if (typeof (sig) === 'string')
-			sig = new Buffer(sig, 'binary');
+			{ sig = new Buffer(sig, 'binary'); }
 		sig = signature.parse(sig, type, 'asn1');
 		sig.hashAlgorithm = hashAlgo;
 		sig.curve = curve;
@@ -44630,18 +44822,18 @@ PrivateKey.prototype.createSign = function (hashAlgo) {
 
 PrivateKey.parse = function (data, format, options) {
 	if (typeof (data) !== 'string')
-		assert_1.buffer(data, 'data');
+		{ assert_1.buffer(data, 'data'); }
 	if (format === undefined)
-		format = 'auto';
+		{ format = 'auto'; }
 	assert_1.string(format, 'format');
 	if (typeof (options) === 'string')
-		options = { filename: options };
+		{ options = { filename: options }; }
 	assert_1.optionalObject(options, 'options');
 	if (options === undefined)
-		options = {};
+		{ options = {}; }
 	assert_1.optionalString(options.filename, 'options.filename');
 	if (options.filename === undefined)
-		options.filename = '(unnamed)';
+		{ options.filename = '(unnamed)'; }
 
 	assert_1.object(formats$2[format], 'formats[format]');
 
@@ -44649,11 +44841,11 @@ PrivateKey.parse = function (data, format, options) {
 		var k = formats$2[format].read(data, options);
 		assert_1.ok(k instanceof PrivateKey, 'key is not a private key');
 		if (!k.comment)
-			k.comment = options.filename;
+			{ k.comment = options.filename; }
 		return (k);
 	} catch (e) {
 		if (e.name === 'KeyEncryptedError')
-			throw (e);
+			{ throw (e); }
 		throw (new KeyParseError$2(options.filename, format, e));
 	}
 };
@@ -44664,13 +44856,13 @@ PrivateKey.isPrivateKey = function (obj, ver) {
 
 PrivateKey.generate = function (type, options) {
 	if (options === undefined)
-		options = {};
+		{ options = {}; }
 	assert_1.object(options, 'options');
 
 	switch (type) {
 	case 'ecdsa':
 		if (options.curve === undefined)
-			options.curve = 'nistp256';
+			{ options.curve = 'nistp256'; }
 		assert_1.string(options.curve, 'options.curve');
 		return (generateECDSA(options.curve));
 	case 'ed25519':
@@ -44695,11 +44887,11 @@ PrivateKey._oldVersionDetect = function (obj) {
 	assert_1.func(obj.toPublic);
 	assert_1.func(obj.createSign);
 	if (obj.derive)
-		return ([1, 3]);
+		{ return ([1, 3]); }
 	if (obj.defaultHashAlgorithm)
-		return ([1, 2]);
+		{ return ([1, 2]); }
 	if (obj.formats['auto'])
-		return ([1, 1]);
+		{ return ([1, 1]); }
 	return ([1, 0]);
 };
 
@@ -44726,39 +44918,39 @@ var MAX_CLASS_DEPTH = 3;
 
 function isCompatible(obj, klass, needVer) {
 	if (obj === null || typeof (obj) !== 'object')
-		return (false);
+		{ return (false); }
 	if (needVer === undefined)
-		needVer = klass.prototype._sshpkApiVersion;
+		{ needVer = klass.prototype._sshpkApiVersion; }
 	if (obj instanceof klass &&
 	    klass.prototype._sshpkApiVersion[0] == needVer[0])
-		return (true);
+		{ return (true); }
 	var proto = Object.getPrototypeOf(obj);
 	var depth = 0;
 	while (proto.constructor.name !== klass.name) {
 		proto = Object.getPrototypeOf(proto);
 		if (!proto || ++depth > MAX_CLASS_DEPTH)
-			return (false);
+			{ return (false); }
 	}
 	if (proto.constructor.name !== klass.name)
-		return (false);
+		{ return (false); }
 	var ver = proto._sshpkApiVersion;
 	if (ver === undefined)
-		ver = klass._oldVersionDetect(obj);
+		{ ver = klass._oldVersionDetect(obj); }
 	if (ver[0] != needVer[0] || ver[1] < needVer[1])
-		return (false);
+		{ return (false); }
 	return (true);
 }
 
 function assertCompatible(obj, klass, needVer, name) {
 	if (name === undefined)
-		name = 'object';
+		{ name = 'object'; }
 	assert_1.ok(obj, name + ' must not be null');
 	assert_1.object(obj, name + ' must be an object');
 	if (needVer === undefined)
-		needVer = klass.prototype._sshpkApiVersion;
+		{ needVer = klass.prototype._sshpkApiVersion; }
 	if (obj instanceof klass &&
 	    klass.prototype._sshpkApiVersion[0] == needVer[0])
-		return;
+		{ return; }
 	var proto = Object.getPrototypeOf(obj);
 	var depth = 0;
 	while (proto.constructor.name !== klass.name) {
@@ -44770,7 +44962,7 @@ function assertCompatible(obj, klass, needVer, name) {
 	    name + ' must be a ' + klass.name + ' instance');
 	var ver = proto._sshpkApiVersion;
 	if (ver === undefined)
-		ver = klass._oldVersionDetect(obj);
+		{ ver = klass._oldVersionDetect(obj); }
 	assert_1.ok(ver[0] == needVer[0] && ver[1] >= needVer[1],
 	    name + ' must be compatible with ' + klass.name + ' klass ' +
 	    'version ' + needVer[0] + '.' + needVer[1]);
@@ -44797,12 +44989,12 @@ function opensslKeyDeriv(cipher, salt, passphrase, count) {
 	while (material.length < clen.key + clen.iv) {
 		bufs = [];
 		if (D_prev)
-			bufs.push(D_prev);
+			{ bufs.push(D_prev); }
 		bufs.push(passphrase);
 		bufs.push(salt);
 		D = Buffer.concat(bufs);
 		for (var j = 0; j < count; ++j)
-			D = tls.createHash('md5').update(D).digest();
+			{ D = tls.createHash('md5').update(D).digest(); }
 		material = Buffer.concat([material, D]);
 		D_prev = D;
 	}
@@ -44819,7 +45011,7 @@ function countZeros(buf) {
 	while (o < buf.length) {
 		var mask = (1 << obit);
 		if ((buf[o] & mask) === mask)
-			break;
+			{ break; }
 		obit--;
 		if (obit < 0) {
 			o++;
@@ -44838,11 +45030,11 @@ function bufferSplit(buf, chr) {
 	var matches = 0;
 	for (var i = 0; i < buf.length; ++i) {
 		if (buf[i] === chr.charCodeAt(matches))
-			++matches;
+			{ ++matches; }
 		else if (buf[i] === chr.charCodeAt(0))
-			matches = 1;
+			{ matches = 1; }
 		else
-			matches = 0;
+			{ matches = 0; }
 
 		if (matches >= chr.length) {
 			var newPart = i + 1;
@@ -44852,7 +45044,7 @@ function bufferSplit(buf, chr) {
 		}
 	}
 	if (lastPart <= buf.length)
-		parts.push(buf.slice(lastPart, buf.length));
+		{ parts.push(buf.slice(lastPart, buf.length)); }
 
 	return (parts);
 }
@@ -44861,21 +45053,21 @@ function ecNormalize(buf, addZero) {
 	assert_1.buffer(buf);
 	if (buf[0] === 0x00 && buf[1] === 0x04) {
 		if (addZero)
-			return (buf);
+			{ return (buf); }
 		return (buf.slice(1));
 	} else if (buf[0] === 0x04) {
 		if (!addZero)
-			return (buf);
+			{ return (buf); }
 	} else {
 		while (buf[0] === 0x00)
-			buf = buf.slice(1);
+			{ buf = buf.slice(1); }
 		if (buf[0] === 0x02 || buf[0] === 0x03)
-			throw (new Error('Compressed elliptic curve points ' +
-			    'are not supported'));
+			{ throw (new Error('Compressed elliptic curve points ' +
+			    'are not supported')); }
 		if (buf[0] !== 0x04)
-			throw (new Error('Not a valid elliptic curve point'));
+			{ throw (new Error('Not a valid elliptic curve point')); }
 		if (!addZero)
-			return (buf);
+			{ return (buf); }
 	}
 	var b = new Buffer(buf.length + 1);
 	b[0] = 0x0;
@@ -44886,7 +45078,7 @@ function ecNormalize(buf, addZero) {
 function mpNormalize(buf) {
 	assert_1.buffer(buf);
 	while (buf.length > 1 && buf[0] === 0x00 && (buf[1] & 0x80) === 0x00)
-		buf = buf.slice(1);
+		{ buf = buf.slice(1); }
 	if ((buf[0] & 0x80) === 0x80) {
 		var b = new Buffer(buf.length + 1);
 		b[0] = 0x00;
@@ -45027,7 +45219,7 @@ function Signature(opts) {
 
 Signature.prototype.toBuffer = function (format) {
 	if (format === undefined)
-		format = 'asn1';
+		{ format = 'asn1'; }
 	assert_1.string(format, 'format');
 
 	var buf;
@@ -45088,10 +45280,10 @@ Signature.prototype.toBuffer = function (format) {
 			buf.writeString('ssh-dss');
 			r = this.part.r.data;
 			if (r.length > 20 && r[0] === 0x00)
-				r = r.slice(1);
+				{ r = r.slice(1); }
 			s = this.part.s.data;
 			if (s.length > 20 && s[0] === 0x00)
-				s = s.slice(1);
+				{ s = s.slice(1); }
 			if ((this.hashAlgorithm &&
 			    this.hashAlgorithm !== 'sha1') ||
 			    r.length + s.length !== 40) {
@@ -45110,14 +45302,14 @@ Signature.prototype.toBuffer = function (format) {
 			/* XXX: find a more proper way to do this? */
 			var curve;
 			if (r[0] === 0x00)
-				r = r.slice(1);
+				{ r = r.slice(1); }
 			var sz = r.length * 8;
 			if (sz === 256)
-				curve = 'nistp256';
+				{ curve = 'nistp256'; }
 			else if (sz === 384)
-				curve = 'nistp384';
+				{ curve = 'nistp384'; }
 			else if (sz === 528)
-				curve = 'nistp521';
+				{ curve = 'nistp521'; }
 			buf.writeString('ecdsa-sha2-' + curve);
 			buf.writeBuffer(inner.toBuffer());
 			return (buf.toBuffer());
@@ -45135,7 +45327,7 @@ Signature.prototype.toString = function (format) {
 
 Signature.parse = function (data, type, format) {
 	if (typeof (data) === 'string')
-		data = new Buffer(data, 'base64');
+		{ data = new Buffer(data, 'base64'); }
 	assert_1.buffer(data, 'data');
 	assert_1.string(format, 'format');
 	assert_1.string(type, 'type');
@@ -45155,11 +45347,11 @@ Signature.parse = function (data, type, format) {
 		case 'dsa':
 		case 'ecdsa':
 			if (format === 'asn1')
-				return (parseDSAasn1(data, type, format, opts));
+				{ return (parseDSAasn1(data, type, format, opts)); }
 			else if (opts.type === 'dsa')
-				return (parseDSA(data, type, format, opts));
+				{ return (parseDSA(data, type, format, opts)); }
 			else
-				return (parseECDSA(data, type, format, opts));
+				{ return (parseECDSA(data, type, format, opts)); }
 
 		default:
 			throw (new InvalidAlgorithmError$6(type));
@@ -45167,7 +45359,7 @@ Signature.parse = function (data, type, format) {
 
 	} catch (e) {
 		if (e instanceof InvalidAlgorithmError$6)
-			throw (e);
+			{ throw (e); }
 		throw (new SignatureParseError$1(type, format, e));
 	}
 };
@@ -45232,7 +45424,7 @@ function parseDSA(data, type, format, opts) {
 		var buf = new sshBuffer({buffer: data});
 		var d = buf.readBuffer();
 		if (d.toString('ascii') === 'ssh-dss')
-			d = buf.readBuffer();
+			{ d = buf.readBuffer(); }
 		assert_1.ok(buf.atEnd(), 'extra trailing bytes');
 		assert_1.strictEqual(d.length, 40, 'invalid inner length');
 		data = d;
@@ -45302,7 +45494,7 @@ Signature.prototype._sshpkApiVersion = [2, 1];
 Signature._oldVersionDetect = function (obj) {
 	assert_1.func(obj.toBuffer);
 	if (obj.hasOwnProperty('hashAlgorithm'))
-		return ([2, 0]);
+		{ return ([2, 0]); }
 	return ([1, 0]);
 };
 
@@ -45348,11 +45540,11 @@ function Identity(opts) {
 	this.componentLookup = {};
 	this.components.forEach(function (c) {
 		if (c.name && !c.oid)
-			c.oid = oids[c.name];
+			{ c.oid = oids[c.name]; }
 		if (c.oid && !c.name)
-			c.name = unoids[c.oid];
+			{ c.name = unoids[c.oid]; }
 		if (self.componentLookup[c.name] === undefined)
-			self.componentLookup[c.name] = [];
+			{ self.componentLookup[c.name] = []; }
 		self.componentLookup[c.name].push(c);
 	});
 	if (this.componentLookup.cn && this.componentLookup.cn.length > 0) {
@@ -45408,13 +45600,13 @@ function Identity(opts) {
 	} else {
 		this.type = opts.type;
 		if (this.type === 'host')
-			this.hostname = opts.hostname;
+			{ this.hostname = opts.hostname; }
 		else if (this.type === 'user')
-			this.uid = opts.uid;
+			{ this.uid = opts.uid; }
 		else if (this.type === 'email')
-			this.email = opts.email;
+			{ this.email = opts.email; }
 		else
-			throw (new Error('Unknown type ' + this.type));
+			{ throw (new Error('Unknown type ' + this.type)); }
 	}
 }
 
@@ -45461,29 +45653,31 @@ Identity.prototype.toAsn1 = function (der, tag) {
 
 function globMatch(a, b) {
 	if (a === '**' || b === '**')
-		return (true);
+		{ return (true); }
 	var aParts = a.split('.');
 	var bParts = b.split('.');
 	if (aParts.length !== bParts.length)
-		return (false);
+		{ return (false); }
 	for (var i = 0; i < aParts.length; ++i) {
 		if (aParts[i] === '*' || bParts[i] === '*')
-			continue;
+			{ continue; }
 		if (aParts[i] !== bParts[i])
-			return (false);
+			{ return (false); }
 	}
 	return (true);
 }
 
 Identity.prototype.equals = function (other) {
+	var this$1 = this;
+
 	if (!Identity.isIdentity(other, [1, 0]))
-		return (false);
+		{ return (false); }
 	if (other.components.length !== this.components.length)
-		return (false);
+		{ return (false); }
 	for (var i = 0; i < this.components.length; ++i) {
-		if (this.components[i].oid !== other.components[i].oid)
-			return (false);
-		if (!globMatch(this.components[i].value,
+		if (this$1.components[i].oid !== other.components[i].oid)
+			{ return (false); }
+		if (!globMatch(this$1.components[i].value,
 		    other.components[i].value)) {
 			return (false);
 		}
@@ -45628,10 +45822,10 @@ var ECDSA_ALGO = /^ecdsa-sha2-([^@-]+)-cert-v01@openssh.com$/;
 
 function read$8(buf, options) {
 	if (Buffer.isBuffer(buf))
-		buf = buf.toString('ascii');
+		{ buf = buf.toString('ascii'); }
 	var parts = buf.trim().split(/[ \t\n]+/g);
 	if (parts.length < 2 || parts.length > 3)
-		throw (new Error('Not a valid SSH certificate line'));
+		{ throw (new Error('Not a valid SSH certificate line')); }
 
 	var algo = parts[0];
 	var data = parts[1];
@@ -45644,9 +45838,9 @@ function fromBuffer(data, algo, partial) {
 	var sshbuf = new sshBuffer({ buffer: data });
 	var innerAlgo = sshbuf.readString();
 	if (algo !== undefined && innerAlgo !== algo)
-		throw (new Error('SSH certificate algorithm mismatch'));
+		{ throw (new Error('SSH certificate algorithm mismatch')); }
 	if (algo === undefined)
-		algo = innerAlgo;
+		{ algo = innerAlgo; }
 
 	var cert = {};
 	cert.signatures = {};
@@ -45660,7 +45854,7 @@ function fromBuffer(data, algo, partial) {
 
 	var partCount = algs.info[key$$2.type].parts.length;
 	while (parts.length < partCount)
-		parts.push(sshbuf.readPart());
+		{ parts.push(sshbuf.readPart()); }
 	assert_1.ok(parts.length >= 1, 'key must have at least one part');
 
 	var algInfo = algs.info[key$$2.type];
@@ -45692,15 +45886,15 @@ function fromBuffer(data, algo, partial) {
 	var pbuf = sshbuf.readBuffer();
 	var psshbuf = new sshBuffer({ buffer: pbuf });
 	while (!psshbuf.atEnd())
-		principals.push(psshbuf.readString());
+		{ principals.push(psshbuf.readString()); }
 	if (principals.length === 0)
-		principals = ['*'];
+		{ principals = ['*']; }
 
 	cert.subjects = principals.map(function (pr) {
 		if (type === 'user')
-			return (identity$1.forUser(pr));
+			{ return (identity$1.forUser(pr)); }
 		else if (type === 'host')
-			return (identity$1.forHost(pr));
+			{ return (identity$1.forHost(pr)); }
 		throw (new Error('Unknown identity type ' + type));
 	});
 
@@ -45746,7 +45940,7 @@ function int64ToDate(buf) {
 
 function dateToInt64(date) {
 	if (date.sourceInt64 !== undefined)
-		return (date.sourceInt64);
+		{ return (date.sourceInt64); }
 	var i = Math.round(date.getTime() / 1000);
 	var upper = Math.floor(i / 4294967296);
 	var lower = Math.floor(i % 4294967296);
@@ -45758,7 +45952,7 @@ function dateToInt64(date) {
 
 function sign$1(cert, key$$2) {
 	if (cert.signatures.openssh === undefined)
-		cert.signatures.openssh = {};
+		{ cert.signatures.openssh = {}; }
 	try {
 		var blob = toBuffer(cert, true);
 	} catch (e) {
@@ -45768,7 +45962,7 @@ function sign$1(cert, key$$2) {
 	var sig = cert.signatures.openssh;
 	var hashAlgo = undefined;
 	if (key$$2.type === 'rsa' || key$$2.type === 'dsa')
-		hashAlgo = 'sha1';
+		{ hashAlgo = 'sha1'; }
 	var signer = key$$2.createSign(hashAlgo);
 	signer.write(blob);
 	sig.signature = signer.sign();
@@ -45777,7 +45971,7 @@ function sign$1(cert, key$$2) {
 
 function signAsync(cert, signer, done) {
 	if (cert.signatures.openssh === undefined)
-		cert.signatures.openssh = {};
+		{ cert.signatures.openssh = {}; }
 	try {
 		var blob = toBuffer(cert, true);
 	} catch (e) {
@@ -45809,12 +46003,12 @@ function signAsync(cert, signer, done) {
 
 function write$8(cert, options) {
 	if (options === undefined)
-		options = {};
+		{ options = {}; }
 
 	var blob = toBuffer(cert);
 	var out = getCertType(cert.subjectKey) + ' ' + blob.toString('base64');
 	if (options.comment)
-		out = out + ' ' + options.comment;
+		{ out = out + ' ' + options.comment; }
 	return (out);
 }
 
@@ -45824,7 +46018,7 @@ function toBuffer(cert, noSig) {
 	var sig = cert.signatures.openssh;
 
 	if (sig.nonce === undefined)
-		sig.nonce = tls.randomBytes(16);
+		{ sig.nonce = tls.randomBytes(16); }
 	var buf = new sshBuffer({});
 	buf.writeString(getCertType(cert.subjectKey));
 	buf.writeBuffer(sig.nonce);
@@ -45854,9 +46048,9 @@ function toBuffer(cert, noSig) {
 	var sub = new sshBuffer({});
 	cert.subjects.forEach(function (id) {
 		if (type === TYPES.host)
-			sub.writeString(id.hostname);
+			{ sub.writeString(id.hostname); }
 		else if (type === TYPES.user)
-			sub.writeString(id.uid);
+			{ sub.writeString(id.uid); }
 	});
 	buf.writeBuffer(sub.toBuffer());
 
@@ -45864,11 +46058,11 @@ function toBuffer(cert, noSig) {
 	buf.writeInt64(dateToInt64(cert.validUntil));
 
 	if (sig.critical === undefined)
-		sig.critical = new Buffer(0);
+		{ sig.critical = new Buffer(0); }
 	buf.writeBuffer(sig.critical);
 
 	if (sig.exts === undefined)
-		sig.exts = new Buffer(0);
+		{ sig.exts = new Buffer(0); }
 	buf.writeBuffer(sig.exts);
 
 	/* reserved */
@@ -45878,32 +46072,32 @@ function toBuffer(cert, noSig) {
 	buf.writeBuffer(sub);
 
 	if (!noSig)
-		buf.writeBuffer(sig.signature.toBuffer('ssh'));
+		{ buf.writeBuffer(sig.signature.toBuffer('ssh')); }
 
 	return (buf.toBuffer());
 }
 
 function getAlg(certType) {
 	if (certType === 'ssh-rsa-cert-v01@openssh.com')
-		return ('rsa');
+		{ return ('rsa'); }
 	if (certType === 'ssh-dss-cert-v01@openssh.com')
-		return ('dsa');
+		{ return ('dsa'); }
 	if (certType.match(ECDSA_ALGO))
-		return ('ecdsa');
+		{ return ('ecdsa'); }
 	if (certType === 'ssh-ed25519-cert-v01@openssh.com')
-		return ('ed25519');
+		{ return ('ed25519'); }
 	throw (new Error('Unsupported cert type ' + certType));
 }
 
 function getCertType(key$$2) {
 	if (key$$2.type === 'rsa')
-		return ('ssh-rsa-cert-v01@openssh.com');
+		{ return ('ssh-rsa-cert-v01@openssh.com'); }
 	if (key$$2.type === 'dsa')
-		return ('ssh-dss-cert-v01@openssh.com');
+		{ return ('ssh-dss-cert-v01@openssh.com'); }
 	if (key$$2.type === 'ecdsa')
-		return ('ecdsa-sha2-' + key$$2.curve + '-cert-v01@openssh.com');
+		{ return ('ecdsa-sha2-' + key$$2.curve + '-cert-v01@openssh.com'); }
 	if (key$$2.type === 'ed25519')
-		return ('ssh-ed25519-cert-v01@openssh.com');
+		{ return ('ssh-ed25519-cert-v01@openssh.com'); }
 	throw (new Error('Unsupported key type ' + key$$2.type));
 }
 
@@ -45946,7 +46140,7 @@ function verify$1(cert, key$$2) {
 
 	var algParts = sig.algo.split('-');
 	if (algParts[0] !== key$$2.type)
-		return (false);
+		{ return (false); }
 
 	var blob = sig.cache;
 	if (blob === undefined) {
@@ -46033,7 +46227,7 @@ function read$9(buf, options) {
 	var certAlgOid = der.readOID();
 	var certAlg = SIGN_ALGS[certAlgOid];
 	if (certAlg === undefined)
-		throw (new Error('unknown signature algorithm ' + certAlgOid));
+		{ throw (new Error('unknown signature algorithm ' + certAlgOid)); }
 
 	der._offset = after;
 	cert.issuer = identity$1.parseAsn1(der);
@@ -46072,7 +46266,7 @@ function read$9(buf, options) {
 		der.readSequence();
 
 		while (der.offset < extEnd)
-			readExtension(cert, buf, der);
+			{ readExtension(cert, buf, der); }
 
 		assert_1.strictEqual(der.offset, extEnd);
 	}
@@ -46084,12 +46278,12 @@ function read$9(buf, options) {
 	var sigAlgOid = der.readOID();
 	var sigAlg = SIGN_ALGS[sigAlgOid];
 	if (sigAlg === undefined)
-		throw (new Error('unknown signature algorithm ' + sigAlgOid));
+		{ throw (new Error('unknown signature algorithm ' + sigAlgOid)); }
 	der._offset = after;
 
 	var sigData = der.readString(lib$18.Ber.BitString, true);
 	if (sigData[0] === 0)
-		sigData = sigData.slice(1);
+		{ sigData = sigData.slice(1); }
 	var algParts = sigAlg.split('-');
 
 	sig.signature = signature.parse(sigData, algParts[0], 'asn1');
@@ -46153,7 +46347,7 @@ function readExtension(cert, buf, der) {
 
 	var critical;
 	if (der.peek() === lib$18.Ber.Boolean)
-		critical = der.readBoolean();
+		{ critical = der.readBoolean(); }
 
 	switch (extId) {
 	case (EXTS.basicConstraints):
@@ -46162,21 +46356,21 @@ function readExtension(cert, buf, der) {
 		var bcEnd = der.offset + der.length;
 		var ca = false;
 		if (der.peek() === lib$18.Ber.Boolean)
-			ca = der.readBoolean();
+			{ ca = der.readBoolean(); }
 		if (cert.purposes === undefined)
-			cert.purposes = [];
+			{ cert.purposes = []; }
 		if (ca === true)
-			cert.purposes.push('ca');
+			{ cert.purposes.push('ca'); }
 		var bc = { oid: extId, critical: critical };
 		if (der.offset < bcEnd && der.peek() === lib$18.Ber.Integer)
-			bc.pathLen = der.readInt();
+			{ bc.pathLen = der.readInt(); }
 		sig.extras.exts.push(bc);
 		break;
 	case (EXTS.extKeyUsage):
 		der.readSequence(lib$18.Ber.OctetString);
 		der.readSequence();
 		if (cert.purposes === undefined)
-			cert.purposes = [];
+			{ cert.purposes = []; }
 		var ekEnd = der.offset + der.length;
 		while (der.offset < ekEnd) {
 			var oid = der.readOID();
@@ -46224,9 +46418,9 @@ function readExtension(cert, buf, der) {
 		var setBits = readBitField(bits, KEYUSEBITS);
 		setBits.forEach(function (bit) {
 			if (cert.purposes === undefined)
-				cert.purposes = [];
+				{ cert.purposes = []; }
 			if (cert.purposes.indexOf(bit) === -1)
-				cert.purposes.push(bit);
+				{ cert.purposes.push(bit); }
 		});
 		sig.extras.exts.push({ oid: extId, critical: critical,
 		    bits: bits });
@@ -46250,20 +46444,20 @@ function readExtension(cert, buf, der) {
 				var email = der.readString(ALTNAME.RFC822Name);
 				id = identity$1.forEmail(email);
 				if (!cert.subjects[0].equals(id))
-					cert.subjects.push(id);
+					{ cert.subjects.push(id); }
 				break;
 			case ALTNAME.DirectoryName:
 				der.readSequence(ALTNAME.DirectoryName);
 				id = identity$1.parseAsn1(der);
 				if (!cert.subjects[0].equals(id))
-					cert.subjects.push(id);
+					{ cert.subjects.push(id); }
 				break;
 			case ALTNAME.DNSName:
 				var host = der.readString(
 				    ALTNAME.DNSName);
 				id = identity$1.forHost(host);
 				if (!cert.subjects[0].equals(id))
-					cert.subjects.push(id);
+					{ cert.subjects.push(id); }
 				break;
 			default:
 				der.readString(der.peek());
@@ -46296,13 +46490,13 @@ function utcTimeToDate(t) {
 
 	var year = parseInt(m[1], 10);
 	if (thisYear % 100 < 50 && year >= 60)
-		year += (century - 1);
+		{ year += (century - 1); }
 	else
-		year += century;
+		{ year += century; }
 	d.setUTCFullYear(year, parseInt(m[2], 10) - 1, parseInt(m[3], 10));
 	d.setUTCHours(parseInt(m[4], 10), parseInt(m[5], 10));
 	if (m[6] && m[6].length > 0)
-		d.setUTCSeconds(parseInt(m[6], 10));
+		{ d.setUTCSeconds(parseInt(m[6], 10)); }
 	return (d);
 }
 
@@ -46317,14 +46511,14 @@ function gTimeToDate(t) {
 	    parseInt(m[3], 10));
 	d.setUTCHours(parseInt(m[4], 10), parseInt(m[5], 10));
 	if (m[6] && m[6].length > 0)
-		d.setUTCSeconds(parseInt(m[6], 10));
+		{ d.setUTCSeconds(parseInt(m[6], 10)); }
 	return (d);
 }
 
 function zeroPad(n) {
 	var s = '' + n;
 	while (s.length < 2)
-		s = '0' + s;
+		{ s = '0' + s; }
 	return (s);
 }
 
@@ -46342,12 +46536,12 @@ function dateToUTCTime(d) {
 
 function sign$2(cert, key$$2) {
 	if (cert.signatures.x509 === undefined)
-		cert.signatures.x509 = {};
+		{ cert.signatures.x509 = {}; }
 	var sig = cert.signatures.x509;
 
 	sig.algo = key$$2.type + '-' + key$$2.defaultHashAlgorithm();
 	if (SIGN_ALGS[sig.algo] === undefined)
-		return (false);
+		{ return (false); }
 
 	var der = new lib$18.BerWriter();
 	writeTBSCert(cert, der);
@@ -46363,7 +46557,7 @@ function sign$2(cert, key$$2) {
 
 function signAsync$1(cert, signer, done) {
 	if (cert.signatures.x509 === undefined)
-		cert.signatures.x509 = {};
+		{ cert.signatures.x509 = {}; }
 	var sig = cert.signatures.x509;
 
 	var der = new lib$18.BerWriter();
@@ -46404,7 +46598,7 @@ function write$9(cert, options) {
 	der.startSequence();
 	der.writeOID(SIGN_ALGS[sig.algo]);
 	if (sig.algo.match(/^rsa-/))
-		der.writeNull();
+		{ der.writeNull(); }
 	der.endSequence();
 
 	var sigData = sig.signature.toBuffer('asn1');
@@ -46477,14 +46671,14 @@ function writeTBSCert(cert, der) {
 		}
 		exts.push({ oid: EXTS.altName });
 		if (sig.extras && sig.extras.exts)
-			exts = sig.extras.exts;
+			{ exts = sig.extras.exts; }
 
 		for (var i = 0; i < exts.length; ++i) {
 			der.startSequence();
 			der.writeOID(exts[i].oid);
 
 			if (exts[i].critical !== undefined)
-				der.writeBoolean(exts[i].critical);
+				{ der.writeBoolean(exts[i].critical); }
 
 			if (exts[i].oid === EXTS.altName) {
 				der.startSequence(lib$18.Ber.OctetString);
@@ -46523,7 +46717,7 @@ function writeTBSCert(cert, der) {
 				var pathLen = exts[i].pathLen;
 				der.writeBoolean(ca);
 				if (pathLen !== undefined)
-					der.writeInt(pathLen);
+					{ der.writeInt(pathLen); }
 				der.endSequence();
 				der.endSequence();
 			} else if (exts[i].oid === EXTS.extKeyUsage) {
@@ -46531,12 +46725,12 @@ function writeTBSCert(cert, der) {
 				der.startSequence();
 				cert.purposes.forEach(function (purpose) {
 					if (purpose === 'ca')
-						return;
+						{ return; }
 					if (KEYUSEBITS.indexOf(purpose) !== -1)
-						return;
+						{ return; }
 					var oid = purpose;
 					if (EXTPURPOSE[purpose] !== undefined)
-						oid = EXTPURPOSE[purpose];
+						{ oid = EXTPURPOSE[purpose]; }
 					der.writeOID(oid);
 				});
 				der.endSequence();
@@ -46625,7 +46819,7 @@ function writeBitField(setBits, bitIndex) {
 		var mask = 1 << bit;
 		var name = bitIndex[i];
 		if (name === undefined)
-			continue;
+			{ continue; }
 		var bitVal = (setBits.indexOf(name) !== -1);
 		if (bitVal) {
 			bits[byteN] |= mask;
@@ -46678,7 +46872,7 @@ function read$10(buf, options) {
 		m = lines[0].match(/*JSSTYLED*/
 		    /^([A-Za-z0-9-]+): (.+)$/);
 		if (!m)
-			break;
+			{ break; }
 		headers[m[1].toLowerCase()] = m[2];
 	}
 
@@ -46702,7 +46896,7 @@ function write$10(cert, options) {
 	for (var i = 0; i < tmp.length; ) {
 		var limit = i + 64;
 		if (limit > tmp.length)
-			limit = tmp.length;
+			{ limit = tmp.length; }
 		o += buf.write(tmp.slice(i, limit), o);
 		buf[o++] = 10;
 		i = limit;
@@ -46772,7 +46966,7 @@ Certificate.formats = formats$1;
 
 Certificate.prototype.toBuffer = function (format, options) {
 	if (format === undefined)
-		format = 'x509';
+		{ format = 'x509'; }
 	assert_1.string(format, 'format');
 	assert_1.object(formats$1[format], 'formats[format]');
 	assert_1.optionalObject(options, 'options');
@@ -46782,13 +46976,13 @@ Certificate.prototype.toBuffer = function (format, options) {
 
 Certificate.prototype.toString = function (format, options) {
 	if (format === undefined)
-		format = 'pem';
+		{ format = 'pem'; }
 	return (this.toBuffer(format, options).toString());
 };
 
 Certificate.prototype.fingerprint = function (algo) {
 	if (algo === undefined)
-		algo = 'sha256';
+		{ algo = 'sha256'; }
 	assert_1.string(algo, 'algorithm');
 	var opts = {
 		type: 'certificate',
@@ -46802,10 +46996,10 @@ Certificate.prototype.hash = function (algo) {
 	assert_1.string(algo, 'algorithm');
 	algo = algo.toLowerCase();
 	if (algs.hashAlgs[algo] === undefined)
-		throw (new InvalidAlgorithmError$5(algo));
+		{ throw (new InvalidAlgorithmError$5(algo)); }
 
 	if (this._hashCache[algo])
-		return (this._hashCache[algo]);
+		{ return (this._hashCache[algo]); }
 
 	var hash = tls.createHash(algo).
 	    update(this.toBuffer('x509')).digest();
@@ -46815,7 +47009,7 @@ Certificate.prototype.hash = function (algo) {
 
 Certificate.prototype.isExpired = function (when) {
 	if (when === undefined)
-		when = new Date();
+		{ when = new Date(); }
 	return (!((when.getTime() >= this.validFrom.getTime()) &&
 		(when.getTime() < this.validUntil.getTime())));
 };
@@ -46824,7 +47018,7 @@ Certificate.prototype.isSignedBy = function (issuerCert) {
 	utils$4.assertCompatible(issuerCert, Certificate, [1, 0], 'issuer');
 
 	if (!this.issuer.equals(issuerCert.subjects[0]))
-		return (false);
+		{ return (false); }
 	if (this.issuer.purposes && this.issuer.purposes.length > 0 &&
 	    this.issuer.purposes.indexOf('ca') === -1) {
 		return (false);
@@ -46844,19 +47038,21 @@ Certificate.prototype.isSignedByKey = function (issuerKey) {
 	var fmt = Object.keys(this.signatures)[0];
 	var valid = formats$1[fmt].verify(this, issuerKey);
 	if (valid)
-		this.issuerKey = issuerKey;
+		{ this.issuerKey = issuerKey; }
 	return (valid);
 };
 
 Certificate.prototype.signWith = function (key$$1) {
+	var this$1 = this;
+
 	utils$4.assertCompatible(key$$1, privateKey, [1, 2], 'key');
 	var fmts = Object.keys(formats$1);
 	var didOne = false;
 	for (var i = 0; i < fmts.length; ++i) {
 		if (fmts[i] !== 'pem') {
-			var ret = formats$1[fmts[i]].sign(this, key$$1);
+			var ret = formats$1[fmts[i]].sign(this$1, key$$1);
 			if (ret === true)
-				didOne = true;
+				{ didOne = true; }
 		}
 	}
 	if (!didOne) {
@@ -46868,9 +47064,9 @@ Certificate.prototype.signWith = function (key$$1) {
 Certificate.createSelfSigned = function (subjectOrSubjects, key$$1, options) {
 	var subjects;
 	if (Array.isArray(subjectOrSubjects))
-		subjects = subjectOrSubjects;
+		{ subjects = subjectOrSubjects; }
 	else
-		subjects = [subjectOrSubjects];
+		{ subjects = [subjectOrSubjects]; }
 
 	assert_1.arrayOfObject(subjects);
 	subjects.forEach(function (subject) {
@@ -46881,38 +47077,38 @@ Certificate.createSelfSigned = function (subjectOrSubjects, key$$1, options) {
 
 	assert_1.optionalObject(options, 'options');
 	if (options === undefined)
-		options = {};
+		{ options = {}; }
 	assert_1.optionalObject(options.validFrom, 'options.validFrom');
 	assert_1.optionalObject(options.validUntil, 'options.validUntil');
 	var validFrom = options.validFrom;
 	var validUntil = options.validUntil;
 	if (validFrom === undefined)
-		validFrom = new Date();
+		{ validFrom = new Date(); }
 	if (validUntil === undefined) {
 		assert_1.optionalNumber(options.lifetime, 'options.lifetime');
 		var lifetime = options.lifetime;
 		if (lifetime === undefined)
-			lifetime = 10*365*24*3600;
+			{ lifetime = 10*365*24*3600; }
 		validUntil = new Date();
 		validUntil.setTime(validUntil.getTime() + lifetime*1000);
 	}
 	assert_1.optionalBuffer(options.serial, 'options.serial');
 	var serial = options.serial;
 	if (serial === undefined)
-		serial = new Buffer('0000000000000001', 'hex');
+		{ serial = new Buffer('0000000000000001', 'hex'); }
 
 	var purposes = options.purposes;
 	if (purposes === undefined)
-		purposes = [];
+		{ purposes = []; }
 
 	if (purposes.indexOf('signature') === -1)
-		purposes.push('signature');
+		{ purposes.push('signature'); }
 
 	/* Self-signed certs are always CAs. */
 	if (purposes.indexOf('ca') === -1)
-		purposes.push('ca');
+		{ purposes.push('ca'); }
 	if (purposes.indexOf('crl') === -1)
-		purposes.push('crl');
+		{ purposes.push('crl'); }
 
 	/*
 	 * If we weren't explicitly given any other purposes, do the sensible
@@ -46927,18 +47123,18 @@ Certificate.createSelfSigned = function (subjectOrSubjects, key$$1, options) {
 		});
 		if (hostSubjects.length > 0) {
 			if (purposes.indexOf('serverAuth') === -1)
-				purposes.push('serverAuth');
+				{ purposes.push('serverAuth'); }
 		}
 		if (userSubjects.length > 0) {
 			if (purposes.indexOf('clientAuth') === -1)
-				purposes.push('clientAuth');
+				{ purposes.push('clientAuth'); }
 		}
 		if (userSubjects.length > 0 || hostSubjects.length > 0) {
 			if (purposes.indexOf('keyAgreement') === -1)
-				purposes.push('keyAgreement');
+				{ purposes.push('keyAgreement'); }
 			if (key$$1.type === 'rsa' &&
 			    purposes.indexOf('encryption') === -1)
-				purposes.push('encryption');
+				{ purposes.push('encryption'); }
 		}
 	}
 
@@ -46962,9 +47158,9 @@ Certificate.create =
     function (subjectOrSubjects, key$$1, issuer, issuerKey, options) {
 	var subjects;
 	if (Array.isArray(subjectOrSubjects))
-		subjects = subjectOrSubjects;
+		{ subjects = subjectOrSubjects; }
 	else
-		subjects = [subjectOrSubjects];
+		{ subjects = [subjectOrSubjects]; }
 
 	assert_1.arrayOfObject(subjects);
 	subjects.forEach(function (subject) {
@@ -46973,44 +47169,44 @@ Certificate.create =
 
 	utils$4.assertCompatible(key$$1, key, [1, 0], 'key');
 	if (privateKey.isPrivateKey(key$$1))
-		key$$1 = key$$1.toPublic();
+		{ key$$1 = key$$1.toPublic(); }
 	utils$4.assertCompatible(issuer, identity$1, [1, 0], 'issuer');
 	utils$4.assertCompatible(issuerKey, privateKey, [1, 2], 'issuer key');
 
 	assert_1.optionalObject(options, 'options');
 	if (options === undefined)
-		options = {};
+		{ options = {}; }
 	assert_1.optionalObject(options.validFrom, 'options.validFrom');
 	assert_1.optionalObject(options.validUntil, 'options.validUntil');
 	var validFrom = options.validFrom;
 	var validUntil = options.validUntil;
 	if (validFrom === undefined)
-		validFrom = new Date();
+		{ validFrom = new Date(); }
 	if (validUntil === undefined) {
 		assert_1.optionalNumber(options.lifetime, 'options.lifetime');
 		var lifetime = options.lifetime;
 		if (lifetime === undefined)
-			lifetime = 10*365*24*3600;
+			{ lifetime = 10*365*24*3600; }
 		validUntil = new Date();
 		validUntil.setTime(validUntil.getTime() + lifetime*1000);
 	}
 	assert_1.optionalBuffer(options.serial, 'options.serial');
 	var serial = options.serial;
 	if (serial === undefined)
-		serial = new Buffer('0000000000000001', 'hex');
+		{ serial = new Buffer('0000000000000001', 'hex'); }
 
 	var purposes = options.purposes;
 	if (purposes === undefined)
-		purposes = [];
+		{ purposes = []; }
 
 	if (purposes.indexOf('signature') === -1)
-		purposes.push('signature');
+		{ purposes.push('signature'); }
 
 	if (options.ca === true) {
 		if (purposes.indexOf('ca') === -1)
-			purposes.push('ca');
+			{ purposes.push('ca'); }
 		if (purposes.indexOf('crl') === -1)
-			purposes.push('crl');
+			{ purposes.push('crl'); }
 	}
 
 	var hostSubjects = subjects.filter(function (subject) {
@@ -47021,18 +47217,18 @@ Certificate.create =
 	});
 	if (hostSubjects.length > 0) {
 		if (purposes.indexOf('serverAuth') === -1)
-			purposes.push('serverAuth');
+			{ purposes.push('serverAuth'); }
 	}
 	if (userSubjects.length > 0) {
 		if (purposes.indexOf('clientAuth') === -1)
-			purposes.push('clientAuth');
+			{ purposes.push('clientAuth'); }
 	}
 	if (userSubjects.length > 0 || hostSubjects.length > 0) {
 		if (purposes.indexOf('keyAgreement') === -1)
-			purposes.push('keyAgreement');
+			{ purposes.push('keyAgreement'); }
 		if (key$$1.type === 'rsa' &&
 		    purposes.indexOf('encryption') === -1)
-			purposes.push('encryption');
+			{ purposes.push('encryption'); }
 	}
 
 	var cert = new Certificate({
@@ -47053,18 +47249,18 @@ Certificate.create =
 
 Certificate.parse = function (data, format, options) {
 	if (typeof (data) !== 'string')
-		assert_1.buffer(data, 'data');
+		{ assert_1.buffer(data, 'data'); }
 	if (format === undefined)
-		format = 'auto';
+		{ format = 'auto'; }
 	assert_1.string(format, 'format');
 	if (typeof (options) === 'string')
-		options = { filename: options };
+		{ options = { filename: options }; }
 	assert_1.optionalObject(options, 'options');
 	if (options === undefined)
-		options = {};
+		{ options = {}; }
 	assert_1.optionalString(options.filename, 'options.filename');
 	if (options.filename === undefined)
-		options.filename = '(unnamed)';
+		{ options.filename = '(unnamed)'; }
 
 	assert_1.object(formats$1[format], 'formats[format]');
 
@@ -47113,7 +47309,7 @@ function Fingerprint(opts) {
 
 	this.algorithm = opts.algorithm.toLowerCase();
 	if (algs.hashAlgs[this.algorithm] !== true)
-		throw (new InvalidAlgorithmError$3(this.algorithm));
+		{ throw (new InvalidAlgorithmError$3(this.algorithm)); }
 
 	this.hash = opts.hash;
 	this.type = opts.type;
@@ -47122,9 +47318,9 @@ function Fingerprint(opts) {
 Fingerprint.prototype.toString = function (format) {
 	if (format === undefined) {
 		if (this.algorithm === 'md5')
-			format = 'hex';
+			{ format = 'hex'; }
 		else
-			format = 'base64';
+			{ format = 'base64'; }
 	}
 	assert_1.string(format);
 
@@ -47153,8 +47349,8 @@ Fingerprint.prototype.matches = function (other) {
 	    update(theirHash).digest('base64');
 
 	if (this.hash2 === undefined)
-		this.hash2 = tls.createHash(this.algorithm).
-		    update(this.hash).digest('base64');
+		{ this.hash2 = tls.createHash(this.algorithm).
+		    update(this.hash).digest('base64'); }
 
 	return (this.hash2 === theirHash2);
 };
@@ -47169,9 +47365,9 @@ Fingerprint.parse = function (fp, options) {
 	}
 	assert_1.optionalObject(options, 'options');
 	if (options === undefined)
-		options = {};
+		{ options = {}; }
 	if (options.enAlgs !== undefined)
-		enAlgs = options.enAlgs;
+		{ enAlgs = options.enAlgs; }
 	assert_1.optionalArrayOfString(enAlgs, 'algorithms');
 
 	var parts = fp.split(':');
@@ -47180,7 +47376,7 @@ Fingerprint.parse = function (fp, options) {
 		/*JSSTYLED*/
 		var base64RE = /^[A-Za-z0-9+\/=]+$/;
 		if (!base64RE.test(parts[1]))
-			throw (new FingerprintFormatError(fp));
+			{ throw (new FingerprintFormatError(fp)); }
 		try {
 			hash = new Buffer(parts[1], 'base64');
 		} catch (e) {
@@ -47189,12 +47385,12 @@ Fingerprint.parse = function (fp, options) {
 	} else if (parts.length > 2) {
 		alg = 'md5';
 		if (parts[0].toLowerCase() === 'md5')
-			parts = parts.slice(1);
+			{ parts = parts.slice(1); }
 		parts = parts.join('');
 		/*JSSTYLED*/
 		var md5RE = /^[a-fA-F0-9]+$/;
 		if (!md5RE.test(parts))
-			throw (new FingerprintFormatError(fp));
+			{ throw (new FingerprintFormatError(fp)); }
 		try {
 			hash = new Buffer(parts, 'hex');
 		} catch (e) {
@@ -47203,15 +47399,15 @@ Fingerprint.parse = function (fp, options) {
 	}
 
 	if (alg === undefined)
-		throw (new FingerprintFormatError(fp));
+		{ throw (new FingerprintFormatError(fp)); }
 
 	if (algs.hashAlgs[alg] === undefined)
-		throw (new InvalidAlgorithmError$3(alg));
+		{ throw (new InvalidAlgorithmError$3(alg)); }
 
 	if (enAlgs !== undefined) {
 		enAlgs = enAlgs.map(function (a) { return a.toLowerCase(); });
 		if (enAlgs.indexOf(alg) === -1)
-			throw (new InvalidAlgorithmError$3(alg));
+			{ throw (new InvalidAlgorithmError$3(alg)); }
 	}
 
 	return (new Fingerprint({
@@ -47294,7 +47490,7 @@ function Key(opts) {
 
 	var algInfo = algs.info[opts.type];
 	if (typeof (algInfo) !== 'object')
-		throw (new InvalidAlgorithmError$2(opts.type));
+		{ throw (new InvalidAlgorithmError$2(opts.type)); }
 
 	var partLookup = {};
 	for (var i = 0; i < opts.parts.length; ++i) {
@@ -47333,14 +47529,14 @@ Key.formats = formats;
 
 Key.prototype.toBuffer = function (format, options) {
 	if (format === undefined)
-		format = 'ssh';
+		{ format = 'ssh'; }
 	assert_1.string(format, 'format');
 	assert_1.object(formats[format], 'formats[format]');
 	assert_1.optionalObject(options, 'options');
 
 	if (format === 'rfc4253') {
 		if (this._rfc4253Cache === undefined)
-			this._rfc4253Cache = formats['rfc4253'].write(this);
+			{ this._rfc4253Cache = formats['rfc4253'].write(this); }
 		return (this._rfc4253Cache);
 	}
 
@@ -47355,10 +47551,10 @@ Key.prototype.hash = function (algo) {
 	assert_1.string(algo, 'algorithm');
 	algo = algo.toLowerCase();
 	if (algs.hashAlgs[algo] === undefined)
-		throw (new InvalidAlgorithmError$2(algo));
+		{ throw (new InvalidAlgorithmError$2(algo)); }
 
 	if (this._hashCache[algo])
-		return (this._hashCache[algo]);
+		{ return (this._hashCache[algo]); }
 
 	var hash = tls.createHash(algo).
 	    update(this.toBuffer('rfc4253')).digest();
@@ -47368,7 +47564,7 @@ Key.prototype.hash = function (algo) {
 
 Key.prototype.fingerprint = function (algo) {
 	if (algo === undefined)
-		algo = 'sha256';
+		{ algo = 'sha256'; }
 	assert_1.string(algo, 'algorithm');
 	var opts = {
 		type: 'key',
@@ -47381,33 +47577,33 @@ Key.prototype.fingerprint = function (algo) {
 Key.prototype.defaultHashAlgorithm = function () {
 	var hashAlgo = 'sha1';
 	if (this.type === 'rsa')
-		hashAlgo = 'sha256';
+		{ hashAlgo = 'sha256'; }
 	if (this.type === 'dsa' && this.size > 1024)
-		hashAlgo = 'sha256';
+		{ hashAlgo = 'sha256'; }
 	if (this.type === 'ed25519')
-		hashAlgo = 'sha512';
+		{ hashAlgo = 'sha512'; }
 	if (this.type === 'ecdsa') {
 		if (this.size <= 256)
-			hashAlgo = 'sha256';
+			{ hashAlgo = 'sha256'; }
 		else if (this.size <= 384)
-			hashAlgo = 'sha384';
+			{ hashAlgo = 'sha384'; }
 		else
-			hashAlgo = 'sha512';
+			{ hashAlgo = 'sha512'; }
 	}
 	return (hashAlgo);
 };
 
 Key.prototype.createVerify = function (hashAlgo) {
 	if (hashAlgo === undefined)
-		hashAlgo = this.defaultHashAlgorithm();
+		{ hashAlgo = this.defaultHashAlgorithm(); }
 	assert_1.string(hashAlgo, 'hash algorithm');
 
 	/* ED25519 is not supported by OpenSSL, use a javascript impl. */
 	if (this.type === 'ed25519' && edCompat !== undefined)
-		return (new edCompat.Verifier(this, hashAlgo));
+		{ return (new edCompat.Verifier(this, hashAlgo)); }
 	if (this.type === 'curve25519')
-		throw (new Error('Curve25519 keys are not suitable for ' +
-		    'signing or verification'));
+		{ throw (new Error('Curve25519 keys are not suitable for ' +
+		    'signing or verification')); }
 
 	var v, nm, err;
 	try {
@@ -47430,13 +47626,13 @@ Key.prototype.createVerify = function (hashAlgo) {
 	v.verify = function (signature$$1, fmt) {
 		if (signature.isSignature(signature$$1, [2, 0])) {
 			if (signature$$1.type !== self.type)
-				return (false);
+				{ return (false); }
 			if (signature$$1.hashAlgorithm &&
 			    signature$$1.hashAlgorithm !== hashAlgo)
-				return (false);
+				{ return (false); }
 			if (signature$$1.curve && self.type === 'ecdsa' &&
 			    signature$$1.curve !== curve)
-				return (false);
+				{ return (false); }
 			return (oldVerify(key, signature$$1.toBuffer('asn1')));
 
 		} else if (typeof (signature$$1) === 'string' ||
@@ -47461,7 +47657,7 @@ Key.prototype.createVerify = function (hashAlgo) {
 
 Key.prototype.createDiffieHellman = function () {
 	if (this.type === 'rsa')
-		throw (new Error('RSA keys do not support Diffie-Hellman'));
+		{ throw (new Error('RSA keys do not support Diffie-Hellman')); }
 
 	return (new DiffieHellman(this));
 };
@@ -47469,31 +47665,31 @@ Key.prototype.createDH = Key.prototype.createDiffieHellman;
 
 Key.parse = function (data, format, options) {
 	if (typeof (data) !== 'string')
-		assert_1.buffer(data, 'data');
+		{ assert_1.buffer(data, 'data'); }
 	if (format === undefined)
-		format = 'auto';
+		{ format = 'auto'; }
 	assert_1.string(format, 'format');
 	if (typeof (options) === 'string')
-		options = { filename: options };
+		{ options = { filename: options }; }
 	assert_1.optionalObject(options, 'options');
 	if (options === undefined)
-		options = {};
+		{ options = {}; }
 	assert_1.optionalString(options.filename, 'options.filename');
 	if (options.filename === undefined)
-		options.filename = '(unnamed)';
+		{ options.filename = '(unnamed)'; }
 
 	assert_1.object(formats[format], 'formats[format]');
 
 	try {
 		var k = formats[format].read(data, options);
 		if (k instanceof privateKey)
-			k = k.toPublic();
+			{ k = k.toPublic(); }
 		if (!k.comment)
-			k.comment = options.filename;
+			{ k.comment = options.filename; }
 		return (k);
 	} catch (e) {
 		if (e.name === 'KeyEncryptedError')
-			throw (e);
+			{ throw (e); }
 		throw (new KeyParseError(options.filename, format, e));
 	}
 };
@@ -47517,13 +47713,13 @@ Key._oldVersionDetect = function (obj) {
 	assert_1.func(obj.toBuffer);
 	assert_1.func(obj.fingerprint);
 	if (obj.createDH)
-		return ([1, 4]);
+		{ return ([1, 4]); }
 	if (obj.defaultHashAlgorithm)
-		return ([1, 3]);
+		{ return ([1, 3]); }
 	if (obj.formats['auto'])
-		return ([1, 2]);
+		{ return ([1, 2]); }
 	if (obj.formats['pkcs1'])
-		return ([1, 1]);
+		{ return ([1, 1]); }
 	return ([1, 0]);
 };
 
@@ -47587,7 +47783,7 @@ var PK_ALGOS$1 = {
 
 function HttpSignatureError$1(message, caller) {
   if (Error.captureStackTrace)
-    Error.captureStackTrace(this, caller || HttpSignatureError$1);
+    { Error.captureStackTrace(this, caller || HttpSignatureError$1); }
 
   this.message = message;
   this.name = caller.name;
@@ -47817,8 +48013,8 @@ var parser = {
       switch (Number(state)) {
 
       case State.New:
-        if (c !== ' ') parsed.scheme += c;
-        else state = State.Params;
+        if (c !== ' ') { parsed.scheme += c; }
+        else { state = State.Params; }
         break;
 
       case State.Params:
@@ -47832,7 +48028,7 @@ var parser = {
             tmpName += c;
           } else if (c === '=') {
             if (tmpName.length === 0)
-              throw new InvalidHeaderError('bad param format');
+              { throw new InvalidHeaderError('bad param format'); }
             substate = ParamsState.Quote;
           } else {
             throw new InvalidHeaderError('bad param format');
@@ -47889,16 +48085,16 @@ var parser = {
 
     // Minimally validate the parsed object
     if (!parsed.scheme || parsed.scheme !== 'Signature')
-      throw new InvalidHeaderError('scheme was not "Signature"');
+      { throw new InvalidHeaderError('scheme was not "Signature"'); }
 
     if (!parsed.params.keyId)
-      throw new InvalidHeaderError('keyId was not specified');
+      { throw new InvalidHeaderError('keyId was not specified'); }
 
     if (!parsed.params.algorithm)
-      throw new InvalidHeaderError('algorithm was not specified');
+      { throw new InvalidHeaderError('algorithm was not specified'); }
 
     if (!parsed.params.signature)
-      throw new InvalidHeaderError('signature was not specified');
+      { throw new InvalidHeaderError('signature was not specified'); }
 
     // Check the algorithm against the official list
     parsed.params.algorithm = parsed.params.algorithm.toLowerCase();
@@ -47906,10 +48102,10 @@ var parser = {
       validateAlgorithm(parsed.params.algorithm);
     } catch (e) {
       if (e instanceof InvalidAlgorithmError)
-        throw (new InvalidParamsError(parsed.params.algorithm + ' is not ' +
-          'supported'));
+        { throw (new InvalidParamsError(parsed.params.algorithm + ' is not ' +
+          'supported')); }
       else
-        throw (e);
+        { throw (e); }
     }
 
     // Build the signingString
@@ -47937,12 +48133,12 @@ var parser = {
       } else {
         var value = request.headers[h];
         if (value === undefined)
-          throw new MissingHeaderError(h + ' was not in the request');
+          { throw new MissingHeaderError(h + ' was not in the request'); }
         parsed.signingString += h + ': ' + value;
       }
 
       if ((i + 1) < parsed.params.headers.length)
-        parsed.signingString += '\n';
+        { parsed.signingString += '\n'; }
     }
 
     // Check against the constraints
@@ -47968,13 +48164,13 @@ var parser = {
       // Remember that we already checked any headers in the params
       // were in the request, so if this passes we're good.
       if (parsed.params.headers.indexOf(hdr.toLowerCase()) < 0)
-        throw new MissingHeaderError(hdr + ' was not a signed header');
+        { throw new MissingHeaderError(hdr + ' was not a signed header'); }
     });
 
     if (options.algorithms) {
       if (options.algorithms.indexOf(parsed.params.algorithm) === -1)
-        throw new InvalidParamsError(parsed.params.algorithm +
-                                     ' is not a supported algorithm');
+        { throw new InvalidParamsError(parsed.params.algorithm +
+                                     ' is not a supported algorithm'); }
     }
 
     parsed.algorithm = parsed.params.algorithm.toUpperCase();
@@ -48055,34 +48251,34 @@ function jsSprintf(fmt)
 		}
 
 		if (args.length === 0)
-			throw (new Error('too few args to sprintf'));
+			{ throw (new Error('too few args to sprintf')); }
 
 		arg = args.shift();
 		argn++;
 
 		if (flags.match(/[\' #]/))
-			throw (new Error(
-			    'unsupported flags: ' + flags));
+			{ throw (new Error(
+			    'unsupported flags: ' + flags)); }
 
 		if (precision.length > 0)
-			throw (new Error(
-			    'non-zero precision not supported'));
+			{ throw (new Error(
+			    'non-zero precision not supported')); }
 
 		if (flags.match(/-/))
-			left = true;
+			{ left = true; }
 
 		if (flags.match(/0/))
-			pad = '0';
+			{ pad = '0'; }
 
 		if (flags.match(/\+/))
-			sign = true;
+			{ sign = true; }
 
 		switch (conversion) {
 		case 's':
 			if (arg === undefined || arg === null)
-				throw (new Error('argument ' + argn +
+				{ throw (new Error('argument ' + argn +
 				    ': attempted to print undefined or null ' +
-				    'as a string'));
+				    'as a string')); }
 			ret += doPad(pad, width, left, arg.toString());
 			break;
 
@@ -48101,7 +48297,7 @@ function jsSprintf(fmt)
 
 		case 'j': /* non-standard */
 			if (width === 0)
-				width = 10;
+				{ width = 10; }
 			ret += util$4.inspect(arg, false, width);
 			break;
 
@@ -48136,9 +48332,9 @@ function doPad(chr, width, left, str)
 
 	while (ret.length < width) {
 		if (left)
-			ret += chr;
+			{ ret += chr; }
 		else
-			ret = chr + ret;
+			{ ret = chr + ret; }
 	}
 
 	return (ret);
@@ -48153,7 +48349,7 @@ function dumpException(ex)
 	var ret;
 
 	if (!(ex instanceof Error))
-		throw (new Error(jsSprintf('invalid type for %%r: %j', ex)));
+		{ throw (new Error(jsSprintf('invalid type for %%r: %j', ex))); }
 
 	/* Note that V8 prepends "ex.stack" with ex.toString(). */
 	ret = 'EXCEPTION: ' + ex.constructor.name + ': ' + ex.stack;
@@ -48433,6 +48629,8 @@ function parseConstructorArguments(args)
  */
 function VError()
 {
+	var this$1 = this;
+
 	var args, obj, parsed, cause, ctor, message, k;
 
 	args = Array.prototype.slice.call(arguments, 0);
@@ -48497,7 +48695,7 @@ function VError()
 	this.jse_info = {};
 	if (parsed.options.info) {
 		for (k in parsed.options.info) {
-			this.jse_info[k] = parsed.options.info[k];
+			this$1.jse_info[k] = parsed.options.info[k];
 		}
 	}
 
@@ -48520,7 +48718,7 @@ VError.prototype.toString = function ve_toString()
 	var str = (this.hasOwnProperty('name') && this.name ||
 		this.constructor.name || this.constructor.prototype.name);
 	if (this.message)
-		str += ': ' + this.message;
+		{ str += ': ' + this.message; }
 
 	return (str);
 };
@@ -48733,9 +48931,9 @@ WError.prototype.toString = function we_toString()
 	var str = (this.hasOwnProperty('name') && this.name ||
 		this.constructor.name || this.constructor.prototype.name);
 	if (this.message)
-		str += ': ' + this.message;
+		{ str += ': ' + this.message; }
 	if (this.jse_cause && this.jse_cause.message)
-		str += '; caused by ' + this.jse_cause.toString();
+		{ str += '; caused by ' + this.jse_cause.toString(); }
 
 	return (str);
 };
@@ -48747,7 +48945,7 @@ WError.prototype.toString = function we_toString()
 WError.prototype.cause = function we_cause(c)
 {
 	if (mod_isError(c))
-		this.jse_cause = c;
+		{ this.jse_cause = c; }
 
 	return (this.jse_cause);
 };
@@ -48822,7 +49020,7 @@ exports.checkPropertyChange = function(/*Any*/value,/*Object*/schema, /*String*/
 	};
 var validate = exports._validate = function(/*Any*/instance,/*Object*/schema,/*Object*/options) {
 
-	if (!options) options = {};
+	if (!options) { options = {}; }
 	var _changing = options.changing;
 
 	function getType(schema){
@@ -48901,9 +49099,9 @@ var validate = exports._validate = function(/*Any*/instance,/*Object*/schema,/*O
 						var propDef = schema.items;
 						for (i = 0, l = value.length; i < l; i += 1) {
 							if (itemsIsArray)
-								propDef = schema.items[i];
+								{ propDef = schema.items[i]; }
 							if (options.coerce)
-								value[i] = options.coerce(value[i], propDef);
+								{ value[i] = options.coerce(value[i], propDef); }
 							errors.concat(checkProp(value[i],propDef,path,i));
 						}
 					}
@@ -48967,7 +49165,7 @@ var validate = exports._validate = function(/*Any*/instance,/*Object*/schema,/*O
 				if(objTypeDef.hasOwnProperty(i)){
 					var value = instance[i];
 					// skip _not_ specified properties
-					if (value === undefined && options.existingOnly) continue;
+					if (value === undefined && options.existingOnly) { continue; }
 					var propDef = objTypeDef[i];
 					// set default
 					if(value === undefined && propDef["default"]){
@@ -49085,7 +49283,7 @@ function deepCopy(obj)
 	var marker = '__deepCopy';
 
 	if (obj && obj[marker])
-		throw (new Error('attempted deep copy of cyclic object'));
+		{ throw (new Error('attempted deep copy of cyclic object')); }
 
 	if (obj && obj.constructor == Object) {
 		ret = {};
@@ -49093,7 +49291,7 @@ function deepCopy(obj)
 
 		for (key in obj) {
 			if (key == marker)
-				continue;
+				{ continue; }
 
 			ret[key] = deepCopy(obj[key]);
 		}
@@ -49107,7 +49305,7 @@ function deepCopy(obj)
 		obj[marker] = true;
 
 		for (key = 0; key < obj.length; key++)
-			ret.push(deepCopy(obj[key]));
+			{ ret.push(deepCopy(obj[key])); }
 
 		delete (obj[marker]);
 		return (ret);
@@ -49122,26 +49320,26 @@ function deepCopy(obj)
 function deepEqual$1(obj1, obj2)
 {
 	if (typeof (obj1) != typeof (obj2))
-		return (false);
+		{ return (false); }
 
 	if (obj1 === null || obj2 === null || typeof (obj1) != 'object')
-		return (obj1 === obj2);
+		{ return (obj1 === obj2); }
 
 	if (obj1.constructor != obj2.constructor)
-		return (false);
+		{ return (false); }
 
 	var k;
 	for (k in obj1) {
 		if (!obj2.hasOwnProperty(k))
-			return (false);
+			{ return (false); }
 
 		if (!deepEqual$1(obj1[k], obj2[k]))
-			return (false);
+			{ return (false); }
 	}
 
 	for (k in obj2) {
 		if (!obj1.hasOwnProperty(k))
-			return (false);
+			{ return (false); }
 	}
 
 	return (true);
@@ -49151,7 +49349,7 @@ function isEmpty(obj)
 {
 	var key;
 	for (key in obj)
-		return (false);
+		{ return (false); }
 	return (true);
 }
 
@@ -49179,18 +49377,18 @@ function pluck(obj, key)
 function pluckv(obj, key)
 {
 	if (obj === null || typeof (obj) !== 'object')
-		return (undefined);
+		{ return (undefined); }
 
 	if (obj.hasOwnProperty(key))
-		return (obj[key]);
+		{ return (obj[key]); }
 
 	var i = key.indexOf('.');
 	if (i == -1)
-		return (undefined);
+		{ return (undefined); }
 
 	var key1 = key.substr(0, i);
 	if (!obj.hasOwnProperty(key1))
-		return (undefined);
+		{ return (undefined); }
 
 	return (pluckv(obj[key1], key.substr(i + 1)));
 }
@@ -49233,7 +49431,7 @@ function doFlattenIter(data, depth, accum, callback)
 function flattenObject(data, depth)
 {
 	if (depth === 0)
-		return ([ data ]);
+		{ return ([ data ]); }
 
 	assert_1.ok(data !== null);
 	assert_1.equal(typeof (data), 'object');
@@ -49266,7 +49464,7 @@ function endsWith(str, suffix)
 function iso8601(d)
 {
 	if (typeof (d) == 'number')
-		d = new Date(d);
+		{ d = new Date(d); }
 	assert_1.ok(d.constructor === Date);
 	return (extsprintf.sprintf('%4d-%02d-%02dT%02d:%02d:%02d.%03dZ',
 	    d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(),
@@ -49561,7 +49759,7 @@ function validateJsonObjectJS(schema, input)
 	var report = validate.validate(input, schema);
 
 	if (report.errors.length === 0)
-		return (null);
+		{ return (null); }
 
 	/* Currently, we only do anything useful with the first error. */
 	var error = report.errors[0];
@@ -49580,9 +49778,9 @@ function validateJsonObjectJS(schema, input)
 	    'schema does not allow additional properties')) != -1) {
 		i += 'the property '.length;
 		if (propname === '')
-			propname = reason.substr(i, j - i);
+			{ propname = reason.substr(i, j - i); }
 		else
-			propname = propname + '.' + reason.substr(i, j - i);
+			{ propname = propname + '.' + reason.substr(i, j - i); }
 
 		reason = 'unsupported property';
 	}
@@ -49748,17 +49946,17 @@ function mergeObjects(provided, overrides, defaults)
 	rv = {};
 	if (defaults) {
 		for (k in defaults)
-			rv[k] = defaults[k];
+			{ rv[k] = defaults[k]; }
 	}
 
 	if (provided) {
 		for (k in provided)
-			rv[k] = provided[k];
+			{ rv[k] = provided[k]; }
 	}
 
 	if (overrides) {
 		for (k in overrides)
-			rv[k] = overrides[k];
+			{ rv[k] = overrides[k]; }
 	}
 
 	return (rv);
@@ -49860,7 +50058,7 @@ function RequestSigner(options) {
     this.rs_keyId = options.keyId;
 
     if (typeof (options.key) !== 'string' && !Buffer.isBuffer(options.key))
-      throw (new TypeError('options.key for HMAC must be a string or Buffer'));
+      { throw (new TypeError('options.key for HMAC must be a string or Buffer')); }
 
     /*
      * Make an rs_signer for HMACs, not a rs_signFunc -- HMACs digest their
@@ -49879,7 +50077,7 @@ function RequestSigner(options) {
   } else if (options.key !== undefined) {
     var key = options.key;
     if (typeof (key) === 'string' || Buffer.isBuffer(key))
-      key = lib$16.parsePrivateKey(key);
+      { key = lib$16.parsePrivateKey(key); }
 
     assert_1.ok(lib$16.PrivateKey.isPrivateKey(key, [1, 2]),
       'options.key must be a sshpk.PrivateKey');
@@ -49929,7 +50127,7 @@ RequestSigner.prototype.writeHeader = function (header, value) {
   } else {
     var line = header + ': ' + value;
     if (this.rs_headers.length > 0)
-      line = '\n' + line;
+      { line = '\n' + line; }
     this.rs_signer.update(line);
   }
 
@@ -49968,7 +50166,7 @@ RequestSigner.prototype.sign = function (cb) {
   assert_1.func(cb, 'callback');
 
   if (this.rs_headers.length < 1)
-    throw (new Error('At least one header must be signed'));
+    { throw (new Error('At least one header must be signed')); }
 
   var alg, authz;
   if (this.rs_signFunc) {
@@ -50027,7 +50225,7 @@ var signer = {
    */
   isSigner: function (obj) {
     if (typeof (obj) === 'object' && obj instanceof RequestSigner)
-      return (true);
+      { return (true); }
     return (false);
   },
 
@@ -50089,11 +50287,11 @@ var signer = {
     assert_1.optionalString(options.httpVersion, 'options.httpVersion');
 
     if (!request.getHeader('Date'))
-      request.setHeader('Date', jsprim.rfc1123(new Date()));
+      { request.setHeader('Date', jsprim.rfc1123(new Date())); }
     if (!options.headers)
-      options.headers = ['date'];
+      { options.headers = ['date']; }
     if (!options.httpVersion)
-      options.httpVersion = '1.1';
+      { options.httpVersion = '1.1'; }
 
     var alg = [];
     if (options.algorithm) {
@@ -50105,7 +50303,7 @@ var signer = {
     var stringToSign = '';
     for (i = 0; i < options.headers.length; i++) {
       if (typeof (options.headers[i]) !== 'string')
-        throw new TypeError('options.headers must be an array of Strings');
+        { throw new TypeError('options.headers must be an array of Strings'); }
 
       var h = options.headers[i].toLowerCase();
 
@@ -50136,7 +50334,7 @@ var signer = {
       }
 
       if ((i + 1) < options.headers.length)
-        stringToSign += '\n';
+        { stringToSign += '\n'; }
     }
 
     /* This is just for unit tests. */
@@ -50147,7 +50345,7 @@ var signer = {
     var signature;
     if (alg[0] === 'hmac') {
       if (typeof (options.key) !== 'string' && !Buffer.isBuffer(options.key))
-        throw (new TypeError('options.key must be a string or Buffer'));
+        { throw (new TypeError('options.key must be a string or Buffer')); }
 
       var hmac = tls.createHmac(alg[1].toUpperCase(), options.key);
       hmac.update(stringToSign);
@@ -50156,7 +50354,7 @@ var signer = {
     } else {
       var key = options.key;
       if (typeof (key) === 'string' || Buffer.isBuffer(key))
-        key = lib$16.parsePrivateKey(options.key);
+        { key = lib$16.parsePrivateKey(options.key); }
 
       assert_1.ok(lib$16.PrivateKey.isPrivateKey(key, [1, 2]),
         'options.key must be a sshpk.PrivateKey');
@@ -50215,12 +50413,12 @@ var verify$2 = {
   verifySignature: function verifySignature(parsedSignature, pubkey) {
     assert_1.object(parsedSignature, 'parsedSignature');
     if (typeof (pubkey) === 'string' || Buffer.isBuffer(pubkey))
-      pubkey = lib$16.parseKey(pubkey);
+      { pubkey = lib$16.parseKey(pubkey); }
     assert_1.ok(lib$16.Key.isKey(pubkey, [1, 1]), 'pubkey must be a sshpk.Key');
 
     var alg = validateAlgorithm$3(parsedSignature.algorithm);
     if (alg[0] === 'hmac' || alg[0] !== pubkey.type)
-      return (false);
+      { return (false); }
 
     var v = pubkey.createVerify(alg[1]);
     v.update(parsedSignature.signingString);
@@ -50243,7 +50441,7 @@ var verify$2 = {
 
     var alg = validateAlgorithm$3(parsedSignature.algorithm);
     if (alg[0] !== 'hmac')
-      return (false);
+      { return (false); }
 
     var hashAlg = alg[1].toUpperCase();
 
@@ -50266,10 +50464,10 @@ var verify$2 = {
 
     /* Node 0.8 returns strings from .digest(). */
     if (typeof (h1) === 'string')
-      return (h1 === h2);
+      { return (h1 === h2); }
     /* And node 0.10 lacks the .equals() method on Buffers. */
     if (Buffer.isBuffer(h1) && !h1.equals)
-      return (h1.toString('binary') === h2.toString('binary'));
+      { return (h1.toString('binary') === h2.toString('binary')); }
 
     return (h1.equals(h2));
   }
@@ -52395,7 +52593,7 @@ function contentType (str) {
   // TODO: use content-type or other module
   if (mime.indexOf('charset') === -1) {
     var charset = exports.charset(mime);
-    if (charset) mime += '; charset=' + charset.toLowerCase();
+    if (charset) { mime += '; charset=' + charset.toLowerCase(); }
   }
 
   return mime
@@ -52506,11 +52704,11 @@ var stringstream = StringStream;
 var AlignedStringDecoder_1 = AlignedStringDecoder;
 
 function StringStream(from, to) {
-  if (!(this instanceof StringStream)) return new StringStream(from, to)
+  if (!(this instanceof StringStream)) { return new StringStream(from, to) }
 
   require$$0$5.call(this);
 
-  if (from == null) from = 'utf8';
+  if (from == null) { from = 'utf8'; }
 
   this.readable = this.writable = true;
   this.paused = false;
@@ -52528,23 +52726,23 @@ StringStream.prototype.write = function(data) {
     return false
   }
   if (this.fromEncoding) {
-    if (Buffer.isBuffer(data)) data = data.toString();
+    if (Buffer.isBuffer(data)) { data = data.toString(); }
     data = new Buffer(data, this.fromEncoding);
   }
   var string = this.decoder.write(data);
-  if (string.length) this.emit('data', string);
+  if (string.length) { this.emit('data', string); }
   return !this.paused
 };
 
 StringStream.prototype.flush = function() {
   if (this.decoder.flush) {
     var string = this.decoder.flush();
-    if (string.length) this.emit('data', string);
+    if (string.length) { this.emit('data', string); }
   }
 };
 
 StringStream.prototype.end = function() {
-  if (!this.writable && !this.readable) return
+  if (!this.writable && !this.readable) { return }
   this.flush();
   this.emit('end');
   this.writable = this.readable = false;
@@ -52562,7 +52760,7 @@ StringStream.prototype.pause = function() {
 };
 
 StringStream.prototype.resume = function () {
-  if (this.paused) this.emit('drain');
+  if (this.paused) { this.emit('drain'); }
   this.paused = false;
 };
 
@@ -52580,7 +52778,7 @@ function AlignedStringDecoder(encoding) {
 util$4.inherits(AlignedStringDecoder, StringDecoder$1);
 
 AlignedStringDecoder.prototype.flush = function() {
-  if (!this.alignedBuffer || !this.alignedBytes) return ''
+  if (!this.alignedBuffer || !this.alignedBytes) { return '' }
   var leftover = this.alignedBuffer.toString(this.encoding, 0, this.alignedBytes);
   this.alignedBytes = 0;
   return leftover
@@ -52588,7 +52786,7 @@ AlignedStringDecoder.prototype.flush = function() {
 
 function alignedWrite(buffer) {
   var rem = (this.alignedBytes + buffer.length) % this.alignedBuffer.length;
-  if (!rem && !this.alignedBytes) return buffer.toString(this.encoding)
+  if (!rem && !this.alignedBytes) { return buffer.toString(this.encoding) }
 
   var returnBuffer = new Buffer(this.alignedBytes + buffer.length - rem);
 
@@ -52607,16 +52805,18 @@ function Caseless (dict) {
   this.dict = dict || {};
 }
 Caseless.prototype.set = function (name, value, clobber) {
+  var this$1 = this;
+
   if (typeof name === 'object') {
     for (var i in name) {
-      this.set(i, name[i], value);
+      this$1.set(i, name[i], value);
     }
   } else {
-    if (typeof clobber === 'undefined') clobber = true;
+    if (typeof clobber === 'undefined') { clobber = true; }
     var has = this.has(name);
 
-    if (!clobber && has) this.dict[has] = this.dict[has] + ',' + value;
-    else this.dict[has || name] = value;
+    if (!clobber && has) { this.dict[has] = this.dict[has] + ',' + value; }
+    else { this.dict[has || name] = value; }
     return has
   }
 };
@@ -52624,7 +52824,7 @@ Caseless.prototype.has = function (name) {
   var keys = Object.keys(this.dict)
     , name = name.toLowerCase();
   for (var i=0;i<keys.length;i++) {
-    if (keys[i].toLowerCase() === name) return keys[i]
+    if (keys[i].toLowerCase() === name) { return keys[i] }
   }
   return false
 };
@@ -52634,14 +52834,14 @@ Caseless.prototype.get = function (name) {
   var headers = this.dict;
   Object.keys(headers).forEach(function (key) {
     _key = key.toLowerCase();
-    if (name === _key) result = headers[key];
+    if (name === _key) { result = headers[key]; }
   });
   return result
 };
 Caseless.prototype.swap = function (name) {
   var has = this.has(name);
-  if (has === name) return
-  if (!has) throw new Error('There is no header than matches "'+name+'"')
+  if (has === name) { return }
+  if (!has) { throw new Error('There is no header than matches "'+name+'"') }
   this.dict[name] = this.dict[has];
   delete this.dict[has];
 };
@@ -52654,7 +52854,7 @@ var caseless = function (dict) {return new Caseless(dict)};
 var httpify = function (resp, headers) {
   var c = new Caseless(headers);
   resp.setHeader = function (key, value, clobber) {
-    if (typeof value === 'undefined') return
+    if (typeof value === 'undefined') { return }
     return c.set(key, value, clobber)
   };
   resp.hasHeader = function (key) {
@@ -52703,7 +52903,7 @@ function ForeverAgent(options) {
     if (self.requests[name] && self.requests[name].length) {
       self.requests[name].shift().onSocket(socket);
     } else if (self.sockets[name].length < self.minSockets) {
-      if (!self.freeSockets[name]) self.freeSockets[name] = [];
+      if (!self.freeSockets[name]) { self.freeSockets[name] = []; }
       self.freeSockets[name].push(socket);
       
       // if an error happens while we don't use the socket anyway, meh, throw the socket away
@@ -53040,7 +53240,7 @@ CombinedStream.prototype.pause = function() {
     return;
   }
 
-  if(this.pauseStreams && this._currentStream && typeof(this._currentStream.pause) == 'function') this._currentStream.pause();
+  if(this.pauseStreams && this._currentStream && typeof(this._currentStream.pause) == 'function') { this._currentStream.pause(); }
   this.emit('pause');
 };
 
@@ -53051,7 +53251,7 @@ CombinedStream.prototype.resume = function() {
     this._getNext();
   }
 
-  if(this.pauseStreams && this._currentStream && typeof(this._currentStream.resume) == 'function') this._currentStream.resume();
+  if(this.pauseStreams && this._currentStream && typeof(this._currentStream.resume) == 'function') { this._currentStream.resume(); }
   this.emit('resume');
 };
 
@@ -53497,6 +53697,8 @@ util$4.inherits(FormData$1, combined_stream);
  * @param {Object} options - Properties to be added/overriden for FormData and CombinedStream
  */
 function FormData$1(options) {
+  var this$1 = this;
+
   if (!(this instanceof FormData$1)) {
     return new FormData$1();
   }
@@ -53509,7 +53711,7 @@ function FormData$1(options) {
 
   options = options || {};
   for (var option in options) {
-    this[option] = options[option];
+    this$1[option] = options[option];
   }
 }
 
@@ -53665,7 +53867,7 @@ FormData$1.prototype._multiPartHeader = function(field, value, options) {
 
   var header;
   for (var prop in headers) {
-    if (!headers.hasOwnProperty(prop)) continue;
+    if (!headers.hasOwnProperty(prop)) { continue; }
     header = headers[prop];
 
     // skip nullish headers.
@@ -54739,40 +54941,40 @@ var querystring_1 = {
 };
 
 var fastDeepEqual = function equal(a, b) {
-  if (a === b) return true;
+  if (a === b) { return true; }
 
   var arrA = Array.isArray(a)
     , arrB = Array.isArray(b)
     , i;
 
   if (arrA && arrB) {
-    if (a.length != b.length) return false;
+    if (a.length != b.length) { return false; }
     for (i = 0; i < a.length; i++)
-      if (!equal(a[i], b[i])) return false;
+      { if (!equal(a[i], b[i])) { return false; } }
     return true;
   }
 
-  if (arrA != arrB) return false;
+  if (arrA != arrB) { return false; }
 
   if (a && b && typeof a === 'object' && typeof b === 'object') {
     var keys = Object.keys(a);
-    if (keys.length !== Object.keys(b).length) return false;
+    if (keys.length !== Object.keys(b).length) { return false; }
 
     var dateA = a instanceof Date
       , dateB = b instanceof Date;
-    if (dateA && dateB) return a.getTime() == b.getTime();
-    if (dateA != dateB) return false;
+    if (dateA && dateB) { return a.getTime() == b.getTime(); }
+    if (dateA != dateB) { return false; }
 
     var regexpA = a instanceof RegExp
       , regexpB = b instanceof RegExp;
-    if (regexpA && regexpB) return a.toString() == b.toString();
-    if (regexpA != regexpB) return false;
+    if (regexpA && regexpB) { return a.toString() == b.toString(); }
+    if (regexpA != regexpB) { return false; }
 
     for (i = 0; i < keys.length; i++)
-      if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+      { if (!Object.prototype.hasOwnProperty.call(b, keys[i])) { return false; } }
 
     for (i = 0; i < keys.length; i++)
-      if(!equal(a[keys[i]], b[keys[i]])) return false;
+      { if(!equal(a[keys[i]], b[keys[i]])) { return false; } }
 
     return true;
   }
@@ -54793,7 +54995,7 @@ var ucs2length$1 = function ucs2length(str) {
     if (value >= 0xD800 && value <= 0xDBFF && pos < len) {
       // high surrogate, and there is a next character
       value = str.charCodeAt(pos);
-      if ((value & 0xFC00) == 0xDC00) pos++; // low surrogate
+      if ((value & 0xFC00) == 0xDC00) { pos++; } // low surrogate
     }
   }
   return length;
@@ -54828,7 +55030,7 @@ var util$7 = {
 
 function copy$2(o, to) {
   to = to || {};
-  for (var key in o) to[key] = o[key];
+  for (var key in o) { to[key] = o[key]; }
   return to;
 }
 
@@ -54865,9 +55067,9 @@ function checkDataTypes(dataTypes, data) {
         delete types.array;
         delete types.object;
       }
-      if (types.number) delete types.integer;
+      if (types.number) { delete types.integer; }
       for (var t in types)
-        code += (code ? ' && ' : '' ) + checkDataType(t, data, true);
+        { code += (code ? ' && ' : '' ) + checkDataType(t, data, true); }
 
       return code;
   }
@@ -54880,10 +55082,10 @@ function coerceToTypes(optionCoerceTypes, dataTypes) {
     var types = [];
     for (var i=0; i<dataTypes.length; i++) {
       var t = dataTypes[i];
-      if (COERCE_TO_TYPES[t]) types[types.length] = t;
-      else if (optionCoerceTypes === 'array' && t === 'array') types[types.length] = t;
+      if (COERCE_TO_TYPES[t]) { types[types.length] = t; }
+      else if (optionCoerceTypes === 'array' && t === 'array') { types[types.length] = t; }
     }
-    if (types.length) return types;
+    if (types.length) { return types; }
   } else if (COERCE_TO_TYPES[dataTypes]) {
     return [dataTypes];
   } else if (optionCoerceTypes === 'array' && dataTypes === 'array') {
@@ -54894,7 +55096,7 @@ function coerceToTypes(optionCoerceTypes, dataTypes) {
 
 function toHash(arr) {
   var hash = {};
-  for (var i=0; i<arr.length; i++) hash[arr[i]] = true;
+  for (var i=0; i<arr.length; i++) { hash[arr[i]] = true; }
   return hash;
 }
 
@@ -54964,20 +55166,20 @@ function finalCleanUpCode(out, async) {
   }
 
   matches = out.match(ROOTDATA_REGEXP);
-  if (!matches || matches.length !== 3) return out;
+  if (!matches || matches.length !== 3) { return out; }
   return out.replace(REMOVE_ROOTDATA, '');
 }
 
 
 function schemaHasRules(schema, rules) {
-  if (typeof schema == 'boolean') return !schema;
-  for (var key in schema) if (rules[key]) return true;
+  if (typeof schema == 'boolean') { return !schema; }
+  for (var key in schema) { if (rules[key]) { return true; } }
 }
 
 
 function schemaHasRulesExcept(schema, rules, exceptKeyword) {
-  if (typeof schema == 'boolean') return !schema && exceptKeyword != 'not';
-  for (var key in schema) if (key != exceptKeyword && rules[key]) return true;
+  if (typeof schema == 'boolean') { return !schema && exceptKeyword != 'not'; }
+  for (var key in schema) { if (key != exceptKeyword && rules[key]) { return true; } }
 }
 
 
@@ -55006,24 +55208,24 @@ var JSON_POINTER = /^\/(?:[^~]|~0|~1)*$/;
 var RELATIVE_JSON_POINTER = /^([0-9]+)(#|\/(?:[^~]|~0|~1)*)?$/;
 function getData$1($data, lvl, paths) {
   var up, jsonPointer, data, matches;
-  if ($data === '') return 'rootData';
+  if ($data === '') { return 'rootData'; }
   if ($data[0] == '/') {
-    if (!JSON_POINTER.test($data)) throw new Error('Invalid JSON-pointer: ' + $data);
+    if (!JSON_POINTER.test($data)) { throw new Error('Invalid JSON-pointer: ' + $data); }
     jsonPointer = $data;
     data = 'rootData';
   } else {
     matches = $data.match(RELATIVE_JSON_POINTER);
-    if (!matches) throw new Error('Invalid JSON-pointer: ' + $data);
+    if (!matches) { throw new Error('Invalid JSON-pointer: ' + $data); }
     up = +matches[1];
     jsonPointer = matches[2];
     if (jsonPointer == '#') {
-      if (up >= lvl) throw new Error('Cannot access property/index ' + up + ' levels up, current level is ' + lvl);
+      if (up >= lvl) { throw new Error('Cannot access property/index ' + up + ' levels up, current level is ' + lvl); }
       return paths[lvl - up];
     }
 
-    if (up > lvl) throw new Error('Cannot access data ' + up + ' levels up, current level is ' + lvl);
+    if (up > lvl) { throw new Error('Cannot access data ' + up + ' levels up, current level is ' + lvl); }
     data = 'data' + ((lvl - up) || '');
-    if (!jsonPointer) return data;
+    if (!jsonPointer) { return data; }
   }
 
   var expr = data;
@@ -55040,7 +55242,7 @@ function getData$1($data, lvl, paths) {
 
 
 function joinPaths (a, b) {
-  if (a == '""') return b;
+  if (a == '""') { return b; }
   return (a + ' + ' + b).replace(/' \+ '/g, '');
 }
 
@@ -55132,12 +55334,12 @@ function _traverse(opts, cb, schema, jsonPtr, rootSchema, parentJsonPtr, parentK
       if (Array.isArray(sch)) {
         if (key in traverse.arrayKeywords) {
           for (var i=0; i<sch.length; i++)
-            _traverse(opts, cb, sch[i], jsonPtr + '/' + key + '/' + i, rootSchema, jsonPtr, key, schema, i);
+            { _traverse(opts, cb, sch[i], jsonPtr + '/' + key + '/' + i, rootSchema, jsonPtr, key, schema, i); }
         }
       } else if (key in traverse.propsKeywords) {
         if (sch && typeof sch == 'object') {
           for (var prop in sch)
-            _traverse(opts, cb, sch[prop], jsonPtr + '/' + key + '/' + escapeJsonPtr(prop), rootSchema, jsonPtr, key, schema, prop);
+            { _traverse(opts, cb, sch[prop], jsonPtr + '/' + key + '/' + escapeJsonPtr(prop), rootSchema, jsonPtr, key, schema, prop); }
         }
       } else if (key in traverse.keywords || (opts.allKeys && !(key in traverse.skipKeywords))) {
         _traverse(opts, cb, sch, jsonPtr + '/' + key, rootSchema, jsonPtr, key, schema);
@@ -55173,8 +55375,8 @@ function resolve$1(compile, root, ref) {
   /* jshint validthis: true */
   var refVal = this._refs[ref];
   if (typeof refVal == 'string') {
-    if (this._refs[refVal]) refVal = this._refs[refVal];
-    else return resolve$1.call(this, compile, root, refVal);
+    if (this._refs[refVal]) { refVal = this._refs[refVal]; }
+    else { return resolve$1.call(this, compile, root, refVal); }
   }
 
   refVal = refVal || this._schemas[ref];
@@ -55222,20 +55424,20 @@ function resolveSchema(root, ref) {
     if (typeof refVal == 'string') {
       return resolveRecursive.call(this, root, refVal, p);
     } else if (refVal instanceof schema_obj) {
-      if (!refVal.validate) this._compile(refVal);
+      if (!refVal.validate) { this._compile(refVal); }
       root = refVal;
     } else {
       refVal = this._schemas[id];
       if (refVal instanceof schema_obj) {
-        if (!refVal.validate) this._compile(refVal);
+        if (!refVal.validate) { this._compile(refVal); }
         if (id == normalizeId(ref))
-          return { schema: refVal, root: root, baseId: baseId };
+          { return { schema: refVal, root: root, baseId: baseId }; }
         root = refVal;
       } else {
         return;
       }
     }
-    if (!root.schema) return;
+    if (!root.schema) { return; }
     baseId = getFullPath(this._getId(root.schema));
   }
   return getJsonPointer.call(this, p, baseId, root.schema, root);
@@ -55251,7 +55453,7 @@ function resolveRecursive(root, ref, parsedRef) {
     var baseId = res.baseId;
     root = res.root;
     var id = this._getId(schema);
-    if (id) baseId = resolveUrl(baseId, id);
+    if (id) { baseId = resolveUrl(baseId, id); }
     return getJsonPointer.call(this, parsedRef, baseId, schema, root);
   }
 }
@@ -55260,9 +55462,11 @@ function resolveRecursive(root, ref, parsedRef) {
 var PREVENT_SCOPE_CHANGE = util$7.toHash(['properties', 'patternProperties', 'enum', 'dependencies', 'definitions']);
 /* @this Ajv */
 function getJsonPointer(parsedRef, baseId, schema, root) {
+  var this$1 = this;
+
   /* jshint validthis: true */
   parsedRef.hash = parsedRef.hash || '';
-  if (parsedRef.hash.slice(0,2) != '#/') return;
+  if (parsedRef.hash.slice(0,2) != '#/') { return; }
   var parts = parsedRef.hash.split('/');
 
   for (var i = 1; i < parts.length; i++) {
@@ -55270,14 +55474,14 @@ function getJsonPointer(parsedRef, baseId, schema, root) {
     if (part) {
       part = util$7.unescapeFragment(part);
       schema = schema[part];
-      if (schema === undefined) break;
+      if (schema === undefined) { break; }
       var id;
       if (!PREVENT_SCOPE_CHANGE[part]) {
-        id = this._getId(schema);
-        if (id) baseId = resolveUrl(baseId, id);
+        id = this$1._getId(schema);
+        if (id) { baseId = resolveUrl(baseId, id); }
         if (schema.$ref) {
           var $ref = resolveUrl(baseId, schema.$ref);
-          var res = resolveSchema.call(this, root, $ref);
+          var res = resolveSchema.call(this$1, root, $ref);
           if (res) {
             schema = res.schema;
             root = res.root;
@@ -55288,7 +55492,7 @@ function getJsonPointer(parsedRef, baseId, schema, root) {
     }
   }
   if (schema !== undefined && schema !== root.schema)
-    return { schema: schema, root: root, baseId: baseId };
+    { return { schema: schema, root: root, baseId: baseId }; }
 }
 
 
@@ -55302,9 +55506,9 @@ var SIMPLE_INLINED = util$7.toHash([
   'required', 'enum'
 ]);
 function inlineRef(schema, limit) {
-  if (limit === false) return false;
-  if (limit === undefined || limit === true) return checkNoRef(schema);
-  else if (limit) return countKeys(schema) <= limit;
+  if (limit === false) { return false; }
+  if (limit === undefined || limit === true) { return checkNoRef(schema); }
+  else if (limit) { return countKeys(schema) <= limit; }
 }
 
 
@@ -55313,13 +55517,13 @@ function checkNoRef(schema) {
   if (Array.isArray(schema)) {
     for (var i=0; i<schema.length; i++) {
       item = schema[i];
-      if (typeof item == 'object' && !checkNoRef(item)) return false;
+      if (typeof item == 'object' && !checkNoRef(item)) { return false; }
     }
   } else {
     for (var key in schema) {
-      if (key == '$ref') return false;
+      if (key == '$ref') { return false; }
       item = schema[key];
-      if (typeof item == 'object' && !checkNoRef(item)) return false;
+      if (typeof item == 'object' && !checkNoRef(item)) { return false; }
     }
   }
   return true;
@@ -55331,18 +55535,18 @@ function countKeys(schema) {
   if (Array.isArray(schema)) {
     for (var i=0; i<schema.length; i++) {
       item = schema[i];
-      if (typeof item == 'object') count += countKeys(item);
-      if (count == Infinity) return Infinity;
+      if (typeof item == 'object') { count += countKeys(item); }
+      if (count == Infinity) { return Infinity; }
     }
   } else {
     for (var key in schema) {
-      if (key == '$ref') return Infinity;
+      if (key == '$ref') { return Infinity; }
       if (SIMPLE_INLINED[key]) {
         count++;
       } else {
         item = schema[key];
-        if (typeof item == 'object') count += countKeys(item) + 1;
-        if (count == Infinity) return Infinity;
+        if (typeof item == 'object') { count += countKeys(item) + 1; }
+        if (count == Infinity) { return Infinity; }
       }
     }
   }
@@ -55351,7 +55555,7 @@ function countKeys(schema) {
 
 
 function getFullPath(id, normalize) {
-  if (normalize !== false) id = normalizeId(id);
+  if (normalize !== false) { id = normalizeId(id); }
   var p = url$2.parse(id, false, true);
   return _getFullPath(p);
 }
@@ -55384,25 +55588,25 @@ function resolveIds(schema) {
   var self = this;
 
   jsonSchemaTraverse(schema, {allKeys: true}, function(sch, jsonPtr, rootSchema, parentJsonPtr, parentKeyword, parentSchema, keyIndex) {
-    if (jsonPtr === '') return;
+    if (jsonPtr === '') { return; }
     var id = self._getId(sch);
     var baseId = baseIds[parentJsonPtr];
     var fullPath = fullPaths[parentJsonPtr] + '/' + parentKeyword;
     if (keyIndex !== undefined)
-      fullPath += '/' + (typeof keyIndex == 'number' ? keyIndex : util$7.escapeFragment(keyIndex));
+      { fullPath += '/' + (typeof keyIndex == 'number' ? keyIndex : util$7.escapeFragment(keyIndex)); }
 
     if (typeof id == 'string') {
       id = baseId = normalizeId(baseId ? url$2.resolve(baseId, id) : id);
 
       var refVal = self._refs[id];
-      if (typeof refVal == 'string') refVal = self._refs[refVal];
+      if (typeof refVal == 'string') { refVal = self._refs[refVal]; }
       if (refVal && refVal.schema) {
         if (!fastDeepEqual(sch, refVal.schema))
-          throw new Error('id "' + id + '" resolves to more than one schema');
+          { throw new Error('id "' + id + '" resolves to more than one schema'); }
       } else if (id != normalizeId(fullPath)) {
         if (id[0] == '#') {
           if (localRefs[id] && !fastDeepEqual(sch, localRefs[id]))
-            throw new Error('id "' + id + '" resolves to more than one schema');
+            { throw new Error('id "' + id + '" resolves to more than one schema'); }
           localRefs[id] = sch;
         } else {
           self._refs[id] = fullPath;
@@ -55448,8 +55652,8 @@ function errorSubclass(Subclass) {
 }
 
 var fastJsonStableStringify = function (data, opts) {
-    if (!opts) opts = {};
-    if (typeof opts === 'function') opts = { cmp: opts };
+    if (!opts) { opts = {}; }
+    if (typeof opts === 'function') { opts = { cmp: opts }; }
     var cycles = (typeof opts.cycles === 'boolean') ? opts.cycles : false;
 
     var cmp = opts.cmp && (function (f) {
@@ -55468,24 +55672,24 @@ var fastJsonStableStringify = function (data, opts) {
             node = node.toJSON();
         }
 
-        if (node === undefined) return;
-        if (typeof node == 'number') return isFinite(node) ? '' + node : 'null';
-        if (typeof node !== 'object') return JSON.stringify(node);
+        if (node === undefined) { return; }
+        if (typeof node == 'number') { return isFinite(node) ? '' + node : 'null'; }
+        if (typeof node !== 'object') { return JSON.stringify(node); }
 
         var i, out;
         if (Array.isArray(node)) {
             out = '[';
             for (i = 0; i < node.length; i++) {
-                if (i) out += ',';
+                if (i) { out += ','; }
                 out += stringify(node[i]) || 'null';
             }
             return out + ']';
         }
 
-        if (node === null) return 'null';
+        if (node === null) { return 'null'; }
 
         if (seen.indexOf(node) !== -1) {
-            if (cycles) return JSON.stringify('__cycle__');
+            if (cycles) { return JSON.stringify('__cycle__'); }
             throw new TypeError('Converting circular structure to JSON');
         }
 
@@ -55496,8 +55700,8 @@ var fastJsonStableStringify = function (data, opts) {
             var key = keys[i];
             var value = stringify(node[key]);
 
-            if (!value) continue;
-            if (out) out += ',';
+            if (!value) { continue; }
+            if (out) { out += ','; }
             out += JSON.stringify(key) + ':' + value;
         }
         seen.splice(seenIndex, 1);
@@ -55609,8 +55813,8 @@ var validate$4 = function generate_validate(it, $keyword, $ruleType) {
     var $lvl = it.level,
       $dataLvl = it.dataLevel,
       $data = 'data' + ($dataLvl || '');
-    if ($id) it.baseId = it.resolve.url(it.baseId, $id);
-    if ($async && !it.async) throw new Error('async schema in sync schema');
+    if ($id) { it.baseId = it.resolve.url(it.baseId, $id); }
+    if ($async && !it.async) { throw new Error('async schema in sync schema'); }
     out += ' var errs_' + ($lvl) + ' = errors;';
   }
   var $valid = 'valid' + $lvl,
@@ -55948,7 +56152,7 @@ var validate$4 = function generate_validate(it, $keyword, $ruleType) {
   function $shouldUseGroup($rulesGroup) {
     var rules = $rulesGroup.rules;
     for (var i = 0; i < rules.length; i++)
-      if ($shouldUseRule(rules[i])) return true;
+      { if ($shouldUseRule(rules[i])) { return true; } }
   }
 
   function $shouldUseRule($rule) {
@@ -55958,7 +56162,7 @@ var validate$4 = function generate_validate(it, $keyword, $ruleType) {
   function $ruleImlementsSomeKeyword($rule) {
     var impl = $rule.implements;
     for (var i = 0; i < impl.length; i++)
-      if (it.schema[impl[i]] !== undefined) return true;
+      { if (it.schema[impl[i]] !== undefined) { return true; } }
   }
   return out;
 };
@@ -56012,8 +56216,8 @@ function co(gen) {
   // which leads to memory leak errors.
   // see https://github.com/tj/co/issues/180
   return new Promise(function(resolve, reject) {
-    if (typeof gen === 'function') gen = gen.apply(ctx, args);
-    if (!gen || typeof gen.next !== 'function') return resolve(gen);
+    if (typeof gen === 'function') { gen = gen.apply(ctx, args); }
+    if (!gen || typeof gen.next !== 'function') { return resolve(gen); }
 
     onFulfilled();
 
@@ -56059,9 +56263,9 @@ function co(gen) {
      */
 
     function next(ret) {
-      if (ret.done) return resolve(ret.value);
+      if (ret.done) { return resolve(ret.value); }
       var value = toPromise.call(ctx, ret.value);
-      if (value && isPromise$1(value)) return value.then(onFulfilled, onRejected);
+      if (value && isPromise$1(value)) { return value.then(onFulfilled, onRejected); }
       return onRejected(new TypeError('You may only yield a function, promise, generator, array, or object, '
         + 'but the following object was passed: "' + String(ret.value) + '"'));
     }
@@ -56077,12 +56281,12 @@ function co(gen) {
  */
 
 function toPromise(obj) {
-  if (!obj) return obj;
-  if (isPromise$1(obj)) return obj;
-  if (isGeneratorFunction(obj) || isGenerator(obj)) return co.call(this, obj);
-  if ('function' == typeof obj) return thunkToPromise.call(this, obj);
-  if (Array.isArray(obj)) return arrayToPromise.call(this, obj);
-  if (isObject$7(obj)) return objectToPromise.call(this, obj);
+  if (!obj) { return obj; }
+  if (isPromise$1(obj)) { return obj; }
+  if (isGeneratorFunction(obj) || isGenerator(obj)) { return co.call(this, obj); }
+  if ('function' == typeof obj) { return thunkToPromise.call(this, obj); }
+  if (Array.isArray(obj)) { return arrayToPromise.call(this, obj); }
+  if (isObject$7(obj)) { return objectToPromise.call(this, obj); }
   return obj;
 }
 
@@ -56098,8 +56302,8 @@ function thunkToPromise(fn) {
   var ctx = this;
   return new Promise(function (resolve, reject) {
     fn.call(ctx, function (err, res) {
-      if (err) return reject(err);
-      if (arguments.length > 2) res = slice.call(arguments, 1);
+      if (err) { return reject(err); }
+      if (arguments.length > 2) { res = slice.call(arguments, 1); }
       resolve(res);
     });
   });
@@ -56128,14 +56332,16 @@ function arrayToPromise(obj) {
  */
 
 function objectToPromise(obj){
+  var this$1 = this;
+
   var results = new obj.constructor();
   var keys = Object.keys(obj);
   var promises = [];
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i];
-    var promise = toPromise.call(this, obj[key]);
-    if (promise && isPromise$1(promise)) defer(promise, key);
-    else results[key] = obj[key];
+    var promise = toPromise.call(this$1, obj[key]);
+    if (promise && isPromise$1(promise)) { defer(promise, key); }
+    else { results[key] = obj[key]; }
   }
   return Promise.all(promises).then(function () {
     return results;
@@ -56183,8 +56389,8 @@ function isGenerator(obj) {
  */
 function isGeneratorFunction(obj) {
   var constructor = obj.constructor;
-  if (!constructor) return false;
-  if ('GeneratorFunction' === constructor.name || 'GeneratorFunction' === constructor.displayName) return true;
+  if (!constructor) { return false; }
+  if ('GeneratorFunction' === constructor.name || 'GeneratorFunction' === constructor.displayName) { return true; }
   return isGenerator(constructor.prototype);
 }
 
@@ -56240,7 +56446,7 @@ function compile$1(schema, root, localRefs, baseId) {
 
   var c = checkCompiling.call(this, schema, root, baseId);
   var compilation = this._compilations[c.index];
-  if (c.compiling) return (compilation.callValidate = callValidate);
+  if (c.compiling) { return (compilation.callValidate = callValidate); }
 
   var formats = this._formats;
   var RULES = this.RULES;
@@ -56256,7 +56462,7 @@ function compile$1(schema, root, localRefs, baseId) {
       cv.refVal = v.refVal;
       cv.root = v.root;
       cv.$async = v.$async;
-      if (opts.sourceCode) cv.source = v.source;
+      if (opts.sourceCode) { cv.source = v.source; }
     }
     return v;
   } finally {
@@ -56273,7 +56479,7 @@ function compile$1(schema, root, localRefs, baseId) {
   function localCompile(_schema, _root, localRefs, baseId) {
     var isRoot = !_root || (_root && _root.schema == _schema);
     if (_root.schema != root.schema)
-      return compile$1.call(self, _schema, _root, localRefs, baseId);
+      { return compile$1.call(self, _schema, _root, localRefs, baseId); }
 
     var $async = _schema.$async === true;
 
@@ -56304,7 +56510,7 @@ function compile$1(schema, root, localRefs, baseId) {
                    + vars(defaults, defaultCode) + vars(customRules, customRuleCode)
                    + sourceCode;
 
-    if (opts.processCode) sourceCode = opts.processCode(sourceCode);
+    if (opts.processCode) { sourceCode = opts.processCode(sourceCode); }
     // console.log('\n\n\n *** \n', JSON.stringify(sourceCode));
     var validate;
     try {
@@ -56348,7 +56554,7 @@ function compile$1(schema, root, localRefs, baseId) {
     validate.refs = refs;
     validate.refVal = refVal;
     validate.root = isRoot ? validate : _root;
-    if ($async) validate.$async = true;
+    if ($async) { validate.$async = true; }
     if (opts.sourceCode === true) {
       validate.source = {
         code: sourceCode,
@@ -56436,7 +56642,7 @@ function compile$1(schema, root, localRefs, baseId) {
       case 'string':
         return util$7.toQuotedString(value);
       case 'object':
-        if (value === null) return 'null';
+        if (value === null) { return 'null'; }
         var valueStr = fastJsonStableStringify(value);
         var index = defaultsHash[valueStr];
         if (index === undefined) {
@@ -56453,8 +56659,8 @@ function compile$1(schema, root, localRefs, baseId) {
       var valid = validateSchema(schema);
       if (!valid) {
         var message = 'keyword schema is invalid: ' + self.errorsText(validateSchema.errors);
-        if (self._opts.validateSchema == 'log') console.error(message);
-        else throw new Error(message);
+        if (self._opts.validateSchema == 'log') { console.error(message); }
+        else { throw new Error(message); }
       }
     }
 
@@ -56467,16 +56673,16 @@ function compile$1(schema, root, localRefs, baseId) {
       validate = compile.call(self, schema, parentSchema, it);
     } else if (macro) {
       validate = macro.call(self, schema, parentSchema, it);
-      if (opts.validateSchema !== false) self.validateSchema(validate, true);
+      if (opts.validateSchema !== false) { self.validateSchema(validate, true); }
     } else if (inline) {
       validate = inline.call(self, it, rule.keyword, schema, parentSchema);
     } else {
       validate = rule.definition.validate;
-      if (!validate) return;
+      if (!validate) { return; }
     }
 
     if (validate === undefined)
-      throw new Error('custom keyword "' + rule.keyword + '"failed to compile');
+      { throw new Error('custom keyword "' + rule.keyword + '"failed to compile'); }
 
     var index = customRules.length;
     customRules[index] = validate;
@@ -56500,7 +56706,7 @@ function compile$1(schema, root, localRefs, baseId) {
 function checkCompiling(schema, root, baseId) {
   /* jshint validthis: true */
   var index = compIndex.call(this, schema, root, baseId);
-  if (index >= 0) return { index: index, compiling: true };
+  if (index >= 0) { return { index: index, compiling: true }; }
   index = this._compilations.length;
   this._compilations[index] = {
     schema: schema,
@@ -56521,7 +56727,7 @@ function checkCompiling(schema, root, baseId) {
 function endCompiling(schema, root, baseId) {
   /* jshint validthis: true */
   var i = compIndex.call(this, schema, root, baseId);
-  if (i >= 0) this._compilations.splice(i, 1);
+  if (i >= 0) { this._compilations.splice(i, 1); }
 }
 
 
@@ -56534,10 +56740,12 @@ function endCompiling(schema, root, baseId) {
  * @return {Integer} compilation index
  */
 function compIndex(schema, root, baseId) {
+  var this$1 = this;
+
   /* jshint validthis: true */
   for (var i=0; i<this._compilations.length; i++) {
-    var c = this._compilations[i];
-    if (c.schema == schema && c.root == root && c.baseId == baseId) return i;
+    var c = this$1._compilations[i];
+    if (c.schema == schema && c.root == root && c.baseId == baseId) { return i; }
   }
   return -1;
 }
@@ -56564,10 +56772,10 @@ function customRuleCode(i) {
 
 
 function vars(arr, statement) {
-  if (!arr.length) return '';
+  if (!arr.length) { return ''; }
   var code = '';
   for (var i=0; i<arr.length; i++)
-    code += statement(i, arr);
+    { code += statement(i, arr); }
   return code;
 }
 
@@ -56676,7 +56884,7 @@ formats$6.full = {
 function date(str) {
   // full-date from http://tools.ietf.org/html/rfc3339#section-5.6
   var matches = str.match(DATE);
-  if (!matches) return false;
+  if (!matches) { return false; }
 
   var month = +matches[1];
   var day = +matches[2];
@@ -56686,7 +56894,7 @@ function date(str) {
 
 function time(str, full) {
   var matches = str.match(TIME$2);
-  if (!matches) return false;
+  if (!matches) { return false; }
 
   var hour = matches[1];
   var minute = matches[2];
@@ -56720,7 +56928,7 @@ function uri(str) {
 
 var Z_ANCHOR = /[^\\]\\Z/;
 function regex$1(str) {
-  if (Z_ANCHOR.test(str)) return false;
+  if (Z_ANCHOR.test(str)) { return false; }
   try {
     return true;
   } catch(e) {
@@ -56825,7 +57033,7 @@ var ref$1 = function generate_ref(it, $keyword, $ruleType) {
     var __callValidate = out;
     out = $$outStack.pop();
     if ($async) {
-      if (!it.async) throw new Error('async schema referenced by sync schema');
+      if (!it.async) { throw new Error('async schema referenced by sync schema'); }
       if ($breakOnError) {
         out += ' var ' + ($valid) + '; ';
       }
@@ -57416,13 +57624,13 @@ var format$2 = function generate_format(it, $keyword, $ruleType) {
       return out;
     }
     if ($async) {
-      if (!it.async) throw new Error('async format in sync schema');
+      if (!it.async) { throw new Error('async format in sync schema'); }
       var $formatRef = 'formats' + it.util.getProperty($schema) + '.validate';
       out += ' if (!(' + (it.yieldAwait) + ' ' + ($formatRef) + '(' + ($data) + '))) { ';
     } else {
       out += ' if (! ';
       var $formatRef = 'formats' + it.util.getProperty($schema);
-      if ($isObject) $formatRef += '.validate';
+      if ($isObject) { $formatRef += '.validate'; }
       if (typeof $format == 'function') {
         out += ' ' + ($formatRef) + '(' + ($data) + ') ';
       } else {
@@ -57707,7 +57915,7 @@ var _limit = function generate__limit(it, $keyword, $ruleType) {
         $schemaValue = $schemaExcl;
         $notOp += '=';
       } else {
-        if ($exclIsNumber) $schemaValue = Math[$isMax ? 'min' : 'max']($schemaExcl, $schema);
+        if ($exclIsNumber) { $schemaValue = Math[$isMax ? 'min' : 'max']($schemaExcl, $schema); }
         if ($schemaExcl === ($exclIsNumber ? $schemaValue : true)) {
           $exclusive = true;
           $errorKeyword = $exclusiveKeyword;
@@ -58108,7 +58316,7 @@ var not = function generate_not(it, $keyword, $ruleType) {
     }
     out += ' ' + (it.validate($it)) + ' ';
     $it.createErrors = true;
-    if ($allErrorsOption) $it.opts.allErrors = $allErrorsOption;
+    if ($allErrorsOption) { $it.opts.allErrors = $allErrorsOption; }
     it.compositeRule = $it.compositeRule = $wasComposite;
     out += ' if (' + ($nextValid) + ') {   ';
     var $$outStack = $$outStack || [];
@@ -58339,7 +58547,7 @@ var properties = function generate_properties(it, $keyword, $ruleType) {
     $ownProperties = it.opts.ownProperties,
     $currentBaseId = it.baseId;
   var $required = it.schema.required;
-  if ($required && !(it.opts.v5 && $required.$data) && $required.length < it.opts.loopRequired) var $requiredHash = it.util.toHash($required);
+  if ($required && !(it.opts.v5 && $required.$data) && $required.length < it.opts.loopRequired) { var $requiredHash = it.util.toHash($required); }
   if (it.opts.patternGroups) {
     var $pgProperties = it.schema.patternGroups || {},
       $pgPropertyKeys = Object.keys($pgProperties);
@@ -59271,7 +59479,7 @@ var rules = function rules() {
       return rule;
     });
 
-    if (group.type) RULES.types[group.type] = group;
+    if (group.type) { RULES.types[group.type] = group; }
   });
 
   RULES.keywords = toHash$1(ALL.concat(KEYWORDS));
@@ -59309,7 +59517,7 @@ var $data = function (metaSchema, keywordsJsonPointers) {
     var keywords = metaSchema;
     var j;
     for (j=1; j<segments.length; j++)
-      keywords = keywords[segments[j]];
+      { keywords = keywords[segments[j]]; }
 
     for (j=0; j<KEYWORDS.length; j++) {
       var key = KEYWORDS[j];
@@ -59383,7 +59591,7 @@ function compileAsync(schema, meta, callback) {
   /* jshint validthis: true */
   var self = this;
   if (typeof this._opts.loadSchema != 'function')
-    throw new Error('options.loadSchema should be a function');
+    { throw new Error('options.loadSchema should be a function'); }
 
   if (typeof meta == 'function') {
     callback = meta;
@@ -59416,14 +59624,14 @@ function compileAsync(schema, meta, callback) {
   function _compileAsync(schemaObj) {
     try { return self._compile(schemaObj); }
     catch(e) {
-      if (e instanceof MissingRefError$1) return loadMissingSchema(e);
+      if (e instanceof MissingRefError$1) { return loadMissingSchema(e); }
       throw e;
     }
 
 
     function loadMissingSchema(e) {
       var ref = e.missingSchema;
-      if (added(ref)) throw new Error('Schema ' + ref + ' is loaded but ' + e.missingRef + ' cannot be resolved');
+      if (added(ref)) { throw new Error('Schema ' + ref + ' is loaded but ' + e.missingRef + ' cannot be resolved'); }
 
       var schemaPromise = self._loadingSchemas[ref];
       if (!schemaPromise) {
@@ -59434,7 +59642,7 @@ function compileAsync(schema, meta, callback) {
       return schemaPromise.then(function (sch) {
         if (!added(ref)) {
           return loadMetaSchemaOf(sch).then(function () {
-            if (!added(ref)) self.addSchema(sch, ref, undefined, meta);
+            if (!added(ref)) { self.addSchema(sch, ref, undefined, meta); }
           });
         }
       }).then(function() {
@@ -59483,7 +59691,7 @@ var custom = function generate_custom(it, $keyword, $ruleType) {
     out += ' var ' + ($definition) + ' = RULES.custom[\'' + ($keyword) + '\'].definition; var ' + ($validateCode) + ' = ' + ($definition) + '.validate;';
   } else {
     $ruleValidate = it.useCustomRule($rule, $schema, it.schema, it);
-    if (!$ruleValidate) return;
+    if (!$ruleValidate) { return; }
     $schemaValue = 'validate.schema' + $schemaPath;
     $validateCode = $ruleValidate.code;
     $compile = $rDef.compile;
@@ -59494,7 +59702,7 @@ var custom = function generate_custom(it, $keyword, $ruleType) {
     $i = 'i' + $lvl,
     $ruleErr = 'ruleErr' + $lvl,
     $asyncKeyword = $rDef.async;
-  if ($asyncKeyword && !it.async) throw new Error('async keyword in sync schema');
+  if ($asyncKeyword && !it.async) { throw new Error('async keyword in sync schema'); }
   if (!($inline || $macro)) {
     out += '' + ($ruleErrs) + ' = null;';
   }
@@ -59699,28 +59907,28 @@ function addKeyword(keyword, definition) {
   var RULES = this.RULES;
 
   if (RULES.keywords[keyword])
-    throw new Error('Keyword ' + keyword + ' is already defined');
+    { throw new Error('Keyword ' + keyword + ' is already defined'); }
 
   if (!IDENTIFIER$1.test(keyword))
-    throw new Error('Keyword ' + keyword + ' is not a valid identifier');
+    { throw new Error('Keyword ' + keyword + ' is not a valid identifier'); }
 
   if (definition) {
     if (definition.macro && definition.valid !== undefined)
-      throw new Error('"valid" option cannot be used with macro keywords');
+      { throw new Error('"valid" option cannot be used with macro keywords'); }
 
     var dataType = definition.type;
     if (Array.isArray(dataType)) {
       var i, len = dataType.length;
-      for (i=0; i<len; i++) checkDataType(dataType[i]);
-      for (i=0; i<len; i++) _addRule(keyword, dataType[i], definition);
+      for (i=0; i<len; i++) { checkDataType(dataType[i]); }
+      for (i=0; i<len; i++) { _addRule(keyword, dataType[i], definition); }
     } else {
-      if (dataType) checkDataType(dataType);
+      if (dataType) { checkDataType(dataType); }
       _addRule(keyword, dataType, definition);
     }
 
     var $data = definition.$data === true && this._opts.$data;
     if ($data && !definition.validate)
-      throw new Error('$data support: "validate" function is not defined');
+      { throw new Error('$data support: "validate" function is not defined'); }
 
     var metaSchema = definition.metaSchema;
     if (metaSchema) {
@@ -59767,7 +59975,7 @@ function addKeyword(keyword, definition) {
 
 
   function checkDataType(dataType) {
-    if (!RULES.types[dataType]) throw new Error('Unknown type ' + dataType);
+    if (!RULES.types[dataType]) { throw new Error('Unknown type ' + dataType); }
   }
 }
 
@@ -59903,7 +60111,7 @@ var META_SUPPORT_DATA = ['/properties'];
  * @return {Object} ajv instance
  */
 function Ajv(opts) {
-  if (!(this instanceof Ajv)) return new Ajv(opts);
+  if (!(this instanceof Ajv)) { return new Ajv(opts); }
   opts = this._opts = util$7.copy(opts) || {};
   this._schemas = {};
   this._refs = {};
@@ -59919,15 +60127,15 @@ function Ajv(opts) {
   this._getId = chooseGetId(opts);
 
   opts.loopRequired = opts.loopRequired || Infinity;
-  if (opts.errorDataPath == 'property') opts._errorDataPathProperty = true;
-  if (opts.serialize === undefined) opts.serialize = fastJsonStableStringify;
+  if (opts.errorDataPath == 'property') { opts._errorDataPathProperty = true; }
+  if (opts.serialize === undefined) { opts.serialize = fastJsonStableStringify; }
   this._metaOpts = getMetaSchemaOptions(this);
 
-  if (opts.formats) addInitialFormats(this);
+  if (opts.formats) { addInitialFormats(this); }
   addDraft6MetaSchema(this);
-  if (typeof opts.meta == 'object') this.addMetaSchema(opts.meta);
+  if (typeof opts.meta == 'object') { this.addMetaSchema(opts.meta); }
   addInitialSchemas(this);
-  if (opts.patternGroups) patternGroups(this);
+  if (opts.patternGroups) { patternGroups(this); }
 }
 
 
@@ -59944,7 +60152,7 @@ function validate$3(schemaKeyRef, data) {
   var v;
   if (typeof schemaKeyRef == 'string') {
     v = this.getSchema(schemaKeyRef);
-    if (!v) throw new Error('no schema with key or ref "' + schemaKeyRef + '"');
+    if (!v) { throw new Error('no schema with key or ref "' + schemaKeyRef + '"'); }
   } else {
     var schemaObj = this._addSchema(schemaKeyRef);
     v = schemaObj.validate || this._compile(schemaObj);
@@ -59952,7 +60160,7 @@ function validate$3(schemaKeyRef, data) {
 
   var valid = v(data);
   if (v.$async === true)
-    return this._opts.async == '*' ? co_1(valid) : valid;
+    { return this._opts.async == '*' ? co_1(valid) : valid; }
   this.errors = v.errors;
   return valid;
 }
@@ -59980,13 +60188,15 @@ function compile(schema, _meta) {
  * @param {Boolean} _meta true if schema is a meta-schema. Used internally, addMetaSchema should be used instead.
  */
 function addSchema(schema, key, _skipValidation, _meta) {
+  var this$1 = this;
+
   if (Array.isArray(schema)){
-    for (var i=0; i<schema.length; i++) this.addSchema(schema[i], undefined, _skipValidation, _meta);
+    for (var i=0; i<schema.length; i++) { this$1.addSchema(schema[i], undefined, _skipValidation, _meta); }
     return;
   }
   var id = this._getId(schema);
   if (id !== undefined && typeof id != 'string')
-    throw new Error('schema id must be string');
+    { throw new Error('schema id must be string'); }
   key = resolve_1.normalizeId(key || id);
   checkUnique(this, key);
   this._schemas[key] = this._addSchema(schema, _skipValidation, _meta, true);
@@ -60016,7 +60226,7 @@ function addMetaSchema(schema, key, skipValidation) {
 function validateSchema(schema, throwOrLogError) {
   var $schema = schema.$schema;
   if ($schema !== undefined && typeof $schema != 'string')
-    throw new Error('$schema must be a string');
+    { throw new Error('$schema must be a string'); }
   $schema = $schema || this._opts.defaultMeta || defaultMeta(this);
   if (!$schema) {
     console.warn('meta-schema not available');
@@ -60032,8 +60242,8 @@ function validateSchema(schema, throwOrLogError) {
   finally { this._formats.uri = currentUriFormat; }
   if (!valid && throwOrLogError) {
     var message = 'schema is invalid: ' + this.errorsText();
-    if (this._opts.validateSchema == 'log') console.error(message);
-    else throw new Error(message);
+    if (this._opts.validateSchema == 'log') { console.error(message); }
+    else { throw new Error(message); }
   }
   return valid;
 }
@@ -60114,7 +60324,7 @@ function removeSchema(schemaKeyRef) {
       return;
     case 'string':
       var schemaObj = _getSchemaObj(this, schemaKeyRef);
-      if (schemaObj) this._cache.del(schemaObj.cacheKey);
+      if (schemaObj) { this._cache.del(schemaObj.cacheKey); }
       delete this._schemas[schemaKeyRef];
       delete this._refs[schemaKeyRef];
       return;
@@ -60146,21 +60356,21 @@ function _removeAllSchemas(self, schemas, regex) {
 /* @this   Ajv */
 function _addSchema(schema, skipValidation, meta, shouldAddSchema) {
   if (typeof schema != 'object' && typeof schema != 'boolean')
-    throw new Error('schema should be object or boolean');
+    { throw new Error('schema should be object or boolean'); }
   var serialize = this._opts.serialize;
   var cacheKey = serialize ? serialize(schema) : schema;
   var cached = this._cache.get(cacheKey);
-  if (cached) return cached;
+  if (cached) { return cached; }
 
   shouldAddSchema = shouldAddSchema || this._opts.addUsedSchema !== false;
 
   var id = resolve_1.normalizeId(this._getId(schema));
-  if (id && shouldAddSchema) checkUnique(this, id);
+  if (id && shouldAddSchema) { checkUnique(this, id); }
 
   var willValidate = this._opts.validateSchema !== false && !skipValidation;
   var recursiveMeta;
   if (willValidate && !(recursiveMeta = id && id == resolve_1.normalizeId(schema.$schema)))
-    this.validateSchema(schema, true);
+    { this.validateSchema(schema, true); }
 
   var localRefs = resolve_1.ids.call(this, schema);
 
@@ -60172,10 +60382,10 @@ function _addSchema(schema, skipValidation, meta, shouldAddSchema) {
     meta: meta
   });
 
-  if (id[0] != '#' && shouldAddSchema) this._refs[id] = schemaObj;
+  if (id[0] != '#' && shouldAddSchema) { this._refs[id] = schemaObj; }
   this._cache.put(cacheKey, schemaObj);
 
-  if (willValidate && recursiveMeta) this.validateSchema(schema, true);
+  if (willValidate && recursiveMeta) { this.validateSchema(schema, true); }
 
   return schemaObj;
 }
@@ -60189,7 +60399,7 @@ function _compile(schemaObj, root) {
     callValidate.errors = null;
     callValidate.root = root ? root : callValidate;
     if (schemaObj.schema.$async === true)
-      callValidate.$async = true;
+      { callValidate.$async = true; }
     return callValidate;
   }
   schemaObj.compiling = true;
@@ -60204,7 +60414,7 @@ function _compile(schemaObj, root) {
   try { v = compile_1.call(this, schemaObj.schema, root, schemaObj.localRefs); }
   finally {
     schemaObj.compiling = false;
-    if (schemaObj.meta) this._opts = currentOpts;
+    if (schemaObj.meta) { this._opts = currentOpts; }
   }
 
   schemaObj.validate = v;
@@ -60233,20 +60443,20 @@ function chooseGetId(opts) {
 
 
 function _getId(schema) {
-  if (schema.$id) console.warn('schema $id ignored', schema.$id);
+  if (schema.$id) { console.warn('schema $id ignored', schema.$id); }
   return schema.id;
 }
 
 
 function _get$Id(schema) {
-  if (schema.id) console.warn('schema id ignored', schema.id);
+  if (schema.id) { console.warn('schema id ignored', schema.id); }
   return schema.$id;
 }
 
 
 function _get$IdOrId(schema) {
   if (schema.$id && schema.id && schema.$id != schema.id)
-    throw new Error('schema $id is different from id');
+    { throw new Error('schema $id is different from id'); }
   return schema.$id || schema.id;
 }
 
@@ -60260,7 +60470,7 @@ function _get$IdOrId(schema) {
  */
 function errorsText(errors, options) {
   errors = errors || this.errors;
-  if (!errors) return 'No errors';
+  if (!errors) { return 'No errors'; }
   options = options || {};
   var separator = options.separator === undefined ? ', ' : options.separator;
   var dataVar = options.dataVar === undefined ? 'data' : options.dataVar;
@@ -60268,7 +60478,7 @@ function errorsText(errors, options) {
   var text = '';
   for (var i=0; i<errors.length; i++) {
     var e = errors[i];
-    if (e) text += dataVar + e.dataPath + ' ' + e.message + separator;
+    if (e) { text += dataVar + e.dataPath + ' ' + e.message + separator; }
   }
   return text.slice(0, -separator.length);
 }
@@ -60281,7 +60491,7 @@ function errorsText(errors, options) {
  * @param {String|RegExp|Function} format string is converted to RegExp; function should return boolean (true when valid)
  */
 function addFormat(name, format) {
-  if (typeof format == 'string') format = new RegExp(format);
+  if (typeof format == 'string') { format = new RegExp(format); }
   this._formats[name] = format;
 }
 
@@ -60292,9 +60502,9 @@ function addDraft6MetaSchema(self) {
     $dataSchema = require$$1$10;
     self.addMetaSchema($dataSchema, $dataSchema.$id, true);
   }
-  if (self._opts.meta === false) return;
+  if (self._opts.meta === false) { return; }
   var metaSchema = require$$2$7;
-  if (self._opts.$data) metaSchema = $data(metaSchema, META_SUPPORT_DATA);
+  if (self._opts.$data) { metaSchema = $data(metaSchema, META_SUPPORT_DATA); }
   self.addMetaSchema(metaSchema, META_SCHEMA_ID, true);
   self._refs['http://json-schema.org/schema'] = META_SCHEMA_ID;
 }
@@ -60302,9 +60512,9 @@ function addDraft6MetaSchema(self) {
 
 function addInitialSchemas(self) {
   var optsSchemas = self._opts.schemas;
-  if (!optsSchemas) return;
-  if (Array.isArray(optsSchemas)) self.addSchema(optsSchemas);
-  else for (var key in optsSchemas) self.addSchema(optsSchemas[key], key);
+  if (!optsSchemas) { return; }
+  if (Array.isArray(optsSchemas)) { self.addSchema(optsSchemas); }
+  else { for (var key in optsSchemas) { self.addSchema(optsSchemas[key], key); } }
 }
 
 
@@ -60318,14 +60528,14 @@ function addInitialFormats(self) {
 
 function checkUnique(self, id) {
   if (self._schemas[id] || self._refs[id])
-    throw new Error('schema with key or id "' + id + '" already exists');
+    { throw new Error('schema with key or id "' + id + '" already exists'); }
 }
 
 
 function getMetaSchemaOptions(self) {
   var metaOpts = util$7.copy(self._opts);
   for (var i=0; i<META_IGNORE_OPTIONS.length; i++)
-    delete metaOpts[META_IGNORE_OPTIONS[i]];
+    { delete metaOpts[META_IGNORE_OPTIONS[i]]; }
   return metaOpts;
 }
 
@@ -61478,13 +61688,13 @@ function map$4 (obj) {
   for (key in obj) {
     val = obj[key];
     if (Array.isArray(val))
-      for (var i = 0; i < val.length; i++)
-        arr.push([key, val[i]]);
+      { for (var i = 0; i < val.length; i++)
+        { arr.push([key, val[i]]); } }
     else if (typeof val === "object")
-      for (var prop in val)
-        arr.push([key + '[' + prop + ']', val[prop]]);
+      { for (var prop in val)
+        { arr.push([key + '[' + prop + ']', val[prop]]); } }
     else
-      arr.push([key, val]);
+      { arr.push([key, val]); }
   }
   return arr
 }
@@ -62183,7 +62393,7 @@ TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
 
 TunnelingAgent.prototype.removeSocket = function removeSocket(socket) {
   var pos = this.sockets.indexOf(socket);
-  if (pos === -1) return
+  if (pos === -1) { return }
 
   this.sockets.splice(pos, 1);
 
@@ -62211,8 +62421,10 @@ function createSecureSocket(options, cb) {
 
 
 function mergeOptions$1(target) {
+  var arguments$1 = arguments;
+
   for (var i = 1, len = arguments.length; i < len; ++i) {
-    var overrides = arguments[i];
+    var overrides = arguments$1[i];
     if (typeof overrides === 'object') {
       var keys = Object.keys(overrides);
       for (var j = 0, keyLen = keys.length; j < keyLen; ++j) {
@@ -64183,7 +64395,7 @@ function endianness() {
 function hostname$1() {
   if (typeof global.location !== 'undefined') {
     return global.location.hostname
-  } else return '';
+  } else { return ''; }
 }
 
 function loadavg() {
@@ -64338,7 +64550,7 @@ var requiresPort = function required(port, protocol) {
   protocol = protocol.split(':')[0];
   port = +port;
 
-  if (!port) return false;
+  if (!port) { return false; }
 
   switch (protocol) {
     case 'http':
@@ -64397,11 +64609,11 @@ var lolcation = function lolcation(loc) {
     finaldestination = new URL$2(unescape(loc.pathname), {});
   } else if ('string' === type) {
     finaldestination = new URL$2(loc, {});
-    for (key in ignore) delete finaldestination[key];
-  } else if ('object' === type) for (key in loc) {
-    if (key in ignore) continue;
+    for (key in ignore) { delete finaldestination[key]; }
+  } else if ('object' === type) { for (key in loc) {
+    if (key in ignore) { continue; }
     finaldestination[key] = loc[key];
-  }
+  } }
 
   return finaldestination;
 };
@@ -64428,7 +64640,7 @@ function querystring(query) {
   for (;
     part = parser.exec(query);
     result[decodeURIComponent(part[1])] = decodeURIComponent(part[2])
-  );
+  ){  }
 
   return result;
 }
@@ -64449,7 +64661,7 @@ function querystringify(obj, prefix) {
   //
   // Optionally prefix with a '?' if needed
   //
-  if ('string' !== typeof prefix) prefix = '?';
+  if ('string' !== typeof prefix) { prefix = '?'; }
 
   for (var key in obj) {
     if (has$2.call(obj, key)) {
@@ -64578,7 +64790,7 @@ function URL$1(address, location, parser) {
   // with a custom parser as function use that instead of the default build-in
   // parser.
   //
-  if (parser) url.query = parser(url.query);
+  if (parser) { url.query = parser(url.query); }
 
   //
   // We should not add port numbers if they are already the default port number
@@ -64636,7 +64848,7 @@ URL$1.prototype.set = function set(part, value, fn) {
   } else if ('hostname' === part) {
     url[part] = value;
 
-    if (url.port) value += ':'+ url.port;
+    if (url.port) { value += ':'+ url.port; }
     url.host = value;
   } else if ('host' === part) {
     url[part] = value;
@@ -64662,7 +64874,7 @@ URL$1.prototype.set = function set(part, value, fn) {
  * @api public
  */
 URL$1.prototype.toString = function toString(stringify) {
-  if (!stringify || 'function' !== typeof stringify) stringify = querystringify_1.stringify;
+  if (!stringify || 'function' !== typeof stringify) { stringify = querystringify_1.stringify; }
 
   var query
     , url = this
@@ -64670,19 +64882,19 @@ URL$1.prototype.toString = function toString(stringify) {
 
   if (url.username) {
     result += url.username;
-    if (url.password) result += ':'+ url.password;
+    if (url.password) { result += ':'+ url.password; }
     result += '@';
   }
 
   result += url.hostname;
-  if (url.port) result += ':'+ url.port;
+  if (url.port) { result += ':'+ url.port; }
 
   result += url.pathname;
 
   query = 'object' === typeof url.query ? stringify(url.query) : url.query;
-  if (query) result += '?' !== query.charAt(0) ? '?'+ query : query;
+  if (query) { result += '?' !== query.charAt(0) ? '?'+ query : query; }
 
-  if (url.hash) result += url.hash;
+  if (url.hash) { result += url.hash; }
 
   return result;
 };
@@ -64703,13 +64915,13 @@ var urlParse$2 = URL$1;
  * @api public
  */
 function origin(url) {
-  if ('string' === typeof url) url = urlParse$2(url);
+  if ('string' === typeof url) { url = urlParse$2(url); }
 
   //
   // 6.2.  ASCII Serialization of an Origin
   // http://tools.ietf.org/html/rfc6454#section-6.2
   //
-  if (!url.protocol || !url.hostname) return 'null';
+  if (!url.protocol || !url.hostname) { return 'null'; }
 
   //
   // 4. Origin of a URI
@@ -64765,7 +64977,7 @@ function EventSource(url, eventSourceInitDict) {
   self.reconnectInterval = 1000;
 
   function onConnectionClosed() {
-    if (readyState === EventSource.CLOSED) return;
+    if (readyState === EventSource.CLOSED) { return; }
     readyState = EventSource.CONNECTING;
     _emit('error', new Event$1('error'));
 
@@ -64801,7 +65013,7 @@ function EventSource(url, eventSourceInitDict) {
     var options = parse$8(url);
     var isSecure = options.protocol == 'https:';
     options.headers = { 'Cache-Control': 'no-cache', 'Accept': 'text/event-stream' };
-    if (lastEventId) options.headers['Last-Event-ID'] = lastEventId;
+    if (lastEventId) { options.headers['Last-Event-ID'] = lastEventId; }
     if (eventSourceInitDict && eventSourceInitDict.headers) {
       for (var i in eventSourceInitDict.headers) {
         var header = eventSourceInitDict.headers[i];
@@ -64832,7 +65044,7 @@ function EventSource(url, eventSourceInitDict) {
           _emit('error', new Event$1('error', {status: res.statusCode}));
           return;
         }
-        if (res.statusCode == 307) reconnectUrl = url;
+        if (res.statusCode == 307) { reconnectUrl = url; }
         url = res.headers.location;
         process.nextTick(connect);
         return;
@@ -64840,7 +65052,7 @@ function EventSource(url, eventSourceInitDict) {
 
       if (res.statusCode !== 200) {
         _emit('error', new Event$1('error', {status: res.statusCode}));
-        if (res.statusCode == 204) return self.close();
+        if (res.statusCode == 204) { return self.close(); }
         return
       }
 
@@ -64910,7 +65122,7 @@ function EventSource(url, eventSourceInitDict) {
     });
 
     req.on('error', onConnectionClosed);
-    if (req.setNoDelay) req.setNoDelay(true);
+    if (req.setNoDelay) { req.setNoDelay(true); }
     req.end();
   }
 
@@ -64923,10 +65135,10 @@ function EventSource(url, eventSourceInitDict) {
   }
 
   this.close = function () {
-    if (readyState == EventSource.CLOSED) return;
+    if (readyState == EventSource.CLOSED) { return; }
     readyState = EventSource.CLOSED;
-    if (req.abort) req.abort();
-    if (req.xhr && req.xhr.abort) req.xhr.abort();
+    if (req.abort) { req.abort(); }
+    if (req.xhr && req.xhr.abort) { req.xhr.abort(); }
   };
 
   function parseEventStreamLine(buf, pos, fieldLength, lineLength) {
@@ -65036,11 +65248,13 @@ EventSource.prototype.addEventListener = function addEventListener(method, liste
  * @api private
  */
 function Event$1(type, optionalProperties) {
+  var this$1 = this;
+
   Object.defineProperty(this, 'type', { writable: false, value: type, enumerable: true });
   if (optionalProperties) {
     for (var f in optionalProperties) {
       if (optionalProperties.hasOwnProperty(f)) {
-        Object.defineProperty(this, f, { writable: false, value: optionalProperties[f], enumerable: true });
+        Object.defineProperty(this$1, f, { writable: false, value: optionalProperties[f], enumerable: true });
       }
     }
   }
@@ -65053,10 +65267,12 @@ function Event$1(type, optionalProperties) {
  * @api private
  */
 function MessageEvent(type, eventInitDict) {
+  var this$1 = this;
+
   Object.defineProperty(this, 'type', { writable: false, value: type, enumerable: true });
   for (var f in eventInitDict) {
     if (eventInitDict.hasOwnProperty(f)) {
-      Object.defineProperty(this, f, { writable: false, value: eventInitDict[f], enumerable: true });
+      Object.defineProperty(this$1, f, { writable: false, value: eventInitDict[f], enumerable: true });
     }
   }
 }
@@ -65071,7 +65287,7 @@ function _id(result) {
 }
 
 function _ID(returns_id) {
-  return returns_id ? _id : data => data;
+  return returns_id ? _id : function (data) { return data; };
 }
 
 
@@ -65082,60 +65298,67 @@ function _ID(returns_id) {
 
 
 function opt(n,id) {
-  return id ? `${n}/${id}` : n;
+  return id ? (n + "/" + id) : n;
 }
 
-var _user=(id) => opt('user',id);
-var _group=(id) => opt('group',id);
-var _corpus=(id) => opt('corpus',id);
-var _medium=(id) => opt('medium',id);
-var _layer=(id) => opt('layer',id);
-var _annotation=(id) => opt('annotation',id);
-var _queue=(id) => opt('queue',id);
+var _user=function (id) { return opt('user',id); };
+var _group=function (id) { return opt('group',id); };
+var _corpus=function (id) { return opt('corpus',id); };
+var _medium=function (id) { return opt('medium',id); };
+var _layer=function (id) { return opt('layer',id); };
+var _annotation=function (id) { return opt('annotation',id); };
+var _queue=function (id) { return opt('queue',id); };
 
-class Camomile {
-  constructor(url) {
-    this._baseUrl = url;
-    this._cookies = undefined;
-    this._evSource = undefined;
+var Camomile = function Camomile(url) {
+  this._baseUrl = url;
+  this._cookies = undefined;
+  this._evSource = undefined;
 
-    this.watchCorpus = this._watch.bind(this, 'corpus');
-    this.watchMedium = this._watch.bind(this, 'medium');
-    this.watchLayer = this._watch.bind(this, 'layer');
-    this.watchQueue = this._watch.bind(this, 'queue');
+  this.watchCorpus = this._watch.bind(this, 'corpus');
+  this.watchMedium = this._watch.bind(this, 'medium');
+  this.watchLayer = this._watch.bind(this, 'layer');
+  this.watchQueue = this._watch.bind(this, 'queue');
 
-    this.unwatchCorpus = this._unwatch.bind(this, 'corpus');
-    this.unwatchMedium = this._unwatch.bind(this, 'medium');
-    this.unwatchLayer = this._unwatch.bind(this, 'layer');
-    this.unwatchQueue = this._unwatch.bind(this, 'queue');
-  }
+  this.unwatchCorpus = this._unwatch.bind(this, 'corpus');
+  this.unwatchMedium = this._unwatch.bind(this, 'medium');
+  this.unwatchLayer = this._unwatch.bind(this, 'layer');
+  this.unwatchQueue = this._unwatch.bind(this, 'queue');
+};
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SSE
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
-  _watch(type, id, callback) {
-    return (this._evSource===undefined ? this._listen() : Promise.resolve())
-      .then(() => this._put(`listen/${this.channel_id}/${type}/${id}`,{}))
-      .then(() => {
-        this._evSource.addEventListener(type + ':' + id, callback);
-      });
-  }
+Camomile.prototype._watch = function _watch (type, id, callback) {
+    var this$1 = this;
 
-  _unwatch(type, id, callback) {
-    return this._delete(`listen/${this.channel_id}/${type}/${id}`).then(() => {
-      this._evSource.removeEventListener(type + ':' + id, callback);
-    })
-  }
-
-
-  _listen() {
-    return this._post('listen',{}).then(({channel_id}) => {
-      this._evSource = new eventsource(this._baseUrl + '/listen/' + channel_id, {withCredentials: true});
-      this.channel_id=channel_id;
+  return (this._evSource===undefined ? this._listen() : Promise.resolve())
+    .then(function () { return this$1._put(("listen/" + (this$1.channel_id) + "/" + type + "/" + id),{}); })
+    .then(function () {
+      this$1._evSource.addEventListener(type + ':' + id, callback);
     });
-  }
+};
+
+Camomile.prototype._unwatch = function _unwatch (type, id, callback) {
+    var this$1 = this;
+
+  return this._delete(("listen/" + (this.channel_id) + "/" + type + "/" + id)).then(function () {
+    this$1._evSource.removeEventListener(type + ':' + id, callback);
+  })
+};
+
+
+Camomile.prototype._listen = function _listen () {
+    var this$1 = this;
+
+  return this._post('listen',{}).then(function (ref) {
+      var channel_id = ref.channel_id;
+
+    this$1._evSource = new eventsource(this$1._baseUrl + '/listen/' + channel_id, {withCredentials: true});
+    this$1.channel_id=channel_id;
+  });
+};
   
 ////////////
 
@@ -65143,520 +65366,636 @@ class Camomile {
 // AUTHENTICATION
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  login(username, password) {
-    return this._post('login',{username,password},true).then(data => {
-      if (data.headers['set-cookie'] && data.headers['set-cookie'][0]) this._cookies = data.headers['set-cookie'][0];
+Camomile.prototype.login = function login (username, password) {
+    var this$1 = this;
 
-      return data.body;
-    });
-  };
+  return this._post('login',{username: username,password: password},true).then(function (data) {
+    if (data.headers['set-cookie'] && data.headers['set-cookie'][0]) { this$1._cookies = data.headers['set-cookie'][0]; }
 
-  logout() {
-    return this._post('logout',{});
-  };
+    return data.body;
+  });
+};
 
-  _get(uri,parameters) {
-    return rp({uri:`${this._baseUrl}/${uri}`,qs:parameters,json: true,headers:{'Cookie':this._cookies},withCredentials:true});
-  }
+Camomile.prototype.logout = function logout () {
+  return this._post('logout',{});
+};
 
-  _put(uri,data) {
-    return rp({method: 'put', uri:`${this._baseUrl}/${uri}`, json: data,headers:{'Cookie':this._cookies},withCredentials:true});
-  }
+Camomile.prototype._get = function _get (uri,parameters) {
+  return rp({uri:((this._baseUrl) + "/" + uri),qs:parameters,json: true,headers:{'Cookie':this._cookies},withCredentials:true});
+};
 
-  _post(uri,data,full=false) {
-    return rp({method: 'post', uri:`${this._baseUrl}/${uri}`, json: data,headers:{'Cookie':this._cookies},withCredentials:true,resolveWithFullResponse: full});
-  }
+Camomile.prototype._put = function _put (uri,data) {
+  return rp({method: 'put', uri:((this._baseUrl) + "/" + uri), json: data,headers:{'Cookie':this._cookies},withCredentials:true});
+};
 
-  _delete(uri) {
-    return rp({method: 'delete', uri:`${this._baseUrl}/${uri}`,json: true,headers:{'Cookie':this._cookies},withCredentials:true});
-  }
+Camomile.prototype._post = function _post (uri,data,full) {
+    if ( full === void 0 ) full=false;
 
-  me() {
-    return this._get("me");
-  };
+  return rp({method: 'post', uri:((this._baseUrl) + "/" + uri), json: data,headers:{'Cookie':this._cookies},withCredentials:true,resolveWithFullResponse: full});
+};
 
-  getMyGroups() {
-    return this._get("me/group");
-  };
+Camomile.prototype._delete = function _delete (uri) {
+  return rp({method: 'delete', uri:((this._baseUrl) + "/" + uri),json: true,headers:{'Cookie':this._cookies},withCredentials:true});
+};
 
-  update_password(new_password) {
-    return this._put('me',{password:new_password});
-  };
+Camomile.prototype.me = function me () {
+  return this._get("me");
+};
+
+Camomile.prototype.getMyGroups = function getMyGroups () {
+  return this._get("me/group");
+};
+
+Camomile.prototype.update_password = function update_password (new_password) {
+  return this._put('me',{password:new_password});
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // USERS
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   
-  getUser(user) {
-    return this._get(_user(user));
-  };
+Camomile.prototype.getUser = function getUser (user) {
+  return this._get(_user(user));
+};
 
-  getUsers({returns_id,filter:{username,role}={}} = {}) {
-    // Available filters: username, role
-    return this._get('user',{username,role}).then(_ID(returns_id));
-  };
+Camomile.prototype.getUsers = function getUsers (ref) {
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
+    var ref_filter = ref.filter; if ( ref_filter === void 0 ) ref_filter = {};
+    var ref_filter$1 = ref_filter;
+    var username = ref_filter$1.username;
+    var role = ref_filter$1.role;
 
-  createUser(username, password, description = {}, role = 'user', {returns_id} = {}) {
-    return this._post('user',{username,password,description,role}).then(_ID(returns_id));
-  };
+  // Available filters: username, role
+  return this._get('user',{username: username,role: role}).then(_ID(returns_id));
+};
 
-  updateUser(user, fields = {}) {
-    // Updatable fields: password, description, role
-    return this._put(_user(user),fields);
-  };
+Camomile.prototype.createUser = function createUser (username, password, description, role, ref) {
+    if ( description === void 0 ) description = {};
+    if ( role === void 0 ) role = 'user';
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
 
-  deleteUser(user) {
-    return this._delete(_user(user));
-  };
+  return this._post('user',{username: username,password: password,description: description,role: role}).then(_ID(returns_id));
+};
 
-  getUserGroups(user, {returns_id} = {}) {
-    return this._get(`${_user(user)}/group`).then(_ID(returns_id));
-  };
+Camomile.prototype.updateUser = function updateUser (user, fields) {
+    if ( fields === void 0 ) fields = {};
+
+  // Updatable fields: password, description, role
+  return this._put(_user(user),fields);
+};
+
+Camomile.prototype.deleteUser = function deleteUser (user) {
+  return this._delete(_user(user));
+};
+
+Camomile.prototype.getUserGroups = function getUserGroups (user, ref) {
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
+
+  return this._get(((_user(user)) + "/group")).then(_ID(returns_id));
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // GROUPS
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  getGroup(group) {
-    return this._get(_group(group));
-  };
+Camomile.prototype.getGroup = function getGroup (group) {
+  return this._get(_group(group));
+};
 
-  getGroups({returns_id,filter:{name}={}} = {}) {
-    // Available filters: name
+Camomile.prototype.getGroups = function getGroups (ref) {
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
+    var ref_filter = ref.filter; if ( ref_filter === void 0 ) ref_filter = {};
+    var name = ref_filter.name;
 
-    return this._get('group',{name}).then(_ID(returns_id));
-  };
+  // Available filters: name
 
-  createGroup(name, description = {}, {returns_id} = {}) {
-    return this._post('group',{name,description}).then(_ID(returns_id));
-  };
+  return this._get('group',{name: name}).then(_ID(returns_id));
+};
 
-  updateGroup(group, fields = {}) {
-    // Updatable fields: description
+Camomile.prototype.createGroup = function createGroup (name, description, ref) {
+    if ( description === void 0 ) description = {};
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
 
-    return this._put(_group(group),fields);
-  }
+  return this._post('group',{name: name,description: description}).then(_ID(returns_id));
+};
 
-  deleteGroup(group) {
-    return this._delete(_group(group));
-  }
+Camomile.prototype.updateGroup = function updateGroup (group, fields) {
+    if ( fields === void 0 ) fields = {};
 
-  addUserToGroup(user, group) {
-    return this._put(`${_group(group)}/user/${user}`,{});
-  }
+  // Updatable fields: description
 
-  removeUserFromGroup(user, group) {
-    return this._delete(`${_group(group)}/user/${user}`);
-  };
+  return this._put(_group(group),fields);
+};
+
+Camomile.prototype.deleteGroup = function deleteGroup (group) {
+  return this._delete(_group(group));
+};
+
+Camomile.prototype.addUserToGroup = function addUserToGroup (user, group) {
+  return this._put(((_group(group)) + "/user/" + user),{});
+};
+
+Camomile.prototype.removeUserFromGroup = function removeUserFromGroup (user, group) {
+  return this._delete(((_group(group)) + "/user/" + user));
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // CORPORA
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Get corpus by ID
-  getCorpus(corpus, {history} = {}) {
-    return this._get(_corpus(corpus),{history});
-  };
+Camomile.prototype.getCorpus = function getCorpus (corpus, ref) {
+    if ( ref === void 0 ) ref = {};
+    var history = ref.history;
+
+  return this._get(_corpus(corpus),{history: history});
+};
 
 // Get list of corpora
-  getCorpora({returns_id,filter:{name}={},history}={}) {
-    // Available filters: name
+Camomile.prototype.getCorpora = function getCorpora (ref) {
+    if ( ref === void 0 ) ref={};
+    var returns_id = ref.returns_id;
+    var ref_filter = ref.filter; if ( ref_filter === void 0 ) ref_filter = {};
+    var name = ref_filter.name;
+    var history = ref.history;
 
-    return this._get('corpus',{name,history}).then(_ID(returns_id));
-  };
+  // Available filters: name
 
-  createCorpus(name, description = {}, {returns_id}) {
-    return this._post('corpus',{name,description}).then(_ID(returns_id));
-  };
+  return this._get('corpus',{name: name,history: history}).then(_ID(returns_id));
+};
 
-  updateCorpus(corpus, fields = {}) {
-    // Updatable fields: name?, description
+Camomile.prototype.createCorpus = function createCorpus (name, description, ref) {
+    if ( description === void 0 ) description = {};
+    var returns_id = ref.returns_id;
 
-    return this._put(_corpus(corpus),fields);
-  };
+  return this._post('corpus',{name: name,description: description}).then(_ID(returns_id));
+};
 
-  deleteCorpus(corpus) {
-    return this._delete(_corpus(corpus));
-  };
+Camomile.prototype.updateCorpus = function updateCorpus (corpus, fields) {
+    if ( fields === void 0 ) fields = {};
+
+  // Updatable fields: name?, description
+
+  return this._put(_corpus(corpus),fields);
+};
+
+Camomile.prototype.deleteCorpus = function deleteCorpus (corpus) {
+  return this._delete(_corpus(corpus));
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // MEDIA
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Get medium by ID
-  getMedium(medium, {history} = {}) {
-    return this._get(`${_medium(medium)}`,{history});
-  };
+Camomile.prototype.getMedium = function getMedium (medium, ref) {
+    if ( ref === void 0 ) ref = {};
+    var history = ref.history;
+
+  return this._get(("" + (_medium(medium))),{history: history});
+};
 
 // Get medium URL, e.g. for use in <video> src attribute
-  getMediumURL(medium, format = "video") {
-    return `${this._baseUrl}/${_medium(medium)}/${format}`;
-  };
+Camomile.prototype.getMediumURL = function getMediumURL (medium, format) {
+    if ( format === void 0 ) format = "video";
+
+  return ((this._baseUrl) + "/" + (_medium(medium)) + "/" + format);
+};
 
 // Get list of media
-  getMedia({filter:{id_corpus,name}= {},returns_count,returns_id,history}={}) {
-    // Available filters: id_corpus, name
+Camomile.prototype.getMedia = function getMedia (ref) {
+    if ( ref === void 0 ) ref={};
+    var ref_filter = ref.filter; if ( ref_filter === void 0 ) ref_filter = {};
+    var ref_filter$1 = ref_filter;
+    var id_corpus = ref_filter$1.id_corpus;
+    var name = ref_filter$1.name;
+    var returns_count = ref.returns_count;
+    var returns_id = ref.returns_id;
+    var history = ref.history;
 
-    // route /corpus/:id_corpus/medium/count
-    if (returns_count) {
-      if (id_corpus === undefined) {
-        throw new Error('returns_count needs options.filter.id_corpus to be set');
-      }
-      return this._get(`${_corpus(id_corpus)}/medium/count`,{name});
+  // Available filters: id_corpus, name
+
+  // route /corpus/:id_corpus/medium/count
+  if (returns_count) {
+    if (id_corpus === undefined) {
+      throw new Error('returns_count needs options.filter.id_corpus to be set');
     }
+    return this._get(((_corpus(id_corpus)) + "/medium/count"),{name: name});
+  }
 
-    if (id_corpus !== undefined) {
-      return this._get(`${_corpus(id_corpus)}/medium`,{name,history}).then(_ID(returns_id));
-    } else {
-      return this._get(`medium`,{name,history}).then(_ID(returns_id));
-    }
-  };
+  if (id_corpus !== undefined) {
+    return this._get(((_corpus(id_corpus)) + "/medium"),{name: name,history: history}).then(_ID(returns_id));
+  } else {
+    return this._get("medium",{name: name,history: history}).then(_ID(returns_id));
+  }
+};
 
-  createMedium(corpus, name, url, description = {}, {returns_id} = {}) {
-    return this._post(`${_corpus(corpus)}/medium`,{name,url,description}).then(_ID(returns_id));
-  };
+Camomile.prototype.createMedium = function createMedium (corpus, name, url, description, ref) {
+    if ( description === void 0 ) description = {};
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
 
-  createMedia(corpus, media, {returns_id} = {}) {
-    return this._post(`${_corpus(corpus)}/medium`,media).then(_ID(returns_id));
-  };
+  return this._post(((_corpus(corpus)) + "/medium"),{name: name,url: url,description: description}).then(_ID(returns_id));
+};
 
-  updateMedium(medium, fields = {}) {
-    // Updatable fields: name?, url, description
+Camomile.prototype.createMedia = function createMedia (corpus, media, ref) {
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
 
-    return this._put(_medium(medium),fields);
-  };
+  return this._post(((_corpus(corpus)) + "/medium"),media).then(_ID(returns_id));
+};
 
-  deleteMedium(medium) {
-    return this._delete(_medium(medium));
-  };
+Camomile.prototype.updateMedium = function updateMedium (medium, fields) {
+    if ( fields === void 0 ) fields = {};
+
+  // Updatable fields: name?, url, description
+
+  return this._put(_medium(medium),fields);
+};
+
+Camomile.prototype.deleteMedium = function deleteMedium (medium) {
+  return this._delete(_medium(medium));
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // LAYERS
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Get layer by ID
-  getLayer(layer) {
-    return this._get(_layer(layer));
-  };
+Camomile.prototype.getLayer = function getLayer (layer) {
+  return this._get(_layer(layer));
+};
 
 // Get list of layers
-  getLayers({returns_id,filter:{id_corpus,name} = {}, history} = {}) {
-    // Available filters: id_corpus, name
+Camomile.prototype.getLayers = function getLayers (ref) {
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
+    var ref_filter = ref.filter; if ( ref_filter === void 0 ) ref_filter = {};
+    var ref_filter$1 = ref_filter;
+    var id_corpus = ref_filter$1.id_corpus;
+    var name = ref_filter$1.name;
+    var history = ref.history;
 
-    if (id_corpus !== undefined) {
-      return this._get(`${_corpus(id_corpus)}/layer`,{name,history}).then(_ID(returns_id));
-    } else {
-      return this._get('layer',{name,history}).then(_ID(returns_id));
-    }
-  };
+  // Available filters: id_corpus, name
 
-  createLayer(corpus, name, description = {}, fragment_type, data_type, annotations = [], {returns_id} = {}) {
-    return this._post(`${_corpus(corpus)}/layer`,{name,description,fragment_type,data_type,annotations}).then(_ID(returns_id));
-  };
+  if (id_corpus !== undefined) {
+    return this._get(((_corpus(id_corpus)) + "/layer"),{name: name,history: history}).then(_ID(returns_id));
+  } else {
+    return this._get('layer',{name: name,history: history}).then(_ID(returns_id));
+  }
+};
 
-  updateLayer(layer, fields = {}) {
-    // Updatable fields: name?, description, fragment_type, data_type
+Camomile.prototype.createLayer = function createLayer (corpus, name, description, fragment_type, data_type, annotations, ref) {
+    if ( description === void 0 ) description = {};
+    if ( annotations === void 0 ) annotations = [];
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
 
-    return this._put(_layer(layer),fields);
-  };
+  return this._post(((_corpus(corpus)) + "/layer"),{name: name,description: description,fragment_type: fragment_type,data_type: data_type,annotations: annotations}).then(_ID(returns_id));
+};
 
-  deleteLayer(layer) {
-    return this._delete(_layer(layer));
-  };
+Camomile.prototype.updateLayer = function updateLayer (layer, fields) {
+    if ( fields === void 0 ) fields = {};
+
+  // Updatable fields: name?, description, fragment_type, data_type
+
+  return this._put(_layer(layer),fields);
+};
+
+Camomile.prototype.deleteLayer = function deleteLayer (layer) {
+  return this._delete(_layer(layer));
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ANNOTATIONS
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  getAnnotation(annotation, {history} = {}) {
-    return this._get(_annotation(annotation),{history});
-  };
+Camomile.prototype.getAnnotation = function getAnnotation (annotation, ref) {
+    if ( ref === void 0 ) ref = {};
+    var history = ref.history;
 
-  getAnnotations({returns_count, filter:{id_medium,id_layer} = {}, history, returns_id} = {}) {
-    // Available filters: id_layer, id_medium
+  return this._get(_annotation(annotation),{history: history});
+};
 
-    // route /layer/:id_layer/annotation/count
-    if (returns_count) {
-      if (id_layer === undefined) {
-        throw new Error('returns_count needs options.filter.id_layer to be set');
-      }
-      return this._get(`${_layer(id_layer)}/annotation/count`,{id_medium});
+Camomile.prototype.getAnnotations = function getAnnotations (ref) {
+    if ( ref === void 0 ) ref = {};
+    var returns_count = ref.returns_count;
+    var ref_filter = ref.filter; if ( ref_filter === void 0 ) ref_filter = {};
+    var ref_filter$1 = ref_filter;
+    var id_medium = ref_filter$1.id_medium;
+    var id_layer = ref_filter$1.id_layer;
+    var history = ref.history;
+    var returns_id = ref.returns_id;
+
+  // Available filters: id_layer, id_medium
+
+  // route /layer/:id_layer/annotation/count
+  if (returns_count) {
+    if (id_layer === undefined) {
+      throw new Error('returns_count needs options.filter.id_layer to be set');
     }
+    return this._get(((_layer(id_layer)) + "/annotation/count"),{id_medium: id_medium});
+  }
 
-    if (id_layer !== undefined) {
-      return this._get(`${_layer(id_layer)}/annotation`,{id_medium,history}).then(_ID(returns_id));
-    } else {
-      return this._get('annotation',{id_medium,history}).then(_ID(returns_id));
-    }
-  };
+  if (id_layer !== undefined) {
+    return this._get(((_layer(id_layer)) + "/annotation"),{id_medium: id_medium,history: history}).then(_ID(returns_id));
+  } else {
+    return this._get('annotation',{id_medium: id_medium,history: history}).then(_ID(returns_id));
+  }
+};
 
-  createAnnotation(layer, medium, fragment = {}, data = {}, {returns_id} = {}) {
-    return this._post(`${_layer(layer)}/annotation`,{id_medium:medium,fragment,data}).then(_ID(returns_id));
-  };
+Camomile.prototype.createAnnotation = function createAnnotation (layer, medium, fragment, data, ref) {
+    if ( fragment === void 0 ) fragment = {};
+    if ( data === void 0 ) data = {};
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
 
-  createAnnotations(layer, annotations, {returns_id} = {}) {
-    return this._post(`${_layer(layer)}/annotation`,annotations).then(_ID(returns_id));
-  };
+  return this._post(((_layer(layer)) + "/annotation"),{id_medium:medium,fragment: fragment,data: data}).then(_ID(returns_id));
+};
 
-  updateAnnotation(annotation, fields = {}) {
-    // Updatable fields: fragment, data
+Camomile.prototype.createAnnotations = function createAnnotations (layer, annotations, ref) {
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
 
-    return this._put(_annotation(annotation),fields);
-  };
+  return this._post(((_layer(layer)) + "/annotation"),annotations).then(_ID(returns_id));
+};
 
-  deleteAnnotation(annotation) {
-    return this._delete(_annotation(annotation));
-  };
+Camomile.prototype.updateAnnotation = function updateAnnotation (annotation, fields) {
+    if ( fields === void 0 ) fields = {};
+
+  // Updatable fields: fragment, data
+
+  return this._put(_annotation(annotation),fields);
+};
+
+Camomile.prototype.deleteAnnotation = function deleteAnnotation (annotation) {
+  return this._delete(_annotation(annotation));
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // QUEUES
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  getQueue(queue) {
-    return this._get(_queue(queue));
-  };
+Camomile.prototype.getQueue = function getQueue (queue) {
+  return this._get(_queue(queue));
+};
 
-  getQueues({returns_id} = {}) {
-    return this._get('queue').then(_ID(returns_id));
-  };
+Camomile.prototype.getQueues = function getQueues (ref) {
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
 
-  createQueue(name, description = {}, {returns_id} = {}) {
-    return this._post('queue',{name,description}).then(_ID(returns_id));
-  };
+  return this._get('queue').then(_ID(returns_id));
+};
 
-  updateQueue(queue, fields) {
-    // Updatable fields: name, description
+Camomile.prototype.createQueue = function createQueue (name, description, ref) {
+    if ( description === void 0 ) description = {};
+    if ( ref === void 0 ) ref = {};
+    var returns_id = ref.returns_id;
 
-    return this._put(_queue(queue),fields);
-  };
+  return this._post('queue',{name: name,description: description}).then(_ID(returns_id));
+};
 
-  enqueue(queue, elements) {
-    return this._put(`${_queue(queue)}/next`,elements);
-  };
+Camomile.prototype.updateQueue = function updateQueue (queue, fields) {
+  // Updatable fields: name, description
 
-  dequeue(queue) {
-    return this._get(`${_queue(queue)}/next`);
-  };
+  return this._put(_queue(queue),fields);
+};
 
-  pick(queue) {
-    return this._get(`${_queue(queue)}/first`);
-  };
+Camomile.prototype.enqueue = function enqueue (queue, elements) {
+  return this._put(((_queue(queue)) + "/next"),elements);
+};
 
-  pickAll(queue) {
-    return this._get(`${_queue(queue)}/all`);
-  };
+Camomile.prototype.dequeue = function dequeue (queue) {
+  return this._get(((_queue(queue)) + "/next"));
+};
 
-  pickLength(queue) {
-    return this._get(`${_queue(queue)}/length`);
-  };
+Camomile.prototype.pick = function pick (queue) {
+  return this._get(((_queue(queue)) + "/first"));
+};
 
-  deleteQueue(queue) {
-    return this._delete(_queue(queue));
-  };
+Camomile.prototype.pickAll = function pickAll (queue) {
+  return this._get(((_queue(queue)) + "/all"));
+};
+
+Camomile.prototype.pickLength = function pickLength (queue) {
+  return this._get(((_queue(queue)) + "/length"));
+};
+
+Camomile.prototype.deleteQueue = function deleteQueue (queue) {
+  return this._delete(_queue(queue));
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PERMISSIONS
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  getCorpusPermissions(corpus) {
-    return this._get(`${_corpus(corpus)}/permissions`);
-  };
+Camomile.prototype.getCorpusPermissions = function getCorpusPermissions (corpus) {
+  return this._get(((_corpus(corpus)) + "/permissions"));
+};
 
-  setCorpusPermissionsForGroup(corpus, group, right) {
-    return this._put(`${_corpus(corpus)}/group/${group}`,{right});
-  };
+Camomile.prototype.setCorpusPermissionsForGroup = function setCorpusPermissionsForGroup (corpus, group, right) {
+  return this._put(((_corpus(corpus)) + "/group/" + group),{right: right});
+};
 
-  removeCorpusPermissionsForGroup(corpus, group) {
-    return this._delete(`${_corpus(corpus)}/group/${group}`);
-  };
+Camomile.prototype.removeCorpusPermissionsForGroup = function removeCorpusPermissionsForGroup (corpus, group) {
+  return this._delete(((_corpus(corpus)) + "/group/" + group));
+};
 
-  setCorpusPermissionsForUser(corpus, user, right) {
-    return this._put(`${_corpus(corpus)}/user/${user}`,{right});
-  };
+Camomile.prototype.setCorpusPermissionsForUser = function setCorpusPermissionsForUser (corpus, user, right) {
+  return this._put(((_corpus(corpus)) + "/user/" + user),{right: right});
+};
 
-  removeCorpusPermissionsForUser(corpus, user) {
-    return this._delete(`${_corpus(corpus)}/user/${user}`);
-  };
+Camomile.prototype.removeCorpusPermissionsForUser = function removeCorpusPermissionsForUser (corpus, user) {
+  return this._delete(((_corpus(corpus)) + "/user/" + user));
+};
 
 
-  getLayerPermissions(layer) {
-    return this._get(`${_layer(layer)}/permissions`);
-  };
+Camomile.prototype.getLayerPermissions = function getLayerPermissions (layer) {
+  return this._get(((_layer(layer)) + "/permissions"));
+};
 
-  setLayerPermissionsForGroup(layer, group, right) {
-    return this._put(`${_layer(layer)}/group/${group}`,{right});
-  };
+Camomile.prototype.setLayerPermissionsForGroup = function setLayerPermissionsForGroup (layer, group, right) {
+  return this._put(((_layer(layer)) + "/group/" + group),{right: right});
+};
 
-  removeLayerPermissionsForGroup(layer, group) {
-    return this._delete(`${_layer(layer)}/group/${group}`);
-  };
+Camomile.prototype.removeLayerPermissionsForGroup = function removeLayerPermissionsForGroup (layer, group) {
+  return this._delete(((_layer(layer)) + "/group/" + group));
+};
 
-  setLayerPermissionsForUser(layer, user, right) {
-    return this._put(`${_layer(layer)}/user/${user}`,{right});
-  };
+Camomile.prototype.setLayerPermissionsForUser = function setLayerPermissionsForUser (layer, user, right) {
+  return this._put(((_layer(layer)) + "/user/" + user),{right: right});
+};
 
-  removeLayerPermissionsForUser(layer, user) {
-    return this._delete(`${_layer(layer)}/user/${user}`);
-  };
+Camomile.prototype.removeLayerPermissionsForUser = function removeLayerPermissionsForUser (layer, user) {
+  return this._delete(((_layer(layer)) + "/user/" + user));
+};
 
-  getQueuePermissions(queue) {
-    return this._get(`${_queue(queue)}/permissions`);
-  };
+Camomile.prototype.getQueuePermissions = function getQueuePermissions (queue) {
+  return this._get(((_queue(queue)) + "/permissions"));
+};
 
-  setQueuePermissionsForGroup(queue, group, right) {
-    return this._put(`${_queue(queue)}/group/${group}`,{right});
-  };
+Camomile.prototype.setQueuePermissionsForGroup = function setQueuePermissionsForGroup (queue, group, right) {
+  return this._put(((_queue(queue)) + "/group/" + group),{right: right});
+};
 
-  removeQueuePermissionsForGroup(queue, group) {
-    return this._delete(`${_queue(queue)}/group/${group}`);
-  };
+Camomile.prototype.removeQueuePermissionsForGroup = function removeQueuePermissionsForGroup (queue, group) {
+  return this._delete(((_queue(queue)) + "/group/" + group));
+};
 
-  setQueuePermissionsForUser(queue, user, right) {
-    return this._put(`${_queue(queue)}/user/${user}`,{right});
-  };
+Camomile.prototype.setQueuePermissionsForUser = function setQueuePermissionsForUser (queue, user, right) {
+  return this._put(((_queue(queue)) + "/user/" + user),{right: right});
+};
 
-  removeQueuePermissionsForUser(queue, user) {
-    return this._delete(`${_queue(queue)}/user/${user}`);
-  };
+Camomile.prototype.removeQueuePermissionsForUser = function removeQueuePermissionsForUser (queue, user) {
+  return this._delete(((_queue(queue)) + "/user/" + user));
+};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // META DATA
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // CORPUS
-  getCorpusMetadata(corpus, path) {
-    return this._getMetadata(_corpus(corpus), path);
-  };
+Camomile.prototype.getCorpusMetadata = function getCorpusMetadata (corpus, path) {
+  return this._getMetadata(_corpus(corpus), path);
+};
 
-  getCorpusMetadataKeys(corpus, path) {
-    return this._getMetadataKeys(_corpus(corpus), path);
-  };
+Camomile.prototype.getCorpusMetadataKeys = function getCorpusMetadataKeys (corpus, path) {
+  return this._getMetadataKeys(_corpus(corpus), path);
+};
 
-  setCorpusMetadata(corpus, metadatas, path) {
-    return this._setMetadata(_corpus(corpus), metadatas, path);
-  };
+Camomile.prototype.setCorpusMetadata = function setCorpusMetadata (corpus, metadatas, path) {
+  return this._setMetadata(_corpus(corpus), metadatas, path);
+};
 
-  sendCorpusMetadataFile(corpus, path, file) {
-    return this._sendMetadataFile(_corpus(corpus), path, file);
-  };
+Camomile.prototype.sendCorpusMetadataFile = function sendCorpusMetadataFile (corpus, path, file) {
+  return this._sendMetadataFile(_corpus(corpus), path, file);
+};
 
-  deleteCorpusMetadata(corpus, path) {
-    return this._deleteMetadata(_corpus(corpus), path);
-  };
+Camomile.prototype.deleteCorpusMetadata = function deleteCorpusMetadata (corpus, path) {
+  return this._deleteMetadata(_corpus(corpus), path);
+};
 
 // LAYER
-  getLayerMetadata(layer, path) {
-    return this._getMetadata(_layer(layer), path);
-  };
+Camomile.prototype.getLayerMetadata = function getLayerMetadata (layer, path) {
+  return this._getMetadata(_layer(layer), path);
+};
 
-  getLayerMetadataKeys(layer, path) {
-    return this._getMetadataKeys(_layer(layer), path);
-  };
+Camomile.prototype.getLayerMetadataKeys = function getLayerMetadataKeys (layer, path) {
+  return this._getMetadataKeys(_layer(layer), path);
+};
 
-  setLayerMetadata(layer, metadatas, path) {
-    return this._setMetadata(_layer(layer), metadatas, path);
-  };
+Camomile.prototype.setLayerMetadata = function setLayerMetadata (layer, metadatas, path) {
+  return this._setMetadata(_layer(layer), metadatas, path);
+};
 
-  msendLayerMetadataFile(layer, path, file) {
-    return this._sendMetadataFile(_layer(layer), path, file);
-  };
+Camomile.prototype.msendLayerMetadataFile = function msendLayerMetadataFile (layer, path, file) {
+  return this._sendMetadataFile(_layer(layer), path, file);
+};
 
-  deleteLayerMetadata(layer, path) {
-    return this. _deleteMetadata(_layer(layer), path);
-  };
+Camomile.prototype.deleteLayerMetadata = function deleteLayerMetadata (layer, path) {
+  return this. _deleteMetadata(_layer(layer), path);
+};
 
 // MEDIUM
-  getMediumMetadata(medium, path) {
-    return this._getMetadata(_medium(medium), path);
-  };
+Camomile.prototype.getMediumMetadata = function getMediumMetadata (medium, path) {
+  return this._getMetadata(_medium(medium), path);
+};
 
-  getMediumMetadataKeys(medium, path) {
-    return this._getMetadataKeys(_medium(medium), path);
-  };
+Camomile.prototype.getMediumMetadataKeys = function getMediumMetadataKeys (medium, path) {
+  return this._getMetadataKeys(_medium(medium), path);
+};
 
-  setMediumMetadata(medium, metadatas, path) {
-    return this._setMetadata(_medium(medium), metadatas, path);
-  };
+Camomile.prototype.setMediumMetadata = function setMediumMetadata (medium, metadatas, path) {
+  return this._setMetadata(_medium(medium), metadatas, path);
+};
 
-  sendMediumMetadataFile(medium, path, file) {
-    return this._sendMetadataFile(_medium(medium), path, file);
-  };
+Camomile.prototype.sendMediumMetadataFile = function sendMediumMetadataFile (medium, path, file) {
+  return this._sendMetadataFile(_medium(medium), path, file);
+};
 
-  deleteMediumMetadata(medium, path) {
-    return this._deleteMetadata(_medium(medium), path);
-  };
+Camomile.prototype.deleteMediumMetadata = function deleteMediumMetadata (medium, path) {
+  return this._deleteMetadata(_medium(medium), path);
+};
 
 ////
 
-  _setMetadata(resource, metadatas, path) {
-    if (path) {
-      metadatas = Camomile._constructMetadataPathObject(path, metadatas);
-    }
-
-    return this._post(`${resource}/metadata`,metadatas);
+Camomile.prototype._setMetadata = function _setMetadata (resource, metadatas, path) {
+  if (path) {
+    metadatas = Camomile._constructMetadataPathObject(path, metadatas);
   }
 
-  _getMetadata(resource, path) {
-    if (!path) {
-      return this._getMetadataKeys(resource);
+  return this._post((resource + "/metadata"),metadatas);
+};
+
+Camomile.prototype._getMetadata = function _getMetadata (resource, path) {
+  if (!path) {
+    return this._getMetadataKeys(resource);
+  } else {
+    return this._get((resource + "/metadata/" + path));
+  }
+};
+
+Camomile.prototype._getMetadataKeys = function _getMetadataKeys (resource, path) {
+    if ( path === void 0 ) path = '';
+
+  return this._get((resource + "/metadata/" + path + "."));
+};
+
+Camomile.prototype._deleteMetadata = function _deleteMetadata (resource, path) {
+  return this._delete((resource + "/metadata/" + path));
+};
+
+Camomile.prototype._sendMetadataFile = function _sendMetadataFile (resource, path, file) {
+    var this$1 = this;
+
+  return new Promise(function (callback) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var base64 = e.target.result;
+      var infos = base64.split(',');
+      var object = Camomile._constructMetadataPathObject(path, {
+        type: 'file',
+        filename: file.name,
+        data: infos[1]
+      });
+
+      this$1._setMetadata(resource, object).then(callback);
+    };
+    reader.readAsDataURL(file);
+  });
+};
+
+Camomile._constructMetadataPathObject = function _constructMetadataPathObject (path, metadatas) {
+  var paths = path.split('.');
+
+  var object = {};
+  var accessor = object;
+  for (var i = 0; i < paths.length; i++) {
+    accessor[paths[i]] = {};
+    if (i === paths.length - 1) {
+      accessor[paths[i]] = metadatas;
     } else {
-      return this._get(`${resource}/metadata/${path}`);
+      accessor = accessor[paths[i]];
     }
   }
 
-  _getMetadataKeys(resource, path = '') {
-    return this._get(`${resource}/metadata/${path}.`);
-  }
-
-  _deleteMetadata(resource, path) {
-    return this._delete(`${resource}/metadata/${path}`);
-  }
-
-  _sendMetadataFile(resource, path, file) {
-    return new Promise(callback => {
-      var reader = new FileReader();
-      reader.onload = (e) => {
-        var base64 = e.target.result;
-        var infos = base64.split(',');
-        var object = Camomile._constructMetadataPathObject(path, {
-          type: 'file',
-          filename: file.name,
-          data: infos[1]
-        });
-
-        this._setMetadata(resource, object).then(callback);
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  static _constructMetadataPathObject(path, metadatas) {
-    var paths = path.split('.');
-
-    var object = {};
-    var accessor = object;
-    for (var i = 0; i < paths.length; i++) {
-      accessor[paths[i]] = {};
-      if (i === paths.length - 1) {
-        accessor[paths[i]] = metadatas;
-      } else {
-        accessor = accessor[paths[i]];
-      }
-    }
-
-    return object;
-  }
+  return object;
+};
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // UTILS
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  getDate() {
-    return this._get('date');
-  };
-}
+Camomile.prototype.getDate = function getDate () {
+  return this._get('date');
+};
 
 
 
@@ -65666,9 +66005,11 @@ var camomileClient = Camomile;
 
 var bind$3 = function bind(fn, thisArg) {
   return function wrap() {
+    var arguments$1 = arguments;
+
     var args = new Array(arguments.length);
     for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
+      args[i] = arguments$1[i];
     }
     return fn.apply(thisArg, args);
   };
@@ -65938,6 +66279,8 @@ function forEach$2(obj, fn) {
  * @returns {Object} Result of all merge properties
  */
 function merge$1(/* obj1, obj2, obj3, ... */) {
+  var arguments$1 = arguments;
+
   var result = {};
   function assignValue(val, key) {
     if (typeof result[key] === 'object' && typeof val === 'object') {
@@ -65948,7 +66291,7 @@ function merge$1(/* obj1, obj2, obj3, ... */) {
   }
 
   for (var i = 0, l = arguments.length; i < l; i++) {
-    forEach$2(arguments[i], assignValue);
+    forEach$2(arguments$1[i], assignValue);
   }
   return result;
 }
@@ -66719,8 +67062,10 @@ function createDebug(namespace) {
   var prevTime;
 
   function debug() {
+    var arguments$1 = arguments;
+
     // disabled?
-    if (!debug.enabled) return;
+    if (!debug.enabled) { return; }
 
     var self = debug;
 
@@ -66735,7 +67080,7 @@ function createDebug(namespace) {
     // turn the `arguments` into a proper Array
     var args = new Array(arguments.length);
     for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
+      args[i] = arguments$1[i];
     }
 
     args[0] = exports.coerce(args[0]);
@@ -66749,7 +67094,7 @@ function createDebug(namespace) {
     var index = 0;
     args[0] = args[0].replace(/%([a-zA-Z%])/g, function(match, format) {
       // if we encounter an escaped % then don't increase the array index
-      if (match === '%%') return match;
+      if (match === '%%') { return match; }
       index++;
       var formatter = exports.formatters[format];
       if ('function' === typeof formatter) {
@@ -66815,7 +67160,7 @@ function enable(namespaces) {
   var len = split.length;
 
   for (i = 0; i < len; i++) {
-    if (!split[i]) continue; // ignore empty strings
+    if (!split[i]) { continue; } // ignore empty strings
     namespaces = split[i].replace(/\*/g, '.*?');
     if (namespaces[0] === '-') {
       exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
@@ -66875,7 +67220,7 @@ function enabled(name) {
  */
 
 function coerce(val) {
-  if (val instanceof Error) return val.stack || val.message;
+  if (val instanceof Error) { return val.stack || val.message; }
   return val;
 }
 });
@@ -66988,7 +67333,7 @@ function formatArgs(args) {
     + (useColors ? '%c ' : ' ')
     + '+' + exports.humanize(this.diff);
 
-  if (!useColors) return;
+  if (!useColors) { return; }
 
   var c = 'color: ' + this.color;
   args.splice(1, 0, c, 'color: inherit');
@@ -66999,7 +67344,7 @@ function formatArgs(args) {
   var index = 0;
   var lastC = 0;
   args[0].replace(/%[a-zA-Z%]/g, function(match) {
-    if ('%%' === match) return;
+    if ('%%' === match) { return; }
     index++;
     if ('%c' === match) {
       // we only are interested in the *last* %c
@@ -67136,22 +67481,22 @@ var hasFlag = function (flag, argv) {
 };
 
 var supportsColor = createCommonjsModule(function (module) {
-const env = process.env;
+var env = process.env;
 
-const support = level => {
+var support = function (level) {
 	if (level === 0) {
 		return false;
 	}
 
 	return {
-		level,
+		level: level,
 		hasBasic: true,
 		has256: level >= 2,
 		has16m: level >= 3
 	};
 };
 
-let supportLevel = (() => {
+var supportLevel = (function () {
 	if (hasFlag('no-color') ||
 		hasFlag('no-colors') ||
 		hasFlag('color=false')) {
@@ -67185,7 +67530,7 @@ let supportLevel = (() => {
 		// won't work. However, here we target Node.js 8 at minimum as it is an LTS
 		// release, and Node.js 7 is not. Windows 10 build 10586 is the first Windows
 		// release that supports 256 colors.
-		const osRelease = os$2.release().split('.');
+		var osRelease = os$2.release().split('.');
 		if (
 			Number(process.versions.node.split('.')[0]) >= 8 &&
 			Number(osRelease[0]) >= 10 &&
@@ -67198,7 +67543,7 @@ let supportLevel = (() => {
 	}
 
 	if ('CI' in env) {
-		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
+		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(function (sign) { return sign in env; }) || env.CI_NAME === 'codeship') {
 			return 1;
 		}
 
@@ -67210,7 +67555,7 @@ let supportLevel = (() => {
 	}
 
 	if ('TERM_PROGRAM' in env) {
-		const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
+		var version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
 
 		switch (env.TERM_PROGRAM) {
 			case 'iTerm.app':
@@ -67311,10 +67656,10 @@ exports.inspectOpts = Object.keys(process.env).filter(function (key) {
 
   // coerce string value into JS value
   var val = process.env[key];
-  if (/^(yes|on|true|enabled)$/i.test(val)) val = true;
-  else if (/^(no|off|false|disabled)$/i.test(val)) val = false;
-  else if (val === 'null') val = null;
-  else val = Number(val);
+  if (/^(yes|on|true|enabled)$/i.test(val)) { val = true; }
+  else if (/^(no|off|false|disabled)$/i.test(val)) { val = false; }
+  else if (val === 'null') { val = null; }
+  else { val = Number(val); }
 
   obj[prop] = val;
   return obj;
@@ -67924,7 +68269,7 @@ var http_1 = function httpAdapter(config) {
 
     // Create the request
     var req = transport.request(options, function handleResponse(res) {
-      if (req.aborted) return;
+      if (req.aborted) { return; }
 
       // Response has been received so kill timer that handles request timeout
       clearTimeout(timer);
@@ -67972,7 +68317,7 @@ var http_1 = function httpAdapter(config) {
         });
 
         stream.on('error', function handleStreamError(err) {
-          if (req.aborted) return;
+          if (req.aborted) { return; }
           reject(enhanceError(err, config, null, lastRequest));
         });
 
@@ -67990,7 +68335,7 @@ var http_1 = function httpAdapter(config) {
 
     // Handle errors
     req.on('error', function handleRequestError(err) {
-      if (req.aborted) return;
+      if (req.aborted) { return; }
       reject(enhanceError(err, config, null, req));
     });
 
@@ -68005,7 +68350,7 @@ var http_1 = function httpAdapter(config) {
     if (config.cancelToken) {
       // Handle cancellation
       config.cancelToken.promise.then(function onCanceled(cancel) {
-        if (req.aborted) return;
+        if (req.aborted) { return; }
 
         req.abort();
         reject(cancel);
@@ -68504,109 +68849,95 @@ axios_1.default = default_1;
 
 var axios = axios_1;
 
-var camomile = (url => {
-  const api = axios.create({
+var camomile = function (url) {
+  var api = axios.create({
     baseURL: url,
     withCredentials: true
   });
 
-  const _opt = (n, id) => {
-    return id ? `${n}/${id}` : n;
+  var _opt = function (n, id) {
+    return id ? (n + "/" + id) : n
   };
 
-  const _user = id => _opt('user', id);
+  var _user = function (id) { return _opt('user', id); };
+  var _get = function (uri) { return api
+      .get(uri)
+      .then(function (r) { return r.data; })
+      .catch(function (e) {
+        console.log('get error: ', uri, e);
+        throw e
+      }); };
 
-  const _get$$1 = async uri => {
-    try {
-      const response = await api.get(uri);
-      console.log('get: ', uri, response.data);
-      return response.data;
-    } catch (e) {
-      console.log('get error: ', uri, e);
-      throw e;
-    }
-  };
+  var _post = function (uri, data) { return api
+      .post(uri, data)
+      .then(function (r) { return r.data; })
+      .catch(function (e) {
+        console.log('post error: ', uri, e);
+        throw e
+      }); };
 
-  const _post = async (uri, data) => {
-    try {
-      const response = await api.post(uri, data);
-      console.log('post: ', uri, response.data);
-      return response.data;
-    } catch (e) {
-      console.log('post error: ', uri, e);
-      throw e;
-    }
-  };
-
-  const _put = async (uri, data) => {
-    try {
-      const response = await api.put(uri, data);
-      console.log('put: ', uri, response.data);
-      return response.data;
-    } catch (e) {
-      console.log('put error: ', uri, e);
-      throw e;
-    }
-  };
+  var _put = function (uri, data) { return api
+      .put(uri, data)
+      .then(function (r) { return r.data; })
+      .catch(function (e) {
+        console.log('post error: ', uri, e);
+        throw e
+      }); };
 
   return {
     // User
-    login(name, password) {
+    login: function login (name, password) {
       return _post('login', {
         username: name,
         password: password
-      });
+      })
     },
-
-    logout() {
-      return _post('logout');
+    logout: function logout () {
+      return _post('logout')
     },
-
-    me() {
-      return _get$$1('me');
+    me: function me () {
+      return _get('me')
     },
-
-    updatePassword(password) {
+    updatePassword: function updatePassword (password) {
       return _put('me', {
         password: password
-      });
+      })
     },
+    createUser: function createUser (
+      name,
+      password,
+      description,
+      role,
+      ref
+    ) {
+      if ( description === void 0 ) description = {};
+      if ( role === void 0 ) role = 'user';
+      if ( ref === void 0 ) ref = {};
+      var returns_id = ref.returns_id;
 
-    createUser(name, password, description = {}, role = 'user', {
-      returns_id
-    } = {}) {
-      return _post('user', {
-        name,
-        password,
-        description,
-        role
-      });
+      return _post('user', { name: name, password: password, description: description, role: role })
     },
+    updateUser: function updateUser (id, fields) {
+      if ( fields === void 0 ) fields = {};
 
-    updateUser(id, fields = {}) {
-      return _put(_user(id), fields);
+      return _put(_user(id), fields)
     },
+    getUsers: function getUsers (ref) {
+      if ( ref === void 0 ) ref = {};
+      var returns_id = ref.returns_id;
+      var ref_filter = ref.filter; if ( ref_filter === void 0 ) ref_filter = {};
+      var ref_filter$1 = ref_filter;
+      var username = ref_filter$1.username;
+      var role = ref_filter$1.role;
 
-    getUsers({
-      returns_id,
-      filter: {
-        username,
-        role
-      } = {}
-    } = {}) {
-      return _get$$1('user', {
-        username,
-        role
-      }).then(r => console.log('getUsers', r, returns_id));
+      return _get('user', { username: username, role: role }).then(function (r) { return console.log('getUsers', r, returns_id); }
+      )
     }
-
-  };
-});
+  }
+};
 
 // import Camomile from '../../camomile-client-javascript' /* debug with local version */
-/* axios api */
-
-const config$1 = {
+var config$1 = {
   title: 'Camomile UI',
   user: {
     name: 'root',
@@ -68616,18 +68947,24 @@ const config$1 = {
   roles: ['admin', 'user'],
   axios: false
 };
-const api = config$1.axios ? camomile(config$1.url) : new camomileClient(config$1.url);
+
+var api = config$1.axios ? camomile(config$1.url) : new camomileClient(config$1.url);
 
 var log$4 = {
-  simple(key, value) {
-    console.log(`%c| ${key}: %c${value}`, // eslint-disable-line camelcase
-    'padding:8px 0; color:#666; line-height:24px;', 'padding:8px 32px 8px 0; color:#f40; line-height:24px;');
+  simple: function simple (key, value) {
+    console.log(
+      ("%c| " + key + ": %c" + value), // eslint-disable-line camelcase
+      'padding:8px 0; color:#666; line-height:24px;',
+      'padding:8px 32px 8px 0; color:#f40; line-height:24px;'
+    );
   },
-
-  button(key, value) {
-    console.log(`%c${key} %c${value}`, 'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 24px; line-height:96px; margin-left: 4px; border-radius: 8px 0 0 8px; color:#333; background:linear-gradient(to bottom, #E5E4E5, #CFCFCF); text-shadow: -1px -1px 1px #ccc,  1px 1px 3px #fff;', 'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 12px; line-height:96px; text-decoration: none; color:#fff; background:linear-gradient(to bottom, #f62, #f30); text-shadow: -1px -1px 1px #a50,  1px 1px 3px #fa0; border-radius: 0 8px 8px 0; ');
+  button: function button (key, value) {
+    console.log(
+      ("%c" + key + " %c" + value),
+      'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 24px; line-height:96px; margin-left: 4px; border-radius: 8px 0 0 8px; color:#333; background:linear-gradient(to bottom, #E5E4E5, #CFCFCF); text-shadow: -1px -1px 1px #ccc,  1px 1px 3px #fff;',
+      'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 12px; line-height:96px; text-decoration: none; color:#fff; background:linear-gradient(to bottom, #f62, #f30); text-shadow: -1px -1px 1px #a50,  1px 1px 3px #fa0; border-radius: 0 8px 8px 0; '
+    );
   }
-
 };
 
 var viewport = {
@@ -68646,11 +68983,10 @@ var viewport = {
     animations: false
   },
   mutations: {
-    svgStatus(state, payload) {
+    svgStatus: function svgStatus (state, payload) {
       state.svg[payload.type] = payload.status;
     },
-
-    viewportSet(state, payload) {
+    viewportSet: function viewportSet (state, payload) {
       if (window.matchMedia('(min-width: 83.5em)').matches) {
         log$4.simple('Viewport', 'Large');
         state.viewport.name = 'large';
@@ -68672,65 +69008,79 @@ var viewport = {
         state.viewport.name = 'default';
         state.animate = false;
       }
-
       state.viewport.width = window.innerWidth;
       state.viewport.height = window.innerHeight;
     },
-
-    svgSet(state, payload) {
-      state.svg.scale = state.viewport.name === 'mobile' || state.viewport.name === 'tablet' ? 0.5 : 1;
-      state.svg.height = state.viewport.name === 'mobile' || state.viewport.name === 'tablet' ? state.viewport.height - 288 : state.viewport.height - 144;
-      state.svg.width = state.viewport.name === 'large' ? state.viewport.width - 48 : state.viewport.width - 48;
+    svgSet: function svgSet (state, payload) {
+      state.svg.scale =
+        state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
+          ? 0.5
+          : 1;
+      state.svg.height =
+        state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
+          ? state.viewport.height - 288
+          : state.viewport.height - 144;
+      state.svg.width =
+        state.viewport.name === 'large'
+          ? state.viewport.width - 48
+          : state.viewport.width - 48;
     }
-
   },
   actions: {
-    set(context) {
+    set: function set (context) {
       context.commit('viewportSet');
       context.commit('svgSet');
     }
-
   }
 };
 
 var sync = {
   namespaced: true,
+
   state: {
     list: []
   },
+
   actions: {
-    all({
-      state,
-      dispatch,
-      commit,
-      rootState
-    }) {
-      Promise.all([...['users', 'groups', 'corpus'].map(type => new Promise((resolve, reject) => dispatch(`cml/${type}/list`, {}, {
-        root: true
-      }).then(r => resolve(r)).catch(e => reject(e)))), ...['medias', 'layers'].map(type => new Promise((resolve, reject) => dispatch(`cml/${type}/list`, rootState.cml.corpus.id, {
-        root: true
-      }).then(r => resolve(r)).catch(e => reject(e))))]).then(v => {
-        dispatch('cml/messages/success', 'Synced with server', {
-          root: true
-        });
+    all: function all (ref) {
+      var state = ref.state;
+      var dispatch = ref.dispatch;
+      var commit = ref.commit;
+      var rootState = ref.rootState;
+
+      Promise.all(['users', 'groups', 'corpus'].map(
+          function (type) { return new Promise(function (resolve, reject) { return dispatch(("cml/" + type + "/list"), {}, { root: true })
+                .then(function (r) { return resolve(r); })
+                .catch(function (e) { return reject(e); }); }
+            ); }
+        ).concat( ['medias', 'layers'].map(
+          function (type) { return new Promise(function (resolve, reject) { return dispatch(("cml/" + type + "/list"), rootState.cml.corpus.id, {
+                root: true
+              })
+                .then(function (r) { return resolve(r); })
+                .catch(function (e) { return reject(e); }); }
+            ); }
+        )
+      )).then(function (v) {
+        dispatch('cml/messages/success', 'Synced with server', { root: true });
       });
     }
-
   },
+
   getters: {
-    active: state => {
-      return state.list.length;
+    active: function (state) {
+      return state.list.length
     }
   },
+
   mutations: {
-    start(state, name) {
+    start: function start (state, name) {
       state.list.push(name);
     },
 
-    stop(state, name) {
-      state.list = state.list.filter(n => n !== name);
+    stop: function stop (state, name) {
+      state.list = state.list.filter(function (n) { return n !== name; });
     }
-
   }
 };
 
@@ -68742,27 +69092,24 @@ var popup = {
     element: {}
   },
   mutations: {
-    open(state, {
-      config,
-      element
-    }) {
+    open: function open (state, ref) {
+      var config = ref.config;
+      var element = ref.element;
+
       state.visible = true;
       state.config = config;
       state.element = JSON.parse(JSON.stringify(element));
     },
-
-    close(state) {
+    close: function close (state) {
       state.visible = false;
       state.config = {};
     },
+    fieldUpdate: function fieldUpdate (state, ref) {
+      var name = ref.name;
+      var value = ref.value;
 
-    fieldUpdate(state, {
-      name,
-      value
-    }) {
       Vue$3.set(state.element, name, value);
     }
-
   }
 };
 
@@ -68773,16 +69120,14 @@ var dropdown = {
     config: {}
   },
   mutations: {
-    close(state) {
+    close: function close (state) {
       state.visible = false;
       state.config = {};
     },
-
-    open(state, config) {
+    open: function open (state, config) {
       state.visible = true;
       state.config = config;
     }
-
   }
 };
 
@@ -68792,47 +69137,36 @@ var messages = {
     list: []
   },
   actions: {
-    success({
-      commit
-    }, content) {
-      commit('add', {
-        content,
-        type: 'success',
-        id: new Date().valueOf()
-      });
-      setTimeout(_ => {
+    success: function success (ref, content) {
+      var commit = ref.commit;
+
+      commit('add', { content: content, type: 'success', id: new Date().valueOf() });
+      setTimeout(function (_) {
         commit('remove');
       }, 2000);
     },
+    error: function error (ref, content) {
+      var commit = ref.commit;
 
-    error({
-      commit
-    }, content) {
-      commit('add', {
-        content,
-        type: 'error',
-        id: new Date().valueOf()
-      });
-      setTimeout(_ => {
+      commit('add', { content: content, type: 'error', id: new Date().valueOf() });
+      setTimeout(function (_) {
         commit('remove');
       }, 2000);
     }
-
   },
   mutations: {
-    remove(state) {
+    remove: function remove (state) {
       state.list.shift();
     },
-
-    add(state, message) {
+    add: function add (state, message) {
       state.list.push(message);
     }
-
   }
 };
 
 var user = {
   namespaced: true,
+
   state: {
     id: '',
     name: '',
@@ -68843,133 +69177,127 @@ var user = {
     isAdmin: false,
     isRoot: false
   },
+
   actions: {
-    login({
-      commit,
-      dispatch
-    }, config) {
-      commit('cml/sync/start', 'userLogin', {
-        root: true
-      });
-      return api.login(config.user.name, config.user.password).then(r => {
-        commit('cml/sync/stop', 'userLogin', {
-          root: true
-        });
-        commit('cml/popup/close', null, {
-          root: true
-        });
-        dispatch('set');
-        return r;
-      }).catch(e => {
-        commit('cml/sync/stop', 'userLogin', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        dispatch('cml/reset', null, {
-          root: true
-        });
-        throw error;
-      });
+    login: function login (ref, config) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+
+      commit('cml/sync/start', 'userLogin', { root: true });
+      return api
+        .login(config.user.name, config.user.password)
+        .then(function (r) {
+          commit('cml/sync/stop', 'userLogin', { root: true });
+          commit('cml/popup/close', null, { root: true });
+          dispatch('set');
+
+          return r
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'userLogin', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+          dispatch('cml/reset', null, { root: true });
+
+          throw error
+        })
     },
 
-    set({
-      commit,
-      dispatch
-    }) {
-      commit('cml/sync/start', 'userSet', {
-        root: true
-      });
-      return api.me().then(user => {
-        commit('cml/sync/stop', 'userSet', {
-          root: true
-        });
-        commit('set', user);
-        dispatch('cml/set', null, {
-          root: true
-        });
-        return user;
-      }).catch(e => {
-        commit('cml/sync/stop', 'userSet', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        dispatch('cml/reset', null, {
-          root: true
-        });
-        throw error;
-      });
+    set: function set (ref) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+
+      commit('cml/sync/start', 'userSet', { root: true });
+      return api
+        .me()
+        .then(function (user) {
+          commit('cml/sync/stop', 'userSet', { root: true });
+          commit('set', user);
+          dispatch('cml/set', null, { root: true });
+
+          return user
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'userSet', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+          dispatch('cml/reset', null, { root: true });
+
+          throw error
+        })
     },
 
-    logout({
-      commit,
-      dispatch
-    }) {
-      commit('cml/sync/start', 'userLogout', {
-        root: true
-      });
-      return api.logout().then(r => {
-        commit('cml/sync/stop', 'userLogout', {
-          root: true
-        });
-        dispatch('cml/reset', null, {
-          root: true
-        });
-        commit('cml/popup/close', null, {
-          root: true
-        });
-        commit('cml/dropdown/close', null, {
-          root: true
-        });
-        return r.success;
-      }).catch(e => {
-        commit('cml/sync/stop', 'userLogout', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        dispatch('cml/reset', null, {
-          root: true
-        });
-        throw error;
-      });
+    logout: function logout (ref) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+
+      commit('cml/sync/start', 'userLogout', { root: true });
+      return api
+        .logout()
+        .then(function (r) {
+          commit('cml/sync/stop', 'userLogout', { root: true });
+          dispatch('cml/reset', null, { root: true });
+          commit('cml/popup/close', null, { root: true });
+          commit('cml/dropdown/close', null, { root: true });
+
+          return r.success
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'userLogout', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+          dispatch('cml/reset', null, { root: true });
+
+          throw error
+        })
     }
-
   },
+
   getters: {
-    isAdmin: state => ({
-      users = {},
-      groups = {}
-    }) => {
-      const isAdmin = users[state.id] === 3;
-      const isInAdminGroup = Object.keys(groups).reduce((result, id) => {
-        const groupIsAdmin = groups[id] === 3;
-        const userIsInGroup = state.groupIds.reduce((isIn, groupId) => {
-          return isIn || groupId === id;
+    isAdmin: function (state) { return function (ref) {
+      var users = ref.users; if ( users === void 0 ) users = {};
+      var groups = ref.groups; if ( groups === void 0 ) groups = {};
+
+      var isAdmin = users[state.id] === 3;
+
+      var isInAdminGroup = Object.keys(groups).reduce(function (result, id) {
+        var groupIsAdmin = groups[id] === 3;
+
+        var userIsInGroup = state.groupIds.reduce(function (isIn, groupId) {
+          return isIn || groupId === id
         }, false);
-        return result || groupIsAdmin && userIsInGroup;
+
+        return result || (groupIsAdmin && userIsInGroup)
       }, false);
-      return isAdmin || isInAdminGroup;
-    },
-    permission: state => ({
-      users = {},
-      groups = {}
-    }) => {
-      const permissionUser = Object.keys(users).find(userId => userId === state.id) && users[state.id] || 0;
-      const permissionGroup = Object.keys(groups).reduce((permission, groupId) => Math.max(permission, state.groupIds.indexOf(groupId) !== -1 && groups[groupId]), 0);
-      const permissionRoot = state.isRoot ? 3 : 0;
-      return Math.max(permissionUser, permissionGroup, permissionRoot);
-    }
+
+      return isAdmin || isInAdminGroup
+    }; },
+
+    permission: function (state) { return function (ref) {
+      var users = ref.users; if ( users === void 0 ) users = {};
+      var groups = ref.groups; if ( groups === void 0 ) groups = {};
+
+      var permissionUser =
+        (Object.keys(users).find(function (userId) { return userId === state.id; }) &&
+          users[state.id]) ||
+        0;
+
+      var permissionGroup = Object.keys(groups).reduce(
+        function (permission, groupId) { return Math.max(
+            permission,
+            state.groupIds.indexOf(groupId) !== -1 && groups[groupId]
+          ); },
+        0
+      );
+
+      var permissionRoot = state.isRoot ? 3 : 0;
+
+      return Math.max(permissionUser, permissionGroup, permissionRoot)
+    }; }
   },
+
   mutations: {
-    set(state, user) {
+    set: function set (state, user) {
       state.isLogged = true;
       state.isAdmin = user.role === 'admin';
       state.isRoot = user.username === 'root';
@@ -68980,7 +69308,7 @@ var user = {
       state.groupIds = user.groups;
     },
 
-    reset(state) {
+    reset: function reset (state) {
       state.isLogged = false;
       state.isAdmin = false;
       state.isRoot = false;
@@ -68991,2531 +69319,1968 @@ var user = {
       state.groupIds = [];
     },
 
-    groupAdd(state, groupId) {
+    groupAdd: function groupAdd (state, groupId) {
       state.groupIds.push(groupId);
     },
 
-    groupRemove(state, groupId) {
-      state.groupIds = state.groupIds.filter(id => id !== groupId);
+    groupRemove: function groupRemove (state, groupId) {
+      state.groupIds = state.groupIds.filter(function (id) { return id !== groupId; });
     }
-
   }
 };
 
-function userFormat(user) {
+function userFormat (user) {
   return {
     name: user.username,
     id: user._id,
     description: user.description || {},
     role: user.role
-  };
+  }
 }
-function groupFormat(group) {
+
+function groupFormat (group) {
   return {
     name: group.name,
     id: group._id,
     description: group.description || {},
     userIds: group.users
-  };
+  }
 }
-function mediaFormat(media) {
+
+function mediaFormat (media) {
   return {
     name: media.name,
     id: media._id,
     url: media.url,
     corpuId: media.id_corpus,
     description: media.description || {}
-  };
-}
-function observerClean(obj) {
-  return Object.keys(obj).reduce((res, e) => Object.assign(res, {
-    [e]: obj[e]
-  }), {});
+  }
 }
 
+function observerClean (obj) {
+  var obj$1;
+
+  return Object.keys(obj).reduce(
+    function (res, e) { return Object.assign(res, ( obj$1 = {}, obj$1[e] = obj[e], obj$1)); },
+    {}
+  )
+}
+
+var obj;
 var users = {
   namespaced: true,
+
   state: {
     list: []
   },
+
   actions: {
-    add({
-      commit,
-      dispatch
-    }, user) {
-      commit('cml/sync/start', 'usersAdd', {
-        root: true
-      });
-      return api.createUser(user.name, user.password, observerClean(user.description), user.role).then(r => {
-        commit('cml/sync/stop', 'usersAdd', {
-          root: true
-        });
-        const user = userFormat(r);
-        commit('add', user);
-        commit('cml/corpus/userAdd', user.id, {
-          root: true
-        });
-        dispatch('cml/messages/success', 'User added', {
-          root: true
-        });
-        return user;
-      }).catch(e => {
-        commit('cml/sync/stop', 'usersAdd', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+    add: function add (ref, user) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+
+      commit('cml/sync/start', 'usersAdd', { root: true });
+      return api
+        .createUser(
+          user.name,
+          user.password,
+          observerClean(user.description),
+          user.role
+        )
+        .then(function (r) {
+          commit('cml/sync/stop', 'usersAdd', { root: true });
+          var user = userFormat(r);
+          commit('add', user);
+          commit('cml/corpus/userAdd', user.id, { root: true });
+          dispatch('cml/messages/success', 'User added', { root: true });
+
+          return user
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'usersAdd', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    update({
-      commit,
-      dispatch,
-      rootState
-    }, user) {
-      commit('cml/sync/start', 'usersUpdate', {
-        root: true
-      });
-      return api.updateUser(user.id, {
-        password: user.password,
-        role: user.role,
-        description: user.description
-      }).then(r => {
-        commit('cml/sync/stop', 'usersUpdate', {
-          root: true
-        });
-        const user = userFormat(r);
-        commit('update', user);
+    update: function update (ref, user) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
 
-        if (user.name === rootState.cml.user.name) {
-          commit('cml/user/set', user, {
-            root: true
-          });
-        }
+      commit('cml/sync/start', 'usersUpdate', { root: true });
+      return api
+        .updateUser(user.id, {
+          password: user.password,
+          role: user.role,
+          description: user.description
+        })
+        .then(function (r) {
+          commit('cml/sync/stop', 'usersUpdate', { root: true });
+          var user = userFormat(r);
+          commit('update', user);
+          if (user.name === rootState.cml.user.name) {
+            commit('cml/user/set', user, { root: true });
+          }
+          dispatch('cml/messages/success', 'User updated', { root: true });
 
-        dispatch('cml/messages/success', 'User updated', {
-          root: true
-        });
-        return user;
-      }).catch(e => {
-        commit('cml/sync/stop', 'usersUpdate', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          return user
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'usersUpdate', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    remove({
-      commit,
-      dispatch
-    }, user) {
-      commit('cml/sync/start', 'usersRemove', {
-        root: true
-      });
-      return api.deleteUser(user.id).then(r => {
-        commit('cml/sync/stop', 'usersRemove', {
-          root: true
-        });
-        commit('remove', user);
-        commit('cml/corpus/userRemove', user.id, {
-          root: true
-        });
-        dispatch('cml/messages/success', 'User removed', {
-          root: true
-        });
-        return r;
-      }).catch(e => {
-        commit('cml/sync/stop', 'usersRemove', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+    remove: function remove (ref, user) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+
+      commit('cml/sync/start', 'usersRemove', { root: true });
+      return api
+        .deleteUser(user.id)
+        .then(function (r) {
+          commit('cml/sync/stop', 'usersRemove', { root: true });
+          commit('remove', user);
+          commit('cml/corpus/userRemove', user.id, { root: true });
+          dispatch('cml/messages/success', 'User removed', { root: true });
+
+          return r
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'usersRemove', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    get({
-      commit
-    }, userId) {
-      commit('cml/sync/start', 'usersGet', {
-        root: true
-      });
-      return api.getUser(userId).then(r => {
-        commit('cml/sync/stop', 'usersRemove', {
-          root: true
-        });
-        const user = userFormat(r);
-        return user;
-      }).catch(e => {
-        commit('cml/sync/stop', 'usersRemove', {
-          root: true
-        });
-        console.log(e);
-        throw e;
-      });
+    get: function get (ref, userId) {
+      var commit = ref.commit;
+
+      commit('cml/sync/start', 'usersGet', { root: true });
+      return api
+        .getUser(userId)
+        .then(function (r) {
+          commit('cml/sync/stop', 'usersRemove', { root: true });
+          var user = userFormat(r);
+
+          return user
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'usersRemove', { root: true });
+          console.log(e);
+
+          throw e
+        })
     },
 
-    list({
-      commit
-    }) {
-      commit('cml/sync/start', 'usersList', {
-        root: true
-      });
-      return api.getUsers().then(r => {
-        commit('cml/sync/stop', 'usersList', {
-          root: true
-        });
-        const users = r.map(user => userFormat(user));
-        commit('list', users);
-        return users;
-      }).catch(e => {
-        commit('cml/sync/stop', 'usersList', {
-          root: true
-        });
-        console.log(e);
-        throw e;
-      });
+    list: function list (ref) {
+      var commit = ref.commit;
+
+      commit('cml/sync/start', 'usersList', { root: true });
+      return api
+        .getUsers()
+        .then(function (r) {
+          commit('cml/sync/stop', 'usersList', { root: true });
+          var users = r.map(function (user) { return userFormat(user); });
+          commit('list', users);
+
+          return users
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'usersList', { root: true });
+          console.log(e);
+          throw e
+        })
     }
-
   },
+
   getters: {
-    permissions: state => permissions => {
-      return state.list.reduce((res, element) => Object.assign(res, {
-        [element.id]: permissions && permissions[element.id] ? permissions[element.id] : 0
-      }), {});
-    }
+    permissions: function (state) { return function (permissions) {
+      return state.list.reduce(
+        function (res, element) { return Object.assign(res, ( obj = {}, obj[element.id] = permissions && permissions[element.id]
+                ? permissions[element.id]
+                : 0, obj)); },
+        {}
+      )
+    }; }
   },
+
   mutations: {
-    reset(state) {
+    reset: function reset (state) {
       state.list = [];
     },
 
-    add(state, user) {
-      const userExisting = state.list.find(u => u.id === user.id);
-
+    add: function add (state, user) {
+      var userExisting = state.list.find(function (u) { return u.id === user.id; });
       if (!userExisting) {
         state.list.push(user);
       }
     },
 
-    update(state, user) {
-      Object.assign(state.list.find(u => u.id === user.id), user);
+    update: function update (state, user) {
+      Object.assign(state.list.find(function (u) { return u.id === user.id; }), user);
     },
 
-    remove(state, user) {
-      const index = state.list.findIndex(u => u.id === user.id);
-
+    remove: function remove (state, user) {
+      var index = state.list.findIndex(function (u) { return u.id === user.id; });
       if (index !== -1) {
         state.list.splice(index, 1);
       }
     },
 
-    list(state, users) {
+    list: function list (state, users) {
       state.list = users;
     }
-
   }
 };
 
+var obj$1;
 var groups = {
   namespaced: true,
+
   state: {
     list: []
   },
+
   actions: {
-    add({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, group) {
-      commit('cml/sync/start', 'groupsAdd', {
-        root: true
-      });
-      return api.createGroup(group.name, group.description).then(r => {
-        commit('cml/sync/stop', 'groupsAdd', {
-          root: true
-        });
-        const group = groupFormat(r);
-        commit('add', group);
-        commit('cml/corpus/groupAdd', group.id, {
-          root: true
-        });
-        dispatch('cml/messages/success', 'Group added', {
-          root: true
-        });
-        return group;
-      }).catch(e => {
-        commit('cml/sync/stop', 'groupsAdd', {
-          root: true
-        });
-        console.log(e);
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+    add: function add (ref, group) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'groupsAdd', { root: true });
+      return api
+        .createGroup(group.name, group.description)
+        .then(function (r) {
+          commit('cml/sync/stop', 'groupsAdd', { root: true });
+          var group = groupFormat(r);
+          commit('add', group);
+          commit('cml/corpus/groupAdd', group.id, { root: true });
+          dispatch('cml/messages/success', 'Group added', { root: true });
+
+          return group
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'groupsAdd', { root: true });
+          console.log(e);
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    remove({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, group) {
-      commit('cml/sync/start', 'groupsRemove', {
-        root: true
-      });
-      return api.deleteGroup(group.id).then(r => {
-        commit('cml/sync/stop', 'groupsRemove', {
-          root: true
-        });
-        commit('remove', group);
-        commit('cml/corpus/groupRemove', group.id, {
-          root: true
-        });
-        dispatch('cml/messages/success', 'Group removed', {
-          root: true
-        });
-        return group.id;
-      }).catch(e => {
-        commit('cml/sync/stop', 'groupsRemove', {
-          root: true
-        });
-        console.log(e);
-        dispatch('cml/messages/error', e, {
-          root: true
-        });
-        throw e;
-      });
+    remove: function remove (ref, group) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'groupsRemove', { root: true });
+      return api
+        .deleteGroup(group.id)
+        .then(function (r) {
+          commit('cml/sync/stop', 'groupsRemove', { root: true });
+          commit('remove', group);
+          commit('cml/corpus/groupRemove', group.id, { root: true });
+          dispatch('cml/messages/success', 'Group removed', { root: true });
+
+          return group.id
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'groupsRemove', { root: true });
+          console.log(e);
+          dispatch('cml/messages/error', e, { root: true });
+
+          throw e
+        })
     },
 
-    update({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, group) {
-      commit('cml/sync/start', 'groupsUpdate', {
-        root: true
-      });
-      return api.updateGroup(group.id, {
-        description: group.description
-      }).then(r => {
-        commit('cml/sync/stop', 'groupsUpdate', {
-          root: true
-        });
-        const group = groupFormat(r);
-        commit('update', group);
-        dispatch('cml/messages/success', 'Group updated', {
-          root: true
-        });
-        return group;
-      }).catch(e => {
-        commit('cml/sync/stop', 'groupsUpdate', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+    update: function update (ref, group) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'groupsUpdate', { root: true });
+      return api
+        .updateGroup(group.id, { description: group.description })
+        .then(function (r) {
+          commit('cml/sync/stop', 'groupsUpdate', { root: true });
+          var group = groupFormat(r);
+          commit('update', group);
+          dispatch('cml/messages/success', 'Group updated', { root: true });
+
+          return group
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'groupsUpdate', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    get({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, groupId) {
-      commit('cml/sync/start', 'groupsGet', {
-        root: true
-      });
-      return api.getGroup(groupId).then(r => {
-        commit('cml/sync/stop', 'groupsGet', {
-          root: true
-        });
-        const group = groupFormat(r);
-        return group;
-      }).catch(e => {
-        commit('cml/sync/stop', 'groupsGet', {
-          root: true
-        });
-        console.log(e);
-        throw e;
-      });
+    get: function get (ref, groupId) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'groupsGet', { root: true });
+      return api
+        .getGroup(groupId)
+        .then(function (r) {
+          commit('cml/sync/stop', 'groupsGet', { root: true });
+          var group = groupFormat(r);
+          return group
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'groupsGet', { root: true });
+          console.log(e);
+
+          throw e
+        })
     },
 
-    list({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }) {
-      commit('cml/sync/start', 'groupsList', {
-        root: true
-      });
-      return api.getGroups().then(r => {
-        commit('cml/sync/stop', 'groupsList', {
-          root: true
-        });
-        const groups = r.map(group => groupFormat(group));
-        commit('list', groups);
-        return groups;
-      }).catch(e => {
-        commit('cml/sync/stop', 'groupsList', {
-          root: true
-        });
-        console.log(e);
-        throw e;
-      });
+    list: function list (ref) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'groupsList', { root: true });
+      return api
+        .getGroups()
+        .then(function (r) {
+          commit('cml/sync/stop', 'groupsList', { root: true });
+          var groups = r.map(function (group) { return groupFormat(group); });
+          commit('list', groups);
+
+          return groups
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'groupsList', { root: true });
+          console.log(e);
+
+          throw e
+        })
     },
 
-    userAdd({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, {
-      user,
-      group
-    }) {
-      commit('cml/sync/start', 'groupsUserAdd', {
-        root: true
-      });
-      return api.addUserToGroup(user.id, group.id).then(r => {
-        commit('cml/sync/stop', 'groupsUserAdd', {
-          root: true
-        });
-        const group = groupFormat(r);
-        commit('update', group);
-        dispatch('cml/messages/success', 'User added to group', {
-          root: true
-        });
+    userAdd: function userAdd (ref, ref$1) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+      var user = ref$1.user;
+      var group = ref$1.group;
 
-        if (user.id === rootState.cml.user.id) {
-          commit('cml/user/groupAdd', group.id, {
+      commit('cml/sync/start', 'groupsUserAdd', { root: true });
+      return api
+        .addUserToGroup(user.id, group.id)
+        .then(function (r) {
+          commit('cml/sync/stop', 'groupsUserAdd', { root: true });
+          var group = groupFormat(r);
+          commit('update', group);
+          dispatch('cml/messages/success', 'User added to group', {
             root: true
           });
-          dispatch('cml/corpus/list', null, {
-            root: true
-          });
-        }
+          if (user.id === rootState.cml.user.id) {
+            commit('cml/user/groupAdd', group.id, { root: true });
+            dispatch('cml/corpus/list', null, {
+              root: true
+            });
+          }
 
-        return group;
-      }).catch(e => {
-        commit('cml/sync/stop', 'groupsUserAdd', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          return group
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'groupsUserAdd', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    userRemove({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, {
-      user,
-      group
-    }) {
-      commit('cml/sync/start', 'groupsUserRemove', {
-        root: true
-      });
-      return api.removeUserFromGroup(user.id, group.id).then(r => {
-        commit('cml/sync/stop', 'groupsUserRemove', {
-          root: true
-        });
-        const group = groupFormat(r);
-        commit('update', group);
-        dispatch('cml/messages/success', 'User removed from group', {
-          root: true
-        });
+    userRemove: function userRemove (ref, ref$1) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+      var user = ref$1.user;
+      var group = ref$1.group;
 
-        if (user.id === rootState.cml.user.id) {
-          commit('cml/user/groupRemove', group.id, {
+      commit('cml/sync/start', 'groupsUserRemove', { root: true });
+      return api
+        .removeUserFromGroup(user.id, group.id)
+        .then(function (r) {
+          commit('cml/sync/stop', 'groupsUserRemove', { root: true });
+          var group = groupFormat(r);
+          commit('update', group);
+          dispatch('cml/messages/success', 'User removed from group', {
             root: true
           });
-          dispatch('cml/corpus/list', null, {
-            root: true
-          });
-        }
+          if (user.id === rootState.cml.user.id) {
+            commit('cml/user/groupRemove', group.id, { root: true });
+            dispatch('cml/corpus/list', null, {
+              root: true
+            });
+          }
 
-        return group;
-      }).catch(e => {
-        commit('cml/sync/stop', 'groupsUserRemove', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          return group
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'groupsUserRemove', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     }
-
   },
+
   getters: {
-    permissions: state => permissions => {
-      return state.list.reduce((res, element) => Object.assign(res, {
-        [element.id]: permissions && permissions[element.id] ? permissions[element.id] : 0
-      }), {});
-    }
+    permissions: function (state) { return function (permissions) {
+      return state.list.reduce(
+        function (res, element) { return Object.assign(res, ( obj$1 = {}, obj$1[element.id] = permissions && permissions[element.id]
+                ? permissions[element.id]
+                : 0, obj$1)); },
+        {}
+      )
+    }; }
   },
+
   mutations: {
-    reset(state) {
+    reset: function reset (state) {
       state.list = [];
     },
 
-    add(state, group) {
+    add: function add (state, group) {
       console.log('group add', group);
-      const groupExisting = state.list.find(g => g.id === group.id);
-
+      var groupExisting = state.list.find(function (g) { return g.id === group.id; });
       if (!groupExisting) {
         state.list.push(group);
       }
     },
 
-    update(state, group) {
-      Object.assign(state.list.find(g => g.id === group.id), group);
+    update: function update (state, group) {
+      Object.assign(state.list.find(function (g) { return g.id === group.id; }), group);
     },
 
-    remove(state, group) {
-      const index = state.list.findIndex(g => g.id === group.id);
-
+    remove: function remove (state, group) {
+      var index = state.list.findIndex(function (g) { return g.id === group.id; });
       if (index !== -1) {
         state.list.splice(index, 1);
       }
     },
 
-    list(state, groups) {
+    list: function list (state, groups) {
       state.list = groups;
     }
-
   }
 };
 
 var corpus = {
   namespaced: true,
+
   state: {
     list: [],
     id: ''
   },
+
   actions: {
-    add({
-      commit,
-      dispatch,
-      rootState,
-      rootGetters
-    }, corpus) {
-      commit('cml/sync/start', 'corpusAdd', {
-        root: true
-      });
-      return api.createCorpus(corpus.name, corpus.description, {}).then(r => {
-        commit('cml/sync/stop', 'corpusAdd', {
-          root: true
-        });
-        const corpu = {
-          name: r.name,
-          id: r._id,
-          permission: 3,
-          permissions: {
-            users: rootGetters['cml/users/permissions']({}),
-            groups: rootGetters['cml/groups/permissions']({})
-          },
-          description: r.description
-        };
-        corpu.permissions.users[rootState.cml.user.id] = 3;
-        commit('add', corpu);
-        dispatch('cml/messages/success', 'Corpus added.', {
-          root: true
-        });
-        dispatch('set', corpu.id);
-        return r;
-      }).catch(e => {
-        commit('cml/sync/stop', 'corpusAdd', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw e;
-      });
+    add: function add (ref, corpus) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var rootGetters = ref.rootGetters;
+
+      commit('cml/sync/start', 'corpusAdd', { root: true });
+      return api
+        .createCorpus(corpus.name, corpus.description, {})
+        .then(function (r) {
+          commit('cml/sync/stop', 'corpusAdd', { root: true });
+          var corpu = {
+            name: r.name,
+            id: r._id,
+            permission: 3,
+            permissions: {
+              users: rootGetters['cml/users/permissions']({}),
+              groups: rootGetters['cml/groups/permissions']({})
+            },
+            description: r.description
+          };
+
+          corpu.permissions.users[rootState.cml.user.id] = 3;
+
+          commit('add', corpu);
+          dispatch('cml/messages/success', 'Corpus added.', { root: true });
+          dispatch('set', corpu.id);
+
+          return r
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'corpusAdd', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw e
+        })
     },
 
-    remove({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, corpu) {
-      commit('cml/sync/start', 'corpusRemove', {
-        root: true
-      });
-      return api.deleteCorpus(corpu.id).then(r => {
-        commit('cml/sync/stop', 'corpusRemove', {
-          root: true
-        });
-        commit('remove', corpu);
-        dispatch('cml/messages/success', 'Corpus removed', {
-          root: true
-        });
+    remove: function remove (ref, corpu) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
 
-        if (state.id === corpu.id) {
-          dispatch('set');
-        }
-
-        return r;
-      }).catch(e => {
-        commit('cml/sync/stop', 'corpusRemove', {
-          root: true
-        });
-        console.log(e);
-        dispatch('cml/messages/error', e, {
-          root: true
-        });
-        throw e;
-      });
-    },
-
-    update({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, corpu) {
-      commit('cml/sync/start', 'corpusUpdate', {
-        root: true
-      });
-      return api.updateCorpus(corpu.id, {
-        name: corpu.name,
-        description: corpu.description
-      }).then(r => {
-        commit('cml/sync/stop', 'corpusUpdate', {
-          root: true
-        });
-        console.log('corpus update', r);
-        corpu.name = r.name;
-        corpu.description = r.description || {};
-        commit('update', corpu);
-        dispatch('cml/messages/success', 'Corpus updated', {
-          root: true
-        });
-        return r;
-      }).catch(e => {
-        commit('cml/sync/stop', 'corpusUpdate', {
-          root: true
-        });
-        console.log(e);
-        dispatch('cml/messages/error', e, {
-          root: true
-        });
-        throw e;
-      });
-    },
-
-    list({
-      commit,
-      dispatch,
-      rootState,
-      rootGetters
-    }) {
-      commit('cml/sync/start', 'corpusList', {
-        root: true
-      });
-      return api.getCorpora().then(r => {
-        commit('cml/sync/stop', 'corpusList', {
-          root: true
-        });
-        const corpus = r.map(c => ({
-          name: c.name,
-          id: c._id,
-          description: c.description || {},
-          permission: rootGetters['cml/user/permission'](c.permissions),
-          permissions: {
-            users: rootGetters['cml/users/permissions'](c.permissions && c.permissions.users || {}),
-            groups: rootGetters['cml/groups/permissions'](c.permissions && c.permissions.groups || {})
+      commit('cml/sync/start', 'corpusRemove', { root: true });
+      return api
+        .deleteCorpus(corpu.id)
+        .then(function (r) {
+          commit('cml/sync/stop', 'corpusRemove', { root: true });
+          commit('remove', corpu);
+          dispatch('cml/messages/success', 'Corpus removed', { root: true });
+          if (state.id === corpu.id) {
+            dispatch('set');
           }
-        }));
-        commit('list', corpus);
-        dispatch('set');
-        return corpus;
-      }).catch(e => {
-        commit('cml/sync/stop', 'corpusList', {
-          root: true
-        });
-        console.log(e);
-        throw e;
-      });
+
+          return r
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'corpusRemove', { root: true });
+          console.log(e);
+          dispatch('cml/messages/error', e, { root: true });
+
+          throw e
+        })
     },
 
-    groupPermissionSet({
-      commit,
-      dispatch,
-      rootState
-    }, {
-      corpuId,
-      groupId,
-      permission
-    }) {
-      commit('cml/sync/start', 'corpusGroupPermissionSet', {
-        root: true
-      });
-      return api.setCorpusPermissionsForGroup(corpuId, groupId, permission).then(p => {
-        commit('cml/sync/stop', 'corpusGroupPermissionSet', {
-          root: true
-        });
-        commit('groupPermissionsUpdate', {
-          corpuId,
-          groupId,
-          permission: p.groups && p.groups[groupId] || 0
-        });
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        });
+    update: function update (ref, corpu) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
 
-        if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
-          dispatch('currentUserIsAdminTest', p);
-        }
+      commit('cml/sync/start', 'corpusUpdate', { root: true });
+      return api
+        .updateCorpus(corpu.id, {
+          name: corpu.name,
+          description: corpu.description
+        })
+        .then(function (r) {
+          commit('cml/sync/stop', 'corpusUpdate', { root: true });
+          console.log('corpus update', r);
+          corpu.name = r.name;
+          corpu.description = r.description || {};
+          commit('update', corpu);
+          dispatch('cml/messages/success', 'Corpus updated', { root: true });
 
-        return p;
-      }).catch(e => {
-        commit('cml/sync/stop', 'corpusGroupPermissionSet', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          return r
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'corpusUpdate', { root: true });
+          console.log(e);
+          dispatch('cml/messages/error', e, { root: true });
+
+          throw e
+        })
     },
 
-    groupPermissionRemove({
-      commit,
-      dispatch,
-      rootState
-    }, {
-      corpuId,
-      groupId
-    }) {
-      commit('cml/sync/start', 'corpusGroupPermissionRemove', {
-        root: true
-      });
-      return api.removeCorpusPermissionsForGroup(corpuId, groupId).then(p => {
-        commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
-          root: true
-        });
-        commit('groupPermissionsUpdate', {
-          corpuId,
-          groupId,
-          permission: 0
-        });
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        });
+    list: function list (ref) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var rootGetters = ref.rootGetters;
 
-        if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
-          dispatch('currentUserIsAdminTest', p);
-        }
+      commit('cml/sync/start', 'corpusList', { root: true });
+      return api
+        .getCorpora()
+        .then(function (r) {
+          commit('cml/sync/stop', 'corpusList', { root: true });
+          var corpus = r.map(function (c) { return ({
+            name: c.name,
+            id: c._id,
+            description: c.description || {},
+            permission: rootGetters['cml/user/permission'](c.permissions),
+            permissions: {
+              users: rootGetters['cml/users/permissions'](
+                (c.permissions && c.permissions.users) || {}
+              ),
+              groups: rootGetters['cml/groups/permissions'](
+                (c.permissions && c.permissions.groups) || {}
+              )
+            }
+          }); });
+          commit('list', corpus);
+          dispatch('set');
 
-        return p;
-      }).catch(e => {
-        commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          return corpus
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'corpusList', { root: true });
+          console.log(e);
+
+          throw e
+        })
     },
 
-    userPermissionSet({
-      commit,
-      dispatch,
-      rootState
-    }, {
-      corpuId,
-      userId,
-      permission
-    }) {
-      commit('cml/sync/start', 'corpusUserPermissionSet', {
-        root: true
-      });
-      return api.setCorpusPermissionsForUser(corpuId, userId, permission).then(p => {
-        commit('cml/sync/stop', 'corpusUserPermissionSet', {
-          root: true
-        });
-        commit('userPermissionsUpdate', {
-          corpuId,
-          userId,
-          permission: p.users && p.users[userId] || 0
-        });
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        });
+    groupPermissionSet: function groupPermissionSet (
+      ref,
+      ref$1
+    ) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var corpuId = ref$1.corpuId;
+      var groupId = ref$1.groupId;
+      var permission = ref$1.permission;
 
-        if (userId === rootState.cml.user.id) {
-          dispatch('currentUserIsAdminTest', p);
-        }
+      commit('cml/sync/start', 'corpusGroupPermissionSet', { root: true });
+      return api
+        .setCorpusPermissionsForGroup(corpuId, groupId, permission)
+        .then(function (p) {
+          commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true });
+          commit('groupPermissionsUpdate', {
+            corpuId: corpuId,
+            groupId: groupId,
+            permission: (p.groups && p.groups[groupId]) || 0
+          });
+          dispatch('cml/messages/success', 'Group permissions updated', {
+            root: true
+          });
 
-        return p;
-      }).catch(e => {
-        commit('cml/sync/stop', 'corpusUserPermissionSet', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
+            dispatch('currentUserIsAdminTest', p);
+          }
+
+          return p
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    userPermissionRemove({
-      commit,
-      dispatch,
-      rootState
-    }, {
-      corpuId,
-      userId
-    }) {
-      commit('cml/sync/start', 'corpusUserPermissionRemove', {
-        root: true
-      });
-      return api.removeCorpusPermissionsForUser(corpuId, userId).then(p => {
-        commit('cml/sync/stop', 'corpusUserPermissionRemove', {
-          root: true
-        });
-        commit('userPermissionsUpdate', {
-          corpuId,
-          userId,
-          permission: 0
-        });
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        });
+    groupPermissionRemove: function groupPermissionRemove (
+      ref,
+      ref$1
+    ) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var corpuId = ref$1.corpuId;
+      var groupId = ref$1.groupId;
 
-        if (userId === rootState.cml.user.id) {
-          dispatch('currentUserIsAdminTest', p);
-        }
+      commit('cml/sync/start', 'corpusGroupPermissionRemove', { root: true });
+      return api
+        .removeCorpusPermissionsForGroup(corpuId, groupId)
+        .then(function (p) {
+          commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
+            root: true
+          });
+          commit('groupPermissionsUpdate', { corpuId: corpuId, groupId: groupId, permission: 0 });
+          dispatch('cml/messages/success', 'Group permissions updated', {
+            root: true
+          });
 
-        return p;
-      }).catch(e => {
-        commit('cml/sync/stop', 'corpusUserPermissionRemove', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
+            dispatch('currentUserIsAdminTest', p);
+          }
+
+          return p
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
+            root: true
+          });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    currentUserIsAdminTest({
-      dispatch,
-      commit,
-      rootGetters
-    }, permissions) {
+    userPermissionSet: function userPermissionSet (
+      ref,
+      ref$1
+    ) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var corpuId = ref$1.corpuId;
+      var userId = ref$1.userId;
+      var permission = ref$1.permission;
+
+      commit('cml/sync/start', 'corpusUserPermissionSet', { root: true });
+      return api
+        .setCorpusPermissionsForUser(corpuId, userId, permission)
+        .then(function (p) {
+          commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true });
+          commit('userPermissionsUpdate', {
+            corpuId: corpuId,
+            userId: userId,
+            permission: (p.users && p.users[userId]) || 0
+          });
+          dispatch('cml/messages/success', 'User permissions updated', {
+            root: true
+          });
+          if (userId === rootState.cml.user.id) {
+            dispatch('currentUserIsAdminTest', p);
+          }
+
+          return p
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
+    },
+
+    userPermissionRemove: function userPermissionRemove (ref, ref$1) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var corpuId = ref$1.corpuId;
+      var userId = ref$1.userId;
+
+      commit('cml/sync/start', 'corpusUserPermissionRemove', { root: true });
+      return api
+        .removeCorpusPermissionsForUser(corpuId, userId)
+        .then(function (p) {
+          commit('cml/sync/stop', 'corpusUserPermissionRemove', { root: true });
+          commit('userPermissionsUpdate', { corpuId: corpuId, userId: userId, permission: 0 });
+          dispatch('cml/messages/success', 'User permissions updated', {
+            root: true
+          });
+          if (userId === rootState.cml.user.id) {
+            dispatch('currentUserIsAdminTest', p);
+          }
+
+          return p
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'corpusUserPermissionRemove', {
+            root: true
+          });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
+    },
+
+    currentUserIsAdminTest: function currentUserIsAdminTest (ref, permissions) {
+      var dispatch = ref.dispatch;
+      var commit = ref.commit;
+      var rootGetters = ref.rootGetters;
+
       if (!rootGetters['cml/user/isAdmin'](permissions)) {
         dispatch('list');
-        commit(`cml/popup/close`, null, {
-          root: true
-        });
+        commit("cml/popup/close", null, { root: true });
       }
     },
 
-    set({
-      state,
-      getters,
-      dispatch,
-      commit
-    }, corpuId) {
-      commit('set', getters.id(corpuId));
+    set: function set (ref, corpuId) {
+      var state = ref.state;
+      var getters = ref.getters;
+      var dispatch = ref.dispatch;
+      var commit = ref.commit;
 
+      commit('set', getters.id(corpuId));
       if (state.id) {
-        dispatch('cml/medias/list', state.id, {
-          root: true
-        });
-        dispatch('cml/layers/list', state.id, {
-          root: true
-        });
+        dispatch('cml/medias/list', state.id, { root: true });
+        dispatch('cml/layers/list', state.id, { root: true });
       } else {
-        commit('cml/medias/reset', null, {
-          root: true
-        });
-        commit('cml/layers/reset', null, {
-          root: true
-        });
+        commit('cml/medias/reset', null, { root: true });
+        commit('cml/layers/reset', null, { root: true });
       }
     }
+  },
 
-  },
   getters: {
-    id: state => id => id || state.list.map(c => c.id).indexOf(state.id) !== -1 && state.id || state.list[0] && state.list[0].id || null
+    id: function (state) { return function (id) { return id ||
+      (state.list.map(function (c) { return c.id; }).indexOf(state.id) !== -1 && state.id) ||
+      (state.list[0] && state.list[0].id) ||
+      null; }; }
   },
+
   mutations: {
-    reset(state) {
+    reset: function reset (state) {
       state.list = [];
     },
 
-    add(state, corpu) {
-      const corpuExisting = state.list.find(c => c.id === corpu.id);
-
+    add: function add (state, corpu) {
+      var corpuExisting = state.list.find(function (c) { return c.id === corpu.id; });
       if (!corpuExisting) {
         state.list.push(corpu);
       }
     },
 
-    update(state, corpu) {
-      Object.assign(state.list.find(c => c.id === corpu.id), corpu);
+    update: function update (state, corpu) {
+      Object.assign(state.list.find(function (c) { return c.id === corpu.id; }), corpu);
     },
 
-    remove(state, corpu) {
-      const index = state.list.findIndex(c => c.id === corpu.id);
-
+    remove: function remove (state, corpu) {
+      var index = state.list.findIndex(function (c) { return c.id === corpu.id; });
       if (index !== -1) {
         state.list.splice(index, 1);
       }
     },
 
-    list(state, corpus) {
+    list: function list (state, corpus) {
       state.list = corpus;
     },
 
-    set(state, corpuId) {
+    set: function set (state, corpuId) {
       state.id = corpuId;
     },
 
-    groupAdd(state, groupId) {
-      state.list.forEach(corpu => {
+    groupAdd: function groupAdd (state, groupId) {
+      state.list.forEach(function (corpu) {
         Vue$3.set(corpu.permissions.groups, groupId, 0);
       });
     },
 
-    groupRemove(state, groupId) {
-      state.list.forEach(corpu => {
+    groupRemove: function groupRemove (state, groupId) {
+      state.list.forEach(function (corpu) {
         delete corpu.permissions.groups[groupId];
       });
     },
 
-    userAdd(state, userId) {
-      state.list.forEach(corpu => {
+    userAdd: function userAdd (state, userId) {
+      state.list.forEach(function (corpu) {
         Vue$3.set(corpu.permissions.users, userId, 0);
       });
     },
 
-    userRemove(state, userId) {
-      state.list.forEach(corpu => {
+    userRemove: function userRemove (state, userId) {
+      state.list.forEach(function (corpu) {
         delete corpu.permissions.users[userId];
       });
     },
 
-    groupPermissionsUpdate(state, {
-      corpuId,
-      groupId,
-      permission
-    }) {
-      const corpu = state.list.find(c => c.id === corpuId);
+    groupPermissionsUpdate: function groupPermissionsUpdate (state, ref) {
+      var corpuId = ref.corpuId;
+      var groupId = ref.groupId;
+      var permission = ref.permission;
+
+      var corpu = state.list.find(function (c) { return c.id === corpuId; });
       corpu.permissions.groups[groupId] = permission;
     },
 
-    userPermissionsUpdate(state, {
-      corpuId,
-      userId,
-      permission
-    }) {
-      const corpu = state.list.find(c => c.id === corpuId);
+    userPermissionsUpdate: function userPermissionsUpdate (state, ref) {
+      var corpuId = ref.corpuId;
+      var userId = ref.userId;
+      var permission = ref.permission;
+
+      var corpu = state.list.find(function (c) { return c.id === corpuId; });
       corpu.permissions.users[userId] = permission;
     },
 
-    corpuPermissionsUpdate(state, {
-      corpu,
-      permission
-    }) {
+    corpuPermissionsUpdate: function corpuPermissionsUpdate (state, ref) {
+      var corpu = ref.corpu;
+      var permission = ref.permission;
+
       corpu.permission = permission;
     }
-
   }
 };
 
 var medias = {
   namespaced: true,
+
   state: {
     list: [],
     id: null
   },
+
   actions: {
-    add({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, {
-      corpuId,
-      name,
-      url,
-      description
-    }) {
-      commit('cml/sync/start', 'mediasAdd', {
-        root: true
-      });
-      return api.createMedium(corpuId, name, url, description).then(r => {
-        commit('cml/sync/stop', 'mediasAdd', {
-          root: true
-        });
-        const media = mediaFormat(r);
-        commit('add', media);
-        dispatch('cml/messages/success', 'Medium added.', {
-          root: true
-        });
-        dispatch('set', media.id);
-        return media;
-      }).catch(e => {
-        commit('cml/sync/stop', 'mediasAdd', {
-          root: true
-        });
-        console.log(e);
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw e;
-      });
+    add: function add (
+      ref,
+      ref$1
+    ) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+      var corpuId = ref$1.corpuId;
+      var name = ref$1.name;
+      var url = ref$1.url;
+      var description = ref$1.description;
+
+      commit('cml/sync/start', 'mediasAdd', { root: true });
+      return api
+        .createMedium(corpuId, name, url, description)
+        .then(function (r) {
+          commit('cml/sync/stop', 'mediasAdd', { root: true });
+          var media = mediaFormat(r);
+          commit('add', media);
+          dispatch('cml/messages/success', 'Medium added.', { root: true });
+          dispatch('set', media.id);
+
+          return media
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'mediasAdd', { root: true });
+          console.log(e);
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw e
+        })
     },
 
-    remove({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, media) {
-      commit('cml/sync/start', 'mediasRemove', {
-        root: true
-      });
-      return api.deleteMedium(media.id).then(r => {
-        commit('cml/sync/stop', 'mediasRemove', {
-          root: true
-        });
-        commit('remove', media);
-        dispatch('cml/messages/success', 'Medium removed', {
-          root: true
-        });
-        return r;
-      }).catch(e => {
-        console.log(e);
-        dispatch('cml/messages/error', e, {
-          root: true
-        });
-        throw e;
-      });
+    remove: function remove (ref, media) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'mediasRemove', { root: true });
+      return api
+        .deleteMedium(media.id)
+        .then(function (r) {
+          commit('cml/sync/stop', 'mediasRemove', { root: true });
+          commit('remove', media);
+          dispatch('cml/messages/success', 'Medium removed', { root: true });
+
+          return r
+        })
+        .catch(function (e) {
+          console.log(e);
+          dispatch('cml/messages/error', e, { root: true });
+
+          throw e
+        })
     },
 
-    update({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, media) {
-      commit('cml/sync/start', 'mediasUpdate', {
-        root: true
-      });
-      return api.updateMedium(media.id, {
-        name: media.name,
-        description: media.description,
-        url: media.url
-      }).then(r => {
-        commit('cml/sync/stop', 'mediasUpdate', {
-          root: true
-        });
-        media.name = r.name;
-        media.url = r.url;
-        media.description = r.description || {};
-        commit('update', media);
-        dispatch('cml/messages/success', 'Medium updated', {
-          root: true
-        });
-        return r;
-      }).catch(e => {
-        console.log(e);
-        dispatch('cml/messages/error', e, {
-          root: true
-        });
-        throw e;
-      });
+    update: function update (ref, media) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'mediasUpdate', { root: true });
+      return api
+        .updateMedium(media.id, {
+          name: media.name,
+          description: media.description,
+          url: media.url
+        })
+        .then(function (r) {
+          commit('cml/sync/stop', 'mediasUpdate', { root: true });
+          media.name = r.name;
+          media.url = r.url;
+          media.description = r.description || {};
+          commit('update', media);
+          dispatch('cml/messages/success', 'Medium updated', { root: true });
+
+          return r
+        })
+        .catch(function (e) {
+          console.log(e);
+          dispatch('cml/messages/error', e, { root: true });
+
+          throw e
+        })
     },
 
-    list({
-      state,
-      dispatch,
-      commit,
-      rootState,
-      rootGetters
-    }, corpuId) {
-      commit('cml/sync/start', 'mediasList', {
-        root: true
-      });
-      return api.getMedia({
-        filter: {
-          id_corpus: corpuId
-        }
-      }).then(r => {
-        commit('cml/sync/stop', 'mediasList', {
-          root: true
-        });
-        const medias = r.map(media => {
-          return mediaFormat(media);
-        });
-        commit('list', medias);
-        dispatch('set');
-        return medias;
-      }).catch(e => {
-        commit('cml/sync/stop', 'mediasList', {
-          root: true
-        });
-        console.log(e);
-        throw e;
-      });
+    list: function list (ref, corpuId) {
+      var state = ref.state;
+      var dispatch = ref.dispatch;
+      var commit = ref.commit;
+      var rootState = ref.rootState;
+      var rootGetters = ref.rootGetters;
+
+      commit('cml/sync/start', 'mediasList', { root: true });
+      return api
+        .getMedia({ filter: { id_corpus: corpuId } })
+        .then(function (r) {
+          commit('cml/sync/stop', 'mediasList', { root: true });
+          var medias = r.map(function (media) {
+            return mediaFormat(media)
+          });
+          commit('list', medias);
+          dispatch('set');
+
+          return medias
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'mediasList', { root: true });
+          console.log(e);
+
+          throw e
+        })
     },
 
-    set({
-      getters,
-      commit
-    }, mediaId) {
+    set: function set (ref, mediaId) {
+      var getters = ref.getters;
+      var commit = ref.commit;
+
       commit('set', getters.id(mediaId));
     }
+  },
 
-  },
   getters: {
-    id: state => id => id || state.list.map(c => c.id).indexOf(state.id) !== -1 && state.id || state.list[0] && state.list[0].id || null
+    id: function (state) { return function (id) { return id ||
+      (state.list.map(function (c) { return c.id; }).indexOf(state.id) !== -1 && state.id) ||
+      (state.list[0] && state.list[0].id) ||
+      null; }; }
   },
+
   mutations: {
-    reset(state) {
+    reset: function reset (state) {
       state.list = [];
     },
 
-    add(state, media) {
-      const mediaExisting = state.list.find(c => c.id === media.id);
-
+    add: function add (state, media) {
+      var mediaExisting = state.list.find(function (c) { return c.id === media.id; });
       if (!mediaExisting) {
         state.list.push(media);
       }
     },
 
-    update(state, media) {
-      Object.assign(state.list.find(c => c.id === media.id), media);
+    update: function update (state, media) {
+      Object.assign(state.list.find(function (c) { return c.id === media.id; }), media);
     },
 
-    remove(state, media) {
-      const index = state.list.findIndex(c => c.id === media.id);
-
+    remove: function remove (state, media) {
+      var index = state.list.findIndex(function (c) { return c.id === media.id; });
       if (index !== -1) {
         state.list.splice(index, 1);
       }
     },
 
-    list(state, medias) {
+    list: function list (state, medias) {
       state.list = medias;
     },
 
-    set(state, id) {
+    set: function set (state, id) {
       state.id = id;
     }
-
   }
 };
 
 var layers = {
   namespaced: true,
+
   state: {
     list: [],
     id: null
   },
+
   actions: {
-    add({
-      commit,
-      dispatch,
-      rootState,
-      rootGetters
-    }, {
-      corpuId,
-      name,
-      description,
-      fragmentType,
-      metadataType,
-      annotations
-    }) {
-      commit('cml/sync/start', 'layersAdd', {
-        root: true
-      });
-      return api.createLayer(corpuId, name, description, fragmentType, metadataType, annotations).then(r => {
-        commit('cml/sync/stop', 'layersAdd', {
-          root: true
-        });
-        const layer = {
-          name: r.name,
-          id: r._id,
-          permission: 3,
-          permissions: {
-            users: rootGetters['cml/users/permissions']({}),
-            groups: rootGetters['cml/groups/permissions']({})
-          },
-          description: r.description || {},
-          fragmentType: r.fragment_type || {},
-          metadataType: r.data_type || {},
-          annotations: r.annotations
-        };
-        layer.permissions.users[rootState.cml.user.id] = 3;
-        commit('add', layer);
-        dispatch('cml/messages/success', 'Layer added.', {
-          root: true
-        });
-        dispatch('set', layer.id);
-        return layer;
-      }).catch(e => {
-        commit('cml/sync/stop', 'layersAdd', {
-          root: true
-        });
-        console.log(e);
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw e;
-      });
+    add: function add (
+      ref,
+      ref$1
+    ) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var rootGetters = ref.rootGetters;
+      var corpuId = ref$1.corpuId;
+      var name = ref$1.name;
+      var description = ref$1.description;
+      var fragmentType = ref$1.fragmentType;
+      var metadataType = ref$1.metadataType;
+      var annotations = ref$1.annotations;
+
+      commit('cml/sync/start', 'layersAdd', { root: true });
+      return api
+        .createLayer(
+          corpuId,
+          name,
+          description,
+          fragmentType,
+          metadataType,
+          annotations
+        )
+        .then(function (r) {
+          commit('cml/sync/stop', 'layersAdd', { root: true });
+          var layer = {
+            name: r.name,
+            id: r._id,
+            permission: 3,
+            permissions: {
+              users: rootGetters['cml/users/permissions']({}),
+              groups: rootGetters['cml/groups/permissions']({})
+            },
+            description: r.description || {},
+            fragmentType: r.fragment_type || {},
+            metadataType: r.data_type || {},
+            annotations: r.annotations
+          };
+
+          layer.permissions.users[rootState.cml.user.id] = 3;
+
+          commit('add', layer);
+          dispatch('cml/messages/success', 'Layer added.', { root: true });
+          dispatch('set', layer.id);
+
+          return layer
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'layersAdd', { root: true });
+          console.log(e);
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw e
+        })
     },
 
-    remove({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, layer) {
-      commit('cml/sync/start', 'layersRemove', {
-        root: true
-      });
-      return api.deleteLayer(layer.id).then(r => {
-        commit('cml/sync/stop', 'layersRemove', {
-          root: true
-        });
-        commit('remove', layer);
-        dispatch('cml/messages/success', 'Layer removed', {
-          root: true
-        });
-        return r;
-      }).catch(e => {
-        console.log(e);
-        dispatch('cml/messages/error', e, {
-          root: true
-        });
-        throw e;
-      });
+    remove: function remove (ref, layer) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'layersRemove', { root: true });
+      return api
+        .deleteLayer(layer.id)
+        .then(function (r) {
+          commit('cml/sync/stop', 'layersRemove', { root: true });
+          commit('remove', layer);
+          dispatch('cml/messages/success', 'Layer removed', { root: true });
+
+          return r
+        })
+        .catch(function (e) {
+          console.log(e);
+          dispatch('cml/messages/error', e, { root: true });
+
+          throw e
+        })
     },
 
-    update({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, layer) {
-      commit('cml/sync/start', 'layersUpdate', {
-        root: true
-      });
-      return api.updateLayer(layer.id, {
-        name: layer.name,
-        description: layer.description,
-        fragment_type: layer.fragmentType,
-        data_type: layer.metadataType
-      }).then(r => {
-        commit('cml/sync/stop', 'layersUpdate', {
-          root: true
-        });
-        layer.description = r.description || {};
-        layer.fragmentType = r.fragment_type || {};
-        layer.metadataType = r.data_type || {};
-        commit('update', layer);
-        dispatch('cml/messages/success', 'Layer updated', {
-          root: true
-        });
-        return r;
-      }).catch(e => {
-        console.log(e);
-        dispatch('cml/messages/error', e, {
-          root: true
-        });
-        throw e;
-      });
+    update: function update (ref, layer) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'layersUpdate', { root: true });
+      return api
+        .updateLayer(layer.id, {
+          name: layer.name,
+          description: layer.description,
+          fragment_type: layer.fragmentType,
+          data_type: layer.metadataType
+        })
+        .then(function (r) {
+          commit('cml/sync/stop', 'layersUpdate', { root: true });
+          layer.description = r.description || {};
+          layer.fragmentType = r.fragment_type || {};
+          layer.metadataType = r.data_type || {};
+          commit('update', layer);
+          dispatch('cml/messages/success', 'Layer updated', { root: true });
+
+          return r
+        })
+        .catch(function (e) {
+          console.log(e);
+          dispatch('cml/messages/error', e, { root: true });
+
+          throw e
+        })
     },
 
-    list({
-      dispatch,
-      commit,
-      rootGetters
-    }, corpuId) {
-      commit('cml/sync/start', 'layersList', {
-        root: true
-      });
-      return api.getLayers({
-        filter: {
-          id_corpus: corpuId
-        }
-      }).then(r => {
-        commit('cml/sync/stop', 'layersList', {
-          root: true
-        });
-        const layers = r.map(l => ({
-          name: l.name,
-          id: l._id,
-          description: l.description || {},
-          permission: rootGetters['cml/user/permission'](l.permissions),
-          permissions: {
-            users: rootGetters['cml/users/permissions'](l.permissions && l.permissions.users || {}),
-            groups: rootGetters['cml/groups/permissions'](l.permissions && l.permissions.groups || {})
-          },
-          fragmentType: l.fragment_type || {},
-          metadataType: l.data_type || {},
-          annotations: l.annotations || []
-        }));
-        commit('list', layers);
-        dispatch('set');
-        return layers;
-      }).catch(e => {
-        commit('cml/sync/stop', 'layersList', {
-          root: true
-        });
-        console.log(e);
-        throw e;
-      });
+    list: function list (ref, corpuId) {
+      var dispatch = ref.dispatch;
+      var commit = ref.commit;
+      var rootGetters = ref.rootGetters;
+
+      commit('cml/sync/start', 'layersList', { root: true });
+      return api
+        .getLayers({ filter: { id_corpus: corpuId } })
+        .then(function (r) {
+          commit('cml/sync/stop', 'layersList', { root: true });
+          var layers = r.map(function (l) { return ({
+            name: l.name,
+            id: l._id,
+            description: l.description || {},
+            permission: rootGetters['cml/user/permission'](l.permissions),
+            permissions: {
+              users: rootGetters['cml/users/permissions'](
+                (l.permissions && l.permissions.users) || {}
+              ),
+              groups: rootGetters['cml/groups/permissions'](
+                (l.permissions && l.permissions.groups) || {}
+              )
+            },
+            fragmentType: l.fragment_type || {},
+            metadataType: l.data_type || {},
+            annotations: l.annotations || []
+          }); });
+          commit('list', layers);
+          dispatch('set');
+
+          return layers
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'layersList', { root: true });
+          console.log(e);
+
+          throw e
+        })
     },
 
-    groupPermissionSet({
-      commit,
-      dispatch,
-      rootState
-    }, {
-      layerId,
-      groupId,
-      permission
-    }) {
-      commit('cml/sync/start', 'layersGroupPermissionSet', {
-        root: true
-      });
-      return api.setLayerPermissionsForGroup(layerId, groupId, permission).then(p => {
-        commit('cml/sync/stop', 'layersGroupPermissionSet', {
-          root: true
-        });
-        commit('groupPermissionsUpdate', {
-          layerId,
-          groupId,
-          permission: p.groups && p.groups[groupId] || 0
-        });
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        });
+    groupPermissionSet: function groupPermissionSet (
+      ref,
+      ref$1
+    ) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var layerId = ref$1.layerId;
+      var groupId = ref$1.groupId;
+      var permission = ref$1.permission;
 
-        if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
-          dispatch('currentUserIsAdminTest', p);
-        }
+      commit('cml/sync/start', 'layersGroupPermissionSet', { root: true });
+      return api
+        .setLayerPermissionsForGroup(layerId, groupId, permission)
+        .then(function (p) {
+          commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true });
+          commit('groupPermissionsUpdate', {
+            layerId: layerId,
+            groupId: groupId,
+            permission: (p.groups && p.groups[groupId]) || 0
+          });
+          dispatch('cml/messages/success', 'Group permissions updated', {
+            root: true
+          });
 
-        return p;
-      }).catch(e => {
-        commit('cml/sync/stop', 'layersGroupPermissionSet', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
+            dispatch('currentUserIsAdminTest', p);
+          }
+
+          return p
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    groupPermissionRemove({
-      commit,
-      dispatch,
-      rootState
-    }, {
-      layerId,
-      groupId
-    }) {
-      commit('cml/sync/start', 'layersGroupPermissionRemove', {
-        root: true
-      });
-      return api.removeLayerPermissionsForGroup(layerId, groupId).then(p => {
-        commit('cml/sync/stop', 'layersGroupPermissionRemove', {
-          root: true
-        });
-        commit('groupPermissionsUpdate', {
-          layerId,
-          groupId,
-          permission: 0
-        });
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        });
+    groupPermissionRemove: function groupPermissionRemove (
+      ref,
+      ref$1
+    ) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var layerId = ref$1.layerId;
+      var groupId = ref$1.groupId;
 
-        if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
-          dispatch('currentUserIsAdminTest', p);
-        }
+      commit('cml/sync/start', 'layersGroupPermissionRemove', { root: true });
+      return api
+        .removeLayerPermissionsForGroup(layerId, groupId)
+        .then(function (p) {
+          commit('cml/sync/stop', 'layersGroupPermissionRemove', {
+            root: true
+          });
+          commit('groupPermissionsUpdate', { layerId: layerId, groupId: groupId, permission: 0 });
+          dispatch('cml/messages/success', 'Group permissions updated', {
+            root: true
+          });
 
-        return p;
-      }).catch(e => {
-        commit('cml/sync/stop', 'layersGroupPermissionRemove', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
+            dispatch('currentUserIsAdminTest', p);
+          }
+
+          return p
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'layersGroupPermissionRemove', {
+            root: true
+          });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    userPermissionSet({
-      commit,
-      dispatch,
-      rootState
-    }, {
-      layerId,
-      userId,
-      permission
-    }) {
-      commit('cml/sync/start', 'layersUserPermissionSet', {
-        root: true
-      });
-      return api.setLayerPermissionsForUser(layerId, userId, permission).then(p => {
-        commit('cml/sync/stop', 'layersUserPermissionSet', {
-          root: true
-        });
-        commit('userPermissionsUpdate', {
-          layerId,
-          userId,
-          permission: p.users && p.users[userId] || 0
-        });
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        });
+    userPermissionSet: function userPermissionSet (
+      ref,
+      ref$1
+    ) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var layerId = ref$1.layerId;
+      var userId = ref$1.userId;
+      var permission = ref$1.permission;
 
-        if (userId === rootState.cml.user.id) {
-          dispatch('currentUserIsAdminTest', p);
-        }
+      commit('cml/sync/start', 'layersUserPermissionSet', { root: true });
+      return api
+        .setLayerPermissionsForUser(layerId, userId, permission)
+        .then(function (p) {
+          commit('cml/sync/stop', 'layersUserPermissionSet', { root: true });
+          commit('userPermissionsUpdate', {
+            layerId: layerId,
+            userId: userId,
+            permission: (p.users && p.users[userId]) || 0
+          });
+          dispatch('cml/messages/success', 'User permissions updated', {
+            root: true
+          });
+          if (userId === rootState.cml.user.id) {
+            dispatch('currentUserIsAdminTest', p);
+          }
 
-        return p;
-      }).catch(e => {
-        commit('cml/sync/stop', 'layersUserPermissionSet', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          return p
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'layersUserPermissionSet', { root: true });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    userPermissionRemove({
-      commit,
-      dispatch,
-      rootState
-    }, {
-      layerId,
-      userId
-    }) {
-      commit('cml/sync/start', 'layersUserPermissionRemove', {
-        root: true
-      });
-      return api.removeLayerPermissionsForUser(layerId, userId).then(p => {
-        commit('cml/sync/stop', 'layersUserPermissionRemove', {
-          root: true
-        });
-        commit('userPermissionsUpdate', {
-          layerId,
-          userId,
-          permission: 0
-        });
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        });
+    userPermissionRemove: function userPermissionRemove (ref, ref$1) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var rootState = ref.rootState;
+      var layerId = ref$1.layerId;
+      var userId = ref$1.userId;
 
-        if (userId === rootState.cml.user.id) {
-          dispatch('currentUserIsAdminTest', p);
-        }
+      commit('cml/sync/start', 'layersUserPermissionRemove', { root: true });
+      return api
+        .removeLayerPermissionsForUser(layerId, userId)
+        .then(function (p) {
+          commit('cml/sync/stop', 'layersUserPermissionRemove', {
+            root: true
+          });
+          commit('userPermissionsUpdate', {
+            layerId: layerId,
+            userId: userId,
+            permission: 0
+          });
+          dispatch('cml/messages/success', 'User permissions updated', {
+            root: true
+          });
+          if (userId === rootState.cml.user.id) {
+            dispatch('currentUserIsAdminTest', p);
+          }
 
-        return p;
-      }).catch(e => {
-        commit('cml/sync/stop', 'layersUserPermissionRemove', {
-          root: true
-        });
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw error;
-      });
+          return p
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'layersUserPermissionRemove', {
+            root: true
+          });
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw error
+        })
     },
 
-    currentUserIsAdminTest({
-      dispatch,
-      commit,
-      rootState,
-      rootGetters
-    }, permissions) {
+    currentUserIsAdminTest: function currentUserIsAdminTest (
+      ref,
+      permissions
+    ) {
+      var dispatch = ref.dispatch;
+      var commit = ref.commit;
+      var rootState = ref.rootState;
+      var rootGetters = ref.rootGetters;
+
       if (!rootGetters['cml/user/isAdmin'](permissions)) {
         dispatch('list', rootState.cml.corpus.id);
-        commit(`cml/popup/close`, null, {
-          root: true
-        });
+        commit("cml/popup/close", null, { root: true });
       }
     },
 
-    set({
-      state,
-      getters,
-      dispatch,
-      commit
-    }, layerId) {
-      commit('set', getters.id(layerId));
+    set: function set (ref, layerId) {
+      var state = ref.state;
+      var getters = ref.getters;
+      var dispatch = ref.dispatch;
+      var commit = ref.commit;
 
+      commit('set', getters.id(layerId));
       if (state.id) {
-        dispatch('cml/annotations/list', state.id, {
-          root: true
-        });
+        dispatch('cml/annotations/list', state.id, { root: true });
       } else {
-        commit('cml/annotations/reset', null, {
-          root: true
-        });
+        commit('cml/annotations/reset', null, { root: true });
       }
     }
+  },
 
-  },
   getters: {
-    id: state => id => id || state.list.map(c => c.id).indexOf(state.id) !== -1 && state.id || state.list[0] && state.list[0].id || null
+    id: function (state) { return function (id) { return id ||
+      (state.list.map(function (c) { return c.id; }).indexOf(state.id) !== -1 && state.id) ||
+      (state.list[0] && state.list[0].id) ||
+      null; }; }
   },
+
   mutations: {
-    reset(state) {
+    reset: function reset (state) {
       state.list = [];
     },
 
-    add(state, layer) {
-      const layerExisting = state.list.find(c => c.id === layer.id);
-
+    add: function add (state, layer) {
+      var layerExisting = state.list.find(function (c) { return c.id === layer.id; });
       if (!layerExisting) {
         state.list.push(layer);
       }
     },
 
-    update(state, layer) {
-      Object.assign(state.list.find(c => c.id === layer.id), layer);
+    update: function update (state, layer) {
+      Object.assign(state.list.find(function (c) { return c.id === layer.id; }), layer);
     },
 
-    remove(state, layer) {
-      const index = state.list.findIndex(c => c.id === layer.id);
-
+    remove: function remove (state, layer) {
+      var index = state.list.findIndex(function (c) { return c.id === layer.id; });
       if (index !== -1) {
         state.list.splice(index, 1);
       }
     },
 
-    list(state, layers) {
+    list: function list (state, layers) {
       state.list = layers;
     },
 
-    set(state, id) {
+    set: function set (state, id) {
       state.id = id;
     },
 
-    groupPermissionsUpdate(state, {
-      layerId,
-      groupId,
-      permission
-    }) {
-      const layer = state.list.find(c => c.id === layerId);
+    groupPermissionsUpdate: function groupPermissionsUpdate (state, ref) {
+      var layerId = ref.layerId;
+      var groupId = ref.groupId;
+      var permission = ref.permission;
+
+      var layer = state.list.find(function (c) { return c.id === layerId; });
       layer.permissions.groups[groupId] = permission;
     },
 
-    userPermissionsUpdate(state, {
-      layerId,
-      userId,
-      permission
-    }) {
-      const layer = state.list.find(c => c.id === layerId);
+    userPermissionsUpdate: function userPermissionsUpdate (state, ref) {
+      var layerId = ref.layerId;
+      var userId = ref.userId;
+      var permission = ref.permission;
+
+      var layer = state.list.find(function (c) { return c.id === layerId; });
       layer.permissions.users[userId] = permission;
     },
 
-    layerPermissionsUpdate(state, {
-      layer,
-      permission
-    }) {
+    layerPermissionsUpdate: function layerPermissionsUpdate (state, ref) {
+      var layer = ref.layer;
+      var permission = ref.permission;
+
       layer.permission = permission;
     }
-
   }
 };
 
 var annotations = {
   namespaced: true,
+
   state: {
     list: [],
     id: null
   },
+
   actions: {
-    add({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, {
-      layerId,
-      mediaId,
-      fragment,
-      data
-    }) {
-      commit('cml/sync/start', 'annotationsAdd', {
-        root: true
-      });
-      return api.createAnnotation(layerId, mediaId, fragment, data).then(r => {
-        commit('cml/sync/stop', 'annotationsAdd', {
-          root: true
-        });
-        const annotation = {
-          id: r._id,
-          fragment: r.fragment || {},
-          metadata: r.data || {},
-          layerId: r.id_layer,
-          mediaId: r.id_medium || null
-        };
-        commit('add', annotation);
-        dispatch('cml/messages/success', 'Annotation added.', {
-          root: true
-        });
-        dispatch('set', annotation.id);
-        return annotation;
-      }).catch(e => {
-        commit('cml/sync/stop', 'annotationsAdd', {
-          root: true
-        });
-        console.log(e);
-        const error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, {
-          root: true
-        });
-        throw e;
-      });
+    add: function add (
+      ref,
+      ref$1
+    ) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+      var layerId = ref$1.layerId;
+      var mediaId = ref$1.mediaId;
+      var fragment = ref$1.fragment;
+      var data = ref$1.data;
+
+      commit('cml/sync/start', 'annotationsAdd', { root: true });
+      return api
+        .createAnnotation(layerId, mediaId, fragment, data)
+        .then(function (r) {
+          commit('cml/sync/stop', 'annotationsAdd', { root: true });
+          var annotation = {
+            id: r._id,
+            fragment: r.fragment || {},
+            metadata: r.data || {},
+            layerId: r.id_layer,
+            mediaId: r.id_medium || null
+          };
+          commit('add', annotation);
+          dispatch('cml/messages/success', 'Annotation added.', { root: true });
+          dispatch('set', annotation.id);
+
+          return annotation
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'annotationsAdd', { root: true });
+          console.log(e);
+          var error = e.response ? e.response.body.error : 'Network error';
+          dispatch('cml/messages/error', error, { root: true });
+
+          throw e
+        })
     },
 
-    remove({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, annotation) {
-      commit('cml/sync/start', 'annotationsRemove', {
-        root: true
-      });
-      return api.deleteAnnotation(annotation.id).then(r => {
-        commit('cml/sync/stop', 'annotationsRemove', {
-          root: true
-        });
-        commit('remove', annotation);
-        dispatch('cml/messages/success', 'Annotation removed', {
-          root: true
-        });
-        return r;
-      }).catch(e => {
-        console.log(e);
-        dispatch('cml/messages/error', e, {
-          root: true
-        });
-        throw e;
-      });
+    remove: function remove (ref, annotation) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'annotationsRemove', { root: true });
+      return api
+        .deleteAnnotation(annotation.id)
+        .then(function (r) {
+          commit('cml/sync/stop', 'annotationsRemove', { root: true });
+          commit('remove', annotation);
+          dispatch('cml/messages/success', 'Annotation removed', { root: true });
+
+          return r
+        })
+        .catch(function (e) {
+          console.log(e);
+          dispatch('cml/messages/error', e, { root: true });
+
+          throw e
+        })
     },
 
-    update({
-      commit,
-      dispatch,
-      state,
-      rootState
-    }, annotation) {
-      commit('cml/sync/start', 'annotationsUpdate', {
-        root: true
-      });
-      return api.updateAnnotation(annotation.id, {
-        fragment: annotation.fragment,
-        metadata: annotation.data
-      }).then(r => {
-        commit('cml/sync/stop', 'annotationsUpdate', {
-          root: true
-        });
-        commit('update', annotation);
-        dispatch('cml/messages/success', 'Annotation updated', {
-          root: true
-        });
-        return r;
-      }).catch(e => {
-        console.log(e);
-        dispatch('cml/messages/error', e, {
-          root: true
-        });
-        throw e;
-      });
+    update: function update (ref, annotation) {
+      var commit = ref.commit;
+      var dispatch = ref.dispatch;
+      var state = ref.state;
+      var rootState = ref.rootState;
+
+      commit('cml/sync/start', 'annotationsUpdate', { root: true });
+      return api
+        .updateAnnotation(annotation.id, {
+          fragment: annotation.fragment,
+          metadata: annotation.data
+        })
+        .then(function (r) {
+          commit('cml/sync/stop', 'annotationsUpdate', { root: true });
+          commit('update', annotation);
+          dispatch('cml/messages/success', 'Annotation updated', { root: true });
+
+          return r
+        })
+        .catch(function (e) {
+          console.log(e);
+          dispatch('cml/messages/error', e, { root: true });
+
+          throw e
+        })
     },
 
-    list({
-      state,
-      dispatch,
-      commit,
-      rootState,
-      rootGetters
-    }, layerId) {
-      commit('cml/sync/start', 'annotationsList', {
-        root: true
-      });
-      return api.getAnnotations({
-        filter: {
-          id_layer: layerId
-        }
-      }).then(r => {
-        commit('cml/sync/stop', 'annotationsList', {
-          root: true
-        });
-        const annotations = r.map(a => ({
-          id: a._id,
-          fragment: a.fragment || {},
-          metadata: a.data || {},
-          layerId: a.id_layer,
-          mediaId: a.id_medium || null
-        }));
-        commit('list', annotations);
-        dispatch('set');
-        return annotations;
-      }).catch(e => {
-        commit('cml/sync/stop', 'annotationsList', {
-          root: true
-        });
-        console.log(e);
-        throw e;
-      });
+    list: function list (ref, layerId) {
+      var state = ref.state;
+      var dispatch = ref.dispatch;
+      var commit = ref.commit;
+      var rootState = ref.rootState;
+      var rootGetters = ref.rootGetters;
+
+      commit('cml/sync/start', 'annotationsList', { root: true });
+      return api
+        .getAnnotations({ filter: { id_layer: layerId } })
+        .then(function (r) {
+          commit('cml/sync/stop', 'annotationsList', { root: true });
+          var annotations = r.map(function (a) { return ({
+            id: a._id,
+            fragment: a.fragment || {},
+            metadata: a.data || {},
+            layerId: a.id_layer,
+            mediaId: a.id_medium || null
+          }); });
+          commit('list', annotations);
+          dispatch('set');
+
+          return annotations
+        })
+        .catch(function (e) {
+          commit('cml/sync/stop', 'annotationsList', { root: true });
+          console.log(e);
+
+          throw e
+        })
     },
 
-    set({
-      getters,
-      commit
-    }, annotationId) {
+    set: function set (ref, annotationId) {
+      var getters = ref.getters;
+      var commit = ref.commit;
+
       if (getters.id(annotationId)) {
         commit('set', getters.id(annotationId));
       }
     }
+  },
 
-  },
   getters: {
-    id: state => id => id || state.list.map(c => c.id).indexOf(state.id) !== -1 && state.id || state.list[0] && state.list[0].id || null
+    id: function (state) { return function (id) { return id ||
+      (state.list.map(function (c) { return c.id; }).indexOf(state.id) !== -1 && state.id) ||
+      (state.list[0] && state.list[0].id) ||
+      null; }; }
   },
+
   mutations: {
-    reset(state) {
+    reset: function reset (state) {
       state.list = [];
     },
 
-    add(state, annotation) {
-      const annotationExisting = state.list.find(c => c.id === annotation.id);
-
+    add: function add (state, annotation) {
+      var annotationExisting = state.list.find(function (c) { return c.id === annotation.id; });
       if (!annotationExisting) {
         state.list.push(annotation);
       }
     },
 
-    update(state, annotation) {
-      Object.assign(state.list.find(c => c.id === annotation.id), annotation);
+    update: function update (state, annotation) {
+      Object.assign(state.list.find(function (c) { return c.id === annotation.id; }), annotation);
     },
 
-    remove(state, annotation) {
-      const index = state.list.findIndex(c => c.id === annotation.id);
-
+    remove: function remove (state, annotation) {
+      var index = state.list.findIndex(function (c) { return c.id === annotation.id; });
       if (index !== -1) {
         state.list.splice(index, 1);
       }
     },
 
-    list(state, annotations) {
+    list: function list (state, annotations) {
       state.list = annotations;
     },
 
-    set(state, id) {
+    set: function set (state, id) {
       state.id = id;
     }
-
   }
 };
 
 Vue$3.use(index_esm);
+
 var store = new index_esm.Store({
   modules: {
     cml: {
       namespaced: true,
+
       modules: {
-        viewport,
-        sync,
-        popup,
-        dropdown,
-        messages,
-        user,
-        users,
-        groups,
-        corpus,
-        medias,
-        layers,
-        annotations
+        viewport: viewport,
+        sync: sync,
+        popup: popup,
+        dropdown: dropdown,
+        messages: messages,
+        user: user,
+        users: users,
+        groups: groups,
+        corpus: corpus,
+        medias: medias,
+        layers: layers,
+        annotations: annotations
       },
+
       state: {
         config: config$1
       },
+
       actions: {
-        set({
-          dispatch
-        }) {
-          Promise.all([new Promise((resolve, reject) => dispatch('cml/users/list', null, {
-            root: true
-          }).then(r => resolve(r)).catch(e => reject(e))), new Promise((resolve, reject) => dispatch('cml/groups/list', null, {
-            root: true
-          }).then(r => resolve(r)).catch(e => reject(e)))]).then(res => {
-            dispatch('cml/corpus/list', null, {
-              root: true
-            });
+        set: function set (ref) {
+          var dispatch = ref.dispatch;
+
+          Promise.all([
+            new Promise(function (resolve, reject) { return dispatch('cml/users/list', null, { root: true })
+                .then(function (r) { return resolve(r); })
+                .catch(function (e) { return reject(e); }); }
+            ),
+            new Promise(function (resolve, reject) { return dispatch('cml/groups/list', null, { root: true })
+                .then(function (r) { return resolve(r); })
+                .catch(function (e) { return reject(e); }); }
+            )
+          ]).then(function (res) {
+            dispatch('cml/corpus/list', null, { root: true });
           });
         },
 
-        reset({
-          commit
-        }) {
+        reset: function reset (ref) {
+          var commit = ref.commit;
+
           commit('delete');
-          commit('cml/user/reset', null, {
-            root: true
-          });
-          commit('cml/users/reset', null, {
-            root: true
-          });
-          commit('cml/groups/reset', null, {
-            root: true
-          });
-          commit('cml/corpus/reset', null, {
-            root: true
-          });
-          commit('cml/medias/reset', null, {
-            root: true
-          });
-          commit('cml/layers/reset', null, {
-            root: true
-          });
+          commit('cml/user/reset', null, { root: true });
+          commit('cml/users/reset', null, { root: true });
+          commit('cml/groups/reset', null, { root: true });
+          commit('cml/corpus/reset', null, { root: true });
+          commit('cml/medias/reset', null, { root: true });
+          commit('cml/layers/reset', null, { root: true });
         },
 
-        sync({
-          dispatch
-        }) {
-          dispatch('cml/users/list', null, {
-            root: true
-          });
-          dispatch('cml/groups/list', null, {
-            root: true
-          });
-          dispatch('cml/corpus/list', null, {
-            root: true
-          });
-        }
+        sync: function sync$$1 (ref) {
+          var dispatch = ref.dispatch;
 
+          dispatch('cml/users/list', null, { root: true });
+          dispatch('cml/groups/list', null, { root: true });
+          dispatch('cml/corpus/list', null, { root: true });
+        }
       },
       mutations: {
-        delete(state) {
+        delete: function delete$1 (state) {
           state.url = '';
           state.api = null;
         }
-
       }
     }
   }
 });
 
-var debug$5 = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _vm.visible ? _c('pre', [_c('code', [_vm._v(_vm._s(_vm.state))])]) : _vm._e();
-  },
-  staticRenderFns: [],
-  _scopeId: 'data-v-5a8a2715',
+var debug$5 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.visible)?_c('pre',[_c('code',[_vm._v(_vm._s(_vm.state))])]):_vm._e()},staticRenderFns: [],_scopeId: 'data-v-5a8a2715',
   name: 'camomile-utils-debug',
 
-  data() {
+  data: function data () {
     return {
       visible: false
-    };
+    }
   },
 
   computed: {
-    state() {
-      return this.$store.state.cml.popup;
+    state: function state () {
+      return this.$store.state.cml.popup
     }
-
   },
-  methods: {
-    keydown(e) {
-      if (e.keyCode >= 65 && e.keyCode <= 90) {
-        const char = (e.metaKey ? 'meta-' : '') + e.keyCode;
 
+  methods: {
+    keydown: function keydown (e) {
+      if (e.keyCode >= 65 && e.keyCode <= 90) {
+        var char = (e.metaKey ? 'meta-' : '') + e.keyCode;
         if (char === 'meta-69') {
           this.visible = !this.visible;
         }
       }
     }
-
   },
 
-  created() {
+  created: function created () {
     document.addEventListener('keydown', this.keydown);
   },
 
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keydown', this.keydown);
   }
-
 };
 
-var viewport$1 = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div');
-  },
-  staticRenderFns: [],
-  _scopeId: 'data-v-24d69054',
+var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],_scopeId: 'data-v-24d69054',
   name: 'camomile-utils-viewport',
-  methods: {
-    resize() {
-      return this.$store.dispatch('cml/viewport/set');
-    }
 
+  methods: {
+    resize: function resize () {
+      return this.$store.dispatch('cml/viewport/set')
+    }
   },
 
-  mounted() {
+  mounted: function mounted () {
     window.addEventListener('resize', this.resize);
     this.resize();
   }
-
 };
 
-var cmlDropdown = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('transition', {
-      attrs: {
-        "name": "transition-top"
-      }
-    }, [_vm.dropdown.visible ? _c('div', {
-      staticClass: "absolute full bg-alpha",
-      on: {
-        "click": function click($event) {
-          if ($event.target !== $event.currentTarget) {
-            return null;
-          }
-
-          _vm.close($event);
-        }
-      }
-    }, [_c('div', {
-      staticClass: "container relative"
-    }, [_c(_vm.dropdown.config.component, {
-      tag: "component"
-    })], 1)]) : _vm._e()]);
-  },
-  staticRenderFns: [],
+var cmlDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"name":"transition-top"}},[(_vm.dropdown.visible)?_c('div',{staticClass:"absolute full bg-alpha",on:{"click":function($event){if($event.target !== $event.currentTarget){ return null; }_vm.close($event);}}},[_c('div',{staticClass:"container relative"},[_c(_vm.dropdown.config.component,{tag:"component"})],1)]):_vm._e()])},staticRenderFns: [],
   name: 'camomile-utils-dropdown',
-  computed: {
-    dropdown() {
-      return this.$store.state.cml.dropdown;
-    }
 
+  computed: {
+    dropdown: function dropdown () {
+      return this.$store.state.cml.dropdown
+    }
   },
+
   methods: {
-    close() {
+    close: function close () {
       this.$store.commit('cml/dropdown/close');
     }
-
   }
 };
 
-var cmlPopup = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "absolute full bg-alpha",
-      on: {
-        "click": _vm.close
-      }
-    }), _vm._v(" "), _c('div', {
-      staticClass: "pophover absolute full bg-alt p-l pb-s"
-    }, [_c('div', {
-      staticClass: "flex flex-start"
-    }, [_c('h2', [_vm._v(_vm._s(_vm.config.title))]), _vm._v(" "), _vm.config.closeBtn ? _c('button', {
-      staticClass: "flex-right btn p-s mt--m",
-      on: {
-        "click": _vm.close
-      }
-    }, [_c('i', {
-      staticClass: "icon-24 icon-24-close"
-    })]) : _vm._e()]), _vm._v(" "), _c('hr', {
-      staticClass: "border-bg"
-    }), _vm._v(" "), _c(_vm.config.component, {
-      tag: "component"
-    })], 1)]);
-  },
-  staticRenderFns: [],
+var cmlPopup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"absolute full bg-alpha",on:{"click":_vm.close}}),_vm._v(" "),_c('div',{staticClass:"pophover absolute full bg-alt p-l pb-s"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',[_vm._v(_vm._s(_vm.config.title))]),_vm._v(" "),(_vm.config.closeBtn)?_c('button',{staticClass:"flex-right btn p-s mt--m",on:{"click":_vm.close}},[_c('i',{staticClass:"icon-24 icon-24-close"})]):_vm._e()]),_vm._v(" "),_c('hr',{staticClass:"border-bg"}),_vm._v(" "),_c(_vm.config.component,{tag:"component"})],1)])},staticRenderFns: [],
   name: 'camomile-popup',
-  computed: {
-    config() {
-      return this.$store.state.cml.popup.config;
-    }
 
+  computed: {
+    config: function config () {
+      return this.$store.state.cml.popup.config
+    }
   },
+
   methods: {
-    close() {
+    close: function close () {
       if (this.config.closeBtn) {
         this.$store.commit('cml/popup/close');
       }
     },
-
-    keyup(e) {
+    keyup: function keyup (e) {
       if ((e.which || e.keyCode) === 27) {
         this.close();
       }
     }
-
   },
 
-  created() {
+  created: function created () {
     if (this.config.closeBtn) {
       document.addEventListener('keyup', this.keyup);
     }
   },
 
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy () {
     if (this.config.closeBtn) {
       document.removeEventListener('keyup', this.keyup);
     }
   }
-
 };
 
-var cmlMessages = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "messages absolute center"
-    }, [_c('transition-group', {
-      attrs: {
-        "name": "transition-bottom",
-        "tag": "div"
-      }
-    }, _vm._l(_vm.messages, function (message) {
-      return message.content ? _c('div', {
-        key: message.id,
-        staticClass: "px-m py-s mb color-bg b",
-        class: `bg-${message.type}`
-      }, [_vm._v(" " + _vm._s(message.content) + " ")]) : _vm._e();
-    }))], 1);
-  },
-  staticRenderFns: [],
+var cmlMessages = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"messages absolute center"},[_c('transition-group',{attrs:{"name":"transition-bottom","tag":"div"}},_vm._l((_vm.messages),function(message){return (message.content)?_c('div',{key:message.id,staticClass:"px-m py-s mb color-bg b",class:("bg-" + (message.type))},[_vm._v(" "+_vm._s(message.content)+" ")]):_vm._e()}))],1)},staticRenderFns: [],
   name: 'camomile-utils-messages',
-  computed: {
-    messages() {
-      return this.$store.state.cml.messages.list;
-    }
 
+  computed: {
+    messages: function messages () {
+      return this.$store.state.cml.messages.list
+    }
   }
 };
 
-var cmlTitle = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('h1', {
-      staticClass: "mb-0"
-    }, [_vm._v(_vm._s(_vm.title))]);
-  },
-  staticRenderFns: [],
+var cmlTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h1',{staticClass:"mb-0"},[_vm._v(_vm._s(_vm.title))])},staticRenderFns: [],
   name: 'camomile-header-title',
-  computed: {
-    title() {
-      return this.$store.state.cml.config.title;
-    }
 
+  computed: {
+    title: function title () {
+      return this.$store.state.cml.config.title
+    }
   }
 };
 
-var cmlInfos = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('h6', {
-      staticClass: "menubar-infos mb-0"
-    }, [_vm._v(_vm._s(_vm.api) + ": " + _vm._s(_vm.url))]);
-  },
-  staticRenderFns: [],
+var cmlInfos = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h6',{staticClass:"menubar-infos mb-0"},[_vm._v(_vm._s(_vm.api)+": "+_vm._s(_vm.url))])},staticRenderFns: [],
   name: 'camomile-header-infos',
-  computed: {
-    url() {
-      return this.$store.state.cml.config.url;
-    },
 
-    api() {
+  computed: {
+    url: function url () {
+      return this.$store.state.cml.config.url
+    },
+    api: function api () {
       return this.$store.state.cml.config.axios ? 'axios' : 'rp';
     }
-
   }
 };
 
-var objectField = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('h3', {
-      staticClass: "pt-s"
-    }, [_vm._v(_vm._s(_vm.title))]), _vm._v(" "), _c('div', {
-      staticClass: "blobs"
-    }, [_c('div', {
-      staticClass: "blob-1"
-    }, [_c('textarea', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.fields,
-        expression: "fields"
-      }],
-      ref: "field",
-      staticClass: "textarea-alt",
-      domProps: {
-        "value": _vm.fields
-      },
-      on: {
-        "keyup": _vm.resize,
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.fields = $event.target.value;
-        }
-      }
-    })])])]);
-  },
-  staticRenderFns: [],
+var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h3',{staticClass:"pt-s"},[_vm._v(_vm._s(_vm.title))]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.fields),expression:"fields"}],ref:"field",staticClass:"textarea-alt",domProps:{"value":(_vm.fields)},on:{"keyup":_vm.resize,"input":function($event){if($event.target.composing){ return; }_vm.fields=$event.target.value;}}})])])])},staticRenderFns: [],
   name: 'camomile-popup-edit-json',
   props: {
     name: String,
     title: String
   },
+
   computed: {
     fields: {
-      get() {
-        return JSON.stringify(this.$store.state.cml.popup.element[this.name], undefined, 2);
+      get: function get () {
+        return JSON.stringify(this.$store.state.cml.popup.element[this.name], undefined, 2)
       },
-
-      set(value) {
+      set: function set (value) {
         if (this.jsonCheck(value)) {
-          this.$store.commit('cml/popup/fieldUpdate', {
-            name: this.name,
-            value: JSON.parse(value)
-          });
+          this.$store.commit('cml/popup/fieldUpdate', { name: this.name, value: JSON.parse(value) });
         }
       }
-
     }
   },
+
   methods: {
-    jsonCheck(str) {
+    jsonCheck: function jsonCheck (str) {
       try {
         
       } catch (e) {
-        return false;
+        return false
       }
-
-      return true;
+      return true
     },
-
-    resize(e) {
-      const el = e.target;
-      el.style.height = `${el.scrollHeight}px`;
+    resize: function resize (e) {
+      var el = e.target;
+      el.style.height = (el.scrollHeight) + "px";
     }
-
   },
 
-  mounted() {
-    const el = this.$refs.field;
-    el.style.height = `${el.scrollHeight}px`;
+  mounted: function mounted () {
+    var el = this.$refs.field;
+    el.style.height = (el.scrollHeight) + "px";
   }
-
 };
 
-var popupEdit = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_vm.type !== 'annotations' ? _c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(0, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.element.name,
-        expression: "element.name"
-      }],
-      ref: "name",
-      staticClass: "input-alt",
-      attrs: {
-        "type": "text",
-        "placeholder": "Name",
-        "disabled": _vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')
-      },
-      domProps: {
-        "value": _vm.element.name
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.element, "name", $event.target.value);
-        }
-      }
-    })])]) : _vm._e(), _vm._v(" "), _vm.type === 'users' ? _c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(1, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('select', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.element.role,
-        expression: "element.role"
-      }],
-      staticClass: "select-alt",
-      attrs: {
-        "type": "text",
-        "disabled": !_vm.rolesPermission
-      },
-      on: {
-        "change": function change($event) {
-          var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-            return o.selected;
-          }).map(function (o) {
-            var val = "_value" in o ? o._value : o.value;
-            return val;
-          });
-
-          _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
-        }
-      }
-    }, _vm._l(_vm.roles, function (role) {
-      return _c('option', {
-        key: role,
-        domProps: {
-          "value": role
-        }
-      }, [_vm._v(" " + _vm._s(role) + " ")]);
-    }))])]) : _vm._e(), _vm._v(" "), _vm.type === 'users' ? _c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(2, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.element.password,
-        expression: "element.password"
-      }],
-      staticClass: "input-alt",
-      attrs: {
-        "type": "password",
-        "placeholder": "••••••••"
-      },
-      domProps: {
-        "value": _vm.element.password
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.element, "password", $event.target.value);
-        }
-      }
-    })])]) : _vm._e(), _vm._v(" "), _vm.type === 'medias' ? _c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(3, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.element.url,
-        expression: "element.url"
-      }],
-      staticClass: "input-alt",
-      attrs: {
-        "type": "text",
-        "placeholder": "http://…"
-      },
-      domProps: {
-        "value": _vm.element.url
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.element, "url", $event.target.value);
-        }
-      }
-    })])]) : _vm._e(), _vm._v(" "), _vm.type === 'annotations' ? _c('object-field', {
-      attrs: {
-        "name": 'fragment',
-        "title": 'Fragment'
-      }
-    }) : _vm._e(), _vm._v(" "), _vm.type === 'annotations' ? _c('object-field', {
-      attrs: {
-        "name": 'metadata',
-        "title": 'Meta-data'
-      }
-    }) : _vm._e(), _vm._v(" "), _vm.type === 'layers' ? _c('object-field', {
-      attrs: {
-        "name": 'fragmentType',
-        "title": 'Fragment type'
-      }
-    }) : _vm._e(), _vm._v(" "), _vm.type === 'layers' ? _c('object-field', {
-      attrs: {
-        "name": 'metadataType',
-        "title": 'Meta-data type'
-      }
-    }) : _vm._e(), _vm._v(" "), _vm.type !== 'annotations' ? _c('object-field', {
-      attrs: {
-        "name": 'description',
-        "title": 'Description'
-      }
-    }) : _vm._e(), _vm._v(" "), _c('div', {
-      staticClass: "blobs"
-    }, [_c('div', {
-      staticClass: "blob-1-4"
-    }), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('button', {
-      staticClass: "btn-alt p-s full-x",
-      attrs: {
-        "disabled": !_vm.element.name && _vm.type !== 'annotations'
-      },
-      on: {
-        "click": _vm.save,
-        "keyup": function keyup($event) {
-          if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13, $event.key)) {
-            return null;
-          }
-
-          _vm.save($event);
-        }
-      }
-    }, [_vm._v("Save")])])])], 1);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Name")])]);
-  }, function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Role")])]);
-  }, function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Password")])]);
-  }, function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Url")])]);
-  }],
+var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])}],
   name: 'camomile-popup-edit',
+
   components: {
-    objectField
+    objectField: objectField
   },
 
-  data() {
+  data: function data () {
     return {
       element: this.$store.state.cml.popup.element
-    };
+    }
   },
 
-  computed: _extends({}, mapState({
-    type: state => state.cml.popup.config.type,
-    rolesPermission: state => state.cml.user.id !== state.cml.popup.element.id,
-    roles: state => state.cml.config.roles
-  })),
-  methods: {
-    save() {
-      if (this.element.id) {
-        this.$store.dispatch(`cml/${this.type}/update`, this.element);
-      } else {
-        this.$store.dispatch(`cml/${this.type}/add`, this.element);
-      }
+  computed: Object.assign({}, mapState({
+      type: function (state) { return state.cml.popup.config.type; },
+      rolesPermission: function (state) { return state.cml.user.id !== state.cml.popup.element.id; },
+      roles: function (state) { return state.cml.config.roles; }
+    })),
 
+  methods: {
+    save: function save () {
+      if (this.element.id) {
+        this.$store.dispatch(("cml/" + (this.type) + "/update"), this.element);
+      } else {
+        this.$store.dispatch(("cml/" + (this.type) + "/add"), this.element);
+      }
       this.$store.commit('cml/popup/close');
     },
-
-    keyup(e) {
+    keyup: function keyup (e) {
       if ((e.which || e.keyCode) === 13) {
         this.save();
       }
     }
-
   },
 
-  created() {
+  created: function created () {
     document.addEventListener('keyup', this.keyup);
   },
 
-  mounted() {
+  mounted: function mounted () {
     if (this.type !== 'annotations') {
       this.$refs.name.focus();
     }
   },
 
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keyup', this.keyup);
   }
-
 };
 
-var userbuttonDropdown = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "dropdown"
-    }, [_vm.isAdmin ? _c('div', [_c('button', {
-      staticClass: "btn px-m py-s full-x",
-      on: {
-        "click": function click($event) {
-          _vm.popupOpen({
-            config: _vm.popupEditConfig,
-            element: _vm.user
-          });
-        }
-      }
-    }, [_vm._v("Settings…")])]) : _vm._e(), _vm._v(" "), _c('div', [_c('button', {
-      staticClass: "btn px-m py-s full-x mr home",
-      on: {
-        "click": _vm.logout
-      }
-    }, [_vm._v("Logout")])])]);
-  },
-  staticRenderFns: [],
+var userbuttonDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"dropdown"},[(_vm.isAdmin)?_c('div',[_c('button',{staticClass:"btn px-m py-s full-x",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: _vm.user });}}},[_vm._v("Settings…")])]):_vm._e(),_vm._v(" "),_c('div',[_c('button',{staticClass:"btn px-m py-s full-x mr home",on:{"click":_vm.logout}},[_vm._v("Logout")])])])},staticRenderFns: [],
   name: 'camomile-header-userbutton-dropdown',
 
-  data() {
+  data: function data () {
     return {
       popupEditConfig: {
         type: 'users',
@@ -71523,68 +71288,43 @@ var userbuttonDropdown = {
         title: 'Edit user',
         component: popupEdit
       }
-    };
+    }
   },
 
   computed: {
-    user() {
-      return this.$store.state.cml.user;
+    user: function user () {
+      return this.$store.state.cml.user
     },
-
-    isAdmin() {
-      return this.$store.state.cml.user.isAdmin;
+    isAdmin: function isAdmin () {
+      return this.$store.state.cml.user.isAdmin
     }
-
   },
+
   methods: {
-    close() {
+    close: function close () {
       this.$store.commit('cml/dropdown/close');
     },
-
-    logout() {
-      return this.$store.dispatch('cml/user/logout');
+    logout: function logout () {
+      return this.$store.dispatch('cml/user/logout')
     },
+    popupOpen: function popupOpen (ref) {
+      var config = ref.config;
+      var element = ref.element;
 
-    popupOpen({
-      config,
-      element
-    }) {
-      this.$store.commit('cml/popup/open', {
-        config,
-        element
-      });
+      this.$store.commit('cml/popup/open', { config: config, element: element });
       this.close();
     }
-
   }
 };
 
-var cmlUserbutton = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('button', {
-      staticClass: "btn-menubar px-m py-s full-x",
-      class: {
-        active: _vm.visible
-      },
-      on: {
-        "click": _vm.dropdownToggle
-      }
-    }, [_vm._v(_vm._s(_vm.user.name))]);
-  },
-  staticRenderFns: [],
+var cmlUserbutton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn-menubar px-m py-s full-x",class:{ active: _vm.visible },on:{"click":_vm.dropdownToggle}},[_vm._v(_vm._s(_vm.user.name))])},staticRenderFns: [],
   name: 'camomile-header-userbutton',
-  computed: _extends({}, mapState({
-    user: state => state.cml.user,
-    visible: state => state.cml.dropdown.visible
-  })),
+  computed: Object.assign({}, mapState({
+      user: function (state) { return state.cml.user; },
+      visible: function (state) { return state.cml.dropdown.visible; }
+    })),
   methods: {
-    dropdownToggle() {
+    dropdownToggle: function dropdownToggle () {
       if (this.visible) {
         this.$store.commit('cml/dropdown/close');
       } else {
@@ -71593,236 +71333,75 @@ var cmlUserbutton = {
         });
       }
     }
-
   }
 };
 
-var cmlSyncbutton = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('button', {
-      staticClass: "btn-menubar px-m py-s full-x",
-      on: {
-        "click": _vm.sync
-      }
-    }, [_c('i', {
-      staticClass: "icon-24 icon-24-dot",
-      class: {
-        blink: _vm.active
-      }
-    })]);
-  },
-  staticRenderFns: [],
+var cmlSyncbutton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn-menubar px-m py-s full-x",on:{"click":_vm.sync}},[_c('i',{staticClass:"icon-24 icon-24-dot",class:{ blink: _vm.active }})])},staticRenderFns: [],
   name: 'camomile-header-syncbutton',
-  computed: {
-    active() {
-      return this.$store.getters['cml/sync/active'];
-    }
 
+  computed: {
+    active: function active () {
+      return this.$store.getters['cml/sync/active']
+    }
   },
+
   methods: {
-    sync() {
+    sync: function sync () {
       this.$store.dispatch('cml/sync/all');
     }
-
   }
 };
 
-var cmlHeader = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "bg-inverse color-bg header"
-    }, [_c('div', {
-      staticClass: "container"
-    }, [_c('div', {
-      staticClass: "blobs"
-    }, [_c('div', {
-      staticClass: "blob-1-4 mb-0"
-    }, [_c('cml-title')], 1), _vm._v(" "), _c('div', {
-      staticClass: "blob-1-2 mb-0"
-    }, [_c('div', {
-      staticClass: "blobs-default"
-    }, [_c('div', {
-      staticClass: "blob-default"
-    }, [_vm.isLogged ? _c('cml-syncbutton', {
-      staticClass: "mb-0 left"
-    }) : _vm._e()], 1), _vm._v(" "), _c('div', {
-      staticClass: "blob-auto mb-0"
-    }, [_vm.isLogged ? _c('cml-infos') : _vm._e()], 1)])]), _vm._v(" "), _c('div', {
-      staticClass: "blob mb-0 flex-right"
-    }, [_vm.isLogged ? _c('cml-userbutton') : _vm._e()], 1)])])]);
-  },
-  staticRenderFns: [],
+var cmlHeader = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"bg-inverse color-bg header"},[_c('div',{staticClass:"container"},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4 mb-0"},[_c('cml-title')],1),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-0"},[_c('div',{staticClass:"blobs-default"},[_c('div',{staticClass:"blob-default"},[(_vm.isLogged)?_c('cml-syncbutton',{staticClass:"mb-0 left"}):_vm._e()],1),_vm._v(" "),_c('div',{staticClass:"blob-auto mb-0"},[(_vm.isLogged)?_c('cml-infos'):_vm._e()],1)])]),_vm._v(" "),_c('div',{staticClass:"blob mb-0 flex-right"},[(_vm.isLogged)?_c('cml-userbutton'):_vm._e()],1)])])])},staticRenderFns: [],
   name: 'camomile-header',
-  components: {
-    cmlTitle,
-    cmlInfos,
-    cmlUserbutton,
-    cmlSyncbutton
-  },
-  computed: {
-    isLogged() {
-      return this.$store.state.cml.user.isLogged;
-    }
 
+  components: {
+    cmlTitle: cmlTitle,
+    cmlInfos: cmlInfos,
+    cmlUserbutton: cmlUserbutton,
+    cmlSyncbutton: cmlSyncbutton
+  },
+
+  computed: {
+    isLogged: function isLogged () {
+      return this.$store.state.cml.user.isLogged
+    }
   }
 };
 
-var popupLogin = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(0, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.config.user.name,
-        expression: "config.user.name"
-      }],
-      staticClass: "input-alt",
-      attrs: {
-        "type": "text",
-        "placeholder": "Name"
-      },
-      domProps: {
-        "value": _vm.config.user.name
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.config.user, "name", $event.target.value);
-        }
-      }
-    })]), _vm._v(" "), _vm._m(1, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.config.user.password,
-        expression: "config.user.password"
-      }],
-      staticClass: "input-alt",
-      attrs: {
-        "type": "password",
-        "placeholder": "Password"
-      },
-      domProps: {
-        "value": _vm.config.user.password
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.config.user, "password", $event.target.value);
-        }
-      }
-    })]), _vm._v(" "), _c('div', {
-      staticClass: "blob-1-4"
-    }), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('button', {
-      staticClass: "btn-alt p-s full-x",
-      on: {
-        "click": function click($event) {
-          _vm.login(_vm.config);
-        }
-      }
-    }, [_vm._v("Login")])])])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Name")])]);
-  }, function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Password")])]);
-  }],
+var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.name),expression:"config.user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name"},domProps:{"value":(_vm.config.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "name", $event.target.value);}}})]),_vm._v(" "),_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.password),expression:"config.user.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"Password"},domProps:{"value":(_vm.config.user.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "password", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":function($event){_vm.login(_vm.config);}}},[_vm._v("Login")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])}],
   name: 'camomile-login-popup',
+
   computed: {
-    config() {
-      return this.$store.state.cml.config;
+    config: function config () {
+      return this.$store.state.cml.config
     }
-
   },
-  methods: {
-    login(config) {
-      return this.$store.dispatch('cml/user/login', config);
-    },
 
-    keyup(e) {
+  methods: {
+    login: function login (config) {
+      return this.$store.dispatch('cml/user/login', config)
+    },
+    keyup: function keyup (e) {
       if ((e.which || e.keyCode) === 13) {
         this.login(this.config);
       }
     }
-
   },
 
-  created() {
+  created: function created () {
     document.addEventListener('keyup', this.keyup);
   },
 
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keyup', this.keyup);
   }
-
 };
 
-var cmlLogin = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div');
-  },
-  staticRenderFns: [],
+var cmlLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],
   name: 'camomile-login',
 
-  created() {
+  created: function created () {
     this.$store.commit('cml/popup/open', {
       config: {
         title: 'Login',
@@ -71832,335 +71411,68 @@ var cmlLogin = {
       element: {}
     });
   }
-
 };
 
-var popupRemove = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_vm.type !== 'annotations' ? _c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(0, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.element.name,
-        expression: "element.name"
-      }],
-      staticClass: "input-alt",
-      attrs: {
-        "type": "text",
-        "placeholder": "Name",
-        "disabled": _vm.element.id
-      },
-      domProps: {
-        "value": _vm.element.name
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.element, "name", $event.target.value);
-        }
-      }
-    })])]) : _vm._e(), _vm._v(" "), _vm.type === 'annotations' ? _c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(1, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.element.id,
-        expression: "element.id"
-      }],
-      staticClass: "input-alt",
-      attrs: {
-        "type": "text",
-        "placeholder": "Name",
-        "disabled": _vm.element.id
-      },
-      domProps: {
-        "value": _vm.element.id
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.element, "id", $event.target.value);
-        }
-      }
-    })])]) : _vm._e(), _vm._v(" "), _c('div', {
-      staticClass: "blobs"
-    }, [_c('div', {
-      staticClass: "blob-1-4"
-    }), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('button', {
-      staticClass: "btn-alt p-s full-x",
-      on: {
-        "click": _vm.remove,
-        "keyup": function keyup($event) {
-          if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13, $event.key)) {
-            return null;
-          }
-
-          _vm.remove($event);
-        }
-      }
-    }, [_vm._v("Remove")])])])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Name")])]);
-  }, function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Id")])]);
-  }],
+var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.id),expression:"element.id"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.id)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "id", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":_vm.remove,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.remove($event);}}},[_vm._v("Remove")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Id")])])}],
   name: 'camomile-popup-remove',
-  computed: _extends({}, mapState({
-    element: state => state.cml.popup.element,
-    type: state => state.cml.popup.config.type
-  })),
-  methods: {
-    remove() {
-      this.$store.dispatch(`cml/${this.type}/remove`, this.element);
-      this.$store.commit(`cml/popup/close`);
-    },
 
-    keyup(e) {
+  computed: Object.assign({}, mapState({
+      element: function (state) { return state.cml.popup.element; },
+      type: function (state) { return state.cml.popup.config.type; }
+    })),
+
+  methods: {
+    remove: function remove () {
+      this.$store.dispatch(("cml/" + (this.type) + "/remove"), this.element);
+      this.$store.commit("cml/popup/close");
+    },
+    keyup: function keyup (e) {
       if ((e.which || e.keyCode) === 13) {
         this.remove();
       }
     }
-
   },
-
-  created() {
+  created: function created () {
     document.addEventListener('keyup', this.keyup);
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keyup', this.keyup);
   }
-
 };
 
-var popupGroups = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(0, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.user.name,
-        expression: "user.name"
-      }],
-      staticClass: "input-alt",
-      attrs: {
-        "type": "text",
-        "placeholder": "Name",
-        "disabled": "disabled"
-      },
-      domProps: {
-        "value": _vm.user.name
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.user, "name", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c('div', {
-      staticClass: "blobs"
-    }, [_c('div', {
-      staticClass: "blob-1"
-    }, [_c('h3', {
-      staticClass: "mb-s"
-    }, [_vm._v("Groups")]), _vm._v(" "), _c('ul', {
-      staticClass: "list-inline clearfix"
-    }, _vm._l(_vm.groups, function (group) {
-      return _c('li', {
-        key: group.id,
-        staticClass: "tag",
-        class: {
-          active: _vm.groupActive(group.id)
-        }
-      }, [_c('button', {
-        staticClass: "btn px-m py-xs h5 pill",
-        on: {
-          "click": function click($event) {
-            _vm.groupToggle(group);
-          }
-        }
-      }, [_vm._v(_vm._s(group.name))])]);
-    }))])])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Name")])]);
-  }],
+var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.user.name),expression:"user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.user, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"mb-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-inline clearfix"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id,staticClass:"tag",class:{ active: _vm.groupActive(group.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.groupToggle(group);}}},[_vm._v(_vm._s(group.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
   name: 'camomile-popup-groups',
+
   computed: {
-    groups() {
-      return this.$store.state.cml.groups.list;
+    groups: function groups () {
+      return this.$store.state.cml.groups.list
     },
+    user: function user () {
+      var this$1 = this;
 
-    user() {
-      return this.$store.state.cml.users.list.find(user => user.id === this.$store.state.cml.popup.element.id);
+      return this.$store.state.cml.users.list.find(function (user) { return user.id === this$1.$store.state.cml.popup.element.id; })
     }
-
   },
+
   methods: {
-    groupToggle(group) {
+    groupToggle: function groupToggle (group) {
       if (this.groupActive(group.id)) {
-        this.$store.dispatch('cml/groups/userRemove', {
-          user: this.user,
-          group: group
-        });
+        this.$store.dispatch('cml/groups/userRemove', { user: this.user, group: group });
       } else {
-        this.$store.dispatch('cml/groups/userAdd', {
-          user: this.user,
-          group: group
-        });
+        this.$store.dispatch('cml/groups/userAdd', { user: this.user, group: group });
       }
     },
-
-    groupActive(groupId) {
-      return this.groups.find(group => group.id === groupId).userIds.indexOf(this.user.id) !== -1;
+    groupActive: function groupActive (groupId) {
+      return this.groups.find(function (group) { return group.id === groupId; })
+        .userIds.indexOf(this.user.id) !== -1
     }
-
   }
 };
 
-var cmlUsers = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "flex flex-start"
-    }, [_c('h2', {
-      staticClass: "mt-s"
-    }, [_vm._v("Users")]), _vm._v(" "), _c('button', {
-      staticClass: "btn p-s flex-right",
-      on: {
-        "click": function click($event) {
-          _vm.popupOpen({
-            config: _vm.popupAddConfig,
-            element: {
-              description: {}
-            }
-          });
-        }
-      }
-    }, [_c('i', {
-      staticClass: "icon-24 icon-24-plus"
-    })])]), _vm._v(" "), _c('div', [_c('table', {
-      staticClass: "table mb-0"
-    }, [_vm._m(0, false, false), _vm._v(" "), _vm._l(_vm.users, function (user) {
-      return _c('tr', {
-        key: user.id
-      }, [_c('td', [_vm._v(_vm._s(user.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(user.role))]), _vm._v(" "), _c('td', {
-        staticClass: "text-right"
-      }, [_c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupGroupsConfig,
-              element: user
-            });
-          }
-        }
-      }, [_vm._v("Groups")]), _vm._v(" "), _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupEditConfig,
-              element: user
-            });
-          }
-        }
-      }, [_vm._v("Edit")]), _vm._v(" "), user.id !== _vm.userId ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupRemoveConfig,
-              element: user
-            });
-          }
-        }
-      }, [_vm._v("Remove")]) : _vm._e()])]);
-    })], 2)])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('tr', [_c('th', [_vm._v("Name")]), _c('th', [_vm._v("Role")]), _c('th')]);
-  }],
+var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
   name: 'camomile-users',
 
-  data() {
+  data: function data () {
     return {
       popupEditConfig: {
         type: 'users',
@@ -72185,213 +71497,57 @@ var cmlUsers = {
         title: 'Remove user',
         component: popupRemove
       }
-    };
+    }
   },
 
-  computed: _extends({}, mapState({
-    users: state => state.cml.users.list,
-    userId: state => state.cml.user.id
-  })),
-  methods: {
-    popupOpen({
-      config,
-      element
-    }) {
-      return this.$store.commit('cml/popup/open', {
-        config,
-        element
-      });
-    }
+  computed: Object.assign({}, mapState({
+      users: function (state) { return state.cml.users.list; },
+      userId: function (state) { return state.cml.user.id; }
+    })),
 
+  methods: {
+    popupOpen: function popupOpen (ref) {
+      var config = ref.config;
+      var element = ref.element;
+
+      return this.$store.commit('cml/popup/open', { config: config, element: element })
+    }
   }
 };
 
-var popupUsers = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(0, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.group.name,
-        expression: "group.name"
-      }],
-      staticClass: "input-alt",
-      attrs: {
-        "type": "text",
-        "placeholder": "Name",
-        "disabled": "disabled"
-      },
-      domProps: {
-        "value": _vm.group.name
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.group, "name", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c('div', {
-      staticClass: "blobs"
-    }, [_c('div', {
-      staticClass: "blob-1"
-    }, [_c('h3', {
-      staticClass: "pt-s mb-s"
-    }, [_vm._v("Users")]), _vm._v(" "), _c('ul', {
-      staticClass: "list-inline"
-    }, _vm._l(_vm.users, function (user) {
-      return _c('li', {
-        key: user.id,
-        staticClass: "tag",
-        class: {
-          active: _vm.userActive(user.id)
-        }
-      }, [_c('button', {
-        staticClass: "btn px-m py-xs h5 pill",
-        on: {
-          "click": function click($event) {
-            _vm.userToggle(user);
-          }
-        }
-      }, [_vm._v(_vm._s(user.name))])]);
-    }))])])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s mb-0"
-    }, [_vm._v("Name")])]);
-  }],
+var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.group.name),expression:"group.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.group.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.group, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"pt-s mb-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-inline"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id,staticClass:"tag",class:{ active: _vm.userActive(user.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.userToggle(user);}}},[_vm._v(_vm._s(user.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
   name: 'camomile-popup-users',
+
   computed: {
-    users() {
-      return this.$store.state.cml.users.list;
+    users: function users () {
+      return this.$store.state.cml.users.list
     },
+    group: function group () {
+      var this$1 = this;
 
-    group() {
-      return this.$store.state.cml.groups.list.find(group => group.id === this.$store.state.cml.popup.element.id);
+      return this.$store.state.cml.groups.list.find(function (group) { return group.id === this$1.$store.state.cml.popup.element.id; })
     }
-
   },
+
   methods: {
-    userToggle(user) {
+    userToggle: function userToggle (user) {
       if (this.userActive(user.id)) {
-        this.$store.dispatch('cml/groups/userRemove', {
-          user: user,
-          group: this.group
-        });
+        this.$store.dispatch('cml/groups/userRemove', { user: user, group: this.group });
       } else {
-        this.$store.dispatch('cml/groups/userAdd', {
-          user: user,
-          group: this.group
-        });
+        this.$store.dispatch('cml/groups/userAdd', { user: user, group: this.group });
       }
     },
 
-    userActive(userId) {
-      return this.group.userIds.indexOf(userId) > -1;
+    userActive: function userActive (userId) {
+      return this.group.userIds.indexOf(userId) > -1
     }
-
   }
 };
 
-var cmlGroups = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "flex flex-start"
-    }, [_c('h2', {
-      staticClass: "mt-s"
-    }, [_vm._v("Groups")]), _vm._v(" "), _c('button', {
-      staticClass: "btn p-s flex-right",
-      on: {
-        "click": function click($event) {
-          _vm.popupOpen({
-            config: _vm.popupAddConfig,
-            element: {
-              description: {}
-            }
-          });
-        }
-      }
-    }, [_c('i', {
-      staticClass: "icon-24 icon-24-plus"
-    })])]), _vm._v(" "), _c('div', [_c('table', {
-      staticClass: "table mb-0"
-    }, [_vm._m(0, false, false), _vm._v(" "), _vm._l(_vm.groups, function (group) {
-      return _c('tr', {
-        key: group.id
-      }, [_c('td', [_vm._v(_vm._s(group.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(group.userIds.length))]), _vm._v(" "), _c('td', {
-        staticClass: "text-right"
-      }, [_c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupUsersConfig,
-              element: group
-            });
-          }
-        }
-      }, [_vm._v("Users")]), _vm._v(" "), _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupEditConfig,
-              element: group
-            });
-          }
-        }
-      }, [_vm._v("Edit")]), _vm._v(" "), _vm.isRoot ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupRemoveConfig,
-              element: group
-            });
-          }
-        }
-      }, [_vm._v("Remove")]) : _vm._e()])]);
-    })], 2)])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('tr', [_c('th', [_vm._v("Name")]), _c('th', [_vm._v("Users")]), _c('th')]);
-  }],
+var cmlGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.groups),function(group){return _c('tr',{key:group.id},[_c('td',[_vm._v(_vm._s(group.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(group.userIds.length))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupUsersConfig, element: group });}}},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: group });}}},[_vm._v("Edit")]),_vm._v(" "),(_vm.isRoot)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: group });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Users")]),_c('th')])}],
   name: 'camomile-groups',
 
-  data() {
+  data: function data () {
     return {
       popupRemoveConfig: {
         type: 'groups',
@@ -72416,325 +71572,85 @@ var cmlGroups = {
         title: 'Group users',
         component: popupUsers
       }
-    };
+    }
   },
 
-  computed: _extends({}, mapState({
-    groups: state => state.cml.groups.list,
-    isRoot: state => state.cml.user.isRoot
-  })),
+  computed: Object.assign({}, mapState({
+      groups: function (state) { return state.cml.groups.list; },
+      isRoot: function (state) { return state.cml.user.isRoot; }
+    })),
+
   methods: {
-    popupOpen({
-      config,
-      element
-    }) {
-      return this.$store.commit('cml/popup/open', {
-        config,
-        element
-      });
+    popupOpen: function popupOpen (ref) {
+      var config = ref.config;
+      var element = ref.element;
+
+      return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
-
-    refresh() {
-      return this.$store.dispatch('cml/groups/list');
+    refresh: function refresh () {
+      return this.$store.dispatch('cml/groups/list')
     }
-
   }
 };
 
-var permissionsEdit = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('ul', {
-      staticClass: "list-inline"
-    }, [_c('li', {
-      staticClass: "tag right",
-      class: {
-        active: _vm.isActive(1)
-      }
-    }, [_c('button', {
-      staticClass: "btn px-s py-xs my--xs h5 mono pill",
-      on: {
-        "click": function click($event) {
-          _vm.toggle(1);
-        }
-      }
-    }, [_vm._v("R")])]), _vm._v(" "), _c('li', {
-      staticClass: "tag right",
-      class: {
-        active: _vm.isActive(2)
-      }
-    }, [_c('button', {
-      staticClass: "btn px-s py-xs my--xs h5 mono pill",
-      on: {
-        "click": function click($event) {
-          _vm.toggle(2);
-        }
-      }
-    }, [_vm._v("W")])]), _vm._v(" "), _c('li', {
-      staticClass: "tag right",
-      class: {
-        active: _vm.isActive(3)
-      }
-    }, [_c('button', {
-      staticClass: "btn px-s py-xs my--xs h5 mono pill",
-      on: {
-        "click": function click($event) {
-          _vm.toggle(3);
-        }
-      }
-    }, [_vm._v("A")])])]);
-  },
-  staticRenderFns: [],
+var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"list-inline"},[_c('li',{staticClass:"tag right",class:{ active: _vm.isActive(1) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(1);}}},[_vm._v("R")])]),_vm._v(" "),_c('li',{staticClass:"tag right",class:{ active: _vm.isActive(2) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(2);}}},[_vm._v("W")])]),_vm._v(" "),_c('li',{staticClass:"tag right",class:{ active: _vm.isActive(3) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(3);}}},[_vm._v("A")])])])},staticRenderFns: [],
   name: 'camomile-popup-permissions-edit',
+
   props: {
     element: Object,
     resource: Object
   },
-  computed: {
-    permissions() {
-      return this.$store.state.cml[`${this.resource.type}s`].list.find(r => r.id === this.resource.id).permissions[`${this.element.type}s`];
-    }
 
+  computed: {
+    permissions: function permissions () {
+      var this$1 = this;
+
+      return this.$store.state.cml[((this.resource.type) + "s")].list.find(function (r) { return r.id === this$1.resource.id; }).permissions[((this.element.type) + "s")]
+    }
   },
+
   methods: {
-    toggle(permission) {
+    toggle: function toggle (permission) {
+      var obj, obj$1;
+
       if (this.isActive(permission)) {
-        this.$store.dispatch(`cml/${this.resource.type}s/${this.element.type}PermissionRemove`, {
-          [`${this.resource.type}Id`]: this.resource.id,
-          [`${this.element.type}Id`]: this.element.id
-        });
+        this.$store.dispatch(("cml/" + (this.resource.type) + "s/" + (this.element.type) + "PermissionRemove"), ( obj = {}, obj[((this.resource.type) + "Id")] = this.resource.id, obj[((this.element.type) + "Id")] = this.element.id, obj));
       } else {
-        this.$store.dispatch(`cml/${this.resource.type}s/${this.element.type}PermissionSet`, {
-          [`${this.resource.type}Id`]: this.resource.id,
-          [`${this.element.type}Id`]: this.element.id,
-          permission
-        });
+        this.$store.dispatch(("cml/" + (this.resource.type) + "s/" + (this.element.type) + "PermissionSet"), ( obj$1 = {}, obj$1[((this.resource.type) + "Id")] = this.resource.id, obj$1[((this.element.type) + "Id")] = this.element.id, obj$1.permission = permission, obj$1));
       }
     },
-
-    isActive(permission) {
-      return this.permissions[this.element.id] === permission;
+    isActive: function isActive (permission) {
+      return this.permissions[this.element.id] === permission
     }
-
   }
 };
 
-var popupPermissions = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "blobs"
-    }, [_vm._m(0, false, false), _vm._v(" "), _c('div', {
-      staticClass: "blob-3-4"
-    }, [_c('input', {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.resource.name,
-        expression: "resource.name"
-      }],
-      staticClass: "input-alt",
-      attrs: {
-        "type": "text",
-        "placeholder": "Name",
-        "disabled": "disabled"
-      },
-      domProps: {
-        "value": _vm.resource.name
-      },
-      on: {
-        "input": function input($event) {
-          if ($event.target.composing) {
-            return;
-          }
-
-          _vm.$set(_vm.resource, "name", $event.target.value);
-        }
-      }
-    })]), _vm._v(" "), _c('div', {
-      staticClass: "blob-1-2"
-    }, [_c('h3', {
-      staticClass: "pt-s"
-    }, [_vm._v("Groups")]), _vm._v(" "), _c('ul', {
-      staticClass: "list-sans"
-    }, _vm._l(_vm.groups, function (group) {
-      return _c('li', {
-        key: group.id
-      }, [_c('div', {
-        staticClass: "blobs"
-      }, [_c('div', {
-        staticClass: "blob-1-2 mb-s"
-      }, [_vm._v(" " + _vm._s(group.name) + " ")]), _vm._v(" "), _c('div', {
-        staticClass: "blob-1-2 mb-s"
-      }, [_c('permissions-edit', {
-        attrs: {
-          "resource": _vm.permissionsConfig,
-          "element": {
-            id: group.id,
-            type: 'group'
-          }
-        }
-      })], 1)])]);
-    }))]), _vm._v(" "), _c('div', {
-      staticClass: "blob-1-2"
-    }, [_c('h3', {
-      staticClass: "pt-s"
-    }, [_vm._v("Users")]), _vm._v(" "), _c('ul', {
-      staticClass: "list-sans"
-    }, _vm._l(_vm.users, function (user) {
-      return _c('li', {
-        key: user.id
-      }, [_c('div', {
-        staticClass: "blobs"
-      }, [_c('div', {
-        staticClass: "blob-1-2 mb-s"
-      }, [_vm._v(" " + _vm._s(user.name) + " ")]), _vm._v(" "), _c('div', {
-        staticClass: "blob-1-2 mb-s"
-      }, [_c('permissions-edit', {
-        attrs: {
-          "resource": _vm.permissionsConfig,
-          "element": {
-            id: user.id,
-            type: 'user'
-          }
-        }
-      })], 1)])]);
-    }))])])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "blob-1-4"
-    }, [_c('h4', {
-      staticClass: "pt-s"
-    }, [_vm._v("Name")])]);
-  }],
+var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.resource.name),expression:"resource.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.resource.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.resource, "name", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(group.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"resource":_vm.permissionsConfig,"element":{ id: group.id, type: 'group' }}})],1)])])}))]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(user.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"resource":_vm.permissionsConfig,"element":{ id: user.id, type: 'user' }}})],1)])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])}],
   name: 'camomile-permissions',
+
   components: {
-    permissionsEdit
+    permissionsEdit: permissionsEdit
   },
-  computed: _extends({}, mapState({
-    resource: state => state.cml[state.cml.popup.config.type].list.find(e => e.id === state.cml.popup.element.id),
-    users: state => state.cml.users.list,
-    groups: state => state.cml.groups.list,
-    type: state => state.cml.popup.config.type
-  }), {
-    permissionsConfig() {
+
+  computed: Object.assign({}, mapState({
+      resource: function (state) { return state.cml[state.cml.popup.config.type].list.find(function (e) { return e.id === state.cml.popup.element.id; }); },
+      users: function (state) { return state.cml.users.list; },
+      groups: function (state) { return state.cml.groups.list; },
+      type: function (state) { return state.cml.popup.config.type; }
+    }),
+    {permissionsConfig: function permissionsConfig () {
       return {
         id: this.resource.id,
         type: this.type.slice(0, -1),
         permissions: this.resource.permissions.users
-      };
-    }
-
-  })
+      }
+    }})
 };
 
-var cmlCorpus = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "flex flex-start"
-    }, [_c('h2', {
-      staticClass: "mt-s"
-    }, [_vm._v("Corpora")]), _vm._v(" "), _vm.isAdmin ? _c('button', {
-      staticClass: "flex-right btn p-s",
-      on: {
-        "click": function click($event) {
-          _vm.popupOpen({
-            config: _vm.popupAddConfig,
-            element: {
-              id: null,
-              description: {}
-            }
-          });
-        }
-      }
-    }, [_c('i', {
-      staticClass: "icon-24 icon-24-plus"
-    })]) : _vm._e()]), _vm._v(" "), _c('div', [_c('table', {
-      staticClass: "table mb-0"
-    }, [_vm._m(0, false, false), _vm._v(" "), _vm._l(_vm.corpus, function (corpu) {
-      return _c('tr', {
-        key: corpu.id
-      }, [_c('td', [_c('input', {
-        attrs: {
-          "type": "radio"
-        },
-        domProps: {
-          "value": corpu.id,
-          "checked": corpu.id === _vm.corpuId
-        },
-        on: {
-          "change": _vm.set
-        }
-      })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(corpu.name))]), _vm._v(" "), _c('td', {
-        staticClass: "text-right"
-      }, [corpu.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupPermissionsConfig,
-              element: corpu
-            });
-          }
-        }
-      }, [_vm._v("Permissions")]) : _vm._e(), _vm._v(" "), corpu.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupEditConfig,
-              element: corpu
-            });
-          }
-        }
-      }, [_vm._v("Edit")]) : _vm._e(), _vm._v(" "), _vm.isAdmin && corpu.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupRemoveConfig,
-              element: corpu
-            });
-          }
-        }
-      }, [_vm._v("Remove")]) : _vm._e()])]);
-    })], 2)])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('tr', [_c('th'), _c('th', [_vm._v("Name")]), _c('th')]);
-  }],
+var cmlCorpus = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-corpus',
 
-  data() {
+  data: function data () {
     return {
       popupEditConfig: {
         type: 'corpus',
@@ -72760,113 +71676,32 @@ var cmlCorpus = {
         title: 'Corpus permissions',
         component: popupPermissions
       }
-    };
+    }
   },
 
-  computed: _extends({}, mapState({
-    corpus: state => state.cml.corpus.list,
-    corpuId: state => state.cml.corpus.id,
-    isAdmin: state => state.cml.user.isAdmin
-  })),
-  methods: {
-    popupOpen({
-      config,
-      element
-    }) {
-      this.$store.commit('cml/popup/open', {
-        config,
-        element
-      });
-    },
+  computed: Object.assign({}, mapState({
+      corpus: function (state) { return state.cml.corpus.list; },
+      corpuId: function (state) { return state.cml.corpus.id; },
+      isAdmin: function (state) { return state.cml.user.isAdmin; }
+    })),
 
-    set(e) {
+  methods: {
+    popupOpen: function popupOpen (ref) {
+      var config = ref.config;
+      var element = ref.element;
+
+      this.$store.commit('cml/popup/open', { config: config, element: element });
+    },
+    set: function set (e) {
       this.$store.dispatch('cml/corpus/set', e.target.value);
     }
-
   }
 };
 
-var cmlMedias = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "flex flex-start"
-    }, [_c('h2', {
-      staticClass: "mt-s"
-    }, [_vm._v("Media")]), _vm._v(" "), _vm.permission === 3 ? _c('button', {
-      staticClass: "flex-right btn p-s",
-      on: {
-        "click": function click($event) {
-          _vm.popupOpen({
-            config: _vm.popupAddConfig,
-            element: {
-              id: null,
-              corpuId: _vm.corpuId,
-              description: {}
-            }
-          });
-        }
-      }
-    }, [_c('i', {
-      staticClass: "icon-24 icon-24-plus"
-    })]) : _vm._e()]), _vm._v(" "), _c('div', [_c('table', {
-      staticClass: "table mb-0"
-    }, [_vm._m(0, false, false), _vm._v(" "), _vm._l(_vm.medias, function (media) {
-      return _c('tr', {
-        key: media.id
-      }, [_c('td', [_c('input', {
-        attrs: {
-          "type": "radio"
-        },
-        domProps: {
-          "value": media.id,
-          "checked": media.id === _vm.mediaId
-        },
-        on: {
-          "change": _vm.set
-        }
-      })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(media.name))]), _vm._v(" "), _c('td', {
-        staticClass: "text-right"
-      }, [_vm.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupEditConfig,
-              element: media
-            });
-          }
-        }
-      }, [_vm._v("Edit")]) : _vm._e(), _vm._v(" "), _vm.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupRemoveConfig,
-              element: media
-            });
-          }
-        }
-      }, [_vm._v("Remove")]) : _vm._e()])]);
-    })], 2)])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('tr', [_c('th'), _c('th', [_vm._v("Name")]), _c('th')]);
-  }],
+var cmlMedias = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Media")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-medias',
 
-  data() {
+  data: function data () {
     return {
       popupEditConfig: {
         type: 'medias',
@@ -72886,132 +71721,39 @@ var cmlMedias = {
         title: 'Remove medium',
         component: popupRemove
       }
-    };
+    }
   },
 
-  computed: _extends({}, mapState({
-    medias: state => state.cml.medias.list,
-    corpus: state => state.cml.corpus.list,
-    corpuId: state => state.cml.corpus.id,
-    mediaId: state => state.cml.medias.id
-  }), {
-    permission() {
-      const corpu = this.corpus.find(c => c.id === this.corpuId);
-      return corpu ? corpu.permission : 0;
-    }
+  computed: Object.assign({}, mapState({
+      medias: function (state) { return state.cml.medias.list; },
+      corpus: function (state) { return state.cml.corpus.list; },
+      corpuId: function (state) { return state.cml.corpus.id; },
+      mediaId: function (state) { return state.cml.medias.id; }
+    }),
+    {permission: function permission () {
+      var this$1 = this;
 
-  }),
+      var corpu = this.corpus.find(function (c) { return c.id === this$1.corpuId; });
+      return corpu ? corpu.permission : 0
+    }}),
+
   methods: {
-    popupOpen({
-      config,
-      element
-    }) {
-      return this.$store.commit('cml/popup/open', {
-        config,
-        element
-      });
-    },
+    popupOpen: function popupOpen (ref) {
+      var config = ref.config;
+      var element = ref.element;
 
-    set(e) {
+      return this.$store.commit('cml/popup/open', { config: config, element: element })
+    },
+    set: function set (e) {
       this.$store.dispatch('cml/medias/set', e.target.value);
     }
-
   }
 };
 
-var cmlLayers = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "flex flex-start"
-    }, [_c('h2', {
-      staticClass: "mt-s"
-    }, [_vm._v("Layers")]), _vm._v(" "), _vm.permission === 3 ? _c('button', {
-      staticClass: "flex-right btn p-s",
-      on: {
-        "click": function click($event) {
-          _vm.popupOpen({
-            config: _vm.popupAddConfig,
-            element: {
-              id: null,
-              corpuId: _vm.corpuId,
-              description: {},
-              metadataType: {},
-              fragmentType: {}
-            }
-          });
-        }
-      }
-    }, [_c('i', {
-      staticClass: "icon-24 icon-24-plus"
-    })]) : _vm._e()]), _vm._v(" "), _c('div', [_c('table', {
-      staticClass: "table mb-0"
-    }, [_vm._m(0, false, false), _vm._v(" "), _vm._l(_vm.layers, function (layer) {
-      return _c('tr', {
-        key: layer.id
-      }, [_c('td', [_c('input', {
-        attrs: {
-          "type": "radio"
-        },
-        domProps: {
-          "value": layer.id,
-          "checked": layer.id === _vm.layerId
-        },
-        on: {
-          "change": _vm.set
-        }
-      })]), _vm._v(" "), _c('td', [_vm._v(_vm._s(layer.name))]), _vm._v(" "), _c('td', {
-        staticClass: "text-right"
-      }, [layer.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupPermissionsConfig,
-              element: layer
-            });
-          }
-        }
-      }, [_vm._v("Permissions")]) : _vm._e(), _vm._v(" "), layer.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupEditConfig,
-              element: layer
-            });
-          }
-        }
-      }, [_vm._v("Edit")]) : _vm._e(), _vm._v(" "), layer.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupRemoveConfig,
-              element: layer
-            });
-          }
-        }
-      }, [_vm._v("Remove")]) : _vm._e()])]);
-    })], 2)])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('tr', [_c('th'), _c('th', [_vm._v("Name")]), _c('th')]);
-  }],
+var cmlLayers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Layers")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":layer.id,"checked":layer.id === _vm.layerId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-layers',
 
-  data() {
+  data: function data () {
     return {
       popupEditConfig: {
         type: 'layers',
@@ -73037,118 +71779,36 @@ var cmlLayers = {
         title: 'Layer permissions',
         component: popupPermissions
       }
-    };
+    }
   },
 
-  computed: _extends({}, mapState({
-    layers: state => state.cml.layers.list,
-    corpuId: state => state.cml.corpus.id,
-    corpus: state => state.cml.corpus.list,
-    layerId: state => state.cml.layers.id
-  }), {
-    permission() {
-      const corpu = this.corpus.find(c => c.id === this.corpuId);
-      return corpu ? corpu.permission : 0;
-    }
+  computed: Object.assign({}, mapState({
+      layers: function (state) { return state.cml.layers.list; },
+      corpuId: function (state) { return state.cml.corpus.id; },
+      corpus: function (state) { return state.cml.corpus.list; },
+      layerId: function (state) { return state.cml.layers.id; }
+    }),
+    {permission: function permission () {
+      var this$1 = this;
 
-  }),
+      var corpu = this.corpus.find(function (c) { return c.id === this$1.corpuId; });
+      return corpu ? corpu.permission : 0
+    }}),
+
   methods: {
-    popupOpen(config) {
-      return this.$store.commit('cml/popup/open', config);
+    popupOpen: function popupOpen (config) {
+      return this.$store.commit('cml/popup/open', config)
     },
-
-    set(e) {
+    set: function set (e) {
       this.$store.dispatch('cml/layers/set', e.target.value);
     }
-
   }
 };
 
-var cmlAnnotations = {
-  render: function render() {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', [_c('div', {
-      staticClass: "flex flex-start"
-    }, [_c('h2', {
-      staticClass: "mt-s"
-    }, [_vm._v("Annotations")]), _vm._v(" "), _vm.permission === 3 ? _c('button', {
-      staticClass: "flex-right btn p-s",
-      on: {
-        "click": function click($event) {
-          _vm.popupOpen({
-            config: _vm.popupAddConfig,
-            element: {
-              id: null,
-              layerId: _vm.layerId,
-              mediaId: _vm.mediaId,
-              fragment: {},
-              metadata: {}
-            }
-          });
-        }
-      }
-    }, [_c('i', {
-      staticClass: "icon-24 icon-24-plus"
-    })]) : _vm._e()]), _vm._v(" "), _c('div', [_c('table', {
-      staticClass: "table mb-0"
-    }, [_vm._m(0, false, false), _vm._v(" "), _vm._l(_vm.annotations, function (annotation) {
-      return _c('tr', {
-        key: annotation.id
-      }, [_c('td', [_c('input', {
-        attrs: {
-          "type": "radio"
-        },
-        domProps: {
-          "value": annotation.id,
-          "checked": annotation.id === _vm.annotationId
-        },
-        on: {
-          "change": _vm.set
-        }
-      })]), _vm._v(" "), _c('td', [_c('span', {
-        staticClass: "h6 bold bg-neutral color-bg py-xxs px-xs rnd"
-      }, [_vm._v("…" + _vm._s(_vm._f("stringEnd")(annotation.id)))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]), _vm._v(" "), _c('td', {
-        staticClass: "text-right"
-      }, [_vm.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupEditConfig,
-              element: annotation
-            });
-          }
-        }
-      }, [_vm._v("Edit")]) : _vm._e(), _vm._v(" "), _vm.permission === 3 ? _c('button', {
-        staticClass: "btn px-s py-s my--s h6",
-        on: {
-          "click": function click($event) {
-            _vm.popupOpen({
-              config: _vm.popupRemoveConfig,
-              element: annotation
-            });
-          }
-        }
-      }, [_vm._v("Remove")]) : _vm._e()])]);
-    })], 2)])]);
-  },
-  staticRenderFns: [function () {
-    var _vm = this;
-
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('tr', [_c('th'), _c('th', [_vm._v("Id")]), _c('th', [_vm._v("Medium")]), _c('th')]);
-  }],
+var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Annotations")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: {}, metadata: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":annotation.id,"checked":annotation.id === _vm.annotationId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
   name: 'camomile-annotations',
 
-  data() {
+  data: function data () {
     return {
       popupEditConfig: {
         type: 'annotations',
@@ -73168,112 +71828,74 @@ var cmlAnnotations = {
         title: 'Remove annotation',
         component: popupRemove
       }
-    };
+    }
   },
 
-  computed: _extends({}, mapState({
-    annotations: state => state.cml.annotations.list,
-    mediaId: state => state.cml.medias.id,
-    layerId: state => state.cml.layers.id,
-    annotationId: state => state.cml.annotations.id,
-    medias: state => state.cml.medias.list
-  }), {
-    permission() {
-      const layer = this.$store.state.cml.layers.list.find(layer => layer.id === this.layerId);
-      return layer ? layer.permission : 0;
-    }
+  computed: Object.assign({}, mapState({
+      annotations: function (state) { return state.cml.annotations.list; },
+      mediaId: function (state) { return state.cml.medias.id; },
+      layerId: function (state) { return state.cml.layers.id; },
+      annotationId: function (state) { return state.cml.annotations.id; },
+      medias: function (state) { return state.cml.medias.list; }
+    }),
+    {permission: function permission () {
+      var this$1 = this;
 
-  }),
+      var layer = this.$store.state.cml.layers.list.find(function (layer) { return layer.id === this$1.layerId; });
+      return layer ? layer.permission : 0
+    }}),
+
   methods: {
-    popupOpen({
-      config,
-      element
-    }) {
-      return this.$store.commit('cml/popup/open', {
-        config,
-        element
-      });
-    },
+    popupOpen: function popupOpen (ref) {
+      var config = ref.config;
+      var element = ref.element;
 
-    set(e) {
+      return this.$store.commit('cml/popup/open', { config: config, element: element })
+    },
+    set: function set (e) {
       this.$store.dispatch('cml/annotations/set', e.target.value);
     },
-
-    mediaName(mediaId) {
-      if (!mediaId) return '';
-      const media = this.medias.find(m => m.id === mediaId);
-      return media ? media.name : '';
+    mediaName: function mediaName (mediaId) {
+      if (!mediaId) { return '' }
+      var media = this.medias.find(function (m) { return m.id === mediaId; });
+      return media ? media.name : ''
     }
-
   },
-  filters: {
-    stringEnd(value) {
-      if (!value) return '';
-      return value.substr(value.length - 6);
-    }
 
+  filters: {
+    stringEnd: function stringEnd (value) {
+      if (!value) { return '' }
+      return value.substr(value.length - 6)
+    }
   }
 };
 
-var app = {
-  render: function render() {
-    var _vm = this;
+var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full-y flex flex-direction-column"},[_c('cml-header'),_vm._v(" "),_c('div',{staticClass:"relative page"},[_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),_c('div',{staticClass:"container pt"},[(_vm.isAdmin)?_c('div',{staticClass:"blobs"},[_c('cml-users',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-groups',{staticClass:"blob-1-2 p border"})],1):_vm._e(),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blobs"},[_c('cml-corpus',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-medias',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-layers',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-annotations',{staticClass:"blob-1-2 p border"})],1):_vm._e()])],1),_vm._v(" "),(!_vm.isLogged)?_c('cml-login'):_vm._e(),_vm._v(" "),_c('viewport'),_vm._v(" "),_c('debug')],1)},staticRenderFns: [],
+  store: store,
 
-    var _h = _vm.$createElement;
-
-    var _c = _vm._self._c || _h;
-
-    return _c('div', {
-      staticClass: "full-y flex flex-direction-column"
-    }, [_c('cml-header'), _vm._v(" "), _c('div', {
-      staticClass: "relative page"
-    }, [_c('transition', {
-      attrs: {
-        "name": "transition-top"
-      }
-    }, [_vm.popup.visible ? _c('cml-popup') : _vm._e()], 1), _vm._v(" "), _c('cml-messages'), _vm._v(" "), _c('cml-dropdown'), _vm._v(" "), _c('div', {
-      staticClass: "container pt"
-    }, [_vm.isAdmin ? _c('div', {
-      staticClass: "blobs"
-    }, [_c('cml-users', {
-      staticClass: "blob-1-2 p border"
-    }), _vm._v(" "), _c('cml-groups', {
-      staticClass: "blob-1-2 p border"
-    })], 1) : _vm._e(), _vm._v(" "), _vm.isLogged ? _c('div', {
-      staticClass: "blobs"
-    }, [_c('cml-corpus', {
-      staticClass: "blob-1-2 p border"
-    }), _vm._v(" "), _c('cml-medias', {
-      staticClass: "blob-1-2 p border"
-    }), _vm._v(" "), _c('cml-layers', {
-      staticClass: "blob-1-2 p border"
-    }), _vm._v(" "), _c('cml-annotations', {
-      staticClass: "blob-1-2 p border"
-    })], 1) : _vm._e()])], 1), _vm._v(" "), !_vm.isLogged ? _c('cml-login') : _vm._e(), _vm._v(" "), _c('viewport'), _vm._v(" "), _c('debug')], 1);
-  },
-  staticRenderFns: [],
-  store,
   name: 'camomile',
+
   components: {
     debug: debug$5,
     viewport: viewport$1,
-    cmlHeader,
-    cmlLogin,
-    cmlPopup,
-    cmlMessages,
-    cmlDropdown,
-    cmlUsers,
-    cmlGroups,
-    cmlCorpus,
-    cmlMedias,
-    cmlLayers,
-    cmlAnnotations
+    cmlHeader: cmlHeader,
+    cmlLogin: cmlLogin,
+    cmlPopup: cmlPopup,
+    cmlMessages: cmlMessages,
+    cmlDropdown: cmlDropdown,
+    cmlUsers: cmlUsers,
+    cmlGroups: cmlGroups,
+    cmlCorpus: cmlCorpus,
+    cmlMedias: cmlMedias,
+    cmlLayers: cmlLayers,
+    cmlAnnotations: cmlAnnotations
   },
-  computed: _extends({}, mapState({
-    isAdmin: state => state.cml.user.isAdmin,
-    isLogged: state => state.cml.user.isLogged,
-    popup: state => state.cml.popup
-  }))
+
+  computed: Object.assign({}, mapState({
+      isAdmin: function (state) { return state.cml.user.isAdmin; },
+      isLogged: function (state) { return state.cml.user.isLogged; },
+      popup: function (state) { return state.cml.popup; }
+    }))
 };
 
 return app;

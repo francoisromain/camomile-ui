@@ -1,4 +1,3 @@
-import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import vue from 'rollup-plugin-vue'
@@ -6,6 +5,7 @@ import postcss from 'rollup-plugin-postcss'
 import postcssPlugins from './rollup.postcss.config.js'
 import json from 'rollup-plugin-json'
 import builtins from 'rollup-plugin-node-builtins'
+import buble from 'rollup-plugin-buble'
 const pkg = require('../package.json')
 
 export default [
@@ -31,8 +31,8 @@ export default [
         plugins: postcssPlugins,
         extract: '../dist/styles.css'
       }),
-      babel({
-        exclude: 'node_modules/**'
+      buble({
+        objectAssign: 'Object.assign'
       })
     ]
   },
@@ -52,8 +52,8 @@ export default [
         plugins: postcssPlugins,
         extract: 'dist/styles.css'
       }),
-      babel({
-        exclude: 'node_modules/**'
+      buble({
+        objectAssign: 'Object.assign'
       })
     ]
   }
