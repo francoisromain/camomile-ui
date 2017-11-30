@@ -14,6 +14,13 @@
 
 ---
 
+Camomile UI is a UI library for [camomile](https://github.com/camomile-project).
+
+To start using this library, you can use
+[camomile-ui-boilerplate](https://github.com/francoisromain/camomile-ui-boilerplate)
+
+---
+
 ## Npm scripts
 
 ```bash
@@ -59,7 +66,5 @@ following structure:
 Start the server (from the _camomile-ui_ directory):
 
 ```bash
-export CMML_DB=../camomile-data/mongodb/files && export CMML_LOGS=../camomile-data/camomile/logs && export CMML_MEDIA=../camomile-data/media && export CMML_UPLOAD=../camomile-data/upload && export CMML_PORT=3000 && export CMML_PASSWORD=roO7p4s5wOrD && docker-compose -f ../camomile-server/docker-compose.dev.yml up -d
+export CMML_DB=../camomile-data/mongodb/files && export CMML_LOGS=../camomile-data/camomile/logs && export CMML_MEDIA=../camomile-data/media && export CMML_UPLOAD=../camomile-data/upload && export CMML_PORT=3000 && export CMML_PASSWORD=roO7p4s5wOrD && docker-compose -f ../camomile-server/docker-compose.dev.yml up --build -d
 ```
-
-node app.js

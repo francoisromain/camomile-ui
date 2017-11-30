@@ -42,7 +42,9 @@ h2,
 }
 
 h3,
-h4 {
+h4,
+h5,
+.h5 {
   font-weight: 700;
 }
 
@@ -61,13 +63,13 @@ h4,
 
 h5,
 .h5 {
-  typescale: -1 0.5;
+  typescale: -1 1;
 }
 
 h6,
 .h6,
 small {
-  typescale: -1.5 1;
+  typescale: -1.5 0.5;
 }
 
 label,
@@ -167,4 +169,9 @@ i,
 
 .text-right {
   text-align: right;
+}
+
+.mono {
+  font-family: 'Lucida Sans Typewriter', monaco, 'Lucida Console', monospace;
+  font-weight: bold;
 }

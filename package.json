@@ -1,41 +1,62 @@
 {
-  "name": "camomile-ui",
-  "version": "0.1.0",
+  "name": "@camomile/camomile-ui",
+  "version": "0.1.1",
   "description": "UI Components library for Camomile",
+  "license": "MIT",
+  "homepage": "https://github.com/francoisromain/camomile-ui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francoisromain/camomile-ui.git"
+  },
   "author": {
     "name": "François Romain",
     "email": "francoisromain@gmail.com",
     "url": "https://francoisromain.com"
   },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/francoisromain/camomile-ui"
+  "bugs": {
+    "url": "https://github.com/francoisromain/camomile-ui/issues"
   },
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "main": "dist/camomile-ui.common.js",
+  "module": "dist/camomile-ui.esm.js",
+  "browser": "dist/camomile-ui.umd.js",
+  "keywords": ["camomile", "collaborative", "annotation", "platform"],
   "scripts": {
-    "dist": "cross-env NODE_ENV=production node build/dist.js",
-    "dev": "cross-env NODE_ENV=development node build/dev.js",
-    "styleguide": "vue-styleguidist server",
-    "styleguide:build": "vue-styleguidist build"
+    "test": "jest",
+    "dist": "cross-env NODE_ENV=production node build/webpack.dist.js",
+    "dev": "cross-env NODE_ENV=development node build/webpack.dev.js",
+    "build": "rollup -c build/rollup.config.dist.js",
+    "styleguide":
+      "vue-styleguidist --config build/webpack.styleguide.config.js server",
+    "styleguide:build":
+      "vue-styleguidist --config build/webpack.styleguide.config.js build"
+  },
+  "dependencies": {
+    "axios": "^0.17.1",
+    "camomile-client": "^0.8.0",
+    "g": "^2.0.1",
+    "npm": "^5.5.1",
+    "vue": "^2.5.9",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.32",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.32",
     "@babel/preset-env": "^7.0.0-beta.32",
-    "@babel/preset-stage-2": "^7.0.0-beta.32",
-    "@babel/register": "^7.0.0-beta.32",
     "autoprefixer": "^7.1.6",
-    "axios": "^0.17.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^21.2.0",
     "babel-loader": "^8.0.0-beta.0",
     "babel-minify-webpack-plugin": "^0.2.0",
-    "babel-polyfill": "^6.26.0",
-    "camomile-client": "^0.8.0",
     "copy-webpack-plugin": "^4.2.3",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
-    "eslint": "^4.12.0",
+    "eslint": "^4.12.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.9.0",
     "eslint-plugin-compat": "^2.1.0",
     "eslint-plugin-html": "^4.0.1",
     "eslint-plugin-import": "^2.8.0",
@@ -47,8 +68,9 @@
     "html-webpack-exclude-assets-plugin": "0.0.5",
     "html-webpack-plugin": "^2.30.1",
     "imports-loader": "^0.7.1",
+    "jest": "^21.2.1",
+    "jest-vue-preprocessor": "^1.3.1",
     "json-loader": "^0.5.7",
-    "normalize.css": "^7.0.0",
     "object-fit-images": "^3.2.3",
     "pixrem": "^4.0.1",
     "pleeease-filters": "^4.0.0",
@@ -88,20 +110,28 @@
     "postcss-typescale": "^0.1.10",
     "postcss-url": "^7.3.0",
     "progress-bar-webpack-plugin": "^1.10.0",
+    "regenerator-runtime": "^0.11.0",
     "rimraf": "^2.6.2",
+    "rollup": "^0.52.0",
+    "rollup-plugin-babel": "^4.0.0-beta.0",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-postcss": "^0.5.5",
+    "rollup-plugin-vue": "^2.5.2",
     "style-loader": "^0.19.0",
     "stylelint": "^8.3.1",
     "stylelint-config-standard": "^18.0.0",
     "stylelint-processor-html": "^1.0.0",
     "url-loader": "^0.6.2",
-    "vue": "^2.5.9",
     "vue-hot-reload-api": "^2.2.4",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^13.5.0",
     "vue-style-loader": "^3.0.3",
     "vue-styleguidist": "^1.3.5",
     "vue-template-compiler": "^2.5.9",
-    "vuex": "^3.0.1",
+    "vue-test-utils": "^1.0.0-beta.6",
     "webpack": "^3.8.1",
     "webpack-bundle-analyzer": "^2.9.1",
     "webpack-dev-server": "^2.9.5",
@@ -113,10 +143,7 @@
     "env": {
       "browser": true
     },
-    "plugins": [
-      "html",
-      "compat"
-    ],
+    "plugins": ["html", "compat"],
     "rules": {
       "compat/compat": 2,
       "arrow-parens": 0,
@@ -124,29 +151,72 @@
     }
   },
   "stylelint": {
-    "processors": [
-      "stylelint-processor-html"
-    ],
+    "processors": ["stylelint-processor-html"],
     "extends": "stylelint-config-standard",
     "rules": {
       "property-no-unknown": [
         true,
         {
-          "ignoreProperties": [
-            "typescale",
-            "gf",
-            "/button-/"
-          ]
+          "ignoreProperties": ["typescale", "gf", "/button-/"]
         }
       ]
     },
-    "ignoreFiles": [
-      "./dist/**/*"
-    ]
+    "ignoreFiles": ["./dist/**/*"]
   },
   "browserslist": [
-    "chrome >= 60",
-    "firefox >= 57",
-    "iOS >= 10"
-  ]
+    "Chrome >= 60",
+    "Safari >= 10.1",
+    "iOS >= 10.3",
+    "Firefox >= 54",
+    "Edge >= 15"
+  ],
+  "jest": {
+    "moduleNameMapper": {
+      "^vue$": "vue/dist/vue.common.js",
+      "^.+\\.(css)$": "<rootDir>/test/mocks/css.js"
+    },
+    "moduleFileExtensions": ["js", "json", "vue"],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
+    },
+    "mapCoverage": true
+  },
+  "postcss": {
+    "plugins": {
+      "postcss-normalize": {},
+      "postcss-import": {},
+      "postcss-custom-properties": {},
+      "postcss-calc": {},
+      "postcss-image-set-polyfill": {},
+      "postcss-nesting": {},
+      "postcss-custom-media": {},
+      "postcss-media-minmax": {},
+      "postcss-custom-selectors": {},
+      "postcss-attribute-case-insensitive": {},
+      "postcss-color-hwb": {},
+      "postcss-color-hsl": {},
+      "postcss-color-rgb": {},
+      "postcss-color-gray": {},
+      "postcss-color-hex-alpha": {},
+      "postcss-color-function": {},
+      "postcss-font-family-system-ui": {},
+      "postcss-font-variant": {},
+      "pleeease-filters": {},
+      "postcss-initial": {},
+      "pixrem": {},
+      "postcss-pseudoelements": {},
+      "postcss-selector-matches": {},
+      "postcss-selector-not": {},
+      "postcss-pseudo-class-any-link": {},
+      "postcss-color-rgba-fallback": {},
+      "postcss-replace-overflow-wrap": {},
+      "postcss-typescale": {},
+      "postcss-grid-system": {},
+      "postcss-grid-fluid": {},
+      "postcss-button": {},
+      "postcss-inline-svg": {},
+      "autoprefixer": {}
+    }
+  }
 }

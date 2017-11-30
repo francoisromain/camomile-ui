@@ -4,10 +4,34 @@
       "@babel/preset-env",
       {
         "useBuiltIns": "entry",
-        "modules": false,
-        "loose": true
+        "modules": false
       }
-    ],
-    "@babel/preset-stage-2"
+    ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": { "node": "current" },
+            "useBuiltIns": "entry"
+          }
+        ]
+      ]
+    }
+  },
+  "plugins": [
+    // [
+    //   "@babel/plugin-transform-runtime",
+    //   {
+    //     "helpers": true,
+    //     "polyfill": false,
+    //     "regenerator": false,
+    //     "useBuiltIns": true,
+    //     "useESModules": true
+    //   }
+    // ],
+    "@babel/proposal-object-rest-spread"
   ]
 }

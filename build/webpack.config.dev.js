@@ -9,26 +9,18 @@ module.exports = merge(webpackConfigBase, {
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/dev-server',
-    './src/app.js'
+    './example/src/app.js'
   ],
   output: {
     filename: 'app.[hash].js',
-    path: path.resolve(__dirname, '../'),
+    path: path.resolve(__dirname, '../example/dist/'),
     publicPath: '/'
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          buble: {
-            objectAssign: 'Object.assign',
-            transforms: {
-              stripWith: true
-            }
-          }
-        }
+        loader: 'vue-loader'
       },
       {
         test: /\.css$/,
@@ -58,7 +50,7 @@ module.exports = merge(webpackConfigBase, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      template: 'example/src/index.html',
       inject: true
     })
   ]

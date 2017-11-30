@@ -15,12 +15,12 @@ const date = new Date().toISOString().slice(0, 10)
 module.exports = merge(webpackConfigBase, {
   devtool: false,
   entry: {
-    app: './src/app.js',
-    loader: './src/js/loader.js'
+    app: './example/src/app.js',
+    loader: './example/src/js/loader.js'
   },
   output: {
     filename: '[name].[hash].js',
-    path: path.resolve(__dirname, '../dist')
+    path: path.resolve(__dirname, '../example/dist')
   },
   module: {
     rules: [
@@ -28,13 +28,7 @@ module.exports = merge(webpackConfigBase, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          extractCSS: true,
-          buble: {
-            objectAssign: 'Object.assign',
-            transforms: {
-              stripWith: true
-            }
-          }
+          extractCSS: true
         }
       },
       {
@@ -85,7 +79,7 @@ module.exports = merge(webpackConfigBase, {
       allChunks: true
     }),
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      template: 'example/src/index.html',
       inject: true,
       minify: {
         removeComments: true,
@@ -97,7 +91,7 @@ module.exports = merge(webpackConfigBase, {
     new HtmlWebpackExcludeAssetsPlugin(),
     // new WebpackMonitor({
     //   capture: true, // -> default 'true'
-    //   target: '../build/monitor/camomile-ui-stats.json', // default -> '../monitor/stats.json'
+    //   target: '../build/webpackMonitor/webpack-stats.json', // default -> '../monitor/stats.json'
     //   launch: true, // -> default 'false'
     //   port: 3030 // default -> 8081
     // }),
