@@ -18,38 +18,32 @@ export default url => {
   const _annotation = id => _opt('annotation', id)
   const _queue = id => _opt('queue', id)
 
-  const _get = async uri => {
-    try {
-      const response = await api.get(uri)
-      console.log('get: ', uri, response.data)
-      return response.data
-    } catch (e) {
-      console.log('get error: ', uri, e)
-      throw e
-    }
-  }
+  const _get = uri =>
+    api
+      .get(uri)
+      .then(r => r.data)
+      .catch(e => {
+        console.log('get error: ', uri, e)
+        throw e
+      })
 
-  const _post = async (uri, data) => {
-    try {
-      const response = await api.post(uri, data)
-      console.log('post: ', uri, response.data)
-      return response.data
-    } catch (e) {
-      console.log('post error: ', uri, e)
-      throw e
-    }
-  }
+  const _post = (uri, data) =>
+    api
+      .post(uri, data)
+      .then(r => r.data)
+      .catch(e => {
+        console.log('post error: ', uri, e)
+        throw e
+      })
 
-  const _put = async (uri, data) => {
-    try {
-      const response = await api.put(uri, data)
-      console.log('put: ', uri, response.data)
-      return response.data
-    } catch (e) {
-      console.log('put error: ', uri, e)
-      throw e
-    }
-  }
+  const _put = (uri, data) =>
+    api
+      .put(uri, data)
+      .then(r => r.data)
+      .catch(e => {
+        console.log('post error: ', uri, e)
+        throw e
+      })
 
   return {
     // User
