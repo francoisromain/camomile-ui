@@ -5,18 +5,18 @@
         <div class="blob-1-4 mb-0">
           <cml-title></cml-title>
         </div>
-        <div class="blob-1-2 mb-0">
+        <div class="blob-1-2 mb-0" v-if="isLogged">
           <div class="blobs-default">
             <div class="blob-default">
-              <cml-syncbutton class="mb-0 left" v-if="isLogged"></cml-syncbutton>
+              <cml-sync class="mb-0 left"></cml-sync>
             </div>
             <div class="blob-auto mb-0">  
-              <cml-infos v-if="isLogged"></cml-infos>
+              <cml-infos></cml-infos>
             </div>
           </div>
         </div>
-        <div class="blob mb-0 flex-right">
-          <cml-userbutton v-if="isLogged"></cml-userbutton>
+        <div class="blob mb-0 flex-right" v-if="isLogged">
+          <cml-userbutton></cml-userbutton>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
 import cmlTitle from './title.vue'
 import cmlInfos from './infos.vue'
 import cmlUserbutton from './userbutton.vue'
-import cmlSyncbutton from './syncbutton.vue'
+import cmlSync from './sync.vue'
 
 export default {
   name: 'camomile-header',
@@ -37,7 +37,7 @@ export default {
     cmlTitle,
     cmlInfos,
     cmlUserbutton,
-    cmlSyncbutton
+    cmlSync
   },
 
   computed: {
