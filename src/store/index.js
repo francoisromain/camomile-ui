@@ -38,15 +38,13 @@ export const state = {
 export const actions = {
   set ({ dispatch }) {
     Promise.all([
-      new Promise((resolve, reject) =>
-        dispatch('cml/users/list', null, { root: true })
-          .then(r => resolve(r))
-          .catch(e => reject(e))
-      ),
-      new Promise((resolve, reject) =>
-        dispatch('cml/groups/list', null, { root: true })
-          .then(r => resolve(r))
-          .catch(e => reject(e))
+      ...['users', 'groups'].map(
+        type =>
+          new Promise((resolve, reject) =>
+            dispatch(`cml/${type}/list`, {}, { root: true })
+              .then(r => resolve(r))
+              .catch(e => reject(e))
+          )
       )
     ]).then(res => {
       dispatch('cml/corpus/list', null, { root: true })
@@ -61,12 +59,6 @@ export const actions = {
     commit('cml/corpus/reset', null, { root: true })
     commit('cml/medias/reset', null, { root: true })
     commit('cml/layers/reset', null, { root: true })
-  },
-
-  sync ({ dispatch }) {
-    dispatch('cml/users/list', null, { root: true })
-    dispatch('cml/groups/list', null, { root: true })
-    dispatch('cml/corpus/list', null, { root: true })
   }
 }
 

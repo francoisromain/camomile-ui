@@ -3,27 +3,8 @@ export const state = {
 }
 
 export const actions = {
-  all ({ state, dispatch, commit, rootState }) {
-    Promise.all([
-      ...['users', 'groups', 'corpus'].map(
-        type =>
-          new Promise((resolve, reject) =>
-            dispatch(`cml/${type}/list`, {}, { root: true })
-              .then(r => resolve(r))
-              .catch(e => reject(e))
-          )
-      ),
-      ...['medias', 'layers'].map(
-        type =>
-          new Promise((resolve, reject) =>
-            dispatch(`cml/${type}/list`, rootState.cml.corpus.id, {
-              root: true
-            })
-              .then(r => resolve(r))
-              .catch(e => reject(e))
-          )
-      )
-    ]).then(v => {
+  all ({ dispatch }) {
+    dispatch(`cml/set`, {}, { root: true }).then(r => {
       dispatch('cml/messages/success', 'Synced with server', { root: true })
     })
   }
