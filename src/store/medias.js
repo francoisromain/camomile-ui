@@ -1,4 +1,4 @@
-import { api } from '../config'
+import api from './_api'
 import { mediaFormat } from './_helpers'
 
 export const state = {

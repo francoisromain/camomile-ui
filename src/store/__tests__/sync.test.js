@@ -1,14 +1,13 @@
 import { createLocalVue } from 'vue-test-utils'
 import Vuex from 'vuex'
-import { actions, getters, mutations } from '../src/store/sync'
+import { actions, getters, mutations } from '../sync'
 
 const localVue = createLocalVue()
-
 localVue.use(Vuex)
 
-const { start, stop } = mutations
-
 describe('store sync mutations', () => {
+  const { start, stop } = mutations
+
   const state = { list: [] }
 
   it('starts', () => {
@@ -23,9 +22,9 @@ describe('store sync mutations', () => {
   })
 })
 
-const { all } = actions
-
 describe('store sync actions', () => {
+  const { all } = actions
+
   it('dispatchs all', () => {
     const state = {
       message: ''

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { api } from '../config'
+import api from './_api'
 
 export const state = {
   list: [],

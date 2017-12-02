@@ -1,4 +1,4 @@
-import { api } from '../config'
+import api from './_api'
 import { userFormat } from './_helpers'
 
 export const state = {
@@ -62,7 +62,7 @@ export const actions = {
       .deleteUser(user.id)
       .then(r => {
         commit('cml/sync/stop', 'usersRemove', { root: true })
-        commit('remove', user)
+        commit('remove', user.id)
         commit('cml/corpus/userRemove', user.id, { root: true })
         dispatch('cml/messages/success', 'User removed', { root: true })
 
@@ -77,29 +77,12 @@ export const actions = {
       })
   },
 
-  get ({ commit }, userId) {
-    commit('cml/sync/start', 'usersGet', { root: true })
-    return api
-      .getUser(userId)
-      .then(r => {
-        commit('cml/sync/stop', 'usersRemove', { root: true })
-        const user = userFormat(r)
-
-        return user
-      })
-      .catch(e => {
-        commit('cml/sync/stop', 'usersRemove', { root: true })
-        console.log(e)
-
-        throw e
-      })
-  },
-
   list ({ commit }) {
     commit('cml/sync/start', 'usersList', { root: true })
     return api
       .getUsers()
       .then(r => {
+        console.log(r)
         commit('cml/sync/stop', 'usersList', { root: true })
         const users = r.map(user => userFormat(user))
         commit('list', users)
@@ -117,8 +100,8 @@ export const actions = {
 export const getters = {
   permissions: state => permissions => {
     return state.list.reduce(
-      (res, element) =>
-        Object.assign(res, {
+      (obj, element) =>
+        Object.assign(obj, {
           [element.id]:
             permissions && permissions[element.id] ? permissions[element.id] : 0
         }),
@@ -133,18 +116,15 @@ export const mutations = {
   },
 
   add (state, user) {
-    const userExisting = state.list.find(u => u.id === user.id)
-    if (!userExisting) {
-      state.list.push(user)
-    }
+    state.list.push(user)
   },
 
   update (state, user) {
     Object.assign(state.list.find(u => u.id === user.id), user)
   },
 
-  remove (state, user) {
-    const index = state.list.findIndex(u => u.id === user.id)
+  remove (state, userId) {
+    const index = state.list.findIndex(u => u.id === userId)
     if (index !== -1) {
       state.list.splice(index, 1)
     }
