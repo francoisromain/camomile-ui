@@ -175,7 +175,7 @@
   "jest": {
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",
-      "^.+\\.(css)$": "<rootDir>/test/mocks/css.js"
+      "^.+\\.(css)$": "<rootDir>/src/__mocks__/css.js"
     },
     "moduleFileExtensions": ["js", "json", "vue"],
     "transform": {
@@ -184,7 +184,7 @@
     },
     "mapCoverage": true,
     "snapshotSerializers": ["<rootDir>/node_modules/jest-serializer-vue"],
-    "roots": ["<rootDir>/src/", "<rootDir>/tests/"]
+    "roots": ["<rootDir>/src/"]
   },
   "postcss": {
     "plugins": {

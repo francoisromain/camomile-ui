@@ -1,9 +1,9 @@
 import { mount, shallow, createLocalVue } from 'vue-test-utils'
 import Vuex from 'vuex'
 import { createRenderer } from 'vue-server-renderer'
-import header from '../../src/components/header/index.vue'
-import headerTitle from '../../src/components/header/title.vue'
-import headerSync from '../../src/components/header/sync.vue'
+import header from '../header/index.vue'
+import headerTitle from '../header/title.vue'
+import headerSync from '../header/sync.vue'
 
 const localVue = createLocalVue()
 
