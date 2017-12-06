@@ -1,8 +1,4 @@
-// import Camomile from '../../camomile-client-javascript' /* debug with local version */
-import Camomile from 'camomile-client'
-import camomile from './js/api' /* axios api */
-
-const config = {
+export default {
   title: 'Camomile UI',
   user: {
     name: 'root',
@@ -12,9 +8,3 @@ const config = {
   roles: ['admin', 'user'],
   axios: false
 }
-
-const api = config.axios ? camomile(config.url) : new Camomile(config.url)
-
-export default config
-
-export { api }

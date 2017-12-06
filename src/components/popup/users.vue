@@ -13,7 +13,7 @@
         <h3 class="pt-s mb-s">Users</h3>
         <ul class="list-inline">
           <li v-for="user in users" :key="user.id" class="tag" :class="{ active: userActive(user.id) }">
-            <button class="btn px-m py-xs h5 pill" @click="userToggle(user)">{{ user.name }}</button>
+            <button class="btn px-m py-xs h5 pill" @click="userToggle(user.id)">{{ user.name }}</button>
           </li>
         </ul>
       </div>
@@ -35,11 +35,11 @@ export default {
   },
 
   methods: {
-    userToggle (user) {
-      if (this.userActive(user.id)) {
-        this.$store.dispatch('cml/groups/userRemove', { user: user, group: this.group })
+    userToggle (userId) {
+      if (this.userActive(userId)) {
+        this.$store.dispatch('cml/groups/userRemove', { userId, group: this.group })
       } else {
-        this.$store.dispatch('cml/groups/userAdd', { user: user, group: this.group })
+        this.$store.dispatch('cml/groups/userAdd', { userId, group: this.group })
       }
     },
 

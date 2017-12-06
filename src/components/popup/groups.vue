@@ -36,9 +36,9 @@ export default {
   methods: {
     groupToggle (group) {
       if (this.groupActive(group.id)) {
-        this.$store.dispatch('cml/groups/userRemove', { user: this.user, group: group })
+        this.$store.dispatch('cml/groups/userRemove', { userId: this.user.id, group })
       } else {
-        this.$store.dispatch('cml/groups/userAdd', { user: this.user, group: group })
+        this.$store.dispatch('cml/groups/userAdd', { userId: this.user.id, group })
       }
     },
     groupActive (groupId) {

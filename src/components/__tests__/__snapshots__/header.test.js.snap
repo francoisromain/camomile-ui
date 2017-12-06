@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`header has not changed snapshot after login 1`] = `
+<div class="bg-inverse color-bg header">
+    <div class="container">
+        <div class="blobs">
+            <div class="blob-1-4 mb-0">
+                <!---->
+            </div>
+            <div class="blob-1-2 mb-0">
+                <div class="blobs-default">
+                    <div class="blob-default">
+                        <!---->
+                    </div>
+                    <div class="blob-auto mb-0">
+                        <!---->
+                    </div>
+                </div>
+            </div>
+            <div class="blob mb-0 flex-right">
+                <!---->
+            </div>
+        </div>
+    </div>
+</div>
+`;
+
+exports[`header has not changed snapshot before login 1`] = `
+<div class="bg-inverse color-bg header">
+    <div class="container">
+        <div class="blobs">
+            <div class="blob-1-4 mb-0">
+                <!---->
+            </div>
+            <!---->
+            <!---->
+        </div>
+    </div>
+</div>
+`;
