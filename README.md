@@ -2,6 +2,18 @@
 
 > UI Components library for [Camomile](http://camomile-project.github.io/).
 
+[![npm version][npm-img]][npm] [![Build Status][ci-img]][ci]
+[![Dependency Status][dep-img]][dep]
+
+[![NPM](https://nodei.co/npm/@camomile/camomile-ui.png)](https://nodei.co/npm/@camomile/camomile-ui/)
+
+[ci-img]: https://travis-ci.org/francoisromain/camomile-ui.svg
+[ci]: https://travis-ci.org/francoisromain/camomile-ui
+[npm-img]: https://badge.fury.io/js/%40camomile%2Fcamomile-ui.svg
+[npm]: https://badge.fury.io/js/@camomile/camomile-ui
+[dep-img]: https://david-dm.org/francoisromain/camomile-ui.svg
+[dep]: https://david-dm.org/francoisromain/camomile-ui
+
 ## Credits
 
 #### Production
@@ -32,6 +44,9 @@ npm run dev
 
 # Build for production with minification.
 npm run dist
+
+# Run tests
+npm run test
 ```
 
 ---
