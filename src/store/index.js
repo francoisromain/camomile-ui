@@ -75,10 +75,10 @@ export default new Vuex.Store({
   modules: {
     cml: {
       namespaced: true,
-      modules,
       state,
       actions,
-      mutations
+      mutations,
+      modules
     }
   }
 })

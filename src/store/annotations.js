@@ -23,18 +23,17 @@ export const actions = {
           mediaId: r.id_medium || null
         }
         commit('add', annotation)
-        dispatch('cml/messages/success', 'Annotation added.', { root: true })
+        dispatch('cml/messages/success', 'Annotation added', { root: true })
         dispatch('set', annotation.id)
 
         return annotation
       })
       .catch(e => {
         commit('cml/sync/stop', 'annotationsAdd', { root: true })
-        console.log(e)
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 
@@ -50,10 +49,11 @@ export const actions = {
         return r
       })
       .catch(e => {
-        console.log(e)
-        dispatch('cml/messages/error', e, { root: true })
+        commit('cml/sync/stop', 'annotationsRemove', { root: true })
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 
@@ -72,10 +72,11 @@ export const actions = {
         return r
       })
       .catch(e => {
-        console.log(e)
-        dispatch('cml/messages/error', e, { root: true })
+        commit('cml/sync/stop', 'annotationsUpdate', { root: true })
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 

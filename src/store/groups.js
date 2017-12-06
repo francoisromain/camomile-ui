@@ -21,7 +21,6 @@ export const actions = {
       })
       .catch(e => {
         commit('cml/sync/stop', 'groupsAdd', { root: true })
-        console.log(e)
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -35,7 +34,7 @@ export const actions = {
       .deleteGroup(group.id)
       .then(r => {
         commit('cml/sync/stop', 'groupsRemove', { root: true })
-        commit('remove', group)
+        commit('remove', group.id)
         commit('cml/corpus/groupRemove', group.id, { root: true })
         dispatch('cml/messages/success', 'Group removed', { root: true })
 
@@ -43,10 +42,10 @@ export const actions = {
       })
       .catch(e => {
         commit('cml/sync/stop', 'groupsRemove', { root: true })
-        console.log(e)
-        dispatch('cml/messages/error', e, { root: true })
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 
@@ -71,23 +70,6 @@ export const actions = {
       })
   },
 
-  get ({ commit, dispatch, state, rootState }, groupId) {
-    commit('cml/sync/start', 'groupsGet', { root: true })
-    return api
-      .getGroup(groupId)
-      .then(r => {
-        commit('cml/sync/stop', 'groupsGet', { root: true })
-        const group = groupFormat(r)
-        return group
-      })
-      .catch(e => {
-        commit('cml/sync/stop', 'groupsGet', { root: true })
-        console.log(e)
-
-        throw e
-      })
-  },
-
   list ({ commit, dispatch, state, rootState }) {
     commit('cml/sync/start', 'groupsList', { root: true })
     return api
@@ -107,10 +89,10 @@ export const actions = {
       })
   },
 
-  userAdd ({ commit, dispatch, state, rootState }, { user, group }) {
+  userAdd ({ commit, dispatch, state, rootState }, { userId, group }) {
     commit('cml/sync/start', 'groupsUserAdd', { root: true })
     return api
-      .addUserToGroup(user.id, group.id)
+      .addUserToGroup(userId, group.id)
       .then(r => {
         commit('cml/sync/stop', 'groupsUserAdd', { root: true })
         const group = groupFormat(r)
@@ -118,7 +100,7 @@ export const actions = {
         dispatch('cml/messages/success', 'User added to group', {
           root: true
         })
-        if (user.id === rootState.cml.user.id) {
+        if (userId === rootState.cml.user.id) {
           commit('cml/user/groupAdd', group.id, { root: true })
           dispatch('cml/corpus/list', null, {
             root: true
@@ -136,10 +118,10 @@ export const actions = {
       })
   },
 
-  userRemove ({ commit, dispatch, state, rootState }, { user, group }) {
+  userRemove ({ commit, dispatch, state, rootState }, { userId, group }) {
     commit('cml/sync/start', 'groupsUserRemove', { root: true })
     return api
-      .removeUserFromGroup(user.id, group.id)
+      .removeUserFromGroup(userId, group.id)
       .then(r => {
         commit('cml/sync/stop', 'groupsUserRemove', { root: true })
         const group = groupFormat(r)
@@ -147,7 +129,7 @@ export const actions = {
         dispatch('cml/messages/success', 'User removed from group', {
           root: true
         })
-        if (user.id === rootState.cml.user.id) {
+        if (userId === rootState.cml.user.id) {
           commit('cml/user/groupRemove', group.id, { root: true })
           dispatch('cml/corpus/list', null, {
             root: true
@@ -169,10 +151,10 @@ export const actions = {
 export const getters = {
   permissions: state => permissions => {
     return state.list.reduce(
-      (res, element) =>
-        Object.assign(res, {
-          [element.id]:
-            permissions && permissions[element.id] ? permissions[element.id] : 0
+      (p, group) =>
+        Object.assign(p, {
+          [group.id]:
+            permissions && permissions[group.id] ? permissions[group.id] : 0
         }),
       {}
     )
@@ -185,22 +167,15 @@ export const mutations = {
   },
 
   add (state, group) {
-    console.log('group add', group)
-    const groupExisting = state.list.find(g => g.id === group.id)
-    if (!groupExisting) {
-      state.list.push(group)
-    }
+    state.list.push(group)
   },
 
   update (state, group) {
     Object.assign(state.list.find(g => g.id === group.id), group)
   },
 
-  remove (state, group) {
-    const index = state.list.findIndex(g => g.id === group.id)
-    if (index !== -1) {
-      state.list.splice(index, 1)
-    }
+  remove (state, groupId) {
+    state.list = state.list.filter(g => g.id !== groupId)
   },
 
   list (state, groups) {

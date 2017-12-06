@@ -94,6 +94,14 @@ export const getters = {
     return isAdmin || isInAdminGroup
   },
 
+  isCurrentUser: state => userId => {
+    return state.id === userId
+  },
+
+  isInGroup: state => groupId => {
+    return state.groupIds.indexOf(groupId) !== -1
+  },
+
   permission: state => ({ users = {}, groups = {} }) => {
     const permissionUser =
       (Object.keys(users).find(userId => userId === state.id) &&

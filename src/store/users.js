@@ -82,7 +82,6 @@ export const actions = {
     return api
       .getUsers()
       .then(r => {
-        console.log(r)
         commit('cml/sync/stop', 'usersList', { root: true })
         const users = r.map(user => userFormat(user))
         commit('list', users)
@@ -100,10 +99,10 @@ export const actions = {
 export const getters = {
   permissions: state => permissions => {
     return state.list.reduce(
-      (obj, element) =>
-        Object.assign(obj, {
-          [element.id]:
-            permissions && permissions[element.id] ? permissions[element.id] : 0
+      (p, user) =>
+        Object.assign(p, {
+          [user.id]:
+            permissions && permissions[user.id] ? permissions[user.id] : 0
         }),
       {}
     )
@@ -124,10 +123,7 @@ export const mutations = {
   },
 
   remove (state, userId) {
-    const index = state.list.findIndex(u => u.id === userId)
-    if (index !== -1) {
-      state.list.splice(index, 1)
-    }
+    state.list = state.list.filter(u => u.id !== userId)
   },
 
   list (state, users) {

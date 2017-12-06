@@ -39,18 +39,17 @@ export const actions = {
         layer.permissions.users[rootState.cml.user.id] = 3
 
         commit('add', layer)
-        dispatch('cml/messages/success', 'Layer added.', { root: true })
+        dispatch('cml/messages/success', 'Layer added', { root: true })
         dispatch('set', layer.id)
 
         return layer
       })
       .catch(e => {
         commit('cml/sync/stop', 'layersAdd', { root: true })
-        console.log(e)
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 
@@ -66,10 +65,11 @@ export const actions = {
         return r
       })
       .catch(e => {
-        console.log(e)
-        dispatch('cml/messages/error', e, { root: true })
+        commit('cml/sync/stop', 'layersRemove', { root: true })
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 
@@ -93,10 +93,11 @@ export const actions = {
         return r
       })
       .catch(e => {
-        console.log(e)
-        dispatch('cml/messages/error', e, { root: true })
+        commit('cml/sync/stop', 'layersUpdate', { root: true })
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 
@@ -130,14 +131,13 @@ export const actions = {
       })
       .catch(e => {
         commit('cml/sync/stop', 'layersList', { root: true })
-        console.log(e)
 
         throw e
       })
   },
 
   groupPermissionSet (
-    { commit, dispatch, rootState },
+    { commit, dispatch, rootState, rootGetters },
     { layerId, groupId, permission }
   ) {
     commit('cml/sync/start', 'layersGroupPermissionSet', { root: true })
@@ -154,8 +154,12 @@ export const actions = {
           root: true
         })
 
-        if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
-          dispatch('currentUserIsAdminTest', p)
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](p)
+        ) {
+          dispatch('list', rootState.cml.corpus.id)
+          commit('cml/popup/close', null, { root: true })
         }
 
         return p
@@ -169,7 +173,10 @@ export const actions = {
       })
   },
 
-  groupPermissionRemove ({ commit, dispatch, rootState }, { layerId, groupId }) {
+  groupPermissionRemove (
+    { commit, dispatch, rootState, rootGetters },
+    { layerId, groupId }
+  ) {
     commit('cml/sync/start', 'layersGroupPermissionRemove', { root: true })
     return api
       .removeLayerPermissionsForGroup(layerId, groupId)
@@ -182,8 +189,12 @@ export const actions = {
           root: true
         })
 
-        if (rootState.cml.user.groupIds.indexOf(groupId) !== -1) {
-          dispatch('currentUserIsAdminTest', p)
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](p)
+        ) {
+          dispatch('list', rootState.cml.corpus.id)
+          commit('cml/popup/close', null, { root: true })
         }
 
         return p
@@ -200,7 +211,7 @@ export const actions = {
   },
 
   userPermissionSet (
-    { commit, dispatch, rootState },
+    { commit, dispatch, rootState, rootGetters },
     { layerId, userId, permission }
   ) {
     commit('cml/sync/start', 'layersUserPermissionSet', { root: true })
@@ -216,8 +227,13 @@ export const actions = {
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         })
-        if (userId === rootState.cml.user.id) {
-          dispatch('currentUserIsAdminTest', p)
+
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](p)
+        ) {
+          dispatch('list', rootState.cml.corpus.id)
+          commit('cml/popup/close', null, { root: true })
         }
 
         return p
@@ -231,7 +247,10 @@ export const actions = {
       })
   },
 
-  userPermissionRemove ({ commit, dispatch, rootState }, { layerId, userId }) {
+  userPermissionRemove (
+    { commit, dispatch, rootState, rootGetters },
+    { layerId, userId }
+  ) {
     commit('cml/sync/start', 'layersUserPermissionRemove', { root: true })
     return api
       .removeLayerPermissionsForUser(layerId, userId)
@@ -247,8 +266,12 @@ export const actions = {
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         })
-        if (userId === rootState.cml.user.id) {
-          dispatch('currentUserIsAdminTest', p)
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](p)
+        ) {
+          dispatch('list', rootState.cml.corpus.id)
+          commit('cml/popup/close', null, { root: true })
         }
 
         return p
@@ -262,16 +285,6 @@ export const actions = {
 
         throw error
       })
-  },
-
-  currentUserIsAdminTest (
-    { dispatch, commit, rootState, rootGetters },
-    permissions
-  ) {
-    if (!rootGetters['cml/user/isAdmin'](permissions)) {
-      dispatch('list', rootState.cml.corpus.id)
-      commit(`cml/popup/close`, null, { root: true })
-    }
   },
 
   set ({ state, getters, dispatch, commit }, layerId) {
