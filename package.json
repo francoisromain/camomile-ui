@@ -1,7 +1,7 @@
 {
   "name": "@camomile/camomile-ui",
   "version": "0.1.2",
-  "description": "UI Components library for Camomile",
+  "description": "UI Component library for Camomile",
   "license": "MIT",
   "homepage": "https://github.com/francoisromain/camomile-ui#readme",
   "repository": {
@@ -23,7 +23,7 @@
   "main": "dist/camomile-ui.common.js",
   "module": "dist/camomile-ui.esm.js",
   "browser": "dist/camomile-ui.umd.js",
-  "keywords": ["camomile", "collaborative", "annotation", "platform"],
+  "keywords": ["camomile", "ui", "collaborative", "annotation", "platform"],
   "scripts": {
     "test": "jest --verbose --coverage",
     "dist": "cross-env NODE_ENV=production node build/webpack.dist.js",

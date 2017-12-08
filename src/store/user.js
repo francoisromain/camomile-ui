@@ -37,7 +37,8 @@ export const actions = {
     commit('cml/sync/start', 'userSet', { root: true })
     return api
       .me()
-      .then(user => {
+      .then(r => {
+        const user = r.data
         commit('cml/sync/stop', 'userSet', { root: true })
         commit('set', user)
         dispatch('cml/set', null, { root: true })

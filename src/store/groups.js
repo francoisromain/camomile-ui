@@ -12,7 +12,7 @@ export const actions = {
       .createGroup(group.name, group.description)
       .then(r => {
         commit('cml/sync/stop', 'groupsAdd', { root: true })
-        const group = groupFormat(r)
+        const group = groupFormat(r.data)
         commit('add', group)
         commit('cml/corpus/groupAdd', group.id, { root: true })
         dispatch('cml/messages/success', 'Group added', { root: true })
@@ -55,7 +55,7 @@ export const actions = {
       .updateGroup(group.id, { description: group.description })
       .then(r => {
         commit('cml/sync/stop', 'groupsUpdate', { root: true })
-        const group = groupFormat(r)
+        const group = groupFormat(r.data)
         commit('update', group)
         dispatch('cml/messages/success', 'Group updated', { root: true })
 
@@ -76,7 +76,7 @@ export const actions = {
       .getGroups()
       .then(r => {
         commit('cml/sync/stop', 'groupsList', { root: true })
-        const groups = r.map(group => groupFormat(group))
+        const groups = r.data.map(group => groupFormat(group))
         commit('list', groups)
 
         return groups
@@ -95,7 +95,7 @@ export const actions = {
       .addUserToGroup(userId, group.id)
       .then(r => {
         commit('cml/sync/stop', 'groupsUserAdd', { root: true })
-        const group = groupFormat(r)
+        const group = groupFormat(r.data)
         commit('update', group)
         dispatch('cml/messages/success', 'User added to group', {
           root: true
@@ -124,7 +124,7 @@ export const actions = {
       .removeUserFromGroup(userId, group.id)
       .then(r => {
         commit('cml/sync/stop', 'groupsUserRemove', { root: true })
-        const group = groupFormat(r)
+        const group = groupFormat(r.data)
         commit('update', group)
         dispatch('cml/messages/success', 'User removed from group', {
           root: true

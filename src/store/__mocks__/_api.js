@@ -136,7 +136,7 @@ const api = {
   me () {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve(user)
+        resolve({ data: user })
       })
     })
   },
@@ -154,10 +154,12 @@ const api = {
       process.nextTick(() => {
         if (name && password) {
           resolve({
-            username: name,
-            description: description,
-            role: role,
-            _id: 'mocks-user-id-new'
+            data: {
+              username: name,
+              description: description,
+              role: role,
+              _id: 'mocks-user-id-new'
+            }
           })
         } else {
           reject(new Error('Incorrect name or password'))
@@ -184,10 +186,12 @@ const api = {
         const user = users.find(u => u._id === id)
         if (user) {
           resolve({
-            _id: id,
-            username: user.username,
-            description: description || user.description,
-            role: role || user.role
+            data: {
+              _id: id,
+              username: user.username,
+              description: description || user.description,
+              role: role || user.role
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -199,7 +203,7 @@ const api = {
   getUsers () {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve(users)
+        resolve({ data: users })
       })
     })
   },
@@ -209,10 +213,12 @@ const api = {
       process.nextTick(() => {
         if (name) {
           resolve({
-            name: name,
-            description: description,
-            _id: 'mocks-group-id-new',
-            users: []
+            data: {
+              name: name,
+              description: description,
+              _id: 'mocks-group-id-new',
+              users: []
+            }
           })
         } else {
           reject(new Error('Incorrect name'))
@@ -239,10 +245,12 @@ const api = {
         const group = groups.find(g => g._id === id)
         if (group) {
           resolve({
-            _id: id,
-            name: group.name,
-            description: description || group.description,
-            users: group.userIds || []
+            data: {
+              _id: id,
+              name: group.name,
+              description: description || group.description,
+              users: group.userIds || []
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -254,7 +262,7 @@ const api = {
   getGroups () {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve(groups)
+        resolve({ data: groups })
       })
     })
   },
@@ -265,10 +273,12 @@ const api = {
         const group = groups.find(g => g._id === groupId)
         if (group && userId) {
           resolve({
-            name: group.name,
-            _id: group._id,
-            descritpion: group.description,
-            users: [...group.users, userId]
+            data: {
+              name: group.name,
+              _id: group._id,
+              descritpion: group.description,
+              users: [...group.users, userId]
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -283,10 +293,12 @@ const api = {
         const group = groups.find(g => g._id === groupId)
         if (group && userId) {
           resolve({
-            name: group.name,
-            users: group.users.filter(id => id !== userId),
-            _id: group._id,
-            description: group.description
+            data: {
+              name: group.name,
+              users: group.users.filter(id => id !== userId),
+              _id: group._id,
+              description: group.description
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -300,9 +312,11 @@ const api = {
       process.nextTick(() => {
         if (name) {
           resolve({
-            name: name,
-            description: description,
-            _id: 'mocks-corpu-id-new'
+            data: {
+              name: name,
+              description: description,
+              _id: 'mocks-corpu-id-new'
+            }
           })
         } else {
           reject(new Error('Incorrect name'))
@@ -329,9 +343,11 @@ const api = {
         const corpu = corpus.find(c => c._id === id)
         if (corpu) {
           resolve({
-            _id: id,
-            name: name || corpu.name,
-            description: description || corpu.description
+            data: {
+              _id: id,
+              name: name || corpu.name,
+              description: description || corpu.description
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -343,7 +359,7 @@ const api = {
   getCorpora () {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve(corpus)
+        resolve({ data: corpus })
       })
     })
   },
@@ -355,7 +371,7 @@ const api = {
         if (corpu && groupId) {
           corpu.permissions.groups = corpu.permissions.groups || {}
           corpu.permissions.groups[groupId] = permission
-          resolve(corpu.permissions)
+          resolve({ data: corpu.permissions })
         } else {
           reject(new Error('Error'))
         }
@@ -375,7 +391,7 @@ const api = {
           ) {
             delete corpu.permissions.groups[groupId]
           }
-          resolve(corpu.permissions)
+          resolve({ data: corpu.permissions })
         } else {
           reject(new Error('Error'))
         }
@@ -390,7 +406,7 @@ const api = {
         if (corpu && userId) {
           corpu.permissions.users = corpu.permissions.users || {}
           corpu.permissions.users[userId] = permission
-          resolve(corpu.permissions)
+          resolve({ data: corpu.permissions })
         } else {
           reject(new Error('Error'))
         }
@@ -410,7 +426,7 @@ const api = {
           ) {
             delete corpu.permissions.users[userId]
           }
-          resolve(corpu.permissions)
+          resolve({ data: corpu.permissions })
         } else {
           reject(new Error('Error'))
         }
@@ -423,11 +439,13 @@ const api = {
       process.nextTick(() => {
         if (name && corpuId) {
           resolve({
-            name,
-            _id: 'mocks-media-id-new',
-            url,
-            description,
-            id_corpus: corpuId
+            data: {
+              name,
+              _id: 'mocks-media-id-new',
+              url,
+              description,
+              id_corpus: corpuId
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -454,11 +472,13 @@ const api = {
         const media = medias.filter(m => m.id === mediaId)
         if (media) {
           resolve({
-            name: name || media.name,
-            _id: mediaId,
-            url: url || media.url,
-            description: description || media.description,
-            id_corpus: media.id_corpus
+            data: {
+              name: name || media.name,
+              _id: mediaId,
+              url: url || media.url,
+              description: description || media.description,
+              id_corpus: media.id_corpus
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -470,7 +490,7 @@ const api = {
   getMedia () {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve(medias)
+        resolve({ data: medias })
       })
     })
   },
@@ -487,13 +507,15 @@ const api = {
       process.nextTick(() => {
         if (name && corpuId) {
           resolve({
-            name,
-            _id: 'mocks-layer-id-new',
-            description,
-            fragment_type: fragmentType,
-            metadata_type: metadataType,
-            annotations,
-            id_corpus: corpuId
+            data: {
+              name,
+              _id: 'mocks-layer-id-new',
+              description,
+              fragment_type: fragmentType,
+              metadata_type: metadataType,
+              annotations,
+              id_corpus: corpuId
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -520,11 +542,13 @@ const api = {
         const layer = layers.filter(l => l.id === layerId)
         if (layer) {
           resolve({
-            name: name || layer.name,
-            _id: layerId,
-            description: description || layer.description,
-            fragment_type: fragment_type || layer.fragment_type,
-            data_type: data_type || layer.data_type
+            data: {
+              name: name || layer.name,
+              _id: layerId,
+              description: description || layer.description,
+              fragment_type: fragment_type || layer.fragment_type,
+              data_type: data_type || layer.data_type
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -536,7 +560,7 @@ const api = {
   getLayers () {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve(layers)
+        resolve({ data: layers })
       })
     })
   },
@@ -548,7 +572,7 @@ const api = {
         if (layer && groupId) {
           layer.permissions.groups = layer.permissions.groups || {}
           layer.permissions.groups[groupId] = permission
-          resolve(layer.permissions)
+          resolve({ data: layer.permissions })
         } else {
           reject(new Error('Error'))
         }
@@ -568,7 +592,7 @@ const api = {
           ) {
             delete layer.permissions.groups[groupId]
           }
-          resolve(layer.permissions)
+          resolve({ data: layer.permissions })
         } else {
           reject(new Error('Error'))
         }
@@ -583,7 +607,7 @@ const api = {
         if (layer && userId) {
           layer.permissions.users = layer.permissions.users || {}
           layer.permissions.users[userId] = permission
-          resolve(layer.permissions)
+          resolve({ data: layer.permissions })
         } else {
           reject(new Error('Error'))
         }
@@ -603,7 +627,7 @@ const api = {
           ) {
             delete layer.permissions.users[userId]
           }
-          resolve(layer.permissions)
+          resolve({ data: layer.permissions })
         } else {
           reject(new Error('Error'))
         }
@@ -616,12 +640,14 @@ const api = {
       process.nextTick(() => {
         if (layerId) {
           resolve({
-            name,
-            _id: 'mocks-annotation-id-new',
-            fragment,
-            data: metadata,
-            id_medium: mediaId,
-            id_layer: layerId
+            data: {
+              name,
+              _id: 'mocks-annotation-id-new',
+              fragment,
+              data: metadata,
+              id_medium: mediaId,
+              id_layer: layerId
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -648,11 +674,13 @@ const api = {
         const annotation = annotations.filter(m => m.id === annotationId)
         if (annotation) {
           resolve({
-            _id: annotationId,
-            fragment: fragment || annotation.fragment,
-            metadata: metadata || annotation.metadata,
-            id_medium: annotation.mediaId,
-            id_layer: annotation.layerId
+            data: {
+              _id: annotationId,
+              fragment: fragment || annotation.fragment,
+              metadata: metadata || annotation.metadata,
+              id_medium: annotation.mediaId,
+              id_layer: annotation.layerId
+            }
           })
         } else {
           reject(new Error('Error'))
@@ -664,7 +692,7 @@ const api = {
   getAnnotations () {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve(annotations)
+        resolve({ data: annotations })
       })
     })
   }

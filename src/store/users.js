@@ -12,7 +12,7 @@ export const actions = {
       .createUser(user.name, user.password, user.description, user.role)
       .then(r => {
         commit('cml/sync/stop', 'usersAdd', { root: true })
-        const user = userFormat(r)
+        const user = userFormat(r.data)
         commit('add', user)
         commit('cml/corpus/userAdd', user.id, { root: true })
         dispatch('cml/messages/success', 'User added', { root: true })
@@ -38,7 +38,7 @@ export const actions = {
       })
       .then(r => {
         commit('cml/sync/stop', 'usersUpdate', { root: true })
-        const user = userFormat(r)
+        const user = userFormat(r.data)
         commit('update', user)
         if (user.name === rootState.cml.user.name) {
           commit('cml/user/set', user, { root: true })
@@ -66,7 +66,7 @@ export const actions = {
         commit('cml/corpus/userRemove', user.id, { root: true })
         dispatch('cml/messages/success', 'User removed', { root: true })
 
-        return r
+        return user.id
       })
       .catch(e => {
         commit('cml/sync/stop', 'usersRemove', { root: true })
@@ -83,7 +83,7 @@ export const actions = {
       .getUsers()
       .then(r => {
         commit('cml/sync/stop', 'usersList', { root: true })
-        const users = r.map(user => userFormat(user))
+        const users = r.data.map(user => userFormat(user))
         commit('list', users)
 
         return users

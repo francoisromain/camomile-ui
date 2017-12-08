@@ -23,17 +23,17 @@ export const actions = {
       .then(r => {
         commit('cml/sync/stop', 'layersAdd', { root: true })
         const layer = {
-          name: r.name,
-          id: r._id,
+          name: r.data.name,
+          id: r.data._id,
           permission: 3,
           permissions: {
             users: rootGetters['cml/users/permissions']({}),
             groups: rootGetters['cml/groups/permissions']({})
           },
-          description: r.description || {},
-          fragmentType: r.fragment_type || {},
-          metadataType: r.data_type || {},
-          annotations: r.annotations
+          description: r.data.description || {},
+          fragmentType: r.data.fragment_type || {},
+          metadataType: r.data.data_type || {},
+          annotations: r.data.annotations
         }
 
         layer.permissions.users[rootState.cml.user.id] = 3
@@ -84,9 +84,9 @@ export const actions = {
       })
       .then(r => {
         commit('cml/sync/stop', 'layersUpdate', { root: true })
-        layer.description = r.description || {}
-        layer.fragmentType = r.fragment_type || {}
-        layer.metadataType = r.data_type || {}
+        layer.description = r.data.description || {}
+        layer.fragmentType = r.data.fragment_type || {}
+        layer.metadataType = r.data.data_type || {}
         commit('update', layer)
         dispatch('cml/messages/success', 'Layer updated', { root: true })
 
@@ -107,7 +107,7 @@ export const actions = {
       .getLayers({ filter: { id_corpus: corpuId } })
       .then(r => {
         commit('cml/sync/stop', 'layersList', { root: true })
-        const layers = r.map(l => ({
+        const layers = r.data.map(l => ({
           name: l.name,
           id: l._id,
           description: l.description || {},
@@ -144,11 +144,12 @@ export const actions = {
     return api
       .setLayerPermissionsForGroup(layerId, groupId, permission)
       .then(p => {
+        const permissions = p.data
         commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true })
         commit('groupPermissionsUpdate', {
           layerId,
           groupId,
-          permission: (p.groups && p.groups[groupId]) || 0
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
         })
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
@@ -156,13 +157,13 @@ export const actions = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id)
           commit('cml/popup/close', null, { root: true })
         }
 
-        return p
+        return permissions
       })
       .catch(e => {
         commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true })
@@ -181,6 +182,7 @@ export const actions = {
     return api
       .removeLayerPermissionsForGroup(layerId, groupId)
       .then(p => {
+        const permissions = p.data
         commit('cml/sync/stop', 'layersGroupPermissionRemove', {
           root: true
         })
@@ -191,13 +193,13 @@ export const actions = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id)
           commit('cml/popup/close', null, { root: true })
         }
 
-        return p
+        return permissions
       })
       .catch(e => {
         commit('cml/sync/stop', 'layersGroupPermissionRemove', {
@@ -218,11 +220,12 @@ export const actions = {
     return api
       .setLayerPermissionsForUser(layerId, userId, permission)
       .then(p => {
+        const permissions = p.data
         commit('cml/sync/stop', 'layersUserPermissionSet', { root: true })
         commit('userPermissionsUpdate', {
           layerId,
           userId,
-          permission: (p.users && p.users[userId]) || 0
+          permission: (permissions.users && permissions.users[userId]) || 0
         })
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
@@ -230,13 +233,13 @@ export const actions = {
 
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id)
           commit('cml/popup/close', null, { root: true })
         }
 
-        return p
+        return permissions
       })
       .catch(e => {
         commit('cml/sync/stop', 'layersUserPermissionSet', { root: true })
@@ -255,6 +258,7 @@ export const actions = {
     return api
       .removeLayerPermissionsForUser(layerId, userId)
       .then(p => {
+        const permissions = p.data
         commit('cml/sync/stop', 'layersUserPermissionRemove', {
           root: true
         })
@@ -268,13 +272,13 @@ export const actions = {
         })
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id)
           commit('cml/popup/close', null, { root: true })
         }
 
-        return p
+        return permissions
       })
       .catch(e => {
         commit('cml/sync/stop', 'layersUserPermissionRemove', {

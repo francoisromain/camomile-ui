@@ -16,11 +16,11 @@ export const actions = {
       .then(r => {
         commit('cml/sync/stop', 'annotationsAdd', { root: true })
         const annotation = {
-          id: r._id,
-          fragment: r.fragment || {},
-          metadata: r.data || {},
-          layerId: r.id_layer,
-          mediaId: r.id_medium || null
+          id: r.data._id,
+          fragment: r.data.fragment || {},
+          metadata: r.data.data || {},
+          layerId: r.data.id_layer,
+          mediaId: r.data.id_medium || null
         }
         commit('add', annotation)
         dispatch('cml/messages/success', 'Annotation added', { root: true })
@@ -46,7 +46,7 @@ export const actions = {
         commit('remove', annotation)
         dispatch('cml/messages/success', 'Annotation removed', { root: true })
 
-        return r
+        return annotation.id
       })
       .catch(e => {
         commit('cml/sync/stop', 'annotationsRemove', { root: true })
@@ -59,17 +59,19 @@ export const actions = {
 
   update ({ commit, dispatch, state, rootState }, annotation) {
     commit('cml/sync/start', 'annotationsUpdate', { root: true })
+    console.log('anno', annotation)
     return api
       .updateAnnotation(annotation.id, {
         fragment: annotation.fragment,
-        metadata: annotation.data
+        data: annotation.metadata
       })
       .then(r => {
         commit('cml/sync/stop', 'annotationsUpdate', { root: true })
+        console.log('update annotation', r)
         commit('update', annotation)
         dispatch('cml/messages/success', 'Annotation updated', { root: true })
 
-        return r
+        return annotation
       })
       .catch(e => {
         commit('cml/sync/stop', 'annotationsUpdate', { root: true })
@@ -86,7 +88,7 @@ export const actions = {
       .getAnnotations({ filter: { id_layer: layerId } })
       .then(r => {
         commit('cml/sync/stop', 'annotationsList', { root: true })
-        const annotations = r.map(a => ({
+        const annotations = r.data.map(a => ({
           id: a._id,
           fragment: a.fragment || {},
           metadata: a.data || {},

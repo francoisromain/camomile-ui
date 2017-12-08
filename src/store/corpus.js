@@ -14,14 +14,14 @@ export const actions = {
       .then(r => {
         commit('cml/sync/stop', 'corpusAdd', { root: true })
         const corpu = {
-          name: r.name,
-          id: r._id,
+          name: r.data.name,
+          id: r.data._id,
           permission: 3,
           permissions: {
             users: rootGetters['cml/users/permissions']({}),
             groups: rootGetters['cml/groups/permissions']({})
           },
-          description: r.description
+          description: r.data.description
         }
 
         corpu.permissions.users[rootState.cml.user.id] = 3
@@ -53,7 +53,7 @@ export const actions = {
           dispatch('set')
         }
 
-        return r
+        return corpu.id
       })
       .catch(e => {
         commit('cml/sync/stop', 'corpusRemove', { root: true })
@@ -73,8 +73,8 @@ export const actions = {
       })
       .then(r => {
         commit('cml/sync/stop', 'corpusUpdate', { root: true })
-        corpu.name = r.name
-        corpu.description = r.description || {}
+        corpu.name = r.data.name
+        corpu.description = r.data.description || {}
         commit('update', corpu)
         dispatch('cml/messages/success', 'Corpus updated', { root: true })
 
@@ -95,7 +95,7 @@ export const actions = {
       .getCorpora()
       .then(r => {
         commit('cml/sync/stop', 'corpusList', { root: true })
-        const corpus = r.map(c => ({
+        const corpus = r.data.map(c => ({
           name: c.name,
           id: c._id,
           description: c.description || {},
@@ -130,11 +130,12 @@ export const actions = {
     return api
       .setCorpusPermissionsForGroup(corpuId, groupId, permission)
       .then(p => {
+        const permissions = p.data
         commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true })
         commit('groupPermissionsUpdate', {
           corpuId,
           groupId,
-          permission: (p.groups && p.groups[groupId]) || 0
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
         })
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
@@ -142,13 +143,13 @@ export const actions = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list')
           commit(`cml/popup/close`, null, { root: true })
         }
 
-        return p
+        return permissions
       })
       .catch(e => {
         commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true })
@@ -167,6 +168,7 @@ export const actions = {
     return api
       .removeCorpusPermissionsForGroup(corpuId, groupId)
       .then(p => {
+        const permissions = p.data
         commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
           root: true
         })
@@ -177,13 +179,13 @@ export const actions = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list')
           commit(`cml/popup/close`, null, { root: true })
         }
 
-        return p
+        return permissions
       })
       .catch(e => {
         commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
@@ -204,24 +206,25 @@ export const actions = {
     return api
       .setCorpusPermissionsForUser(corpuId, userId, permission)
       .then(p => {
+        const permissions = p.data
         commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true })
         commit('userPermissionsUpdate', {
           corpuId,
           userId,
-          permission: (p.users && p.users[userId]) || 0
+          permission: (permissions.users && permissions.users[userId]) || 0
         })
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         })
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list')
           commit(`cml/popup/close`, null, { root: true })
         }
 
-        return p
+        return permissions
       })
       .catch(e => {
         commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true })
@@ -237,6 +240,7 @@ export const actions = {
     return api
       .removeCorpusPermissionsForUser(corpuId, userId)
       .then(p => {
+        const permissions = p.data
         commit('cml/sync/stop', 'corpusUserPermissionRemove', { root: true })
         commit('userPermissionsUpdate', { corpuId, userId, permission: 0 })
         dispatch('cml/messages/success', 'User permissions updated', {
@@ -244,13 +248,13 @@ export const actions = {
         })
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list')
           commit(`cml/popup/close`, null, { root: true })
         }
 
-        return p
+        return permissions
       })
       .catch(e => {
         commit('cml/sync/stop', 'corpusUserPermissionRemove', {

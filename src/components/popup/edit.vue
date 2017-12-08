@@ -36,6 +36,14 @@
         <input type="text" v-model="element.url" class="input-alt" placeholder="http://…">
       </div>
     </div>
+    <div class="blobs" v-if="type === 'annotations' && !element.id">
+      <div class="blob-1-4">
+        <h4 class="pt-s mb-0">Link to media</h4>
+      </div>
+      <div class="blob-3-4 p-s">
+        <input type="checkbox" v-model="element.mediaLinked" class="select-alt">
+      </div>
+    </div>
     <object-field :name="'fragment'" :title="'Fragment'" v-if="type === 'annotations'"></object-field>
     <object-field :name="'metadata'" :title="'Meta-data'" v-if="type === 'annotations'"></object-field>
     <object-field :name="'fragmentType'" :title="'Fragment type'" v-if="type === 'layers'"></object-field>
