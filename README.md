@@ -1,6 +1,6 @@
 # Camomile UI
 
-> UI Components library for [Camomile](http://camomile-project.github.io/).
+> UI Component library for [Camomile](http://camomile-project.github.io/).
 
 [![npm version][npm-img]][npm] [![Build Status][ci-img]][ci]
 [![Dependency Status][dep-img]][dep]

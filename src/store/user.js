@@ -21,7 +21,7 @@ export const actions = {
         commit('cml/popup/close', null, { root: true })
         dispatch('set')
 
-        return r
+        return r.message
       })
       .catch(e => {
         commit('cml/sync/stop', 'userLogin', { root: true })
@@ -37,7 +37,14 @@ export const actions = {
     commit('cml/sync/start', 'userSet', { root: true })
     return api
       .me()
-      .then(user => {
+      .then(r => {
+        const user = {
+          id: r.data._id,
+          name: r.data.username,
+          role: r.data.role,
+          description: r.data.description || {},
+          groupIds: r.data.groups || []
+        }
         commit('cml/sync/stop', 'userSet', { root: true })
         commit('set', user)
         dispatch('cml/set', null, { root: true })
@@ -54,7 +61,7 @@ export const actions = {
       })
   },
 
-  logout ({ commit, dispatch }) {
+  logout ({ state, commit, dispatch }) {
     commit('cml/sync/start', 'userLogout', { root: true })
     return api
       .logout()
@@ -64,7 +71,7 @@ export const actions = {
         commit('cml/popup/close', null, { root: true })
         commit('cml/dropdown/close', null, { root: true })
 
-        return r.success
+        return r.message
       })
       .catch(e => {
         commit('cml/sync/stop', 'userLogout', { root: true })
@@ -127,12 +134,12 @@ export const mutations = {
   set (state, user) {
     state.isLogged = true
     state.isAdmin = user.role === 'admin'
-    state.isRoot = user.username === 'root'
-    state.id = user._id
-    state.name = user.username
+    state.isRoot = user.name === 'root'
+    state.id = user.id
+    state.name = user.name
     state.role = user.role
     state.description = user.description
-    state.groupIds = user.groups
+    state.groupIds = user.groupIds
   },
 
   reset (state) {

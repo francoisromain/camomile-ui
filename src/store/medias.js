@@ -13,7 +13,7 @@ export const actions = {
       .createMedium(corpuId, name, url, description)
       .then(r => {
         commit('cml/sync/stop', 'mediasAdd', { root: true })
-        const media = mediaFormat(r)
+        const media = mediaFormat(r.data)
         commit('add', media)
         dispatch('cml/messages/success', 'Medium added', { root: true })
         dispatch('set', media.id)
@@ -58,13 +58,13 @@ export const actions = {
       })
       .then(r => {
         commit('cml/sync/stop', 'mediasUpdate', { root: true })
-        media.name = r.name
-        media.url = r.url
-        media.description = r.description || {}
+        media.name = r.data.name
+        media.url = r.data.url
+        media.description = r.data.description || {}
         commit('update', media)
         dispatch('cml/messages/success', 'Medium updated', { root: true })
 
-        return r
+        return media
       })
       .catch(e => {
         const error = e.response ? e.response.body.error : 'Network error'
@@ -80,7 +80,7 @@ export const actions = {
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(r => {
         commit('cml/sync/stop', 'mediasList', { root: true })
-        const medias = r.map(media => {
+        const medias = r.data.map(media => {
           return mediaFormat(media)
         })
         commit('list', medias)
@@ -90,9 +90,10 @@ export const actions = {
       })
       .catch(e => {
         commit('cml/sync/stop', 'mediasList', { root: true })
-        console.log(e)
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 
