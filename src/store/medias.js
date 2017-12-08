@@ -90,9 +90,10 @@ export const actions = {
       })
       .catch(e => {
         commit('cml/sync/stop', 'mediasList', { root: true })
-        console.log(e)
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 

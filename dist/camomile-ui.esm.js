@@ -323,7 +323,7 @@ var camomile = function (url) {
   }
 };
 
-// import Camomile from '../../camomile-client-javascript' /* debug with local version */
+// import Camomile from '../../../camomile-client-javascript' /* debug with local version */
 var api = (config.axios ? camomile(config.url) : new Camomile(config.url));
 
 var state$6 = {
@@ -350,7 +350,7 @@ var actions$4 = {
         commit('cml/popup/close', null, { root: true });
         dispatch('set');
 
-        return r
+        return r.message
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'userLogin', { root: true });
@@ -369,7 +369,14 @@ var actions$4 = {
     commit('cml/sync/start', 'userSet', { root: true });
     return api
       .me()
-      .then(function (user) {
+      .then(function (r) {
+        var user = {
+          id: r.data._id,
+          name: r.data.username,
+          role: r.data.role,
+          description: r.data.description || {},
+          groupIds: r.data.groups || []
+        };
         commit('cml/sync/stop', 'userSet', { root: true });
         commit('set', user);
         dispatch('cml/set', null, { root: true });
@@ -387,6 +394,7 @@ var actions$4 = {
   },
 
   logout: function logout (ref) {
+    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
@@ -399,7 +407,7 @@ var actions$4 = {
         commit('cml/popup/close', null, { root: true });
         commit('cml/dropdown/close', null, { root: true });
 
-        return r.success
+        return r.message
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'userLogout', { root: true });
@@ -467,12 +475,12 @@ var mutations$6 = {
   set: function set (state, user) {
     state.isLogged = true;
     state.isAdmin = user.role === 'admin';
-    state.isRoot = user.username === 'root';
-    state.id = user._id;
-    state.name = user.username;
+    state.isRoot = user.name === 'root';
+    state.id = user.id;
+    state.name = user.name;
     state.role = user.role;
     state.description = user.description;
-    state.groupIds = user.groups;
+    state.groupIds = user.groupIds;
   },
 
   reset: function reset (state) {
@@ -546,7 +554,7 @@ var actions$5 = {
       .createUser(user.name, user.password, user.description, user.role)
       .then(function (r) {
         commit('cml/sync/stop', 'usersAdd', { root: true });
-        var user = userFormat(r);
+        var user = userFormat(r.data);
         commit('add', user);
         commit('cml/corpus/userAdd', user.id, { root: true });
         dispatch('cml/messages/success', 'User added', { root: true });
@@ -576,7 +584,7 @@ var actions$5 = {
       })
       .then(function (r) {
         commit('cml/sync/stop', 'usersUpdate', { root: true });
-        var user = userFormat(r);
+        var user = userFormat(r.data);
         commit('update', user);
         if (user.name === rootState.cml.user.name) {
           commit('cml/user/set', user, { root: true });
@@ -607,7 +615,7 @@ var actions$5 = {
         commit('cml/corpus/userRemove', user.id, { root: true });
         dispatch('cml/messages/success', 'User removed', { root: true });
 
-        return r
+        return user.id
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'usersRemove', { root: true });
@@ -620,21 +628,24 @@ var actions$5 = {
 
   list: function list (ref) {
     var commit = ref.commit;
+    var dispatch = ref.dispatch;
 
     commit('cml/sync/start', 'usersList', { root: true });
     return api
       .getUsers()
       .then(function (r) {
         commit('cml/sync/stop', 'usersList', { root: true });
-        var users = r.map(function (user) { return userFormat(user); });
+        var users = r.data.map(function (user) { return userFormat(user); });
         commit('list', users);
 
         return users
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'usersList', { root: true });
-        console.log(e);
-        throw e
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
+
+        throw error
       })
   }
 };
@@ -695,7 +706,7 @@ var actions$6 = {
       .createGroup(group.name, group.description)
       .then(function (r) {
         commit('cml/sync/stop', 'groupsAdd', { root: true });
-        var group = groupFormat(r);
+        var group = groupFormat(r.data);
         commit('add', group);
         commit('cml/corpus/groupAdd', group.id, { root: true });
         dispatch('cml/messages/success', 'Group added', { root: true });
@@ -748,7 +759,7 @@ var actions$6 = {
       .updateGroup(group.id, { description: group.description })
       .then(function (r) {
         commit('cml/sync/stop', 'groupsUpdate', { root: true });
-        var group = groupFormat(r);
+        var group = groupFormat(r.data);
         commit('update', group);
         dispatch('cml/messages/success', 'Group updated', { root: true });
 
@@ -774,16 +785,17 @@ var actions$6 = {
       .getGroups()
       .then(function (r) {
         commit('cml/sync/stop', 'groupsList', { root: true });
-        var groups = r.map(function (group) { return groupFormat(group); });
+        var groups = r.data.map(function (group) { return groupFormat(group); });
         commit('list', groups);
 
         return groups
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'groupsList', { root: true });
-        console.log(e);
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
 
-        throw e
+        throw error
       })
   },
 
@@ -800,7 +812,7 @@ var actions$6 = {
       .addUserToGroup(userId, group.id)
       .then(function (r) {
         commit('cml/sync/stop', 'groupsUserAdd', { root: true });
-        var group = groupFormat(r);
+        var group = groupFormat(r.data);
         commit('update', group);
         dispatch('cml/messages/success', 'User added to group', {
           root: true
@@ -836,7 +848,7 @@ var actions$6 = {
       .removeUserFromGroup(userId, group.id)
       .then(function (r) {
         commit('cml/sync/stop', 'groupsUserRemove', { root: true });
-        var group = groupFormat(r);
+        var group = groupFormat(r.data);
         commit('update', group);
         dispatch('cml/messages/success', 'User removed from group', {
           root: true
@@ -917,14 +929,14 @@ var actions$7 = {
       .then(function (r) {
         commit('cml/sync/stop', 'corpusAdd', { root: true });
         var corpu = {
-          name: r.name,
-          id: r._id,
+          name: r.data.name,
+          id: r.data._id,
           permission: 3,
           permissions: {
             users: rootGetters['cml/users/permissions']({}),
             groups: rootGetters['cml/groups/permissions']({})
           },
-          description: r.description
+          description: r.data.description || {}
         };
 
         corpu.permissions.users[rootState.cml.user.id] = 3;
@@ -960,7 +972,7 @@ var actions$7 = {
           dispatch('set');
         }
 
-        return r
+        return corpu.id
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusRemove', { root: true });
@@ -984,8 +996,8 @@ var actions$7 = {
       })
       .then(function (r) {
         commit('cml/sync/stop', 'corpusUpdate', { root: true });
-        corpu.name = r.name;
-        corpu.description = r.description || {};
+        corpu.name = r.data.name;
+        corpu.description = r.data.description || {};
         commit('update', corpu);
         dispatch('cml/messages/success', 'Corpus updated', { root: true });
 
@@ -1010,7 +1022,7 @@ var actions$7 = {
       .getCorpora()
       .then(function (r) {
         commit('cml/sync/stop', 'corpusList', { root: true });
-        var corpus = r.map(function (c) { return ({
+        var corpus = r.data.map(function (c) { return ({
           name: c.name,
           id: c._id,
           description: c.description || {},
@@ -1031,9 +1043,10 @@ var actions$7 = {
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusList', { root: true });
-        console.log(e);
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
 
-        throw e
+        throw error
       })
   },
 
@@ -1052,11 +1065,12 @@ var actions$7 = {
     return api
       .setCorpusPermissionsForGroup(corpuId, groupId, permission)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true });
         commit('groupPermissionsUpdate', {
           corpuId: corpuId,
           groupId: groupId,
-          permission: (p.groups && p.groups[groupId]) || 0
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
@@ -1064,13 +1078,13 @@ var actions$7 = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list');
           commit("cml/popup/close", null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true });
@@ -1095,6 +1109,7 @@ var actions$7 = {
     return api
       .removeCorpusPermissionsForGroup(corpuId, groupId)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
           root: true
         });
@@ -1105,13 +1120,13 @@ var actions$7 = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list');
           commit("cml/popup/close", null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
@@ -1139,24 +1154,25 @@ var actions$7 = {
     return api
       .setCorpusPermissionsForUser(corpuId, userId, permission)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true });
         commit('userPermissionsUpdate', {
           corpuId: corpuId,
           userId: userId,
-          permission: (p.users && p.users[userId]) || 0
+          permission: (permissions.users && permissions.users[userId]) || 0
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list');
           commit("cml/popup/close", null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true });
@@ -1178,6 +1194,7 @@ var actions$7 = {
     return api
       .removeCorpusPermissionsForUser(corpuId, userId)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'corpusUserPermissionRemove', { root: true });
         commit('userPermissionsUpdate', { corpuId: corpuId, userId: userId, permission: 0 });
         dispatch('cml/messages/success', 'User permissions updated', {
@@ -1185,13 +1202,13 @@ var actions$7 = {
         });
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list');
           commit("cml/popup/close", null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusUserPermissionRemove', {
@@ -1334,7 +1351,7 @@ var actions$8 = {
       .createMedium(corpuId, name, url, description)
       .then(function (r) {
         commit('cml/sync/stop', 'mediasAdd', { root: true });
-        var media = mediaFormat(r);
+        var media = mediaFormat(r.data);
         commit('add', media);
         dispatch('cml/messages/success', 'Medium added', { root: true });
         dispatch('set', media.id);
@@ -1387,13 +1404,13 @@ var actions$8 = {
       })
       .then(function (r) {
         commit('cml/sync/stop', 'mediasUpdate', { root: true });
-        media.name = r.name;
-        media.url = r.url;
-        media.description = r.description || {};
+        media.name = r.data.name;
+        media.url = r.data.url;
+        media.description = r.data.description || {};
         commit('update', media);
         dispatch('cml/messages/success', 'Medium updated', { root: true });
 
-        return r
+        return media
       })
       .catch(function (e) {
         var error = e.response ? e.response.body.error : 'Network error';
@@ -1415,7 +1432,7 @@ var actions$8 = {
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(function (r) {
         commit('cml/sync/stop', 'mediasList', { root: true });
-        var medias = r.map(function (media) {
+        var medias = r.data.map(function (media) {
           return mediaFormat(media)
         });
         commit('list', medias);
@@ -1425,9 +1442,10 @@ var actions$8 = {
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'mediasList', { root: true });
-        console.log(e);
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
 
-        throw e
+        throw error
       })
   },
 
@@ -1520,17 +1538,17 @@ var actions$9 = {
       .then(function (r) {
         commit('cml/sync/stop', 'layersAdd', { root: true });
         var layer = {
-          name: r.name,
-          id: r._id,
+          name: r.data.name,
+          id: r.data._id,
           permission: 3,
           permissions: {
             users: rootGetters['cml/users/permissions']({}),
             groups: rootGetters['cml/groups/permissions']({})
           },
-          description: r.description || {},
-          fragmentType: r.fragment_type || {},
-          metadataType: r.data_type || {},
-          annotations: r.annotations
+          description: r.data.description || {},
+          fragmentType: r.data.fragment_type || {},
+          metadataType: r.data.data_type || {},
+          annotations: r.data.annotations
         };
 
         layer.permissions.users[rootState.cml.user.id] = 3;
@@ -1591,9 +1609,9 @@ var actions$9 = {
       })
       .then(function (r) {
         commit('cml/sync/stop', 'layersUpdate', { root: true });
-        layer.description = r.description || {};
-        layer.fragmentType = r.fragment_type || {};
-        layer.metadataType = r.data_type || {};
+        layer.description = r.data.description || {};
+        layer.fragmentType = r.data.fragment_type || {};
+        layer.metadataType = r.data.data_type || {};
         commit('update', layer);
         dispatch('cml/messages/success', 'Layer updated', { root: true });
 
@@ -1618,7 +1636,7 @@ var actions$9 = {
       .getLayers({ filter: { id_corpus: corpuId } })
       .then(function (r) {
         commit('cml/sync/stop', 'layersList', { root: true });
-        var layers = r.map(function (l) { return ({
+        var layers = r.data.map(function (l) { return ({
           name: l.name,
           id: l._id,
           description: l.description || {},
@@ -1663,11 +1681,12 @@ var actions$9 = {
     return api
       .setLayerPermissionsForGroup(layerId, groupId, permission)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true });
         commit('groupPermissionsUpdate', {
           layerId: layerId,
           groupId: groupId,
-          permission: (p.groups && p.groups[groupId]) || 0
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
@@ -1675,13 +1694,13 @@ var actions$9 = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id);
           commit('cml/popup/close', null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true });
@@ -1707,6 +1726,7 @@ var actions$9 = {
     return api
       .removeLayerPermissionsForGroup(layerId, groupId)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'layersGroupPermissionRemove', {
           root: true
         });
@@ -1717,13 +1737,13 @@ var actions$9 = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id);
           commit('cml/popup/close', null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'layersGroupPermissionRemove', {
@@ -1752,11 +1772,12 @@ var actions$9 = {
     return api
       .setLayerPermissionsForUser(layerId, userId, permission)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'layersUserPermissionSet', { root: true });
         commit('userPermissionsUpdate', {
           layerId: layerId,
           userId: userId,
-          permission: (p.users && p.users[userId]) || 0
+          permission: (permissions.users && permissions.users[userId]) || 0
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
@@ -1764,13 +1785,13 @@ var actions$9 = {
 
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id);
           commit('cml/popup/close', null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'layersUserPermissionSet', { root: true });
@@ -1796,6 +1817,7 @@ var actions$9 = {
     return api
       .removeLayerPermissionsForUser(layerId, userId)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'layersUserPermissionRemove', {
           root: true
         });
@@ -1809,13 +1831,13 @@ var actions$9 = {
         });
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id);
           commit('cml/popup/close', null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'layersUserPermissionRemove', {
@@ -1940,11 +1962,11 @@ var actions$10 = {
       .then(function (r) {
         commit('cml/sync/stop', 'annotationsAdd', { root: true });
         var annotation = {
-          id: r._id,
-          fragment: r.fragment || {},
-          metadata: r.data || {},
-          layerId: r.id_layer,
-          mediaId: r.id_medium || null
+          id: r.data._id,
+          fragment: r.data.fragment || {},
+          metadata: r.data.data || {},
+          layerId: r.data.id_layer,
+          mediaId: r.data.id_medium || null
         };
         commit('add', annotation);
         dispatch('cml/messages/success', 'Annotation added', { root: true });
@@ -1975,7 +1997,7 @@ var actions$10 = {
         commit('remove', annotation);
         dispatch('cml/messages/success', 'Annotation removed', { root: true });
 
-        return r
+        return annotation.id
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'annotationsRemove', { root: true });
@@ -1996,14 +2018,14 @@ var actions$10 = {
     return api
       .updateAnnotation(annotation.id, {
         fragment: annotation.fragment,
-        metadata: annotation.data
+        data: annotation.metadata
       })
       .then(function (r) {
         commit('cml/sync/stop', 'annotationsUpdate', { root: true });
         commit('update', annotation);
         dispatch('cml/messages/success', 'Annotation updated', { root: true });
 
-        return r
+        return annotation
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'annotationsUpdate', { root: true });
@@ -2026,7 +2048,7 @@ var actions$10 = {
       .getAnnotations({ filter: { id_layer: layerId } })
       .then(function (r) {
         commit('cml/sync/stop', 'annotationsList', { root: true });
-        var annotations = r.map(function (a) { return ({
+        var annotations = r.data.map(function (a) { return ({
           id: a._id,
           fragment: a.fragment || {},
           metadata: a.data || {},
@@ -2040,9 +2062,10 @@ var actions$10 = {
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'annotationsList', { root: true });
-        console.log(e);
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
 
-        throw e
+        throw error
       })
   },
 
@@ -2345,7 +2368,7 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   }
 };
 
-var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])}],
+var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations' && !_vm.element.id)?_c('div',{staticClass:"blobs"},[_vm._m(4,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4 p-s"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.mediaLinked),expression:"element.mediaLinked"}],staticClass:"select-alt",attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.element.mediaLinked)?_vm._i(_vm.element.mediaLinked,null)>-1:(_vm.element.mediaLinked)},on:{"change":function($event){var $$a=_vm.element.mediaLinked,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.element.mediaLinked=$$a.concat([$$v]));}else{$$i>-1&&(_vm.element.mediaLinked=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.$set(_vm.element, "mediaLinked", $$c);}}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Link to media")])])}],
   name: 'camomile-popup-edit',
 
   components: {
@@ -2587,7 +2610,7 @@ var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   }
 };
 
-var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
+var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {}, role: 'user' } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
   name: 'camomile-users',
 
   data: function data () {
@@ -2711,7 +2734,7 @@ var cmlGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   }
 };
 
-var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"list-inline"},[_c('li',{staticClass:"tag right",class:{ active: _vm.isActive(1) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(1);}}},[_vm._v("R")])]),_vm._v(" "),_c('li',{staticClass:"tag right",class:{ active: _vm.isActive(2) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(2);}}},[_vm._v("W")])]),_vm._v(" "),_c('li',{staticClass:"tag right",class:{ active: _vm.isActive(3) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(3);}}},[_vm._v("A")])])])},staticRenderFns: [],
+var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"list-inline"},[_c('li',{staticClass:"tag",class:{ active: _vm.isActive(1) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(1);}}},[_vm._v("R")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(2) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(2);}}},[_vm._v("W")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(3) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(3);}}},[_vm._v("A")])])])},staticRenderFns: [],
   name: 'camomile-popup-permissions-edit',
 
   props: {

@@ -1,12 +1,12 @@
 <template>
   <ul class="list-inline">
-    <li class="tag right" :class="{ active: isActive(1) }">
+    <li class="tag" :class="{ active: isActive(1) }">
       <button class="btn px-s py-xs my--xs h5 mono pill" @click="toggle(1)">R</button>
     </li>
-    <li class="tag right" :class="{ active: isActive(2) }">
+    <li class="tag" :class="{ active: isActive(2) }">
       <button class="btn px-s py-xs my--xs h5 mono pill" @click="toggle(2)">W</button>
     </li>
-    <li class="tag right" :class="{ active: isActive(3) }">
+    <li class="tag" :class="{ active: isActive(3) }">
       <button class="btn px-s py-xs my--xs h5 mono pill" @click="toggle(3)">A</button>
     </li>
   </ul>

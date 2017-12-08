@@ -18017,7 +18017,7 @@ var _integrity = "sha1-C2GKVWW23qkL80JdBNVe3EdadWE=";
 var _location = "/tough-cookie";
 var _phantomChildren = {};
 var _requested = {"type":"range","registry":true,"raw":"tough-cookie@~2.3.3","name":"tough-cookie","escapedName":"tough-cookie","rawSpec":"~2.3.3","saveSpec":null,"fetchSpec":"~2.3.3"};
-var _requiredBy = ["/request","/request-promise"];
+var _requiredBy = ["/jsdom","/less/request","/node-sass/request","/request","/request-promise"];
 var _resolved = "https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.3.tgz";
 var _shasum = "0b618a5565b6dea90bf3425d04d55edc475a7561";
 var _spec = "tough-cookie@~2.3.3";
@@ -56066,7 +56066,7 @@ var validate$4 = function generate_validate(it, $keyword, $ruleType) {
       throw new Error('$ref: validation keywords used in schema at path "' + it.errSchemaPath + '" (see option extendRefs)');
     } else if (it.opts.extendRefs !== true) {
       $refKeywords = false;
-      console.warn('$ref: keywords ignored in schema at path "' + it.errSchemaPath + '"');
+      it.logger.warn('$ref: keywords ignored in schema at path "' + it.errSchemaPath + '"');
     }
   }
   if ($typeSchema) {
@@ -56224,7 +56224,7 @@ var validate$4 = function generate_validate(it, $keyword, $ruleType) {
     }
   } else {
     if (it.opts.v5 && it.schema.patternGroups) {
-      console.warn('keyword "patternGroups" is deprecated and disabled. Use option patternGroups: true to enable.');
+      it.logger.warn('keyword "patternGroups" is deprecated and disabled. Use option patternGroups: true to enable.');
     }
     var arr2 = it.RULES;
     if (arr2) {
@@ -56389,10 +56389,10 @@ var validate$4 = function generate_validate(it, $keyword, $ruleType) {
   }
 
   function $shouldUseRule($rule) {
-    return it.schema[$rule.keyword] !== undefined || ($rule.implements && $ruleImlementsSomeKeyword($rule));
+    return it.schema[$rule.keyword] !== undefined || ($rule.implements && $ruleImplementsSomeKeyword($rule));
   }
 
-  function $ruleImlementsSomeKeyword($rule) {
+  function $ruleImplementsSomeKeyword($rule) {
     var impl = $rule.implements;
     for (var i = 0; i < impl.length; i++)
       { if (it.schema[impl[i]] !== undefined) { return true; } }
@@ -56736,6 +56736,7 @@ function compile$1(schema, root, localRefs, baseId) {
       useCustomRule: useCustomRule,
       opts: opts,
       formats: formats,
+      logger: self.logger,
       self: self
     });
 
@@ -56778,7 +56779,7 @@ function compile$1(schema, root, localRefs, baseId) {
 
       refVal[0] = validate;
     } catch(e) {
-      console.error('Error compiling schema, function code:', sourceCode);
+      self.logger.error('Error compiling schema, function code:', sourceCode);
       throw e;
     }
 
@@ -56892,7 +56893,7 @@ function compile$1(schema, root, localRefs, baseId) {
       var valid = validateSchema(schema);
       if (!valid) {
         var message = 'keyword schema is invalid: ' + self.errorsText(validateSchema.errors);
-        if (self._opts.validateSchema == 'log') { console.error(message); }
+        if (self._opts.validateSchema == 'log') { self.logger.error(message); }
         else { throw new Error(message); }
       }
     }
@@ -57192,7 +57193,7 @@ var ref$1 = function generate_ref(it, $keyword, $ruleType) {
     if ($refVal === undefined) {
       var $message = it.MissingRefError.message(it.baseId, $schema);
       if (it.opts.missingRefs == 'fail') {
-        console.error($message);
+        it.logger.error($message);
         var $$outStack = $$outStack || [];
         $$outStack.push(out);
         out = ''; /* istanbul ignore else */
@@ -57223,7 +57224,7 @@ var ref$1 = function generate_ref(it, $keyword, $ruleType) {
           out += ' if (false) { ';
         }
       } else if (it.opts.missingRefs == 'ignore') {
-        console.warn($message);
+        it.logger.warn($message);
         if ($breakOnError) {
           out += ' if (true) { ';
         }
@@ -57830,7 +57831,7 @@ var format$2 = function generate_format(it, $keyword, $ruleType) {
     var $format = it.formats[$schema];
     if (!$format) {
       if ($unknownFormats == 'ignore') {
-        console.warn('unknown format "' + $schema + '" ignored in schema at path "' + it.errSchemaPath + '"');
+        it.logger.warn('unknown format "' + $schema + '" ignored in schema at path "' + it.errSchemaPath + '"');
         if ($breakOnError) {
           out += ' if (true) { ';
         }
@@ -59684,7 +59685,7 @@ var rules = function rules() {
 
   var ALL = [ 'type' ];
   var KEYWORDS = [
-    'additionalItems', '$schema', 'id', 'title',
+    'additionalItems', '$schema', '$id', 'id', 'title',
     'description', 'default', 'definitions'
   ];
   var TYPES = [ 'number', 'integer', 'string', 'array', 'object', 'boolean', 'null' ];
@@ -60133,6 +60134,7 @@ var keyword = {
  * @this  Ajv
  * @param {String} keyword custom keyword, should be unique (including different from all standard, custom and macro keywords).
  * @param {Object} definition keyword definition object with properties `type` (type(s) which the keyword applies to), `validate` or `compile`.
+ * @return {Ajv} this for method chaining
  */
 function addKeyword(keyword, definition) {
   /* jshint validthis: true */
@@ -60210,6 +60212,8 @@ function addKeyword(keyword, definition) {
   function checkDataType(dataType) {
     if (!RULES.types[dataType]) { throw new Error('Unknown type ' + dataType); }
   }
+
+  return this;
 }
 
 
@@ -60230,6 +60234,7 @@ function getKeyword(keyword) {
  * Remove keyword
  * @this  Ajv
  * @param {String} keyword pre-defined or custom keyword.
+ * @return {Ajv} this for method chaining
  */
 function removeKeyword(keyword) {
   /* jshint validthis: true */
@@ -60246,6 +60251,7 @@ function removeKeyword(keyword) {
       }
     }
   }
+  return this;
 }
 
 var $schema = "http://json-schema.org/draft-06/schema#";
@@ -60281,7 +60287,7 @@ var $id$1 = "http://json-schema.org/draft-06/schema#";
 var title$1 = "Core schema meta-schema";
 var definitions = {"schemaArray":{"type":"array","minItems":1,"items":{"$ref":"#"}},"nonNegativeInteger":{"type":"integer","minimum":0},"nonNegativeIntegerDefault0":{"allOf":[{"$ref":"#/definitions/nonNegativeInteger"},{"default":0}]},"simpleTypes":{"enum":["array","boolean","integer","null","number","object","string"]},"stringArray":{"type":"array","items":{"type":"string"},"uniqueItems":true,"default":[]}};
 var type$1 = ["object","boolean"];
-var properties$3 = {"$id":{"type":"string","format":"uri-reference"},"$schema":{"type":"string","format":"uri"},"$ref":{"type":"string","format":"uri-reference"},"title":{"type":"string"},"description":{"type":"string"},"default":{},"multipleOf":{"type":"number","exclusiveMinimum":0},"maximum":{"type":"number"},"exclusiveMaximum":{"type":"number"},"minimum":{"type":"number"},"exclusiveMinimum":{"type":"number"},"maxLength":{"$ref":"#/definitions/nonNegativeInteger"},"minLength":{"$ref":"#/definitions/nonNegativeIntegerDefault0"},"pattern":{"type":"string","format":"regex"},"additionalItems":{"$ref":"#"},"items":{"anyOf":[{"$ref":"#"},{"$ref":"#/definitions/schemaArray"}],"default":{}},"maxItems":{"$ref":"#/definitions/nonNegativeInteger"},"minItems":{"$ref":"#/definitions/nonNegativeIntegerDefault0"},"uniqueItems":{"type":"boolean","default":false},"contains":{"$ref":"#"},"maxProperties":{"$ref":"#/definitions/nonNegativeInteger"},"minProperties":{"$ref":"#/definitions/nonNegativeIntegerDefault0"},"required":{"$ref":"#/definitions/stringArray"},"additionalProperties":{"$ref":"#"},"definitions":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"properties":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"patternProperties":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"dependencies":{"type":"object","additionalProperties":{"anyOf":[{"$ref":"#"},{"$ref":"#/definitions/stringArray"}]}},"propertyNames":{"$ref":"#"},"const":{},"enum":{"type":"array","minItems":1,"uniqueItems":true},"type":{"anyOf":[{"$ref":"#/definitions/simpleTypes"},{"type":"array","items":{"$ref":"#/definitions/simpleTypes"},"minItems":1,"uniqueItems":true}]},"format":{"type":"string"},"allOf":{"$ref":"#/definitions/schemaArray"},"anyOf":{"$ref":"#/definitions/schemaArray"},"oneOf":{"$ref":"#/definitions/schemaArray"},"not":{"$ref":"#"}};
+var properties$3 = {"$id":{"type":"string","format":"uri-reference"},"$schema":{"type":"string","format":"uri"},"$ref":{"type":"string","format":"uri-reference"},"title":{"type":"string"},"description":{"type":"string"},"default":{},"examples":{"type":"array","items":{}},"multipleOf":{"type":"number","exclusiveMinimum":0},"maximum":{"type":"number"},"exclusiveMaximum":{"type":"number"},"minimum":{"type":"number"},"exclusiveMinimum":{"type":"number"},"maxLength":{"$ref":"#/definitions/nonNegativeInteger"},"minLength":{"$ref":"#/definitions/nonNegativeIntegerDefault0"},"pattern":{"type":"string","format":"regex"},"additionalItems":{"$ref":"#"},"items":{"anyOf":[{"$ref":"#"},{"$ref":"#/definitions/schemaArray"}],"default":{}},"maxItems":{"$ref":"#/definitions/nonNegativeInteger"},"minItems":{"$ref":"#/definitions/nonNegativeIntegerDefault0"},"uniqueItems":{"type":"boolean","default":false},"contains":{"$ref":"#"},"maxProperties":{"$ref":"#/definitions/nonNegativeInteger"},"minProperties":{"$ref":"#/definitions/nonNegativeIntegerDefault0"},"required":{"$ref":"#/definitions/stringArray"},"additionalProperties":{"$ref":"#"},"definitions":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"properties":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"patternProperties":{"type":"object","additionalProperties":{"$ref":"#"},"default":{}},"dependencies":{"type":"object","additionalProperties":{"anyOf":[{"$ref":"#"},{"$ref":"#/definitions/stringArray"}]}},"propertyNames":{"$ref":"#"},"const":{},"enum":{"type":"array","minItems":1,"uniqueItems":true},"type":{"anyOf":[{"$ref":"#/definitions/simpleTypes"},{"type":"array","items":{"$ref":"#/definitions/simpleTypes"},"minItems":1,"uniqueItems":true}]},"format":{"type":"string"},"allOf":{"$ref":"#/definitions/schemaArray"},"anyOf":{"$ref":"#/definitions/schemaArray"},"oneOf":{"$ref":"#/definitions/schemaArray"},"not":{"$ref":"#"}};
 var jsonSchemaDraft06 = {
 	$schema: $schema$1,
 	$id: $id$1,
@@ -60346,6 +60352,7 @@ var META_SUPPORT_DATA = ['/properties'];
 function Ajv(opts) {
   if (!(this instanceof Ajv)) { return new Ajv(opts); }
   opts = this._opts = util$7.copy(opts) || {};
+  setLogger(this);
   this._schemas = {};
   this._refs = {};
   this._fragments = {};
@@ -60419,13 +60426,14 @@ function compile(schema, _meta) {
  * @param {String} key Optional schema key. Can be passed to `validate` method instead of schema object or id/ref. One schema per instance can have empty `id` and `key`.
  * @param {Boolean} _skipValidation true to skip schema validation. Used internally, option validateSchema should be used instead.
  * @param {Boolean} _meta true if schema is a meta-schema. Used internally, addMetaSchema should be used instead.
+ * @return {Ajv} this for method chaining
  */
 function addSchema(schema, key, _skipValidation, _meta) {
   var this$1 = this;
 
   if (Array.isArray(schema)){
     for (var i=0; i<schema.length; i++) { this$1.addSchema(schema[i], undefined, _skipValidation, _meta); }
-    return;
+    return this;
   }
   var id = this._getId(schema);
   if (id !== undefined && typeof id != 'string')
@@ -60433,6 +60441,7 @@ function addSchema(schema, key, _skipValidation, _meta) {
   key = resolve_1.normalizeId(key || id);
   checkUnique(this, key);
   this._schemas[key] = this._addSchema(schema, _skipValidation, _meta, true);
+  return this;
 }
 
 
@@ -60443,9 +60452,11 @@ function addSchema(schema, key, _skipValidation, _meta) {
  * @param {Object} schema schema object
  * @param {String} key optional schema key
  * @param {Boolean} skipValidation true to skip schema validation, can be used to override validateSchema option for meta-schema
+ * @return {Ajv} this for method chaining
  */
 function addMetaSchema(schema, key, skipValidation) {
   this.addSchema(schema, key, skipValidation, true);
+  return this;
 }
 
 
@@ -60462,7 +60473,7 @@ function validateSchema(schema, throwOrLogError) {
     { throw new Error('$schema must be a string'); }
   $schema = $schema || this._opts.defaultMeta || defaultMeta(this);
   if (!$schema) {
-    console.warn('meta-schema not available');
+    this.logger.warn('meta-schema not available');
     this.errors = null;
     return true;
   }
@@ -60475,7 +60486,7 @@ function validateSchema(schema, throwOrLogError) {
   finally { this._formats.uri = currentUriFormat; }
   if (!valid && throwOrLogError) {
     var message = 'schema is invalid: ' + this.errorsText();
-    if (this._opts.validateSchema == 'log') { console.error(message); }
+    if (this._opts.validateSchema == 'log') { this.logger.error(message); }
     else { throw new Error(message); }
   }
   return valid;
@@ -60542,25 +60553,26 @@ function _getSchemaObj(self, keyRef) {
  * Even if schema is referenced by other schemas it still can be removed as other schemas have local references.
  * @this   Ajv
  * @param  {String|Object|RegExp} schemaKeyRef key, ref, pattern to match key/ref or schema object
+ * @return {Ajv} this for method chaining
  */
 function removeSchema(schemaKeyRef) {
   if (schemaKeyRef instanceof RegExp) {
     _removeAllSchemas(this, this._schemas, schemaKeyRef);
     _removeAllSchemas(this, this._refs, schemaKeyRef);
-    return;
+    return this;
   }
   switch (typeof schemaKeyRef) {
     case 'undefined':
       _removeAllSchemas(this, this._schemas);
       _removeAllSchemas(this, this._refs);
       this._cache.clear();
-      return;
+      return this;
     case 'string':
       var schemaObj = _getSchemaObj(this, schemaKeyRef);
       if (schemaObj) { this._cache.del(schemaObj.cacheKey); }
       delete this._schemas[schemaKeyRef];
       delete this._refs[schemaKeyRef];
-      return;
+      return this;
     case 'object':
       var serialize = this._opts.serialize;
       var cacheKey = serialize ? serialize(schemaKeyRef) : schemaKeyRef;
@@ -60572,6 +60584,7 @@ function removeSchema(schemaKeyRef) {
         delete this._refs[id];
       }
   }
+  return this;
 }
 
 
@@ -60674,15 +60687,15 @@ function chooseGetId(opts) {
   }
 }
 
-
+/* @this   Ajv */
 function _getId(schema) {
-  if (schema.$id) { console.warn('schema $id ignored', schema.$id); }
+  if (schema.$id) { this.logger.warn('schema $id ignored', schema.$id); }
   return schema.id;
 }
 
-
+/* @this   Ajv */
 function _get$Id(schema) {
-  if (schema.id) { console.warn('schema id ignored', schema.id); }
+  if (schema.id) { this.logger.warn('schema id ignored', schema.id); }
   return schema.$id;
 }
 
@@ -60722,10 +60735,12 @@ function errorsText(errors, options) {
  * @this   Ajv
  * @param {String} name format name
  * @param {String|RegExp|Function} format string is converted to RegExp; function should return boolean (true when valid)
+ * @return {Ajv} this for method chaining
  */
 function addFormat(name, format) {
   if (typeof format == 'string') { format = new RegExp(format); }
   this._formats[name] = format;
+  return this;
 }
 
 
@@ -60771,6 +60786,22 @@ function getMetaSchemaOptions(self) {
     { delete metaOpts[META_IGNORE_OPTIONS[i]]; }
   return metaOpts;
 }
+
+
+function setLogger(self) {
+  var logger = self._opts.logger;
+  if (logger === false) {
+    self.logger = {log: noop$3, warn: noop$3, error: noop$3};
+  } else {
+    if (logger === undefined) { logger = console; }
+    if (!(typeof logger == 'object' && logger.log && logger.warn && logger.error))
+      { throw new Error('logger must implement log, warn and error methods'); }
+    self.logger = logger;
+  }
+}
+
+
+function noop$3() {}
 
 function HARError (errors) {
   var message = 'validation failed';
@@ -68278,17 +68309,17 @@ Object.keys(nativeProtocols).forEach(function (protocol) {
 
 var followRedirects_1 = followRedirects.maxRedirects;
 
-var _from$2 = "axios";
+var _from$2 = "axios@^0.17.1";
 var _id$3 = "axios@0.17.1";
 var _inBundle$2 = false;
 var _integrity$2 = "sha1-LY4+XQvb1zJ/kbyBT1xXZg+Bgk0=";
 var _location$2 = "/axios";
 var _phantomChildren$2 = {};
-var _requested$2 = {"type":"tag","registry":true,"raw":"axios","name":"axios","escapedName":"axios","rawSpec":"","saveSpec":null,"fetchSpec":"latest"};
-var _requiredBy$2 = ["#USER","/"];
+var _requested$2 = {"type":"range","registry":true,"raw":"axios@^0.17.1","name":"axios","escapedName":"axios","rawSpec":"^0.17.1","saveSpec":null,"fetchSpec":"^0.17.1"};
+var _requiredBy$2 = ["/"];
 var _resolved$2 = "https://registry.npmjs.org/axios/-/axios-0.17.1.tgz";
 var _shasum$2 = "2d8e3e5d0bdbd7327f91bc814f5c57660f81824d";
-var _spec$2 = "axios";
+var _spec$2 = "axios@^0.17.1";
 var _where$2 = "/Volumes/Fr-01-Work/Sites/camomile-ui";
 var author$2 = {"name":"Matt Zabriskie"};
 var browser$7 = {"./lib/adapters/http.js":"./lib/adapters/xhr.js"};
@@ -69169,7 +69200,7 @@ var camomile = function (url) {
   }
 };
 
-// import Camomile from '../../camomile-client-javascript' /* debug with local version */
+// import Camomile from '../../../camomile-client-javascript' /* debug with local version */
 var api = (config$1.axios ? camomile(config$1.url) : new camomileClient(config$1.url));
 
 var state$6 = {
@@ -69196,7 +69227,7 @@ var actions$4 = {
         commit('cml/popup/close', null, { root: true });
         dispatch('set');
 
-        return r
+        return r.message
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'userLogin', { root: true });
@@ -69215,7 +69246,14 @@ var actions$4 = {
     commit('cml/sync/start', 'userSet', { root: true });
     return api
       .me()
-      .then(function (user) {
+      .then(function (r) {
+        var user = {
+          id: r.data._id,
+          name: r.data.username,
+          role: r.data.role,
+          description: r.data.description || {},
+          groupIds: r.data.groups || []
+        };
         commit('cml/sync/stop', 'userSet', { root: true });
         commit('set', user);
         dispatch('cml/set', null, { root: true });
@@ -69233,6 +69271,7 @@ var actions$4 = {
   },
 
   logout: function logout (ref) {
+    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
@@ -69245,7 +69284,7 @@ var actions$4 = {
         commit('cml/popup/close', null, { root: true });
         commit('cml/dropdown/close', null, { root: true });
 
-        return r.success
+        return r.message
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'userLogout', { root: true });
@@ -69313,12 +69352,12 @@ var mutations$6 = {
   set: function set (state, user) {
     state.isLogged = true;
     state.isAdmin = user.role === 'admin';
-    state.isRoot = user.username === 'root';
-    state.id = user._id;
-    state.name = user.username;
+    state.isRoot = user.name === 'root';
+    state.id = user.id;
+    state.name = user.name;
     state.role = user.role;
     state.description = user.description;
-    state.groupIds = user.groups;
+    state.groupIds = user.groupIds;
   },
 
   reset: function reset (state) {
@@ -69392,7 +69431,7 @@ var actions$5 = {
       .createUser(user.name, user.password, user.description, user.role)
       .then(function (r) {
         commit('cml/sync/stop', 'usersAdd', { root: true });
-        var user = userFormat(r);
+        var user = userFormat(r.data);
         commit('add', user);
         commit('cml/corpus/userAdd', user.id, { root: true });
         dispatch('cml/messages/success', 'User added', { root: true });
@@ -69422,7 +69461,7 @@ var actions$5 = {
       })
       .then(function (r) {
         commit('cml/sync/stop', 'usersUpdate', { root: true });
-        var user = userFormat(r);
+        var user = userFormat(r.data);
         commit('update', user);
         if (user.name === rootState.cml.user.name) {
           commit('cml/user/set', user, { root: true });
@@ -69453,7 +69492,7 @@ var actions$5 = {
         commit('cml/corpus/userRemove', user.id, { root: true });
         dispatch('cml/messages/success', 'User removed', { root: true });
 
-        return r
+        return user.id
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'usersRemove', { root: true });
@@ -69466,21 +69505,24 @@ var actions$5 = {
 
   list: function list (ref) {
     var commit = ref.commit;
+    var dispatch = ref.dispatch;
 
     commit('cml/sync/start', 'usersList', { root: true });
     return api
       .getUsers()
       .then(function (r) {
         commit('cml/sync/stop', 'usersList', { root: true });
-        var users = r.map(function (user) { return userFormat(user); });
+        var users = r.data.map(function (user) { return userFormat(user); });
         commit('list', users);
 
         return users
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'usersList', { root: true });
-        console.log(e);
-        throw e
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
+
+        throw error
       })
   }
 };
@@ -69541,7 +69583,7 @@ var actions$6 = {
       .createGroup(group.name, group.description)
       .then(function (r) {
         commit('cml/sync/stop', 'groupsAdd', { root: true });
-        var group = groupFormat(r);
+        var group = groupFormat(r.data);
         commit('add', group);
         commit('cml/corpus/groupAdd', group.id, { root: true });
         dispatch('cml/messages/success', 'Group added', { root: true });
@@ -69594,7 +69636,7 @@ var actions$6 = {
       .updateGroup(group.id, { description: group.description })
       .then(function (r) {
         commit('cml/sync/stop', 'groupsUpdate', { root: true });
-        var group = groupFormat(r);
+        var group = groupFormat(r.data);
         commit('update', group);
         dispatch('cml/messages/success', 'Group updated', { root: true });
 
@@ -69620,16 +69662,17 @@ var actions$6 = {
       .getGroups()
       .then(function (r) {
         commit('cml/sync/stop', 'groupsList', { root: true });
-        var groups = r.map(function (group) { return groupFormat(group); });
+        var groups = r.data.map(function (group) { return groupFormat(group); });
         commit('list', groups);
 
         return groups
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'groupsList', { root: true });
-        console.log(e);
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
 
-        throw e
+        throw error
       })
   },
 
@@ -69646,7 +69689,7 @@ var actions$6 = {
       .addUserToGroup(userId, group.id)
       .then(function (r) {
         commit('cml/sync/stop', 'groupsUserAdd', { root: true });
-        var group = groupFormat(r);
+        var group = groupFormat(r.data);
         commit('update', group);
         dispatch('cml/messages/success', 'User added to group', {
           root: true
@@ -69682,7 +69725,7 @@ var actions$6 = {
       .removeUserFromGroup(userId, group.id)
       .then(function (r) {
         commit('cml/sync/stop', 'groupsUserRemove', { root: true });
-        var group = groupFormat(r);
+        var group = groupFormat(r.data);
         commit('update', group);
         dispatch('cml/messages/success', 'User removed from group', {
           root: true
@@ -69763,14 +69806,14 @@ var actions$7 = {
       .then(function (r) {
         commit('cml/sync/stop', 'corpusAdd', { root: true });
         var corpu = {
-          name: r.name,
-          id: r._id,
+          name: r.data.name,
+          id: r.data._id,
           permission: 3,
           permissions: {
             users: rootGetters['cml/users/permissions']({}),
             groups: rootGetters['cml/groups/permissions']({})
           },
-          description: r.description
+          description: r.data.description || {}
         };
 
         corpu.permissions.users[rootState.cml.user.id] = 3;
@@ -69806,7 +69849,7 @@ var actions$7 = {
           dispatch('set');
         }
 
-        return r
+        return corpu.id
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusRemove', { root: true });
@@ -69830,8 +69873,8 @@ var actions$7 = {
       })
       .then(function (r) {
         commit('cml/sync/stop', 'corpusUpdate', { root: true });
-        corpu.name = r.name;
-        corpu.description = r.description || {};
+        corpu.name = r.data.name;
+        corpu.description = r.data.description || {};
         commit('update', corpu);
         dispatch('cml/messages/success', 'Corpus updated', { root: true });
 
@@ -69856,7 +69899,7 @@ var actions$7 = {
       .getCorpora()
       .then(function (r) {
         commit('cml/sync/stop', 'corpusList', { root: true });
-        var corpus = r.map(function (c) { return ({
+        var corpus = r.data.map(function (c) { return ({
           name: c.name,
           id: c._id,
           description: c.description || {},
@@ -69877,9 +69920,10 @@ var actions$7 = {
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusList', { root: true });
-        console.log(e);
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
 
-        throw e
+        throw error
       })
   },
 
@@ -69898,11 +69942,12 @@ var actions$7 = {
     return api
       .setCorpusPermissionsForGroup(corpuId, groupId, permission)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true });
         commit('groupPermissionsUpdate', {
           corpuId: corpuId,
           groupId: groupId,
-          permission: (p.groups && p.groups[groupId]) || 0
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
@@ -69910,13 +69955,13 @@ var actions$7 = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list');
           commit("cml/popup/close", null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true });
@@ -69941,6 +69986,7 @@ var actions$7 = {
     return api
       .removeCorpusPermissionsForGroup(corpuId, groupId)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
           root: true
         });
@@ -69951,13 +69997,13 @@ var actions$7 = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list');
           commit("cml/popup/close", null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
@@ -69985,24 +70031,25 @@ var actions$7 = {
     return api
       .setCorpusPermissionsForUser(corpuId, userId, permission)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true });
         commit('userPermissionsUpdate', {
           corpuId: corpuId,
           userId: userId,
-          permission: (p.users && p.users[userId]) || 0
+          permission: (permissions.users && permissions.users[userId]) || 0
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list');
           commit("cml/popup/close", null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true });
@@ -70024,6 +70071,7 @@ var actions$7 = {
     return api
       .removeCorpusPermissionsForUser(corpuId, userId)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'corpusUserPermissionRemove', { root: true });
         commit('userPermissionsUpdate', { corpuId: corpuId, userId: userId, permission: 0 });
         dispatch('cml/messages/success', 'User permissions updated', {
@@ -70031,13 +70079,13 @@ var actions$7 = {
         });
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list');
           commit("cml/popup/close", null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'corpusUserPermissionRemove', {
@@ -70180,7 +70228,7 @@ var actions$8 = {
       .createMedium(corpuId, name, url, description)
       .then(function (r) {
         commit('cml/sync/stop', 'mediasAdd', { root: true });
-        var media = mediaFormat(r);
+        var media = mediaFormat(r.data);
         commit('add', media);
         dispatch('cml/messages/success', 'Medium added', { root: true });
         dispatch('set', media.id);
@@ -70233,13 +70281,13 @@ var actions$8 = {
       })
       .then(function (r) {
         commit('cml/sync/stop', 'mediasUpdate', { root: true });
-        media.name = r.name;
-        media.url = r.url;
-        media.description = r.description || {};
+        media.name = r.data.name;
+        media.url = r.data.url;
+        media.description = r.data.description || {};
         commit('update', media);
         dispatch('cml/messages/success', 'Medium updated', { root: true });
 
-        return r
+        return media
       })
       .catch(function (e) {
         var error = e.response ? e.response.body.error : 'Network error';
@@ -70261,7 +70309,7 @@ var actions$8 = {
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(function (r) {
         commit('cml/sync/stop', 'mediasList', { root: true });
-        var medias = r.map(function (media) {
+        var medias = r.data.map(function (media) {
           return mediaFormat(media)
         });
         commit('list', medias);
@@ -70271,9 +70319,10 @@ var actions$8 = {
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'mediasList', { root: true });
-        console.log(e);
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
 
-        throw e
+        throw error
       })
   },
 
@@ -70366,17 +70415,17 @@ var actions$9 = {
       .then(function (r) {
         commit('cml/sync/stop', 'layersAdd', { root: true });
         var layer = {
-          name: r.name,
-          id: r._id,
+          name: r.data.name,
+          id: r.data._id,
           permission: 3,
           permissions: {
             users: rootGetters['cml/users/permissions']({}),
             groups: rootGetters['cml/groups/permissions']({})
           },
-          description: r.description || {},
-          fragmentType: r.fragment_type || {},
-          metadataType: r.data_type || {},
-          annotations: r.annotations
+          description: r.data.description || {},
+          fragmentType: r.data.fragment_type || {},
+          metadataType: r.data.data_type || {},
+          annotations: r.data.annotations
         };
 
         layer.permissions.users[rootState.cml.user.id] = 3;
@@ -70437,9 +70486,9 @@ var actions$9 = {
       })
       .then(function (r) {
         commit('cml/sync/stop', 'layersUpdate', { root: true });
-        layer.description = r.description || {};
-        layer.fragmentType = r.fragment_type || {};
-        layer.metadataType = r.data_type || {};
+        layer.description = r.data.description || {};
+        layer.fragmentType = r.data.fragment_type || {};
+        layer.metadataType = r.data.data_type || {};
         commit('update', layer);
         dispatch('cml/messages/success', 'Layer updated', { root: true });
 
@@ -70464,7 +70513,7 @@ var actions$9 = {
       .getLayers({ filter: { id_corpus: corpuId } })
       .then(function (r) {
         commit('cml/sync/stop', 'layersList', { root: true });
-        var layers = r.map(function (l) { return ({
+        var layers = r.data.map(function (l) { return ({
           name: l.name,
           id: l._id,
           description: l.description || {},
@@ -70509,11 +70558,12 @@ var actions$9 = {
     return api
       .setLayerPermissionsForGroup(layerId, groupId, permission)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true });
         commit('groupPermissionsUpdate', {
           layerId: layerId,
           groupId: groupId,
-          permission: (p.groups && p.groups[groupId]) || 0
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
@@ -70521,13 +70571,13 @@ var actions$9 = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id);
           commit('cml/popup/close', null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true });
@@ -70553,6 +70603,7 @@ var actions$9 = {
     return api
       .removeLayerPermissionsForGroup(layerId, groupId)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'layersGroupPermissionRemove', {
           root: true
         });
@@ -70563,13 +70614,13 @@ var actions$9 = {
 
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id);
           commit('cml/popup/close', null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'layersGroupPermissionRemove', {
@@ -70598,11 +70649,12 @@ var actions$9 = {
     return api
       .setLayerPermissionsForUser(layerId, userId, permission)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'layersUserPermissionSet', { root: true });
         commit('userPermissionsUpdate', {
           layerId: layerId,
           userId: userId,
-          permission: (p.users && p.users[userId]) || 0
+          permission: (permissions.users && permissions.users[userId]) || 0
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
@@ -70610,13 +70662,13 @@ var actions$9 = {
 
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id);
           commit('cml/popup/close', null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'layersUserPermissionSet', { root: true });
@@ -70642,6 +70694,7 @@ var actions$9 = {
     return api
       .removeLayerPermissionsForUser(layerId, userId)
       .then(function (p) {
+        var permissions = p.data;
         commit('cml/sync/stop', 'layersUserPermissionRemove', {
           root: true
         });
@@ -70655,13 +70708,13 @@ var actions$9 = {
         });
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](p)
+          !rootGetters['cml/user/isAdmin'](permissions)
         ) {
           dispatch('list', rootState.cml.corpus.id);
           commit('cml/popup/close', null, { root: true });
         }
 
-        return p
+        return permissions
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'layersUserPermissionRemove', {
@@ -70786,11 +70839,11 @@ var actions$10 = {
       .then(function (r) {
         commit('cml/sync/stop', 'annotationsAdd', { root: true });
         var annotation = {
-          id: r._id,
-          fragment: r.fragment || {},
-          metadata: r.data || {},
-          layerId: r.id_layer,
-          mediaId: r.id_medium || null
+          id: r.data._id,
+          fragment: r.data.fragment || {},
+          metadata: r.data.data || {},
+          layerId: r.data.id_layer,
+          mediaId: r.data.id_medium || null
         };
         commit('add', annotation);
         dispatch('cml/messages/success', 'Annotation added', { root: true });
@@ -70821,7 +70874,7 @@ var actions$10 = {
         commit('remove', annotation);
         dispatch('cml/messages/success', 'Annotation removed', { root: true });
 
-        return r
+        return annotation.id
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'annotationsRemove', { root: true });
@@ -70842,14 +70895,14 @@ var actions$10 = {
     return api
       .updateAnnotation(annotation.id, {
         fragment: annotation.fragment,
-        metadata: annotation.data
+        data: annotation.metadata
       })
       .then(function (r) {
         commit('cml/sync/stop', 'annotationsUpdate', { root: true });
         commit('update', annotation);
         dispatch('cml/messages/success', 'Annotation updated', { root: true });
 
-        return r
+        return annotation
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'annotationsUpdate', { root: true });
@@ -70872,7 +70925,7 @@ var actions$10 = {
       .getAnnotations({ filter: { id_layer: layerId } })
       .then(function (r) {
         commit('cml/sync/stop', 'annotationsList', { root: true });
-        var annotations = r.map(function (a) { return ({
+        var annotations = r.data.map(function (a) { return ({
           id: a._id,
           fragment: a.fragment || {},
           metadata: a.data || {},
@@ -70886,9 +70939,10 @@ var actions$10 = {
       })
       .catch(function (e) {
         commit('cml/sync/stop', 'annotationsList', { root: true });
-        console.log(e);
+        var error = e.response ? e.response.body.error : 'Network error';
+        dispatch('cml/messages/error', error, { root: true });
 
-        throw e
+        throw error
       })
   },
 
@@ -71191,7 +71245,7 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   }
 };
 
-var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])}],
+var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations' && !_vm.element.id)?_c('div',{staticClass:"blobs"},[_vm._m(4,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4 p-s"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.mediaLinked),expression:"element.mediaLinked"}],staticClass:"select-alt",attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.element.mediaLinked)?_vm._i(_vm.element.mediaLinked,null)>-1:(_vm.element.mediaLinked)},on:{"change":function($event){var $$a=_vm.element.mediaLinked,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.element.mediaLinked=$$a.concat([$$v]));}else{$$i>-1&&(_vm.element.mediaLinked=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.$set(_vm.element, "mediaLinked", $$c);}}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Link to media")])])}],
   name: 'camomile-popup-edit',
 
   components: {
@@ -71433,7 +71487,7 @@ var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   }
 };
 
-var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
+var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {}, role: 'user' } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
   name: 'camomile-users',
 
   data: function data () {
@@ -71557,7 +71611,7 @@ var cmlGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   }
 };
 
-var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"list-inline"},[_c('li',{staticClass:"tag right",class:{ active: _vm.isActive(1) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(1);}}},[_vm._v("R")])]),_vm._v(" "),_c('li',{staticClass:"tag right",class:{ active: _vm.isActive(2) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(2);}}},[_vm._v("W")])]),_vm._v(" "),_c('li',{staticClass:"tag right",class:{ active: _vm.isActive(3) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(3);}}},[_vm._v("A")])])])},staticRenderFns: [],
+var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"list-inline"},[_c('li',{staticClass:"tag",class:{ active: _vm.isActive(1) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(1);}}},[_vm._v("R")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(2) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(2);}}},[_vm._v("W")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(3) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(3);}}},[_vm._v("A")])])])},staticRenderFns: [],
   name: 'camomile-popup-permissions-edit',
 
   props: {

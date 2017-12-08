@@ -59,7 +59,6 @@ export const actions = {
 
   update ({ commit, dispatch, state, rootState }, annotation) {
     commit('cml/sync/start', 'annotationsUpdate', { root: true })
-    console.log('anno', annotation)
     return api
       .updateAnnotation(annotation.id, {
         fragment: annotation.fragment,
@@ -67,7 +66,6 @@ export const actions = {
       })
       .then(r => {
         commit('cml/sync/stop', 'annotationsUpdate', { root: true })
-        console.log('update annotation', r)
         commit('update', annotation)
         dispatch('cml/messages/success', 'Annotation updated', { root: true })
 
@@ -102,9 +100,10 @@ export const actions = {
       })
       .catch(e => {
         commit('cml/sync/stop', 'annotationsList', { root: true })
-        console.log(e)
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 

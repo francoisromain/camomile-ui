@@ -21,7 +21,7 @@ export const actions = {
             users: rootGetters['cml/users/permissions']({}),
             groups: rootGetters['cml/groups/permissions']({})
           },
-          description: r.data.description
+          description: r.data.description || {}
         }
 
         corpu.permissions.users[rootState.cml.user.id] = 3
@@ -116,9 +116,10 @@ export const actions = {
       })
       .catch(e => {
         commit('cml/sync/stop', 'corpusList', { root: true })
-        console.log(e)
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
 
-        throw e
+        throw error
       })
   },
 

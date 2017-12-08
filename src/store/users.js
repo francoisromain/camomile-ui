@@ -77,7 +77,7 @@ export const actions = {
       })
   },
 
-  list ({ commit }) {
+  list ({ commit, dispatch }) {
     commit('cml/sync/start', 'usersList', { root: true })
     return api
       .getUsers()
@@ -90,8 +90,10 @@ export const actions = {
       })
       .catch(e => {
         commit('cml/sync/stop', 'usersList', { root: true })
-        console.log(e)
-        throw e
+        const error = e.response ? e.response.body.error : 'Network error'
+        dispatch('cml/messages/error', error, { root: true })
+
+        throw error
       })
   }
 }

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import { actions, mutations } from '../index'
 import messages from '../messages'
 import popup from '../popup'
+import dropdown from '../dropdown'
 import sync from '../sync'
 import user from '../user'
 import groups from '../groups'
@@ -10,6 +11,7 @@ import users from '../users'
 import corpus from '../corpus'
 import medias from '../medias'
 import layers from '../layers'
+import annotations from '../annotations'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -18,11 +20,20 @@ jest.mock('../_api.js')
 
 describe('store user actions', () => {
   let store
+  const config = {
+    user: {
+      name: 'lu',
+      role: 'admin',
+      description: { desc: 'Ipsum Sit Dolor' },
+      password: 'password'
+    }
+  }
 
   beforeAll(() => {
     messages.state = {
       list: []
     }
+
     user.state = {
       id: '',
       name: '',
@@ -32,10 +43,6 @@ describe('store user actions', () => {
       isLogged: false,
       isAdmin: false,
       isRoot: false
-    }
-
-    groups.state = {
-      list: [{ id: 'mocks-group-id-1' }, { id: 'mocks-group-id-2' }]
     }
 
     store = new Vuex.Store({
@@ -48,12 +55,14 @@ describe('store user actions', () => {
             users,
             messages,
             sync,
-            corpus,
             popup,
+            dropdown,
             user,
             groups,
+            corpus,
             medias,
-            layers
+            layers,
+            annotations
           }
         }
       }
@@ -61,26 +70,134 @@ describe('store user actions', () => {
   })
 
   it('logs-in', () => {
-    const user = {
-      name: 'lu',
-      role: 'admin',
-      description: { desc: 'Ipsum Sit Dolor' },
-      password: 'password'
-    }
+    expect.assertions(1)
+    return store
+      .dispatch('cml/user/login', {
+        user: { name: config.user.name, password: config.user.password }
+      })
+      .then(r => {
+        expect(r).toBe('Authentication succeeded.')
+      })
+  })
 
-    // expect.assertions(3)
-    // return store
-    //   .dispatch('cml/user/login', {
-    //     user: { name: user.name, password: user.password }
-    //   })
-    //   .then(r => {
-    //     expect(store.state.cml.user.isLogged).toBeTruthy()
-    //     expect(store.state.cml.user.isAdmin).toBeTruthy()
-    //     expect(store.state.cml.user.isRoot).toBeFalsy()
-    //   })
+  it('logs-in (error)', () => {
+    expect.assertions(1)
+    return store
+      .dispatch('cml/user/login', {
+        user: { name: config.user.name, password: '' }
+      })
+      .catch(e => {
+        expect(e).toBe('Network error')
+      })
+  })
+
+  it('returns current user', () => {
+    expect.assertions(1)
+    return store.dispatch('cml/user/set').then(u => {
+      expect(u).toEqual({
+        name: 'lu',
+        id: 'mocks-user-id-lu',
+        role: 'admin',
+        description: {
+          desc: 'Nulla vitae elit libero, a pharetra augue.'
+        },
+        groupIds: []
+      })
+    })
+  })
+
+  it('logs-out', () => {
+    expect.assertions(1)
+    return store.dispatch('cml/user/logout').then(r => {
+      expect(r).toBe('Logout succeeded.')
+    })
+  })
+
+  it('logs-out (error)', () => {
+    expect.assertions(1)
+    return store.dispatch('cml/user/logout').catch(e => {
+      expect(e).toBe('Network error')
+    })
+  })
+
+  it('returns current user (error)', () => {
+    expect.assertions(1)
+    return store.dispatch('cml/user/set').catch(e => {
+      expect(e).toBe('Network error')
+    })
   })
 })
 
-describe('store user getters', () => {})
+describe('store user getters', () => {
+  let store
+
+  beforeEach(() => {
+    user.state = {
+      description: {},
+      groupIds: ['mocks-group-id-1'],
+      id: 'mocks-user-id-lu',
+      isAdmin: true,
+      isLogged: true,
+      isRoot: false,
+      name: 'lu',
+      role: 'admin'
+    }
+
+    store = new Vuex.Store({
+      modules: {
+        cml: {
+          namespaced: true,
+          modules: {
+            user
+          }
+        }
+      }
+    })
+  })
+
+  it('returns true if is admin', () => {
+    const permissions = {
+      users: {
+        'mocks-user-id-joe': 3,
+        'mocks-user-id-lu': 3
+      }
+    }
+
+    expect(store.getters['cml/user/isAdmin'](permissions)).toBeTruthy()
+  })
+
+  it('returns false if is not admin', () => {
+    const permissions = {
+      users: {
+        'mocks-user-id-joe': 3,
+        'mocks-user-id-lu': 2
+      }
+    }
+
+    expect(store.getters['cml/user/isAdmin'](permissions)).toBeFalsy()
+  })
+
+  it('returns true if is in admin group', () => {
+    const permissions = {
+      groups: {
+        'mocks-group-id-1': 3,
+        'mocks-group-id-2': 1
+      }
+    }
+
+    expect(store.getters['cml/user/isAdmin'](permissions)).toBeTruthy()
+  })
+
+  it('returns false if is not in admin group', () => {
+    const permissions = {
+      users: {
+        'mocks-group-id-1': 1,
+        'mocks-group-id-2': 3
+      }
+    }
+
+    expect(store.getters['cml/user/isAdmin'](permissions)).toBeFalsy()
+  })
+})
 
 describe('store users mutations', () => {})

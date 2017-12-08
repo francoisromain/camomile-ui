@@ -1,4 +1,4 @@
-const user = {
+let user = {
   username: 'lu',
   _id: 'mocks-user-id-lu',
   role: 'admin',
@@ -125,7 +125,11 @@ const api = {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (username && password) {
-          resolve()
+          resolve({
+            status: 'success',
+            data: null,
+            message: 'Authentication succeeded.'
+          })
         } else {
           reject(new Error('Incorrect username or password'))
         }
@@ -136,7 +140,11 @@ const api = {
   me () {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve({ data: user })
+        if (user) {
+          resolve({ data: user })
+        } else {
+          reject(new Error('Error'))
+        }
       })
     })
   },
@@ -144,7 +152,12 @@ const api = {
   logout () {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve()
+        if (user) {
+          user = null
+          resolve({ message: 'Logout succeeded.' })
+        } else {
+          reject(new Error('Error'))
+        }
       })
     })
   },

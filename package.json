@@ -1,6 +1,6 @@
 {
   "name": "@camomile/camomile-ui",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "UI Component library for Camomile",
   "license": "MIT",
   "homepage": "https://github.com/francoisromain/camomile-ui#readme",
@@ -23,22 +23,26 @@
   "main": "dist/camomile-ui.common.js",
   "module": "dist/camomile-ui.esm.js",
   "browser": "dist/camomile-ui.umd.js",
-  "keywords": ["camomile", "ui", "collaborative", "annotation", "platform"],
+  "keywords": [
+    "camomile",
+    "ui",
+    "collaborative",
+    "annotation",
+    "platform"
+  ],
   "scripts": {
     "test": "jest --verbose --coverage",
     "dist": "cross-env NODE_ENV=production node build/webpack.dist.js",
     "dev": "cross-env NODE_ENV=development node build/webpack.dev.js",
     "build": "rollup -c build/rollup.config.dist.js",
-    "styleguide":
-      "vue-styleguidist --config build/webpack.styleguide.config.js server",
-    "styleguide:build":
-      "vue-styleguidist --config build/webpack.styleguide.config.js build"
+    "styleguide": "vue-styleguidist --config build/webpack.styleguide.config.js server",
+    "styleguide:build": "vue-styleguidist --config build/webpack.styleguide.config.js build"
   },
   "dependencies": {
     "axios": "^0.17.1",
     "camomile-client": "^0.8.0",
     "g": "^2.0.1",
-    "npm": "^5.5.1",
+    "npm": "^5.6.0",
     "vue": "^2.5.9",
     "vuex": "^3.0.1"
   },
@@ -46,7 +50,7 @@
     "@babel/core": "^7.0.0-beta.34",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.34",
     "@babel/preset-env": "^7.0.0-beta.34",
-    "autoprefixer": "^7.2.1",
+    "autoprefixer": "^7.2.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^21.2.0",
     "babel-loader": "^8.0.0-beta.0",
@@ -54,7 +58,7 @@
     "copy-webpack-plugin": "^4.2.3",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
-    "eslint": "^4.12.1",
+    "eslint": "^4.13.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-plugin-compat": "^2.1.0",
@@ -111,7 +115,6 @@
     "postcss-typescale": "^0.1.10",
     "postcss-url": "^7.3.0",
     "progress-bar-webpack-plugin": "^1.10.0",
-    "regenerator-runtime": "^0.11.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.52.1",
     "rollup-plugin-buble": "^0.18.0",
@@ -136,7 +139,7 @@
     "vue-test-utils": "^1.0.0-beta.6",
     "webpack": "^3.10.0",
     "webpack-bundle-analyzer": "^2.9.1",
-    "webpack-dev-server": "^2.9.5",
+    "webpack-dev-server": "^2.9.7",
     "webpack-merge": "^4.1.1",
     "webpack-monitor": "^1.0.14"
   },
@@ -145,7 +148,10 @@
     "env": {
       "browser": true
     },
-    "plugins": ["html", "compat"],
+    "plugins": [
+      "html",
+      "compat"
+    ],
     "rules": {
       "compat/compat": 2,
       "arrow-parens": 0,
@@ -153,17 +159,25 @@
     }
   },
   "stylelint": {
-    "processors": ["stylelint-processor-html"],
+    "processors": [
+      "stylelint-processor-html"
+    ],
     "extends": "stylelint-config-standard",
     "rules": {
       "property-no-unknown": [
         true,
         {
-          "ignoreProperties": ["typescale", "gf", "/button-/"]
+          "ignoreProperties": [
+            "typescale",
+            "gf",
+            "/button-/"
+          ]
         }
       ]
     },
-    "ignoreFiles": ["./dist/**/*"]
+    "ignoreFiles": [
+      "./dist/**/*"
+    ]
   },
   "browserslist": [
     "Chrome >= 60",
@@ -177,14 +191,22 @@
       "^vue$": "vue/dist/vue.common.js",
       "^.+\\.(css)$": "<rootDir>/src/__mocks__/css.js"
     },
-    "moduleFileExtensions": ["js", "json", "vue"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
     },
     "mapCoverage": true,
-    "snapshotSerializers": ["<rootDir>/node_modules/jest-serializer-vue"],
-    "roots": ["<rootDir>/src/"]
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/jest-serializer-vue"
+    ],
+    "roots": [
+      "<rootDir>/src/"
+    ]
   },
   "postcss": {
     "plugins": {
