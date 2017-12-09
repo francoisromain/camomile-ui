@@ -2,17 +2,17 @@
 
 > UI Component library for [Camomile](http://camomile-project.github.io/).
 
-[![npm version][npm-img]][npm] [![Build Status][ci-img]][ci]
-[![Dependency Status][dep-img]][dep]
+[![npm version][npm-img]][npm] [![Dependency Status][dep-img]][dep]
+[![Build Status][ci-img]][ci] [![codecov][codecov-img]][codecov]
 
-[![NPM](https://nodei.co/npm/@camomile/camomile-ui.png)](https://nodei.co/npm/@camomile/camomile-ui/)
-
+[npm-img]: https://badge.fury.io/js/%40camomile%2Fcamomile-ui.svg
+[npm]: https://www.npmjs.com/package/@camomile/camomile-ui
 [ci-img]: https://travis-ci.org/francoisromain/camomile-ui.svg
 [ci]: https://travis-ci.org/francoisromain/camomile-ui
-[npm-img]: https://badge.fury.io/js/%40camomile%2Fcamomile-ui.svg
-[npm]: https://badge.fury.io/js/@camomile/camomile-ui
 [dep-img]: https://david-dm.org/francoisromain/camomile-ui.svg
 [dep]: https://david-dm.org/francoisromain/camomile-ui
+[codecov-img]: https://codecov.io/gh/francoisromain/camomile-ui/branch/master/graph/badge.svg
+[codecov]: https://codecov.io/gh/francoisromain/camomile-ui
 
 ## Credits
 
