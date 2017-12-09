@@ -1,7 +1,5 @@
 # Camomile UI
 
-> UI Component library for [Camomile](http://camomile-project.github.io/).
-
 [![npm version][npm-img]][npm] [![Dependency Status][dep-img]][dep]
 [![Build Status][ci-img]][ci] [![codecov][codecov-img]][codecov]
 
@@ -14,19 +12,9 @@
 [codecov-img]: https://codecov.io/gh/francoisromain/camomile-ui/branch/master/graph/badge.svg
 [codecov]: https://codecov.io/gh/francoisromain/camomile-ui
 
-## Credits
-
-#### Production
-
-* Hervé Bredin, [LIMSI, CNRS](https://www.limsi.fr)
-
-#### Development
-
-* [François Romain](http://francoisromain.com)
+> UI component library for [Camomile](http://camomile-project.github.io/).
 
 ---
-
-Camomile UI is a UI library for [camomile](https://github.com/camomile-project).
 
 To start using this library, you can use
 [camomile-ui-boilerplate](https://github.com/francoisromain/camomile-ui-boilerplate).
@@ -83,3 +71,15 @@ Start the server (from the _camomile-ui_ directory):
 ```bash
 export CMML_DB=../camomile-data/mongodb/files && export CMML_LOGS=../camomile-data/camomile/logs && export CMML_MEDIA=../camomile-data/media && export CMML_UPLOAD=../camomile-data/upload && export CMML_PORT=3000 && export CMML_PASSWORD=roO7p4s5wOrD && docker-compose -f ../camomile-server/docker-compose.dev.yml up --build -d
 ```
+
+---
+
+## Credits
+
+#### Production
+
+* Hervé Bredin, [LIMSI, CNRS](https://www.limsi.fr)
+
+#### Development
+
+* [François Romain](http://francoisromain.com)
