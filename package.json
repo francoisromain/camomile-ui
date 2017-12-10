@@ -25,7 +25,8 @@
   "browser": "dist/camomile-ui.umd.js",
   "keywords": ["camomile", "ui", "collaborative", "annotation", "platform"],
   "scripts": {
-    "test": "jest --verbose --coverage && codecov",
+    "jest": "jest --verbose --coverage --watch",
+    "test": "jest && codecov",
     "dist": "cross-env NODE_ENV=production node build/webpack.dist.js",
     "dev": "cross-env NODE_ENV=development node build/webpack.dev.js",
     "build": "rollup -c build/rollup.config.dist.js",
@@ -173,7 +174,7 @@
   ],
   "jest": {
     "moduleNameMapper": {
-      "^vue$": "vue/dist/vue.common.js",
+      "^vue$": "vue/dist/vue.runtime.min.js",
       "^.+\\.(css)$": "<rootDir>/src/__mocks__/css.js"
     },
     "moduleFileExtensions": ["js", "json", "vue"],

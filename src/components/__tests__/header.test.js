@@ -1,25 +1,76 @@
 import { mount, shallow, createLocalVue } from 'vue-test-utils'
-import Vuex from 'vuex'
 import { createRenderer } from 'vue-server-renderer'
+import Vuex from 'vuex'
 import header from '../header/index.vue'
 import headerTitle from '../header/title.vue'
 import headerSync from '../header/sync.vue'
+import headerUserbutton from '../header/userbutton.vue'
 
 const localVue = createLocalVue()
+const renderer = createRenderer()
 
 localVue.use(Vuex)
 
 // Header
 describe('header', () => {
-  const state = { cml: { user: { isLogged: false } } }
-  const store = new Vuex.Store({ state })
-  beforeEach(() => store)
+  let store
+  const state = {
+    config: {
+      title: 'Camomile-ui'
+    }
+  }
+
+  const user = {
+    namespaced: true,
+    state: {
+      isLogged: false,
+      name: 'lu'
+    }
+  }
+
+  const dropdown = {
+    namespaced: true,
+    state: {
+      visible: false
+    },
+    mutations: {
+      open: jest.fn(),
+      close: jest.fn()
+    }
+  }
+
+  const sync = {
+    namespaced: true,
+    actions: {
+      all: jest.fn()
+    }
+  }
+
+  beforeEach(() => {
+    store = new Vuex.Store({
+      modules: {
+        cml: {
+          namespaced: true,
+          state,
+          modules: {
+            user,
+            dropdown,
+            sync
+          }
+        }
+      }
+    })
+  })
 
   it('renders the correct markup before login', () => {
-    const wrapper = shallow(header, { store, localVue })
-    expect(wrapper.html()).toContain(
+    const headerWrapper = shallow(header, { store, localVue })
+    const titleWrapper = mount(headerTitle, { store, localVue })
+
+    expect(headerWrapper.html()).toContain(
       '<div class="bg-inverse color-bg header"><div class="container"><div class="blobs"><div class="blob-1-4 mb-0"><!----></div> <!----> <!----></div></div></div>'
     )
+
+    expect(titleWrapper.html()).toBe('<h1 class="mb-0">Camomile-ui</h1>')
   })
 
   it('renders the correct markup after login', () => {
@@ -32,7 +83,6 @@ describe('header', () => {
 
   it('has not changed snapshot before login', () => {
     store.state.cml.user.isLogged = false
-    const renderer = createRenderer()
     const wrapper = shallow(header, { store, localVue })
     renderer.renderToString(wrapper.vm, (err, str) => {
       if (err) throw err
@@ -41,38 +91,33 @@ describe('header', () => {
   })
 
   it('has not changed snapshot after login', () => {
-    store.state.cml.user.isLogged = true
-    const renderer = createRenderer()
     const wrapper = shallow(header, { store, localVue })
+    store.state.cml.user.isLogged = true
     renderer.renderToString(wrapper.vm, (err, str) => {
       if (err) throw err
       expect(str).toMatchSnapshot()
     })
   })
-})
 
-describe('header title', () => {
-  const state = { cml: { config: { title: 'Camomile-ui' } } }
-  const store = new Vuex.Store({ state })
-  beforeEach(() => store)
-
-  it('renders the correct markup', () => {
-    const wrapper = mount(headerTitle, { store, localVue })
-    expect(wrapper.html()).toBe('<h1 class="mb-0">Camomile-ui</h1>')
-  })
-})
-
-describe('header sync', () => {
-  const getters = { 'cml/sync/active': () => false }
-  const actions = { 'cml/sync/all': jest.fn() }
-  const store = new Vuex.Store({ getters, actions })
-
-  beforeEach(() => store)
-
-  it('calls store action "cml/sync/all" when button is clicked', () => {
+  it('syncs all list when button is clicked', () => {
     const wrapper = mount(headerSync, { store, localVue })
     const button = wrapper.find('button')
     button.trigger('click')
-    expect(actions['cml/sync/all']).toHaveBeenCalled()
+    expect(sync.actions.all).toHaveBeenCalled()
+  })
+
+  it('opens dropdown when user clicks on user button', () => {
+    const wrapper = mount(headerUserbutton, { store, localVue })
+    const button = wrapper.find('button')
+    button.trigger('click')
+    expect(dropdown.mutations.open).toHaveBeenCalled()
+  })
+
+  it('close dropdown when user clicks again on user button', () => {
+    const wrapper = mount(headerUserbutton, { store, localVue })
+    const button = wrapper.find('button')
+    store.state.cml.dropdown.visible = true
+    button.trigger('click')
+    expect(dropdown.mutations.close).toHaveBeenCalled()
   })
 })
