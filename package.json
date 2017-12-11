@@ -1,6 +1,6 @@
 {
   "name": "@camomile/camomile-ui",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "UI Component library for Camomile",
   "license": "MIT",
   "homepage": "https://github.com/francoisromain/camomile-ui#readme",
@@ -25,7 +25,8 @@
   "browser": "dist/camomile-ui.umd.js",
   "keywords": ["camomile", "ui", "collaborative", "annotation", "platform"],
   "scripts": {
-    "test": "jest --verbose --coverage && codecov",
+    "jest": "jest --verbose --coverage --watch",
+    "test": "jest --verbose && codecov",
     "dist": "cross-env NODE_ENV=production node build/webpack.dist.js",
     "dev": "cross-env NODE_ENV=development node build/webpack.dev.js",
     "build": "rollup -c build/rollup.config.dist.js",
@@ -37,7 +38,6 @@
   "dependencies": {
     "axios": "^0.17.1",
     "camomile-client": "^0.8.0",
-    "npm": "^5.6.0",
     "vue": "^2.5.9",
     "vuex": "^3.0.1"
   },
@@ -173,7 +173,7 @@
   ],
   "jest": {
     "moduleNameMapper": {
-      "^vue$": "vue/dist/vue.common.js",
+      "^vue$": "vue/dist/vue.runtime.min.js",
       "^.+\\.(css)$": "<rootDir>/src/__mocks__/css.js"
     },
     "moduleFileExtensions": ["js", "json", "vue"],

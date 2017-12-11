@@ -12,10 +12,12 @@ export const mutations = {
     state.config = config
     state.element = JSON.parse(JSON.stringify(element))
   },
+
   close (state) {
     state.visible = false
     state.config = {}
   },
+
   fieldUpdate (state, { name, value }) {
     Vue.set(state.element, name, value)
   }

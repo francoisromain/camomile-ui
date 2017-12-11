@@ -29,16 +29,19 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch }, media) {
+  remove ({ commit, dispatch, rootGetters }, media) {
     commit('cml/sync/start', 'mediasRemove', { root: true })
     return api
       .deleteMedium(media.id)
       .then(r => {
         commit('cml/sync/stop', 'mediasRemove', { root: true })
         commit('remove', media)
+        dispatch('cml/annotations/list', rootGetters['cml/layers/id'](), {
+          root: true
+        })
         dispatch('cml/messages/success', 'Medium removed', { root: true })
 
-        return r
+        return media.id
       })
       .catch(e => {
         const error = e.response ? e.response.body.error : 'Network error'
@@ -74,7 +77,7 @@ export const actions = {
       })
   },
 
-  list ({ state, dispatch, commit, rootState, rootGetters }, corpuId) {
+  list ({ dispatch, commit }, corpuId) {
     commit('cml/sync/start', 'mediasList', { root: true })
     return api
       .getMedia({ filter: { id_corpus: corpuId } })

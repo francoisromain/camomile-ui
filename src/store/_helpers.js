@@ -26,9 +26,13 @@ export function mediaFormat (media) {
   }
 }
 
-export function observerClean (obj) {
-  return Object.keys(obj).reduce(
-    (res, e) => Object.assign(res, { [e]: obj[e] }),
-    {}
-  )
+export function dateCurrent () {
+  return new Date().valueOf()
 }
+
+// export function observerClean (obj) {
+//   return Object.keys(obj).reduce(
+//     (res, e) => Object.assign(res, { [e]: obj[e] }),
+//     {}
+//   )
+// }

@@ -2,7 +2,7 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">Annotations</h2>
-      <button @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId, mediaId, fragment: {}, metadata: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId, mediaId, fragment: {}, metadata: {}, mediaName: mediaName(mediaId), mediaLink: true } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <div>
       <table class="table mb-0">

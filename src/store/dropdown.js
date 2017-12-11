@@ -8,6 +8,7 @@ export const mutations = {
     state.visible = false
     state.config = {}
   },
+
   open (state, config) {
     state.visible = true
     state.config = config

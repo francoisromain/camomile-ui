@@ -12,9 +12,10 @@
 [codecov-img]: https://codecov.io/gh/francoisromain/camomile-ui/branch/master/graph/badge.svg
 [codecov]: https://codecov.io/gh/francoisromain/camomile-ui
 
-> UI component library for [Camomile](http://camomile-project.github.io/).
+**UI component library for [Camomile](http://camomile-project.github.io/).**
 
----
+Camomile UI is a front end application only and requires a connection to a
+[Camomile API server](https://github.com/camomile-project/camomile-server).
 
 To start using this library, you can use
 [camomile-ui-boilerplate](https://github.com/francoisromain/camomile-ui-boilerplate).
@@ -27,21 +28,21 @@ To start using this library, you can use
 # Install dependencies.
 npm install
 
-# Serve with hot reload at localhost:8080.
+# Serve with hot reload at localhost:8080 (with Webpack).
 npm run dev
 
-# Build for production with minification.
-npm run dist
+# Build for production with minification (with Rollup).
+npm run build
 
-# Run tests
+# Run tests (with Jest and vue-test-utils).
 npm run test
 ```
 
 ---
 
-## Create a local API server
+## Create a local Camomile API server
 
-Create a local
+For development purposes, you can create a local
 [Camomile API server](https://github.com/camomile-project/camomile-server).
 
 Create one additional `camomile-data` folder next to this one, resulting in the

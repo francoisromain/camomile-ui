@@ -42,14 +42,18 @@ var state$1 = {
     width: window.innerWidth,
     height: window.innerHeight
   },
-  animations: false
+  animate: false
+};
+
+var actions$1 = {
+  set: function set (context) {
+    context.commit('viewportSet');
+    context.commit('svgSet');
+  }
 };
 
 var mutations$1 = {
-  svgStatus: function svgStatus (state, payload) {
-    state.svg[payload.type] = payload.status;
-  },
-  viewportSet: function viewportSet (state, payload) {
+  viewportSet: function viewportSet (state) {
     if (window.matchMedia('(min-width: 83.5em)').matches) {
       log.simple('Viewport', 'Large');
       state.viewport.name = 'large';
@@ -74,7 +78,7 @@ var mutations$1 = {
     state.viewport.width = window.innerWidth;
     state.viewport.height = window.innerHeight;
   },
-  svgSet: function svgSet (state, payload) {
+  svgSet: function svgSet (state) {
     state.svg.scale =
       state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
         ? 0.5
@@ -87,13 +91,6 @@ var mutations$1 = {
       state.viewport.name === 'large'
         ? state.viewport.width - 48
         : state.viewport.width - 48;
-  }
-};
-
-var actions$1 = {
-  set: function set (context) {
-    context.commit('viewportSet');
-    context.commit('svgSet');
   }
 };
 
@@ -157,10 +154,12 @@ var mutations$3 = {
     state.config = config;
     state.element = JSON.parse(JSON.stringify(element));
   },
+
   close: function close (state) {
     state.visible = false;
     state.config = {};
   },
+
   fieldUpdate: function fieldUpdate (state, ref) {
     var name = ref.name;
     var value = ref.value;
@@ -185,6 +184,7 @@ var mutations$4 = {
     state.visible = false;
     state.config = {};
   },
+
   open: function open (state, config) {
     state.visible = true;
     state.config = config;
@@ -197,6 +197,45 @@ var dropdown = {
   mutations: mutations$4
 };
 
+function userFormat (user) {
+  return {
+    name: user.username,
+    id: user._id,
+    description: user.description || {},
+    role: user.role
+  }
+}
+
+function groupFormat (group) {
+  return {
+    name: group.name,
+    id: group._id,
+    description: group.description || {},
+    userIds: group.users
+  }
+}
+
+function mediaFormat (media) {
+  return {
+    name: media.name,
+    id: media._id,
+    url: media.url,
+    corpuId: media.id_corpus,
+    description: media.description || {}
+  }
+}
+
+function dateCurrent () {
+  return new Date().valueOf()
+}
+
+// export function observerClean (obj) {
+//   return Object.keys(obj).reduce(
+//     (res, e) => Object.assign(res, { [e]: obj[e] }),
+//     {}
+//   )
+// }
+
 var state$5 = {
   list: []
 };
@@ -205,15 +244,16 @@ var actions$3 = {
   success: function success (ref, content) {
     var commit = ref.commit;
 
-    commit('add', { content: content, type: 'success', id: new Date().valueOf() });
+    commit('add', { content: content, type: 'success', id: dateCurrent() });
     setTimeout(function (_) {
       commit('remove');
     }, 2000);
   },
+
   error: function error (ref, content) {
     var commit = ref.commit;
 
-    commit('add', { content: content, type: 'error', id: new Date().valueOf() });
+    commit('add', { content: content, type: 'error', id: dateCurrent() });
     setTimeout(function (_) {
       commit('remove');
     }, 2000);
@@ -224,6 +264,7 @@ var mutations$5 = {
   remove: function remove (state) {
     state.list.shift();
   },
+
   add: function add (state, message) {
     state.list.push(message);
   }
@@ -510,34 +551,6 @@ var user = {
   getters: getters$1,
   mutations: mutations$6
 };
-
-function userFormat (user) {
-  return {
-    name: user.username,
-    id: user._id,
-    description: user.description || {},
-    role: user.role
-  }
-}
-
-function groupFormat (group) {
-  return {
-    name: group.name,
-    id: group._id,
-    description: group.description || {},
-    userIds: group.users
-  }
-}
-
-function mediaFormat (media) {
-  return {
-    name: media.name,
-    id: media._id,
-    url: media.url,
-    corpuId: media.id_corpus,
-    description: media.description || {}
-  }
-}
 
 var obj;
 var state$7 = {
@@ -1370,6 +1383,7 @@ var actions$8 = {
   remove: function remove (ref, media) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootGetters = ref.rootGetters;
 
     commit('cml/sync/start', 'mediasRemove', { root: true });
     return api
@@ -1377,9 +1391,12 @@ var actions$8 = {
       .then(function (r) {
         commit('cml/sync/stop', 'mediasRemove', { root: true });
         commit('remove', media);
+        dispatch('cml/annotations/list', rootGetters['cml/layers/id'](), {
+          root: true
+        });
         dispatch('cml/messages/success', 'Medium removed', { root: true });
 
-        return r
+        return media.id
       })
       .catch(function (e) {
         var error = e.response ? e.response.body.error : 'Network error';
@@ -1421,11 +1438,8 @@ var actions$8 = {
   },
 
   list: function list (ref, corpuId) {
-    var state = ref.state;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
-    var rootState = ref.rootState;
-    var rootGetters = ref.rootGetters;
 
     commit('cml/sync/start', 'mediasList', { root: true });
     return api
@@ -1943,22 +1957,19 @@ var state$12 = {
 };
 
 var actions$10 = {
-  add: function add (
-    ref,
-    ref$1
-  ) {
+  add: function add (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
-    var rootState = ref.rootState;
     var layerId = ref$1.layerId;
     var mediaId = ref$1.mediaId;
     var fragment = ref$1.fragment;
     var data = ref$1.data;
+    var mediaLink = ref$1.mediaLink;
 
     commit('cml/sync/start', 'annotationsAdd', { root: true });
+
     return api
-      .createAnnotation(layerId, mediaId, fragment, data)
+      .createAnnotation(layerId, mediaLink ? mediaId : null, fragment, data)
       .then(function (r) {
         commit('cml/sync/stop', 'annotationsAdd', { root: true });
         var annotation = {
@@ -1986,8 +1997,6 @@ var actions$10 = {
   remove: function remove (ref, annotation) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
-    var rootState = ref.rootState;
 
     commit('cml/sync/start', 'annotationsRemove', { root: true });
     return api
@@ -2011,8 +2020,6 @@ var actions$10 = {
   update: function update (ref, annotation) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
-    var rootState = ref.rootState;
 
     commit('cml/sync/start', 'annotationsUpdate', { root: true });
     return api
@@ -2037,11 +2044,8 @@ var actions$10 = {
   },
 
   list: function list (ref, layerId) {
-    var state = ref.state;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
-    var rootState = ref.rootState;
-    var rootGetters = ref.rootGetters;
 
     commit('cml/sync/start', 'annotationsList', { root: true });
     return api
@@ -2368,20 +2372,15 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   }
 };
 
-var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations' && !_vm.element.id)?_c('div',{staticClass:"blobs"},[_vm._m(4,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4 p-s"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.mediaLinked),expression:"element.mediaLinked"}],staticClass:"select-alt",attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.element.mediaLinked)?_vm._i(_vm.element.mediaLinked,null)>-1:(_vm.element.mediaLinked)},on:{"change":function($event){var $$a=_vm.element.mediaLinked,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.element.mediaLinked=$$a.concat([$$v]));}else{$$i>-1&&(_vm.element.mediaLinked=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.$set(_vm.element, "mediaLinked", $$c);}}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Link to media")])])}],
+var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations' && !_vm.element.id && _vm.element.mediaId)?_c('div',{staticClass:"blobs"},[_vm._m(4,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4 p-s"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.mediaLink),expression:"element.mediaLink"}],staticClass:"select-alt",attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.element.mediaLink)?_vm._i(_vm.element.mediaLink,null)>-1:(_vm.element.mediaLink)},on:{"change":function($event){var $$a=_vm.element.mediaLink,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.element.mediaLink=$$a.concat([$$v]));}else{$$i>-1&&(_vm.element.mediaLink=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.$set(_vm.element, "mediaLink", $$c);}}}}),_vm._v(" "+_vm._s(_vm.element.mediaName)+" ")])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Link to media")])])}],
   name: 'camomile-popup-edit',
 
   components: {
     objectField: objectField
   },
 
-  data: function data () {
-    return {
-      element: this.$store.state.cml.popup.element
-    }
-  },
-
   computed: Object.assign({}, mapState({
+      element: function (state) { return state.cml.popup.element; },
       type: function (state) { return state.cml.popup.config.type; },
       rolesPermission: function (state) { return state.cml.user.id !== state.cml.popup.element.id; },
       roles: function (state) { return state.cml.config.roles; }
@@ -2946,7 +2945,7 @@ var cmlLayers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   }
 };
 
-var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Annotations")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: {}, metadata: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":annotation.id,"checked":annotation.id === _vm.annotationId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
+var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Annotations")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":annotation.id,"checked":annotation.id === _vm.annotationId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
   name: 'camomile-annotations',
 
   data: function data () {

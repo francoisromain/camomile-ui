@@ -82,8 +82,7 @@ describe('store medias actions', () => {
     const corpuId = 'mocks-corpu-id-1'
     const media = {
       name: 'media-1',
-      url: 'https://en.wikipedia.org/',
-      description: { desc: 'Egestas Euismod Quam Condimentum' }
+      url: 'https://en.wikipedia.org/'
     }
 
     expect.assertions(2)
@@ -112,7 +111,7 @@ describe('store medias actions', () => {
           },
           {
             corpuId: 'mocks-corpu-id-1',
-            description: { desc: 'Egestas Euismod Quam Condimentum' },
+            description: {},
             id: 'mocks-media-id-new',
             name: 'media-1',
             url: 'https://en.wikipedia.org/'

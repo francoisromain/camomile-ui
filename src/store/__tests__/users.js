@@ -108,7 +108,6 @@ describe('store users actions', () => {
     const user = {
       name: 'yoc',
       role: 'user',
-      description: 'Ipsum Sit Dolor',
       password: 'password'
     }
 
@@ -119,7 +118,7 @@ describe('store users actions', () => {
         { description: {}, id: 'mocks-user-id-ji', name: 'ji', role: 'admin' },
         { description: {}, id: 'mocks-user-id-joe', name: 'joe', role: 'user' },
         {
-          description: 'Ipsum Sit Dolor',
+          description: {},
           id: 'mocks-user-id-new',
           name: 'yoc',
           role: 'user'

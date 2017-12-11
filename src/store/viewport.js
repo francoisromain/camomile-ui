@@ -11,14 +11,18 @@ export const state = {
     width: window.innerWidth,
     height: window.innerHeight
   },
-  animations: false
+  animate: false
+}
+
+export const actions = {
+  set (context) {
+    context.commit('viewportSet')
+    context.commit('svgSet')
+  }
 }
 
 export const mutations = {
-  svgStatus (state, payload) {
-    state.svg[payload.type] = payload.status
-  },
-  viewportSet (state, payload) {
+  viewportSet (state) {
     if (window.matchMedia('(min-width: 83.5em)').matches) {
       log.simple('Viewport', 'Large')
       state.viewport.name = 'large'
@@ -43,7 +47,7 @@ export const mutations = {
     state.viewport.width = window.innerWidth
     state.viewport.height = window.innerHeight
   },
-  svgSet (state, payload) {
+  svgSet (state) {
     state.svg.scale =
       state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
         ? 0.5
@@ -56,13 +60,6 @@ export const mutations = {
       state.viewport.name === 'large'
         ? state.viewport.width - 48
         : state.viewport.width - 48
-  }
-}
-
-export const actions = {
-  set (context) {
-    context.commit('viewportSet')
-    context.commit('svgSet')
   }
 }
 

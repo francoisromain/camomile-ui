@@ -36,12 +36,12 @@
         <input type="text" v-model="element.url" class="input-alt" placeholder="http://…">
       </div>
     </div>
-    <div class="blobs" v-if="type === 'annotations' && !element.id">
+    <div class="blobs" v-if="type === 'annotations' && !element.id && element.mediaId">
       <div class="blob-1-4">
         <h4 class="pt-s mb-0">Link to media</h4>
       </div>
       <div class="blob-3-4 p-s">
-        <input type="checkbox" v-model="element.mediaLinked" class="select-alt">
+        <input type="checkbox" v-model="element.mediaLink" class="select-alt"> {{ element.mediaName }}
       </div>
     </div>
     <object-field :name="'fragment'" :title="'Fragment'" v-if="type === 'annotations'"></object-field>
@@ -70,14 +70,9 @@ export default {
     objectField
   },
 
-  data () {
-    return {
-      element: this.$store.state.cml.popup.element
-    }
-  },
-
   computed: {
     ...mapState({
+      element: state => state.cml.popup.element,
       type: state => state.cml.popup.config.type,
       rolesPermission: state => state.cml.user.id !== state.cml.popup.element.id,
       roles: state => state.cml.config.roles
