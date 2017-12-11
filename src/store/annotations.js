@@ -6,13 +6,11 @@ export const state = {
 }
 
 export const actions = {
-  add (
-    { commit, dispatch, state, rootState },
-    { layerId, mediaId, fragment, data }
-  ) {
+  add ({ commit, dispatch }, { layerId, mediaId, fragment, data, mediaLink }) {
     commit('cml/sync/start', 'annotationsAdd', { root: true })
+
     return api
-      .createAnnotation(layerId, mediaId, fragment, data)
+      .createAnnotation(layerId, mediaLink ? mediaId : null, fragment, data)
       .then(r => {
         commit('cml/sync/stop', 'annotationsAdd', { root: true })
         const annotation = {
@@ -37,7 +35,7 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch, state, rootState }, annotation) {
+  remove ({ commit, dispatch }, annotation) {
     commit('cml/sync/start', 'annotationsRemove', { root: true })
     return api
       .deleteAnnotation(annotation.id)
@@ -57,7 +55,7 @@ export const actions = {
       })
   },
 
-  update ({ commit, dispatch, state, rootState }, annotation) {
+  update ({ commit, dispatch }, annotation) {
     commit('cml/sync/start', 'annotationsUpdate', { root: true })
     return api
       .updateAnnotation(annotation.id, {
@@ -80,7 +78,7 @@ export const actions = {
       })
   },
 
-  list ({ state, dispatch, commit, rootState, rootGetters }, layerId) {
+  list ({ dispatch, commit }, layerId) {
     commit('cml/sync/start', 'annotationsList', { root: true })
     return api
       .getAnnotations({ filter: { id_layer: layerId } })

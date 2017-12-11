@@ -14,8 +14,8 @@
 
 **UI component library for [Camomile](http://camomile-project.github.io/).**
 
-Camomile UI is a front end application only and require a connection to a
-[Camomile API server ](https://github.com/camomile-project/camomile-server).
+Camomile UI is a front end application only and requires a connection to a
+[Camomile API server](https://github.com/camomile-project/camomile-server).
 
 To start using this library, you can use
 [camomile-ui-boilerplate](https://github.com/francoisromain/camomile-ui-boilerplate).

@@ -86,52 +86,44 @@ describe('store annotations actions', () => {
   })
 
   it('adds a new annotation', () => {
-    const layerId = 'mocks-layer-id-1'
-    const mediaId = 'mocks-media-id-1'
-    const annotation = {
+    const element = {
+      layerId: 'mocks-layer-id-1',
+      mediaId: 'mocks-media-id-1',
       fragment: { fragment: 'Egestas Euismod Quam Condimentum' },
-      data: { data: 'Egestas Euismod Quam Condimentum' }
+      data: { data: 'Egestas Euismod Quam Condimentum' },
+      mediaLink: true
     }
 
     expect.assertions(2)
-    return store
-      .dispatch('cml/annotations/add', {
-        layerId,
-        mediaId,
-        fragment: annotation.fragment,
-        data: annotation.data
-      })
-      .then(r => {
-        expect(store.state.cml.annotations.list).toEqual([
-          {
-            fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
-            id: 'mocks-annotation-id-1',
-            layerId: 'mocks-layer-id-1',
-            mediumId: 'mocks-media-id-1',
-            metadata: { metadata: 'Maecenas faucibus mollis interdum.' }
+    return store.dispatch('cml/annotations/add', element).then(r => {
+      expect(store.state.cml.annotations.list).toEqual([
+        {
+          fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
+          id: 'mocks-annotation-id-1',
+          layerId: 'mocks-layer-id-1',
+          mediumId: 'mocks-media-id-1',
+          metadata: { metadata: 'Maecenas faucibus mollis interdum.' }
+        },
+        {
+          fragment: {
+            fragment: 'Etiam porta sem malesuada magna mollis euismod.'
           },
-          {
-            fragment: {
-              fragment: 'Etiam porta sem malesuada magna mollis euismod.'
-            },
-            id: 'mocks-annotation-id-2',
-            layerId: 'mocks-layer-id-1',
-            metadata: {
-              metadata: 'Etiam porta sem malesuada magna mollis euismod.'
-            }
-          },
-          {
-            fragment: { fragment: 'Egestas Euismod Quam Condimentum' },
-            id: 'mocks-annotation-id-new',
-            layerId: 'mocks-layer-id-1',
-            mediaId: 'mocks-media-id-1',
-            metadata: { data: 'Egestas Euismod Quam Condimentum' }
+          id: 'mocks-annotation-id-2',
+          layerId: 'mocks-layer-id-1',
+          metadata: {
+            metadata: 'Etiam porta sem malesuada magna mollis euismod.'
           }
-        ])
-        expect(store.state.cml.messages.list[0].content).toBe(
-          'Annotation added'
-        )
-      })
+        },
+        {
+          fragment: { fragment: 'Egestas Euismod Quam Condimentum' },
+          id: 'mocks-annotation-id-new',
+          layerId: 'mocks-layer-id-1',
+          mediaId: 'mocks-media-id-1',
+          metadata: { data: 'Egestas Euismod Quam Condimentum' }
+        }
+      ])
+      expect(store.state.cml.messages.list[0].content).toBe('Annotation added')
+    })
   })
 
   it('adds a new annotation (error)', () => {
