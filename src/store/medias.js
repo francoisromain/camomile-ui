@@ -1,9 +1,19 @@
 import api from './_api'
 import { mediaFormat } from './_helpers'
 
+let interval
+let timer = 0
+
 export const state = {
   list: [],
-  id: null
+  id: null,
+  properties: {
+    timeTotal: 0,
+    timeCurrent: 0,
+    isPlaying: false,
+    isLoaded: false,
+    seek: { seeking: false }
+  }
 }
 
 export const actions = {
@@ -102,6 +112,35 @@ export const actions = {
 
   set ({ getters, commit }, mediaId) {
     commit('set', getters.id(mediaId))
+  },
+
+  play ({ state, commit }) {
+    const timeStart = Date.now()
+    const timeCurrent = state.properties.timeCurrent
+    interval = setInterval(() => {
+      var timeEllapsed = Date.now() - timeStart
+      commit('timeCurrent', timeCurrent + timeEllapsed)
+    }, 0)
+    commit('play', true)
+  },
+
+  pause ({ commit }) {
+    clearInterval(interval)
+    commit('play', false)
+  },
+
+  stop ({ commit, dispatch }) {
+    clearInterval(interval)
+    commit('play', false)
+    dispatch('seek', { ratio: 0, serverRequest: true })
+  },
+
+  seek ({ state, commit, dispatch }, { ratio, serverRequest }) {
+    if (state.properties.isPlaying) {
+      clearInterval(interval)
+    }
+    commit('timeCurrent', ratio * state.properties.timeTotal)
+    commit('seek', { seeking: true, serverRequest })
   }
 }
 
@@ -142,6 +181,26 @@ export const mutations = {
 
   set (state, id) {
     state.id = id
+  },
+
+  loaded (state, isLoaded) {
+    state.properties.isLoaded = isLoaded
+  },
+
+  play (state, isPlaying) {
+    state.properties.isPlaying = isPlaying
+  },
+
+  timeCurrent (state, time) {
+    state.properties.timeCurrent = time
+  },
+
+  timeTotal (state, time) {
+    state.properties.timeTotal = time
+  },
+
+  seek (state, options) {
+    state.properties.seek = options
   }
 }
 

@@ -7,20 +7,24 @@
       </transition>
       <cml-messages></cml-messages>
       <cml-dropdown></cml-dropdown>
-      <div class="container pt">
+      <div class="container pt" v-if="isLogged">
         <div class="blobs" v-if="isAdmin">
           <cml-users class="blob-1-2 p border"></cml-users>
           <cml-groups class="blob-1-2 p border"></cml-groups>
         </div>
-        <div class="blobs" v-if="isLogged">
+        <div class="blobs">
           <cml-corpus class="blob-1-2 p border"></cml-corpus>
           <cml-medias class="blob-1-2 p border"></cml-medias>
           <cml-layers class="blob-1-2 p border"></cml-layers>
           <cml-annotations class="blob-1-2 p border"></cml-annotations>
         </div>
-      </div> 
+        <cml-media-controller :media="media" class="mb"></cml-media-controller>
+        <cml-media-video v-if="mediaType === 'video'" :media="media"></cml-media-video>
+      </div>
+      <cml-login v-else></cml-login>
+
+
     </div>
-    <cml-login v-if="!isLogged"></cml-login>
     <viewport></viewport>
     <debug></debug>
   </div>
@@ -46,6 +50,9 @@ import cmlMedias from './components/medias.vue'
 import cmlLayers from './components/layers.vue'
 import cmlAnnotations from './components/annotations.vue'
 
+import cmlMediaVideo from './components/media-video.vue'
+import cmlMediaController from './components/media-controller.vue'
+
 export default {
   store,
 
@@ -64,15 +71,21 @@ export default {
     cmlCorpus,
     cmlMedias,
     cmlLayers,
-    cmlAnnotations
+    cmlAnnotations,
+    cmlMediaVideo,
+    cmlMediaController
   },
 
   computed: {
     ...mapState({
       isAdmin: state => state.cml.user.isAdmin,
       isLogged: state => state.cml.user.isLogged,
-      popup: state => state.cml.popup
-    })
+      popup: state => state.cml.popup,
+      media: state => state.cml.medias.list.find(m => m.id === state.cml.medias.id)
+    }),
+    mediaType () {
+      return this.media && this.media.description && this.media.description.type || undefined
+    }
   }
 }
 </script>

@@ -38,15 +38,13 @@ export const state = {
 export const actions = {
   set ({ dispatch }) {
     Promise.all([
-      ...['users', 'groups'].map(
-        type =>
-          new Promise((resolve, reject) =>
-            dispatch(`cml/${type}/list`, {}, { root: true })
-              .then(r => resolve(r))
-              .catch(e => reject(e))
-          )
+      ...['users', 'groups'].map(type =>
+        dispatch(`cml/${type}/list`, {}, { root: true })
+          .then(r => r)
+          .catch(e => e)
       )
     ]).then(res => {
+      console.log('res', res)
       dispatch('cml/corpus/list', null, { root: true })
     })
   },

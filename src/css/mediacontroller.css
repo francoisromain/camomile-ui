@@ -1,0 +1,57 @@
+.mediacontroller {
+  height: var(--unit-xxl);
+  transition: all 0.3s;
+}
+
+.mediacontroller-button {
+  position: absolute;
+  left: 0;
+  bottom: var(--unit-m);
+  height: var(--unit-xl);
+  width: var(--unit-xl);
+  padding: 0;
+  background: none;
+  border: 0;
+  outline: 0;
+  line-height: 1;
+  color: var(--color-text);
+  text-align: center;
+  cursor: pointer;
+}
+
+.mediacontroller-counter {
+  position: absolute;
+  left: var(--unit-xl);
+  right: 0;
+  bottom: var(--unit-m);
+  height: var(--unit-xl);
+  padding: var(--unit-s);
+}
+
+.mediacontroller-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--unit-m) + var(--unit-xxs));
+  background: var(--color-neutral);
+  cursor: ew-resize;
+}
+
+.mediacontroller-progress relative {
+  height: calc(var(--unit-m) + var(--unit-xxs));
+}
+
+.mediacontroller-progress-bar {
+  background: var(--color-highlight);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 0;
+
+  /*transition: width 1s;*/
+}
+
+.mediacontroller-controls:hover {
+  bottom: 0;
+}
