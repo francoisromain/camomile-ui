@@ -181,6 +181,13 @@ export const mutations = {
 
   set (state, id) {
     state.id = id
+    state.properties = {
+      timeTotal: 0,
+      timeCurrent: 0,
+      isPlaying: false,
+      isLoaded: false,
+      seek: { seeking: false }
+    }
   },
 
   loaded (state, isLoaded) {

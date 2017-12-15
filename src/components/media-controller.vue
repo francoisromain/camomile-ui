@@ -23,13 +23,15 @@ import { mapState } from 'vuex'
 
 export default {
   props: {
-    controls: Object
+    media: Object
   },
+
   data () {
     return {
       mousedown: false
     }
   },
+
   computed: {
     ...mapState({
       timeTotal: state => state.cml.medias.properties.timeTotal,
@@ -50,6 +52,7 @@ export default {
       return this.isPlaying ? '❚ ❚' : '►'
     }
   },
+
   methods: {
     mediaToggle () {
       if (this.isPlaying) {

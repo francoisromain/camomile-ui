@@ -18,12 +18,10 @@
           <cml-layers class="blob-1-2 p border"></cml-layers>
           <cml-annotations class="blob-1-2 p border"></cml-annotations>
         </div>
-        <cml-media-controller :media="media" class="mb"></cml-media-controller>
-        <cml-media-video v-if="mediaType === 'video'" :media="media"></cml-media-video>
+        <cml-media-controller :media="media" v-if="media" class="mb"></cml-media-controller>
+        <cml-media-video :media="media" v-if="media"></cml-media-video>
       </div>
       <cml-login v-else></cml-login>
-
-
     </div>
     <viewport></viewport>
     <debug></debug>

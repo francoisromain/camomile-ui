@@ -1000,7 +1000,7 @@ http://cssmojo.com/the-very-latest-clearfix-reloaded/
 }
 
 .full-y {
-  height: 100vh;
+  height: 100%;
 }
 
 /*
@@ -2234,4 +2234,72 @@ hr.border-bg {
   50% {
     transform: scale(1);
   }
+}
+
+.mediacontroller {
+  height: 60px;
+  height: 3.75rem;
+  transition: all 0.3s;
+}
+
+.mediacontroller-button {
+  position: absolute;
+  left: 0;
+  bottom: 18px;
+  bottom: 1.125rem;
+  height: 48px;
+  height: 3rem;
+  width: 48px;
+  width: 3rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  outline: 0;
+  line-height: 1;
+  color: #666;
+  text-align: center;
+  cursor: pointer;
+}
+
+.mediacontroller-counter {
+  position: absolute;
+  left: 48px;
+  left: 3rem;
+  right: 0;
+  bottom: 18px;
+  bottom: 1.125rem;
+  height: 48px;
+  height: 3rem;
+  padding: 12px;
+  padding: 0.75rem;
+}
+
+.mediacontroller-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 21px;
+  height: 1.3125rem;
+  background: #bcb9af;
+  cursor: ew-resize;
+}
+
+.mediacontroller-progress relative {
+  height: 21px;
+  height: 1.3125rem;
+}
+
+.mediacontroller-progress-bar {
+  background: #f50;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 0;
+
+  /*transition: width 1s;*/
+}
+
+.mediacontroller-controls:hover {
+  bottom: 0;
 }

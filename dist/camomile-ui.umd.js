@@ -938,7 +938,7 @@ var index_esm = {
 };
 
 /*!
- * Vue.js v2.5.9
+ * Vue.js v2.5.11
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
@@ -1275,6 +1275,7 @@ var config = ({
   /**
    * Option merge strategies (used in core/util/options)
    */
+  // $flow-disable-line
   optionMergeStrategies: Object.create(null),
 
   /**
@@ -1315,6 +1316,7 @@ var config = ({
   /**
    * Custom user key aliases for v-on
    */
+  // $flow-disable-line
   keyCodes: Object.create(null),
 
   /**
@@ -1749,8 +1751,7 @@ var arrayMethods = Object.create(arrayProto);[
   'splice',
   'sort',
   'reverse'
-]
-.forEach(function (method) {
+].forEach(function (method) {
   // cache original method
   var original = arrayProto[method];
   def(arrayMethods, method, function mutator () {
@@ -2084,18 +2085,18 @@ function mergeDataOrFn (
     // it has to be a function to pass previous merges.
     return function mergedDataFn () {
       return mergeData(
-        typeof childVal === 'function' ? childVal.call(this) : childVal,
-        typeof parentVal === 'function' ? parentVal.call(this) : parentVal
+        typeof childVal === 'function' ? childVal.call(this, this) : childVal,
+        typeof parentVal === 'function' ? parentVal.call(this, this) : parentVal
       )
     }
   } else {
     return function mergedInstanceDataFn () {
       // instance merge
       var instanceData = typeof childVal === 'function'
-        ? childVal.call(vm)
+        ? childVal.call(vm, vm)
         : childVal;
       var defaultData = typeof parentVal === 'function'
-        ? parentVal.call(vm)
+        ? parentVal.call(vm, vm)
         : parentVal;
       if (instanceData) {
         return mergeData(instanceData, defaultData)
@@ -2247,13 +2248,23 @@ var defaultStrat = function (parentVal, childVal) {
  */
 function checkComponents (options) {
   for (var key in options.components) {
-    var lower = key.toLowerCase();
-    if (isBuiltInTag(lower) || config.isReservedTag(lower)) {
-      warn(
-        'Do not use built-in or reserved HTML elements as component ' +
-        'id: ' + key
-      );
-    }
+    validateComponentName(key);
+  }
+}
+
+function validateComponentName (name) {
+  if (!/^[a-zA-Z][\w-]*$/.test(name)) {
+    warn(
+      'Invalid component name: "' + name + '". Component names ' +
+      'can only contain alphanumeric characters and the hyphen, ' +
+      'and must start with a letter.'
+    );
+  }
+  if (isBuiltInTag(name) || config.isReservedTag(name)) {
+    warn(
+      'Do not use built-in or reserved HTML elements as component ' +
+      'id: ' + name
+    );
   }
 }
 
@@ -2281,6 +2292,9 @@ function normalizeProps (options, vm) {
     for (var key in props) {
       val = props[key];
       name = camelize(key);
+      if (process.env.NODE_ENV !== 'production' && isPlainObject(val)) {
+        validatePropObject(name, val, vm);
+      }
       res[name] = isPlainObject(val)
         ? val
         : { type: val };
@@ -2293,6 +2307,26 @@ function normalizeProps (options, vm) {
     );
   }
   options.props = res;
+}
+
+/**
+ * Validate whether a prop object keys are valid.
+ */
+var propOptionsRE = /^(type|default|required|validator)$/;
+
+function validatePropObject (
+  propName,
+  prop,
+  vm
+) {
+  for (var key in prop) {
+    if (!propOptionsRE.test(key)) {
+      warn(
+        ("Invalid key \"" + key + "\" in validation rules object for prop \"" + propName + "\"."),
+        vm
+      );
+    }
+  }
 }
 
 /**
@@ -3442,6 +3476,8 @@ function eventsMixin (Vue) {
 
 /*  */
 
+
+
 /**
  * Runtime helper for resolving raw children VNodes into a slot object.
  */
@@ -3465,10 +3501,10 @@ function resolveSlots (
     if ((child.context === context || child.fnContext === context) &&
       data && data.slot != null
     ) {
-      var name = child.data.slot;
+      var name = data.slot;
       var slot = (slots[name] || (slots[name] = []));
       if (child.tag === 'template') {
-        slot.push.apply(slot, child.children);
+        slot.push.apply(slot, child.children || []);
       } else {
         slot.push(child);
       }
@@ -4309,6 +4345,7 @@ function getData (data, vm) {
 var computedWatcherOptions = { lazy: true };
 
 function initComputed (vm, computed) {
+  // $flow-disable-line
   var watchers = vm._computedWatchers = Object.create(null);
   // computed properties are just getters during SSR
   var isSSR = isServerRendering();
@@ -4539,11 +4576,11 @@ function resolveInject (inject, vm) {
     // inject is :any because flow is not smart enough to figure out cached
     var result = Object.create(null);
     var keys = hasSymbol
-        ? Reflect.ownKeys(inject).filter(function (key) {
-          /* istanbul ignore next */
-          return Object.getOwnPropertyDescriptor(inject, key).enumerable
-        })
-        : Object.keys(inject);
+      ? Reflect.ownKeys(inject).filter(function (key) {
+        /* istanbul ignore next */
+        return Object.getOwnPropertyDescriptor(inject, key).enumerable
+      })
+      : Object.keys(inject);
 
     for (var i = 0; i < keys.length; i++) {
       var key = keys[i];
@@ -4749,19 +4786,9 @@ function bindObjectProps (
  */
 function renderStatic (
   index,
-  isInFor,
-  isOnce
+  isInFor
 ) {
-  // render fns generated by compiler < 2.5.4 does not provide v-once
-  // information to runtime so be conservative
-  var isOldVersion = arguments.length < 3;
-  // if a static tree is generated by v-once, it is cached on the instance;
-  // otherwise it is purely static and can be cached on the shared options
-  // across all instances.
-  var renderFns = this.$options.staticRenderFns;
-  var cached = isOldVersion || isOnce
-    ? (this._staticTrees || (this._staticTrees = []))
-    : (renderFns.cached || (renderFns.cached = []));
+  var cached = this._staticTrees || (this._staticTrees = []);
   var tree = cached[index];
   // if has already-rendered static tree and not inside v-for,
   // we can reuse the same tree by doing a shallow clone.
@@ -4771,7 +4798,11 @@ function renderStatic (
       : cloneVNode(tree)
   }
   // otherwise, render a fresh tree.
-  tree = cached[index] = renderFns[index].call(this._renderProxy, null, this);
+  tree = cached[index] = this.$options.staticRenderFns[index].call(
+    this._renderProxy,
+    null,
+    this // for render fns generated for functional component templates
+  );
   markStatic(tree, ("__static__" + index), false);
   return tree
 }
@@ -5123,15 +5154,10 @@ function createComponentInstanceForVnode (
   parentElm,
   refElm
 ) {
-  var vnodeComponentOptions = vnode.componentOptions;
   var options = {
     _isComponent: true,
     parent: parent,
-    propsData: vnodeComponentOptions.propsData,
-    _componentTag: vnodeComponentOptions.tag,
     _parentVnode: vnode,
-    _parentListeners: vnodeComponentOptions.listeners,
-    _renderChildren: vnodeComponentOptions.children,
     _parentElm: parentElm || null,
     _refElm: refElm || null
   };
@@ -5141,7 +5167,7 @@ function createComponentInstanceForVnode (
     options.render = inlineTemplate.render;
     options.staticRenderFns = inlineTemplate.staticRenderFns;
   }
-  return new vnodeComponentOptions.Ctor(options)
+  return new vnode.componentOptions.Ctor(options)
 }
 
 function mergeHooks (data) {
@@ -5475,14 +5501,18 @@ function initMixin (Vue) {
 function initInternalComponent (vm, options) {
   var opts = vm.$options = Object.create(vm.constructor.options);
   // doing this because it's faster than dynamic enumeration.
+  var parentVnode = options._parentVnode;
   opts.parent = options.parent;
-  opts.propsData = options.propsData;
-  opts._parentVnode = options._parentVnode;
-  opts._parentListeners = options._parentListeners;
-  opts._renderChildren = options._renderChildren;
-  opts._componentTag = options._componentTag;
+  opts._parentVnode = parentVnode;
   opts._parentElm = options._parentElm;
   opts._refElm = options._refElm;
+
+  var vnodeComponentOptions = parentVnode.componentOptions;
+  opts.propsData = vnodeComponentOptions.propsData;
+  opts._parentListeners = vnodeComponentOptions.listeners;
+  opts._renderChildren = vnodeComponentOptions.children;
+  opts._componentTag = vnodeComponentOptions.tag;
+
   if (options.render) {
     opts.render = options.render;
     opts.staticRenderFns = options.staticRenderFns;
@@ -5616,14 +5646,8 @@ function initExtend (Vue) {
     }
 
     var name = extendOptions.name || Super.options.name;
-    if (process.env.NODE_ENV !== 'production') {
-      if (!/^[a-zA-Z][\w-]*$/.test(name)) {
-        warn(
-          'Invalid component name: "' + name + '". Component names ' +
-          'can only contain alphanumeric characters and the hyphen, ' +
-          'and must start with a letter.'
-        );
-      }
+    if (process.env.NODE_ENV !== 'production' && name) {
+      validateComponentName(name);
     }
 
     var Sub = function VueComponent (options) {
@@ -5705,13 +5729,8 @@ function initAssetRegisters (Vue) {
         return this.options[type + 's'][id]
       } else {
         /* istanbul ignore if */
-        if (process.env.NODE_ENV !== 'production') {
-          if (type === 'component' && config.isReservedTag(id)) {
-            warn(
-              'Do not use built-in or reserved HTML elements as component ' +
-              'id: ' + id
-            );
-          }
+        if (process.env.NODE_ENV !== 'production' && type === 'component') {
+          validateComponentName(id);
         }
         if (type === 'component' && isPlainObject(definition)) {
           definition.name = definition.name || id;
@@ -5918,7 +5937,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.5.9';
+Vue$3.version = '2.5.11';
 
 /*  */
 
@@ -5970,12 +5989,12 @@ function genClassForVnode (vnode) {
   var childNode = vnode;
   while (isDef(childNode.componentInstance)) {
     childNode = childNode.componentInstance._vnode;
-    if (childNode.data) {
+    if (childNode && childNode.data) {
       data = mergeClassData(childNode.data, data);
     }
   }
   while (isDef(parentNode = parentNode.parent)) {
-    if (parentNode.data) {
+    if (parentNode && parentNode.data) {
       data = mergeClassData(data, parentNode.data);
     }
   }
@@ -6486,6 +6505,9 @@ function createPatchFunction (backend) {
 
   function createChildren (vnode, children, insertedVnodeQueue) {
     if (Array.isArray(children)) {
+      if (process.env.NODE_ENV !== 'production') {
+        checkDuplicateKeys(children);
+      }
       for (var i = 0; i < children.length; ++i) {
         createElm(children[i], insertedVnodeQueue, vnode.elm, null, true);
       }
@@ -6617,6 +6639,10 @@ function createPatchFunction (backend) {
     // during leaving transitions
     var canMove = !removeOnly;
 
+    if (process.env.NODE_ENV !== 'production') {
+      checkDuplicateKeys(newCh);
+    }
+
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (isUndef(oldStartVnode)) {
         oldStartVnode = oldCh[++oldStartIdx]; // Vnode has been moved left
@@ -6649,13 +6675,6 @@ function createPatchFunction (backend) {
           createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm);
         } else {
           vnodeToMove = oldCh[idxInOld];
-          /* istanbul ignore if */
-          if (process.env.NODE_ENV !== 'production' && !vnodeToMove) {
-            warn(
-              'It seems there are duplicate keys that is causing an update error. ' +
-              'Make sure each v-for item has a unique key.'
-            );
-          }
           if (sameVnode(vnodeToMove, newStartVnode)) {
             patchVnode(vnodeToMove, newStartVnode, insertedVnodeQueue);
             oldCh[idxInOld] = undefined;
@@ -6673,6 +6692,24 @@ function createPatchFunction (backend) {
       addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);
     } else if (newStartIdx > newEndIdx) {
       removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
+    }
+  }
+
+  function checkDuplicateKeys (children) {
+    var seenKeys = {};
+    for (var i = 0; i < children.length; i++) {
+      var vnode = children[i];
+      var key = vnode.key;
+      if (isDef(key)) {
+        if (seenKeys[key]) {
+          warn(
+            ("Duplicate keys detected: '" + key + "'. This may cause an update error."),
+            vnode.context
+          );
+        } else {
+          seenKeys[key] = true;
+        }
+      }
     }
   }
 
@@ -7058,17 +7095,20 @@ function normalizeDirectives$1 (
 ) {
   var res = Object.create(null);
   if (!dirs) {
+    // $flow-disable-line
     return res
   }
   var i, dir;
   for (i = 0; i < dirs.length; i++) {
     dir = dirs[i];
     if (!dir.modifiers) {
+      // $flow-disable-line
       dir.modifiers = emptyModifiers;
     }
     res[getRawDirName(dir)] = dir;
     dir.def = resolveAsset(vm.$options, 'directives', dir.name, true);
   }
+  // $flow-disable-line
   return res
 }
 
@@ -7406,12 +7446,12 @@ function updateDOMProps (oldVnode, vnode) {
 function shouldUpdateValue (elm, checkVal) {
   return (!elm.composing && (
     elm.tagName === 'OPTION' ||
-    isDirty(elm, checkVal) ||
-    isInputChanged(elm, checkVal)
+    isNotInFocusAndDirty(elm, checkVal) ||
+    isDirtyWithModifiers(elm, checkVal)
   ))
 }
 
-function isDirty (elm, checkVal) {
+function isNotInFocusAndDirty (elm, checkVal) {
   // return true when textbox (.number and .trim) loses focus and its value is
   // not equal to the updated value
   var notInFocus = true;
@@ -7421,14 +7461,20 @@ function isDirty (elm, checkVal) {
   return notInFocus && elm.value !== checkVal
 }
 
-function isInputChanged (elm, newVal) {
+function isDirtyWithModifiers (elm, newVal) {
   var value = elm.value;
   var modifiers = elm._vModifiers; // injected by v-model runtime
-  if (isDef(modifiers) && modifiers.number) {
-    return toNumber(value) !== toNumber(newVal)
-  }
-  if (isDef(modifiers) && modifiers.trim) {
-    return value.trim() !== newVal.trim()
+  if (isDef(modifiers)) {
+    if (modifiers.lazy) {
+      // inputs with lazy should only be updated when not in focus
+      return false
+    }
+    if (modifiers.number) {
+      return toNumber(value) !== toNumber(newVal)
+    }
+    if (modifiers.trim) {
+      return value.trim() !== newVal.trim()
+    }
   }
   return value !== newVal
 }
@@ -7486,7 +7532,10 @@ function getStyle (vnode, checkChild) {
     var childNode = vnode;
     while (childNode.componentInstance) {
       childNode = childNode.componentInstance._vnode;
-      if (childNode.data && (styleData = normalizeStyleData(childNode.data))) {
+      if (
+        childNode && childNode.data &&
+        (styleData = normalizeStyleData(childNode.data))
+      ) {
         extend(res, styleData);
       }
     }
@@ -8803,7 +8852,7 @@ var config$1 = {
   url: 'http://localhost:3000',
   roles: ['admin', 'user'],
   axios: false
-};
+}
 
 var log = {
   simple: function simple (key, value) {
@@ -8820,68 +8869,62 @@ var log = {
       'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 12px; line-height:96px; text-decoration: none; color:#fff; background:linear-gradient(to bottom, #f62, #f30); text-shadow: -1px -1px 1px #a50,  1px 1px 3px #fa0; border-radius: 0 8px 8px 0; '
     );
   }
-};
+}
 
 var state$1 = {
+  name: '',
+  width: 0,
+  height: 0,
   svg: {
     height: 0,
     width: 0,
     scale: 1
   },
-  viewport: {
-    name: '',
-    width: window.innerWidth,
-    height: window.innerHeight
-  },
   animate: false
 };
 
 var actions$1 = {
-  set: function set (context) {
-    context.commit('viewportSet');
-    context.commit('svgSet');
+  set: function set (ref) {
+    var state = ref.state;
+    var commit = ref.commit;
+
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var name;
+    var animate;
+    if (window.matchMedia('(min-width: 83.5em)').matches) {
+      name = 'large';
+      animate = true;
+    } else if (window.matchMedia('(min-width: 63em)').matches) {
+      name = 'desktop';
+      animate = true;
+    } else if (window.matchMedia('(min-width: 42.5em)').matches) {
+      name = 'tablet';
+      animate = false;
+    } else if (window.matchMedia('(min-width: 22em)').matches) {
+      name = 'mobile';
+      animate = false;
+    } else {
+      log.simple('Viewport', 'Default');
+      name = 'default';
+      animate = false;
+    }
+    commit('set', { name: name, animate: animate, width: width, height: height });
   }
 };
 
 var mutations$1 = {
-  viewportSet: function viewportSet (state) {
-    if (window.matchMedia('(min-width: 83.5em)').matches) {
-      log.simple('Viewport', 'Large');
-      state.viewport.name = 'large';
-      state.animate = true;
-    } else if (window.matchMedia('(min-width: 63em)').matches) {
-      log.simple('Viewport', 'Desktop');
-      state.viewport.name = 'desktop';
-      state.animate = true;
-    } else if (window.matchMedia('(min-width: 42.5em)').matches) {
-      log.simple('Viewport', 'Tablet');
-      state.viewport.name = 'tablet';
-      state.animate = false;
-    } else if (window.matchMedia('(min-width: 22em)').matches) {
-      log.simple('Viewport', 'Mobile');
-      state.viewport.name = 'mobile';
-      state.animate = false;
-    } else {
-      log.simple('Viewport', 'Default');
-      state.viewport.name = 'default';
-      state.animate = false;
-    }
-    state.viewport.width = window.innerWidth;
-    state.viewport.height = window.innerHeight;
-  },
-  svgSet: function svgSet (state) {
-    state.svg.scale =
-      state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
-        ? 0.5
-        : 1;
-    state.svg.height =
-      state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
-        ? state.viewport.height - 288
-        : state.viewport.height - 144;
-    state.svg.width =
-      state.viewport.name === 'large'
-        ? state.viewport.width - 48
-        : state.viewport.width - 48;
+  set: function set (state, ref) {
+    var animate = ref.animate;
+    var name = ref.name;
+    var width = ref.width;
+    var height = ref.height;
+
+    state.name = name;
+    state.animate = animate;
+    state.width = width;
+    state.height = height;
+    log.simple('Viewport', name);
   }
 };
 
@@ -8890,7 +8933,7 @@ var viewport = {
   state: state$1,
   mutations: mutations$1,
   actions: actions$1
-};
+}
 
 var state$2 = {
   list: []
@@ -8928,7 +8971,7 @@ var sync = {
   actions: actions$2,
   getters: getters,
   mutations: mutations$2
-};
+}
 
 var state$3 = {
   visible: false,
@@ -8963,7 +9006,7 @@ var popup = {
   namespaced: true,
   state: state$3,
   mutations: mutations$3
-};
+}
 
 var state$4 = {
   visible: false,
@@ -8986,7 +9029,7 @@ var dropdown = {
   namespaced: true,
   state: state$4,
   mutations: mutations$4
-};
+}
 
 function userFormat (user) {
   return {
@@ -9066,7 +9109,7 @@ var messages = {
   state: state$5,
   actions: actions$3,
   mutations: mutations$5
-};
+}
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -15860,7 +15903,7 @@ var punycode$1 = {
   toUnicode: toUnicode,
   encode: encode,
   decode: decode
-};
+}
 
 
 var punycode$2 = Object.freeze({
@@ -16716,7 +16759,7 @@ var util$2 = {
   deprecate: deprecate,
   format: format$1,
   debuglog: debuglog
-};
+}
 
 
 var util$3 = Object.freeze({
@@ -16890,7 +16933,7 @@ var qs = {
   stringify: stringify,
   decode: parse$3,
   parse: parse$3
-};
+}
 
 
 
@@ -16924,13 +16967,13 @@ var qs$1 = Object.freeze({
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-var url = {
+var url$1 = {
   parse: urlParse$1,
   resolve: urlResolve,
   resolveObject: urlResolveObject,
   format: urlFormat,
   Url: Url
-};
+}
 function Url() {
   this.protocol = null;
   this.slashes = null;
@@ -17626,12 +17669,12 @@ function parseHost(self) {
 }
 
 
-var url$1 = Object.freeze({
+var url$2 = Object.freeze({
 	parse: urlParse$1,
 	resolve: urlResolve,
 	resolveObject: urlResolveObject,
 	format: urlFormat,
-	default: url,
+	default: url$1,
 	Url: Url
 });
 
@@ -18150,11 +18193,11 @@ var _package$1 = Object.freeze({
 
 var tls = ( empty$1 && empty ) || empty$1;
 
-var url$2 = ( url$1 && url ) || url$1;
+var url$3 = ( url$2 && url$1 ) || url$2;
 
 var require$$4$1 = ( _package$1 && _package ) || _package$1;
 
-var urlParse = url$2.parse;
+var urlParse = url$3.parse;
 
 var Store$1 = store$1.Store;
 var MemoryCookieStore = memstore.MemoryCookieStore;
@@ -24402,7 +24445,7 @@ IncomingMessage.prototype._onXHRProgress = function() {
 
 // MIT License
 // Copyright (c) 2016 John Hiesey
-var toArrayBuffer = function (buf) {
+function toArrayBuffer (buf) {
   // If the buffer is backed by a Uint8Array, a faster version will work
   if (buf instanceof Uint8Array) {
     // If the buffer isn't a subarray, return the underlying ArrayBuffer
@@ -24426,7 +24469,7 @@ var toArrayBuffer = function (buf) {
   } else {
     throw new Error('Argument must be a Buffer')
   }
-};
+}
 
 function decideMode(preferBinary, useFetch) {
   if (hasFetch && useFetch) {
@@ -24862,7 +24905,7 @@ var http = {
   Agent: Agent,
   METHODS: METHODS,
   STATUS_CODES: STATUS_CODES
-};
+}
 
 
 var http$1 = Object.freeze({
@@ -34369,7 +34412,7 @@ exports.generateNormalizedString = function (type, options) {
     if (resource &&
         resource[0] !== '/') {
 
-        var url = url$2.parse(resource, false);
+        var url = url$3.parse(resource, false);
         resource = url.path;                        // Includes query
     }
 
@@ -35075,7 +35118,7 @@ var header$1 = function (uri, method, options) {
     // Parse URI
 
     if (typeof uri === 'string') {
-        uri = url$2.parse(uri);
+        uri = url$3.parse(uri);
     }
 
     // Calculate signature
@@ -35279,7 +35322,7 @@ var getBewit = function (uri, options) {
     // Parse URI
 
     if (typeof uri === 'string') {
-        uri = url$2.parse(uri);
+        uri = url$3.parse(uri);
     }
 
     // Calculate signature
@@ -35432,7 +35475,7 @@ var lib_8 = lib$2.uri;
  * Module dependencies.
  */
 
-var parse$4 = url$2.parse;
+var parse$4 = url$3.parse;
 
 /**
  * Valid keys.
@@ -35752,7 +35795,7 @@ function encodeRfc3986(urlEncodedString) {
 // credentials: { accessKeyId, secretAccessKey, [sessionToken] }
 function RequestSigner(request, credentials) {
 
-  if (typeof request === 'string') { request = url$2.parse(request); }
+  if (typeof request === 'string') { request = url$3.parse(request); }
 
   var headers = request.headers = (request.headers || {}),
       hostParts = this.matchHost(request.hostname || request.host || headers.Host || headers.host);
@@ -53950,7 +53993,7 @@ var populate = function(dst, src) {
   return dst;
 };
 
-var parseUrl = url$2.parse;
+var parseUrl = url$3.parse;
 
 
 
@@ -55689,7 +55732,7 @@ function resolve$1(compile, root, ref) {
  */
 function resolveSchema(root, ref) {
   /* jshint validthis: true */
-  var p = url$2.parse(ref, false, true)
+  var p = url$3.parse(ref, false, true)
     , refPath = _getFullPath(p)
     , baseId = getFullPath(this._getId(root.schema));
   if (refPath !== baseId) {
@@ -55830,7 +55873,7 @@ function countKeys(schema) {
 
 function getFullPath(id, normalize) {
   if (normalize !== false) { id = normalizeId(id); }
-  var p = url$2.parse(id, false, true);
+  var p = url$3.parse(id, false, true);
   return _getFullPath(p);
 }
 
@@ -55849,7 +55892,7 @@ function normalizeId(id) {
 
 function resolveUrl(baseId, id) {
   id = normalizeId(id);
-  return url$2.resolve(baseId, id);
+  return url$3.resolve(baseId, id);
 }
 
 
@@ -55870,7 +55913,7 @@ function resolveIds(schema) {
       { fullPath += '/' + (typeof keyIndex == 'number' ? keyIndex : util$7.escapeFragment(keyIndex)); }
 
     if (typeof id == 'string') {
-      id = baseId = normalizeId(baseId ? url$2.resolve(baseId, id) : id);
+      id = baseId = normalizeId(baseId ? url$3.resolve(baseId, id) : id);
 
       var refVal = self._refs[id];
       if (typeof refVal == 'string') { refVal = self._refs[refVal]; }
@@ -62234,7 +62277,7 @@ OAuth$1.prototype.onRequest = function (_oauth) {
 
     case 'query':
       var href = self.request.uri.href += (query ? '&' : '?') + self.concatParams(oa, '&');
-      self.request.uri = url$2.parse(href);
+      self.request.uri = url$3.parse(href);
       self.request.path = self.request.uri.path;
       break
 
@@ -62465,11 +62508,11 @@ Redirect$1.prototype.onResponse = function (response) {
   self.redirectsFollowed += 1;
 
   if (!isUrl.test(redirectTo)) {
-    redirectTo = url$2.resolve(request.uri.href, redirectTo);
+    redirectTo = url$3.resolve(request.uri.href, redirectTo);
   }
 
   var uriPrev = request.uri;
-  request.uri = url$2.parse(redirectTo);
+  request.uri = url$3.parse(redirectTo);
 
   // handle the case where we change protocol from https to http or vice versa
   if (request.uri.protocol !== uriPrev.protocol) {
@@ -62902,7 +62945,7 @@ Tunnel$1.prototype.setup = function (options) {
   options = options || {};
 
   if (typeof request.proxy === 'string') {
-    request.proxy = url$2.parse(request.proxy);
+    request.proxy = url$3.parse(request.proxy);
   }
 
   if (!request.proxy || !request.tunnel) {
@@ -63201,12 +63244,12 @@ Request.prototype.init = function (options) {
 
   // If a string URI/URL was given, parse it into a URL object
   if (typeof self.uri === 'string') {
-    self.uri = url$2.parse(self.uri);
+    self.uri = url$3.parse(self.uri);
   }
 
   // Some URL objects are not from a URL parsed string and need href added
   if (!self.uri.href) {
-    self.uri.href = url$2.format(self.uri);
+    self.uri.href = url$3.format(self.uri);
   }
 
   // DEPRECATED: Warning for users of the old Unix Sockets URL Scheme
@@ -63228,7 +63271,7 @@ Request.prototype.init = function (options) {
   if (!(self.uri.host || (self.uri.hostname && self.uri.port)) && !self.uri.isUnix) {
     // Invalid URI: it may generate lot of bad errors, like 'TypeError: Cannot call method `indexOf` of undefined' in CookieJar
     // Detect and reject it as soon as possible
-    var faultyUri = url$2.format(self.uri);
+    var faultyUri = url$3.format(self.uri);
     var message = 'Invalid URI "' + faultyUri + '"';
     if (Object.keys(options).length === 0) {
       // No option ? This can be the sign of a redirect
@@ -63594,7 +63637,7 @@ Request.prototype.getNewAgent = function () {
   // ca option is only relevant if proxy or destination are https
   var proxy = self.proxy;
   if (typeof proxy === 'string') {
-    proxy = url$2.parse(proxy);
+    proxy = url$3.parse(proxy);
   }
   var isHttps = (proxy && proxy.protocol === 'https:') || this.uri.protocol === 'https:';
 
@@ -64201,7 +64244,7 @@ Request.prototype.qs = function (q, clobber) {
     return self
   }
 
-  self.uri = url$2.parse(self.uri.href.split('?')[0] + '?' + qs);
+  self.uri = url$3.parse(self.uri.href.split('?')[0] + '?' + qs);
   self.url = self.uri;
   self.path = self.uri.path;
 
@@ -64766,7 +64809,7 @@ var os = {
   loadavg: loadavg,
   hostname: hostname$1,
   endianness: endianness,
-};
+}
 
 
 var os$1 = Object.freeze({
@@ -65255,7 +65298,7 @@ origin.same = function same(a, b) {
 //
 var original = origin;
 
-var parse$8 = url$2.parse;
+var parse$8 = url$3.parse;
 
 /**
  * Creates a new EventSource object
@@ -67765,7 +67808,7 @@ var tty = {
   isatty: isatty,
   ReadStream: ReadStream,
   WriteStream: WriteStream
-};
+}
 
 
 var tty$1 = Object.freeze({
@@ -68181,7 +68224,7 @@ RedirectableRequest.prototype._performRequest = function () {
 	var nativeProtocol = nativeProtocols[protocol];
 	var request = this._currentRequest =
 				nativeProtocol.request(this._options, this._onNativeResponse);
-	this._currentUrl = url$2.format(this._options);
+	this._currentUrl = url$3.format(this._options);
 
 	// Set up event handlers
 	request._redirectable = this;
@@ -68261,9 +68304,9 @@ RedirectableRequest.prototype._processResponse = function (response) {
 		}
 
 		// Perform the redirected request
-		var redirectUrl = url$2.resolve(this._currentUrl, location);
+		var redirectUrl = url$3.resolve(this._currentUrl, location);
 		debug('redirecting to', redirectUrl);
-		Object.assign(this._options, url$2.parse(redirectUrl));
+		Object.assign(this._options, url$3.parse(redirectUrl));
 		this._isRedirect = true;
 		this._performRequest();
 	} else {
@@ -68325,7 +68368,7 @@ Object.keys(nativeProtocols).forEach(function (protocol) {
 	// Executes an HTTP request, following redirects
 	wrappedProtocol.request = function (options, callback) {
 		if (typeof options === 'string') {
-			options = url$2.parse(options);
+			options = url$3.parse(options);
 			options.maxRedirects = exports.maxRedirects;
 		} else {
 			options = Object.assign({
@@ -68498,7 +68541,7 @@ var http_1 = function httpAdapter(config) {
     }
 
     // Parse url
-    var parsed = url$2.parse(config.url);
+    var parsed = url$3.parse(config.url);
     var protocol = parsed.protocol || 'http:';
 
     if (!auth && parsed.auth) {
@@ -68530,7 +68573,7 @@ var http_1 = function httpAdapter(config) {
       var proxyEnv = protocol.slice(0, -1) + '_proxy';
       var proxyUrl = process.env[proxyEnv] || process.env[proxyEnv.toUpperCase()];
       if (proxyUrl) {
-        var parsedProxyUrl = url$2.parse(proxyUrl);
+        var parsedProxyUrl = url$3.parse(proxyUrl);
         proxy = {
           host: parsedProxyUrl.hostname,
           port: parsedProxyUrl.port
@@ -69154,7 +69197,7 @@ axios_1.default = default_1;
 
 var axios = axios_1;
 
-var camomile = function (url) {
+function camomile (url) {
   var api = axios.create({
     baseURL: url,
     withCredentials: true
@@ -69239,10 +69282,10 @@ var camomile = function (url) {
       )
     }
   }
-};
+}
 
 // import Camomile from '../../../camomile-client-javascript' /* debug with local version */
-var api = (config$1.axios ? camomile(config$1.url) : new camomileClient(config$1.url));
+var api = (config$1.axios ? camomile(config$1.url) : new camomileClient(config$1.url))
 
 var state$6 = {
   id: '',
@@ -69427,7 +69470,7 @@ var user = {
   actions: actions$4,
   getters: getters$1,
   mutations: mutations$6
-};
+}
 
 var obj;
 var state$8 = {
@@ -69577,7 +69620,7 @@ var users = {
   actions: actions$5,
   getters: getters$2,
   mutations: mutations$7
-};
+}
 
 var obj$1;
 var state$9 = {
@@ -69799,7 +69842,7 @@ var groups = {
   actions: actions$6,
   getters: getters$3,
   mutations: mutations$8
-};
+}
 
 var state$10 = {
   list: [],
@@ -70220,11 +70263,19 @@ var corpus = {
   actions: actions$7,
   getters: getters$4,
   mutations: mutations$9
-};
+}
 
+var interval;
 var state$11 = {
   list: [],
-  id: null
+  id: null,
+  properties: {
+    timeTotal: 0,
+    timeCurrent: 0,
+    isPlaying: false,
+    isLoaded: false,
+    seek: { seeking: false }
+  }
 };
 
 var actions$8 = {
@@ -70345,6 +70396,49 @@ var actions$8 = {
     var commit = ref.commit;
 
     commit('set', getters.id(mediaId));
+  },
+
+  play: function play (ref) {
+    var state = ref.state;
+    var commit = ref.commit;
+
+    var timeStart = Date.now();
+    var timeCurrent = state.properties.timeCurrent;
+    interval = setInterval(function () {
+      var timeEllapsed = Date.now() - timeStart;
+      commit('timeCurrent', timeCurrent + timeEllapsed);
+    }, 0);
+    commit('play', true);
+  },
+
+  pause: function pause (ref) {
+    var commit = ref.commit;
+
+    clearInterval(interval);
+    commit('play', false);
+  },
+
+  stop: function stop (ref) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+
+    clearInterval(interval);
+    commit('play', false);
+    dispatch('seek', { ratio: 0, serverRequest: true });
+  },
+
+  seek: function seek (ref, ref$1) {
+    var state = ref.state;
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var ratio = ref$1.ratio;
+    var serverRequest = ref$1.serverRequest;
+
+    if (state.properties.isPlaying) {
+      clearInterval(interval);
+    }
+    commit('timeCurrent', ratio * state.properties.timeTotal);
+    commit('seek', { seeking: true, serverRequest: serverRequest });
   }
 };
 
@@ -70384,6 +70478,33 @@ var mutations$10 = {
 
   set: function set (state, id) {
     state.id = id;
+    state.properties = {
+      timeTotal: 0,
+      timeCurrent: 0,
+      isPlaying: false,
+      isLoaded: false,
+      seek: { seeking: false }
+    };
+  },
+
+  loaded: function loaded (state, isLoaded) {
+    state.properties.isLoaded = isLoaded;
+  },
+
+  play: function play (state, isPlaying) {
+    state.properties.isPlaying = isPlaying;
+  },
+
+  timeCurrent: function timeCurrent (state, time) {
+    state.properties.timeCurrent = time;
+  },
+
+  timeTotal: function timeTotal (state, time) {
+    state.properties.timeTotal = time;
+  },
+
+  seek: function seek (state, options) {
+    state.properties.seek = options;
   }
 };
 
@@ -70393,7 +70514,7 @@ var medias = {
   actions: actions$8,
   getters: getters$5,
   mutations: mutations$10
-};
+}
 
 var state$12 = {
   list: [],
@@ -70826,7 +70947,7 @@ var layers = {
   actions: actions$9,
   getters: getters$6,
   mutations: mutations$11
-};
+}
 
 var state$13 = {
   list: [],
@@ -71005,7 +71126,7 @@ var annotations = {
   actions: actions$10,
   getters: getters$7,
   mutations: mutations$12
-};
+}
 
 var modules = {
   viewport: viewport,
@@ -71030,11 +71151,9 @@ var actions = {
   set: function set (ref) {
     var dispatch = ref.dispatch;
 
-    Promise.all([].concat( ['users', 'groups'].map(
-        function (type) { return new Promise(function (resolve, reject) { return dispatch(("cml/" + type + "/list"), {}, { root: true })
-              .then(function (r) { return resolve(r); })
-              .catch(function (e) { return reject(e); }); }
-          ); }
+    Promise.all([].concat( ['users', 'groups'].map(function (type) { return dispatch(("cml/" + type + "/list"), {}, { root: true })
+          .then(function (r) { return r; })
+          .catch(function (e) { return e; }); }
       ) )).then(function (res) {
       dispatch('cml/corpus/list', null, { root: true });
     });
@@ -71072,7 +71191,7 @@ var store = new index_esm.Store({
       modules: modules
     }
   }
-});
+})
 
 var debug$5 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.visible)?_c('pre',[_c('code',[_vm._v(_vm._s(_vm.state))])]):_vm._e()},staticRenderFns: [],_scopeId: 'data-v-5a8a2715',
   name: 'camomile-utils-debug',
@@ -71107,7 +71226,7 @@ var debug$5 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
   beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keydown', this.keydown);
   }
-};
+}
 
 var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],_scopeId: 'data-v-24d69054',
   name: 'camomile-utils-viewport',
@@ -71122,7 +71241,7 @@ var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
     window.addEventListener('resize', this.resize);
     this.resize();
   }
-};
+}
 
 var cmlDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"name":"transition-top"}},[(_vm.dropdown.visible)?_c('div',{staticClass:"absolute full bg-alpha",on:{"click":function($event){if($event.target !== $event.currentTarget){ return null; }_vm.close($event);}}},[_c('div',{staticClass:"container relative"},[_c(_vm.dropdown.config.component,{tag:"component"})],1)]):_vm._e()])},staticRenderFns: [],
   name: 'camomile-utils-dropdown',
@@ -71138,7 +71257,7 @@ var cmlDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var
       this.$store.commit('cml/dropdown/close');
     }
   }
-};
+}
 
 var cmlPopup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"absolute full bg-alpha",on:{"click":_vm.close}}),_vm._v(" "),_c('div',{staticClass:"pophover absolute full bg-alt p-l pb-s"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',[_vm._v(_vm._s(_vm.config.title))]),_vm._v(" "),(_vm.config.closeBtn)?_c('button',{staticClass:"flex-right btn p-s mt--m",on:{"click":_vm.close}},[_c('i',{staticClass:"icon-24 icon-24-close"})]):_vm._e()]),_vm._v(" "),_c('hr',{staticClass:"border-bg"}),_vm._v(" "),_c(_vm.config.component,{tag:"component"})],1)])},staticRenderFns: [],
   name: 'camomile-popup',
@@ -71173,7 +71292,7 @@ var cmlPopup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       document.removeEventListener('keyup', this.keyup);
     }
   }
-};
+}
 
 var cmlMessages = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"messages absolute center"},[_c('transition-group',{attrs:{"name":"transition-bottom","tag":"div"}},_vm._l((_vm.messages),function(message){return (message.content)?_c('div',{key:message.id,staticClass:"px-m py-s mb color-bg b",class:("bg-" + (message.type))},[_vm._v(" "+_vm._s(message.content)+" ")]):_vm._e()}))],1)},staticRenderFns: [],
   name: 'camomile-utils-messages',
@@ -71183,7 +71302,7 @@ var cmlMessages = {render: function(){var _vm=this;var _h=_vm.$createElement;var
       return this.$store.state.cml.messages.list
     }
   }
-};
+}
 
 var cmlTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h1',{staticClass:"mb-0"},[_vm._v(_vm._s(_vm.title))])},staticRenderFns: [],
   name: 'camomile-header-title',
@@ -71193,7 +71312,7 @@ var cmlTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       return this.$store.state.cml.config.title
     }
   }
-};
+}
 
 var cmlInfos = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h6',{staticClass:"menubar-infos mb-0"},[_vm._v(_vm._s(_vm.api)+": "+_vm._s(_vm.url))])},staticRenderFns: [],
   name: 'camomile-header-infos',
@@ -71206,7 +71325,7 @@ var cmlInfos = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       return this.$store.state.cml.config.axios ? 'axios' : 'rp';
     }
   }
-};
+}
 
 var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h3',{staticClass:"pt-s"},[_vm._v(_vm._s(_vm.title))]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.fields),expression:"fields"}],ref:"field",staticClass:"textarea-alt",domProps:{"value":(_vm.fields)},on:{"keyup":_vm.resize,"input":function($event){if($event.target.composing){ return; }_vm.fields=$event.target.value;}}})])])])},staticRenderFns: [],
   name: 'camomile-popup-edit-json',
@@ -71231,7 +71350,7 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   methods: {
     jsonCheck: function jsonCheck (str) {
       try {
-        
+        JSON.parse(str);
       } catch (e) {
         return false
       }
@@ -71247,9 +71366,9 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
     var el = this.$refs.field;
     el.style.height = (el.scrollHeight) + "px";
   }
-};
+}
 
-var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations' && !_vm.element.id && _vm.element.mediaId)?_c('div',{staticClass:"blobs"},[_vm._m(4,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4 p-s"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.mediaLink),expression:"element.mediaLink"}],staticClass:"select-alt",attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.element.mediaLink)?_vm._i(_vm.element.mediaLink,null)>-1:(_vm.element.mediaLink)},on:{"change":function($event){var $$a=_vm.element.mediaLink,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.element.mediaLink=$$a.concat([$$v]));}else{$$i>-1&&(_vm.element.mediaLink=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.$set(_vm.element, "mediaLink", $$c);}}}}),_vm._v(" "+_vm._s(_vm.element.mediaName)+" ")])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Link to media")])])}],
+var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations' && !_vm.element.id && _vm.element.mediaId)?_c('div',{staticClass:"blobs"},[_vm._m(4),_vm._v(" "),_c('div',{staticClass:"blob-3-4 p-s"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.mediaLink),expression:"element.mediaLink"}],staticClass:"select-alt",attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.element.mediaLink)?_vm._i(_vm.element.mediaLink,null)>-1:(_vm.element.mediaLink)},on:{"change":function($event){var $$a=_vm.element.mediaLink,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.element.mediaLink=$$a.concat([$$v]));}else{$$i>-1&&(_vm.element.mediaLink=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.$set(_vm.element, "mediaLink", $$c);}}}}),_vm._v(" "+_vm._s(_vm.element.mediaName)+" ")])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Link to media")])])}],
   name: 'camomile-popup-edit',
 
   components: {
@@ -71292,7 +71411,7 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keyup', this.keyup);
   }
-};
+}
 
 var userbuttonDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"dropdown"},[(_vm.isAdmin)?_c('div',[_c('button',{staticClass:"btn px-m py-s full-x",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: _vm.user });}}},[_vm._v("Settings…")])]):_vm._e(),_vm._v(" "),_c('div',[_c('button',{staticClass:"btn px-m py-s full-x mr home",on:{"click":_vm.logout}},[_vm._v("Logout")])])])},staticRenderFns: [],
   name: 'camomile-header-userbutton-dropdown',
@@ -71332,7 +71451,7 @@ var userbuttonDropdown = {render: function(){var _vm=this;var _h=_vm.$createElem
       this.close();
     }
   }
-};
+}
 
 var cmlUserbutton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn-menubar px-m py-s full-x",class:{ active: _vm.visible },on:{"click":_vm.dropdownToggle}},[_vm._v(_vm._s(_vm.user.name))])},staticRenderFns: [],
   name: 'camomile-header-userbutton',
@@ -71351,7 +71470,7 @@ var cmlUserbutton = {render: function(){var _vm=this;var _h=_vm.$createElement;v
       }
     }
   }
-};
+}
 
 var cmlSync = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn-menubar px-m py-s full-x",on:{"click":_vm.sync}},[_c('i',{staticClass:"icon-24 icon-24-dot",class:{ blink: _vm.active }})])},staticRenderFns: [],
   name: 'camomile-header-syncbutton',
@@ -71367,7 +71486,7 @@ var cmlSync = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
       this.$store.dispatch('cml/sync/all');
     }
   }
-};
+}
 
 var cmlHeader = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"bg-inverse color-bg header"},[_c('div',{staticClass:"container"},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4 mb-0"},[_c('cml-title')],1),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blob-1-2 mb-0"},[_c('div',{staticClass:"blobs-default"},[_c('div',{staticClass:"blob-default"},[_c('cml-sync',{staticClass:"mb-0 left"})],1),_vm._v(" "),_c('div',{staticClass:"blob-auto mb-0"},[_c('cml-infos')],1)])]):_vm._e(),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blob mb-0 flex-right"},[_c('cml-userbutton')],1):_vm._e()])])])},staticRenderFns: [],
   name: 'camomile-header',
@@ -71384,9 +71503,9 @@ var cmlHeader = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
       return this.$store.state.cml.user.isLogged
     }
   }
-};
+}
 
-var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.name),expression:"config.user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name"},domProps:{"value":(_vm.config.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "name", $event.target.value);}}})]),_vm._v(" "),_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.password),expression:"config.user.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"Password"},domProps:{"value":(_vm.config.user.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "password", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":function($event){_vm.login(_vm.config);}}},[_vm._v("Login")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])}],
+var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.name),expression:"config.user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name"},domProps:{"value":(_vm.config.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "name", $event.target.value);}}})]),_vm._v(" "),_vm._m(1),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.password),expression:"config.user.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"Password"},domProps:{"value":(_vm.config.user.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "password", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":function($event){_vm.login(_vm.config);}}},[_vm._v("Login")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])}],
   name: 'camomile-login-popup',
 
   computed: {
@@ -71413,7 +71532,7 @@ var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
   beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keyup', this.keyup);
   }
-};
+}
 
 var cmlLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],
   name: 'camomile-login',
@@ -71428,9 +71547,9 @@ var cmlLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       element: {}
     });
   }
-};
+}
 
-var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.id),expression:"element.id"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.id)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "id", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":_vm.remove,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.remove($event);}}},[_vm._v("Remove")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Id")])])}],
+var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(1),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.id),expression:"element.id"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.id)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "id", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":_vm.remove,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.remove($event);}}},[_vm._v("Remove")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Id")])])}],
   name: 'camomile-popup-remove',
 
   computed: Object.assign({}, mapState({
@@ -71455,9 +71574,9 @@ var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keyup', this.keyup);
   }
-};
+}
 
-var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.user.name),expression:"user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.user, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"mb-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-inline clearfix"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id,staticClass:"tag",class:{ active: _vm.groupActive(group.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.groupToggle(group);}}},[_vm._v(_vm._s(group.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
+var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.user.name),expression:"user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.user, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"mb-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-inline clearfix"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id,staticClass:"tag",class:{ active: _vm.groupActive(group.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.groupToggle(group);}}},[_vm._v(_vm._s(group.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
   name: 'camomile-popup-groups',
 
   computed: {
@@ -71484,9 +71603,9 @@ var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var
         .userIds.indexOf(this.user.id) !== -1
     }
   }
-};
+}
 
-var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {}, role: 'user' } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
+var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {}, role: 'user' } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
   name: 'camomile-users',
 
   data: function data () {
@@ -71530,9 +71649,9 @@ var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     }
   }
-};
+}
 
-var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.group.name),expression:"group.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.group.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.group, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"pt-s mb-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-inline"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id,staticClass:"tag",class:{ active: _vm.userActive(user.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.userToggle(user.id);}}},[_vm._v(_vm._s(user.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
+var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.group.name),expression:"group.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.group.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.group, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"pt-s mb-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-inline"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id,staticClass:"tag",class:{ active: _vm.userActive(user.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.userToggle(user.id);}}},[_vm._v(_vm._s(user.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
   name: 'camomile-popup-users',
 
   computed: {
@@ -71559,9 +71678,9 @@ var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
       return this.group.userIds.indexOf(userId) > -1
     }
   }
-};
+}
 
-var cmlGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.groups),function(group){return _c('tr',{key:group.id},[_c('td',[_vm._v(_vm._s(group.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(group.userIds.length))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupUsersConfig, element: group });}}},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: group });}}},[_vm._v("Edit")]),_vm._v(" "),(_vm.isRoot)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: group });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Users")]),_c('th')])}],
+var cmlGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.groups),function(group){return _c('tr',{key:group.id},[_c('td',[_vm._v(_vm._s(group.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(group.userIds.length))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupUsersConfig, element: group });}}},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: group });}}},[_vm._v("Edit")]),_vm._v(" "),(_vm.isRoot)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: group });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Users")]),_c('th')])}],
   name: 'camomile-groups',
 
   data: function data () {
@@ -71608,7 +71727,7 @@ var cmlGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
       return this.$store.dispatch('cml/groups/list')
     }
   }
-};
+}
 
 var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"list-inline"},[_c('li',{staticClass:"tag",class:{ active: _vm.isActive(1) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(1);}}},[_vm._v("R")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(2) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(2);}}},[_vm._v("W")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(3) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(3);}}},[_vm._v("A")])])])},staticRenderFns: [],
   name: 'camomile-popup-permissions-edit',
@@ -71640,9 +71759,9 @@ var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement
       return this.permissions[this.element.id] === permission
     }
   }
-};
+}
 
-var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.resource.name),expression:"resource.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.resource.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.resource, "name", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(group.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"resource":_vm.permissionsConfig,"element":{ id: group.id, type: 'group' }}})],1)])])}))]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(user.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"resource":_vm.permissionsConfig,"element":{ id: user.id, type: 'user' }}})],1)])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])}],
+var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.resource.name),expression:"resource.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.resource.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.resource, "name", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(group.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"resource":_vm.permissionsConfig,"element":{ id: group.id, type: 'group' }}})],1)])])}))]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(user.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"resource":_vm.permissionsConfig,"element":{ id: user.id, type: 'user' }}})],1)])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])}],
   name: 'camomile-permissions',
 
   components: {
@@ -71662,9 +71781,9 @@ var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElemen
         permissions: this.resource.permissions.users
       }
     }})
-};
+}
 
-var cmlCorpus = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var cmlCorpus = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-corpus',
 
   data: function data () {
@@ -71713,9 +71832,9 @@ var cmlCorpus = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
       this.$store.dispatch('cml/corpus/set', e.target.value);
     }
   }
-};
+}
 
-var cmlMedias = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Media")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var cmlMedias = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Media")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-medias',
 
   data: function data () {
@@ -71765,9 +71884,9 @@ var cmlMedias = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
       this.$store.dispatch('cml/medias/set', e.target.value);
     }
   }
-};
+}
 
-var cmlLayers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Layers")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":layer.id,"checked":layer.id === _vm.layerId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var cmlLayers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Layers")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":layer.id,"checked":layer.id === _vm.layerId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-layers',
 
   data: function data () {
@@ -71820,9 +71939,9 @@ var cmlLayers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
       this.$store.dispatch('cml/layers/set', e.target.value);
     }
   }
-};
+}
 
-var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Annotations")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":annotation.id,"checked":annotation.id === _vm.annotationId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
+var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Annotations")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":annotation.id,"checked":annotation.id === _vm.annotationId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
   name: 'camomile-annotations',
 
   data: function data () {
@@ -71885,9 +72004,231 @@ var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;
       return value.substr(value.length - 6)
     }
   }
-};
+}
 
-var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full-y flex flex-direction-column"},[_c('cml-header'),_vm._v(" "),_c('div',{staticClass:"relative page"},[_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),_c('div',{staticClass:"container pt"},[(_vm.isAdmin)?_c('div',{staticClass:"blobs"},[_c('cml-users',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-groups',{staticClass:"blob-1-2 p border"})],1):_vm._e(),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blobs"},[_c('cml-corpus',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-medias',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-layers',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-annotations',{staticClass:"blob-1-2 p border"})],1):_vm._e()])],1),_vm._v(" "),(!_vm.isLogged)?_c('cml-login'):_vm._e(),_vm._v(" "),_c('viewport'),_vm._v(" "),_c('debug')],1)},staticRenderFns: [],
+var spinner = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _vm._m(0)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"spinner"},[_c('div',{staticClass:"bounce1"}),_vm._v(" "),_c('div',{staticClass:"bounce2"}),_vm._v(" "),_c('div',{staticClass:"bounce3"})])}],
+  name: 'camomile-utils-spinner'
+}
+
+var cmlMediaVideo = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"mb-xl"},[_c('div',{attrs:{"id":"player"}}),_vm._v(" "),(!_vm.isLoaded)?_c('spinner'):_vm._e()],1)},staticRenderFns: [],
+  components: {
+    spinner: spinner
+  },
+
+  props: {
+    media: Object
+  },
+
+  data: function data () {
+    return {
+      player: null,
+      videoNew: false
+    }
+  },
+
+  computed: Object.assign({}, mapState({
+      isPlaying: function (state) { return state.cml.medias.properties.isPlaying; },
+      isLoaded: function (state) { return state.cml.medias.properties.isLoaded; },
+      seek: function (state) { return state.cml.medias.properties.seek; },
+      timeCurrent: function (state) { return state.cml.medias.properties.timeCurrent; },
+      viewportWidth: function (state) { return state.cml.viewport.width; }
+    })),
+
+  mounted: function mounted () {
+
+    this.playerLoad(this.media.url);
+
+    // if (media.description.embed === 'youtube') {
+  },
+
+  methods: {
+    videoLoad: function videoLoad (mediaUrl) {
+      var videoId = this.parseYouTubeId(mediaUrl);
+      this.player.loadVideoById(videoId);
+    },
+
+    playerLoad: function playerLoad (mediaUrl) {
+      var this$1 = this;
+
+      var videoId = this.parseYouTubeId(mediaUrl);
+
+      var width = this.$refs.container.offsetWidth;
+      var height = width * 9 / 16;
+      var events = {
+        onReady: function (event) {
+          console.log('onReady', event);
+          this$1.$store.commit('cml/medias/loaded', true);
+          this$1.$store.commit('cml/medias/timeTotal', this$1.player.getDuration() * 1000);
+        },
+        onStateChange: function (event) {
+          console.log('onStateChange', event.data);
+          if (event.data === -1) {
+          } else if (event.data === 1) {
+            if (this$1.videoNew) {
+              this$1.videoNew = false;
+              this$1.$store.commit('cml/medias/timeTotal', this$1.player.getDuration() * 1000);
+              this$1.player.pauseVideo();
+              // this.$store.dispatch('cml/medias/pause')
+            } else {
+              this$1.$store.dispatch('cml/medias/play');
+            }
+          } else if (event.data === 2) {
+            // to-do: handle buffering
+            this$1.$store.dispatch('cml/medias/pause');
+          } else if (event.data === 0) {
+            this$1.$store.dispatch('cml/medias/stop');
+          } else if (event.data === 5) {
+            console.log('once cued', event, this$1.player.getDuration());
+            this$1.$store.commit('cml/medias/loaded', true);
+            this$1.$store.commit('cml/medias/timeTotal', this$1.player.getDuration() * 1000);
+          }
+        },
+        onApiChange: function (event) {
+          console.log('onApiChange', event);
+          if (!this$1.isLoaded) {
+            this$1.videoNew = true;
+            this$1.$store.commit('cml/medias/loaded', true);
+          }
+        }
+      };
+      var playerVars = {
+        autoplay: 0,
+        controls: 0,
+        modestbranding: 1,
+        rel: 0,
+        showinfo: 0,
+        iv_load_policy: 3,
+        enablejsapi: 1,
+        disablekb: 1
+      };
+
+      var tag = document.createElement('script');
+      var scriptTags = document.getElementsByTagName('script');
+      var scriptTagLast = scriptTags[scriptTags.length - 1];
+
+      tag.src = 'https://www.youtube.com/iframe_api';
+      scriptTagLast.parentNode.insertBefore(tag, scriptTagLast.nextSibling);
+
+      window.onYouTubeIframeAPIReady = function () {
+        this$1.player = new YT.Player('player', {
+          width: width,
+          height: height,
+          videoId: videoId,
+          playerVars: playerVars,
+          events: events
+        });
+      };
+
+      // youtube(videoId, width, height,playerVars, events)
+
+    },
+    videoSeek: function videoSeek (serverRequest) {
+      this.player.seekTo(this.timeCurrent / 1000, serverRequest);
+      this.$store.commit('cml/medias/seek', { seekign: false });
+    },
+    parseYouTubeId: function parseYouTubeId (url) {
+      var regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      return url.match(regex) ? RegExp.$2 : url
+    }
+  },
+
+  beforeDestroy: function beforeDestroy () {
+    console.log('before destroy');
+    if (this.player !== null && this.player.destroy) {
+      this.player.destroy();
+    }
+
+    this.player = null;
+  },
+
+  watch: {
+    isPlaying: function isPlaying (val) {
+      if (val) {
+        this.player.playVideo();
+      } else {
+        this.player.pauseVideo();
+      }
+    },
+    seek: function seek (options) {
+      if (options.seeking) {
+        this.videoSeek(options.serverRequest);
+      }
+    },
+    viewportWidth: function viewportWidth () {
+      var width = this.$refs.container.offsetWidth;
+      var height = width * 9 / 16;
+      this.player.setSize(width, height);
+    },
+    media: {
+      handler: function handler (media) {
+        this.videoLoad(media.url);
+      }
+    }
+  }
+}
+
+var cmlMediaController = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isLoaded)?_c('div',{staticClass:"mediacontroller relative"},[_c('button',{ref:"button",staticClass:"mediacontroller-button",on:{"click":_vm.mediaToggle}},[_vm._v(_vm._s(_vm.playButton))]),_vm._v(" "),_c('div',{ref:"counter",staticClass:"mediacontroller-counter"},[_vm._v(_vm._s(_vm.timeCurrentFormat)+" / "+_vm._s(_vm.timeTotalFormat)+" ")]),_vm._v(" "),_c('div',{ref:"progress",staticClass:"mediacontroller-progress",on:{"click":_vm.progressClick,"mousemove":_vm.progressMousemove,"mousedown":_vm.progressMousedown,"mouseup":_vm.progressMouseup}},[_c('div',{staticClass:"relative pointer-none full-y"},[_c('div',{staticClass:"mediacontroller-progress-bar",style:({ width: _vm.progressBarWidth })})])])]):_vm._e()},staticRenderFns: [],
+  props: {
+    media: Object
+  },
+
+  data: function data () {
+    return {
+      mousedown: false
+    }
+  },
+
+  computed: Object.assign({}, mapState({
+      timeTotal: function (state) { return state.cml.medias.properties.timeTotal; },
+      timeCurrent: function (state) { return state.cml.medias.properties.timeCurrent; },
+      isPlaying: function (state) { return state.cml.medias.properties.isPlaying; },
+      isLoaded: function (state) { return state.cml.medias.properties.isLoaded; }
+    }),
+    {timeCurrentFormat: function timeCurrentFormat () {
+      return this.msToMinutesAndSeconds(this.timeCurrent)
+    },
+    timeTotalFormat: function timeTotalFormat () {
+      return this.msToMinutesAndSeconds(this.timeTotal)
+    },
+    progressBarWidth: function progressBarWidth () {
+      return ((this.timeCurrent / this.timeTotal * 100) + "%")
+    },
+    playButton: function playButton () {
+      return this.isPlaying ? '❚ ❚' : '►'
+    }}),
+
+  methods: {
+    mediaToggle: function mediaToggle () {
+      if (this.isPlaying) {
+        this.$store.commit('cml/medias/play', false);
+      } else {
+        this.$store.commit('cml/medias/play', true);
+      }
+    },
+    progressClick: function progressClick (e) {
+      this.seek(e.offsetX / this.$refs.progress.offsetWidth, true);
+    },
+    progressMousemove: function progressMousemove (e) {
+      this.mousedown && this.seek(e.offsetX / this.$refs.progress.offsetWidth, false);
+    },
+    progressMousedown: function progressMousedown () {
+      this.mousedown = true;
+    },
+    progressMouseup: function progressMouseup () {
+      this.mousedown = false;
+    },
+    seek: function seek (ratio, serverRequest) {
+      this.$store.dispatch('cml/medias/seek', { ratio: ratio, serverRequest: serverRequest });
+    },
+    msToMinutesAndSeconds: function msToMinutesAndSeconds (ms) {
+      var minutes = Math.floor(ms / 60000);
+      var seconds = ((ms % 60000) / 1000).toFixed(0);
+      return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
+    }
+  }
+}
+
+var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full-y flex flex-direction-column"},[_c('cml-header'),_vm._v(" "),_c('div',{staticClass:"relative page"},[_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"container pt"},[(_vm.isAdmin)?_c('div',{staticClass:"blobs"},[_c('cml-users',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-groups',{staticClass:"blob-1-2 p border"})],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('cml-corpus',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-medias',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-layers',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-annotations',{staticClass:"blob-1-2 p border"})],1),_vm._v(" "),(_vm.media)?_c('cml-media-controller',{staticClass:"mb",attrs:{"media":_vm.media}}):_vm._e(),_vm._v(" "),(_vm.media)?_c('cml-media-video',{attrs:{"media":_vm.media}}):_vm._e()],1):_c('cml-login')],1),_vm._v(" "),_c('viewport'),_vm._v(" "),_c('debug')],1)},staticRenderFns: [],
   store: store,
 
   name: 'camomile',
@@ -71905,15 +72246,21 @@ var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm.
     cmlCorpus: cmlCorpus,
     cmlMedias: cmlMedias,
     cmlLayers: cmlLayers,
-    cmlAnnotations: cmlAnnotations
+    cmlAnnotations: cmlAnnotations,
+    cmlMediaVideo: cmlMediaVideo,
+    cmlMediaController: cmlMediaController
   },
 
   computed: Object.assign({}, mapState({
       isAdmin: function (state$$1) { return state$$1.cml.user.isAdmin; },
       isLogged: function (state$$1) { return state$$1.cml.user.isLogged; },
-      popup: function (state$$1) { return state$$1.cml.popup; }
-    }))
-};
+      popup: function (state$$1) { return state$$1.cml.popup; },
+      media: function (state$$1) { return state$$1.cml.medias.list.find(function (m) { return m.id === state$$1.cml.medias.id; }); }
+    }),
+    {mediaType: function mediaType () {
+      return this.media && this.media.description && this.media.description.type || undefined
+    }})
+}
 
 return app;
 
