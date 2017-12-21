@@ -37,7 +37,7 @@ export default [
     ]
   },
   {
-    input: 'src/app.vue',
+    input: 'src/app.js',
     external: ['vue', 'vuex', 'camomile-client', 'axios'],
     output: [
       { file: pkg.main, format: 'cjs' },

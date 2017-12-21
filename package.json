@@ -175,7 +175,7 @@
   "jest": {
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.runtime.min.js",
-      "^.+\\.(css)$": "./src/__mocks__/css.js"
+      "^.+\\.(css)$": "<rootDir>/src/__mocks__/css.js"
     },
     "moduleFileExtensions": ["js", "json", "vue"],
     "transform": {
@@ -184,8 +184,8 @@
     },
     "mapCoverage": true,
     "snapshotSerializers": ["jest-serializer-vue"],
-    "roots": ["./src/"],
-    "coverageDirectory": "./coverage/",
+    "roots": ["<rootDir>/src/"],
+    "coverageDirectory": "<rootDir>/coverage/",
     "collectCoverage": true
   },
   "postcss": {
