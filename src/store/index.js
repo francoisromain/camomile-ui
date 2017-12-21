@@ -49,20 +49,12 @@ export const actions = {
   },
 
   reset ({ commit }) {
-    commit('delete')
     commit('cml/user/reset', null, { root: true })
     commit('cml/users/reset', null, { root: true })
     commit('cml/groups/reset', null, { root: true })
     commit('cml/corpus/reset', null, { root: true })
     commit('cml/medias/reset', null, { root: true })
     commit('cml/layers/reset', null, { root: true })
-  }
-}
-
-export const mutations = {
-  delete (state) {
-    state.url = ''
-    state.api = null
   }
 }
 
@@ -74,7 +66,6 @@ export default new Vuex.Store({
       namespaced: true,
       state,
       actions,
-      mutations,
       modules
     }
   }

@@ -8,11 +8,11 @@ export const state = {
 
 export const actions = {
   add ({ commit, dispatch, rootState, rootGetters }, { element, uid }) {
-    commit('cml/sync/start', `corpusAdd-${uid}`, { root: true })
+    dispatch('cml/sync/start', `corpusAdd-${uid}`, { root: true })
     return api
       .createCorpus(element.name, element.description, {})
       .then(r => {
-        commit('cml/sync/stop', `corpusAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusAdd-${uid}`, { root: true })
         const corpu = {
           name: r.data.name,
           id: r.data._id,
@@ -33,7 +33,7 @@ export const actions = {
         return corpu
       })
       .catch(e => {
-        commit('cml/sync/stop', `corpusAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusAdd-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -42,11 +42,11 @@ export const actions = {
   },
 
   remove ({ commit, dispatch, state }, { id, uid }) {
-    commit('cml/sync/start', `corpusRemove-${uid}`, { root: true })
+    dispatch('cml/sync/start', `corpusRemove-${uid}`, { root: true })
     return api
       .deleteCorpus(id)
       .then(r => {
-        commit('cml/sync/stop', `corpusRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusRemove-${uid}`, { root: true })
         commit('remove', { corpuId: id, uid })
         dispatch('cml/messages/success', 'Corpus removed', { root: true })
         if (state.actives[uid] === id) {
@@ -56,7 +56,7 @@ export const actions = {
         return id
       })
       .catch(e => {
-        commit('cml/sync/stop', `corpusRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusRemove-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -65,14 +65,14 @@ export const actions = {
   },
 
   update ({ commit, dispatch, state }, { element, uid }) {
-    commit('cml/sync/start', `corpusUpdate-${uid}`, { root: true })
+    dispatch('cml/sync/start', `corpusUpdate-${uid}`, { root: true })
     return api
       .updateCorpus(element.id, {
         name: element.name,
         description: element.description
       })
       .then(r => {
-        commit('cml/sync/stop', `corpusUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusUpdate-${uid}`, { root: true })
         const corpu = Object.assign({}, element)
         corpu.name = r.data.name
         corpu.description = r.data.description || {}
@@ -82,7 +82,7 @@ export const actions = {
         return corpu
       })
       .catch(e => {
-        commit('cml/sync/stop', `corpusUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusUpdate-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -90,16 +90,19 @@ export const actions = {
       })
   },
 
-  listAll ({ dispatch }) {
-    dispatch('list', 'default')
+  listAll ({ state, dispatch }) {
+    Object.keys(state.lists).forEach(uid => {
+      console.log('uid', uid)
+      dispatch('list', uid)
+    })
   },
 
   list ({ commit, dispatch, rootGetters }, uid) {
-    commit('cml/sync/start', `corpusList-${uid}`, { root: true })
+    dispatch('cml/sync/start', `corpusList-${uid}`, { root: true })
     return api
       .getCorpora()
       .then(r => {
-        commit('cml/sync/stop', `corpusList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusList-${uid}`, { root: true })
         const corpus = r.data.map(c => ({
           name: c.name,
           id: c._id,
@@ -120,7 +123,7 @@ export const actions = {
         return corpus
       })
       .catch(e => {
-        commit('cml/sync/stop', `corpusList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusList-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -132,12 +135,14 @@ export const actions = {
     { commit, dispatch, rootGetters },
     { corpuId, groupId, permission, uid }
   ) {
-    commit('cml/sync/start', `corpusGroupPermissionSet-${uid}`, { root: true })
+    dispatch('cml/sync/start', `corpusGroupPermissionSet-${uid}`, {
+      root: true
+    })
     return api
       .setCorpusPermissionsForGroup(corpuId, groupId, permission)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', `corpusGroupPermissionSet-${uid}`, {
+        dispatch('cml/sync/stop', `corpusGroupPermissionSet-${uid}`, {
           root: true
         })
         commit('groupPermissionsUpdate', {
@@ -161,7 +166,7 @@ export const actions = {
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', `corpusGroupPermissionSet-${uid}`, {
+        dispatch('cml/sync/stop', `corpusGroupPermissionSet-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'
@@ -175,14 +180,14 @@ export const actions = {
     { commit, dispatch, rootGetters },
     { corpuId, groupId, uid }
   ) {
-    commit('cml/sync/start', `corpusGroupPermissionRemove-${uid}`, {
+    dispatch('cml/sync/start', `corpusGroupPermissionRemove-${uid}`, {
       root: true
     })
     return api
       .removeCorpusPermissionsForGroup(corpuId, groupId)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', `corpusGroupPermissionRemove-${uid}`, {
+        dispatch('cml/sync/stop', `corpusGroupPermissionRemove-${uid}`, {
           root: true
         })
         commit('groupPermissionsUpdate', {
@@ -206,7 +211,7 @@ export const actions = {
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', `corpusGroupPermissionRemove-${uid}`, {
+        dispatch('cml/sync/stop', `corpusGroupPermissionRemove-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'
@@ -220,12 +225,12 @@ export const actions = {
     { commit, dispatch, rootGetters },
     { corpuId, userId, permission, uid }
   ) {
-    commit('cml/sync/start', `corpusUserPermissionSet-${uid}`, { root: true })
+    dispatch('cml/sync/start', `corpusUserPermissionSet-${uid}`, { root: true })
     return api
       .setCorpusPermissionsForUser(corpuId, userId, permission)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', `corpusUserPermissionSet-${uid}`, {
+        dispatch('cml/sync/stop', `corpusUserPermissionSet-${uid}`, {
           root: true
         })
         commit('userPermissionsUpdate', {
@@ -249,7 +254,7 @@ export const actions = {
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', `corpusUserPermissionSet-${uid}`, {
+        dispatch('cml/sync/stop', `corpusUserPermissionSet-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'
@@ -263,14 +268,14 @@ export const actions = {
     { commit, dispatch, rootGetters },
     { corpuId, userId, uid }
   ) {
-    commit('cml/sync/start', `corpusUserPermissionRemove-${uid}`, {
+    dispatch('cml/sync/start', `corpusUserPermissionRemove-${uid}`, {
       root: true
     })
     return api
       .removeCorpusPermissionsForUser(corpuId, userId)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', `corpusUserPermissionRemove-${uid}`, {
+        dispatch('cml/sync/stop', `corpusUserPermissionRemove-${uid}`, {
           root: true
         })
         commit('userPermissionsUpdate', { corpuId, userId, permission: 0, uid })
@@ -289,7 +294,7 @@ export const actions = {
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', `corpusUserPermissionRemove-${uid}`, {
+        dispatch('cml/sync/stop', `corpusUserPermissionRemove-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'
@@ -329,6 +334,10 @@ export const getters = {
 }
 
 export const mutations = {
+  register (state, uid) {
+    Vue.set(state.lists, uid, [])
+  },
+
   reset (state) {
     state.lists = {}
     state.actives = {}

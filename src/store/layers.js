@@ -8,7 +8,7 @@ export const state = {
 
 export const actions = {
   add ({ commit, dispatch, rootState, rootGetters }, { element, uid }) {
-    commit('cml/sync/start', `layersAdd-${uid}`, { root: true })
+    dispatch('cml/sync/start', `layersAdd-${uid}`, { root: true })
     return api
       .createLayer(
         element.corpuId,
@@ -19,7 +19,7 @@ export const actions = {
         element.annotations
       )
       .then(r => {
-        commit('cml/sync/stop', `layersAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersAdd-${uid}`, { root: true })
         const layer = {
           name: r.data.name,
           id: r.data._id,
@@ -43,7 +43,7 @@ export const actions = {
         return layer
       })
       .catch(e => {
-        commit('cml/sync/stop', `layersAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersAdd-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -52,11 +52,11 @@ export const actions = {
   },
 
   remove ({ commit, dispatch, state, rootState }, { id, uid }) {
-    commit('cml/sync/start', `layersRemove-${uid}`, { root: true })
+    dispatch('cml/sync/start', `layersRemove-${uid}`, { root: true })
     return api
       .deleteLayer(id)
       .then(r => {
-        commit('cml/sync/stop', `layersRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersRemove-${uid}`, { root: true })
         commit('remove', { layerId: id, uid })
         dispatch('cml/messages/success', 'Layer removed', { root: true })
         if (state.actives[uid] === id) {
@@ -66,7 +66,7 @@ export const actions = {
         return id
       })
       .catch(e => {
-        commit('cml/sync/stop', `layersRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersRemove-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -75,7 +75,7 @@ export const actions = {
   },
 
   update ({ commit, dispatch, state, rootState }, { element, uid }) {
-    commit('cml/sync/start', `layersUpdate-${uid}`, { root: true })
+    dispatch('cml/sync/start', `layersUpdate-${uid}`, { root: true })
     return api
       .updateLayer(element.id, {
         name: element.name,
@@ -84,7 +84,7 @@ export const actions = {
         data_type: element.metadataType
       })
       .then(r => {
-        commit('cml/sync/stop', `layersUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersUpdate-${uid}`, { root: true })
         const layer = Object.assign({}, element)
         layer.description = r.data.description || {}
         layer.fragmentType = r.data.fragment_type || {}
@@ -95,7 +95,7 @@ export const actions = {
         return layer
       })
       .catch(e => {
-        commit('cml/sync/stop', `layersUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersUpdate-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -104,11 +104,11 @@ export const actions = {
   },
 
   list ({ dispatch, commit, rootGetters }, { corpuId, uid }) {
-    commit('cml/sync/start', `layersList-${uid}`, { root: true })
+    dispatch('cml/sync/start', `layersList-${uid}`, { root: true })
     return api
       .getLayers({ filter: { id_corpus: corpuId } })
       .then(r => {
-        commit('cml/sync/stop', `layersList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersList-${uid}`, { root: true })
         const layers = r.data.map(l => ({
           name: l.name,
           id: l._id,
@@ -132,7 +132,7 @@ export const actions = {
         return layers
       })
       .catch(e => {
-        commit('cml/sync/stop', `layersList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersList-${uid}`, { root: true })
 
         throw e
       })
@@ -142,12 +142,12 @@ export const actions = {
     { commit, dispatch, rootState, rootGetters },
     { layerId, groupId, permission, uid }
   ) {
-    commit('cml/sync/start', `layersGroupPermissionSet-${uid}`, { root: true })
+    dispatch('cml/sync/start', `layersGroupPermissionSet-${uid}`, { root: true })
     return api
       .setLayerPermissionsForGroup(layerId, groupId, permission)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', `layersGroupPermissionSet-${uid}`, {
+        dispatch('cml/sync/stop', `layersGroupPermissionSet-${uid}`, {
           root: true
         })
         commit('groupPermissionsUpdate', {
@@ -171,7 +171,7 @@ export const actions = {
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', `layersGroupPermissionSet-${uid}`, {
+        dispatch('cml/sync/stop', `layersGroupPermissionSet-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'
@@ -185,14 +185,14 @@ export const actions = {
     { commit, dispatch, rootState, rootGetters },
     { layerId, groupId, uid }
   ) {
-    commit('cml/sync/start', `layersGroupPermissionRemove-${uid}`, {
+    dispatch('cml/sync/start', `layersGroupPermissionRemove-${uid}`, {
       root: true
     })
     return api
       .removeLayerPermissionsForGroup(layerId, groupId)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', `layersGroupPermissionRemove-${uid}`, {
+        dispatch('cml/sync/stop', `layersGroupPermissionRemove-${uid}`, {
           root: true
         })
         commit('groupPermissionsUpdate', {
@@ -216,7 +216,7 @@ export const actions = {
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', `layersGroupPermissionRemove-${uid}`, {
+        dispatch('cml/sync/stop', `layersGroupPermissionRemove-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'
@@ -230,12 +230,12 @@ export const actions = {
     { commit, dispatch, rootState, rootGetters },
     { layerId, userId, permission, uid }
   ) {
-    commit('cml/sync/start', `layersUserPermissionSet-${uid}`, { root: true })
+    dispatch('cml/sync/start', `layersUserPermissionSet-${uid}`, { root: true })
     return api
       .setLayerPermissionsForUser(layerId, userId, permission)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', `layersUserPermissionSet-${uid}`, {
+        dispatch('cml/sync/stop', `layersUserPermissionSet-${uid}`, {
           root: true
         })
         commit('userPermissionsUpdate', {
@@ -259,7 +259,7 @@ export const actions = {
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', `layersUserPermissionSet-${uid}`, {
+        dispatch('cml/sync/stop', `layersUserPermissionSet-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'
@@ -273,14 +273,14 @@ export const actions = {
     { commit, dispatch, rootState, rootGetters },
     { layerId, userId, uid }
   ) {
-    commit('cml/sync/start', `layersUserPermissionRemove-${uid}`, {
+    dispatch('cml/sync/start', `layersUserPermissionRemove-${uid}`, {
       root: true
     })
     return api
       .removeLayerPermissionsForUser(layerId, userId)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', `layersUserPermissionRemove-${uid}`, {
+        dispatch('cml/sync/stop', `layersUserPermissionRemove-${uid}`, {
           root: true
         })
         commit('userPermissionsUpdate', { layerId, userId, permission: 0, uid })
@@ -299,7 +299,7 @@ export const actions = {
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', `layersUserPermissionRemove-${uid}`, {
+        dispatch('cml/sync/stop', `layersUserPermissionRemove-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'

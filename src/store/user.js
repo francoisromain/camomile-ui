@@ -13,18 +13,18 @@ export const state = {
 
 export const actions = {
   login ({ commit, dispatch }, config) {
-    commit('cml/sync/start', 'userLogin', { root: true })
+    dispatch('cml/sync/start', 'userLogin', { root: true })
     return api
       .login(config.user.name, config.user.password)
       .then(r => {
-        commit('cml/sync/stop', 'userLogin', { root: true })
+        dispatch('cml/sync/stop', 'userLogin', { root: true })
         commit('cml/popup/close', null, { root: true })
         dispatch('set')
 
         return r.message
       })
       .catch(e => {
-        commit('cml/sync/stop', 'userLogin', { root: true })
+        dispatch('cml/sync/stop', 'userLogin', { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
         dispatch('cml/reset', null, { root: true })
@@ -34,7 +34,7 @@ export const actions = {
   },
 
   set ({ commit, dispatch }) {
-    commit('cml/sync/start', 'userSet', { root: true })
+    dispatch('cml/sync/start', 'userSet', { root: true })
     return api
       .me()
       .then(r => {
@@ -45,14 +45,14 @@ export const actions = {
           description: r.data.description || {},
           groupIds: r.data.groups || []
         }
-        commit('cml/sync/stop', 'userSet', { root: true })
+        dispatch('cml/sync/stop', 'userSet', { root: true })
         commit('set', user)
         dispatch('cml/set', null, { root: true })
 
         return user
       })
       .catch(e => {
-        commit('cml/sync/stop', 'userSet', { root: true })
+        dispatch('cml/sync/stop', 'userSet', { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
         dispatch('cml/reset', null, { root: true })
@@ -62,11 +62,11 @@ export const actions = {
   },
 
   logout ({ state, commit, dispatch }) {
-    commit('cml/sync/start', 'userLogout', { root: true })
+    dispatch('cml/sync/start', 'userLogout', { root: true })
     return api
       .logout()
       .then(r => {
-        commit('cml/sync/stop', 'userLogout', { root: true })
+        dispatch('cml/sync/stop', 'userLogout', { root: true })
         dispatch('cml/reset', null, { root: true })
         commit('cml/popup/close', null, { root: true })
         commit('cml/dropdown/close', null, { root: true })
@@ -74,7 +74,7 @@ export const actions = {
         return r.message
       })
       .catch(e => {
-        commit('cml/sync/stop', 'userLogout', { root: true })
+        dispatch('cml/sync/stop', 'userLogout', { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
         dispatch('cml/reset', null, { root: true })

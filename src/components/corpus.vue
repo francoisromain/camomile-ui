@@ -75,8 +75,12 @@ export default {
     corpus () {
       return this.$store.state.cml.corpus.lists[this.uid]
     },
-    corpuId () { return this.$store.state.cml.corpus.actives[this.uid] },
-    isAdmin () { return this.$store.state.cml.user.isAdmin }
+    corpuId () {
+      return this.$store.state.cml.corpus.actives[this.uid]
+    },
+    isAdmin () {
+      return this.$store.state.cml.user.isAdmin
+    }
   },
 
   methods: {
@@ -86,6 +90,10 @@ export default {
     set (e) {
       this.$store.dispatch('cml/corpus/set', { corpuId: e.target.value, uid: this.uid })
     }
+  },
+
+  mounted () {
+    this.$store.commit('cml/corpus/register', this.uid)
   }
 }
 </script>

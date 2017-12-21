@@ -11,7 +11,7 @@ export const state = {
 
 export const actions = {
   add ({ commit, dispatch }, { element, uid }) {
-    commit('cml/sync/start', `mediasAdd-${uid}`, { root: true })
+    dispatch('cml/sync/start', `mediasAdd-${uid}`, { root: true })
     return api
       .createMedium(
         element.corpuId,
@@ -20,7 +20,7 @@ export const actions = {
         element.description
       )
       .then(r => {
-        commit('cml/sync/stop', `mediasAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasAdd-${uid}`, { root: true })
         const media = mediaFormat(r.data)
         commit('add', { media, uid })
         dispatch('cml/messages/success', 'Medium added', { root: true })
@@ -29,7 +29,7 @@ export const actions = {
         return media
       })
       .catch(e => {
-        commit('cml/sync/stop', `mediasAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasAdd-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -38,11 +38,11 @@ export const actions = {
   },
 
   remove ({ commit, dispatch, rootGetters }, { id, uid }) {
-    commit('cml/sync/start', `mediasRemove-${uid}`, { root: true })
+    dispatch('cml/sync/start', `mediasRemove-${uid}`, { root: true })
     return api
       .deleteMedium(id)
       .then(r => {
-        commit('cml/sync/stop', `mediasRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasRemove-${uid}`, { root: true })
         commit('remove', { mediaId: id, uid })
         dispatch('cml/messages/success', 'Medium removed', { root: true })
         if (state.actives[uid].id === id) {
@@ -59,7 +59,7 @@ export const actions = {
         return id
       })
       .catch(e => {
-        commit('cml/sync/stop', `mediasRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasRemove-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -68,7 +68,7 @@ export const actions = {
   },
 
   update ({ commit, dispatch, state, rootState }, { element, uid }) {
-    commit('cml/sync/start', `mediasUpdate-${uid}`, { root: true })
+    dispatch('cml/sync/start', `mediasUpdate-${uid}`, { root: true })
     return api
       .updateMedium(element.id, {
         name: element.name,
@@ -76,7 +76,7 @@ export const actions = {
         url: element.url
       })
       .then(r => {
-        commit('cml/sync/stop', `mediasUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasUpdate-${uid}`, { root: true })
         const media = Object.assign({}, element)
         media.name = r.data.name
         media.url = r.data.url
@@ -87,7 +87,7 @@ export const actions = {
         return media
       })
       .catch(e => {
-        commit('cml/sync/stop', `mediasUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasUpdate-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -96,11 +96,11 @@ export const actions = {
   },
 
   list ({ dispatch, commit }, { corpuId, uid }) {
-    commit('cml/sync/start', `mediasList-${uid}`, { root: true })
+    dispatch('cml/sync/start', `mediasList-${uid}`, { root: true })
     return api
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(r => {
-        commit('cml/sync/stop', `mediasList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasList-${uid}`, { root: true })
         const medias = r.data.map(media => {
           return mediaFormat(media)
         })
@@ -110,7 +110,7 @@ export const actions = {
         return medias
       })
       .catch(e => {
-        commit('cml/sync/stop', `mediasList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasList-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 

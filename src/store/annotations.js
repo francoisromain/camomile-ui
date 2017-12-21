@@ -17,7 +17,7 @@ export const actions = {
       element.metadata,
       uid
     )
-    commit('cml/sync/start', `annotationsAdd-${uid}`, { root: true })
+    dispatch('cml/sync/start', `annotationsAdd-${uid}`, { root: true })
     return api
       .createAnnotation(
         element.layerId,
@@ -27,7 +27,7 @@ export const actions = {
       )
       .then(r => {
         console.log('anno, add', element, uid)
-        commit('cml/sync/stop', `annotationsAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `annotationsAdd-${uid}`, { root: true })
         const annotation = {
           id: r.data._id,
           fragment: r.data.fragment || {},
@@ -42,7 +42,7 @@ export const actions = {
         return annotation
       })
       .catch(e => {
-        commit('cml/sync/stop', `annotationsAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `annotationsAdd-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -51,18 +51,18 @@ export const actions = {
   },
 
   remove ({ commit, dispatch }, { id, uid }) {
-    commit('cml/sync/start', `annotationsRemove-${uid}`, { root: true })
+    dispatch('cml/sync/start', `annotationsRemove-${uid}`, { root: true })
     return api
       .deleteAnnotation(id)
       .then(r => {
-        commit('cml/sync/stop', `annotationsRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `annotationsRemove-${uid}`, { root: true })
         commit('remove', { id, uid })
         dispatch('cml/messages/success', 'Annotation removed', { root: true })
 
         return id
       })
       .catch(e => {
-        commit('cml/sync/stop', `annotationsRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `annotationsRemove-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -71,7 +71,7 @@ export const actions = {
   },
 
   update ({ commit, dispatch }, { element, uid }) {
-    commit('cml/sync/start', `annotationsUpdate-${uid}`, { root: true })
+    dispatch('cml/sync/start', `annotationsUpdate-${uid}`, { root: true })
     return api
       .updateAnnotation(element.id, {
         fragment: element.fragment,
@@ -81,14 +81,14 @@ export const actions = {
         const annotation = Object.assign({}, element)
         annotation.fragment = r.data.fragment || {}
         annotation.metadata = r.data.metadata || {}
-        commit('cml/sync/stop', `annotationsUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `annotationsUpdate-${uid}`, { root: true })
         commit('update', { annotation, uid })
         dispatch('cml/messages/success', 'Annotation updated', { root: true })
 
         return annotation
       })
       .catch(e => {
-        commit('cml/sync/stop', `annotationsUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `annotationsUpdate-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -98,11 +98,11 @@ export const actions = {
 
   list ({ dispatch, commit }, { layerId, uid }) {
     console.log('anno list', layerId, uid)
-    commit('cml/sync/start', `annotationsList-${uid}`, { root: true })
+    dispatch('cml/sync/start', `annotationsList-${uid}`, { root: true })
     return api
       .getAnnotations({ filter: { id_layer: layerId } })
       .then(r => {
-        commit('cml/sync/stop', `annotationsList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `annotationsList-${uid}`, { root: true })
         const annotations = r.data.map(a => ({
           id: a._id,
           fragment: a.fragment || {},
@@ -116,7 +116,7 @@ export const actions = {
         return annotations
       })
       .catch(e => {
-        commit('cml/sync/stop', `annotationsList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `annotationsList-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 

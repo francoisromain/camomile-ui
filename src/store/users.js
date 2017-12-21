@@ -7,7 +7,7 @@ export const state = {
 
 export const actions = {
   add ({ commit, dispatch }, { element }) {
-    commit('cml/sync/start', 'usersAdd', { root: true })
+    dispatch('cml/sync/start', 'usersAdd', { root: true })
     return api
       .createUser(
         element.name,
@@ -16,7 +16,7 @@ export const actions = {
         element.role
       )
       .then(r => {
-        commit('cml/sync/stop', 'usersAdd', { root: true })
+        dispatch('cml/sync/stop', 'usersAdd', { root: true })
         const user = userFormat(r.data)
         commit('add', user)
         commit('cml/corpus/userAdd', user.id, { root: true })
@@ -25,7 +25,7 @@ export const actions = {
         return user
       })
       .catch(e => {
-        commit('cml/sync/stop', 'usersAdd', { root: true })
+        dispatch('cml/sync/stop', 'usersAdd', { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -34,7 +34,7 @@ export const actions = {
   },
 
   update ({ commit, dispatch, rootState }, { element }) {
-    commit('cml/sync/start', 'usersUpdate', { root: true })
+    dispatch('cml/sync/start', 'usersUpdate', { root: true })
     return api
       .updateUser(element.id, {
         password: element.password,
@@ -42,7 +42,7 @@ export const actions = {
         description: element.description
       })
       .then(r => {
-        commit('cml/sync/stop', 'usersUpdate', { root: true })
+        dispatch('cml/sync/stop', 'usersUpdate', { root: true })
         const user = userFormat(r.data)
         commit('update', user)
         if (user.name === rootState.cml.user.name) {
@@ -53,7 +53,7 @@ export const actions = {
         return user
       })
       .catch(e => {
-        commit('cml/sync/stop', 'usersUpdate', { root: true })
+        dispatch('cml/sync/stop', 'usersUpdate', { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -62,11 +62,11 @@ export const actions = {
   },
 
   remove ({ commit, dispatch }, { id }) {
-    commit('cml/sync/start', 'usersRemove', { root: true })
+    dispatch('cml/sync/start', 'usersRemove', { root: true })
     return api
       .deleteUser(id)
       .then(r => {
-        commit('cml/sync/stop', 'usersRemove', { root: true })
+        dispatch('cml/sync/stop', 'usersRemove', { root: true })
         commit('remove', id)
         commit('cml/corpus/userRemove', id, { root: true })
         dispatch('cml/messages/success', 'User removed', { root: true })
@@ -74,7 +74,7 @@ export const actions = {
         return id
       })
       .catch(e => {
-        commit('cml/sync/stop', 'usersRemove', { root: true })
+        dispatch('cml/sync/stop', 'usersRemove', { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -83,18 +83,18 @@ export const actions = {
   },
 
   list ({ commit, dispatch }) {
-    commit('cml/sync/start', 'usersList', { root: true })
+    dispatch('cml/sync/start', 'usersList', { root: true })
     return api
       .getUsers()
       .then(r => {
-        commit('cml/sync/stop', 'usersList', { root: true })
+        dispatch('cml/sync/stop', 'usersList', { root: true })
         const users = r.data.map(user => userFormat(user))
         commit('list', users)
 
         return users
       })
       .catch(e => {
-        commit('cml/sync/stop', 'usersList', { root: true })
+        dispatch('cml/sync/stop', 'usersList', { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
