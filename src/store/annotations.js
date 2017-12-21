@@ -8,15 +8,6 @@ export const state = {
 
 export const actions = {
   add ({ commit, dispatch }, { element, uid }) {
-    console.log(
-      'anno add',
-      element.layerId,
-      element.mediaLink,
-      element.mediaId,
-      element.fragment,
-      element.metadata,
-      uid
-    )
     dispatch('cml/sync/start', `annotationsAdd-${uid}`, { root: true })
     return api
       .createAnnotation(
@@ -139,9 +130,14 @@ export const getters = {
 }
 
 export const mutations = {
-  reset (state) {
-    state.lists = {}
-    state.actives = {}
+  reset (state, uid) {
+    Vue.set(state.lists, uid, [])
+    Vue.delete(state.actives, uid)
+  },
+
+  resetAll (state) {
+    Vue.set(state, 'lists', {})
+    Vue.set(state, 'actives', {})
   },
 
   add (state, { annotation, uid }) {

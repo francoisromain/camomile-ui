@@ -51,16 +51,16 @@ export default {
   methods: {
     mediaToggle () {
       if (this.active.isPlaying) {
-        this.$store.commit('cml/medias/play', false)
+        this.$store.commit('cml/medias/pause', this.uid)
       } else {
-        this.$store.commit('cml/medias/play', true)
+        this.$store.commit('cml/medias/play', this.uid)
       }
     },
     progressClick (e) {
-      this.seek(e.offsetX / this.$refs.progress.offsetWidth, true)
+      this.seek(e.offsetX / this.$refs.progress.offsetWidth, true, this.uid)
     },
     progressMousemove (e) {
-      this.mousedown && this.seek(e.offsetX / this.$refs.progress.offsetWidth, false)
+      this.mousedown && this.seek(e.offsetX / this.$refs.progress.offsetWidth, false, this.uid)
     },
     progressMousedown () {
       this.mousedown = true
@@ -68,9 +68,9 @@ export default {
     progressMouseup () {
       this.mousedown = false
     },
-    seek (ratio, serverRequest) {
+    seek (ratio, serverRequest, uid) {
       if (this.active.isLoaded) {
-        this.$store.dispatch('cml/medias/seek', { ratio, serverRequest })
+        this.$store.dispatch('cml/medias/seek', { ratio, serverRequest, uid })
       }
     },
     msToMinutesAndSeconds (ms) {

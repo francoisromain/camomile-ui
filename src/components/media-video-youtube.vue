@@ -33,7 +33,7 @@ export default {
 
   computed: {
     active () {
-      return this.$store.state.cml.medias.actives[this.uid] || {}
+      return this.$store.state.cml.medias.actives[this.uid]
     },
     isPlaying () {
       return this.active && this.active.isPlaying || null
@@ -53,12 +53,9 @@ export default {
   },
 
   mounted () {
-
-    console.log('media', this.media)
     if (this.media.url) {
       this.playerLoad(this.media.url)
     }
-    // if (media.description.embed === 'youtube') {
   },
 
   methods: {
@@ -78,36 +75,43 @@ export default {
       const events = {
         onReady: event => {
           console.log('onReady', event)
-          this.$store.commit('cml/medias/loaded', true)
-          this.$store.commit('cml/medias/timeTotal', this.player.getDuration() * 1000)
+          this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
+          this.$store.commit('cml/medias/timeTotal', { time: this.player.getDuration() * 1000, uid: this.uid })
         },
         onStateChange: event => {
           console.log('onStateChange', event.data)
           if (event.data === -1) {
+            // unstarted
           } else if (event.data === 1) {
+            // playing
             if (this.videoNew) {
               this.videoNew = false
-              this.$store.commit('cml/medias/timeTotal', this.player.getDuration() * 1000)
+              this.$store.commit('cml/medias/timeTotal', { time: this.player.getDuration() * 1000, uid: this.uid })
               this.player.pauseVideo()
             } else {
-              this.$store.dispatch('cml/medias/play')
+              this.$store.dispatch('cml/medias/play', this.uid)
             }
           } else if (event.data === 2) {
-            // to-do: handle buffering
-            this.$store.dispatch('cml/medias/pause')
+            // paused
+            this.$store.dispatch('cml/medias/pause', this.uid)
+          } else if (event.data === 3) {
+            // buffering
+            this.$store.dispatch('cml/medias/buffering', this.uid)
           } else if (event.data === 0) {
-            this.$store.dispatch('cml/medias/stop')
+            // ended
+            this.$store.dispatch('cml/medias/stop', this.uid)
           } else if (event.data === 5) {
+            // cued
             console.log('once cued', event, this.player.getDuration())
-            this.$store.commit('cml/medias/loaded', true)
-            this.$store.commit('cml/medias/timeTotal', this.player.getDuration() * 1000)
+            this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
+            this.$store.commit('cml/medias/timeTotal', { time: this.player.getDuration() * 1000, uid: this.uid })
           }
         },
         onApiChange: event => {
           console.log('onApiChange', event)
           if (!this.isLoaded) {
             this.videoNew = true
-            this.$store.commit('cml/medias/loaded', true)
+            this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
           }
         }
       }
@@ -138,13 +142,10 @@ export default {
           events
         })
       }
-
-      // youtube(videoId, width, height,playerVars, events)
-
     },
     videoSeek (serverRequest) {
       this.player.seekTo(this.timeCurrent / 1000, serverRequest)
-      this.$store.commit('cml/medias/seek', { seekign: false })
+      this.$store.commit('cml/medias/seek', { options: { seekign: false }, uid: this.uid })
     },
     parseYouTubeId (url) {
       var regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
@@ -180,7 +181,9 @@ export default {
       this.player.setSize(width, height)
     },
     media (media) {
-      this.videoLoad(media.url)
+      if (this.media.url) {
+        this.videoLoad(media.url)
+      }
     }
   }
 }

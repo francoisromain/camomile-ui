@@ -51,9 +51,7 @@ export const actions = {
         dispatch(
           'cml/annotations/list',
           { layerId: rootGetters['cml/layers/id'](uid), uid },
-          {
-            root: true
-          }
+          { root: true }
         )
 
         return id
@@ -118,7 +116,11 @@ export const actions = {
       })
   },
 
-  set ({ getters, commit }, { mediaId, uid }) {
+  set ({ state, getters, dispatch, commit }, { mediaId, uid }) {
+    console.log('set medias', uid, mediaId)
+    if (state.actives[uid] && state.actives[uid].isPlaying) {
+      dispatch('pause', uid)
+    }
     commit('set', { mediaId: mediaId || getters.id(uid), uid })
   },
 
@@ -127,7 +129,7 @@ export const actions = {
     const timeCurrent = state.actives[uid].timeCurrent
     interval = setInterval(() => {
       var timeEllapsed = Date.now() - timeStart
-      commit('timeCurrent', timeCurrent + timeEllapsed)
+      commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid })
     }, 0)
     commit('play', uid)
   },
@@ -135,6 +137,10 @@ export const actions = {
   pause ({ commit }, uid) {
     clearInterval(interval)
     commit('pause', uid)
+  },
+
+  buffering ({ commit }, uid) {
+    clearInterval(interval)
   },
 
   stop ({ commit, dispatch }, uid) {
@@ -147,7 +153,7 @@ export const actions = {
     if (state.actives[uid].isPlaying) {
       clearInterval(interval)
     }
-    commit('timeCurrent', ratio * state.actives[uid].timeTotal)
+    commit('timeCurrent', { time: ratio * state.actives[uid].timeTotal, uid })
     commit('seek', { options: { seeking: true, serverRequest }, uid })
   }
 }
@@ -162,9 +168,14 @@ export const getters = {
 }
 
 export const mutations = {
-  reset (state) {
-    state.lists = {}
-    state.actives = {}
+  reset (state, uid) {
+    Vue.set(state.lists, uid, [])
+    Vue.delete(state.actives, uid)
+  },
+
+  resetAll (state) {
+    Vue.set(state, 'lists', {})
+    Vue.set(state, 'actives', {})
   },
 
   add (state, { media, uid }) {
@@ -189,6 +200,7 @@ export const mutations = {
   },
 
   set (state, { mediaId, uid }) {
+    console.log('media set', mediaId, uid)
     Vue.set(state.actives, uid, {
       id: mediaId,
       timeTotal: 0,

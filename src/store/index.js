@@ -52,9 +52,10 @@ export const actions = {
     commit('cml/user/reset', null, { root: true })
     commit('cml/users/reset', null, { root: true })
     commit('cml/groups/reset', null, { root: true })
-    commit('cml/corpus/reset', null, { root: true })
-    commit('cml/medias/reset', null, { root: true })
-    commit('cml/layers/reset', null, { root: true })
+    commit('cml/corpus/resetAll', null, { root: true })
+    commit('cml/medias/resetAll', null, { root: true })
+    commit('cml/layers/resetAll', null, { root: true })
+    commit('cml/annotations/resetAll', null, { root: true })
   }
 }
 

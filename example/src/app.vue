@@ -12,6 +12,17 @@
         <cml-annotations class="blob-1-2 p border"></cml-annotations>
       </div>
 
+      <div class="blobs">
+        <cml-corpus class="blob-1-2 p border" uid="test"></cml-corpus>
+        <cml-medias class="blob-1-2 p border" uid="test"></cml-medias>
+        <cml-layers class="blob-1-2 p border" uid="test"></cml-layers>
+        <cml-annotations class="blob-1-2 p border" uid="test"></cml-annotations>
+      </div>
+
+      <cml-media-controller></cml-media-controller>
+      <cml-media-video></cml-media-video>
+
+
     </div>
   </cml-app>
 </template>

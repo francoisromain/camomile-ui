@@ -23,9 +23,7 @@ export const actions = {
           },
           description: r.data.description || {}
         }
-
         corpu.permissions.users[rootState.cml.user.id] = 3
-
         commit('add', { corpu, uid })
         dispatch('cml/messages/success', 'Corpus added', { root: true })
         dispatch('set', { corpuId: corpu.id, uid })
@@ -92,7 +90,6 @@ export const actions = {
 
   listAll ({ state, dispatch }) {
     Object.keys(state.lists).forEach(uid => {
-      console.log('uid', uid)
       dispatch('list', uid)
     })
   },
@@ -318,8 +315,8 @@ export const actions = {
         { root: true }
       )
     } else {
-      commit('cml/medias/reset', null, { root: true })
-      commit('cml/layers/reset', null, { root: true })
+      commit('cml/medias/reset', uid, { root: true })
+      commit('cml/layers/reset', uid, { root: true })
     }
   }
 }
@@ -338,14 +335,16 @@ export const mutations = {
     Vue.set(state.lists, uid, [])
   },
 
-  reset (state) {
+  resetAll (state) {
     state.lists = {}
     state.actives = {}
   },
 
   add (state, { corpu, uid }) {
-    const index = state.lists[uid].length
-    Vue.set(state.lists[uid], index, corpu)
+    Object.keys(state.actives).forEach(id => {
+      const index = state.lists[id].length
+      Vue.set(state.lists[id], index, corpu)
+    })
   },
 
   update (state, { corpu, uid }) {

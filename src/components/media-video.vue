@@ -1,5 +1,5 @@
 <template>
-  <div v-if="media">media {{ media }}
+  <div v-if="media">
     <video-youtube :uid="uid" :media="media"></video-youtube>
   </div>
 </template>

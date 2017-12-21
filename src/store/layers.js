@@ -142,7 +142,9 @@ export const actions = {
     { commit, dispatch, rootState, rootGetters },
     { layerId, groupId, permission, uid }
   ) {
-    dispatch('cml/sync/start', `layersGroupPermissionSet-${uid}`, { root: true })
+    dispatch('cml/sync/start', `layersGroupPermissionSet-${uid}`, {
+      root: true
+    })
     return api
       .setLayerPermissionsForGroup(layerId, groupId, permission)
       .then(p => {
@@ -311,6 +313,7 @@ export const actions = {
 
   set ({ state, getters, dispatch, commit }, { layerId, uid }) {
     commit('set', { layerId: layerId || getters.id(uid), uid })
+    console.log('layer set', uid, state.actives[uid])
     if (state.actives[uid]) {
       dispatch(
         'cml/annotations/list',
@@ -318,7 +321,7 @@ export const actions = {
         { root: true }
       )
     } else {
-      commit('cml/annotations/reset', null, { root: true })
+      commit('cml/annotations/reset', uid, { root: true })
     }
   }
 }
@@ -334,7 +337,13 @@ export const getters = {
 
 export const mutations = {
   reset (state, uid) {
-    state.list = []
+    Vue.set(state.lists, uid, [])
+    Vue.delete(state.actives, uid)
+  },
+
+  resetAll (state) {
+    Vue.set(state, 'lists', {})
+    Vue.set(state, 'actives', {})
   },
 
   add (state, { layer, uid }) {
