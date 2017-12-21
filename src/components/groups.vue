@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isAdmin">
     <div class="flex flex-start">
       <h2 class="mt-s">Groups</h2>
       <button @click="popupOpen({ config: popupAddConfig, element: { description: {} } })" class="btn p-s flex-right"><i class="icon-24 icon-24-plus"></i></button>
@@ -62,6 +62,7 @@ export default {
 
   computed: {
     ...mapState({
+      isAdmin: state => state.cml.user.isAdmin,
       groups: state => state.cml.groups.list,
       isRoot: state => state.cml.user.isRoot
     })

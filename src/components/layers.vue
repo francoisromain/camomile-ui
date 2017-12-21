@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import popupEdit from './popup/edit.vue'
 import popupRemove from './popup/remove.vue'
 import popupPermissions from './popup/permissions.vue'
@@ -32,54 +31,72 @@ import popupPermissions from './popup/permissions.vue'
 export default {
   name: 'camomile-layers',
 
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
+
   data () {
     return {
       popupEditConfig: {
         type: 'layers',
         closeBtn: true,
         title: 'Edit layer',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupAddConfig: {
         type: 'layers',
         closeBtn: true,
         title: 'Edit layer',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupRemoveConfig: {
         type: 'layers',
         closeBtn: true,
         title: 'Remove layer',
-        component: popupRemove
+        component: popupRemove,
+        uid: this.uid
       },
       popupPermissionsConfig: {
         type: 'layers',
         closeBtn: true,
         title: 'Layer permissions',
-        component: popupPermissions
+        component: popupPermissions,
+        uid: this.uid
       }
     }
   },
 
   computed: {
-    ...mapState({
-      layers: state => state.cml.layers.list,
-      corpuId: state => state.cml.corpus.id,
-      corpus: state => state.cml.corpus.list,
-      layerId: state => state.cml.layers.id
-    }),
+    layers () {
+      return this.$store.state.cml.layers.lists[this.uid]
+    },
+    layerId () {
+      return this.$store.state.cml.layers.actives[this.uid]
+    },
+    corpus () {
+      return this.$store.state.cml.corpus.lists[this.uid]
+    },
+    corpuId () {
+      return this.$store.state.cml.corpus.actives[this.uid]
+    },
     permission () {
-      const corpu = this.corpus.find(c => c.id === this.corpuId)
+      const corpus = this.$store.state.cml.corpus.lists
+      const corpu = corpus[this.uid] && corpus[this.uid].find(c => c.id === this.corpuId)
       return corpu ? corpu.permission : 0
     }
   },
 
   methods: {
-    popupOpen (config) {
-      return this.$store.commit('cml/popup/open', config)
+    popupOpen ({ config, element }) {
+      return this.$store.commit('cml/popup/open', { config, element })
     },
     set (e) {
-      this.$store.dispatch('cml/layers/set', e.target.value)
+      this.$store.dispatch('cml/layers/set', { layerId: e.target.value, uid: this.uid })
     }
   }
 }

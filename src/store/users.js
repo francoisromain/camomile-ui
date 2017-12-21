@@ -6,10 +6,15 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch }, user) {
+  add ({ commit, dispatch }, { element }) {
     commit('cml/sync/start', 'usersAdd', { root: true })
     return api
-      .createUser(user.name, user.password, user.description, user.role)
+      .createUser(
+        element.name,
+        element.password,
+        element.description,
+        element.role
+      )
       .then(r => {
         commit('cml/sync/stop', 'usersAdd', { root: true })
         const user = userFormat(r.data)
@@ -28,13 +33,13 @@ export const actions = {
       })
   },
 
-  update ({ commit, dispatch, rootState }, user) {
+  update ({ commit, dispatch, rootState }, { element }) {
     commit('cml/sync/start', 'usersUpdate', { root: true })
     return api
-      .updateUser(user.id, {
-        password: user.password,
-        role: user.role,
-        description: user.description
+      .updateUser(element.id, {
+        password: element.password,
+        role: element.role,
+        description: element.description
       })
       .then(r => {
         commit('cml/sync/stop', 'usersUpdate', { root: true })
@@ -56,17 +61,17 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch }, user) {
+  remove ({ commit, dispatch }, { id }) {
     commit('cml/sync/start', 'usersRemove', { root: true })
     return api
-      .deleteUser(user.id)
+      .deleteUser(id)
       .then(r => {
         commit('cml/sync/stop', 'usersRemove', { root: true })
-        commit('remove', user.id)
-        commit('cml/corpus/userRemove', user.id, { root: true })
+        commit('remove', id)
+        commit('cml/corpus/userRemove', id, { root: true })
         dispatch('cml/messages/success', 'User removed', { root: true })
 
-        return user.id
+        return id
       })
       .catch(e => {
         commit('cml/sync/stop', 'usersRemove', { root: true })

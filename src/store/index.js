@@ -44,7 +44,7 @@ export const actions = {
           .catch(e => e)
       )
     ]).then(res => {
-      dispatch('cml/corpus/list', null, { root: true })
+      dispatch('cml/corpus/listAll', null, { root: true })
     })
   },
 

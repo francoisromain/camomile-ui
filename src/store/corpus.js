@@ -2,17 +2,17 @@ import Vue from 'vue'
 import api from './_api'
 
 export const state = {
-  list: [],
-  id: ''
+  lists: {},
+  actives: {}
 }
 
 export const actions = {
-  add ({ commit, dispatch, rootState, rootGetters }, corpus) {
-    commit('cml/sync/start', 'corpusAdd', { root: true })
+  add ({ commit, dispatch, rootState, rootGetters }, { element, uid }) {
+    commit('cml/sync/start', `corpusAdd-${uid}`, { root: true })
     return api
-      .createCorpus(corpus.name, corpus.description, {})
+      .createCorpus(element.name, element.description, {})
       .then(r => {
-        commit('cml/sync/stop', 'corpusAdd', { root: true })
+        commit('cml/sync/stop', `corpusAdd-${uid}`, { root: true })
         const corpu = {
           name: r.data.name,
           id: r.data._id,
@@ -26,14 +26,14 @@ export const actions = {
 
         corpu.permissions.users[rootState.cml.user.id] = 3
 
-        commit('add', corpu)
+        commit('add', { corpu, uid })
         dispatch('cml/messages/success', 'Corpus added', { root: true })
-        dispatch('set', corpu.id)
+        dispatch('set', { corpuId: corpu.id, uid })
 
         return corpu
       })
       .catch(e => {
-        commit('cml/sync/stop', 'corpusAdd', { root: true })
+        commit('cml/sync/stop', `corpusAdd-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -41,22 +41,22 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch, state }, corpu) {
-    commit('cml/sync/start', 'corpusRemove', { root: true })
+  remove ({ commit, dispatch, state }, { id, uid }) {
+    commit('cml/sync/start', `corpusRemove-${uid}`, { root: true })
     return api
-      .deleteCorpus(corpu.id)
+      .deleteCorpus(id)
       .then(r => {
-        commit('cml/sync/stop', 'corpusRemove', { root: true })
-        commit('remove', corpu.id)
+        commit('cml/sync/stop', `corpusRemove-${uid}`, { root: true })
+        commit('remove', { corpuId: id, uid })
         dispatch('cml/messages/success', 'Corpus removed', { root: true })
-        if (state.id === corpu.id) {
-          dispatch('set')
+        if (state.actives[uid] === id) {
+          dispatch('set', { uid })
         }
 
-        return corpu.id
+        return id
       })
       .catch(e => {
-        commit('cml/sync/stop', 'corpusRemove', { root: true })
+        commit('cml/sync/stop', `corpusRemove-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -64,24 +64,25 @@ export const actions = {
       })
   },
 
-  update ({ commit, dispatch, state }, corpu) {
-    commit('cml/sync/start', 'corpusUpdate', { root: true })
+  update ({ commit, dispatch, state }, { element, uid }) {
+    commit('cml/sync/start', `corpusUpdate-${uid}`, { root: true })
     return api
-      .updateCorpus(corpu.id, {
-        name: corpu.name,
-        description: corpu.description
+      .updateCorpus(element.id, {
+        name: element.name,
+        description: element.description
       })
       .then(r => {
-        commit('cml/sync/stop', 'corpusUpdate', { root: true })
+        commit('cml/sync/stop', `corpusUpdate-${uid}`, { root: true })
+        const corpu = Object.assign({}, element)
         corpu.name = r.data.name
         corpu.description = r.data.description || {}
-        commit('update', corpu)
+        commit('update', { corpu, uid })
         dispatch('cml/messages/success', 'Corpus updated', { root: true })
 
-        return r
+        return corpu
       })
       .catch(e => {
-        commit('cml/sync/stop', 'corpusUpdate', { root: true })
+        commit('cml/sync/stop', `corpusUpdate-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -89,12 +90,16 @@ export const actions = {
       })
   },
 
-  list ({ commit, dispatch, rootGetters }) {
-    commit('cml/sync/start', 'corpusList', { root: true })
+  listAll ({ dispatch }) {
+    dispatch('list', 'default')
+  },
+
+  list ({ commit, dispatch, rootGetters }, uid) {
+    commit('cml/sync/start', `corpusList-${uid}`, { root: true })
     return api
       .getCorpora()
       .then(r => {
-        commit('cml/sync/stop', 'corpusList', { root: true })
+        commit('cml/sync/stop', `corpusList-${uid}`, { root: true })
         const corpus = r.data.map(c => ({
           name: c.name,
           id: c._id,
@@ -109,13 +114,13 @@ export const actions = {
             )
           }
         }))
-        commit('list', corpus)
-        dispatch('set')
+        commit('list', { corpus, uid })
+        dispatch('set', { uid })
 
         return corpus
       })
       .catch(e => {
-        commit('cml/sync/stop', 'corpusList', { root: true })
+        commit('cml/sync/stop', `corpusList-${uid}`, { root: true })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -125,18 +130,21 @@ export const actions = {
 
   groupPermissionSet (
     { commit, dispatch, rootGetters },
-    { corpuId, groupId, permission }
+    { corpuId, groupId, permission, uid }
   ) {
-    commit('cml/sync/start', 'corpusGroupPermissionSet', { root: true })
+    commit('cml/sync/start', `corpusGroupPermissionSet-${uid}`, { root: true })
     return api
       .setCorpusPermissionsForGroup(corpuId, groupId, permission)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true })
+        commit('cml/sync/stop', `corpusGroupPermissionSet-${uid}`, {
+          root: true
+        })
         commit('groupPermissionsUpdate', {
           corpuId,
           groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0
+          permission: (permissions.groups && permissions.groups[groupId]) || 0,
+          uid
         })
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
@@ -146,14 +154,16 @@ export const actions = {
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list')
+          dispatch('list', uid)
           commit(`cml/popup/close`, null, { root: true })
         }
 
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true })
+        commit('cml/sync/stop', `corpusGroupPermissionSet-${uid}`, {
+          root: true
+        })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -163,17 +173,24 @@ export const actions = {
 
   groupPermissionRemove (
     { commit, dispatch, rootGetters },
-    { corpuId, groupId }
+    { corpuId, groupId, uid }
   ) {
-    commit('cml/sync/start', 'corpusGroupPermissionRemove', { root: true })
+    commit('cml/sync/start', `corpusGroupPermissionRemove-${uid}`, {
+      root: true
+    })
     return api
       .removeCorpusPermissionsForGroup(corpuId, groupId)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
+        commit('cml/sync/stop', `corpusGroupPermissionRemove-${uid}`, {
           root: true
         })
-        commit('groupPermissionsUpdate', { corpuId, groupId, permission: 0 })
+        commit('groupPermissionsUpdate', {
+          corpuId,
+          groupId,
+          permission: 0,
+          uid
+        })
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         })
@@ -182,14 +199,14 @@ export const actions = {
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list')
+          dispatch('list', uid)
           commit(`cml/popup/close`, null, { root: true })
         }
 
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
+        commit('cml/sync/stop', `corpusGroupPermissionRemove-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'
@@ -201,34 +218,40 @@ export const actions = {
 
   userPermissionSet (
     { commit, dispatch, rootGetters },
-    { corpuId, userId, permission }
+    { corpuId, userId, permission, uid }
   ) {
-    commit('cml/sync/start', 'corpusUserPermissionSet', { root: true })
+    commit('cml/sync/start', `corpusUserPermissionSet-${uid}`, { root: true })
     return api
       .setCorpusPermissionsForUser(corpuId, userId, permission)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true })
+        commit('cml/sync/stop', `corpusUserPermissionSet-${uid}`, {
+          root: true
+        })
         commit('userPermissionsUpdate', {
           corpuId,
           userId,
-          permission: (permissions.users && permissions.users[userId]) || 0
+          permission: (permissions.users && permissions.users[userId]) || 0,
+          uid
         })
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         })
+
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list')
+          dispatch('list', uid)
           commit(`cml/popup/close`, null, { root: true })
         }
 
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true })
+        commit('cml/sync/stop', `corpusUserPermissionSet-${uid}`, {
+          root: true
+        })
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
@@ -236,17 +259,25 @@ export const actions = {
       })
   },
 
-  userPermissionRemove ({ commit, dispatch, rootGetters }, { corpuId, userId }) {
-    commit('cml/sync/start', 'corpusUserPermissionRemove', { root: true })
+  userPermissionRemove (
+    { commit, dispatch, rootGetters },
+    { corpuId, userId, uid }
+  ) {
+    commit('cml/sync/start', `corpusUserPermissionRemove-${uid}`, {
+      root: true
+    })
     return api
       .removeCorpusPermissionsForUser(corpuId, userId)
       .then(p => {
         const permissions = p.data
-        commit('cml/sync/stop', 'corpusUserPermissionRemove', { root: true })
-        commit('userPermissionsUpdate', { corpuId, userId, permission: 0 })
+        commit('cml/sync/stop', `corpusUserPermissionRemove-${uid}`, {
+          root: true
+        })
+        commit('userPermissionsUpdate', { corpuId, userId, permission: 0, uid })
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         })
+
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
@@ -258,7 +289,7 @@ export const actions = {
         return permissions
       })
       .catch(e => {
-        commit('cml/sync/stop', 'corpusUserPermissionRemove', {
+        commit('cml/sync/stop', `corpusUserPermissionRemove-${uid}`, {
           root: true
         })
         const error = e.response ? e.response.body.error : 'Network error'
@@ -268,11 +299,19 @@ export const actions = {
       })
   },
 
-  set ({ state, getters, dispatch, commit }, corpuId) {
-    commit('set', getters.id(corpuId))
-    if (state.id) {
-      dispatch('cml/medias/list', state.id, { root: true })
-      dispatch('cml/layers/list', state.id, { root: true })
+  set ({ state, getters, dispatch, commit }, { corpuId, uid }) {
+    commit('set', { corpuId: corpuId || getters.id(uid), uid })
+    if (state.actives[uid]) {
+      dispatch(
+        'cml/medias/list',
+        { corpuId: state.actives[uid], uid },
+        { root: true }
+      )
+      dispatch(
+        'cml/layers/list',
+        { corpuId: state.actives[uid], uid },
+        { root: true }
+      )
     } else {
       commit('cml/medias/reset', null, { root: true })
       commit('cml/layers/reset', null, { root: true })
@@ -281,81 +320,92 @@ export const actions = {
 }
 
 export const getters = {
-  id: state => id => {
-    return (
-      id ||
-      (state.list.map(c => c.id).indexOf(state.id) !== -1 && state.id) ||
-      (state.list[0] && state.list[0].id) ||
-      null
-    )
-  }
+  id: state => uid =>
+    (state.actives[uid] &&
+      state.lists[uid].map(c => c.id).indexOf(state.actives[uid]) !== -1 &&
+      state.actives[uid]) ||
+    (state.lists[uid][0] && state.lists[uid][0].id) ||
+    null
 }
 
 export const mutations = {
   reset (state) {
-    state.list = []
+    state.lists = {}
+    state.actives = {}
   },
 
-  add (state, corpu) {
-    const corpuExisting = state.list.find(c => c.id === corpu.id)
-    if (!corpuExisting) {
-      state.list.push(corpu)
+  add (state, { corpu, uid }) {
+    const index = state.lists[uid].length
+    Vue.set(state.lists[uid], index, corpu)
+  },
+
+  update (state, { corpu, uid }) {
+    const index = state.lists[uid].findIndex(m => m.id === corpu.id)
+    if (index !== -1) {
+      Vue.set(state.lists[uid], index, corpu)
     }
   },
 
-  update (state, corpu) {
-    Object.assign(state.list.find(c => c.id === corpu.id), corpu)
+  remove (state, { corpuId, uid }) {
+    const index = state.lists[uid].findIndex(m => m.id === corpuId)
+    if (index !== -1) {
+      Vue.delete(state.lists[uid], index)
+    }
   },
 
-  remove (state, corpuId) {
-    state.list = state.list.filter(c => c.id !== corpuId)
+  list (state, { corpus, uid }) {
+    Vue.set(state.lists, uid, corpus)
   },
 
-  list (state, corpus) {
-    state.list = corpus
-  },
-
-  set (state, corpuId) {
-    state.id = corpuId
+  set (state, { corpuId, uid }) {
+    Vue.set(state.actives, uid, corpuId)
   },
 
   groupAdd (state, groupId) {
-    state.list.forEach(corpu => {
-      Vue.set(corpu.permissions.groups, groupId, 0)
+    Object.keys(state.lists).forEach(uid => {
+      state.lists[uid].forEach(c => {
+        Vue.set(c.permissions.groups, groupId, 0)
+      })
     })
   },
 
   groupRemove (state, groupId) {
-    state.list.forEach(corpu => {
-      delete corpu.permissions.groups[groupId]
+    Object.keys(state.lists).forEach(uid => {
+      state.lists[uid].forEach(c => {
+        Vue.delete(c.permissions.groups, groupId)
+      })
     })
   },
 
   userAdd (state, userId) {
-    state.list.forEach(corpu => {
-      Vue.set(corpu.permissions.users, userId, 0)
+    Object.keys(state.lists).forEach(uid => {
+      state.lists[uid].forEach(c => {
+        Vue.set(c.permissions.users, userId, 0)
+      })
     })
   },
 
   userRemove (state, userId) {
-    state.list.forEach(corpu => {
-      delete corpu.permissions.users[userId]
+    Object.keys(state.lists).forEach(uid => {
+      state.lists[uid].forEach(c => {
+        Vue.delete(c.permissions.users, userId)
+      })
     })
   },
 
-  groupPermissionsUpdate (state, { corpuId, groupId, permission }) {
-    const corpu = state.list.find(c => c.id === corpuId)
-    corpu.permissions.groups[groupId] = permission
+  groupPermissionsUpdate (state, { corpuId, groupId, permission, uid }) {
+    const index = state.lists[uid].findIndex(m => m.id === corpuId)
+    if (index !== -1) {
+      Vue.set(state.lists[uid][index].permissions.groups, groupId, permission)
+    }
   },
 
-  userPermissionsUpdate (state, { corpuId, userId, permission }) {
-    const corpu = state.list.find(c => c.id === corpuId)
-    corpu.permissions.users[userId] = permission
+  userPermissionsUpdate (state, { corpuId, userId, permission, uid }) {
+    const index = state.lists[uid].findIndex(m => m.id === corpuId)
+    if (index !== -1) {
+      Vue.set(state.lists[uid][index].permissions.users, userId, permission)
+    }
   }
-
-  // corpuPermissionsUpdate (state, { corpu, permission }) {
-  //   corpu.permission = permission
-  // }
 }
 
 export default {

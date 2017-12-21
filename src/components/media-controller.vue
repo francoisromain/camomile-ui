@@ -1,15 +1,17 @@
 <template>
-  <div class="mediacontroller relative" v-if="isLoaded">
-    <button class="mediacontroller-button" ref="button" @click="mediaToggle">{{ playButton }}</button>
-    <div class="mediacontroller-counter" ref="counter">{{ timeCurrentFormat }} / {{ timeTotalFormat }}
+  <div class="mediacontroller">
+    <div class="mediacontroller-controls clearfix pb-s">
+      <button class="mediacontroller-button btn" ref="button" @click="mediaToggle" :disabled="!active.isLoaded">{{ playButton }}</button>
+      <div class="mediacontroller-counter" ref="counter">{{ msToMinutesAndSeconds(active.timeCurrent) }} / {{ msToMinutesAndSeconds(active.timeTotal) }}
+      </div>
     </div>
 
-    <div class="mediacontroller-progress" ref="progress"
+    <div class="mediacontroller-progress" ref="progress" :class="{ loaded: active.isLoaded }"
       @click="progressClick"
       @mousemove="progressMousemove"
       @mousedown="progressMousedown"
       @mouseup="progressMouseup">
-      <div class="relative pointer-none full-y">
+      <div class="pointer-none full-y">
         <div class="mediacontroller-progress-bar" :style="{ width: progressBarWidth }">
         </div>
       </div>
@@ -19,11 +21,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 
 export default {
   props: {
-    media: Object
+    uid: {
+      type: String,
+      default: 'default'
+    }
   },
 
   data () {
@@ -33,29 +37,20 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      timeTotal: state => state.cml.medias.properties.timeTotal,
-      timeCurrent: state => state.cml.medias.properties.timeCurrent,
-      isPlaying: state => state.cml.medias.properties.isPlaying,
-      isLoaded: state => state.cml.medias.properties.isLoaded
-    }),
-    timeCurrentFormat () {
-      return this.msToMinutesAndSeconds(this.timeCurrent)
-    },
-    timeTotalFormat () {
-      return this.msToMinutesAndSeconds(this.timeTotal)
+    active () {
+      return this.$store.state.cml.medias.actives[this.uid] || {}
     },
     progressBarWidth () {
-      return `${this.timeCurrent / this.timeTotal * 100}%`
+      return `${this.active.timeCurrent / this.active.timeTotal * 100}%`
     },
     playButton () {
-      return this.isPlaying ? '❚ ❚' : '►'
+      return this.active.isPlaying ? '❚ ❚' : '►'
     }
   },
 
   methods: {
     mediaToggle () {
-      if (this.isPlaying) {
+      if (this.active.isPlaying) {
         this.$store.commit('cml/medias/play', false)
       } else {
         this.$store.commit('cml/medias/play', true)
@@ -74,7 +69,9 @@ export default {
       this.mousedown = false
     },
     seek (ratio, serverRequest) {
-      this.$store.dispatch('cml/medias/seek', { ratio, serverRequest })
+      if (this.active.isLoaded) {
+        this.$store.dispatch('cml/medias/seek', { ratio, serverRequest })
+      }
     },
     msToMinutesAndSeconds (ms) {
       const minutes = Math.floor(ms / 60000)

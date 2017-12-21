@@ -6,10 +6,10 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch, state, rootState }, group) {
+  add ({ commit, dispatch, state, rootState }, { element }) {
     commit('cml/sync/start', 'groupsAdd', { root: true })
     return api
-      .createGroup(group.name, group.description)
+      .createGroup(element.name, element.description)
       .then(r => {
         commit('cml/sync/stop', 'groupsAdd', { root: true })
         const group = groupFormat(r.data)
@@ -28,17 +28,17 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch, state, rootState }, group) {
+  remove ({ commit, dispatch, state, rootState }, { id }) {
     commit('cml/sync/start', 'groupsRemove', { root: true })
     return api
-      .deleteGroup(group.id)
+      .deleteGroup(id)
       .then(r => {
         commit('cml/sync/stop', 'groupsRemove', { root: true })
-        commit('remove', group.id)
-        commit('cml/corpus/groupRemove', group.id, { root: true })
+        commit('remove', id)
+        commit('cml/corpus/groupRemove', id, { root: true })
         dispatch('cml/messages/success', 'Group removed', { root: true })
 
-        return group.id
+        return id
       })
       .catch(e => {
         commit('cml/sync/stop', 'groupsRemove', { root: true })
@@ -49,10 +49,10 @@ export const actions = {
       })
   },
 
-  update ({ commit, dispatch, state, rootState }, group) {
+  update ({ commit, dispatch, state, rootState }, { element }) {
     commit('cml/sync/start', 'groupsUpdate', { root: true })
     return api
-      .updateGroup(group.id, { description: group.description })
+      .updateGroup(element.id, { description: element.description })
       .then(r => {
         commit('cml/sync/stop', 'groupsUpdate', { root: true })
         const group = groupFormat(r.data)
@@ -103,7 +103,7 @@ export const actions = {
         })
         if (userId === rootState.cml.user.id) {
           commit('cml/user/groupAdd', group.id, { root: true })
-          dispatch('cml/corpus/list', null, {
+          dispatch('cml/corpus/init', null, {
             root: true
           })
         }
@@ -132,7 +132,7 @@ export const actions = {
         })
         if (userId === rootState.cml.user.id) {
           commit('cml/user/groupRemove', group.id, { root: true })
-          dispatch('cml/corpus/list', null, {
+          dispatch('cml/corpus/init', null, {
             root: true
           })
         }

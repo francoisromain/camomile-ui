@@ -24,12 +24,18 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import popupEdit from './popup/edit.vue'
 import popupRemove from './popup/remove.vue'
 
 export default {
   name: 'camomile-annotations',
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
 
   data () {
     return {
@@ -37,33 +43,45 @@ export default {
         type: 'annotations',
         closeBtn: true,
         title: 'Edit annotation',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupAddConfig: {
         type: 'annotations',
         closeBtn: true,
         title: 'Add annotation',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupRemoveConfig: {
         type: 'annotations',
         closeBtn: true,
         title: 'Remove annotation',
-        component: popupRemove
+        component: popupRemove,
+        uid: this.uid
       }
     }
   },
 
   computed: {
-    ...mapState({
-      annotations: state => state.cml.annotations.list,
-      mediaId: state => state.cml.medias.id,
-      layerId: state => state.cml.layers.id,
-      annotationId: state => state.cml.annotations.id,
-      medias: state => state.cml.medias.list
-    }),
+    annotations () {
+      return this.$store.state.cml.annotations.lists[this.uid]
+    },
+    mediaId () {
+      return this.$store.state.cml.medias.actives[this.uid].id
+    },
+    layerId () {
+      return this.$store.state.cml.layers.actives[this.uid]
+    },
+    annotationId () {
+      return this.$store.state.cml.annotations.actives[this.uid]
+    },
+    medias () {
+      return this.$store.state.cml.medias.lists[this.uid]
+    },
     permission () {
-      const layer = this.$store.state.cml.layers.list.find(layer => layer.id === this.layerId)
+      const layers = this.$store.state.cml.layers.lists
+      const layer = layers[this.uid] && layers[this.uid].find(c => c.id === this.layerId)
       return layer ? layer.permission : 0
     }
   },
@@ -73,7 +91,7 @@ export default {
       return this.$store.commit('cml/popup/open', { config, element })
     },
     set (e) {
-      this.$store.dispatch('cml/annotations/set', e.target.value)
+      this.$store.dispatch('cml/annotations/set', { id: e.target.value, uid: this.uid })
     },
     mediaName (mediaId) {
       if (!mediaId) return ''
