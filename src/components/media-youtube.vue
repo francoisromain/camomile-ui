@@ -1,27 +1,27 @@
 <template>
-  <div class="mb-xl" ref="container">
-    <div id="player"></div>
+  <div v-if="media" ref="container">
+    <div v-show="isLoaded">
+      <div id="player"></div>
+    </div>
     <spinner v-if="!isLoaded"></spinner>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import spinner from './utils/spinner.vue'
 
-import youtube from '../js/youtube'
-
 export default {
-  components: {
-    spinner
-  },
+  name: 'camomile-media-youtube',
 
   props: {
     uid: {
       type: String,
       default: 'default'
-    },
-    media: Object
+    }
+  },
+
+  components: {
+    spinner
   },
 
   data () {
@@ -32,23 +32,27 @@ export default {
   },
 
   computed: {
-    active () {
-      return this.$store.state.cml.medias.actives[this.uid]
+    media () {
+      const medias = this.$store.state.cml.medias
+      return medias.lists[this.uid] && medias.lists[this.uid].find(m => m.id === medias.actives[this.uid]) || {}
+    },
+    properties () {
+      return this.$store.state.cml.medias.properties[this.uid] || {}
     },
     isPlaying () {
-      return this.active && this.active.isPlaying || null
+      return this.properties.isPlaying || false
     },
     isLoaded () {
-      return this.active && this.active.isLoaded || null
+      return this.properties.isLoaded || false
     },
     seek () {
-      return this.active && this.active.seek || null
+      return this.properties.seek || {}
     },
     timeCurrent () {
-      return this.active && this.active.timeCurrent || null
+      return this.properties.timeCurrent || 0
     },
     viewportWidth () {
-      return this.$store.state.cml.viewport.width || null
+      return this.$store.state.cml.viewport.width || 0
     }
   },
 

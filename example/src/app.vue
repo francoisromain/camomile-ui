@@ -12,15 +12,15 @@
         <cml-annotations class="blob-1-2 p border"></cml-annotations>
       </div>
 
+      <cml-media-controller class="mb"></cml-media-controller>
+      <cml-media-youtube class="mb"></cml-media-youtube>
+
       <div class="blobs">
         <cml-corpus class="blob-1-2 p border" uid="test"></cml-corpus>
         <cml-medias class="blob-1-2 p border" uid="test"></cml-medias>
         <cml-layers class="blob-1-2 p border" uid="test"></cml-layers>
         <cml-annotations class="blob-1-2 p border" uid="test"></cml-annotations>
       </div>
-
-      <cml-media-controller></cml-media-controller>
-      <cml-media-video></cml-media-video>
 
 
     </div>
@@ -36,7 +36,7 @@ import {
   cmlMedias,
   cmlLayers,
   cmlAnnotations,
-  cmlMediaVideo,
+  cmlMediaYoutube,
   cmlMediaController}
   from '../../src/app.js'
 
@@ -50,7 +50,7 @@ export default {
     cmlMedias,
     cmlLayers,
     cmlAnnotations,
-    cmlMediaVideo,
+    cmlMediaYoutube,
     cmlMediaController
   }
 }

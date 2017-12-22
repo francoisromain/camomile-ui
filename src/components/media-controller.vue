@@ -1,12 +1,12 @@
 <template>
   <div class="mediacontroller">
     <div class="mediacontroller-controls clearfix pb-s">
-      <button class="mediacontroller-button btn" ref="button" @click="mediaToggle" :disabled="!active.isLoaded">{{ playButton }}</button>
-      <div class="mediacontroller-counter" ref="counter">{{ msToMinutesAndSeconds(active.timeCurrent) }} / {{ msToMinutesAndSeconds(active.timeTotal) }}
+      <button class="mediacontroller-button btn" ref="button" @click="mediaToggle" :disabled="!isLoaded">{{ playButton }}</button>
+      <div class="mediacontroller-counter" ref="counter">{{ msToMinutesAndSeconds(timeCurrent) }} / {{ msToMinutesAndSeconds(timeTotal) }}
       </div>
     </div>
 
-    <div class="mediacontroller-progress" ref="progress" :class="{ loaded: active.isLoaded }"
+    <div class="mediacontroller-progress" ref="progress" :class="{ loaded: isLoaded }"
       @click="progressClick"
       @mousemove="progressMousemove"
       @mousedown="progressMousedown"
@@ -37,20 +37,29 @@ export default {
   },
 
   computed: {
-    active () {
-      return this.$store.state.cml.medias.actives[this.uid] || {}
+    properties () {
+      return this.$store.state.cml.medias.properties[this.uid] || {}
     },
-    progressBarWidth () {
-      return `${this.active.timeCurrent / this.active.timeTotal * 100}%`
+    timeCurrent () {
+      return this.properties.timeCurrent || 0
+    },
+    timeTotal () {
+      return this.properties.timeTotal || 0
     },
     playButton () {
-      return this.active.isPlaying ? '❚ ❚' : '►'
+      return this.properties.isPlaying && '❚ ❚' || '►'
+    },
+    isLoaded () {
+      return this.properties.isLoaded || false
+    },
+    progressBarWidth () {
+      return `${this.timeCurrent / this.timeTotal * 100}%`
     }
   },
 
   methods: {
     mediaToggle () {
-      if (this.active.isPlaying) {
+      if (this.properties.isPlaying) {
         this.$store.commit('cml/medias/pause', this.uid)
       } else {
         this.$store.commit('cml/medias/play', this.uid)
@@ -69,7 +78,7 @@ export default {
       this.mousedown = false
     },
     seek (ratio, serverRequest, uid) {
-      if (this.active.isLoaded) {
+      if (this.properties.isLoaded) {
         this.$store.dispatch('cml/medias/seek', { ratio, serverRequest, uid })
       }
     },

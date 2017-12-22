@@ -6,7 +6,8 @@ let interval
 
 export const state = {
   lists: {},
-  actives: {}
+  actives: {},
+  properties: {}
 }
 
 export const actions = {
@@ -45,7 +46,7 @@ export const actions = {
         dispatch('cml/sync/stop', `mediasRemove-${uid}`, { root: true })
         commit('remove', { mediaId: id, uid })
         dispatch('cml/messages/success', 'Medium removed', { root: true })
-        if (state.actives[uid].id === id) {
+        if (state.actives[uid] === id) {
           dispatch('set', { uid })
         }
         dispatch(
@@ -117,8 +118,7 @@ export const actions = {
   },
 
   set ({ state, getters, dispatch, commit }, { mediaId, uid }) {
-    console.log('set medias', uid, mediaId)
-    if (state.actives[uid] && state.actives[uid].isPlaying) {
+    if (state.properties[uid] && state.properties[uid].isPlaying) {
       dispatch('pause', uid)
     }
     commit('set', { mediaId: mediaId || getters.id(uid), uid })
@@ -126,7 +126,7 @@ export const actions = {
 
   play ({ state, commit }, uid) {
     const timeStart = Date.now()
-    const timeCurrent = state.actives[uid].timeCurrent
+    const timeCurrent = state.properties[uid].timeCurrent
     interval = setInterval(() => {
       var timeEllapsed = Date.now() - timeStart
       commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid })
@@ -150,10 +150,13 @@ export const actions = {
   },
 
   seek ({ state, commit, dispatch }, { ratio, serverRequest, uid }) {
-    if (state.actives[uid].isPlaying) {
+    if (state.properties[uid].isPlaying) {
       clearInterval(interval)
     }
-    commit('timeCurrent', { time: ratio * state.actives[uid].timeTotal, uid })
+    commit('timeCurrent', {
+      time: ratio * state.properties[uid].timeTotal,
+      uid
+    })
     commit('seek', { options: { seeking: true, serverRequest }, uid })
   }
 }
@@ -161,8 +164,8 @@ export const actions = {
 export const getters = {
   id: state => uid =>
     (state.actives[uid] &&
-      state.lists[uid].map(c => c.id).indexOf(state.actives[uid].id) !== -1 &&
-      state.actives[uid].id) ||
+      state.lists[uid].map(c => c.id).indexOf(state.actives[uid]) !== -1 &&
+      state.actives[uid]) ||
     (state.lists[uid][0] && state.lists[uid][0].id) ||
     null
 }
@@ -171,11 +174,13 @@ export const mutations = {
   reset (state, uid) {
     Vue.set(state.lists, uid, [])
     Vue.delete(state.actives, uid)
+    Vue.delete(state.properties, uid)
   },
 
   resetAll (state) {
     Vue.set(state, 'lists', {})
     Vue.set(state, 'actives', {})
+    Vue.set(state, 'properties', {})
   },
 
   add (state, { media, uid }) {
@@ -200,9 +205,8 @@ export const mutations = {
   },
 
   set (state, { mediaId, uid }) {
-    console.log('media set', mediaId, uid)
-    Vue.set(state.actives, uid, {
-      id: mediaId,
+    Vue.set(state.actives, uid, mediaId)
+    Vue.set(state.properties, uid, {
       timeTotal: 0,
       timeCurrent: 0,
       isPlaying: false,
@@ -212,27 +216,27 @@ export const mutations = {
   },
 
   loaded (state, { isLoaded, uid }) {
-    Vue.set(state.actives[uid], 'isLoaded', isLoaded)
+    Vue.set(state.properties[uid], 'isLoaded', isLoaded)
   },
 
   play (state, uid) {
-    Vue.set(state.actives[uid], 'isPlaying', true)
+    Vue.set(state.properties[uid], 'isPlaying', true)
   },
 
   pause (state, uid) {
-    Vue.set(state.actives[uid], 'isPlaying', false)
+    Vue.set(state.properties[uid], 'isPlaying', false)
   },
 
   timeCurrent (state, { time, uid }) {
-    Vue.set(state.actives[uid], 'timeCurrent', time)
+    Vue.set(state.properties[uid], 'timeCurrent', time)
   },
 
   timeTotal (state, { time, uid }) {
-    Vue.set(state.actives[uid], 'timeTotal', time)
+    Vue.set(state.properties[uid], 'timeTotal', time)
   },
 
   seek (state, { options, uid }) {
-    Vue.set(state.actives[uid], 'seek', options)
+    Vue.set(state.properties[uid], 'seek', options)
   }
 }
 

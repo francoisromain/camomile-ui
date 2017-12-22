@@ -67,7 +67,7 @@ export default {
       return this.$store.state.cml.corpus.actives[this.uid]
     },
     mediaId () {
-      return this.$store.state.cml.medias.actives[this.uid].id
+      return this.$store.state.cml.medias.actives[this.uid]
     },
     medias () {
       return this.$store.state.cml.medias.lists[this.uid]
