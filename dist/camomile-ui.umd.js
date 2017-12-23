@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global['camomile-ui'] = factory());
-}(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global['camomile-ui'] = {})));
+}(this, (function (exports) { 'use strict';
 
 /**
  * vuex v3.0.1
@@ -938,7 +938,7 @@ var index_esm = {
 };
 
 /*!
- * Vue.js v2.5.9
+ * Vue.js v2.5.13
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
@@ -971,6 +971,8 @@ function isPrimitive (value) {
   return (
     typeof value === 'string' ||
     typeof value === 'number' ||
+    // $flow-disable-line
+    typeof value === 'symbol' ||
     typeof value === 'boolean'
   )
 }
@@ -1275,6 +1277,7 @@ var config = ({
   /**
    * Option merge strategies (used in core/util/options)
    */
+  // $flow-disable-line
   optionMergeStrategies: Object.create(null),
 
   /**
@@ -1315,6 +1318,7 @@ var config = ({
   /**
    * Custom user key aliases for v-on
    */
+  // $flow-disable-line
   keyCodes: Object.create(null),
 
   /**
@@ -1749,8 +1753,7 @@ var arrayMethods = Object.create(arrayProto);[
   'splice',
   'sort',
   'reverse'
-]
-.forEach(function (method) {
+].forEach(function (method) {
   // cache original method
   var original = arrayProto[method];
   def(arrayMethods, method, function mutator () {
@@ -2084,18 +2087,18 @@ function mergeDataOrFn (
     // it has to be a function to pass previous merges.
     return function mergedDataFn () {
       return mergeData(
-        typeof childVal === 'function' ? childVal.call(this) : childVal,
-        typeof parentVal === 'function' ? parentVal.call(this) : parentVal
+        typeof childVal === 'function' ? childVal.call(this, this) : childVal,
+        typeof parentVal === 'function' ? parentVal.call(this, this) : parentVal
       )
     }
   } else {
     return function mergedInstanceDataFn () {
       // instance merge
       var instanceData = typeof childVal === 'function'
-        ? childVal.call(vm)
+        ? childVal.call(vm, vm)
         : childVal;
       var defaultData = typeof parentVal === 'function'
-        ? parentVal.call(vm)
+        ? parentVal.call(vm, vm)
         : parentVal;
       if (instanceData) {
         return mergeData(instanceData, defaultData)
@@ -2247,13 +2250,23 @@ var defaultStrat = function (parentVal, childVal) {
  */
 function checkComponents (options) {
   for (var key in options.components) {
-    var lower = key.toLowerCase();
-    if (isBuiltInTag(lower) || config.isReservedTag(lower)) {
-      warn(
-        'Do not use built-in or reserved HTML elements as component ' +
-        'id: ' + key
-      );
-    }
+    validateComponentName(key);
+  }
+}
+
+function validateComponentName (name) {
+  if (!/^[a-zA-Z][\w-]*$/.test(name)) {
+    warn(
+      'Invalid component name: "' + name + '". Component names ' +
+      'can only contain alphanumeric characters and the hyphen, ' +
+      'and must start with a letter.'
+    );
+  }
+  if (isBuiltInTag(name) || config.isReservedTag(name)) {
+    warn(
+      'Do not use built-in or reserved HTML elements as component ' +
+      'id: ' + name
+    );
   }
 }
 
@@ -2300,6 +2313,7 @@ function normalizeProps (options, vm) {
  */
 function normalizeInject (options, vm) {
   var inject = options.inject;
+  if (!inject) { return }
   var normalized = options.inject = {};
   if (Array.isArray(inject)) {
     for (var i = 0; i < inject.length; i++) {
@@ -2312,7 +2326,7 @@ function normalizeInject (options, vm) {
         ? extend({ from: key }, val)
         : { from: val };
     }
-  } else if (process.env.NODE_ENV !== 'production' && inject) {
+  } else if (process.env.NODE_ENV !== 'production') {
     warn(
       "Invalid value for option \"inject\": expected an Array or an Object, " +
       "but got " + (toRawType(inject)) + ".",
@@ -2454,7 +2468,11 @@ function validateProp (
     observe(value);
     observerState.shouldConvert = prevShouldConvert;
   }
-  if (process.env.NODE_ENV !== 'production') {
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    // skip validation for weex recycle-list child component props
+    !(false && isObject$1(value) && ('@binding' in value))
+  ) {
     assertProp(prop, key, value, vm, absent);
   }
   return value
@@ -2934,11 +2952,12 @@ function updateListeners (
   remove$$1,
   vm
 ) {
-  var name, cur, old, event;
+  var name, def, cur, old, event;
   for (name in on) {
-    cur = on[name];
+    def = cur = on[name];
     old = oldOn[name];
     event = normalizeEvent(name);
+    /* istanbul ignore if */
     if (isUndef(cur)) {
       process.env.NODE_ENV !== 'production' && warn(
         "Invalid handler for event \"" + (event.name) + "\": got " + String(cur),
@@ -2948,7 +2967,7 @@ function updateListeners (
       if (isUndef(cur.fns)) {
         cur = on[name] = createFnInvoker(cur);
       }
-      add(event.name, cur, event.once, event.capture, event.passive);
+      add(event.name, cur, event.once, event.capture, event.passive, event.params);
     } else if (cur !== old) {
       old.fns = cur;
       on[name] = old;
@@ -3442,6 +3461,8 @@ function eventsMixin (Vue) {
 
 /*  */
 
+
+
 /**
  * Runtime helper for resolving raw children VNodes into a slot object.
  */
@@ -3465,10 +3486,10 @@ function resolveSlots (
     if ((child.context === context || child.fnContext === context) &&
       data && data.slot != null
     ) {
-      var name = child.data.slot;
+      var name = data.slot;
       var slot = (slots[name] || (slots[name] = []));
       if (child.tag === 'template') {
-        slot.push.apply(slot, child.children);
+        slot.push.apply(slot, child.children || []);
       } else {
         slot.push(child);
       }
@@ -4309,6 +4330,7 @@ function getData (data, vm) {
 var computedWatcherOptions = { lazy: true };
 
 function initComputed (vm, computed) {
+  // $flow-disable-line
   var watchers = vm._computedWatchers = Object.create(null);
   // computed properties are just getters during SSR
   var isSSR = isServerRendering();
@@ -4539,11 +4561,11 @@ function resolveInject (inject, vm) {
     // inject is :any because flow is not smart enough to figure out cached
     var result = Object.create(null);
     var keys = hasSymbol
-        ? Reflect.ownKeys(inject).filter(function (key) {
-          /* istanbul ignore next */
-          return Object.getOwnPropertyDescriptor(inject, key).enumerable
-        })
-        : Object.keys(inject);
+      ? Reflect.ownKeys(inject).filter(function (key) {
+        /* istanbul ignore next */
+        return Object.getOwnPropertyDescriptor(inject, key).enumerable
+      })
+      : Object.keys(inject);
 
     for (var i = 0; i < keys.length; i++) {
       var key = keys[i];
@@ -4749,19 +4771,9 @@ function bindObjectProps (
  */
 function renderStatic (
   index,
-  isInFor,
-  isOnce
+  isInFor
 ) {
-  // render fns generated by compiler < 2.5.4 does not provide v-once
-  // information to runtime so be conservative
-  var isOldVersion = arguments.length < 3;
-  // if a static tree is generated by v-once, it is cached on the instance;
-  // otherwise it is purely static and can be cached on the shared options
-  // across all instances.
-  var renderFns = this.$options.staticRenderFns;
-  var cached = isOldVersion || isOnce
-    ? (this._staticTrees || (this._staticTrees = []))
-    : (renderFns.cached || (renderFns.cached = []));
+  var cached = this._staticTrees || (this._staticTrees = []);
   var tree = cached[index];
   // if has already-rendered static tree and not inside v-for,
   // we can reuse the same tree by doing a shallow clone.
@@ -4771,7 +4783,11 @@ function renderStatic (
       : cloneVNode(tree)
   }
   // otherwise, render a fresh tree.
-  tree = cached[index] = renderFns[index].call(this._renderProxy, null, this);
+  tree = cached[index] = this.$options.staticRenderFns[index].call(
+    this._renderProxy,
+    null,
+    this // for render fns generated for functional component templates
+  );
   markStatic(tree, ("__static__" + index), false);
   return tree
 }
@@ -4949,6 +4965,25 @@ function mergeProps (to, from) {
 
 /*  */
 
+
+
+
+// Register the component hook to weex native render engine.
+// The hook will be triggered by native, not javascript.
+
+
+// Updates the state of the component to weex native render engine.
+
+/*  */
+
+// https://github.com/Hanks10100/weex-native-directive/tree/master/component
+
+// listening on native callback
+
+/*  */
+
+/*  */
+
 // hooks to be invoked on component VNodes during patch
 var componentVNodeHooks = {
   init: function init (
@@ -5114,6 +5149,11 @@ function createComponent (
     { Ctor: Ctor, propsData: propsData, listeners: listeners, tag: tag, children: children },
     asyncFactory
   );
+
+  // Weex specific: invoke recycle-list optimized @render function for
+  // extracting cell-slot template.
+  // https://github.com/Hanks10100/weex-native-directive/tree/master/component
+  /* istanbul ignore if */
   return vnode
 }
 
@@ -5123,15 +5163,10 @@ function createComponentInstanceForVnode (
   parentElm,
   refElm
 ) {
-  var vnodeComponentOptions = vnode.componentOptions;
   var options = {
     _isComponent: true,
     parent: parent,
-    propsData: vnodeComponentOptions.propsData,
-    _componentTag: vnodeComponentOptions.tag,
     _parentVnode: vnode,
-    _parentListeners: vnodeComponentOptions.listeners,
-    _renderChildren: vnodeComponentOptions.children,
     _parentElm: parentElm || null,
     _refElm: refElm || null
   };
@@ -5141,7 +5176,7 @@ function createComponentInstanceForVnode (
     options.render = inlineTemplate.render;
     options.staticRenderFns = inlineTemplate.staticRenderFns;
   }
-  return new vnodeComponentOptions.Ctor(options)
+  return new vnode.componentOptions.Ctor(options)
 }
 
 function mergeHooks (data) {
@@ -5229,11 +5264,13 @@ function _createElement (
   if (process.env.NODE_ENV !== 'production' &&
     isDef(data) && isDef(data.key) && !isPrimitive(data.key)
   ) {
-    warn(
-      'Avoid using non-primitive value as key, ' +
-      'use string/number value instead.',
-      context
-    );
+    {
+      warn(
+        'Avoid using non-primitive value as key, ' +
+        'use string/number value instead.',
+        context
+      );
+    }
   }
   // support single function children as default scoped slot
   if (Array.isArray(children) &&
@@ -5475,14 +5512,18 @@ function initMixin (Vue) {
 function initInternalComponent (vm, options) {
   var opts = vm.$options = Object.create(vm.constructor.options);
   // doing this because it's faster than dynamic enumeration.
+  var parentVnode = options._parentVnode;
   opts.parent = options.parent;
-  opts.propsData = options.propsData;
-  opts._parentVnode = options._parentVnode;
-  opts._parentListeners = options._parentListeners;
-  opts._renderChildren = options._renderChildren;
-  opts._componentTag = options._componentTag;
+  opts._parentVnode = parentVnode;
   opts._parentElm = options._parentElm;
   opts._refElm = options._refElm;
+
+  var vnodeComponentOptions = parentVnode.componentOptions;
+  opts.propsData = vnodeComponentOptions.propsData;
+  opts._parentListeners = vnodeComponentOptions.listeners;
+  opts._renderChildren = vnodeComponentOptions.children;
+  opts._componentTag = vnodeComponentOptions.tag;
+
   if (options.render) {
     opts.render = options.render;
     opts.staticRenderFns = options.staticRenderFns;
@@ -5616,14 +5657,8 @@ function initExtend (Vue) {
     }
 
     var name = extendOptions.name || Super.options.name;
-    if (process.env.NODE_ENV !== 'production') {
-      if (!/^[a-zA-Z][\w-]*$/.test(name)) {
-        warn(
-          'Invalid component name: "' + name + '". Component names ' +
-          'can only contain alphanumeric characters and the hyphen, ' +
-          'and must start with a letter.'
-        );
-      }
+    if (process.env.NODE_ENV !== 'production' && name) {
+      validateComponentName(name);
     }
 
     var Sub = function VueComponent (options) {
@@ -5705,13 +5740,8 @@ function initAssetRegisters (Vue) {
         return this.options[type + 's'][id]
       } else {
         /* istanbul ignore if */
-        if (process.env.NODE_ENV !== 'production') {
-          if (type === 'component' && config.isReservedTag(id)) {
-            warn(
-              'Do not use built-in or reserved HTML elements as component ' +
-              'id: ' + id
-            );
-          }
+        if (process.env.NODE_ENV !== 'production' && type === 'component') {
+          validateComponentName(id);
         }
         if (type === 'component' && isPlainObject(definition)) {
           definition.name = definition.name || id;
@@ -5918,7 +5948,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.5.9';
+Vue$3.version = '2.5.13';
 
 /*  */
 
@@ -5970,12 +6000,12 @@ function genClassForVnode (vnode) {
   var childNode = vnode;
   while (isDef(childNode.componentInstance)) {
     childNode = childNode.componentInstance._vnode;
-    if (childNode.data) {
+    if (childNode && childNode.data) {
       data = mergeClassData(childNode.data, data);
     }
   }
   while (isDef(parentNode = parentNode.parent)) {
-    if (parentNode.data) {
+    if (parentNode && parentNode.data) {
       data = mergeClassData(data, parentNode.data);
     }
   }
@@ -6486,11 +6516,14 @@ function createPatchFunction (backend) {
 
   function createChildren (vnode, children, insertedVnodeQueue) {
     if (Array.isArray(children)) {
+      if (process.env.NODE_ENV !== 'production') {
+        checkDuplicateKeys(children);
+      }
       for (var i = 0; i < children.length; ++i) {
         createElm(children[i], insertedVnodeQueue, vnode.elm, null, true);
       }
     } else if (isPrimitive(vnode.text)) {
-      nodeOps.appendChild(vnode.elm, nodeOps.createTextNode(vnode.text));
+      nodeOps.appendChild(vnode.elm, nodeOps.createTextNode(String(vnode.text)));
     }
   }
 
@@ -6617,6 +6650,10 @@ function createPatchFunction (backend) {
     // during leaving transitions
     var canMove = !removeOnly;
 
+    if (process.env.NODE_ENV !== 'production') {
+      checkDuplicateKeys(newCh);
+    }
+
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (isUndef(oldStartVnode)) {
         oldStartVnode = oldCh[++oldStartIdx]; // Vnode has been moved left
@@ -6649,13 +6686,6 @@ function createPatchFunction (backend) {
           createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm);
         } else {
           vnodeToMove = oldCh[idxInOld];
-          /* istanbul ignore if */
-          if (process.env.NODE_ENV !== 'production' && !vnodeToMove) {
-            warn(
-              'It seems there are duplicate keys that is causing an update error. ' +
-              'Make sure each v-for item has a unique key.'
-            );
-          }
           if (sameVnode(vnodeToMove, newStartVnode)) {
             patchVnode(vnodeToMove, newStartVnode, insertedVnodeQueue);
             oldCh[idxInOld] = undefined;
@@ -6673,6 +6703,24 @@ function createPatchFunction (backend) {
       addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);
     } else if (newStartIdx > newEndIdx) {
       removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
+    }
+  }
+
+  function checkDuplicateKeys (children) {
+    var seenKeys = {};
+    for (var i = 0; i < children.length; i++) {
+      var vnode = children[i];
+      var key = vnode.key;
+      if (isDef(key)) {
+        if (seenKeys[key]) {
+          warn(
+            ("Duplicate keys detected: '" + key + "'. This may cause an update error."),
+            vnode.context
+          );
+        } else {
+          seenKeys[key] = true;
+        }
+      }
     }
   }
 
@@ -7058,17 +7106,20 @@ function normalizeDirectives$1 (
 ) {
   var res = Object.create(null);
   if (!dirs) {
+    // $flow-disable-line
     return res
   }
   var i, dir;
   for (i = 0; i < dirs.length; i++) {
     dir = dirs[i];
     if (!dir.modifiers) {
+      // $flow-disable-line
       dir.modifiers = emptyModifiers;
     }
     res[getRawDirName(dir)] = dir;
     dir.def = resolveAsset(vm.$options, 'directives', dir.name, true);
   }
+  // $flow-disable-line
   return res
 }
 
@@ -7236,6 +7287,9 @@ var klass = {
 
 
 
+
+
+// add a raw attr (use this in preTransforms)
 
 
 
@@ -7406,12 +7460,12 @@ function updateDOMProps (oldVnode, vnode) {
 function shouldUpdateValue (elm, checkVal) {
   return (!elm.composing && (
     elm.tagName === 'OPTION' ||
-    isDirty(elm, checkVal) ||
-    isInputChanged(elm, checkVal)
+    isNotInFocusAndDirty(elm, checkVal) ||
+    isDirtyWithModifiers(elm, checkVal)
   ))
 }
 
-function isDirty (elm, checkVal) {
+function isNotInFocusAndDirty (elm, checkVal) {
   // return true when textbox (.number and .trim) loses focus and its value is
   // not equal to the updated value
   var notInFocus = true;
@@ -7421,14 +7475,20 @@ function isDirty (elm, checkVal) {
   return notInFocus && elm.value !== checkVal
 }
 
-function isInputChanged (elm, newVal) {
+function isDirtyWithModifiers (elm, newVal) {
   var value = elm.value;
   var modifiers = elm._vModifiers; // injected by v-model runtime
-  if (isDef(modifiers) && modifiers.number) {
-    return toNumber(value) !== toNumber(newVal)
-  }
-  if (isDef(modifiers) && modifiers.trim) {
-    return value.trim() !== newVal.trim()
+  if (isDef(modifiers)) {
+    if (modifiers.lazy) {
+      // inputs with lazy should only be updated when not in focus
+      return false
+    }
+    if (modifiers.number) {
+      return toNumber(value) !== toNumber(newVal)
+    }
+    if (modifiers.trim) {
+      return value.trim() !== newVal.trim()
+    }
   }
   return value !== newVal
 }
@@ -7486,7 +7546,10 @@ function getStyle (vnode, checkChild) {
     var childNode = vnode;
     while (childNode.componentInstance) {
       childNode = childNode.componentInstance._vnode;
-      if (childNode.data && (styleData = normalizeStyleData(childNode.data))) {
+      if (
+        childNode && childNode.data &&
+        (styleData = normalizeStyleData(childNode.data))
+      ) {
         extend(res, styleData);
       }
     }
@@ -8803,7 +8866,7 @@ var config$1 = {
   url: 'http://localhost:3000',
   roles: ['admin', 'user'],
   axios: false
-};
+}
 
 var log = {
   simple: function simple (key, value) {
@@ -8820,77 +8883,71 @@ var log = {
       'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 12px; line-height:96px; text-decoration: none; color:#fff; background:linear-gradient(to bottom, #f62, #f30); text-shadow: -1px -1px 1px #a50,  1px 1px 3px #fa0; border-radius: 0 8px 8px 0; '
     );
   }
-};
+}
 
 var state$1 = {
+  name: '',
+  width: 0,
+  height: 0,
   svg: {
     height: 0,
     width: 0,
     scale: 1
   },
-  viewport: {
-    name: '',
-    width: window.innerWidth,
-    height: window.innerHeight
-  },
   animate: false
 };
 
 var actions$1 = {
-  set: function set (context) {
-    context.commit('viewportSet');
-    context.commit('svgSet');
+  set: function set (ref) {
+    var state = ref.state;
+    var commit = ref.commit;
+
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var name;
+    var animate;
+    if (window.matchMedia('(min-width: 83.5em)').matches) {
+      name = 'large';
+      animate = true;
+    } else if (window.matchMedia('(min-width: 63em)').matches) {
+      name = 'desktop';
+      animate = true;
+    } else if (window.matchMedia('(min-width: 42.5em)').matches) {
+      name = 'tablet';
+      animate = false;
+    } else if (window.matchMedia('(min-width: 22em)').matches) {
+      name = 'mobile';
+      animate = false;
+    } else {
+      log.simple('Viewport', 'Default');
+      name = 'default';
+      animate = false;
+    }
+    commit('set', { name: name, animate: animate, width: width, height: height });
   }
 };
 
-var mutations$1 = {
-  viewportSet: function viewportSet (state) {
-    if (window.matchMedia('(min-width: 83.5em)').matches) {
-      log.simple('Viewport', 'Large');
-      state.viewport.name = 'large';
-      state.animate = true;
-    } else if (window.matchMedia('(min-width: 63em)').matches) {
-      log.simple('Viewport', 'Desktop');
-      state.viewport.name = 'desktop';
-      state.animate = true;
-    } else if (window.matchMedia('(min-width: 42.5em)').matches) {
-      log.simple('Viewport', 'Tablet');
-      state.viewport.name = 'tablet';
-      state.animate = false;
-    } else if (window.matchMedia('(min-width: 22em)').matches) {
-      log.simple('Viewport', 'Mobile');
-      state.viewport.name = 'mobile';
-      state.animate = false;
-    } else {
-      log.simple('Viewport', 'Default');
-      state.viewport.name = 'default';
-      state.animate = false;
-    }
-    state.viewport.width = window.innerWidth;
-    state.viewport.height = window.innerHeight;
-  },
-  svgSet: function svgSet (state) {
-    state.svg.scale =
-      state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
-        ? 0.5
-        : 1;
-    state.svg.height =
-      state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
-        ? state.viewport.height - 288
-        : state.viewport.height - 144;
-    state.svg.width =
-      state.viewport.name === 'large'
-        ? state.viewport.width - 48
-        : state.viewport.width - 48;
+var mutations = {
+  set: function set (state, ref) {
+    var animate = ref.animate;
+    var name = ref.name;
+    var width = ref.width;
+    var height = ref.height;
+
+    state.name = name;
+    state.animate = animate;
+    state.width = width;
+    state.height = height;
+    log.simple('Viewport', name);
   }
 };
 
 var viewport = {
   namespaced: true,
   state: state$1,
-  mutations: mutations$1,
+  mutations: mutations,
   actions: actions$1
-};
+}
 
 var state$2 = {
   list: []
@@ -8903,6 +8960,18 @@ var actions$2 = {
     dispatch("cml/set", {}, { root: true }).then(function (r) {
       dispatch('cml/messages/success', 'Synced with server', { root: true });
     });
+  },
+
+  start: function start (ref, name) {
+    var state = ref.state;
+
+    state.list.push(name);
+  },
+
+  stop: function stop (ref, name) {
+    var state = ref.state;
+
+    state.list = state.list.filter(function (n) { return n !== name; });
   }
 };
 
@@ -8912,23 +8981,12 @@ var getters = {
   }
 };
 
-var mutations$2 = {
-  start: function start (state, name) {
-    state.list.push(name);
-  },
-
-  stop: function stop (state, name) {
-    state.list = state.list.filter(function (n) { return n !== name; });
-  }
-};
-
 var sync = {
   namespaced: true,
   state: state$2,
   actions: actions$2,
-  getters: getters,
-  mutations: mutations$2
-};
+  getters: getters
+}
 
 var state$3 = {
   visible: false,
@@ -8936,7 +8994,7 @@ var state$3 = {
   element: {}
 };
 
-var mutations$3 = {
+var mutations$1 = {
   open: function open (state, ref) {
     var config = ref.config;
     var element = ref.element;
@@ -8962,15 +9020,15 @@ var mutations$3 = {
 var popup = {
   namespaced: true,
   state: state$3,
-  mutations: mutations$3
-};
+  mutations: mutations$1
+}
 
 var state$4 = {
   visible: false,
   config: {}
 };
 
-var mutations$4 = {
+var mutations$2 = {
   close: function close (state) {
     state.visible = false;
     state.config = {};
@@ -8985,8 +9043,8 @@ var mutations$4 = {
 var dropdown = {
   namespaced: true,
   state: state$4,
-  mutations: mutations$4
-};
+  mutations: mutations$2
+}
 
 function userFormat (user) {
   return {
@@ -9051,7 +9109,7 @@ var actions$3 = {
   }
 };
 
-var mutations$5 = {
+var mutations$3 = {
   remove: function remove (state) {
     state.list.shift();
   },
@@ -9065,8 +9123,8 @@ var messages = {
   namespaced: true,
   state: state$5,
   actions: actions$3,
-  mutations: mutations$5
-};
+  mutations: mutations$3
+}
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -15860,7 +15918,7 @@ var punycode$1 = {
   toUnicode: toUnicode,
   encode: encode,
   decode: decode
-};
+}
 
 
 var punycode$2 = Object.freeze({
@@ -16716,7 +16774,7 @@ var util$2 = {
   deprecate: deprecate,
   format: format$1,
   debuglog: debuglog
-};
+}
 
 
 var util$3 = Object.freeze({
@@ -16890,7 +16948,7 @@ var qs = {
   stringify: stringify,
   decode: parse$3,
   parse: parse$3
-};
+}
 
 
 
@@ -16930,7 +16988,7 @@ var url = {
   resolveObject: urlResolveObject,
   format: urlFormat,
   Url: Url
-};
+}
 function Url() {
   this.protocol = null;
   this.slashes = null;
@@ -18058,7 +18116,7 @@ var _integrity = "sha1-C2GKVWW23qkL80JdBNVe3EdadWE=";
 var _location = "/tough-cookie";
 var _phantomChildren = {};
 var _requested = {"type":"range","registry":true,"raw":"tough-cookie@~2.3.3","name":"tough-cookie","escapedName":"tough-cookie","rawSpec":"~2.3.3","saveSpec":null,"fetchSpec":"~2.3.3"};
-var _requiredBy = ["/codecov/request","/jsdom","/less/request","/node-sass/request","/request","/request-promise"];
+var _requiredBy = ["/codecov/request","/jsdom","/less/request","/node-sass/request","/request","/request-promise","/request-promise-native"];
 var _resolved = "https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.3.tgz";
 var _shasum = "0b618a5565b6dea90bf3425d04d55edc475a7561";
 var _spec = "tough-cookie@~2.3.3";
@@ -24402,7 +24460,7 @@ IncomingMessage.prototype._onXHRProgress = function() {
 
 // MIT License
 // Copyright (c) 2016 John Hiesey
-var toArrayBuffer = function (buf) {
+function toArrayBuffer (buf) {
   // If the buffer is backed by a Uint8Array, a faster version will work
   if (buf instanceof Uint8Array) {
     // If the buffer isn't a subarray, return the underlying ArrayBuffer
@@ -24426,7 +24484,7 @@ var toArrayBuffer = function (buf) {
   } else {
     throw new Error('Argument must be a Buffer')
   }
-};
+}
 
 function decideMode(preferBinary, useFetch) {
   if (hasFetch && useFetch) {
@@ -24862,7 +24920,7 @@ var http = {
   Agent: Agent,
   METHODS: METHODS,
   STATUS_CODES: STATUS_CODES
-};
+}
 
 
 var http$1 = Object.freeze({
@@ -64766,7 +64824,7 @@ var os = {
   loadavg: loadavg,
   hostname: hostname$1,
   endianness: endianness,
-};
+}
 
 
 var os$1 = Object.freeze({
@@ -67765,7 +67823,7 @@ var tty = {
   isatty: isatty,
   ReadStream: ReadStream,
   WriteStream: WriteStream
-};
+}
 
 
 var tty$1 = Object.freeze({
@@ -69154,7 +69212,7 @@ axios_1.default = default_1;
 
 var axios = axios_1;
 
-var camomile = function (url) {
+function camomile (url) {
   var api = axios.create({
     baseURL: url,
     withCredentials: true
@@ -69239,10 +69297,10 @@ var camomile = function (url) {
       )
     }
   }
-};
+}
 
 // import Camomile from '../../../camomile-client-javascript' /* debug with local version */
-var api = (config$1.axios ? camomile(config$1.url) : new camomileClient(config$1.url));
+var api = (config$1.axios ? camomile(config$1.url) : new camomileClient(config$1.url))
 
 var state$6 = {
   id: '',
@@ -69260,18 +69318,18 @@ var actions$4 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
-    commit('cml/sync/start', 'userLogin', { root: true });
+    dispatch('cml/sync/start', 'userLogin', { root: true });
     return api
       .login(config.user.name, config.user.password)
       .then(function (r) {
-        commit('cml/sync/stop', 'userLogin', { root: true });
+        dispatch('cml/sync/stop', 'userLogin', { root: true });
         commit('cml/popup/close', null, { root: true });
         dispatch('set');
 
         return r.message
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'userLogin', { root: true });
+        dispatch('cml/sync/stop', 'userLogin', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
         dispatch('cml/reset', null, { root: true });
@@ -69284,7 +69342,7 @@ var actions$4 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
-    commit('cml/sync/start', 'userSet', { root: true });
+    dispatch('cml/sync/start', 'userSet', { root: true });
     return api
       .me()
       .then(function (r) {
@@ -69295,14 +69353,14 @@ var actions$4 = {
           description: r.data.description || {},
           groupIds: r.data.groups || []
         };
-        commit('cml/sync/stop', 'userSet', { root: true });
+        dispatch('cml/sync/stop', 'userSet', { root: true });
         commit('set', user);
         dispatch('cml/set', null, { root: true });
 
         return user
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'userSet', { root: true });
+        dispatch('cml/sync/stop', 'userSet', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
         dispatch('cml/reset', null, { root: true });
@@ -69316,11 +69374,11 @@ var actions$4 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
-    commit('cml/sync/start', 'userLogout', { root: true });
+    dispatch('cml/sync/start', 'userLogout', { root: true });
     return api
       .logout()
       .then(function (r) {
-        commit('cml/sync/stop', 'userLogout', { root: true });
+        dispatch('cml/sync/stop', 'userLogout', { root: true });
         dispatch('cml/reset', null, { root: true });
         commit('cml/popup/close', null, { root: true });
         commit('cml/dropdown/close', null, { root: true });
@@ -69328,7 +69386,7 @@ var actions$4 = {
         return r.message
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'userLogout', { root: true });
+        dispatch('cml/sync/stop', 'userLogout', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
         dispatch('cml/reset', null, { root: true });
@@ -69389,7 +69447,7 @@ var getters$1 = {
   }; }
 };
 
-var mutations$6 = {
+var mutations$4 = {
   set: function set (state, user) {
     state.isLogged = true;
     state.isAdmin = user.role === 'admin';
@@ -69426,8 +69484,8 @@ var user = {
   state: state$6,
   actions: actions$4,
   getters: getters$1,
-  mutations: mutations$6
-};
+  mutations: mutations$4
+}
 
 var obj;
 var state$8 = {
@@ -69435,15 +69493,21 @@ var state$8 = {
 };
 
 var actions$5 = {
-  add: function add (ref, user) {
+  add: function add (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var element = ref$1.element;
 
-    commit('cml/sync/start', 'usersAdd', { root: true });
+    dispatch('cml/sync/start', 'usersAdd', { root: true });
     return api
-      .createUser(user.name, user.password, user.description, user.role)
+      .createUser(
+        element.name,
+        element.password,
+        element.description,
+        element.role
+      )
       .then(function (r) {
-        commit('cml/sync/stop', 'usersAdd', { root: true });
+        dispatch('cml/sync/stop', 'usersAdd', { root: true });
         var user = userFormat(r.data);
         commit('add', user);
         commit('cml/corpus/userAdd', user.id, { root: true });
@@ -69452,7 +69516,7 @@ var actions$5 = {
         return user
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'usersAdd', { root: true });
+        dispatch('cml/sync/stop', 'usersAdd', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69460,20 +69524,21 @@ var actions$5 = {
       })
   },
 
-  update: function update (ref, user) {
+  update: function update (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootState = ref.rootState;
+    var element = ref$1.element;
 
-    commit('cml/sync/start', 'usersUpdate', { root: true });
+    dispatch('cml/sync/start', 'usersUpdate', { root: true });
     return api
-      .updateUser(user.id, {
-        password: user.password,
-        role: user.role,
-        description: user.description
+      .updateUser(element.id, {
+        password: element.password,
+        role: element.role,
+        description: element.description
       })
       .then(function (r) {
-        commit('cml/sync/stop', 'usersUpdate', { root: true });
+        dispatch('cml/sync/stop', 'usersUpdate', { root: true });
         var user = userFormat(r.data);
         commit('update', user);
         if (user.name === rootState.cml.user.name) {
@@ -69484,7 +69549,7 @@ var actions$5 = {
         return user
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'usersUpdate', { root: true });
+        dispatch('cml/sync/stop', 'usersUpdate', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69492,23 +69557,24 @@ var actions$5 = {
       })
   },
 
-  remove: function remove (ref, user) {
+  remove: function remove (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var id = ref$1.id;
 
-    commit('cml/sync/start', 'usersRemove', { root: true });
+    dispatch('cml/sync/start', 'usersRemove', { root: true });
     return api
-      .deleteUser(user.id)
+      .deleteUser(id)
       .then(function (r) {
-        commit('cml/sync/stop', 'usersRemove', { root: true });
-        commit('remove', user.id);
-        commit('cml/corpus/userRemove', user.id, { root: true });
+        dispatch('cml/sync/stop', 'usersRemove', { root: true });
+        commit('remove', id);
+        commit('cml/corpus/userRemove', id, { root: true });
         dispatch('cml/messages/success', 'User removed', { root: true });
 
-        return user.id
+        return id
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'usersRemove', { root: true });
+        dispatch('cml/sync/stop', 'usersRemove', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69520,18 +69586,18 @@ var actions$5 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
-    commit('cml/sync/start', 'usersList', { root: true });
+    dispatch('cml/sync/start', 'usersList', { root: true });
     return api
       .getUsers()
       .then(function (r) {
-        commit('cml/sync/stop', 'usersList', { root: true });
+        dispatch('cml/sync/stop', 'usersList', { root: true });
         var users = r.data.map(function (user) { return userFormat(user); });
         commit('list', users);
 
         return users
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'usersList', { root: true });
+        dispatch('cml/sync/stop', 'usersList', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69549,9 +69615,9 @@ var getters$2 = {
   }; }
 };
 
-var mutations$7 = {
+var mutations$5 = {
   reset: function reset (state) {
-    state.list = [];
+    Vue$3.set(state, 'list', []);
   },
 
   add: function add (state, user) {
@@ -69559,15 +69625,17 @@ var mutations$7 = {
   },
 
   update: function update (state, user) {
-    Object.assign(state.list.find(function (u) { return u.id === user.id; }), user);
+    var index = state.list.findIndex(function (u) { return u.id === user.id; });
+    Vue$3.set(state.list, index, user);
   },
 
   remove: function remove (state, userId) {
-    state.list = state.list.filter(function (u) { return u.id !== userId; });
+    var index = state.list.findIndex(function (u) { return u.id === userId; });
+    Vue$3.delete(state.list, index);
   },
 
   list: function list (state, users) {
-    state.list = users;
+    Vue$3.set(state, 'list', users);
   }
 };
 
@@ -69576,8 +69644,8 @@ var users = {
   state: state$8,
   actions: actions$5,
   getters: getters$2,
-  mutations: mutations$7
-};
+  mutations: mutations$5
+}
 
 var obj$1;
 var state$9 = {
@@ -69585,17 +69653,18 @@ var state$9 = {
 };
 
 var actions$6 = {
-  add: function add (ref, group) {
+  add: function add (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
     var rootState = ref.rootState;
+    var element = ref$1.element;
 
-    commit('cml/sync/start', 'groupsAdd', { root: true });
+    dispatch('cml/sync/start', 'groupsAdd', { root: true });
     return api
-      .createGroup(group.name, group.description)
+      .createGroup(element.name, element.description)
       .then(function (r) {
-        commit('cml/sync/stop', 'groupsAdd', { root: true });
+        dispatch('cml/sync/stop', 'groupsAdd', { root: true });
         var group = groupFormat(r.data);
         commit('add', group);
         commit('cml/corpus/groupAdd', group.id, { root: true });
@@ -69604,7 +69673,7 @@ var actions$6 = {
         return group
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'groupsAdd', { root: true });
+        dispatch('cml/sync/stop', 'groupsAdd', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69612,25 +69681,26 @@ var actions$6 = {
       })
   },
 
-  remove: function remove (ref, group) {
+  remove: function remove (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
     var rootState = ref.rootState;
+    var id = ref$1.id;
 
-    commit('cml/sync/start', 'groupsRemove', { root: true });
+    dispatch('cml/sync/start', 'groupsRemove', { root: true });
     return api
-      .deleteGroup(group.id)
+      .deleteGroup(id)
       .then(function (r) {
-        commit('cml/sync/stop', 'groupsRemove', { root: true });
-        commit('remove', group.id);
-        commit('cml/corpus/groupRemove', group.id, { root: true });
+        dispatch('cml/sync/stop', 'groupsRemove', { root: true });
+        commit('remove', id);
+        commit('cml/corpus/groupRemove', id, { root: true });
         dispatch('cml/messages/success', 'Group removed', { root: true });
 
-        return group.id
+        return id
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'groupsRemove', { root: true });
+        dispatch('cml/sync/stop', 'groupsRemove', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69638,17 +69708,18 @@ var actions$6 = {
       })
   },
 
-  update: function update (ref, group) {
+  update: function update (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
     var rootState = ref.rootState;
+    var element = ref$1.element;
 
-    commit('cml/sync/start', 'groupsUpdate', { root: true });
+    dispatch('cml/sync/start', 'groupsUpdate', { root: true });
     return api
-      .updateGroup(group.id, { description: group.description })
+      .updateGroup(element.id, { description: element.description })
       .then(function (r) {
-        commit('cml/sync/stop', 'groupsUpdate', { root: true });
+        dispatch('cml/sync/stop', 'groupsUpdate', { root: true });
         var group = groupFormat(r.data);
         commit('update', group);
         dispatch('cml/messages/success', 'Group updated', { root: true });
@@ -69656,7 +69727,7 @@ var actions$6 = {
         return group
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'groupsUpdate', { root: true });
+        dispatch('cml/sync/stop', 'groupsUpdate', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69670,18 +69741,18 @@ var actions$6 = {
     var state = ref.state;
     var rootState = ref.rootState;
 
-    commit('cml/sync/start', 'groupsList', { root: true });
+    dispatch('cml/sync/start', 'groupsList', { root: true });
     return api
       .getGroups()
       .then(function (r) {
-        commit('cml/sync/stop', 'groupsList', { root: true });
+        dispatch('cml/sync/stop', 'groupsList', { root: true });
         var groups = r.data.map(function (group) { return groupFormat(group); });
         commit('list', groups);
 
         return groups
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'groupsList', { root: true });
+        dispatch('cml/sync/stop', 'groupsList', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69697,11 +69768,11 @@ var actions$6 = {
     var userId = ref$1.userId;
     var group = ref$1.group;
 
-    commit('cml/sync/start', 'groupsUserAdd', { root: true });
+    dispatch('cml/sync/start', 'groupsUserAdd', { root: true });
     return api
       .addUserToGroup(userId, group.id)
       .then(function (r) {
-        commit('cml/sync/stop', 'groupsUserAdd', { root: true });
+        dispatch('cml/sync/stop', 'groupsUserAdd', { root: true });
         var group = groupFormat(r.data);
         commit('update', group);
         dispatch('cml/messages/success', 'User added to group', {
@@ -69709,7 +69780,7 @@ var actions$6 = {
         });
         if (userId === rootState.cml.user.id) {
           commit('cml/user/groupAdd', group.id, { root: true });
-          dispatch('cml/corpus/list', null, {
+          dispatch('cml/corpus/listAll', null, {
             root: true
           });
         }
@@ -69717,7 +69788,7 @@ var actions$6 = {
         return group
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'groupsUserAdd', { root: true });
+        dispatch('cml/sync/stop', 'groupsUserAdd', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69733,11 +69804,11 @@ var actions$6 = {
     var userId = ref$1.userId;
     var group = ref$1.group;
 
-    commit('cml/sync/start', 'groupsUserRemove', { root: true });
+    dispatch('cml/sync/start', 'groupsUserRemove', { root: true });
     return api
       .removeUserFromGroup(userId, group.id)
       .then(function (r) {
-        commit('cml/sync/stop', 'groupsUserRemove', { root: true });
+        dispatch('cml/sync/stop', 'groupsUserRemove', { root: true });
         var group = groupFormat(r.data);
         commit('update', group);
         dispatch('cml/messages/success', 'User removed from group', {
@@ -69745,7 +69816,7 @@ var actions$6 = {
         });
         if (userId === rootState.cml.user.id) {
           commit('cml/user/groupRemove', group.id, { root: true });
-          dispatch('cml/corpus/list', null, {
+          dispatch('cml/corpus/listAll', null, {
             root: true
           });
         }
@@ -69753,7 +69824,7 @@ var actions$6 = {
         return group
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'groupsUserRemove', { root: true });
+        dispatch('cml/sync/stop', 'groupsUserRemove', { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69771,9 +69842,9 @@ var getters$3 = {
   }; }
 };
 
-var mutations$8 = {
+var mutations$6 = {
   reset: function reset (state) {
-    state.list = [];
+    Vue$3.set(state, 'list', []);
   },
 
   add: function add (state, group) {
@@ -69781,15 +69852,17 @@ var mutations$8 = {
   },
 
   update: function update (state, group) {
-    Object.assign(state.list.find(function (g) { return g.id === group.id; }), group);
+    var index = state.list.findIndex(function (g) { return g.id === group.id; });
+    Vue$3.set(state.list, index, group);
   },
 
   remove: function remove (state, groupId) {
-    state.list = state.list.filter(function (g) { return g.id !== groupId; });
+    var index = state.list.findIndex(function (g) { return g.id === groupId; });
+    Vue$3.delete(state.list, index);
   },
 
   list: function list (state, groups) {
-    state.list = groups;
+    Vue$3.set(state, 'list', groups);
   }
 };
 
@@ -69798,26 +69871,28 @@ var groups = {
   state: state$9,
   actions: actions$6,
   getters: getters$3,
-  mutations: mutations$8
-};
+  mutations: mutations$6
+}
 
 var state$10 = {
-  list: [],
-  id: ''
+  lists: {},
+  actives: {}
 };
 
 var actions$7 = {
-  add: function add (ref, corpus) {
+  add: function add (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
+    var element = ref$1.element;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'corpusAdd', { root: true });
+    dispatch('cml/sync/start', ("corpusAdd-" + uid), { root: true });
     return api
-      .createCorpus(corpus.name, corpus.description, {})
+      .createCorpus(element.name, element.description, {})
       .then(function (r) {
-        commit('cml/sync/stop', 'corpusAdd', { root: true });
+        dispatch('cml/sync/stop', ("corpusAdd-" + uid), { root: true });
         var corpu = {
           name: r.data.name,
           id: r.data._id,
@@ -69828,17 +69903,15 @@ var actions$7 = {
           },
           description: r.data.description || {}
         };
-
         corpu.permissions.users[rootState.cml.user.id] = 3;
-
-        commit('add', corpu);
+        commit('add', { corpu: corpu, uid: uid });
         dispatch('cml/messages/success', 'Corpus added', { root: true });
-        dispatch('set', corpu.id);
+        dispatch('set', { corpuId: corpu.id, uid: uid });
 
         return corpu
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'corpusAdd', { root: true });
+        dispatch('cml/sync/stop', ("corpusAdd-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69846,26 +69919,28 @@ var actions$7 = {
       })
   },
 
-  remove: function remove (ref, corpu) {
+  remove: function remove (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
+    var id = ref$1.id;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'corpusRemove', { root: true });
+    dispatch('cml/sync/start', ("corpusRemove-" + uid), { root: true });
     return api
-      .deleteCorpus(corpu.id)
+      .deleteCorpus(id)
       .then(function (r) {
-        commit('cml/sync/stop', 'corpusRemove', { root: true });
-        commit('remove', corpu.id);
+        dispatch('cml/sync/stop', ("corpusRemove-" + uid), { root: true });
+        commit('remove', { corpuId: id, uid: uid });
         dispatch('cml/messages/success', 'Corpus removed', { root: true });
-        if (state.id === corpu.id) {
-          dispatch('set');
+        if (state.actives[uid] === id) {
+          dispatch('set', { uid: uid });
         }
 
-        return corpu.id
+        return id
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'corpusRemove', { root: true });
+        dispatch('cml/sync/stop', ("corpusRemove-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69873,28 +69948,31 @@ var actions$7 = {
       })
   },
 
-  update: function update (ref, corpu) {
+  update: function update (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
+    var element = ref$1.element;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'corpusUpdate', { root: true });
+    dispatch('cml/sync/start', ("corpusUpdate-" + uid), { root: true });
     return api
-      .updateCorpus(corpu.id, {
-        name: corpu.name,
-        description: corpu.description
+      .updateCorpus(element.id, {
+        name: element.name,
+        description: element.description
       })
       .then(function (r) {
-        commit('cml/sync/stop', 'corpusUpdate', { root: true });
+        dispatch('cml/sync/stop', ("corpusUpdate-" + uid), { root: true });
+        var corpu = Object.assign({}, element);
         corpu.name = r.data.name;
         corpu.description = r.data.description || {};
-        commit('update', corpu);
+        commit('update', { corpu: corpu, uid: uid });
         dispatch('cml/messages/success', 'Corpus updated', { root: true });
 
-        return r
+        return corpu
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'corpusUpdate', { root: true });
+        dispatch('cml/sync/stop', ("corpusUpdate-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69902,16 +69980,25 @@ var actions$7 = {
       })
   },
 
-  list: function list (ref) {
+  listAll: function listAll (ref) {
+    var state = ref.state;
+    var dispatch = ref.dispatch;
+
+    Object.keys(state.lists).forEach(function (uid) {
+      dispatch('list', uid);
+    });
+  },
+
+  list: function list (ref, uid) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
 
-    commit('cml/sync/start', 'corpusList', { root: true });
+    dispatch('cml/sync/start', ("corpusList-" + uid), { root: true });
     return api
       .getCorpora()
       .then(function (r) {
-        commit('cml/sync/stop', 'corpusList', { root: true });
+        dispatch('cml/sync/stop', ("corpusList-" + uid), { root: true });
         var corpus = r.data.map(function (c) { return ({
           name: c.name,
           id: c._id,
@@ -69926,13 +70013,13 @@ var actions$7 = {
             )
           }
         }); });
-        commit('list', corpus);
-        dispatch('set');
+        commit('list', { corpus: corpus, uid: uid });
+        dispatch('set', { uid: uid });
 
         return corpus
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'corpusList', { root: true });
+        dispatch('cml/sync/stop', ("corpusList-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69950,17 +70037,23 @@ var actions$7 = {
     var corpuId = ref$1.corpuId;
     var groupId = ref$1.groupId;
     var permission = ref$1.permission;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'corpusGroupPermissionSet', { root: true });
+    dispatch('cml/sync/start', ("corpusGroupPermissionSet-" + uid), {
+      root: true
+    });
     return api
       .setCorpusPermissionsForGroup(corpuId, groupId, permission)
       .then(function (p) {
         var permissions = p.data;
-        commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true });
+        dispatch('cml/sync/stop', ("corpusGroupPermissionSet-" + uid), {
+          root: true
+        });
         commit('groupPermissionsUpdate', {
           corpuId: corpuId,
           groupId: groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0
+          permission: (permissions.groups && permissions.groups[groupId]) || 0,
+          uid: uid
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
@@ -69970,14 +70063,16 @@ var actions$7 = {
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list');
+          dispatch('list', uid);
           commit("cml/popup/close", null, { root: true });
         }
 
         return permissions
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'corpusGroupPermissionSet', { root: true });
+        dispatch('cml/sync/stop', ("corpusGroupPermissionSet-" + uid), {
+          root: true
+        });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -69994,16 +70089,24 @@ var actions$7 = {
     var rootGetters = ref.rootGetters;
     var corpuId = ref$1.corpuId;
     var groupId = ref$1.groupId;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'corpusGroupPermissionRemove', { root: true });
+    dispatch('cml/sync/start', ("corpusGroupPermissionRemove-" + uid), {
+      root: true
+    });
     return api
       .removeCorpusPermissionsForGroup(corpuId, groupId)
       .then(function (p) {
         var permissions = p.data;
-        commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
+        dispatch('cml/sync/stop', ("corpusGroupPermissionRemove-" + uid), {
           root: true
         });
-        commit('groupPermissionsUpdate', { corpuId: corpuId, groupId: groupId, permission: 0 });
+        commit('groupPermissionsUpdate', {
+          corpuId: corpuId,
+          groupId: groupId,
+          permission: 0,
+          uid: uid
+        });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
@@ -70012,14 +70115,14 @@ var actions$7 = {
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list');
+          dispatch('list', uid);
           commit("cml/popup/close", null, { root: true });
         }
 
         return permissions
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'corpusGroupPermissionRemove', {
+        dispatch('cml/sync/stop', ("corpusGroupPermissionRemove-" + uid), {
           root: true
         });
         var error = e.response ? e.response.body.error : 'Network error';
@@ -70039,33 +70142,40 @@ var actions$7 = {
     var corpuId = ref$1.corpuId;
     var userId = ref$1.userId;
     var permission = ref$1.permission;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'corpusUserPermissionSet', { root: true });
+    dispatch('cml/sync/start', ("corpusUserPermissionSet-" + uid), { root: true });
     return api
       .setCorpusPermissionsForUser(corpuId, userId, permission)
       .then(function (p) {
         var permissions = p.data;
-        commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true });
+        dispatch('cml/sync/stop', ("corpusUserPermissionSet-" + uid), {
+          root: true
+        });
         commit('userPermissionsUpdate', {
           corpuId: corpuId,
           userId: userId,
-          permission: (permissions.users && permissions.users[userId]) || 0
+          permission: (permissions.users && permissions.users[userId]) || 0,
+          uid: uid
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
+
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list');
+          dispatch('list', uid);
           commit("cml/popup/close", null, { root: true });
         }
 
         return permissions
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'corpusUserPermissionSet', { root: true });
+        dispatch('cml/sync/stop', ("corpusUserPermissionSet-" + uid), {
+          root: true
+        });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70073,23 +70183,32 @@ var actions$7 = {
       })
   },
 
-  userPermissionRemove: function userPermissionRemove (ref, ref$1) {
+  userPermissionRemove: function userPermissionRemove (
+    ref,
+    ref$1
+  ) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
     var corpuId = ref$1.corpuId;
     var userId = ref$1.userId;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'corpusUserPermissionRemove', { root: true });
+    dispatch('cml/sync/start', ("corpusUserPermissionRemove-" + uid), {
+      root: true
+    });
     return api
       .removeCorpusPermissionsForUser(corpuId, userId)
       .then(function (p) {
         var permissions = p.data;
-        commit('cml/sync/stop', 'corpusUserPermissionRemove', { root: true });
-        commit('userPermissionsUpdate', { corpuId: corpuId, userId: userId, permission: 0 });
+        dispatch('cml/sync/stop', ("corpusUserPermissionRemove-" + uid), {
+          root: true
+        });
+        commit('userPermissionsUpdate', { corpuId: corpuId, userId: userId, permission: 0, uid: uid });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
+
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
@@ -70101,7 +70220,7 @@ var actions$7 = {
         return permissions
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'corpusUserPermissionRemove', {
+        dispatch('cml/sync/stop', ("corpusUserPermissionRemove-" + uid), {
           root: true
         });
         var error = e.response ? e.response.body.error : 'Network error';
@@ -70111,83 +70230,129 @@ var actions$7 = {
       })
   },
 
-  set: function set (ref, corpuId) {
+  set: function set (ref, ref$1) {
     var state = ref.state;
     var getters = ref.getters;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var corpuId = ref$1.corpuId;
+    var uid = ref$1.uid;
 
-    commit('set', getters.id(corpuId));
-    if (state.id) {
-      dispatch('cml/medias/list', state.id, { root: true });
-      dispatch('cml/layers/list', state.id, { root: true });
+    commit('set', { corpuId: corpuId || getters.id(uid), uid: uid });
+    if (state.actives[uid]) {
+      dispatch(
+        'cml/medias/list',
+        { corpuId: state.actives[uid], uid: uid },
+        { root: true }
+      );
+      dispatch(
+        'cml/layers/list',
+        { corpuId: state.actives[uid], uid: uid },
+        { root: true }
+      );
     } else {
-      commit('cml/medias/reset', null, { root: true });
-      commit('cml/layers/reset', null, { root: true });
+      commit('cml/medias/reset', uid, { root: true });
+      commit('cml/layers/reset', uid, { root: true });
     }
   }
 };
 
 var getters$4 = {
-  id: function (state) { return function (id) {
-    return (
-      id ||
-      (state.list.map(function (c) { return c.id; }).indexOf(state.id) !== -1 && state.id) ||
-      (state.list[0] && state.list[0].id) ||
-      null
-    )
-  }; }
+  id: function (state) { return function (uid) { return (state.actives[uid] &&
+      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid]) !== -1 &&
+      state.actives[uid]) ||
+    (state.lists[uid][0] && state.lists[uid][0].id) ||
+    null; }; }
 };
 
-var mutations$9 = {
-  reset: function reset (state) {
-    state.list = [];
+var mutations$7 = {
+  register: function register (state, uid) {
+    Vue$3.set(state.lists, uid, []);
   },
 
-  add: function add (state, corpu) {
-    var corpuExisting = state.list.find(function (c) { return c.id === corpu.id; });
-    if (!corpuExisting) {
-      state.list.push(corpu);
+  reset: function reset (state, uid) {
+    Vue$3.set(state.lists, uid, []);
+    Vue$3.delete(state.actives, uid);
+  },
+
+  resetAll: function resetAll (state) {
+    state.lists = {};
+    state.actives = {};
+  },
+
+  add: function add (state, ref) {
+    var corpu = ref.corpu;
+    var uid = ref.uid;
+
+    Object.keys(state.actives).forEach(function (id) {
+      var index = state.lists[id].length;
+      Vue$3.set(state.lists[id], index, corpu);
+    });
+  },
+
+  update: function update (state, ref) {
+    var corpu = ref.corpu;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].findIndex(function (m) { return m.id === corpu.id; });
+    if (index !== -1) {
+      Vue$3.set(state.lists[uid], index, corpu);
     }
   },
 
-  update: function update (state, corpu) {
-    Object.assign(state.list.find(function (c) { return c.id === corpu.id; }), corpu);
+  remove: function remove (state, ref) {
+    var corpuId = ref.corpuId;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].findIndex(function (m) { return m.id === corpuId; });
+    if (index !== -1) {
+      Vue$3.delete(state.lists[uid], index);
+    }
   },
 
-  remove: function remove (state, corpuId) {
-    state.list = state.list.filter(function (c) { return c.id !== corpuId; });
+  list: function list (state, ref) {
+    var corpus = ref.corpus;
+    var uid = ref.uid;
+
+    Vue$3.set(state.lists, uid, corpus);
   },
 
-  list: function list (state, corpus) {
-    state.list = corpus;
-  },
+  set: function set (state, ref) {
+    var corpuId = ref.corpuId;
+    var uid = ref.uid;
 
-  set: function set (state, corpuId) {
-    state.id = corpuId;
+    Vue$3.set(state.actives, uid, corpuId);
   },
 
   groupAdd: function groupAdd (state, groupId) {
-    state.list.forEach(function (corpu) {
-      Vue$3.set(corpu.permissions.groups, groupId, 0);
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (c) {
+        Vue$3.set(c.permissions.groups, groupId, 0);
+      });
     });
   },
 
   groupRemove: function groupRemove (state, groupId) {
-    state.list.forEach(function (corpu) {
-      delete corpu.permissions.groups[groupId];
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (c) {
+        Vue$3.delete(c.permissions.groups, groupId);
+      });
     });
   },
 
   userAdd: function userAdd (state, userId) {
-    state.list.forEach(function (corpu) {
-      Vue$3.set(corpu.permissions.users, userId, 0);
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (c) {
+        Vue$3.set(c.permissions.users, userId, 0);
+      });
     });
   },
 
   userRemove: function userRemove (state, userId) {
-    state.list.forEach(function (corpu) {
-      delete corpu.permissions.users[userId];
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (c) {
+        Vue$3.delete(c.permissions.users, userId);
+      });
     });
   },
 
@@ -70195,23 +70360,25 @@ var mutations$9 = {
     var corpuId = ref.corpuId;
     var groupId = ref.groupId;
     var permission = ref.permission;
+    var uid = ref.uid;
 
-    var corpu = state.list.find(function (c) { return c.id === corpuId; });
-    corpu.permissions.groups[groupId] = permission;
+    var index = state.lists[uid].findIndex(function (m) { return m.id === corpuId; });
+    if (index !== -1) {
+      Vue$3.set(state.lists[uid][index].permissions.groups, groupId, permission);
+    }
   },
 
   userPermissionsUpdate: function userPermissionsUpdate (state, ref) {
     var corpuId = ref.corpuId;
     var userId = ref.userId;
     var permission = ref.permission;
+    var uid = ref.uid;
 
-    var corpu = state.list.find(function (c) { return c.id === corpuId; });
-    corpu.permissions.users[userId] = permission;
+    var index = state.lists[uid].findIndex(function (m) { return m.id === corpuId; });
+    if (index !== -1) {
+      Vue$3.set(state.lists[uid][index].permissions.users, userId, permission);
+    }
   }
-
-  // corpuPermissionsUpdate (state, { corpu, permission }) {
-  //   corpu.permission = permission
-  // }
 };
 
 var corpus = {
@@ -70219,37 +70386,43 @@ var corpus = {
   state: state$10,
   actions: actions$7,
   getters: getters$4,
-  mutations: mutations$9
-};
+  mutations: mutations$7
+}
+
+var interval;
 
 var state$11 = {
-  list: [],
-  id: null
+  lists: {},
+  actives: {},
+  properties: {}
 };
 
 var actions$8 = {
   add: function add (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var corpuId = ref$1.corpuId;
-    var name = ref$1.name;
-    var url = ref$1.url;
-    var description = ref$1.description;
+    var element = ref$1.element;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'mediasAdd', { root: true });
+    dispatch('cml/sync/start', ("mediasAdd-" + uid), { root: true });
     return api
-      .createMedium(corpuId, name, url, description)
+      .createMedium(
+        element.corpuId,
+        element.name,
+        element.url,
+        element.description
+      )
       .then(function (r) {
-        commit('cml/sync/stop', 'mediasAdd', { root: true });
+        dispatch('cml/sync/stop', ("mediasAdd-" + uid), { root: true });
         var media = mediaFormat(r.data);
-        commit('add', media);
+        commit('add', { media: media, uid: uid });
         dispatch('cml/messages/success', 'Medium added', { root: true });
-        dispatch('set', media.id);
+        dispatch('set', { mediaId: media.id, uid: uid });
 
         return media
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'mediasAdd', { root: true });
+        dispatch('cml/sync/stop', ("mediasAdd-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70257,25 +70430,33 @@ var actions$8 = {
       })
   },
 
-  remove: function remove (ref, media) {
+  remove: function remove (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var id = ref$1.id;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'mediasRemove', { root: true });
+    dispatch('cml/sync/start', ("mediasRemove-" + uid), { root: true });
     return api
-      .deleteMedium(media.id)
+      .deleteMedium(id)
       .then(function (r) {
-        commit('cml/sync/stop', 'mediasRemove', { root: true });
-        commit('remove', media);
-        dispatch('cml/annotations/list', rootGetters['cml/layers/id'](), {
-          root: true
-        });
+        dispatch('cml/sync/stop', ("mediasRemove-" + uid), { root: true });
+        commit('remove', { mediaId: id, uid: uid });
         dispatch('cml/messages/success', 'Medium removed', { root: true });
+        if (state$11.actives[uid] === id) {
+          dispatch('set', { uid: uid });
+        }
+        dispatch(
+          'cml/annotations/list',
+          { layerId: rootGetters['cml/layers/id'](uid), uid: uid },
+          { root: true }
+        );
 
-        return media.id
+        return id
       })
       .catch(function (e) {
+        dispatch('cml/sync/stop', ("mediasRemove-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70283,30 +70464,34 @@ var actions$8 = {
       })
   },
 
-  update: function update (ref, media) {
+  update: function update (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
     var rootState = ref.rootState;
+    var element = ref$1.element;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'mediasUpdate', { root: true });
+    dispatch('cml/sync/start', ("mediasUpdate-" + uid), { root: true });
     return api
-      .updateMedium(media.id, {
-        name: media.name,
-        description: media.description,
-        url: media.url
+      .updateMedium(element.id, {
+        name: element.name,
+        description: element.description,
+        url: element.url
       })
       .then(function (r) {
-        commit('cml/sync/stop', 'mediasUpdate', { root: true });
+        dispatch('cml/sync/stop', ("mediasUpdate-" + uid), { root: true });
+        var media = Object.assign({}, element);
         media.name = r.data.name;
         media.url = r.data.url;
         media.description = r.data.description || {};
-        commit('update', media);
+        commit('update', { media: media, uid: uid });
         dispatch('cml/messages/success', 'Medium updated', { root: true });
 
         return media
       })
       .catch(function (e) {
+        dispatch('cml/sync/stop', ("mediasUpdate-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70314,25 +70499,27 @@ var actions$8 = {
       })
   },
 
-  list: function list (ref, corpuId) {
+  list: function list (ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var corpuId = ref$1.corpuId;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'mediasList', { root: true });
+    dispatch('cml/sync/start', ("mediasList-" + uid), { root: true });
     return api
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(function (r) {
-        commit('cml/sync/stop', 'mediasList', { root: true });
+        dispatch('cml/sync/stop', ("mediasList-" + uid), { root: true });
         var medias = r.data.map(function (media) {
           return mediaFormat(media)
         });
-        commit('list', medias);
-        dispatch('set');
+        commit('list', { medias: medias, uid: uid });
+        dispatch('set', { uid: uid });
 
         return medias
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'mediasList', { root: true });
+        dispatch('cml/sync/stop', ("mediasList-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70340,50 +70527,176 @@ var actions$8 = {
       })
   },
 
-  set: function set (ref, mediaId) {
+  set: function set (ref, ref$1) {
+    var state = ref.state;
     var getters = ref.getters;
+    var dispatch = ref.dispatch;
+    var commit = ref.commit;
+    var mediaId = ref$1.mediaId;
+    var uid = ref$1.uid;
+
+    if (state.properties[uid] && state.properties[uid].isPlaying) {
+      dispatch('pause', uid);
+    }
+    commit('set', { mediaId: mediaId || getters.id(uid), uid: uid });
+  },
+
+  play: function play (ref, uid) {
+    var state = ref.state;
     var commit = ref.commit;
 
-    commit('set', getters.id(mediaId));
+    var timeStart = Date.now();
+    var timeCurrent = state.properties[uid].timeCurrent;
+    interval = setInterval(function () {
+      var timeEllapsed = Date.now() - timeStart;
+      commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid: uid });
+    }, 0);
+    commit('play', uid);
+  },
+
+  pause: function pause (ref, uid) {
+    var commit = ref.commit;
+
+    clearInterval(interval);
+    commit('pause', uid);
+  },
+
+  buffering: function buffering (ref, uid) {
+    var commit = ref.commit;
+
+    clearInterval(interval);
+  },
+
+  stop: function stop (ref, uid) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+
+    clearInterval(interval);
+    commit('pause', uid);
+    dispatch('seek', { options: { ratio: 0, serverRequest: true }, uid: uid });
+  },
+
+  seek: function seek (ref, ref$1) {
+    var state = ref.state;
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var ratio = ref$1.ratio;
+    var serverRequest = ref$1.serverRequest;
+    var uid = ref$1.uid;
+
+    if (state.properties[uid].isPlaying) {
+      clearInterval(interval);
+    }
+    commit('timeCurrent', {
+      time: ratio * state.properties[uid].timeTotal,
+      uid: uid
+    });
+    commit('seek', { options: { seeking: true, serverRequest: serverRequest }, uid: uid });
   }
 };
 
 var getters$5 = {
-  id: function (state) { return function (id) { return id ||
-    (state.list.map(function (c) { return c.id; }).indexOf(state.id) !== -1 && state.id) ||
-    (state.list[0] && state.list[0].id) ||
+  id: function (state) { return function (uid) { return (state.actives[uid] &&
+      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid]) !== -1 &&
+      state.actives[uid]) ||
+    (state.lists[uid][0] && state.lists[uid][0].id) ||
     null; }; }
 };
 
-var mutations$10 = {
-  reset: function reset (state) {
-    state.list = [];
+var mutations$8 = {
+  reset: function reset (state, uid) {
+    Vue$3.set(state.lists, uid, []);
+    Vue$3.delete(state.actives, uid);
+    Vue$3.delete(state.properties, uid);
   },
 
-  add: function add (state, media) {
-    var mediaExisting = state.list.find(function (c) { return c.id === media.id; });
-    if (!mediaExisting) {
-      state.list.push(media);
-    }
+  resetAll: function resetAll (state) {
+    Vue$3.set(state, 'lists', {});
+    Vue$3.set(state, 'actives', {});
+    Vue$3.set(state, 'properties', {});
   },
 
-  update: function update (state, media) {
-    Object.assign(state.list.find(function (c) { return c.id === media.id; }), media);
+  add: function add (state, ref) {
+    var media = ref.media;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].length;
+    Vue$3.set(state.lists[uid], index, media);
   },
 
-  remove: function remove (state, media) {
-    var index = state.list.findIndex(function (c) { return c.id === media.id; });
+  update: function update (state, ref) {
+    var media = ref.media;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].findIndex(function (m) { return m.id === media.id; });
+    Vue$3.set(state.lists[uid], index, media);
+  },
+
+  remove: function remove (state, ref) {
+    var mediaId = ref.mediaId;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].findIndex(function (m) { return m.id === mediaId; });
     if (index !== -1) {
-      state.list.splice(index, 1);
+      Vue$3.delete(state.lists[uid], index);
     }
   },
 
-  list: function list (state, medias) {
-    state.list = medias;
+  list: function list (state, ref) {
+    var medias = ref.medias;
+    var uid = ref.uid;
+
+    Vue$3.set(state.lists, uid, medias);
   },
 
-  set: function set (state, id) {
-    state.id = id;
+  set: function set (state, ref) {
+    var mediaId = ref.mediaId;
+    var uid = ref.uid;
+
+    Vue$3.set(state.actives, uid, mediaId);
+    Vue$3.set(state.properties, uid, {
+      timeTotal: 0,
+      timeCurrent: 0,
+      isPlaying: false,
+      isLoaded: false,
+      seek: { seeking: false }
+    });
+  },
+
+  loaded: function loaded (state, ref) {
+    var isLoaded = ref.isLoaded;
+    var uid = ref.uid;
+
+    Vue$3.set(state.properties[uid], 'isLoaded', isLoaded);
+  },
+
+  play: function play (state, uid) {
+    Vue$3.set(state.properties[uid], 'isPlaying', true);
+  },
+
+  pause: function pause (state, uid) {
+    Vue$3.set(state.properties[uid], 'isPlaying', false);
+  },
+
+  timeCurrent: function timeCurrent (state, ref) {
+    var time = ref.time;
+    var uid = ref.uid;
+
+    Vue$3.set(state.properties[uid], 'timeCurrent', time);
+  },
+
+  timeTotal: function timeTotal (state, ref) {
+    var time = ref.time;
+    var uid = ref.uid;
+
+    Vue$3.set(state.properties[uid], 'timeTotal', time);
+  },
+
+  seek: function seek (state, ref) {
+    var options = ref.options;
+    var uid = ref.uid;
+
+    Vue$3.set(state.properties[uid], 'seek', options);
   }
 };
 
@@ -70392,42 +70705,35 @@ var medias = {
   state: state$11,
   actions: actions$8,
   getters: getters$5,
-  mutations: mutations$10
-};
+  mutations: mutations$8
+}
 
 var state$12 = {
-  list: [],
-  id: null
+  lists: {},
+  actives: {}
 };
 
 var actions$9 = {
-  add: function add (
-    ref,
-    ref$1
-  ) {
+  add: function add (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
-    var corpuId = ref$1.corpuId;
-    var name = ref$1.name;
-    var description = ref$1.description;
-    var fragmentType = ref$1.fragmentType;
-    var metadataType = ref$1.metadataType;
-    var annotations = ref$1.annotations;
+    var element = ref$1.element;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'layersAdd', { root: true });
+    dispatch('cml/sync/start', ("layersAdd-" + uid), { root: true });
     return api
       .createLayer(
-        corpuId,
-        name,
-        description,
-        fragmentType,
-        metadataType,
-        annotations
+        element.corpuId,
+        element.name,
+        element.description,
+        element.fragmentType,
+        element.metadataType,
+        element.annotations
       )
       .then(function (r) {
-        commit('cml/sync/stop', 'layersAdd', { root: true });
+        dispatch('cml/sync/stop', ("layersAdd-" + uid), { root: true });
         var layer = {
           name: r.data.name,
           id: r.data._id,
@@ -70444,14 +70750,14 @@ var actions$9 = {
 
         layer.permissions.users[rootState.cml.user.id] = 3;
 
-        commit('add', layer);
+        commit('add', { layer: layer, uid: uid });
         dispatch('cml/messages/success', 'Layer added', { root: true });
-        dispatch('set', layer.id);
+        dispatch('set', { layerId: layer.id, uid: uid });
 
         return layer
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'layersAdd', { root: true });
+        dispatch('cml/sync/stop', ("layersAdd-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70459,24 +70765,29 @@ var actions$9 = {
       })
   },
 
-  remove: function remove (ref, layer) {
+  remove: function remove (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
     var rootState = ref.rootState;
+    var id = ref$1.id;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'layersRemove', { root: true });
+    dispatch('cml/sync/start', ("layersRemove-" + uid), { root: true });
     return api
-      .deleteLayer(layer.id)
+      .deleteLayer(id)
       .then(function (r) {
-        commit('cml/sync/stop', 'layersRemove', { root: true });
-        commit('remove', layer);
+        dispatch('cml/sync/stop', ("layersRemove-" + uid), { root: true });
+        commit('remove', { layerId: id, uid: uid });
         dispatch('cml/messages/success', 'Layer removed', { root: true });
+        if (state.actives[uid] === id) {
+          dispatch('set', { uid: uid });
+        }
 
-        return r
+        return id
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'layersRemove', { root: true });
+        dispatch('cml/sync/stop', ("layersRemove-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70484,32 +70795,35 @@ var actions$9 = {
       })
   },
 
-  update: function update (ref, layer) {
+  update: function update (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
     var rootState = ref.rootState;
+    var element = ref$1.element;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'layersUpdate', { root: true });
+    dispatch('cml/sync/start', ("layersUpdate-" + uid), { root: true });
     return api
-      .updateLayer(layer.id, {
-        name: layer.name,
-        description: layer.description,
-        fragment_type: layer.fragmentType,
-        data_type: layer.metadataType
+      .updateLayer(element.id, {
+        name: element.name,
+        description: element.description,
+        fragment_type: element.fragmentType,
+        data_type: element.metadataType
       })
       .then(function (r) {
-        commit('cml/sync/stop', 'layersUpdate', { root: true });
+        dispatch('cml/sync/stop', ("layersUpdate-" + uid), { root: true });
+        var layer = Object.assign({}, element);
         layer.description = r.data.description || {};
         layer.fragmentType = r.data.fragment_type || {};
         layer.metadataType = r.data.data_type || {};
-        commit('update', layer);
+        commit('update', { layer: layer, uid: uid });
         dispatch('cml/messages/success', 'Layer updated', { root: true });
 
-        return r
+        return layer
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'layersUpdate', { root: true });
+        dispatch('cml/sync/stop', ("layersUpdate-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70517,16 +70831,18 @@ var actions$9 = {
       })
   },
 
-  list: function list (ref, corpuId) {
+  list: function list (ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var rootGetters = ref.rootGetters;
+    var corpuId = ref$1.corpuId;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'layersList', { root: true });
+    dispatch('cml/sync/start', ("layersList-" + uid), { root: true });
     return api
       .getLayers({ filter: { id_corpus: corpuId } })
       .then(function (r) {
-        commit('cml/sync/stop', 'layersList', { root: true });
+        dispatch('cml/sync/stop', ("layersList-" + uid), { root: true });
         var layers = r.data.map(function (l) { return ({
           name: l.name,
           id: l._id,
@@ -70544,13 +70860,13 @@ var actions$9 = {
           metadataType: l.data_type || {},
           annotations: l.annotations || []
         }); });
-        commit('list', layers);
-        dispatch('set');
+        commit('list', { layers: layers, uid: uid });
+        dispatch('set', { uid: uid });
 
         return layers
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'layersList', { root: true });
+        dispatch('cml/sync/stop', ("layersList-" + uid), { root: true });
 
         throw e
       })
@@ -70567,17 +70883,23 @@ var actions$9 = {
     var layerId = ref$1.layerId;
     var groupId = ref$1.groupId;
     var permission = ref$1.permission;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'layersGroupPermissionSet', { root: true });
+    dispatch('cml/sync/start', ("layersGroupPermissionSet-" + uid), {
+      root: true
+    });
     return api
       .setLayerPermissionsForGroup(layerId, groupId, permission)
       .then(function (p) {
         var permissions = p.data;
-        commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true });
+        dispatch('cml/sync/stop', ("layersGroupPermissionSet-" + uid), {
+          root: true
+        });
         commit('groupPermissionsUpdate', {
           layerId: layerId,
           groupId: groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0
+          permission: (permissions.groups && permissions.groups[groupId]) || 0,
+          uid: uid
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
@@ -70587,14 +70909,16 @@ var actions$9 = {
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list', rootState.cml.corpus.id);
+          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
           commit('cml/popup/close', null, { root: true });
         }
 
         return permissions
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'layersGroupPermissionSet', { root: true });
+        dispatch('cml/sync/stop', ("layersGroupPermissionSet-" + uid), {
+          root: true
+        });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70612,16 +70936,24 @@ var actions$9 = {
     var rootGetters = ref.rootGetters;
     var layerId = ref$1.layerId;
     var groupId = ref$1.groupId;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'layersGroupPermissionRemove', { root: true });
+    dispatch('cml/sync/start', ("layersGroupPermissionRemove-" + uid), {
+      root: true
+    });
     return api
       .removeLayerPermissionsForGroup(layerId, groupId)
       .then(function (p) {
         var permissions = p.data;
-        commit('cml/sync/stop', 'layersGroupPermissionRemove', {
+        dispatch('cml/sync/stop', ("layersGroupPermissionRemove-" + uid), {
           root: true
         });
-        commit('groupPermissionsUpdate', { layerId: layerId, groupId: groupId, permission: 0 });
+        commit('groupPermissionsUpdate', {
+          layerId: layerId,
+          groupId: groupId,
+          permission: 0,
+          uid: uid
+        });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
@@ -70630,14 +70962,14 @@ var actions$9 = {
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list', rootState.cml.corpus.id);
+          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
           commit('cml/popup/close', null, { root: true });
         }
 
         return permissions
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'layersGroupPermissionRemove', {
+        dispatch('cml/sync/stop', ("layersGroupPermissionRemove-" + uid), {
           root: true
         });
         var error = e.response ? e.response.body.error : 'Network error';
@@ -70658,17 +70990,21 @@ var actions$9 = {
     var layerId = ref$1.layerId;
     var userId = ref$1.userId;
     var permission = ref$1.permission;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'layersUserPermissionSet', { root: true });
+    dispatch('cml/sync/start', ("layersUserPermissionSet-" + uid), { root: true });
     return api
       .setLayerPermissionsForUser(layerId, userId, permission)
       .then(function (p) {
         var permissions = p.data;
-        commit('cml/sync/stop', 'layersUserPermissionSet', { root: true });
+        dispatch('cml/sync/stop', ("layersUserPermissionSet-" + uid), {
+          root: true
+        });
         commit('userPermissionsUpdate', {
           layerId: layerId,
           userId: userId,
-          permission: (permissions.users && permissions.users[userId]) || 0
+          permission: (permissions.users && permissions.users[userId]) || 0,
+          uid: uid
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
@@ -70678,14 +71014,16 @@ var actions$9 = {
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list', rootState.cml.corpus.id);
+          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
           commit('cml/popup/close', null, { root: true });
         }
 
         return permissions
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'layersUserPermissionSet', { root: true });
+        dispatch('cml/sync/stop', ("layersUserPermissionSet-" + uid), {
+          root: true
+        });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70703,35 +71041,35 @@ var actions$9 = {
     var rootGetters = ref.rootGetters;
     var layerId = ref$1.layerId;
     var userId = ref$1.userId;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'layersUserPermissionRemove', { root: true });
+    dispatch('cml/sync/start', ("layersUserPermissionRemove-" + uid), {
+      root: true
+    });
     return api
       .removeLayerPermissionsForUser(layerId, userId)
       .then(function (p) {
         var permissions = p.data;
-        commit('cml/sync/stop', 'layersUserPermissionRemove', {
+        dispatch('cml/sync/stop', ("layersUserPermissionRemove-" + uid), {
           root: true
         });
-        commit('userPermissionsUpdate', {
-          layerId: layerId,
-          userId: userId,
-          permission: 0
-        });
+        commit('userPermissionsUpdate', { layerId: layerId, userId: userId, permission: 0, uid: uid });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
+
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list', rootState.cml.corpus.id);
+          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
           commit('cml/popup/close', null, { root: true });
         }
 
         return permissions
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'layersUserPermissionRemove', {
+        dispatch('cml/sync/stop', ("layersUserPermissionRemove-" + uid), {
           root: true
         });
         var error = e.response ? e.response.body.error : 'Network error';
@@ -70741,82 +71079,142 @@ var actions$9 = {
       })
   },
 
-  set: function set (ref, layerId) {
+  set: function set (ref, ref$1) {
     var state = ref.state;
     var getters = ref.getters;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var layerId = ref$1.layerId;
+    var uid = ref$1.uid;
 
-    commit('set', getters.id(layerId));
-    if (state.id) {
-      dispatch('cml/annotations/list', state.id, { root: true });
+    commit('set', { layerId: layerId || getters.id(uid), uid: uid });
+    if (state.actives[uid]) {
+      dispatch(
+        'cml/annotations/list',
+        { layerId: state.actives[uid], uid: uid },
+        { root: true }
+      );
     } else {
-      commit('cml/annotations/reset', null, { root: true });
+      commit('cml/annotations/reset', uid, { root: true });
     }
   }
 };
 
 var getters$6 = {
-  id: function (state) { return function (id) { return id ||
-    (state.list.map(function (c) { return c.id; }).indexOf(state.id) !== -1 && state.id) ||
-    (state.list[0] && state.list[0].id) ||
+  id: function (state) { return function (uid) { return (state.actives[uid] &&
+      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid]) !== -1 &&
+      state.actives[uid]) ||
+    (state.lists[uid][0] && state.lists[uid][0].id) ||
     null; }; }
 };
 
-var mutations$11 = {
-  reset: function reset (state) {
-    state.list = [];
+var mutations$9 = {
+  reset: function reset (state, uid) {
+    Vue$3.set(state.lists, uid, []);
+    Vue$3.delete(state.actives, uid);
   },
 
-  add: function add (state, layer) {
-    var layerExisting = state.list.find(function (c) { return c.id === layer.id; });
-    if (!layerExisting) {
-      state.list.push(layer);
-    }
+  resetAll: function resetAll (state) {
+    Vue$3.set(state, 'lists', {});
+    Vue$3.set(state, 'actives', {});
   },
 
-  update: function update (state, layer) {
-    Object.assign(state.list.find(function (c) { return c.id === layer.id; }), layer);
+  add: function add (state, ref) {
+    var layer = ref.layer;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].length;
+    Vue$3.set(state.lists[uid], index, layer);
   },
 
-  remove: function remove (state, layer) {
-    var index = state.list.findIndex(function (c) { return c.id === layer.id; });
+  update: function update (state, ref) {
+    var layer = ref.layer;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].findIndex(function (l) { return l.id === layer.id; });
     if (index !== -1) {
-      state.list.splice(index, 1);
+      Vue$3.set(state.lists[uid], index, layer);
     }
   },
 
-  list: function list (state, layers) {
-    state.list = layers;
+  remove: function remove (state, ref) {
+    var layerId = ref.layerId;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].findIndex(function (l) { return l.id === layerId; });
+    if (index !== -1) {
+      Vue$3.delete(state.lists[uid], index);
+    }
   },
 
-  set: function set (state, id) {
-    state.id = id;
+  list: function list (state, ref) {
+    var layers = ref.layers;
+    var uid = ref.uid;
+
+    Vue$3.set(state.lists, uid, layers);
+  },
+
+  set: function set (state, ref) {
+    var layerId = ref.layerId;
+    var uid = ref.uid;
+
+    Vue$3.set(state.actives, uid, layerId);
+  },
+
+  groupAdd: function groupAdd (state, groupId) {
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (c) {
+        Vue$3.set(c.permissions.groups, groupId, 0);
+      });
+    });
+  },
+
+  groupRemove: function groupRemove (state, groupId) {
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (c) {
+        Vue$3.delete(c.permissions.groups, groupId);
+      });
+    });
+  },
+
+  userAdd: function userAdd (state, userId) {
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (c) {
+        Vue$3.set(c.permissions.users, userId, 0);
+      });
+    });
+  },
+
+  userRemove: function userRemove (state, userId) {
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (c) {
+        Vue$3.delete(c.permissions.users, userId);
+      });
+    });
   },
 
   groupPermissionsUpdate: function groupPermissionsUpdate (state, ref) {
     var layerId = ref.layerId;
     var groupId = ref.groupId;
     var permission = ref.permission;
+    var uid = ref.uid;
 
-    var layer = state.list.find(function (c) { return c.id === layerId; });
-    layer.permissions.groups[groupId] = permission;
+    var index = state.lists[uid].findIndex(function (m) { return m.id === layerId; });
+    if (index !== -1) {
+      Vue$3.set(state.lists[uid][index].permissions.groups, groupId, permission);
+    }
   },
 
   userPermissionsUpdate: function userPermissionsUpdate (state, ref) {
     var layerId = ref.layerId;
     var userId = ref.userId;
     var permission = ref.permission;
+    var uid = ref.uid;
 
-    var layer = state.list.find(function (c) { return c.id === layerId; });
-    layer.permissions.users[userId] = permission;
-  },
-
-  layerPermissionsUpdate: function layerPermissionsUpdate (state, ref) {
-    var layer = ref.layer;
-    var permission = ref.permission;
-
-    layer.permission = permission;
+    var index = state.lists[uid].findIndex(function (m) { return m.id === layerId; });
+    if (index !== -1) {
+      Vue$3.set(state.lists[uid][index].permissions.users, userId, permission);
+    }
   }
 };
 
@@ -70825,30 +71223,31 @@ var layers = {
   state: state$12,
   actions: actions$9,
   getters: getters$6,
-  mutations: mutations$11
-};
+  mutations: mutations$9
+}
 
 var state$13 = {
-  list: [],
-  id: null
+  lists: {},
+  actives: {}
 };
 
 var actions$10 = {
   add: function add (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var layerId = ref$1.layerId;
-    var mediaId = ref$1.mediaId;
-    var fragment = ref$1.fragment;
-    var data = ref$1.data;
-    var mediaLink = ref$1.mediaLink;
+    var element = ref$1.element;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'annotationsAdd', { root: true });
-
+    dispatch('cml/sync/start', ("annotationsAdd-" + uid), { root: true });
     return api
-      .createAnnotation(layerId, mediaLink ? mediaId : null, fragment, data)
+      .createAnnotation(
+        element.layerId,
+        element.mediaLink ? element.mediaId : null,
+        element.fragment,
+        element.metadata
+      )
       .then(function (r) {
-        commit('cml/sync/stop', 'annotationsAdd', { root: true });
+        dispatch('cml/sync/stop', ("annotationsAdd-" + uid), { root: true });
         var annotation = {
           id: r.data._id,
           fragment: r.data.fragment || {},
@@ -70856,14 +71255,14 @@ var actions$10 = {
           layerId: r.data.id_layer,
           mediaId: r.data.id_medium || null
         };
-        commit('add', annotation);
+        commit('add', { annotation: annotation, uid: uid });
         dispatch('cml/messages/success', 'Annotation added', { root: true });
-        dispatch('set', annotation.id);
+        dispatch('set', { id: annotation.id, uid: uid });
 
         return annotation
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'annotationsAdd', { root: true });
+        dispatch('cml/sync/stop', ("annotationsAdd-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70871,22 +71270,24 @@ var actions$10 = {
       })
   },
 
-  remove: function remove (ref, annotation) {
+  remove: function remove (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var id = ref$1.id;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'annotationsRemove', { root: true });
+    dispatch('cml/sync/start', ("annotationsRemove-" + uid), { root: true });
     return api
-      .deleteAnnotation(annotation.id)
+      .deleteAnnotation(id)
       .then(function (r) {
-        commit('cml/sync/stop', 'annotationsRemove', { root: true });
-        commit('remove', annotation);
+        dispatch('cml/sync/stop', ("annotationsRemove-" + uid), { root: true });
+        commit('remove', { id: id, uid: uid });
         dispatch('cml/messages/success', 'Annotation removed', { root: true });
 
-        return annotation.id
+        return id
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'annotationsRemove', { root: true });
+        dispatch('cml/sync/stop', ("annotationsRemove-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70894,25 +71295,30 @@ var actions$10 = {
       })
   },
 
-  update: function update (ref, annotation) {
+  update: function update (ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var element = ref$1.element;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'annotationsUpdate', { root: true });
+    dispatch('cml/sync/start', ("annotationsUpdate-" + uid), { root: true });
     return api
-      .updateAnnotation(annotation.id, {
-        fragment: annotation.fragment,
-        data: annotation.metadata
+      .updateAnnotation(element.id, {
+        fragment: element.fragment,
+        data: element.metadata
       })
       .then(function (r) {
-        commit('cml/sync/stop', 'annotationsUpdate', { root: true });
-        commit('update', annotation);
+        var annotation = Object.assign({}, element);
+        annotation.fragment = r.data.fragment || {};
+        annotation.metadata = r.data.data || {};
+        dispatch('cml/sync/stop', ("annotationsUpdate-" + uid), { root: true });
+        commit('update', { annotation: annotation, uid: uid });
         dispatch('cml/messages/success', 'Annotation updated', { root: true });
 
         return annotation
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'annotationsUpdate', { root: true });
+        dispatch('cml/sync/stop', ("annotationsUpdate-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
@@ -70920,15 +71326,20 @@ var actions$10 = {
       })
   },
 
-  list: function list (ref, layerId) {
+  list: function list (ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var layerId = ref$1.layerId;
+    var uid = ref$1.uid;
 
-    commit('cml/sync/start', 'annotationsList', { root: true });
+    dispatch('cml/sync/start', ("annotationsList-" + uid), { root: true });
     return api
       .getAnnotations({ filter: { id_layer: layerId } })
       .then(function (r) {
-        commit('cml/sync/stop', 'annotationsList', { root: true });
+        if (!uid) {
+          throw new Error('missing uid')
+        }
+        dispatch('cml/sync/stop', ("annotationsList-" + uid), { root: true });
         var annotations = r.data.map(function (a) { return ({
           id: a._id,
           fragment: a.fragment || {},
@@ -70936,66 +71347,86 @@ var actions$10 = {
           layerId: a.id_layer,
           mediaId: a.id_medium || null
         }); });
-        commit('list', annotations);
-        dispatch('set');
+        commit('list', { annotations: annotations, uid: uid });
+        dispatch('set', { uid: uid });
 
         return annotations
       })
       .catch(function (e) {
-        commit('cml/sync/stop', 'annotationsList', { root: true });
+        dispatch('cml/sync/stop', ("annotationsList-" + uid), { root: true });
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
-        throw error
+        throw e
       })
   },
 
-  set: function set (ref, annotationId) {
+  set: function set (ref, ref$1) {
     var getters = ref.getters;
     var commit = ref.commit;
+    var id = ref$1.id;
+    var uid = ref$1.uid;
 
-    if (getters.id(annotationId)) {
-      commit('set', getters.id(annotationId));
-    }
+    commit('set', { id: id || getters.id(uid), uid: uid });
   }
 };
 
 var getters$7 = {
-  id: function (state) { return function (id) { return id ||
-    (state.list.map(function (c) { return c.id; }).indexOf(state.id) !== -1 && state.id) ||
-    (state.list[0] && state.list[0].id) ||
+  id: function (state) { return function (uid) { return (state.actives[uid] &&
+      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid]) !== -1 &&
+      state.actives[uid]) ||
+    (state.lists[uid][0] && state.lists[uid][0].id) ||
     null; }; }
 };
 
-var mutations$12 = {
-  reset: function reset (state) {
-    state.list = [];
+var mutations$10 = {
+  reset: function reset (state, uid) {
+    Vue$3.set(state.lists, uid, []);
   },
 
-  add: function add (state, annotation) {
-    var annotationExisting = state.list.find(function (c) { return c.id === annotation.id; });
-    if (!annotationExisting) {
-      state.list.push(annotation);
-    }
+  resetAll: function resetAll (state) {
+    Vue$3.set(state, 'lists', {});
+    Vue$3.set(state, 'actives', {});
   },
 
-  update: function update (state, annotation) {
-    Object.assign(state.list.find(function (c) { return c.id === annotation.id; }), annotation);
+  add: function add (state, ref) {
+    var annotation = ref.annotation;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].length;
+    Vue$3.set(state.lists[uid], index, annotation);
   },
 
-  remove: function remove (state, annotation) {
-    var index = state.list.findIndex(function (c) { return c.id === annotation.id; });
+  update: function update (state, ref) {
+    var annotation = ref.annotation;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].findIndex(function (m) { return m.id === annotation.id; });
+    Vue$3.set(state.lists[uid], index, annotation);
+  },
+
+  remove: function remove (state, ref) {
+    var id = ref.id;
+    var uid = ref.uid;
+
+    var index = state.lists[uid].findIndex(function (m) { return m.id === id; });
     if (index !== -1) {
-      state.list.splice(index, 1);
+      Vue$3.delete(state.lists[uid], index);
     }
   },
 
-  list: function list (state, annotations) {
-    state.list = annotations;
+  list: function list (state, ref) {
+    var annotations = ref.annotations;
+    var uid = ref.uid;
+
+    Vue$3.set(state.lists, uid, annotations);
   },
 
-  set: function set (state, id) {
-    state.id = id;
+  set: function set (state, ref) {
+    var id = ref.id;
+    var uid = ref.uid;
+
+    Vue$3.set(state.actives, uid, id);
   }
 };
 
@@ -71004,8 +71435,8 @@ var annotations = {
   state: state$13,
   actions: actions$10,
   getters: getters$7,
-  mutations: mutations$12
-};
+  mutations: mutations$10
+}
 
 var modules = {
   viewport: viewport,
@@ -71030,33 +71461,24 @@ var actions = {
   set: function set (ref) {
     var dispatch = ref.dispatch;
 
-    Promise.all([].concat( ['users', 'groups'].map(
-        function (type) { return new Promise(function (resolve, reject) { return dispatch(("cml/" + type + "/list"), {}, { root: true })
-              .then(function (r) { return resolve(r); })
-              .catch(function (e) { return reject(e); }); }
-          ); }
+    Promise.all([].concat( ['users', 'groups'].map(function (type) { return dispatch(("cml/" + type + "/list"), {}, { root: true })
+          .then(function (r) { return r; })
+          .catch(function (e) { return e; }); }
       ) )).then(function (res) {
-      dispatch('cml/corpus/list', null, { root: true });
+      dispatch('cml/corpus/listAll', null, { root: true });
     });
   },
 
   reset: function reset (ref) {
     var commit = ref.commit;
 
-    commit('delete');
     commit('cml/user/reset', null, { root: true });
     commit('cml/users/reset', null, { root: true });
     commit('cml/groups/reset', null, { root: true });
-    commit('cml/corpus/reset', null, { root: true });
-    commit('cml/medias/reset', null, { root: true });
-    commit('cml/layers/reset', null, { root: true });
-  }
-};
-
-var mutations = {
-  delete: function delete$1 (state) {
-    state.url = '';
-    state.api = null;
+    commit('cml/corpus/resetAll', null, { root: true });
+    commit('cml/medias/resetAll', null, { root: true });
+    commit('cml/layers/resetAll', null, { root: true });
+    commit('cml/annotations/resetAll', null, { root: true });
   }
 };
 
@@ -71068,11 +71490,10 @@ var store = new index_esm.Store({
       namespaced: true,
       state: state,
       actions: actions,
-      mutations: mutations,
       modules: modules
     }
   }
-});
+})
 
 var debug$5 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.visible)?_c('pre',[_c('code',[_vm._v(_vm._s(_vm.state))])]):_vm._e()},staticRenderFns: [],_scopeId: 'data-v-5a8a2715',
   name: 'camomile-utils-debug',
@@ -71107,7 +71528,7 @@ var debug$5 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
   beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keydown', this.keydown);
   }
-};
+}
 
 var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],_scopeId: 'data-v-24d69054',
   name: 'camomile-utils-viewport',
@@ -71122,7 +71543,7 @@ var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
     window.addEventListener('resize', this.resize);
     this.resize();
   }
-};
+}
 
 var cmlDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"name":"transition-top"}},[(_vm.dropdown.visible)?_c('div',{staticClass:"absolute full bg-alpha",on:{"click":function($event){if($event.target !== $event.currentTarget){ return null; }_vm.close($event);}}},[_c('div',{staticClass:"container relative"},[_c(_vm.dropdown.config.component,{tag:"component"})],1)]):_vm._e()])},staticRenderFns: [],
   name: 'camomile-utils-dropdown',
@@ -71138,7 +71559,7 @@ var cmlDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var
       this.$store.commit('cml/dropdown/close');
     }
   }
-};
+}
 
 var cmlPopup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"absolute full bg-alpha",on:{"click":_vm.close}}),_vm._v(" "),_c('div',{staticClass:"pophover absolute full bg-alt p-l pb-s"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',[_vm._v(_vm._s(_vm.config.title))]),_vm._v(" "),(_vm.config.closeBtn)?_c('button',{staticClass:"flex-right btn p-s mt--m",on:{"click":_vm.close}},[_c('i',{staticClass:"icon-24 icon-24-close"})]):_vm._e()]),_vm._v(" "),_c('hr',{staticClass:"border-bg"}),_vm._v(" "),_c(_vm.config.component,{tag:"component"})],1)])},staticRenderFns: [],
   name: 'camomile-popup',
@@ -71173,7 +71594,7 @@ var cmlPopup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       document.removeEventListener('keyup', this.keyup);
     }
   }
-};
+}
 
 var cmlMessages = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"messages absolute center"},[_c('transition-group',{attrs:{"name":"transition-bottom","tag":"div"}},_vm._l((_vm.messages),function(message){return (message.content)?_c('div',{key:message.id,staticClass:"px-m py-s mb color-bg b",class:("bg-" + (message.type))},[_vm._v(" "+_vm._s(message.content)+" ")]):_vm._e()}))],1)},staticRenderFns: [],
   name: 'camomile-utils-messages',
@@ -71183,7 +71604,7 @@ var cmlMessages = {render: function(){var _vm=this;var _h=_vm.$createElement;var
       return this.$store.state.cml.messages.list
     }
   }
-};
+}
 
 var cmlTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h1',{staticClass:"mb-0"},[_vm._v(_vm._s(_vm.title))])},staticRenderFns: [],
   name: 'camomile-header-title',
@@ -71193,7 +71614,7 @@ var cmlTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       return this.$store.state.cml.config.title
     }
   }
-};
+}
 
 var cmlInfos = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h6',{staticClass:"menubar-infos mb-0"},[_vm._v(_vm._s(_vm.api)+": "+_vm._s(_vm.url))])},staticRenderFns: [],
   name: 'camomile-header-infos',
@@ -71206,7 +71627,7 @@ var cmlInfos = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       return this.$store.state.cml.config.axios ? 'axios' : 'rp';
     }
   }
-};
+}
 
 var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h3',{staticClass:"pt-s"},[_vm._v(_vm._s(_vm.title))]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.fields),expression:"fields"}],ref:"field",staticClass:"textarea-alt",domProps:{"value":(_vm.fields)},on:{"keyup":_vm.resize,"input":function($event){if($event.target.composing){ return; }_vm.fields=$event.target.value;}}})])])])},staticRenderFns: [],
   name: 'camomile-popup-edit-json',
@@ -71231,7 +71652,7 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   methods: {
     jsonCheck: function jsonCheck (str) {
       try {
-        
+        JSON.parse(str);
       } catch (e) {
         return false
       }
@@ -71247,9 +71668,9 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
     var el = this.$refs.field;
     el.style.height = (el.scrollHeight) + "px";
   }
-};
+}
 
-var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations' && !_vm.element.id && _vm.element.mediaId)?_c('div',{staticClass:"blobs"},[_vm._m(4,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4 p-s"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.mediaLink),expression:"element.mediaLink"}],staticClass:"select-alt",attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.element.mediaLink)?_vm._i(_vm.element.mediaLink,null)>-1:(_vm.element.mediaLink)},on:{"change":function($event){var $$a=_vm.element.mediaLink,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.element.mediaLink=$$a.concat([$$v]));}else{$$i>-1&&(_vm.element.mediaLink=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.$set(_vm.element, "mediaLink", $$c);}}}}),_vm._v(" "+_vm._s(_vm.element.mediaName)+" ")])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Link to media")])])}],
+var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations' && !_vm.element.id && _vm.element.mediaId)?_c('div',{staticClass:"blobs"},[_vm._m(4),_vm._v(" "),_c('div',{staticClass:"blob-3-4 p-s"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.mediaLink),expression:"element.mediaLink"}],staticClass:"select-alt",attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.element.mediaLink)?_vm._i(_vm.element.mediaLink,null)>-1:(_vm.element.mediaLink)},on:{"change":function($event){var $$a=_vm.element.mediaLink,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.element.mediaLink=$$a.concat([$$v]));}else{$$i>-1&&(_vm.element.mediaLink=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.$set(_vm.element, "mediaLink", $$c);}}}}),_vm._v(" "+_vm._s(_vm.element.mediaName)+" ")])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Link to media")])])}],
   name: 'camomile-popup-edit',
 
   components: {
@@ -71259,6 +71680,7 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   computed: Object.assign({}, mapState({
       element: function (state) { return state.cml.popup.element; },
       type: function (state) { return state.cml.popup.config.type; },
+      uid: function (state) { return state.cml.popup.config.uid; },
       rolesPermission: function (state) { return state.cml.user.id !== state.cml.popup.element.id; },
       roles: function (state) { return state.cml.config.roles; }
     })),
@@ -71266,9 +71688,9 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   methods: {
     save: function save () {
       if (this.element.id) {
-        this.$store.dispatch(("cml/" + (this.type) + "/update"), this.element);
+        this.$store.dispatch(("cml/" + (this.type) + "/update"), { element: this.element, uid: this.uid });
       } else {
-        this.$store.dispatch(("cml/" + (this.type) + "/add"), this.element);
+        this.$store.dispatch(("cml/" + (this.type) + "/add"), { element: this.element, uid: this.uid });
       }
       this.$store.commit('cml/popup/close');
     },
@@ -71292,7 +71714,7 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keyup', this.keyup);
   }
-};
+}
 
 var userbuttonDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"dropdown"},[(_vm.isAdmin)?_c('div',[_c('button',{staticClass:"btn px-m py-s full-x",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: _vm.user });}}},[_vm._v("Settings…")])]):_vm._e(),_vm._v(" "),_c('div',[_c('button',{staticClass:"btn px-m py-s full-x mr home",on:{"click":_vm.logout}},[_vm._v("Logout")])])])},staticRenderFns: [],
   name: 'camomile-header-userbutton-dropdown',
@@ -71332,7 +71754,7 @@ var userbuttonDropdown = {render: function(){var _vm=this;var _h=_vm.$createElem
       this.close();
     }
   }
-};
+}
 
 var cmlUserbutton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn-menubar px-m py-s full-x",class:{ active: _vm.visible },on:{"click":_vm.dropdownToggle}},[_vm._v(_vm._s(_vm.user.name))])},staticRenderFns: [],
   name: 'camomile-header-userbutton',
@@ -71351,7 +71773,7 @@ var cmlUserbutton = {render: function(){var _vm=this;var _h=_vm.$createElement;v
       }
     }
   }
-};
+}
 
 var cmlSync = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn-menubar px-m py-s full-x",on:{"click":_vm.sync}},[_c('i',{staticClass:"icon-24 icon-24-dot",class:{ blink: _vm.active }})])},staticRenderFns: [],
   name: 'camomile-header-syncbutton',
@@ -71367,7 +71789,7 @@ var cmlSync = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
       this.$store.dispatch('cml/sync/all');
     }
   }
-};
+}
 
 var cmlHeader = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"bg-inverse color-bg header"},[_c('div',{staticClass:"container"},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4 mb-0"},[_c('cml-title')],1),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blob-1-2 mb-0"},[_c('div',{staticClass:"blobs-default"},[_c('div',{staticClass:"blob-default"},[_c('cml-sync',{staticClass:"mb-0 left"})],1),_vm._v(" "),_c('div',{staticClass:"blob-auto mb-0"},[_c('cml-infos')],1)])]):_vm._e(),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blob mb-0 flex-right"},[_c('cml-userbutton')],1):_vm._e()])])])},staticRenderFns: [],
   name: 'camomile-header',
@@ -71384,9 +71806,9 @@ var cmlHeader = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
       return this.$store.state.cml.user.isLogged
     }
   }
-};
+}
 
-var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.name),expression:"config.user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name"},domProps:{"value":(_vm.config.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "name", $event.target.value);}}})]),_vm._v(" "),_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.password),expression:"config.user.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"Password"},domProps:{"value":(_vm.config.user.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "password", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":function($event){_vm.login(_vm.config);}}},[_vm._v("Login")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])}],
+var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.name),expression:"config.user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name"},domProps:{"value":(_vm.config.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "name", $event.target.value);}}})]),_vm._v(" "),_vm._m(1),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.password),expression:"config.user.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"Password"},domProps:{"value":(_vm.config.user.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "password", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":function($event){_vm.login(_vm.config);}}},[_vm._v("Login")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])}],
   name: 'camomile-login-popup',
 
   computed: {
@@ -71413,7 +71835,7 @@ var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
   beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keyup', this.keyup);
   }
-};
+}
 
 var cmlLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],
   name: 'camomile-login',
@@ -71428,19 +71850,42 @@ var cmlLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       element: {}
     });
   }
-};
+}
 
-var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(1,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.id),expression:"element.id"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.id)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "id", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":_vm.remove,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.remove($event);}}},[_vm._v("Remove")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Id")])])}],
+var cmlApp$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full-y flex flex-direction-column"},[_c('cml-header'),_vm._v(" "),_c('div',{staticClass:"relative page"},[_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),(_vm.isLogged)?_vm._t("default"):_c('cml-login')],2),_vm._v(" "),_c('viewport'),_vm._v(" "),_c('debug')],1)},staticRenderFns: [],
+  store: store,
+
+  name: 'camomile',
+
+  components: {
+    debug: debug$5,
+    viewport: viewport$1,
+    cmlHeader: cmlHeader,
+    cmlLogin: cmlLogin,
+    cmlPopup: cmlPopup,
+    cmlMessages: cmlMessages,
+    cmlDropdown: cmlDropdown
+  },
+
+  computed: Object.assign({}, mapState({
+      isLogged: function (state$$1) { return state$$1.cml.user.isLogged; },
+      popup: function (state$$1) { return state$$1.cml.popup; },
+      media: function (state$$1) { return state$$1.cml.medias.list.find(function (m) { return m.id === state$$1.cml.medias.id; }); }
+    }))
+}
+
+var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(1),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.id),expression:"element.id"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id},domProps:{"value":(_vm.element.id)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "id", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",on:{"click":_vm.remove,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.remove($event);}}},[_vm._v("Remove")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Id")])])}],
   name: 'camomile-popup-remove',
 
   computed: Object.assign({}, mapState({
       element: function (state) { return state.cml.popup.element; },
-      type: function (state) { return state.cml.popup.config.type; }
+      type: function (state) { return state.cml.popup.config.type; },
+      uid: function (state) { return state.cml.popup.config.uid; }
     })),
 
   methods: {
     remove: function remove () {
-      this.$store.dispatch(("cml/" + (this.type) + "/remove"), this.element);
+      this.$store.dispatch(("cml/" + (this.type) + "/remove"), { id: this.element.id, uid: this.uid });
       this.$store.commit("cml/popup/close");
     },
     keyup: function keyup (e) {
@@ -71455,9 +71900,9 @@ var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   beforeDestroy: function beforeDestroy () {
     document.removeEventListener('keyup', this.keyup);
   }
-};
+}
 
-var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.user.name),expression:"user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.user, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"mb-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-inline clearfix"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id,staticClass:"tag",class:{ active: _vm.groupActive(group.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.groupToggle(group);}}},[_vm._v(_vm._s(group.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
+var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.user.name),expression:"user.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.user, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"mb-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-inline clearfix"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id,staticClass:"tag",class:{ active: _vm.groupActive(group.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.groupToggle(group);}}},[_vm._v(_vm._s(group.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
   name: 'camomile-popup-groups',
 
   computed: {
@@ -71484,9 +71929,9 @@ var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var
         .userIds.indexOf(this.user.id) !== -1
     }
   }
-};
+}
 
-var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {}, role: 'user' } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
+var users$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isAdmin)?_c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {}, role: 'user' } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])]):_vm._e()},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
   name: 'camomile-users',
 
   data: function data () {
@@ -71518,6 +71963,7 @@ var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   },
 
   computed: Object.assign({}, mapState({
+      isAdmin: function (state) { return state.cml.user.isAdmin; },
       users: function (state) { return state.cml.users.list; },
       userId: function (state) { return state.cml.user.id; }
     })),
@@ -71530,9 +71976,9 @@ var cmlUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     }
   }
-};
+}
 
-var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.group.name),expression:"group.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.group.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.group, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"pt-s mb-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-inline"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id,staticClass:"tag",class:{ active: _vm.userActive(user.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.userToggle(user.id);}}},[_vm._v(_vm._s(user.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
+var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.group.name),expression:"group.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.group.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.group, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1"},[_c('h3',{staticClass:"pt-s mb-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-inline"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id,staticClass:"tag",class:{ active: _vm.userActive(user.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.userToggle(user.id);}}},[_vm._v(_vm._s(user.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])}],
   name: 'camomile-popup-users',
 
   computed: {
@@ -71559,9 +72005,9 @@ var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
       return this.group.userIds.indexOf(userId) > -1
     }
   }
-};
+}
 
-var cmlGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.groups),function(group){return _c('tr',{key:group.id},[_c('td',[_vm._v(_vm._s(group.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(group.userIds.length))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupUsersConfig, element: group });}}},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: group });}}},[_vm._v("Edit")]),_vm._v(" "),(_vm.isRoot)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: group });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Users")]),_c('th')])}],
+var groups$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isAdmin)?_c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.groups),function(group){return _c('tr',{key:group.id},[_c('td',[_vm._v(_vm._s(group.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(group.userIds.length))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupUsersConfig, element: group });}}},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: group });}}},[_vm._v("Edit")]),_vm._v(" "),(_vm.isRoot)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: group });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])]):_vm._e()},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Users")]),_c('th')])}],
   name: 'camomile-groups',
 
   data: function data () {
@@ -71593,6 +72039,7 @@ var cmlGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   },
 
   computed: Object.assign({}, mapState({
+      isAdmin: function (state) { return state.cml.user.isAdmin; },
       groups: function (state) { return state.cml.groups.list; },
       isRoot: function (state) { return state.cml.user.isRoot; }
     })),
@@ -71608,21 +72055,27 @@ var cmlGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
       return this.$store.dispatch('cml/groups/list')
     }
   }
-};
+}
 
 var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"list-inline"},[_c('li',{staticClass:"tag",class:{ active: _vm.isActive(1) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(1);}}},[_vm._v("R")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(2) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(2);}}},[_vm._v("W")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(3) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(3);}}},[_vm._v("A")])])])},staticRenderFns: [],
   name: 'camomile-popup-permissions-edit',
 
   props: {
     element: Object,
-    resource: Object
+    type: String
   },
 
   computed: {
-    permissions: function permissions () {
+    id: function id () {
+      return this.$store.state.cml.popup.element.id
+    },
+    uid: function uid () {
+      return this.$store.state.cml.popup.config.uid
+    },
+    permission: function permission () {
       var this$1 = this;
 
-      return this.$store.state.cml[((this.resource.type) + "s")].list.find(function (r) { return r.id === this$1.resource.id; }).permissions[((this.element.type) + "s")]
+      return this.$store.state.cml[((this.type) + "s")].lists[this.uid].find(function (r) { return r.id === this$1.id; }).permissions[((this.element.type) + "s")][this.element.id]
     }
   },
 
@@ -71631,18 +72084,18 @@ var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement
       var obj, obj$1;
 
       if (this.isActive(permission)) {
-        this.$store.dispatch(("cml/" + (this.resource.type) + "s/" + (this.element.type) + "PermissionRemove"), ( obj = {}, obj[((this.resource.type) + "Id")] = this.resource.id, obj[((this.element.type) + "Id")] = this.element.id, obj));
+        this.$store.dispatch(("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionRemove"), ( obj = {}, obj[((this.type) + "Id")] = this.id, obj[((this.element.type) + "Id")] = this.element.id, obj.uid = this.uid, obj));
       } else {
-        this.$store.dispatch(("cml/" + (this.resource.type) + "s/" + (this.element.type) + "PermissionSet"), ( obj$1 = {}, obj$1[((this.resource.type) + "Id")] = this.resource.id, obj$1[((this.element.type) + "Id")] = this.element.id, obj$1.permission = permission, obj$1));
+        this.$store.dispatch(("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionSet"), ( obj$1 = {}, obj$1[((this.type) + "Id")] = this.id, obj$1[((this.element.type) + "Id")] = this.element.id, obj$1.permission = permission, obj$1.uid = this.uid, obj$1));
       }
     },
     isActive: function isActive (permission) {
-      return this.permissions[this.element.id] === permission
+      return this.permission === permission
     }
   }
-};
+}
 
-var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0,false,false),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.resource.name),expression:"resource.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.resource.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.resource, "name", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(group.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"resource":_vm.permissionsConfig,"element":{ id: group.id, type: 'group' }}})],1)])])}))]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(user.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"resource":_vm.permissionsConfig,"element":{ id: user.id, type: 'user' }}})],1)])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])}],
+var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.resource.name),expression:"resource.name"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.resource.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.resource, "name", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(user.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"type":_vm.type.slice(0, -1),"element":{ id: user.id, type: 'user' }}})],1)])])}))]),_vm._v(" "),_c('div',{staticClass:"blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-2 mb-s"},[_vm._v(" "+_vm._s(group.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"type":_vm.type.slice(0, -1),"element":{ id: group.id, type: 'group'}}})],1)])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])}],
   name: 'camomile-permissions',
 
   components: {
@@ -71650,22 +72103,23 @@ var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElemen
   },
 
   computed: Object.assign({}, mapState({
-      resource: function (state) { return state.cml[state.cml.popup.config.type].list.find(function (e) { return e.id === state.cml.popup.element.id; }); },
+      resource: function (state) { return state.cml.popup.element; },
       users: function (state) { return state.cml.users.list; },
       groups: function (state) { return state.cml.groups.list; },
-      type: function (state) { return state.cml.popup.config.type; }
-    }),
-    {permissionsConfig: function permissionsConfig () {
-      return {
-        id: this.resource.id,
-        type: this.type.slice(0, -1),
-        permissions: this.resource.permissions.users
-      }
-    }})
-};
+      type: function (state) { return state.cml.popup.config.type; },
+      uid: function (state) { return state.cml.popup.config.uid; }
+    }))
+}
 
-var cmlCorpus = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-corpus',
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
 
   data: function data () {
     return {
@@ -71673,34 +72127,44 @@ var cmlCorpus = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
         type: 'corpus',
         closeBtn: true,
         title: 'Edit corpus',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupAddConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Add corpus',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupRemoveConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Remove corpus',
-        component: popupRemove
+        component: popupRemove,
+        uid: this.uid
       },
       popupPermissionsConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Corpus permissions',
-        component: popupPermissions
+        component: popupPermissions,
+        uid: this.uid
       }
     }
   },
 
-  computed: Object.assign({}, mapState({
-      corpus: function (state) { return state.cml.corpus.list; },
-      corpuId: function (state) { return state.cml.corpus.id; },
-      isAdmin: function (state) { return state.cml.user.isAdmin; }
-    })),
+  computed: {
+    corpus: function corpus () {
+      return this.$store.state.cml.corpus.lists[this.uid]
+    },
+    corpuId: function corpuId () {
+      return this.$store.state.cml.corpus.actives[this.uid]
+    },
+    isAdmin: function isAdmin () {
+      return this.$store.state.cml.user.isAdmin
+    }
+  },
 
   methods: {
     popupOpen: function popupOpen (ref) {
@@ -71710,13 +72174,24 @@ var cmlCorpus = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
       this.$store.commit('cml/popup/open', { config: config, element: element });
     },
     set: function set (e) {
-      this.$store.dispatch('cml/corpus/set', e.target.value);
+      this.$store.dispatch('cml/corpus/set', { corpuId: e.target.value, uid: this.uid });
     }
-  }
-};
+  },
 
-var cmlMedias = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Media")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+  mounted: function mounted () {
+    this.$store.commit('cml/corpus/register', this.uid);
+  }
+}
+
+var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Media")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-medias',
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
 
   data: function data () {
     return {
@@ -71724,35 +72199,44 @@ var cmlMedias = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
         type: 'medias',
         closeBtn: true,
         title: 'Edit medium',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupAddConfig: {
         type: 'medias',
         closeBtn: true,
         title: 'Add medium',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupRemoveConfig: {
         type: 'medias',
         closeBtn: true,
         title: 'Remove medium',
-        component: popupRemove
+        component: popupRemove,
+        uid: this.uid
       }
     }
   },
 
-  computed: Object.assign({}, mapState({
-      medias: function (state) { return state.cml.medias.list; },
-      corpus: function (state) { return state.cml.corpus.list; },
-      corpuId: function (state) { return state.cml.corpus.id; },
-      mediaId: function (state) { return state.cml.medias.id; }
-    }),
-    {permission: function permission () {
+  computed: {
+    corpuId: function corpuId () {
+      return this.$store.state.cml.corpus.actives[this.uid]
+    },
+    mediaId: function mediaId () {
+      return this.$store.state.cml.medias.actives[this.uid]
+    },
+    medias: function medias () {
+      return this.$store.state.cml.medias.lists[this.uid]
+    },
+    permission: function permission () {
       var this$1 = this;
 
-      var corpu = this.corpus.find(function (c) { return c.id === this$1.corpuId; });
+      var corpus = this.$store.state.cml.corpus.lists;
+      var corpu = corpus[this.uid] && corpus[this.uid].find(function (c) { return c.id === this$1.corpuId; });
       return corpu ? corpu.permission : 0
-    }}),
+    }
+  },
 
   methods: {
     popupOpen: function popupOpen (ref) {
@@ -71762,13 +72246,20 @@ var cmlMedias = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
     set: function set (e) {
-      this.$store.dispatch('cml/medias/set', e.target.value);
+      this.$store.dispatch('cml/medias/set', { uid: this.uid, mediaId: e.target.value });
     }
   }
-};
+}
 
-var cmlLayers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Layers")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":layer.id,"checked":layer.id === _vm.layerId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Layers")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":layer.id,"checked":layer.id === _vm.layerId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-layers',
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
 
   data: function data () {
     return {
@@ -71776,54 +72267,77 @@ var cmlLayers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
         type: 'layers',
         closeBtn: true,
         title: 'Edit layer',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupAddConfig: {
         type: 'layers',
         closeBtn: true,
         title: 'Edit layer',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupRemoveConfig: {
         type: 'layers',
         closeBtn: true,
         title: 'Remove layer',
-        component: popupRemove
+        component: popupRemove,
+        uid: this.uid
       },
       popupPermissionsConfig: {
         type: 'layers',
         closeBtn: true,
         title: 'Layer permissions',
-        component: popupPermissions
+        component: popupPermissions,
+        uid: this.uid
       }
     }
   },
 
-  computed: Object.assign({}, mapState({
-      layers: function (state) { return state.cml.layers.list; },
-      corpuId: function (state) { return state.cml.corpus.id; },
-      corpus: function (state) { return state.cml.corpus.list; },
-      layerId: function (state) { return state.cml.layers.id; }
-    }),
-    {permission: function permission () {
+  computed: {
+    layers: function layers () {
+      return this.$store.state.cml.layers.lists[this.uid]
+    },
+    layerId: function layerId () {
+      return this.$store.state.cml.layers.actives[this.uid]
+    },
+    corpus: function corpus () {
+      return this.$store.state.cml.corpus.lists[this.uid]
+    },
+    corpuId: function corpuId () {
+      return this.$store.state.cml.corpus.actives[this.uid]
+    },
+    permission: function permission () {
       var this$1 = this;
 
-      var corpu = this.corpus.find(function (c) { return c.id === this$1.corpuId; });
+      var corpus = this.$store.state.cml.corpus.lists;
+      var corpu = corpus[this.uid] && corpus[this.uid].find(function (c) { return c.id === this$1.corpuId; });
       return corpu ? corpu.permission : 0
-    }}),
+    }
+  },
 
   methods: {
-    popupOpen: function popupOpen (config) {
-      return this.$store.commit('cml/popup/open', config)
+    popupOpen: function popupOpen (ref) {
+      var config = ref.config;
+      var element = ref.element;
+
+      return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
     set: function set (e) {
-      this.$store.dispatch('cml/layers/set', e.target.value);
+      this.$store.dispatch('cml/layers/set', { layerId: e.target.value, uid: this.uid });
     }
   }
-};
+}
 
-var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Annotations")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0,false,false),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":annotation.id,"checked":annotation.id === _vm.annotationId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
+var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Annotations")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":annotation.id,"checked":annotation.id === _vm.annotationId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
   name: 'camomile-annotations',
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
 
   data: function data () {
     return {
@@ -71831,36 +72345,50 @@ var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;
         type: 'annotations',
         closeBtn: true,
         title: 'Edit annotation',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupAddConfig: {
         type: 'annotations',
         closeBtn: true,
         title: 'Add annotation',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupRemoveConfig: {
         type: 'annotations',
         closeBtn: true,
         title: 'Remove annotation',
-        component: popupRemove
+        component: popupRemove,
+        uid: this.uid
       }
     }
   },
 
-  computed: Object.assign({}, mapState({
-      annotations: function (state) { return state.cml.annotations.list; },
-      mediaId: function (state) { return state.cml.medias.id; },
-      layerId: function (state) { return state.cml.layers.id; },
-      annotationId: function (state) { return state.cml.annotations.id; },
-      medias: function (state) { return state.cml.medias.list; }
-    }),
-    {permission: function permission () {
+  computed: {
+    annotations: function annotations () {
+      return this.$store.state.cml.annotations.lists[this.uid]
+    },
+    mediaId: function mediaId () {
+      return this.$store.state.cml.medias.actives[this.uid].id
+    },
+    layerId: function layerId () {
+      return this.$store.state.cml.layers.actives[this.uid]
+    },
+    annotationId: function annotationId () {
+      return this.$store.state.cml.annotations.actives[this.uid]
+    },
+    medias: function medias () {
+      return this.$store.state.cml.medias.lists[this.uid]
+    },
+    permission: function permission () {
       var this$1 = this;
 
-      var layer = this.$store.state.cml.layers.list.find(function (layer) { return layer.id === this$1.layerId; });
+      var layers = this.$store.state.cml.layers.lists;
+      var layer = layers[this.uid] && layers[this.uid].find(function (c) { return c.id === this$1.layerId; });
       return layer ? layer.permission : 0
-    }}),
+    }
+  },
 
   methods: {
     popupOpen: function popupOpen (ref) {
@@ -71870,7 +72398,7 @@ var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
     set: function set (e) {
-      this.$store.dispatch('cml/annotations/set', e.target.value);
+      this.$store.dispatch('cml/annotations/set', { id: e.target.value, uid: this.uid });
     },
     mediaName: function mediaName (mediaId) {
       if (!mediaId) { return '' }
@@ -71885,36 +72413,277 @@ var cmlAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;
       return value.substr(value.length - 6)
     }
   }
-};
+}
 
-var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full-y flex flex-direction-column"},[_c('cml-header'),_vm._v(" "),_c('div',{staticClass:"relative page"},[_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),_c('div',{staticClass:"container pt"},[(_vm.isAdmin)?_c('div',{staticClass:"blobs"},[_c('cml-users',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-groups',{staticClass:"blob-1-2 p border"})],1):_vm._e(),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blobs"},[_c('cml-corpus',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-medias',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-layers',{staticClass:"blob-1-2 p border"}),_vm._v(" "),_c('cml-annotations',{staticClass:"blob-1-2 p border"})],1):_vm._e()])],1),_vm._v(" "),(!_vm.isLogged)?_c('cml-login'):_vm._e(),_vm._v(" "),_c('viewport'),_vm._v(" "),_c('debug')],1)},staticRenderFns: [],
-  store: store,
+var spinner = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _vm._m(0)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"spinner"},[_c('div',{staticClass:"bounce1"}),_vm._v(" "),_c('div',{staticClass:"bounce2"}),_vm._v(" "),_c('div',{staticClass:"bounce3"})])}],
+  name: 'camomile-utils-spinner'
+}
 
-  name: 'camomile',
+var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.media)?_c('div',{ref:"container"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isLoaded),expression:"isLoaded"}]},[_c('div',{attrs:{"id":"player"}})]),_vm._v(" "),(!_vm.isLoaded)?_c('spinner'):_vm._e()],1):_vm._e()},staticRenderFns: [],
+  name: 'camomile-media-youtube',
 
-  components: {
-    debug: debug$5,
-    viewport: viewport$1,
-    cmlHeader: cmlHeader,
-    cmlLogin: cmlLogin,
-    cmlPopup: cmlPopup,
-    cmlMessages: cmlMessages,
-    cmlDropdown: cmlDropdown,
-    cmlUsers: cmlUsers,
-    cmlGroups: cmlGroups,
-    cmlCorpus: cmlCorpus,
-    cmlMedias: cmlMedias,
-    cmlLayers: cmlLayers,
-    cmlAnnotations: cmlAnnotations
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
   },
 
-  computed: Object.assign({}, mapState({
-      isAdmin: function (state$$1) { return state$$1.cml.user.isAdmin; },
-      isLogged: function (state$$1) { return state$$1.cml.user.isLogged; },
-      popup: function (state$$1) { return state$$1.cml.popup; }
-    }))
-};
+  components: {
+    spinner: spinner
+  },
 
-return app;
+  data: function data () {
+    return {
+      player: null,
+      videoNew: false
+    }
+  },
+
+  computed: {
+    media: function media () {
+      var this$1 = this;
+
+      var medias = this.$store.state.cml.medias;
+      return medias.lists[this.uid] && medias.lists[this.uid].find(function (m) { return m.id === medias.actives[this$1.uid]; }) || {}
+    },
+    properties: function properties () {
+      return this.$store.state.cml.medias.properties[this.uid] || {}
+    },
+    isPlaying: function isPlaying () {
+      return this.properties.isPlaying || false
+    },
+    isLoaded: function isLoaded () {
+      return this.properties.isLoaded || false
+    },
+    seek: function seek () {
+      return this.properties.seek || {}
+    },
+    timeCurrent: function timeCurrent () {
+      return this.properties.timeCurrent || 0
+    },
+    viewportWidth: function viewportWidth () {
+      return this.$store.state.cml.viewport.width || 0
+    }
+  },
+
+  mounted: function mounted () {
+    if (this.media.url) {
+      this.playerLoad(this.media.url);
+    }
+  },
+
+  methods: {
+    videoLoad: function videoLoad (mediaUrl) {
+      if (this.player) {
+        var videoId = this.parseYouTubeId(mediaUrl);
+        this.player.loadVideoById(videoId);
+      } else {
+        this.playerLoad(this.media.url);
+      }
+    },
+
+    playerLoad: function playerLoad (mediaUrl) {
+      var this$1 = this;
+
+      var videoId = this.parseYouTubeId(mediaUrl);
+      var width = this.$refs.container.offsetWidth;
+      var height = width * 9 / 16;
+      var events = {
+        onReady: function (event) {
+          console.log('onReady', event);
+          this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
+          this$1.$store.commit('cml/medias/timeTotal', { time: this$1.player.getDuration() * 1000, uid: this$1.uid });
+        },
+        onStateChange: function (event) {
+          console.log('onStateChange', event.data);
+          if (event.data === -1) {
+            // unstarted
+          } else if (event.data === 1) {
+            // playing
+            if (this$1.videoNew) {
+              this$1.videoNew = false;
+              this$1.$store.commit('cml/medias/timeTotal', { time: this$1.player.getDuration() * 1000, uid: this$1.uid });
+              this$1.player.pauseVideo();
+            } else {
+              this$1.$store.dispatch('cml/medias/play', this$1.uid);
+            }
+          } else if (event.data === 2) {
+            // paused
+            this$1.$store.dispatch('cml/medias/pause', this$1.uid);
+          } else if (event.data === 3) {
+            // buffering
+            this$1.$store.dispatch('cml/medias/buffering', this$1.uid);
+          } else if (event.data === 0) {
+            // ended
+            this$1.$store.dispatch('cml/medias/stop', this$1.uid);
+          } else if (event.data === 5) {
+            // cued
+            console.log('once cued', event, this$1.player.getDuration());
+            this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
+            this$1.$store.commit('cml/medias/timeTotal', { time: this$1.player.getDuration() * 1000, uid: this$1.uid });
+          }
+        },
+        onApiChange: function (event) {
+          console.log('onApiChange', event);
+          if (!this$1.isLoaded) {
+            this$1.videoNew = true;
+            this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
+          }
+        }
+      };
+      var playerVars = {
+        autoplay: 0,
+        controls: 0,
+        modestbranding: 1,
+        rel: 0,
+        showinfo: 0,
+        iv_load_policy: 3,
+        enablejsapi: 1,
+        disablekb: 1
+      };
+
+      var tag = document.createElement('script');
+      var scriptTags = document.getElementsByTagName('script');
+      var scriptTagLast = scriptTags[scriptTags.length - 1];
+
+      tag.src = 'https://www.youtube.com/iframe_api';
+      scriptTagLast.parentNode.insertBefore(tag, scriptTagLast.nextSibling);
+
+      window.onYouTubeIframeAPIReady = function () {
+        this$1.player = new YT.Player('player', {
+          width: width,
+          height: height,
+          videoId: videoId,
+          playerVars: playerVars,
+          events: events
+        });
+      };
+    },
+    videoSeek: function videoSeek (serverRequest) {
+      this.player.seekTo(this.timeCurrent / 1000, serverRequest);
+      this.$store.commit('cml/medias/seek', { options: { seekign: false }, uid: this.uid });
+    },
+    parseYouTubeId: function parseYouTubeId (url) {
+      var regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      return url.match(regex) ? RegExp.$2 : url
+    }
+  },
+
+  beforeDestroy: function beforeDestroy () {
+    console.log('before destroy');
+    if (this.player !== null && this.player.destroy) {
+      this.player.destroy();
+    }
+
+    this.player = null;
+  },
+
+  watch: {
+    isPlaying: function isPlaying (val) {
+      if (val) {
+        this.player.playVideo();
+      } else {
+        this.player.pauseVideo();
+      }
+    },
+    seek: function seek (options) {
+      if (options.seeking) {
+        this.videoSeek(options.serverRequest);
+      }
+    },
+    viewportWidth: function viewportWidth () {
+      var width = this.$refs.container.offsetWidth;
+      var height = width * 9 / 16;
+      this.player.setSize(width, height);
+    },
+    media: function media (media$1) {
+      if (this.media.url) {
+        this.videoLoad(media$1.url);
+      }
+    }
+  }
+}
+
+var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"mediacontroller"},[_c('div',{staticClass:"mediacontroller-controls clearfix pb-s"},[_c('button',{ref:"button",staticClass:"mediacontroller-button btn",attrs:{"disabled":!_vm.isLoaded},on:{"click":_vm.mediaToggle}},[_vm._v(_vm._s(_vm.playButton))]),_vm._v(" "),_c('div',{ref:"counter",staticClass:"mediacontroller-counter"},[_vm._v(_vm._s(_vm.msToMinutesAndSeconds(_vm.timeCurrent))+" / "+_vm._s(_vm.msToMinutesAndSeconds(_vm.timeTotal))+" ")])]),_vm._v(" "),_c('div',{ref:"progress",staticClass:"mediacontroller-progress",class:{ loaded: _vm.isLoaded },on:{"click":_vm.progressClick,"mousemove":_vm.progressMousemove,"mousedown":_vm.progressMousedown,"mouseup":_vm.progressMouseup}},[_c('div',{staticClass:"pointer-none full-y"},[_c('div',{staticClass:"mediacontroller-progress-bar",style:({ width: _vm.progressBarWidth })})])])])},staticRenderFns: [],
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
+
+  data: function data () {
+    return {
+      mousedown: false
+    }
+  },
+
+  computed: {
+    properties: function properties () {
+      return this.$store.state.cml.medias.properties[this.uid] || {}
+    },
+    timeCurrent: function timeCurrent () {
+      return this.properties.timeCurrent || 0
+    },
+    timeTotal: function timeTotal () {
+      return this.properties.timeTotal || 0
+    },
+    playButton: function playButton () {
+      return this.properties.isPlaying && '❚ ❚' || '►'
+    },
+    isLoaded: function isLoaded () {
+      return this.properties.isLoaded || false
+    },
+    progressBarWidth: function progressBarWidth () {
+      return ((this.timeCurrent / this.timeTotal * 100) + "%")
+    }
+  },
+
+  methods: {
+    mediaToggle: function mediaToggle () {
+      if (this.properties.isPlaying) {
+        this.$store.commit('cml/medias/pause', this.uid);
+      } else {
+        this.$store.commit('cml/medias/play', this.uid);
+      }
+    },
+    progressClick: function progressClick (e) {
+      this.seek(e.offsetX / this.$refs.progress.offsetWidth, true, this.uid);
+    },
+    progressMousemove: function progressMousemove (e) {
+      this.mousedown && this.seek(e.offsetX / this.$refs.progress.offsetWidth, false, this.uid);
+    },
+    progressMousedown: function progressMousedown () {
+      this.mousedown = true;
+    },
+    progressMouseup: function progressMouseup () {
+      this.mousedown = false;
+    },
+    seek: function seek (ratio, serverRequest, uid) {
+      if (this.properties.isLoaded) {
+        this.$store.dispatch('cml/medias/seek', { ratio: ratio, serverRequest: serverRequest, uid: uid });
+      }
+    },
+    msToMinutesAndSeconds: function msToMinutesAndSeconds (ms) {
+      var minutes = Math.floor(ms / 60000);
+      var seconds = ((ms % 60000) / 1000).toFixed(0);
+      return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
+    }
+  }
+}
+
+exports['default'] = cmlApp$1;
+exports.cmlApp = cmlApp$1;
+exports.cmlUsers = users$1;
+exports.cmlGroups = groups$1;
+exports.cmlCorpus = corpus$1;
+exports.cmlMedias = medias$1;
+exports.cmlLayers = layers$1;
+exports.cmlAnnotations = annotations$1;
+exports.cmlMediaYoutube = mediaYoutube;
+exports.cmlMediaController = mediaController;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 })));

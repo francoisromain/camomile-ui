@@ -35,13 +35,14 @@ export default {
   computed: {
     ...mapState({
       element: state => state.cml.popup.element,
-      type: state => state.cml.popup.config.type
+      type: state => state.cml.popup.config.type,
+      uid: state => state.cml.popup.config.uid
     })
   },
 
   methods: {
     remove () {
-      this.$store.dispatch(`cml/${this.type}/remove`, this.element)
+      this.$store.dispatch(`cml/${this.type}/remove`, { id: this.element.id, uid: this.uid })
       this.$store.commit(`cml/popup/close`)
     },
     keyup (e) {

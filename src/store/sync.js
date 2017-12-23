@@ -7,6 +7,14 @@ export const actions = {
     dispatch(`cml/set`, {}, { root: true }).then(r => {
       dispatch('cml/messages/success', 'Synced with server', { root: true })
     })
+  },
+
+  start ({ state }, name) {
+    state.list.push(name)
+  },
+
+  stop ({ state }, name) {
+    state.list = state.list.filter(n => n !== name)
   }
 }
 
@@ -16,20 +24,9 @@ export const getters = {
   }
 }
 
-export const mutations = {
-  start (state, name) {
-    state.list.push(name)
-  },
-
-  stop (state, name) {
-    state.list = state.list.filter(n => n !== name)
-  }
-}
-
 export default {
   namespaced: true,
   state,
   actions,
-  getters,
-  mutations
+  getters
 }

@@ -1,65 +1,51 @@
 import log from '../js/log'
 
 export const state = {
+  name: '',
+  width: 0,
+  height: 0,
   svg: {
     height: 0,
     width: 0,
     scale: 1
   },
-  viewport: {
-    name: '',
-    width: window.innerWidth,
-    height: window.innerHeight
-  },
   animate: false
 }
 
 export const actions = {
-  set (context) {
-    context.commit('viewportSet')
-    context.commit('svgSet')
+  set ({ state, commit }) {
+    const width = window.innerWidth
+    const height = window.innerHeight
+    let name
+    let animate
+    if (window.matchMedia('(min-width: 83.5em)').matches) {
+      name = 'large'
+      animate = true
+    } else if (window.matchMedia('(min-width: 63em)').matches) {
+      name = 'desktop'
+      animate = true
+    } else if (window.matchMedia('(min-width: 42.5em)').matches) {
+      name = 'tablet'
+      animate = false
+    } else if (window.matchMedia('(min-width: 22em)').matches) {
+      name = 'mobile'
+      animate = false
+    } else {
+      log.simple('Viewport', 'Default')
+      name = 'default'
+      animate = false
+    }
+    commit('set', { name, animate, width, height })
   }
 }
 
 export const mutations = {
-  viewportSet (state) {
-    if (window.matchMedia('(min-width: 83.5em)').matches) {
-      log.simple('Viewport', 'Large')
-      state.viewport.name = 'large'
-      state.animate = true
-    } else if (window.matchMedia('(min-width: 63em)').matches) {
-      log.simple('Viewport', 'Desktop')
-      state.viewport.name = 'desktop'
-      state.animate = true
-    } else if (window.matchMedia('(min-width: 42.5em)').matches) {
-      log.simple('Viewport', 'Tablet')
-      state.viewport.name = 'tablet'
-      state.animate = false
-    } else if (window.matchMedia('(min-width: 22em)').matches) {
-      log.simple('Viewport', 'Mobile')
-      state.viewport.name = 'mobile'
-      state.animate = false
-    } else {
-      log.simple('Viewport', 'Default')
-      state.viewport.name = 'default'
-      state.animate = false
-    }
-    state.viewport.width = window.innerWidth
-    state.viewport.height = window.innerHeight
-  },
-  svgSet (state) {
-    state.svg.scale =
-      state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
-        ? 0.5
-        : 1
-    state.svg.height =
-      state.viewport.name === 'mobile' || state.viewport.name === 'tablet'
-        ? state.viewport.height - 288
-        : state.viewport.height - 144
-    state.svg.width =
-      state.viewport.name === 'large'
-        ? state.viewport.width - 48
-        : state.viewport.width - 48
+  set (state, { animate, name, width, height }) {
+    state.name = name
+    state.animate = animate
+    state.width = width
+    state.height = height
+    log.simple('Viewport', name)
   }
 }
 

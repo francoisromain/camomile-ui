@@ -29,32 +29,48 @@ describe('store medias actions', () => {
       groupIds: ['mocks-group-id-1']
     }
 
-    groups.state = {
-      list: [{ id: 'mocks-group-id-1' }, { id: 'mocks-group-id-2' }]
-    }
-
     users.state = {
       list: [{ id: 'mocks-user-id-lu' }, { id: 'mocks-user-id-ji' }]
     }
 
+    groups.state = {
+      list: [{ id: 'mocks-group-id-1' }, { id: 'mocks-group-id-2' }]
+    }
+
     medias.state = {
-      id: 'mocks-media-id-1',
-      list: [
-        {
-          corpuId: 'mocks-corpu-id-1',
-          description: { desc: 'Ornare Malesuada Fermentum Parturient' },
-          id: 'mocks-media-id-1',
-          name: 'media-1',
-          url: 'https://www.limsi.fr/'
-        },
-        {
-          corpuId: 'mocks-corpu-id-1',
-          description: { desc: 'Condimentum Elit Mattis Quam' },
-          id: 'mocks-media-id-2',
-          name: 'media-2',
-          url: 'https://github.com'
-        }
-      ]
+      properties: {
+        default: {}
+      },
+      actives: {
+        default: 'mocks-media-id-1'
+      },
+      lists: {
+        default: [
+          {
+            corpuId: 'mocks-corpu-id-1',
+            description: { desc: 'Ornare Malesuada Fermentum Parturient' },
+            id: 'mocks-media-id-1',
+            name: 'media-1',
+            url: 'https://www.limsi.fr/'
+          },
+          {
+            corpuId: 'mocks-corpu-id-1',
+            description: { desc: 'Condimentum Elit Mattis Quam' },
+            id: 'mocks-media-id-2',
+            name: 'media-2',
+            url: 'https://github.com'
+          }
+        ]
+      }
+    }
+
+    layers.state = {
+      actives: {
+        default: 'mocks-layer-id-1'
+      },
+      lists: {
+        default: []
+      }
     }
 
     store = new Vuex.Store({
@@ -79,22 +95,18 @@ describe('store medias actions', () => {
   })
 
   it('adds a new media', () => {
-    const corpuId = 'mocks-corpu-id-1'
-    const media = {
+    const element = {
+      corpuId: 'mocks-corpu-id-1',
       name: 'media-1',
-      url: 'https://en.wikipedia.org/'
+      url: 'https://en.wikipedia.org/',
+      description: {}
     }
 
     expect.assertions(2)
     return store
-      .dispatch('cml/medias/add', {
-        corpuId,
-        name: media.name,
-        url: media.url,
-        description: media.description
-      })
+      .dispatch('cml/medias/add', { element, uid: 'default' })
       .then(r => {
-        expect(store.state.cml.medias.list).toEqual([
+        expect(store.state.cml.medias.lists['default']).toEqual([
           {
             corpuId: 'mocks-corpu-id-1',
             description: { desc: 'Ornare Malesuada Fermentum Parturient' },
@@ -122,21 +134,16 @@ describe('store medias actions', () => {
   })
 
   it('adds a new media (error)', () => {
-    const corpuId = '' // throw an error
-    const media = {
+    const element = {
+      corpuId: '', // throw an error
       name: 'media-1',
       url: 'https://en.wikipedia.org/',
-      description: { desc: 'Egestas Euismod Quam Condimentum' }
+      description: {}
     }
 
     expect.assertions(2)
     return store
-      .dispatch('cml/medias/add', {
-        corpuId,
-        name: media.name,
-        url: media.url,
-        description: media.description
-      })
+      .dispatch('cml/medias/add', { element, uid: 'default' })
       .catch(e => {
         expect(e).toEqual('Network error')
         expect(store.state.cml.messages.list[0].content).toBe('Network error')
@@ -144,47 +151,40 @@ describe('store medias actions', () => {
   })
 
   it('removes a media', () => {
-    const media = {
-      corpuId: 'mocks-corpu-id-1',
-      description: { desc: 'Ornare Malesuada Fermentum Parturient' },
-      id: 'mocks-media-id-1',
-      name: 'media-1',
-      url: 'https://www.limsi.fr/'
-    }
+    const id = 'mocks-media-id-1'
 
     expect.assertions(2)
-    return store.dispatch('cml/medias/remove', media).then(r => {
-      expect(store.state.cml.medias.list).toEqual([
-        {
-          corpuId: 'mocks-corpu-id-1',
-          description: { desc: 'Condimentum Elit Mattis Quam' },
-          id: 'mocks-media-id-2',
-          name: 'media-2',
-          url: 'https://github.com'
-        }
-      ])
-      expect(store.state.cml.messages.list[0].content).toBe('Medium removed')
-    })
+    return store
+      .dispatch('cml/medias/remove', { id, uid: 'default' })
+      .then(r => {
+        expect(store.state.cml.medias.lists['default']).toEqual([
+          {
+            corpuId: 'mocks-corpu-id-1',
+            description: { desc: 'Condimentum Elit Mattis Quam' },
+            id: 'mocks-media-id-2',
+            name: 'media-2',
+            url: 'https://github.com'
+          }
+        ])
+        expect(store.state.cml.messages.list[0].content).toBe('Medium removed')
+      })
   })
 
   it('removes a media (error)', () => {
-    const media = {
-      corpuId: 'mocks-corpu-id-1',
-      description: { desc: 'Ornare Malesuada Fermentum Parturient' },
-      id: '', // throw an error
-      name: 'media-1',
-      url: 'https://www.limsi.fr/'
-    }
+    const id = '' // throw an error
 
     expect.assertions(2)
-    return store.dispatch('cml/medias/remove', media).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return store
+      .dispatch('cml/medias/remove', { id, uid: 'default' })
+      .catch(e => {
+        expect(e).toEqual('Network error')
+        expect(store.state.cml.messages.list[0].content).toBe('Network error')
+      })
   })
 
   it('updates a media', () => {
-    const media = {
+    const element = {
+      corpuId: 'mocks-corpu-id-1',
       description: { desc: 'Sollicitudin Quam Fringilla Ullamcorper' },
       id: 'mocks-media-id-1',
       name: 'media-limsi',
@@ -192,29 +192,32 @@ describe('store medias actions', () => {
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/medias/update', media).then(r => {
-      expect(store.state.cml.medias.list).toEqual([
-        {
-          corpuId: 'mocks-corpu-id-1',
-          description: { desc: 'Sollicitudin Quam Fringilla Ullamcorper' },
-          id: 'mocks-media-id-1',
-          name: 'media-limsi',
-          url: 'https://www.limsi.fr/fr/laboratoire/soutien-a-la-recherche'
-        },
-        {
-          corpuId: 'mocks-corpu-id-1',
-          description: { desc: 'Condimentum Elit Mattis Quam' },
-          id: 'mocks-media-id-2',
-          name: 'media-2',
-          url: 'https://github.com'
-        }
-      ])
-      expect(store.state.cml.messages.list[0].content).toBe('Medium updated')
-    })
+    return store
+      .dispatch('cml/medias/update', { element, uid: 'default' })
+      .then(r => {
+        expect(store.state.cml.medias.lists['default']).toEqual([
+          {
+            corpuId: 'mocks-corpu-id-1',
+            description: { desc: 'Sollicitudin Quam Fringilla Ullamcorper' },
+            id: 'mocks-media-id-1',
+            name: 'media-limsi',
+            url: 'https://www.limsi.fr/fr/laboratoire/soutien-a-la-recherche'
+          },
+          {
+            corpuId: 'mocks-corpu-id-1',
+            description: { desc: 'Condimentum Elit Mattis Quam' },
+            id: 'mocks-media-id-2',
+            name: 'media-2',
+            url: 'https://github.com'
+          }
+        ])
+        expect(store.state.cml.messages.list[0].content).toBe('Medium updated')
+      })
   })
 
   it('updates a media (error)', () => {
-    const media = {
+    const element = {
+      corpuId: 'mocks-corpu-id-1',
       description: { desc: 'Sollicitudin Quam Fringilla Ullamcorper' },
       id: '', // throw an error
       name: 'media-limsi',
@@ -222,16 +225,18 @@ describe('store medias actions', () => {
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/medias/update', media).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return store
+      .dispatch('cml/medias/update', { element, uid: 'default' })
+      .catch(e => {
+        expect(e).toEqual('Network error')
+        expect(store.state.cml.messages.list[0].content).toBe('Network error')
+      })
   })
 
   it('lists all medias', () => {
     expect.assertions(1)
-    return store.dispatch('cml/medias/list').then(r => {
-      expect(store.state.cml.medias.list).toEqual([
+    return store.dispatch('cml/medias/list', { uid: 'default' }).then(r => {
+      expect(store.state.cml.medias.lists['default']).toEqual([
         {
           corpuId: 'mocks-corpu-id-1',
           description: { desc: 'Ornare Malesuada Fermentum Parturient' },
@@ -253,9 +258,13 @@ describe('store medias actions', () => {
   it('sets selected media', () => {
     const mediaId = 'mocks-media-id-2'
     expect.assertions(1)
-    return store.dispatch('cml/medias/set', mediaId).then(r => {
-      expect(store.state.cml.medias.id).toEqual('mocks-media-id-2')
-    })
+    return store
+      .dispatch('cml/medias/set', { mediaId, uid: 'default' })
+      .then(r => {
+        expect(store.state.cml.medias.actives['default']).toEqual(
+          'mocks-media-id-2'
+        )
+      })
   })
 })
 
@@ -264,19 +273,23 @@ describe('store medias getters', () => {
 
   beforeEach(() => {
     const state = {
-      id: 'mocks-media-id-2',
-      list: [
-        {
-          description: {},
-          id: 'mocks-media-id-1',
-          name: 'media-1'
-        },
-        {
-          description: {},
-          id: 'mocks-media-id-2',
-          name: 'media-2'
-        }
-      ]
+      actives: {
+        default: 'mocks-media-id-2'
+      },
+      lists: {
+        default: [
+          {
+            description: {},
+            id: 'mocks-media-id-1',
+            name: 'media-1'
+          },
+          {
+            description: {},
+            id: 'mocks-media-id-2',
+            name: 'media-2'
+          }
+        ]
+      }
     }
 
     store = new Vuex.Store({
@@ -285,26 +298,25 @@ describe('store medias getters', () => {
     })
   })
 
-  it('returns the id of the selected medias (without a param)', () => {
-    expect(store.getters.id()).toEqual('mocks-media-id-2')
-  })
-
-  it('returns the id of the selected medias (with a param)', () => {
-    expect(store.getters.id('mocks-media-id-4')).toEqual('mocks-media-id-4')
+  it('returns the id of the active medias', () => {
+    expect(store.getters.id('default')).toEqual('mocks-media-id-2')
   })
 })
 
 describe('store medias mutations', () => {
-  const state = { list: [] }
+  const state = { actives: {}, lists: {} }
 
   it('resets media list', () => {
-    state.list = [
-      { name: 'group-1' },
-      { name: 'group-2' },
-      { name: 'group-3' },
-      { name: 'group-4' }
-    ]
-    medias.mutations.reset(state)
-    expect(state.list).toEqual([])
+    beforeEach(() => {
+      state.lists['default'] = [
+        { name: 'group-1' },
+        { name: 'group-2' },
+        { name: 'group-3' },
+        { name: 'group-4' }
+      ]
+      state.actives['default'] = 'mocks-id'
+    })
+    medias.mutations.resetAll(state)
+    expect(state.lists).toEqual({})
   })
 })

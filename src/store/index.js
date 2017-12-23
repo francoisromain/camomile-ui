@@ -38,34 +38,24 @@ export const state = {
 export const actions = {
   set ({ dispatch }) {
     Promise.all([
-      ...['users', 'groups'].map(
-        type =>
-          new Promise((resolve, reject) =>
-            dispatch(`cml/${type}/list`, {}, { root: true })
-              .then(r => resolve(r))
-              .catch(e => reject(e))
-          )
+      ...['users', 'groups'].map(type =>
+        dispatch(`cml/${type}/list`, {}, { root: true })
+          .then(r => r)
+          .catch(e => e)
       )
     ]).then(res => {
-      dispatch('cml/corpus/list', null, { root: true })
+      dispatch('cml/corpus/listAll', null, { root: true })
     })
   },
 
   reset ({ commit }) {
-    commit('delete')
     commit('cml/user/reset', null, { root: true })
     commit('cml/users/reset', null, { root: true })
     commit('cml/groups/reset', null, { root: true })
-    commit('cml/corpus/reset', null, { root: true })
-    commit('cml/medias/reset', null, { root: true })
-    commit('cml/layers/reset', null, { root: true })
-  }
-}
-
-export const mutations = {
-  delete (state) {
-    state.url = ''
-    state.api = null
+    commit('cml/corpus/resetAll', null, { root: true })
+    commit('cml/medias/resetAll', null, { root: true })
+    commit('cml/layers/resetAll', null, { root: true })
+    commit('cml/annotations/resetAll', null, { root: true })
   }
 }
 
@@ -77,7 +67,6 @@ export default new Vuex.Store({
       namespaced: true,
       state,
       actions,
-      mutations,
       modules
     }
   }

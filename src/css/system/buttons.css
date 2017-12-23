@@ -13,6 +13,7 @@
 .btn {
   button: default;
   font-weight: 700;
+  border-radius: var(--unit-xxs);
 }
 
 .btn-border {

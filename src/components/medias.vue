@@ -23,12 +23,18 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import popupEdit from './popup/edit.vue'
 import popupRemove from './popup/remove.vue'
 
 export default {
   name: 'camomile-medias',
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
 
   data () {
     return {
@@ -36,32 +42,39 @@ export default {
         type: 'medias',
         closeBtn: true,
         title: 'Edit medium',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupAddConfig: {
         type: 'medias',
         closeBtn: true,
         title: 'Add medium',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupRemoveConfig: {
         type: 'medias',
         closeBtn: true,
         title: 'Remove medium',
-        component: popupRemove
+        component: popupRemove,
+        uid: this.uid
       }
     }
   },
 
   computed: {
-    ...mapState({
-      medias: state => state.cml.medias.list,
-      corpus: state => state.cml.corpus.list,
-      corpuId: state => state.cml.corpus.id,
-      mediaId: state => state.cml.medias.id
-    }),
+    corpuId () {
+      return this.$store.state.cml.corpus.actives[this.uid]
+    },
+    mediaId () {
+      return this.$store.state.cml.medias.actives[this.uid]
+    },
+    medias () {
+      return this.$store.state.cml.medias.lists[this.uid]
+    },
     permission () {
-      const corpu = this.corpus.find(c => c.id === this.corpuId)
+      const corpus = this.$store.state.cml.corpus.lists
+      const corpu = corpus[this.uid] && corpus[this.uid].find(c => c.id === this.corpuId)
       return corpu ? corpu.permission : 0
     }
   },
@@ -71,7 +84,7 @@ export default {
       return this.$store.commit('cml/popup/open', { config, element })
     },
     set (e) {
-      this.$store.dispatch('cml/medias/set', e.target.value)
+      this.$store.dispatch('cml/medias/set', { uid: this.uid, mediaId: e.target.value })
     }
   }
 }

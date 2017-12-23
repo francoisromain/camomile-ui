@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import popupEdit from './popup/edit.vue'
 import popupRemove from './popup/remove.vue'
 import popupPermissions from './popup/permissions.vue'
@@ -32,41 +31,56 @@ import popupPermissions from './popup/permissions.vue'
 export default {
   name: 'camomile-corpus',
 
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
+
   data () {
     return {
       popupEditConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Edit corpus',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupAddConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Add corpus',
-        component: popupEdit
+        component: popupEdit,
+        uid: this.uid
       },
       popupRemoveConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Remove corpus',
-        component: popupRemove
+        component: popupRemove,
+        uid: this.uid
       },
       popupPermissionsConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Corpus permissions',
-        component: popupPermissions
+        component: popupPermissions,
+        uid: this.uid
       }
     }
   },
 
   computed: {
-    ...mapState({
-      corpus: state => state.cml.corpus.list,
-      corpuId: state => state.cml.corpus.id,
-      isAdmin: state => state.cml.user.isAdmin
-    })
+    corpus () {
+      return this.$store.state.cml.corpus.lists[this.uid]
+    },
+    corpuId () {
+      return this.$store.state.cml.corpus.actives[this.uid]
+    },
+    isAdmin () {
+      return this.$store.state.cml.user.isAdmin
+    }
   },
 
   methods: {
@@ -74,8 +88,12 @@ export default {
       this.$store.commit('cml/popup/open', { config, element })
     },
     set (e) {
-      this.$store.dispatch('cml/corpus/set', e.target.value)
+      this.$store.dispatch('cml/corpus/set', { corpuId: e.target.value, uid: this.uid })
     }
+  },
+
+  mounted () {
+    this.$store.commit('cml/corpus/register', this.uid)
   }
 }
 </script>
