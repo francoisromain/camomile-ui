@@ -85,8 +85,8 @@ const layers = [
     _id: 'mocks-layer-id-1',
     name: 'layer-1',
     permissions: {
-      groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 2 },
-      users: { 'mocks-user-id-lu': 1, 'mocks-user-id-ji': 0 }
+      groups: { 'mocks-group-id-2': 2 },
+      users: { 'mocks-user-id-lu': 1 }
     }
   },
   {
@@ -98,8 +98,8 @@ const layers = [
     _id: 'mocks-layer-id-2',
     name: 'layer-2',
     permissions: {
-      groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
-      users: { 'mocks-user-id-lu': 0, 'mocks-user-id-ji': 3 }
+      groups: { 'mocks-group-id-1': 2 },
+      users: { 'mocks-user-id-ji': 3 }
     }
   }
 ]
@@ -114,8 +114,8 @@ const annotations = [
   },
   {
     _id: 'mocks-annotation-id-2',
-    fragment: { fragment: 'Etiam porta sem malesuada magna mollis euismod..' },
-    data: { metadata: 'Etiam porta sem malesuada magna mollis euismod..' },
+    fragment: { fragment: 'Etiam porta sem malesuada magna mollis euismod.' },
+    data: { metadata: 'Etiam porta sem malesuada magna mollis euismod.' },
     id_layer: 'mocks-layer-id-1'
   }
 ]
@@ -143,7 +143,7 @@ const api = {
         if (user) {
           resolve({ data: user })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -156,7 +156,7 @@ const api = {
           user = null
           resolve({ message: 'Logout succeeded.' })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -207,7 +207,7 @@ const api = {
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -266,7 +266,7 @@ const api = {
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -294,7 +294,7 @@ const api = {
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -314,7 +314,7 @@ const api = {
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -363,7 +363,7 @@ const api = {
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -386,7 +386,7 @@ const api = {
           corpu.permissions.groups[groupId] = permission
           resolve({ data: corpu.permissions })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -406,7 +406,7 @@ const api = {
           }
           resolve({ data: corpu.permissions })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -421,7 +421,7 @@ const api = {
           corpu.permissions.users[userId] = permission
           resolve({ data: corpu.permissions })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -441,7 +441,7 @@ const api = {
           }
           resolve({ data: corpu.permissions })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -461,7 +461,7 @@ const api = {
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -473,7 +473,7 @@ const api = {
         if (mediaId) {
           resolve()
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -482,7 +482,7 @@ const api = {
   updateMedium (mediaId, { name, url, description }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        const media = medias.filter(m => m.id === mediaId)
+        const media = medias.find(m => m._id === mediaId)
         if (media) {
           resolve({
             data: {
@@ -494,7 +494,7 @@ const api = {
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -525,13 +525,13 @@ const api = {
               _id: 'mocks-layer-id-new',
               description,
               fragment_type: fragmentType,
-              metadata_type: metadataType,
+              data_type: metadataType,
               annotations,
               id_corpus: corpuId
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -543,7 +543,7 @@ const api = {
         if (layerId) {
           resolve()
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -552,7 +552,7 @@ const api = {
   updateLayer (layerId, { name, fragment_type, data_type, description }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        const layer = layers.filter(l => l.id === layerId)
+        const layer = layers.find(l => l._id === layerId)
         if (layer) {
           resolve({
             data: {
@@ -564,7 +564,7 @@ const api = {
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -587,7 +587,7 @@ const api = {
           layer.permissions.groups[groupId] = permission
           resolve({ data: layer.permissions })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -607,7 +607,7 @@ const api = {
           }
           resolve({ data: layer.permissions })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -622,7 +622,7 @@ const api = {
           layer.permissions.users[userId] = permission
           resolve({ data: layer.permissions })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -642,13 +642,13 @@ const api = {
           }
           resolve({ data: layer.permissions })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
   },
 
-  createAnnotation (layerId, mediaId, fragment, metadata) {
+  createAnnotation (layerId, mediaId, fragment, data) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (layerId) {
@@ -657,13 +657,13 @@ const api = {
               name,
               _id: 'mocks-annotation-id-new',
               fragment,
-              data: metadata,
+              data,
               id_medium: mediaId,
               id_layer: layerId
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
@@ -675,28 +675,28 @@ const api = {
         if (annotationId) {
           resolve()
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })
   },
 
-  updateAnnotation (annotationId, { fragment, metadata }) {
+  updateAnnotation (annotationId, { fragment, data }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        const annotation = annotations.filter(m => m.id === annotationId)
+        const annotation = annotations.find(m => m._id === annotationId)
         if (annotation) {
           resolve({
             data: {
               _id: annotationId,
               fragment: fragment || annotation.fragment,
-              metadata: metadata || annotation.metadata,
+              data: data || annotation.data,
               id_medium: annotation.mediaId,
               id_layer: annotation.layerId
             }
           })
         } else {
-          reject(new Error('Error'))
+          reject(new Error('Api'))
         }
       })
     })

@@ -335,6 +335,11 @@ export const mutations = {
     Vue.set(state.lists, uid, [])
   },
 
+  reset (state, uid) {
+    Vue.set(state.lists, uid, [])
+    Vue.delete(state.actives, uid)
+  },
+
   resetAll (state) {
     state.lists = {}
     state.actives = {}

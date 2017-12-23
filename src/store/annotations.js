@@ -17,7 +17,6 @@ export const actions = {
         element.metadata
       )
       .then(r => {
-        console.log('anno, add', element, uid)
         dispatch('cml/sync/stop', `annotationsAdd-${uid}`, { root: true })
         const annotation = {
           id: r.data._id,
@@ -71,7 +70,7 @@ export const actions = {
       .then(r => {
         const annotation = Object.assign({}, element)
         annotation.fragment = r.data.fragment || {}
-        annotation.metadata = r.data.metadata || {}
+        annotation.metadata = r.data.data || {}
         dispatch('cml/sync/stop', `annotationsUpdate-${uid}`, { root: true })
         commit('update', { annotation, uid })
         dispatch('cml/messages/success', 'Annotation updated', { root: true })
@@ -88,11 +87,13 @@ export const actions = {
   },
 
   list ({ dispatch, commit }, { layerId, uid }) {
-    console.log('anno list', layerId, uid)
     dispatch('cml/sync/start', `annotationsList-${uid}`, { root: true })
     return api
       .getAnnotations({ filter: { id_layer: layerId } })
       .then(r => {
+        if (!uid) {
+          throw new Error('missing uid')
+        }
         dispatch('cml/sync/stop', `annotationsList-${uid}`, { root: true })
         const annotations = r.data.map(a => ({
           id: a._id,
@@ -111,7 +112,7 @@ export const actions = {
         const error = e.response ? e.response.body.error : 'Network error'
         dispatch('cml/messages/error', error, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -132,7 +133,6 @@ export const getters = {
 export const mutations = {
   reset (state, uid) {
     Vue.set(state.lists, uid, [])
-    Vue.delete(state.actives, uid)
   },
 
   resetAll (state) {

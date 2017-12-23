@@ -53,34 +53,39 @@ describe('store groups actions', () => {
     }
 
     corpus.state = {
-      list: [
-        {
-          id: 'mocks-corpu-id-1',
-          name: 'corpu-1',
-          description: {},
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
-            users: {
-              'mocks-user-id-lu': 1,
-              'mocks-user-id-ji': 2,
-              'mocks-user-id-joe': 3
+      actives: {
+        default: 'mocks-corpu-id-1'
+      },
+      lists: {
+        default: [
+          {
+            id: 'mocks-corpu-id-1',
+            name: 'corpu-1',
+            description: {},
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
+              users: {
+                'mocks-user-id-lu': 1,
+                'mocks-user-id-ji': 2,
+                'mocks-user-id-joe': 3
+              }
+            }
+          },
+          {
+            id: 'mocks-corpu-id-2',
+            name: 'corpu-2',
+            description: {},
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
+              users: {
+                'mocks-user-id-lu': 3,
+                'mocks-user-id-ji': 2,
+                'mocks-user-id-joe': 1
+              }
             }
           }
-        },
-        {
-          id: 'mocks-corpu-id-2',
-          name: 'corpu-2',
-          description: {},
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
-            users: {
-              'mocks-user-id-lu': 3,
-              'mocks-user-id-ji': 2,
-              'mocks-user-id-joe': 1
-            }
-          }
-        }
-      ]
+        ]
+      }
     }
 
     store = new Vuex.Store({
@@ -105,13 +110,13 @@ describe('store groups actions', () => {
   })
 
   it('adds a new group', () => {
-    const group = {
+    const element = {
       name: 'yoc',
       description: { dja: 'Ipsum Sit Dolor' }
     }
 
     expect.assertions(3)
-    return store.dispatch('cml/groups/add', group).then(r => {
+    return store.dispatch('cml/groups/add', { element }).then(r => {
       expect(store.state.cml.groups.list).toEqual([
         {
           description: {},
@@ -132,7 +137,9 @@ describe('store groups actions', () => {
           userIds: []
         }
       ])
-      expect(store.state.cml.corpus.list[0].permissions.groups).toEqual({
+      expect(
+        store.state.cml.corpus.lists['default'][0].permissions.groups
+      ).toEqual({
         'mocks-group-id-1': 0,
         'mocks-group-id-2': 0,
         'mocks-group-id-new': 0
@@ -142,26 +149,22 @@ describe('store groups actions', () => {
   })
 
   it('adds a new group (error)', () => {
-    const group = {
+    const element = {
       name: '' // throw an the error
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/groups/add', group).catch(e => {
+    return store.dispatch('cml/groups/add', { element }).catch(e => {
       expect(e).toEqual('Network error')
       expect(store.state.cml.messages.list[0].content).toBe('Network error')
     })
   })
 
   it('removes a group', () => {
-    const group = {
-      id: 'mocks-group-id-1',
-      name: 'group-1',
-      description: {}
-    }
+    const id = 'mocks-group-id-1'
 
     expect.assertions(3)
-    return store.dispatch('cml/groups/remove', group).then(r => {
+    return store.dispatch('cml/groups/remove', { id }).then(r => {
       expect(store.state.cml.messages.list[0].content).toBe('Group removed')
       expect(store.state.cml.groups.list).toEqual([
         {
@@ -171,33 +174,33 @@ describe('store groups actions', () => {
           userIds: ['mocks-user-id-ji']
         }
       ])
-      expect(store.state.cml.corpus.list[0].permissions.groups).toEqual({
+      expect(
+        store.state.cml.corpus.lists['default'][0].permissions.groups
+      ).toEqual({
         'mocks-group-id-2': 0
       })
     })
   })
 
   it('removes a group (error)', () => {
-    const group = {
-      id: '' // throw an the error
-    }
+    const id = '' // throw an the error
 
     expect.assertions(2)
-    return store.dispatch('cml/groups/remove', group).catch(e => {
+    return store.dispatch('cml/groups/remove', { id }).catch(e => {
       expect(e).toEqual('Network error')
       expect(store.state.cml.messages.list[0].content).toBe('Network error')
     })
   })
 
   it('updates a group', () => {
-    const group = {
+    const element = {
       id: 'mocks-group-id-1',
       name: 'group-1',
       description: { test: 'meoi oiou' }
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/groups/update', group).then(r => {
+    return store.dispatch('cml/groups/update', { element }).then(r => {
       expect(store.state.cml.messages.list[0].content).toBe('Group updated')
       expect(store.state.cml.groups.list).toEqual([
         {
@@ -217,12 +220,12 @@ describe('store groups actions', () => {
   })
 
   it('updates a group (error)', () => {
-    const group = {
+    const element = {
       id: '' // throw an the error
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/groups/update', group).catch(e => {
+    return store.dispatch('cml/groups/update', { element }).catch(e => {
       expect(e).toEqual('Network error')
       expect(store.state.cml.messages.list[0].content).toBe('Network error')
     })

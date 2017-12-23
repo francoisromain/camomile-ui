@@ -29,38 +29,42 @@ describe('store corpus actions', () => {
       groupIds: ['mocks-group-id-1']
     }
 
-    groups.state = {
-      list: [{ id: 'mocks-group-id-1' }, { id: 'mocks-group-id-2' }]
-    }
-
     users.state = {
       list: [{ id: 'mocks-user-id-lu' }, { id: 'mocks-user-id-ji' }]
     }
 
+    groups.state = {
+      list: [{ id: 'mocks-group-id-1' }, { id: 'mocks-group-id-2' }]
+    }
+
     corpus.state = {
-      id: 'mocks-corpu-id-2',
-      list: [
-        {
-          id: 'mocks-corpu-id-1',
-          name: 'corpu-1',
-          description: {},
-          permission: 0,
-          permissions: {
-            groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
-            users: { 'mocks-user-id-lu': 2, 'mocks-user-id-ji': 0 }
+      actives: {
+        default: 'mocks-corpu-id-2'
+      },
+      lists: {
+        default: [
+          {
+            id: 'mocks-corpu-id-1',
+            name: 'corpu-1',
+            description: {},
+            permission: 0,
+            permissions: {
+              groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
+              users: { 'mocks-user-id-lu': 2, 'mocks-user-id-ji': 0 }
+            }
+          },
+          {
+            id: 'mocks-corpu-id-2',
+            name: 'corpu-2',
+            description: {},
+            permission: 0,
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 1 },
+              users: { 'mocks-user-id-lu': 0, 'mocks-user-id-ji': 1 }
+            }
           }
-        },
-        {
-          id: 'mocks-corpu-id-2',
-          name: 'corpu-2',
-          description: {},
-          permission: 0,
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 1 },
-            users: { 'mocks-user-id-lu': 0, 'mocks-user-id-ji': 1 }
-          }
-        }
-      ]
+        ]
+      }
     }
 
     store = new Vuex.Store({
@@ -85,161 +89,173 @@ describe('store corpus actions', () => {
   })
 
   it('adds a new corpu', () => {
-    const corpu = {
+    const element = {
       name: 'corpus-1',
       description: { desc: 'Egestas Euismod Quam Condimentum' }
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/corpus/add', corpu).then(r => {
-      expect(store.state.cml.corpus.list).toEqual([
-        {
-          description: {},
-          id: 'mocks-corpu-id-1',
-          name: 'corpu-1',
-          permission: 0,
-          permissions: {
-            groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
-            users: { 'mocks-user-id-ji': 0, 'mocks-user-id-lu': 2 }
-          }
-        },
-        {
-          description: {},
-          id: 'mocks-corpu-id-2',
-          name: 'corpu-2',
-          permission: 0,
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 1 },
-            users: { 'mocks-user-id-ji': 1, 'mocks-user-id-lu': 0 }
-          }
-        },
-        {
-          description: { desc: 'Egestas Euismod Quam Condimentum' },
-          id: 'mocks-corpu-id-new',
-          name: 'corpus-1',
-          permission: 3,
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
-            users: {
-              'mocks-user-id-lu': 0,
-              'mocks-user-id-ji': 0,
-              'mocks-user-id-lu': 3
+    return store
+      .dispatch('cml/corpus/add', { element, uid: 'default' })
+      .then(r => {
+        expect(store.state.cml.corpus.lists['default']).toEqual([
+          {
+            description: {},
+            id: 'mocks-corpu-id-1',
+            name: 'corpu-1',
+            permission: 0,
+            permissions: {
+              groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
+              users: { 'mocks-user-id-ji': 0, 'mocks-user-id-lu': 2 }
+            }
+          },
+          {
+            description: {},
+            id: 'mocks-corpu-id-2',
+            name: 'corpu-2',
+            permission: 0,
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 1 },
+              users: { 'mocks-user-id-ji': 1, 'mocks-user-id-lu': 0 }
+            }
+          },
+          {
+            description: { desc: 'Egestas Euismod Quam Condimentum' },
+            id: 'mocks-corpu-id-new',
+            name: 'corpus-1',
+            permission: 3,
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
+              users: {
+                'mocks-user-id-lu': 3,
+                'mocks-user-id-ji': 0
+              }
             }
           }
-        }
-      ])
-      expect(store.state.cml.messages.list[0].content).toBe('Corpus added')
-    })
+        ])
+        expect(store.state.cml.messages.list[0].content).toBe('Corpus added')
+      })
   })
 
   it('adds a new corpu (error)', () => {
-    const corpu = {
+    const element = {
       name: '' // throw an error
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/corpus/add', corpu).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return store
+      .dispatch('cml/corpus/add', { element, uid: 'default' })
+      .catch(e => {
+        expect(e).toEqual('Network error')
+        expect(store.state.cml.messages.list[0].content).toBe('Network error')
+      })
   })
 
   it('removes a corpu', () => {
-    const corpu = {
-      name: 'corpus-1',
-      description: { desc: 'Egestas Euismod Quam Condimentum' },
-      id: 'mocks-corpu-id-1'
-    }
+    const id = 'mocks-corpu-id-1'
 
     expect.assertions(2)
-    return store.dispatch('cml/corpus/remove', corpu).then(r => {
-      expect(store.state.cml.corpus.list).toEqual([
-        {
-          description: {},
-          id: 'mocks-corpu-id-2',
-          name: 'corpu-2',
-          permission: 0,
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 1 },
-            users: { 'mocks-user-id-ji': 1, 'mocks-user-id-lu': 0 }
+    return store
+      .dispatch('cml/corpus/remove', { id, uid: 'default' })
+      .then(r => {
+        expect(store.state.cml.corpus.lists['default']).toEqual([
+          {
+            description: {},
+            id: 'mocks-corpu-id-2',
+            name: 'corpu-2',
+            permission: 0,
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 1 },
+              users: { 'mocks-user-id-ji': 1, 'mocks-user-id-lu': 0 }
+            }
           }
-        }
-      ])
-      expect(store.state.cml.messages.list[0].content).toBe('Corpus removed')
-    })
+        ])
+        expect(store.state.cml.messages.list[0].content).toBe('Corpus removed')
+      })
   })
 
   it('removes a corpu (error)', () => {
-    const corpu = {
-      id: '' // throw an error
-    }
+    const id = '' // throw an error
 
     expect.assertions(2)
-    return store.dispatch('cml/corpus/remove', corpu).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return store
+      .dispatch('cml/corpus/remove', { id, uid: 'defaut' })
+      .catch(e => {
+        expect(e).toEqual('Network error')
+        expect(store.state.cml.messages.list[0].content).toBe('Network error')
+      })
   })
 
   it('updates a corpu', () => {
-    const corpu = {
+    const element = {
       id: 'mocks-corpu-id-1',
       name: 'corpu-1-new',
-      description: { new: 'Tristique Sollicitudin Ullamcorper Malesuada' }
+      description: { new: 'Tristique Sollicitudin Ullamcorper Malesuada' },
+      permission: 0,
+      permissions: {
+        groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
+        users: { 'mocks-user-id-ji': 0, 'mocks-user-id-lu': 2 }
+      }
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/corpus/update', corpu).then(r => {
-      expect(store.state.cml.corpus.list).toEqual([
-        {
-          description: { new: 'Tristique Sollicitudin Ullamcorper Malesuada' },
-          id: 'mocks-corpu-id-1',
-          name: 'corpu-1-new',
-          permission: 0,
-          permissions: {
-            groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
-            users: { 'mocks-user-id-ji': 0, 'mocks-user-id-lu': 2 }
+    return store
+      .dispatch('cml/corpus/update', { element, uid: 'default' })
+      .then(r => {
+        expect(store.state.cml.corpus.lists['default']).toEqual([
+          {
+            description: {
+              new: 'Tristique Sollicitudin Ullamcorper Malesuada'
+            },
+            id: 'mocks-corpu-id-1',
+            name: 'corpu-1-new',
+            permission: 0,
+            permissions: {
+              groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
+              users: { 'mocks-user-id-ji': 0, 'mocks-user-id-lu': 2 }
+            }
+          },
+          {
+            description: {},
+            id: 'mocks-corpu-id-2',
+            name: 'corpu-2',
+            permission: 0,
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 1 },
+              users: { 'mocks-user-id-ji': 1, 'mocks-user-id-lu': 0 }
+            }
           }
-        },
-        {
-          description: {},
-          id: 'mocks-corpu-id-2',
-          name: 'corpu-2',
-          permission: 0,
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 1 },
-            users: { 'mocks-user-id-ji': 1, 'mocks-user-id-lu': 0 }
-          }
-        }
-      ])
-      expect(store.state.cml.messages.list[0].content).toBe('Corpus updated')
-    })
+        ])
+        expect(store.state.cml.messages.list[0].content).toBe('Corpus updated')
+      })
   })
 
   it('updates a corpu (error)', () => {
-    const corpu = {
+    const element = {
       id: '' // throw an error
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/corpus/update', corpu).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return store
+      .dispatch('cml/corpus/update', { element, uid: 'default' })
+      .catch(e => {
+        expect(e).toEqual('Network error')
+        expect(store.state.cml.messages.list[0].content).toBe('Network error')
+      })
   })
 
   it('lists all corpus', () => {
     expect.assertions(1)
-    return store.dispatch('cml/corpus/list').then(r => {
-      expect(store.state.cml.corpus.list).toEqual([
+    return store.dispatch('cml/corpus/list', { uid: 'default' }).then(r => {
+      expect(store.state.cml.corpus.lists['default']).toEqual([
         {
           description: {},
           id: 'mocks-corpu-id-1',
           name: 'corpu-1',
           permission: 0,
           permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
-            users: { 'mocks-user-id-lu': 0, 'mocks-user-id-ji': 0 }
+            groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
+            users: { 'mocks-user-id-lu': 2, 'mocks-user-id-ji': 0 }
           }
         },
         {
@@ -248,8 +264,8 @@ describe('store corpus actions', () => {
           name: 'corpu-2',
           permission: 0,
           permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
-            users: { 'mocks-user-id-lu': 0, 'mocks-user-id-ji': 0 }
+            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 1 },
+            users: { 'mocks-user-id-lu': 0, 'mocks-user-id-ji': 1 }
           }
         }
       ])
@@ -266,10 +282,11 @@ describe('store corpus actions', () => {
       .dispatch('cml/corpus/groupPermissionSet', {
         corpuId,
         groupId,
-        permission
+        permission,
+        uid: 'default'
       })
       .then(r => {
-        expect(store.state.cml.corpus.list).toEqual([
+        expect(store.state.cml.corpus.lists['default']).toEqual([
           {
             description: {},
             id: 'mocks-corpu-id-1',
@@ -307,7 +324,8 @@ describe('store corpus actions', () => {
       .dispatch('cml/corpus/groupPermissionSet', {
         corpuId,
         groupId,
-        permission
+        permission,
+        uid: 'default'
       })
       .catch(e => {
         expect(e).toEqual('Network error')
@@ -323,10 +341,11 @@ describe('store corpus actions', () => {
     return store
       .dispatch('cml/corpus/groupPermissionRemove', {
         corpuId,
-        groupId
+        groupId,
+        uid: 'default'
       })
       .then(r => {
-        expect(store.state.cml.corpus.list).toEqual([
+        expect(store.state.cml.corpus.lists['default']).toEqual([
           {
             description: {},
             id: 'mocks-corpu-id-1',
@@ -362,7 +381,8 @@ describe('store corpus actions', () => {
     return store
       .dispatch('cml/corpus/groupPermissionRemove', {
         corpuId,
-        groupId
+        groupId,
+        uid: 'default'
       })
       .catch(e => {
         expect(e).toEqual('Network error')
@@ -380,10 +400,11 @@ describe('store corpus actions', () => {
       .dispatch('cml/corpus/userPermissionSet', {
         corpuId,
         userId,
-        permission
+        permission,
+        uid: 'default'
       })
       .then(r => {
-        expect(store.state.cml.corpus.list).toEqual([
+        expect(store.state.cml.corpus.lists['default']).toEqual([
           {
             description: {},
             id: 'mocks-corpu-id-1',
@@ -421,7 +442,8 @@ describe('store corpus actions', () => {
       .dispatch('cml/corpus/userPermissionSet', {
         corpuId,
         userId,
-        permission
+        permission,
+        uid: 'default'
       })
       .catch(e => {
         expect(e).toEqual('Network error')
@@ -437,10 +459,11 @@ describe('store corpus actions', () => {
     return store
       .dispatch('cml/corpus/userPermissionRemove', {
         corpuId,
-        userId
+        userId,
+        uid: 'default'
       })
       .then(r => {
-        expect(store.state.cml.corpus.list).toEqual([
+        expect(store.state.cml.corpus.lists['default']).toEqual([
           {
             description: {},
             id: 'mocks-corpu-id-1',
@@ -476,7 +499,8 @@ describe('store corpus actions', () => {
     return store
       .dispatch('cml/corpus/userPermissionRemove', {
         corpuId,
-        userId
+        userId,
+        uid: 'default'
       })
       .catch(e => {
         expect(e).toEqual('Network error')
@@ -486,8 +510,8 @@ describe('store corpus actions', () => {
 
   it('sets a corpus (without a param)', () => {
     expect.assertions(1)
-    return store.dispatch('cml/corpus/set').then(r => {
-      expect(store.state.cml.corpus.id).toBe('mocks-corpu-id-2')
+    return store.dispatch('cml/corpus/set', { uid: 'default' }).then(r => {
+      expect(store.state.cml.corpus.actives['default']).toBe('mocks-corpu-id-2')
     })
   })
 
@@ -495,9 +519,13 @@ describe('store corpus actions', () => {
     const corpuId = 'mocks-corpu-id-1'
 
     expect.assertions(1)
-    return store.dispatch('cml/corpus/set', corpuId).then(r => {
-      expect(store.state.cml.corpus.id).toBe('mocks-corpu-id-1')
-    })
+    return store
+      .dispatch('cml/corpus/set', { corpuId, uid: 'default' })
+      .then(r => {
+        expect(store.state.cml.corpus.actives['default']).toBe(
+          'mocks-corpu-id-1'
+        )
+      })
   })
 })
 
@@ -506,19 +534,23 @@ describe('store corpus getters', () => {
 
   beforeEach(() => {
     const state = {
-      id: 'mocks-corpu-id-2',
-      list: [
-        {
-          description: {},
-          id: 'mocks-corpu-id-1',
-          name: 'corpu-1'
-        },
-        {
-          description: {},
-          id: 'mocks-corpu-id-2',
-          name: 'corpu-2'
-        }
-      ]
+      actives: {
+        default: 'mocks-corpu-id-2'
+      },
+      lists: {
+        default: [
+          {
+            description: {},
+            id: 'mocks-corpu-id-1',
+            name: 'corpu-1'
+          },
+          {
+            description: {},
+            id: 'mocks-corpu-id-2',
+            name: 'corpu-2'
+          }
+        ]
+      }
     }
 
     store = new Vuex.Store({
@@ -527,26 +559,36 @@ describe('store corpus getters', () => {
     })
   })
 
-  it('returns the id of the selected corpus (without a param)', () => {
-    expect(store.getters.id()).toEqual('mocks-corpu-id-2')
-  })
-
-  it('returns the id of the selected corpus (with a param)', () => {
-    expect(store.getters.id('mocks-corpu-id-4')).toEqual('mocks-corpu-id-4')
+  it('returns the id of the active corpus', () => {
+    expect(store.getters.id('default')).toEqual('mocks-corpu-id-2')
   })
 })
 
 describe('store corpus mutations', () => {
-  const state = { list: [] }
+  const state = { actives: {}, lists: {} }
 
-  it('resets corpu list', () => {
-    state.list = [
-      { name: 'group-1' },
-      { name: 'group-2' },
-      { name: 'group-3' },
-      { name: 'group-4' }
-    ]
-    corpus.mutations.reset(state)
-    expect(state.list).toEqual([])
+  beforeEach(() => {
+    state.actives = {
+      default: 'an-idea'
+    }
+
+    state.lists = {
+      default: [
+        { name: 'corpu-1' },
+        { name: 'corpu-2' },
+        { name: 'corpu-3' },
+        { name: 'corpu-4' }
+      ]
+    }
+  })
+
+  it('resets one corpu list', () => {
+    corpus.mutations.reset(state, 'default')
+    expect(state.lists['default']).toEqual([])
+  })
+
+  it('resets all corpu lists', () => {
+    corpus.mutations.resetAll(state)
+    expect(state.lists).toEqual({})
   })
 })

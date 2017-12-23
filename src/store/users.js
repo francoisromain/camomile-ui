@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import api from './_api'
 import { userFormat } from './_helpers'
 
@@ -118,7 +119,7 @@ export const getters = {
 
 export const mutations = {
   reset (state) {
-    state.list = []
+    Vue.set(state, 'list', [])
   },
 
   add (state, user) {
@@ -126,15 +127,17 @@ export const mutations = {
   },
 
   update (state, user) {
-    Object.assign(state.list.find(u => u.id === user.id), user)
+    const index = state.list.findIndex(u => u.id === user.id)
+    Vue.set(state.list, index, user)
   },
 
   remove (state, userId) {
-    state.list = state.list.filter(u => u.id !== userId)
+    const index = state.list.findIndex(u => u.id === userId)
+    Vue.delete(state.list, index)
   },
 
   list (state, users) {
-    state.list = users
+    Vue.set(state, 'list', users)
   }
 }
 

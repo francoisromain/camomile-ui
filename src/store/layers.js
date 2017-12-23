@@ -313,7 +313,6 @@ export const actions = {
 
   set ({ state, getters, dispatch, commit }, { layerId, uid }) {
     commit('set', { layerId: layerId || getters.id(uid), uid })
-    console.log('layer set', uid, state.actives[uid])
     if (state.actives[uid]) {
       dispatch(
         'cml/annotations/list',

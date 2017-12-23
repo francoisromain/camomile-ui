@@ -59,22 +59,19 @@ describe('store sync actions', () => {
       )
     })
   })
-})
-
-describe('store sync mutations', () => {
-  const { start, stop } = sync.mutations
-
-  const state = { list: [] }
 
   it('starts', () => {
-    start(state, 'annotationsAdd')
-    start(state, 'annotationsRemove')
-    expect(state.list).toEqual(['annotationsAdd', 'annotationsRemove'])
+    expect.assertions(1)
+    return store.dispatch('cml/sync/start', 'annotationsAdd').then(r => {
+      expect(store.state.cml.sync.list).toEqual(['annotationsAdd'])
+    })
   })
 
   it('stops', () => {
-    stop(state, 'annotationsRemove')
-    expect(state.list).toEqual(['annotationsAdd'])
+    expect.assertions(1)
+    return store.dispatch('cml/sync/stop', 'annotationsAdd').then(r => {
+      expect(store.state.cml.sync.list).toEqual([])
+    })
   })
 })
 

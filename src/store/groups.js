@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import api from './_api'
 import { groupFormat } from './_helpers'
 
@@ -103,7 +104,7 @@ export const actions = {
         })
         if (userId === rootState.cml.user.id) {
           commit('cml/user/groupAdd', group.id, { root: true })
-          dispatch('cml/corpus/init', null, {
+          dispatch('cml/corpus/listAll', null, {
             root: true
           })
         }
@@ -132,7 +133,7 @@ export const actions = {
         })
         if (userId === rootState.cml.user.id) {
           commit('cml/user/groupRemove', group.id, { root: true })
-          dispatch('cml/corpus/init', null, {
+          dispatch('cml/corpus/listAll', null, {
             root: true
           })
         }
@@ -164,7 +165,7 @@ export const getters = {
 
 export const mutations = {
   reset (state) {
-    state.list = []
+    Vue.set(state, 'list', [])
   },
 
   add (state, group) {
@@ -172,15 +173,17 @@ export const mutations = {
   },
 
   update (state, group) {
-    Object.assign(state.list.find(g => g.id === group.id), group)
+    const index = state.list.findIndex(g => g.id === group.id)
+    Vue.set(state.list, index, group)
   },
 
   remove (state, groupId) {
-    state.list = state.list.filter(g => g.id !== groupId)
+    const index = state.list.findIndex(g => g.id === groupId)
+    Vue.delete(state.list, index)
   },
 
   list (state, groups) {
-    state.list = groups
+    Vue.set(state, 'list', groups)
   }
 }
 

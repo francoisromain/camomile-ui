@@ -45,7 +45,9 @@ describe('store users actions', () => {
     }
 
     groups.state = {
-      list: [{ id: 'mocks-group-id-1' }, { id: 'mocks-group-id-2' }]
+      lists: {
+        default: [{ id: 'mocks-group-id-1' }, { id: 'mocks-group-id-2' }]
+      }
     }
 
     user.state = {
@@ -56,34 +58,36 @@ describe('store users actions', () => {
     }
 
     corpus.state = {
-      list: [
-        {
-          id: 'mocks-corpu-id-1',
-          name: 'corpu-1',
-          description: {},
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
-            users: {
-              'mocks-user-id-lu': 1,
-              'mocks-user-id-ji': 2,
-              'mocks-user-id-joe': 3
+      lists: {
+        default: [
+          {
+            id: 'mocks-corpu-id-1',
+            name: 'corpu-1',
+            description: {},
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
+              users: {
+                'mocks-user-id-lu': 1,
+                'mocks-user-id-ji': 2,
+                'mocks-user-id-joe': 3
+              }
+            }
+          },
+          {
+            id: 'mocks-corpu-id-2',
+            name: 'corpu-2',
+            description: {},
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
+              users: {
+                'mocks-user-id-lu': 3,
+                'mocks-user-id-ji': 2,
+                'mocks-user-id-joe': 1
+              }
             }
           }
-        },
-        {
-          id: 'mocks-corpu-id-2',
-          name: 'corpu-2',
-          description: {},
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 0 },
-            users: {
-              'mocks-user-id-lu': 3,
-              'mocks-user-id-ji': 2,
-              'mocks-user-id-joe': 1
-            }
-          }
-        }
-      ]
+        ]
+      }
     }
 
     store = new Vuex.Store({
@@ -105,14 +109,14 @@ describe('store users actions', () => {
   })
 
   it('adds a new user', () => {
-    const user = {
+    const element = {
       name: 'yoc',
       role: 'user',
       password: 'password'
     }
 
     expect.assertions(3)
-    return store.dispatch('cml/users/add', user).then(r => {
+    return store.dispatch('cml/users/add', { element }).then(r => {
       expect(store.state.cml.users.list).toEqual([
         { description: {}, id: 'mocks-user-id-lu', name: 'lu', role: 'user' },
         { description: {}, id: 'mocks-user-id-ji', name: 'ji', role: 'admin' },
@@ -124,7 +128,9 @@ describe('store users actions', () => {
           role: 'user'
         }
       ])
-      expect(store.state.cml.corpus.list[0].permissions.users).toEqual({
+      expect(
+        store.state.cml.corpus.lists['default'][0].permissions.users
+      ).toEqual({
         'mocks-user-id-ji': 2,
         'mocks-user-id-joe': 3,
         'mocks-user-id-lu': 1,
@@ -135,19 +141,19 @@ describe('store users actions', () => {
   })
 
   it('adds a new user (error)', () => {
-    const user = {
+    const element = {
       name: '' // throw an error
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/users/add', user).catch(e => {
+    return store.dispatch('cml/users/add', { element }).catch(e => {
       expect(e).toEqual('Network error')
       expect(store.state.cml.messages.list[0].content).toBe('Network error')
     })
   })
 
   it('updates a user', () => {
-    const u = {
+    const element = {
       id: 'mocks-user-id-lu',
       name: 'lu',
       role: 'admin',
@@ -156,7 +162,7 @@ describe('store users actions', () => {
     }
 
     expect.assertions(3)
-    return store.dispatch('cml/users/update', u).then(r => {
+    return store.dispatch('cml/users/update', { element }).then(r => {
       expect(store.state.cml.users.list).toEqual([
         {
           description: { test: 'meoi oiou' },
@@ -173,33 +179,30 @@ describe('store users actions', () => {
   })
 
   it('updates a user (error)', () => {
-    const user = {
+    const element = {
       id: ''
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/users/update', user).catch(e => {
+    return store.dispatch('cml/users/update', { element }).catch(e => {
       expect(e).toEqual('Network error')
       expect(store.state.cml.messages.list[0].content).toBe('Network error')
     })
   })
 
   it('removes a user', () => {
-    const user = {
-      id: 'mocks-user-id-lu',
-      name: 'lu',
-      role: 'user',
-      description: {}
-    }
+    const id = 'mocks-user-id-lu'
 
     expect.assertions(3)
-    return store.dispatch('cml/users/remove', user).then(r => {
+    return store.dispatch('cml/users/remove', { id }).then(r => {
       expect(store.state.cml.messages.list[0].content).toBe('User removed')
       expect(store.state.cml.users.list).toEqual([
         { description: {}, id: 'mocks-user-id-ji', name: 'ji', role: 'admin' },
         { description: {}, id: 'mocks-user-id-joe', name: 'joe', role: 'user' }
       ])
-      expect(store.state.cml.corpus.list[0].permissions.users).toEqual({
+      expect(
+        store.state.cml.corpus.lists['default'][0].permissions.users
+      ).toEqual({
         'mocks-user-id-ji': 2,
         'mocks-user-id-joe': 3
       })
@@ -207,12 +210,10 @@ describe('store users actions', () => {
   })
 
   it('removes a user (error)', () => {
-    const user = {
-      id: ''
-    }
+    const id = ''
 
     expect.assertions(2)
-    return store.dispatch('cml/users/remove', user).catch(e => {
+    return store.dispatch('cml/users/remove', { id }).catch(e => {
       expect(e).toEqual('Network error')
       expect(store.state.cml.messages.list[0].content).toBe('Network error')
     })
