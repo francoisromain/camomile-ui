@@ -5,7 +5,7 @@
 
 [npm-img]: https://badge.fury.io/js/%40camomile%2Fcamomile-ui.svg
 [npm]: https://www.npmjs.com/package/@camomile/camomile-ui
-[ci-img]: https://travis-ci.org/francoisromain/camomile-ui.svg
+[ci-img]: https://travis-ci.org/francoisromain/camomile-ui.svg?branch=master
 [ci]: https://travis-ci.org/francoisromain/camomile-ui
 [dep-img]: https://david-dm.org/francoisromain/camomile-ui.svg
 [dep]: https://david-dm.org/francoisromain/camomile-ui
