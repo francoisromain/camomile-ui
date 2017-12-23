@@ -452,6 +452,7 @@ describe('store corpus actions', () => {
   })
 
   it('removes permission on a user', () => {
+    // to-do: fix the error in the console
     const corpuId = 'mocks-corpu-id-1'
     const userId = 'mocks-user-id-lu'
 
