@@ -16982,7 +16982,7 @@ var qs$1 = Object.freeze({
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-var url$1 = {
+var url = {
   parse: urlParse$1,
   resolve: urlResolve,
   resolveObject: urlResolveObject,
@@ -17684,12 +17684,12 @@ function parseHost(self) {
 }
 
 
-var url$2 = Object.freeze({
+var url$1 = Object.freeze({
 	parse: urlParse$1,
 	resolve: urlResolve,
 	resolveObject: urlResolveObject,
 	format: urlFormat,
-	default: url$1,
+	default: url,
 	Url: Url
 });
 
@@ -18116,7 +18116,7 @@ var _integrity = "sha1-C2GKVWW23qkL80JdBNVe3EdadWE=";
 var _location = "/tough-cookie";
 var _phantomChildren = {};
 var _requested = {"type":"range","registry":true,"raw":"tough-cookie@~2.3.3","name":"tough-cookie","escapedName":"tough-cookie","rawSpec":"~2.3.3","saveSpec":null,"fetchSpec":"~2.3.3"};
-var _requiredBy = ["/codecov/request","/jsdom","/less/request","/node-sass/request","/request","/request-promise"];
+var _requiredBy = ["/codecov/request","/jsdom","/less/request","/node-sass/request","/request","/request-promise","/request-promise-native"];
 var _resolved = "https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.3.tgz";
 var _shasum = "0b618a5565b6dea90bf3425d04d55edc475a7561";
 var _spec = "tough-cookie@~2.3.3";
@@ -18208,11 +18208,11 @@ var _package$1 = Object.freeze({
 
 var tls = ( empty$1 && empty ) || empty$1;
 
-var url$3 = ( url$2 && url$1 ) || url$2;
+var url$2 = ( url$1 && url ) || url$1;
 
 var require$$4$1 = ( _package$1 && _package ) || _package$1;
 
-var urlParse = url$3.parse;
+var urlParse = url$2.parse;
 
 var Store$1 = store$1.Store;
 var MemoryCookieStore = memstore.MemoryCookieStore;
@@ -34427,7 +34427,7 @@ exports.generateNormalizedString = function (type, options) {
     if (resource &&
         resource[0] !== '/') {
 
-        var url = url$3.parse(resource, false);
+        var url = url$2.parse(resource, false);
         resource = url.path;                        // Includes query
     }
 
@@ -35133,7 +35133,7 @@ var header$1 = function (uri, method, options) {
     // Parse URI
 
     if (typeof uri === 'string') {
-        uri = url$3.parse(uri);
+        uri = url$2.parse(uri);
     }
 
     // Calculate signature
@@ -35337,7 +35337,7 @@ var getBewit = function (uri, options) {
     // Parse URI
 
     if (typeof uri === 'string') {
-        uri = url$3.parse(uri);
+        uri = url$2.parse(uri);
     }
 
     // Calculate signature
@@ -35490,7 +35490,7 @@ var lib_8 = lib$2.uri;
  * Module dependencies.
  */
 
-var parse$4 = url$3.parse;
+var parse$4 = url$2.parse;
 
 /**
  * Valid keys.
@@ -35810,7 +35810,7 @@ function encodeRfc3986(urlEncodedString) {
 // credentials: { accessKeyId, secretAccessKey, [sessionToken] }
 function RequestSigner(request, credentials) {
 
-  if (typeof request === 'string') { request = url$3.parse(request); }
+  if (typeof request === 'string') { request = url$2.parse(request); }
 
   var headers = request.headers = (request.headers || {}),
       hostParts = this.matchHost(request.hostname || request.host || headers.Host || headers.host);
@@ -54008,7 +54008,7 @@ var populate = function(dst, src) {
   return dst;
 };
 
-var parseUrl = url$3.parse;
+var parseUrl = url$2.parse;
 
 
 
@@ -55747,7 +55747,7 @@ function resolve$1(compile, root, ref) {
  */
 function resolveSchema(root, ref) {
   /* jshint validthis: true */
-  var p = url$3.parse(ref, false, true)
+  var p = url$2.parse(ref, false, true)
     , refPath = _getFullPath(p)
     , baseId = getFullPath(this._getId(root.schema));
   if (refPath !== baseId) {
@@ -55888,7 +55888,7 @@ function countKeys(schema) {
 
 function getFullPath(id, normalize) {
   if (normalize !== false) { id = normalizeId(id); }
-  var p = url$3.parse(id, false, true);
+  var p = url$2.parse(id, false, true);
   return _getFullPath(p);
 }
 
@@ -55907,7 +55907,7 @@ function normalizeId(id) {
 
 function resolveUrl(baseId, id) {
   id = normalizeId(id);
-  return url$3.resolve(baseId, id);
+  return url$2.resolve(baseId, id);
 }
 
 
@@ -55928,7 +55928,7 @@ function resolveIds(schema) {
       { fullPath += '/' + (typeof keyIndex == 'number' ? keyIndex : util$7.escapeFragment(keyIndex)); }
 
     if (typeof id == 'string') {
-      id = baseId = normalizeId(baseId ? url$3.resolve(baseId, id) : id);
+      id = baseId = normalizeId(baseId ? url$2.resolve(baseId, id) : id);
 
       var refVal = self._refs[id];
       if (typeof refVal == 'string') { refVal = self._refs[refVal]; }
@@ -62292,7 +62292,7 @@ OAuth$1.prototype.onRequest = function (_oauth) {
 
     case 'query':
       var href = self.request.uri.href += (query ? '&' : '?') + self.concatParams(oa, '&');
-      self.request.uri = url$3.parse(href);
+      self.request.uri = url$2.parse(href);
       self.request.path = self.request.uri.path;
       break
 
@@ -62523,11 +62523,11 @@ Redirect$1.prototype.onResponse = function (response) {
   self.redirectsFollowed += 1;
 
   if (!isUrl.test(redirectTo)) {
-    redirectTo = url$3.resolve(request.uri.href, redirectTo);
+    redirectTo = url$2.resolve(request.uri.href, redirectTo);
   }
 
   var uriPrev = request.uri;
-  request.uri = url$3.parse(redirectTo);
+  request.uri = url$2.parse(redirectTo);
 
   // handle the case where we change protocol from https to http or vice versa
   if (request.uri.protocol !== uriPrev.protocol) {
@@ -62960,7 +62960,7 @@ Tunnel$1.prototype.setup = function (options) {
   options = options || {};
 
   if (typeof request.proxy === 'string') {
-    request.proxy = url$3.parse(request.proxy);
+    request.proxy = url$2.parse(request.proxy);
   }
 
   if (!request.proxy || !request.tunnel) {
@@ -63259,12 +63259,12 @@ Request.prototype.init = function (options) {
 
   // If a string URI/URL was given, parse it into a URL object
   if (typeof self.uri === 'string') {
-    self.uri = url$3.parse(self.uri);
+    self.uri = url$2.parse(self.uri);
   }
 
   // Some URL objects are not from a URL parsed string and need href added
   if (!self.uri.href) {
-    self.uri.href = url$3.format(self.uri);
+    self.uri.href = url$2.format(self.uri);
   }
 
   // DEPRECATED: Warning for users of the old Unix Sockets URL Scheme
@@ -63286,7 +63286,7 @@ Request.prototype.init = function (options) {
   if (!(self.uri.host || (self.uri.hostname && self.uri.port)) && !self.uri.isUnix) {
     // Invalid URI: it may generate lot of bad errors, like 'TypeError: Cannot call method `indexOf` of undefined' in CookieJar
     // Detect and reject it as soon as possible
-    var faultyUri = url$3.format(self.uri);
+    var faultyUri = url$2.format(self.uri);
     var message = 'Invalid URI "' + faultyUri + '"';
     if (Object.keys(options).length === 0) {
       // No option ? This can be the sign of a redirect
@@ -63652,7 +63652,7 @@ Request.prototype.getNewAgent = function () {
   // ca option is only relevant if proxy or destination are https
   var proxy = self.proxy;
   if (typeof proxy === 'string') {
-    proxy = url$3.parse(proxy);
+    proxy = url$2.parse(proxy);
   }
   var isHttps = (proxy && proxy.protocol === 'https:') || this.uri.protocol === 'https:';
 
@@ -64259,7 +64259,7 @@ Request.prototype.qs = function (q, clobber) {
     return self
   }
 
-  self.uri = url$3.parse(self.uri.href.split('?')[0] + '?' + qs);
+  self.uri = url$2.parse(self.uri.href.split('?')[0] + '?' + qs);
   self.url = self.uri;
   self.path = self.uri.path;
 
@@ -65313,7 +65313,7 @@ origin.same = function same(a, b) {
 //
 var original = origin;
 
-var parse$8 = url$3.parse;
+var parse$8 = url$2.parse;
 
 /**
  * Creates a new EventSource object
@@ -68239,7 +68239,7 @@ RedirectableRequest.prototype._performRequest = function () {
 	var nativeProtocol = nativeProtocols[protocol];
 	var request = this._currentRequest =
 				nativeProtocol.request(this._options, this._onNativeResponse);
-	this._currentUrl = url$3.format(this._options);
+	this._currentUrl = url$2.format(this._options);
 
 	// Set up event handlers
 	request._redirectable = this;
@@ -68319,9 +68319,9 @@ RedirectableRequest.prototype._processResponse = function (response) {
 		}
 
 		// Perform the redirected request
-		var redirectUrl = url$3.resolve(this._currentUrl, location);
+		var redirectUrl = url$2.resolve(this._currentUrl, location);
 		debug('redirecting to', redirectUrl);
-		Object.assign(this._options, url$3.parse(redirectUrl));
+		Object.assign(this._options, url$2.parse(redirectUrl));
 		this._isRedirect = true;
 		this._performRequest();
 	} else {
@@ -68383,7 +68383,7 @@ Object.keys(nativeProtocols).forEach(function (protocol) {
 	// Executes an HTTP request, following redirects
 	wrappedProtocol.request = function (options, callback) {
 		if (typeof options === 'string') {
-			options = url$3.parse(options);
+			options = url$2.parse(options);
 			options.maxRedirects = exports.maxRedirects;
 		} else {
 			options = Object.assign({
@@ -68556,7 +68556,7 @@ var http_1 = function httpAdapter(config) {
     }
 
     // Parse url
-    var parsed = url$3.parse(config.url);
+    var parsed = url$2.parse(config.url);
     var protocol = parsed.protocol || 'http:';
 
     if (!auth && parsed.auth) {
@@ -68588,7 +68588,7 @@ var http_1 = function httpAdapter(config) {
       var proxyEnv = protocol.slice(0, -1) + '_proxy';
       var proxyUrl = process.env[proxyEnv] || process.env[proxyEnv.toUpperCase()];
       if (proxyUrl) {
-        var parsedProxyUrl = url$3.parse(proxyUrl);
+        var parsedProxyUrl = url$2.parse(proxyUrl);
         proxy = {
           host: parsedProxyUrl.hostname,
           port: parsedProxyUrl.port
@@ -69617,7 +69617,7 @@ var getters$2 = {
 
 var mutations$5 = {
   reset: function reset (state) {
-    state.list = [];
+    Vue$3.set(state, 'list', []);
   },
 
   add: function add (state, user) {
@@ -69625,15 +69625,17 @@ var mutations$5 = {
   },
 
   update: function update (state, user) {
-    Object.assign(state.list.find(function (u) { return u.id === user.id; }), user);
+    var index = state.list.findIndex(function (u) { return u.id === user.id; });
+    Vue$3.set(state.list, index, user);
   },
 
   remove: function remove (state, userId) {
-    state.list = state.list.filter(function (u) { return u.id !== userId; });
+    var index = state.list.findIndex(function (u) { return u.id === userId; });
+    Vue$3.delete(state.list, index);
   },
 
   list: function list (state, users) {
-    state.list = users;
+    Vue$3.set(state, 'list', users);
   }
 };
 
@@ -69778,7 +69780,7 @@ var actions$6 = {
         });
         if (userId === rootState.cml.user.id) {
           commit('cml/user/groupAdd', group.id, { root: true });
-          dispatch('cml/corpus/init', null, {
+          dispatch('cml/corpus/listAll', null, {
             root: true
           });
         }
@@ -69814,7 +69816,7 @@ var actions$6 = {
         });
         if (userId === rootState.cml.user.id) {
           commit('cml/user/groupRemove', group.id, { root: true });
-          dispatch('cml/corpus/init', null, {
+          dispatch('cml/corpus/listAll', null, {
             root: true
           });
         }
@@ -69842,7 +69844,7 @@ var getters$3 = {
 
 var mutations$6 = {
   reset: function reset (state) {
-    state.list = [];
+    Vue$3.set(state, 'list', []);
   },
 
   add: function add (state, group) {
@@ -69850,15 +69852,17 @@ var mutations$6 = {
   },
 
   update: function update (state, group) {
-    Object.assign(state.list.find(function (g) { return g.id === group.id; }), group);
+    var index = state.list.findIndex(function (g) { return g.id === group.id; });
+    Vue$3.set(state.list, index, group);
   },
 
   remove: function remove (state, groupId) {
-    state.list = state.list.filter(function (g) { return g.id !== groupId; });
+    var index = state.list.findIndex(function (g) { return g.id === groupId; });
+    Vue$3.delete(state.list, index);
   },
 
   list: function list (state, groups) {
-    state.list = groups;
+    Vue$3.set(state, 'list', groups);
   }
 };
 
@@ -70266,6 +70270,11 @@ var mutations$7 = {
     Vue$3.set(state.lists, uid, []);
   },
 
+  reset: function reset (state, uid) {
+    Vue$3.set(state.lists, uid, []);
+    Vue$3.delete(state.actives, uid);
+  },
+
   resetAll: function resetAll (state) {
     state.lists = {};
     state.actives = {};
@@ -70384,7 +70393,8 @@ var interval;
 
 var state$11 = {
   lists: {},
-  actives: {}
+  actives: {},
+  properties: {}
 };
 
 var actions$8 = {
@@ -70434,7 +70444,7 @@ var actions$8 = {
         dispatch('cml/sync/stop', ("mediasRemove-" + uid), { root: true });
         commit('remove', { mediaId: id, uid: uid });
         dispatch('cml/messages/success', 'Medium removed', { root: true });
-        if (state$11.actives[uid].id === id) {
+        if (state$11.actives[uid] === id) {
           dispatch('set', { uid: uid });
         }
         dispatch(
@@ -70525,8 +70535,7 @@ var actions$8 = {
     var mediaId = ref$1.mediaId;
     var uid = ref$1.uid;
 
-    console.log('set medias', uid, mediaId);
-    if (state.actives[uid] && state.actives[uid].isPlaying) {
+    if (state.properties[uid] && state.properties[uid].isPlaying) {
       dispatch('pause', uid);
     }
     commit('set', { mediaId: mediaId || getters.id(uid), uid: uid });
@@ -70537,7 +70546,7 @@ var actions$8 = {
     var commit = ref.commit;
 
     var timeStart = Date.now();
-    var timeCurrent = state.actives[uid].timeCurrent;
+    var timeCurrent = state.properties[uid].timeCurrent;
     interval = setInterval(function () {
       var timeEllapsed = Date.now() - timeStart;
       commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid: uid });
@@ -70575,18 +70584,21 @@ var actions$8 = {
     var serverRequest = ref$1.serverRequest;
     var uid = ref$1.uid;
 
-    if (state.actives[uid].isPlaying) {
+    if (state.properties[uid].isPlaying) {
       clearInterval(interval);
     }
-    commit('timeCurrent', { time: ratio * state.actives[uid].timeTotal, uid: uid });
+    commit('timeCurrent', {
+      time: ratio * state.properties[uid].timeTotal,
+      uid: uid
+    });
     commit('seek', { options: { seeking: true, serverRequest: serverRequest }, uid: uid });
   }
 };
 
 var getters$5 = {
   id: function (state) { return function (uid) { return (state.actives[uid] &&
-      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid].id) !== -1 &&
-      state.actives[uid].id) ||
+      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid]) !== -1 &&
+      state.actives[uid]) ||
     (state.lists[uid][0] && state.lists[uid][0].id) ||
     null; }; }
 };
@@ -70595,11 +70607,13 @@ var mutations$8 = {
   reset: function reset (state, uid) {
     Vue$3.set(state.lists, uid, []);
     Vue$3.delete(state.actives, uid);
+    Vue$3.delete(state.properties, uid);
   },
 
   resetAll: function resetAll (state) {
     Vue$3.set(state, 'lists', {});
     Vue$3.set(state, 'actives', {});
+    Vue$3.set(state, 'properties', {});
   },
 
   add: function add (state, ref) {
@@ -70639,9 +70653,8 @@ var mutations$8 = {
     var mediaId = ref.mediaId;
     var uid = ref.uid;
 
-    console.log('media set', mediaId, uid);
-    Vue$3.set(state.actives, uid, {
-      id: mediaId,
+    Vue$3.set(state.actives, uid, mediaId);
+    Vue$3.set(state.properties, uid, {
       timeTotal: 0,
       timeCurrent: 0,
       isPlaying: false,
@@ -70654,36 +70667,36 @@ var mutations$8 = {
     var isLoaded = ref.isLoaded;
     var uid = ref.uid;
 
-    Vue$3.set(state.actives[uid], 'isLoaded', isLoaded);
+    Vue$3.set(state.properties[uid], 'isLoaded', isLoaded);
   },
 
   play: function play (state, uid) {
-    Vue$3.set(state.actives[uid], 'isPlaying', true);
+    Vue$3.set(state.properties[uid], 'isPlaying', true);
   },
 
   pause: function pause (state, uid) {
-    Vue$3.set(state.actives[uid], 'isPlaying', false);
+    Vue$3.set(state.properties[uid], 'isPlaying', false);
   },
 
   timeCurrent: function timeCurrent (state, ref) {
     var time = ref.time;
     var uid = ref.uid;
 
-    Vue$3.set(state.actives[uid], 'timeCurrent', time);
+    Vue$3.set(state.properties[uid], 'timeCurrent', time);
   },
 
   timeTotal: function timeTotal (state, ref) {
     var time = ref.time;
     var uid = ref.uid;
 
-    Vue$3.set(state.actives[uid], 'timeTotal', time);
+    Vue$3.set(state.properties[uid], 'timeTotal', time);
   },
 
   seek: function seek (state, ref) {
     var options = ref.options;
     var uid = ref.uid;
 
-    Vue$3.set(state.actives[uid], 'seek', options);
+    Vue$3.set(state.properties[uid], 'seek', options);
   }
 };
 
@@ -71075,7 +71088,6 @@ var actions$9 = {
     var uid = ref$1.uid;
 
     commit('set', { layerId: layerId || getters.id(uid), uid: uid });
-    console.log('layer set', uid, state.actives[uid]);
     if (state.actives[uid]) {
       dispatch(
         'cml/annotations/list',
@@ -71235,7 +71247,6 @@ var actions$10 = {
         element.metadata
       )
       .then(function (r) {
-        console.log('anno, add', element, uid);
         dispatch('cml/sync/stop', ("annotationsAdd-" + uid), { root: true });
         var annotation = {
           id: r.data._id,
@@ -71299,7 +71310,7 @@ var actions$10 = {
       .then(function (r) {
         var annotation = Object.assign({}, element);
         annotation.fragment = r.data.fragment || {};
-        annotation.metadata = r.data.metadata || {};
+        annotation.metadata = r.data.data || {};
         dispatch('cml/sync/stop', ("annotationsUpdate-" + uid), { root: true });
         commit('update', { annotation: annotation, uid: uid });
         dispatch('cml/messages/success', 'Annotation updated', { root: true });
@@ -71321,11 +71332,13 @@ var actions$10 = {
     var layerId = ref$1.layerId;
     var uid = ref$1.uid;
 
-    console.log('anno list', layerId, uid);
     dispatch('cml/sync/start', ("annotationsList-" + uid), { root: true });
     return api
       .getAnnotations({ filter: { id_layer: layerId } })
       .then(function (r) {
+        if (!uid) {
+          throw new Error('missing uid')
+        }
         dispatch('cml/sync/stop', ("annotationsList-" + uid), { root: true });
         var annotations = r.data.map(function (a) { return ({
           id: a._id,
@@ -71344,7 +71357,7 @@ var actions$10 = {
         var error = e.response ? e.response.body.error : 'Network error';
         dispatch('cml/messages/error', error, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -71369,7 +71382,6 @@ var getters$7 = {
 var mutations$10 = {
   reset: function reset (state, uid) {
     Vue$3.set(state.lists, uid, []);
-    Vue$3.delete(state.actives, uid);
   },
 
   resetAll: function resetAll (state) {
@@ -72212,7 +72224,7 @@ var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       return this.$store.state.cml.corpus.actives[this.uid]
     },
     mediaId: function mediaId () {
-      return this.$store.state.cml.medias.actives[this.uid].id
+      return this.$store.state.cml.medias.actives[this.uid]
     },
     medias: function medias () {
       return this.$store.state.cml.medias.lists[this.uid]
@@ -72407,17 +72419,18 @@ var spinner = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
   name: 'camomile-utils-spinner'
 }
 
-var videoYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"mb-xl"},[_c('div',{attrs:{"id":"player"}}),_vm._v(" "),(!_vm.isLoaded)?_c('spinner'):_vm._e()],1)},staticRenderFns: [],
-  components: {
-    spinner: spinner
-  },
+var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.media)?_c('div',{ref:"container"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isLoaded),expression:"isLoaded"}]},[_c('div',{attrs:{"id":"player"}})]),_vm._v(" "),(!_vm.isLoaded)?_c('spinner'):_vm._e()],1):_vm._e()},staticRenderFns: [],
+  name: 'camomile-media-youtube',
 
   props: {
     uid: {
       type: String,
       default: 'default'
-    },
-    media: Object
+    }
+  },
+
+  components: {
+    spinner: spinner
   },
 
   data: function data () {
@@ -72428,23 +72441,29 @@ var videoYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
   },
 
   computed: {
-    active: function active () {
-      return this.$store.state.cml.medias.actives[this.uid]
+    media: function media () {
+      var this$1 = this;
+
+      var medias = this.$store.state.cml.medias;
+      return medias.lists[this.uid] && medias.lists[this.uid].find(function (m) { return m.id === medias.actives[this$1.uid]; }) || {}
+    },
+    properties: function properties () {
+      return this.$store.state.cml.medias.properties[this.uid] || {}
     },
     isPlaying: function isPlaying () {
-      return this.active && this.active.isPlaying || null
+      return this.properties.isPlaying || false
     },
     isLoaded: function isLoaded () {
-      return this.active && this.active.isLoaded || null
+      return this.properties.isLoaded || false
     },
     seek: function seek () {
-      return this.active && this.active.seek || null
+      return this.properties.seek || {}
     },
     timeCurrent: function timeCurrent () {
-      return this.active && this.active.timeCurrent || null
+      return this.properties.timeCurrent || 0
     },
     viewportWidth: function viewportWidth () {
-      return this.$store.state.cml.viewport.width || null
+      return this.$store.state.cml.viewport.width || 0
     }
   },
 
@@ -72586,31 +72605,7 @@ var videoYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
   }
 }
 
-var mediaVideo = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.media)?_c('div',[_c('video-youtube',{attrs:{"uid":_vm.uid,"media":_vm.media}})],1):_vm._e()},staticRenderFns: [],
-  name: 'camomile-media-video',
-
-  props: {
-    uid: {
-      type: String,
-      default: 'default'
-    }
-  },
-
-  components: {
-    videoYoutube: videoYoutube
-  },
-
-  computed: {
-    media: function media () {
-      var this$1 = this;
-
-      var medias = this.$store.state.cml.medias;
-      return medias.lists[this.uid] && medias.lists[this.uid].find(function (m) { return m.id === medias.actives[this$1.uid].id; }) || {}
-    }
-  }
-}
-
-var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"mediacontroller"},[_c('div',{staticClass:"mediacontroller-controls clearfix pb-s"},[_c('button',{ref:"button",staticClass:"mediacontroller-button btn",attrs:{"disabled":!_vm.active.isLoaded},on:{"click":_vm.mediaToggle}},[_vm._v(_vm._s(_vm.playButton))]),_vm._v(" "),_c('div',{ref:"counter",staticClass:"mediacontroller-counter"},[_vm._v(_vm._s(_vm.msToMinutesAndSeconds(_vm.active.timeCurrent))+" / "+_vm._s(_vm.msToMinutesAndSeconds(_vm.active.timeTotal))+" ")])]),_vm._v(" "),_c('div',{ref:"progress",staticClass:"mediacontroller-progress",class:{ loaded: _vm.active.isLoaded },on:{"click":_vm.progressClick,"mousemove":_vm.progressMousemove,"mousedown":_vm.progressMousedown,"mouseup":_vm.progressMouseup}},[_c('div',{staticClass:"pointer-none full-y"},[_c('div',{staticClass:"mediacontroller-progress-bar",style:({ width: _vm.progressBarWidth })})])])])},staticRenderFns: [],
+var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"mediacontroller"},[_c('div',{staticClass:"mediacontroller-controls clearfix pb-s"},[_c('button',{ref:"button",staticClass:"mediacontroller-button btn",attrs:{"disabled":!_vm.isLoaded},on:{"click":_vm.mediaToggle}},[_vm._v(_vm._s(_vm.playButton))]),_vm._v(" "),_c('div',{ref:"counter",staticClass:"mediacontroller-counter"},[_vm._v(_vm._s(_vm.msToMinutesAndSeconds(_vm.timeCurrent))+" / "+_vm._s(_vm.msToMinutesAndSeconds(_vm.timeTotal))+" ")])]),_vm._v(" "),_c('div',{ref:"progress",staticClass:"mediacontroller-progress",class:{ loaded: _vm.isLoaded },on:{"click":_vm.progressClick,"mousemove":_vm.progressMousemove,"mousedown":_vm.progressMousedown,"mouseup":_vm.progressMouseup}},[_c('div',{staticClass:"pointer-none full-y"},[_c('div',{staticClass:"mediacontroller-progress-bar",style:({ width: _vm.progressBarWidth })})])])])},staticRenderFns: [],
   props: {
     uid: {
       type: String,
@@ -72625,20 +72620,29 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
   },
 
   computed: {
-    active: function active () {
-      return this.$store.state.cml.medias.actives[this.uid] || {}
+    properties: function properties () {
+      return this.$store.state.cml.medias.properties[this.uid] || {}
     },
-    progressBarWidth: function progressBarWidth () {
-      return ((this.active.timeCurrent / this.active.timeTotal * 100) + "%")
+    timeCurrent: function timeCurrent () {
+      return this.properties.timeCurrent || 0
+    },
+    timeTotal: function timeTotal () {
+      return this.properties.timeTotal || 0
     },
     playButton: function playButton () {
-      return this.active.isPlaying ? '❚ ❚' : '►'
+      return this.properties.isPlaying && '❚ ❚' || '►'
+    },
+    isLoaded: function isLoaded () {
+      return this.properties.isLoaded || false
+    },
+    progressBarWidth: function progressBarWidth () {
+      return ((this.timeCurrent / this.timeTotal * 100) + "%")
     }
   },
 
   methods: {
     mediaToggle: function mediaToggle () {
-      if (this.active.isPlaying) {
+      if (this.properties.isPlaying) {
         this.$store.commit('cml/medias/pause', this.uid);
       } else {
         this.$store.commit('cml/medias/play', this.uid);
@@ -72657,7 +72661,7 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
       this.mousedown = false;
     },
     seek: function seek (ratio, serverRequest, uid) {
-      if (this.active.isLoaded) {
+      if (this.properties.isLoaded) {
         this.$store.dispatch('cml/medias/seek', { ratio: ratio, serverRequest: serverRequest, uid: uid });
       }
     },
@@ -72677,7 +72681,7 @@ exports.cmlCorpus = corpus$1;
 exports.cmlMedias = medias$1;
 exports.cmlLayers = layers$1;
 exports.cmlAnnotations = annotations$1;
-exports.cmlMediaVideo = mediaVideo;
+exports.cmlMediaYoutube = mediaYoutube;
 exports.cmlMediaController = mediaController;
 
 Object.defineProperty(exports, '__esModule', { value: true });
