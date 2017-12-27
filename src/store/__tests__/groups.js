@@ -25,10 +25,14 @@ describe('store groups actions', () => {
     }
 
     user.state = {
-      id: 'mocks-user-id-lu',
       name: 'lu',
+      id: 'mocks-user-id-lu',
       groupIds: ['mocks-group-id-1'],
-      description: {}
+      role: 'user',
+      description: {},
+      isLogged: true,
+      isAdmin: false,
+      isRoot: false
     }
 
     groups.state = {
@@ -153,11 +157,9 @@ describe('store groups actions', () => {
       name: '' // throw an the error
     }
 
-    expect.assertions(2)
-    return store.dispatch('cml/groups/add', { element }).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return expect(
+      store.dispatch('cml/groups/add', { element })
+    ).rejects.toThrow('Incorrect name')
   })
 
   it('removes a group', () => {
@@ -185,11 +187,9 @@ describe('store groups actions', () => {
   it('removes a group (error)', () => {
     const id = '' // throw an the error
 
-    expect.assertions(2)
-    return store.dispatch('cml/groups/remove', { id }).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return expect(store.dispatch('cml/groups/remove', { id })).rejects.toThrow(
+      'Incorrect group Id'
+    )
   })
 
   it('updates a group', () => {
@@ -224,11 +224,9 @@ describe('store groups actions', () => {
       id: '' // throw an the error
     }
 
-    expect.assertions(2)
-    return store.dispatch('cml/groups/update', { element }).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return expect(
+      store.dispatch('cml/groups/update', { element })
+    ).rejects.toThrow('Api')
   })
 
   it('lists all groups', () => {
@@ -255,8 +253,8 @@ describe('store groups actions', () => {
     const userId = 'mocks-user-id-lu'
 
     const group = {
-      id: 'mocks-group-id-1',
-      name: 'group-1',
+      id: 'mocks-group-id-2',
+      name: 'group-2',
       userIds: [],
       description: { bla: 'blou' }
     }
@@ -271,20 +269,24 @@ describe('store groups actions', () => {
           description: {},
           id: 'mocks-group-id-1',
           name: 'group-1',
-          userIds: ['mocks-user-id-lu', 'mocks-user-id-ji', 'mocks-user-id-lu']
+          userIds: ['mocks-user-id-lu', 'mocks-user-id-ji']
         },
         {
           description: {},
           id: 'mocks-group-id-2',
           name: 'group-2',
-          userIds: ['mocks-user-id-ji']
+          userIds: ['mocks-user-id-ji', 'mocks-user-id-lu']
         }
       ])
       expect(store.state.cml.user).toEqual({
         description: {},
-        groupIds: ['mocks-group-id-1', 'mocks-group-id-1'],
+        groupIds: ['mocks-group-id-1', 'mocks-group-id-2'],
         id: 'mocks-user-id-lu',
-        name: 'lu'
+        isAdmin: false,
+        isLogged: true,
+        isRoot: false,
+        name: 'lu',
+        role: 'user'
       })
     })
   })
@@ -299,11 +301,9 @@ describe('store groups actions', () => {
       description: { bla: 'blou' }
     }
 
-    expect.assertions(2)
-    return store.dispatch('cml/groups/userAdd', { userId, group }).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return expect(
+      store.dispatch('cml/groups/userAdd', { userId, group })
+    ).rejects.toThrow('Api')
   })
 
   it('removes a user from a group', () => {
@@ -341,7 +341,11 @@ describe('store groups actions', () => {
           description: {},
           groupIds: [],
           id: 'mocks-user-id-lu',
-          name: 'lu'
+          isAdmin: false,
+          isLogged: true,
+          isRoot: false,
+          name: 'lu',
+          role: 'user'
         })
       })
   })
@@ -356,13 +360,9 @@ describe('store groups actions', () => {
       description: { bla: 'blou' }
     }
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/groups/userRemove', { userId, group })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/groups/userRemove', { userId, group })
+    ).rejects.toThrow('Api')
   })
 })
 

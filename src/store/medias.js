@@ -31,10 +31,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `mediasAdd-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -59,10 +58,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `mediasRemove-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -87,10 +85,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `mediasUpdate-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -110,10 +107,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `mediasList-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -129,7 +125,8 @@ export const actions = {
     const timeCurrent = state.properties[uid].timeCurrent
     interval = setInterval(() => {
       var timeEllapsed = Date.now() - timeStart
-      commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid })
+      // commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid })
+      Vue.set(state.properties[uid], 'timeCurrent', timeCurrent + timeEllapsed)
     }, 0)
     commit('play', uid)
   },
@@ -153,10 +150,16 @@ export const actions = {
     if (state.properties[uid].isPlaying) {
       clearInterval(interval)
     }
-    commit('timeCurrent', {
-      time: ratio * state.properties[uid].timeTotal,
-      uid
-    })
+    // commit('timeCurrent', {
+    //   time: ratio * state.properties[uid].timeTotal,
+    //   uid
+    // })
+
+    Vue.set(
+      state.properties[uid],
+      'timeCurrent',
+      ratio * state.properties[uid].timeTotal
+    )
     commit('seek', { options: { seeking: true, serverRequest }, uid })
   }
 }
@@ -225,10 +228,6 @@ export const mutations = {
 
   pause (state, uid) {
     Vue.set(state.properties[uid], 'isPlaying', false)
-  },
-
-  timeCurrent (state, { time, uid }) {
-    Vue.set(state.properties[uid], 'timeCurrent', time)
   },
 
   timeTotal (state, { time, uid }) {

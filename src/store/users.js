@@ -27,10 +27,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'usersAdd', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -55,10 +54,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'usersUpdate', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -76,10 +74,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'usersRemove', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -96,10 +93,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'usersList', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   }
 }

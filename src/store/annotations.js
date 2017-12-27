@@ -33,10 +33,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `annotationsAdd-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -53,10 +52,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `annotationsRemove-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -79,10 +77,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `annotationsUpdate-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -109,8 +106,7 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `annotationsList-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })

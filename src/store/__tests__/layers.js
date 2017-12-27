@@ -25,8 +25,14 @@ describe('store layers actions', () => {
     }
 
     user.state = {
+      name: 'lu',
       id: 'mocks-user-id-lu',
-      groupIds: ['mocks-group-id-1']
+      groupIds: ['mocks-group-id-1'],
+      role: 'user',
+      description: {},
+      isLogged: true,
+      isAdmin: false,
+      isRoot: false
     }
 
     groups.state = {
@@ -170,13 +176,9 @@ describe('store layers actions', () => {
       corpuId: '' // throw an error
     }
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/layers/add', { element, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/layers/add', { element, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('removes a layer', () => {
@@ -210,13 +212,9 @@ describe('store layers actions', () => {
   it('removes a layer (error)', () => {
     const id = '' // throw an error
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/layers/remove', { id, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/layers/remove', { id, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('updates a layer', () => {
@@ -279,13 +277,9 @@ describe('store layers actions', () => {
       id: '' // throw an error
     }
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/layers/update', { element, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/layers/update', { element, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('lists all layers', () => {
@@ -379,18 +373,14 @@ describe('store layers actions', () => {
     const groupId = 'mocks-group-id-1'
     const permission = 1
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/layers/groupPermissionSet', {
+    return expect(
+      store.dispatch('cml/layers/groupPermissionSet', {
         layerId,
         groupId,
         permission,
         uid: 'default'
       })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    ).rejects.toThrow('Api')
   })
 
   it('removes permission on a group', () => {
@@ -447,17 +437,13 @@ describe('store layers actions', () => {
     const layerId = 'mocks-layer-id-1'
     const groupId = '' // throw an error
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/layers/groupPermissionRemove', {
+    return expect(
+      store.dispatch('cml/layers/groupPermissionRemove', {
         layerId,
         groupId,
         uid: 'default'
       })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    ).rejects.toThrow('Api')
   })
 
   it('sets permission on a user', () => {
@@ -520,18 +506,14 @@ describe('store layers actions', () => {
     const userId = '' // throw an error
     const permission = 1
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/layers/userPermissionSet', {
+    return expect(
+      store.dispatch('cml/layers/userPermissionSet', {
         layerId,
         userId,
         permission,
         uid: 'default'
       })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    ).rejects.toThrow('Api')
   })
 
   it('removes permission on a user', () => {
@@ -591,17 +573,13 @@ describe('store layers actions', () => {
     const layerId = 'mocks-layer-id-1'
     const userId = '' // throw an error
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/layers/userPermissionRemove', {
+    return expect(
+      store.dispatch('cml/layers/userPermissionRemove', {
         layerId,
         userId,
         uid: 'default'
       })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    ).rejects.toThrow('Api')
   })
 
   it('sets a layer (without a param)', () => {

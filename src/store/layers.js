@@ -44,10 +44,10 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `layersAdd-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
       })
   },
 
@@ -67,10 +67,10 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `layersRemove-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
       })
   },
 
@@ -96,10 +96,10 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `layersUpdate-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
       })
   },
 
@@ -176,10 +176,10 @@ export const actions = {
         dispatch('cml/sync/stop', `layersGroupPermissionSet-${uid}`, {
           root: true
         })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
       })
   },
 
@@ -221,10 +221,10 @@ export const actions = {
         dispatch('cml/sync/stop', `layersGroupPermissionRemove-${uid}`, {
           root: true
         })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
       })
   },
 
@@ -264,10 +264,10 @@ export const actions = {
         dispatch('cml/sync/stop', `layersUserPermissionSet-${uid}`, {
           root: true
         })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
       })
   },
 
@@ -304,10 +304,9 @@ export const actions = {
         dispatch('cml/sync/stop', `layersUserPermissionRemove-${uid}`, {
           root: true
         })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 

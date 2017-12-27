@@ -25,8 +25,14 @@ describe('store corpus actions', () => {
     }
 
     user.state = {
+      name: 'lu',
       id: 'mocks-user-id-lu',
-      groupIds: ['mocks-group-id-1']
+      groupIds: ['mocks-group-id-1'],
+      role: 'user',
+      description: {},
+      isLogged: true,
+      isAdmin: false,
+      isRoot: false
     }
 
     users.state = {
@@ -142,13 +148,9 @@ describe('store corpus actions', () => {
       name: '' // throw an error
     }
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/corpus/add', { element, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/corpus/add', { element, uid: 'default' })
+    ).rejects.toThrow('Incorrect name')
   })
 
   it('removes a corpu', () => {
@@ -177,13 +179,9 @@ describe('store corpus actions', () => {
   it('removes a corpu (error)', () => {
     const id = '' // throw an error
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/corpus/remove', { id, uid: 'defaut' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/corpus/remove', { id, uid: 'defaut' })
+    ).rejects.toThrow('Incorrect group Id')
   })
 
   it('updates a corpu', () => {
@@ -235,13 +233,9 @@ describe('store corpus actions', () => {
       id: '' // throw an error
     }
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/corpus/update', { element, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/corpus/update', { element, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('lists all corpus', () => {
@@ -319,18 +313,14 @@ describe('store corpus actions', () => {
     const groupId = '' // throw an error
     const permission = 1
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/corpus/groupPermissionSet', {
+    return expect(
+      store.dispatch('cml/corpus/groupPermissionSet', {
         corpuId,
         groupId,
         permission,
         uid: 'default'
       })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    ).rejects.toThrow('Api')
   })
 
   it('removes permission on a group', () => {
@@ -377,17 +367,13 @@ describe('store corpus actions', () => {
     const corpuId = 'mocks-corpu-id-1'
     const groupId = '' // throw an error
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/corpus/groupPermissionRemove', {
+    return expect(
+      store.dispatch('cml/corpus/groupPermissionRemove', {
         corpuId,
         groupId,
         uid: 'default'
       })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    ).rejects.toThrow('Api')
   })
 
   it('sets permission on a user', () => {
@@ -437,22 +423,17 @@ describe('store corpus actions', () => {
     const userId = '' // throw an error
     const permission = 1
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/corpus/userPermissionSet', {
+    return expect(
+      store.dispatch('cml/corpus/userPermissionSet', {
         corpuId,
         userId,
         permission,
         uid: 'default'
       })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    ).rejects.toThrow('Api')
   })
 
   it('removes permission on a user', () => {
-    // to-do: fix the error in the console
     const corpuId = 'mocks-corpu-id-1'
     const userId = 'mocks-user-id-lu'
 
@@ -496,17 +477,13 @@ describe('store corpus actions', () => {
     const corpuId = 'mocks-corpu-id-1'
     const userId = '' // throw an error
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/corpus/userPermissionRemove', {
+    return expect(
+      store.dispatch('cml/corpus/userPermissionRemove', {
         corpuId,
         userId,
         uid: 'default'
       })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    ).rejects.toThrow('Api')
   })
 
   it('sets a corpus (without a param)', () => {

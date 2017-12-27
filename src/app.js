@@ -12,8 +12,6 @@ import cmlAnnotations from './components/annotations.vue'
 import cmlMediaYoutube from './components/media-youtube.vue'
 import cmlMediaController from './components/media-controller.vue'
 
-export default cmlApp
-
 export {
   cmlApp,
   cmlUsers,

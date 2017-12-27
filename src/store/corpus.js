@@ -32,10 +32,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `corpusAdd-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -55,10 +54,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `corpusRemove-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -81,10 +79,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `corpusUpdate-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -121,10 +118,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', `corpusList-${uid}`, { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -166,10 +162,10 @@ export const actions = {
         dispatch('cml/sync/stop', `corpusGroupPermissionSet-${uid}`, {
           root: true
         })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
       })
   },
 
@@ -211,10 +207,9 @@ export const actions = {
         dispatch('cml/sync/stop', `corpusGroupPermissionRemove-${uid}`, {
           root: true
         })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -254,10 +249,9 @@ export const actions = {
         dispatch('cml/sync/stop', `corpusUserPermissionSet-${uid}`, {
           root: true
         })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -284,7 +278,7 @@ export const actions = {
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list')
+          dispatch('list', uid)
           commit(`cml/popup/close`, null, { root: true })
         }
 
@@ -294,10 +288,9 @@ export const actions = {
         dispatch('cml/sync/stop', `corpusUserPermissionRemove-${uid}`, {
           root: true
         })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 

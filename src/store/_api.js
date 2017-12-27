@@ -1,6 +1,7 @@
 import config from '../config'
+// import camomile from '../js/api' /* axios api */
 // import Camomile from '../../../camomile-client-javascript' /* debug with local version */
 import Camomile from 'camomile-client'
-import camomile from '../js/api' /* axios api */
 
-export default (config.axios ? camomile(config.url) : new Camomile(config.url))
+// export default camomile(config.url)
+export default new Camomile(config.url)

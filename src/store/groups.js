@@ -22,10 +22,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'groupsAdd', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -43,10 +42,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'groupsRemove', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -64,10 +62,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'groupsUpdate', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -84,10 +81,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'groupsList', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -113,10 +109,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'groupsUserAdd', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -142,10 +137,9 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'groupsUserRemove', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
-        throw error
+        throw e
       })
   }
 }

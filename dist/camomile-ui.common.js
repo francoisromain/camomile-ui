@@ -8,7 +8,6 @@ var Vuex = require('vuex');
 var Vuex__default = _interopDefault(Vuex);
 var Vue = _interopDefault(require('vue'));
 var Camomile = _interopDefault(require('camomile-client'));
-var axios = _interopDefault(require('axios'));
 
 var config = {
   title: 'Camomile UI',
@@ -17,8 +16,7 @@ var config = {
     password: 'roO7p4s5wOrD'
   },
   url: 'http://localhost:3000',
-  roles: ['admin', 'user'],
-  axios: false
+  roles: ['admin', 'user']
 }
 
 var log = {
@@ -279,101 +277,16 @@ var messages = {
   mutations: mutations$3
 }
 
-function camomile (url) {
-  var api = axios.create({
-    baseURL: url,
-    withCredentials: true
-  });
-
-  var _opt = function (n, id) {
-    return id ? (n + "/" + id) : n
-  };
-
-  var _user = function (id) { return _opt('user', id); };
-  var _get = function (uri) { return api
-      .get(uri)
-      .then(function (r) { return r.data; })
-      .catch(function (e) {
-        console.log('get error: ', uri, e);
-        throw e
-      }); };
-
-  var _post = function (uri, data) { return api
-      .post(uri, data)
-      .then(function (r) { return r.data; })
-      .catch(function (e) {
-        console.log('post error: ', uri, e);
-        throw e
-      }); };
-
-  var _put = function (uri, data) { return api
-      .put(uri, data)
-      .then(function (r) { return r.data; })
-      .catch(function (e) {
-        console.log('post error: ', uri, e);
-        throw e
-      }); };
-
-  return {
-    // User
-    login: function login (name, password) {
-      return _post('login', {
-        username: name,
-        password: password
-      })
-    },
-    logout: function logout () {
-      return _post('logout')
-    },
-    me: function me () {
-      return _get('me')
-    },
-    updatePassword: function updatePassword (password) {
-      return _put('me', {
-        password: password
-      })
-    },
-    createUser: function createUser (
-      name,
-      password,
-      description,
-      role,
-      ref
-    ) {
-      if ( description === void 0 ) description = {};
-      if ( role === void 0 ) role = 'user';
-      if ( ref === void 0 ) ref = {};
-      var returns_id = ref.returns_id;
-
-      return _post('user', { name: name, password: password, description: description, role: role })
-    },
-    updateUser: function updateUser (id, fields) {
-      if ( fields === void 0 ) fields = {};
-
-      return _put(_user(id), fields)
-    },
-    getUsers: function getUsers (ref) {
-      if ( ref === void 0 ) ref = {};
-      var returns_id = ref.returns_id;
-      var ref_filter = ref.filter; if ( ref_filter === void 0 ) ref_filter = {};
-      var ref_filter$1 = ref_filter;
-      var username = ref_filter$1.username;
-      var role = ref_filter$1.role;
-
-      return _get('user', { username: username, role: role }).then(function (r) { return console.log('getUsers', r, returns_id); }
-      )
-    }
-  }
-}
-
+// import camomile from '../js/api' /* axios api */
 // import Camomile from '../../../camomile-client-javascript' /* debug with local version */
-var api = (config.axios ? camomile(config.url) : new Camomile(config.url))
+// export default camomile(config.url)
+var api = new Camomile(config.url)
 
 var state$6 = {
   id: '',
   name: '',
   role: '',
-  description: '',
+  description: {},
   groupIds: [],
   isLogged: false,
   isAdmin: false,
@@ -397,11 +310,10 @@ var actions$4 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'userLogin', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
         dispatch('cml/reset', null, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -428,11 +340,10 @@ var actions$4 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'userSet', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
         dispatch('cml/reset', null, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -454,11 +365,10 @@ var actions$4 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'userLogout', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
         dispatch('cml/reset', null, { root: true });
 
-        throw error
+        throw e
       })
   }
 };
@@ -533,7 +443,7 @@ var mutations$4 = {
     state.id = '';
     state.name = '';
     state.role = '';
-    state.description = '';
+    state.description = {};
     state.groupIds = [];
   },
 
@@ -584,10 +494,9 @@ var actions$5 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'usersAdd', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -617,10 +526,9 @@ var actions$5 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'usersUpdate', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -642,10 +550,9 @@ var actions$5 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'usersRemove', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -665,10 +572,9 @@ var actions$5 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'usersList', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   }
 };
@@ -741,10 +647,9 @@ var actions$6 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'groupsAdd', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -768,10 +673,9 @@ var actions$6 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'groupsRemove', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -795,10 +699,9 @@ var actions$6 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'groupsUpdate', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -820,10 +723,9 @@ var actions$6 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'groupsList', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -856,10 +758,9 @@ var actions$6 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'groupsUserAdd', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -892,10 +793,9 @@ var actions$6 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', 'groupsUserRemove', { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   }
 };
@@ -979,10 +879,9 @@ var actions$7 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("corpusAdd-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1008,10 +907,9 @@ var actions$7 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("corpusRemove-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1040,10 +938,9 @@ var actions$7 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("corpusUpdate-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1087,10 +984,9 @@ var actions$7 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("corpusList-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1140,10 +1036,10 @@ var actions$7 = {
         dispatch('cml/sync/stop', ("corpusGroupPermissionSet-" + uid), {
           root: true
         });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
       })
   },
 
@@ -1192,10 +1088,9 @@ var actions$7 = {
         dispatch('cml/sync/stop', ("corpusGroupPermissionRemove-" + uid), {
           root: true
         });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1243,10 +1138,9 @@ var actions$7 = {
         dispatch('cml/sync/stop', ("corpusUserPermissionSet-" + uid), {
           root: true
         });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1280,7 +1174,7 @@ var actions$7 = {
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
-          dispatch('list');
+          dispatch('list', uid);
           commit("cml/popup/close", null, { root: true });
         }
 
@@ -1290,10 +1184,9 @@ var actions$7 = {
         dispatch('cml/sync/stop', ("corpusUserPermissionRemove-" + uid), {
           root: true
         });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1490,10 +1383,9 @@ var actions$8 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("mediasAdd-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1524,10 +1416,9 @@ var actions$8 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("mediasRemove-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1559,10 +1450,9 @@ var actions$8 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("mediasUpdate-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1587,10 +1477,9 @@ var actions$8 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("mediasList-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -1616,7 +1505,8 @@ var actions$8 = {
     var timeCurrent = state.properties[uid].timeCurrent;
     interval = setInterval(function () {
       var timeEllapsed = Date.now() - timeStart;
-      commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid: uid });
+      // commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid })
+      Vue.set(state.properties[uid], 'timeCurrent', timeCurrent + timeEllapsed);
     }, 0);
     commit('play', uid);
   },
@@ -1654,10 +1544,16 @@ var actions$8 = {
     if (state.properties[uid].isPlaying) {
       clearInterval(interval);
     }
-    commit('timeCurrent', {
-      time: ratio * state.properties[uid].timeTotal,
-      uid: uid
-    });
+    // commit('timeCurrent', {
+    //   time: ratio * state.properties[uid].timeTotal,
+    //   uid
+    // })
+
+    Vue.set(
+      state.properties[uid],
+      'timeCurrent',
+      ratio * state.properties[uid].timeTotal
+    );
     commit('seek', { options: { seeking: true, serverRequest: serverRequest }, uid: uid });
   }
 };
@@ -1745,13 +1641,6 @@ var mutations$8 = {
     Vue.set(state.properties[uid], 'isPlaying', false);
   },
 
-  timeCurrent: function timeCurrent (state, ref) {
-    var time = ref.time;
-    var uid = ref.uid;
-
-    Vue.set(state.properties[uid], 'timeCurrent', time);
-  },
-
   timeTotal: function timeTotal (state, ref) {
     var time = ref.time;
     var uid = ref.uid;
@@ -1825,10 +1714,10 @@ var actions$9 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("layersAdd-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
       })
   },
 
@@ -1855,10 +1744,10 @@ var actions$9 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("layersRemove-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
       })
   },
 
@@ -1891,10 +1780,10 @@ var actions$9 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("layersUpdate-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
       })
   },
 
@@ -1986,10 +1875,10 @@ var actions$9 = {
         dispatch('cml/sync/stop', ("layersGroupPermissionSet-" + uid), {
           root: true
         });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
       })
   },
 
@@ -2039,10 +1928,10 @@ var actions$9 = {
         dispatch('cml/sync/stop', ("layersGroupPermissionRemove-" + uid), {
           root: true
         });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
       })
   },
 
@@ -2091,10 +1980,10 @@ var actions$9 = {
         dispatch('cml/sync/stop', ("layersUserPermissionSet-" + uid), {
           root: true
         });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
 
-        throw error
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
       })
   },
 
@@ -2139,10 +2028,9 @@ var actions$9 = {
         dispatch('cml/sync/stop', ("layersUserPermissionRemove-" + uid), {
           root: true
         });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -2330,10 +2218,9 @@ var actions$10 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("annotationsAdd-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -2355,10 +2242,9 @@ var actions$10 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("annotationsRemove-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -2386,10 +2272,9 @@ var actions$10 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("annotationsUpdate-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
-        throw error
+        throw e
       })
   },
 
@@ -2421,8 +2306,7 @@ var actions$10 = {
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("annotationsList-" + uid), { root: true });
-        var error = e.response ? e.response.body.error : 'Network error';
-        dispatch('cml/messages/error', error, { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
       })
@@ -2683,15 +2567,12 @@ var cmlTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   }
 }
 
-var cmlInfos = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h6',{staticClass:"menubar-infos mb-0"},[_vm._v(_vm._s(_vm.api)+": "+_vm._s(_vm.url))])},staticRenderFns: [],
+var cmlInfos = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h6',{staticClass:"menubar-infos mb-0"},[_vm._v(_vm._s(_vm.url))])},staticRenderFns: [],
   name: 'camomile-header-infos',
 
   computed: {
     url: function url () {
       return this.$store.state.cml.config.url
-    },
-    api: function api () {
-      return this.$store.state.cml.config.axios ? 'axios' : 'rp';
     }
   }
 }
@@ -2919,7 +2800,7 @@ var cmlLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   }
 }
 
-var cmlApp$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full-y flex flex-direction-column"},[_c('cml-header'),_vm._v(" "),_c('div',{staticClass:"relative page"},[_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),(_vm.isLogged)?_vm._t("default"):_c('cml-login')],2),_vm._v(" "),_c('viewport'),_vm._v(" "),_c('debug')],1)},staticRenderFns: [],
+var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full-y flex flex-direction-column"},[_c('cml-header'),_vm._v(" "),_c('div',{staticClass:"relative page"},[_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),(_vm.isLogged)?_vm._t("default"):_c('cml-login')],2),_vm._v(" "),_c('viewport'),_vm._v(" "),_c('debug')],1)},staticRenderFns: [],
   store: store,
 
   name: 'camomile',
@@ -3558,18 +3439,19 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
       var height = width * 9 / 16;
       var events = {
         onReady: function (event) {
-          console.log('onReady', event);
+          // console.log('onReady', event)
           this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
           this$1.$store.commit('cml/medias/timeTotal', { time: this$1.player.getDuration() * 1000, uid: this$1.uid });
         },
         onStateChange: function (event) {
-          console.log('onStateChange', event.data);
+          // console.log('onStateChange', event.data, this.videoNew)
           if (event.data === -1) {
             // unstarted
           } else if (event.data === 1) {
             // playing
             if (this$1.videoNew) {
               this$1.videoNew = false;
+              this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
               this$1.$store.commit('cml/medias/timeTotal', { time: this$1.player.getDuration() * 1000, uid: this$1.uid });
               this$1.player.pauseVideo();
             } else {
@@ -3586,16 +3468,14 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
             this$1.$store.dispatch('cml/medias/stop', this$1.uid);
           } else if (event.data === 5) {
             // cued
-            console.log('once cued', event, this$1.player.getDuration());
             this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
             this$1.$store.commit('cml/medias/timeTotal', { time: this$1.player.getDuration() * 1000, uid: this$1.uid });
           }
         },
         onApiChange: function (event) {
-          console.log('onApiChange', event);
+          // console.log('onApiChange', event, this.isLoaded)
           if (!this$1.isLoaded) {
             this$1.videoNew = true;
-            this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
           }
         }
       };
@@ -3638,7 +3518,6 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
   },
 
   beforeDestroy: function beforeDestroy () {
-    console.log('before destroy');
     if (this.player !== null && this.player.destroy) {
       this.player.destroy();
     }
@@ -3703,7 +3582,7 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
       return this.properties.isLoaded || false
     },
     progressBarWidth: function progressBarWidth () {
-      return ((this.timeCurrent / this.timeTotal * 100) + "%")
+      return this.timeTotal ? ((this.timeCurrent / this.timeTotal * 100) + "%") : 0
     }
   },
 
@@ -3740,8 +3619,7 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
   }
 }
 
-exports['default'] = cmlApp$1;
-exports.cmlApp = cmlApp$1;
+exports.cmlApp = app;
 exports.cmlUsers = users$1;
 exports.cmlGroups = groups$1;
 exports.cmlCorpus = corpus$1;

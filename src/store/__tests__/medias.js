@@ -141,13 +141,9 @@ describe('store medias actions', () => {
       description: {}
     }
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/medias/add', { element, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/medias/remove', { element, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('removes a media', () => {
@@ -173,13 +169,9 @@ describe('store medias actions', () => {
   it('removes a media (error)', () => {
     const id = '' // throw an error
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/medias/remove', { id, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/medias/remove', { id, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('updates a media', () => {
@@ -224,13 +216,9 @@ describe('store medias actions', () => {
       url: 'https://www.limsi.fr/fr/laboratoire/soutien-a-la-recherche'
     }
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/medias/update', { element, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/medias/update', { element, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('lists all medias', () => {

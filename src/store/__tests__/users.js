@@ -144,12 +144,9 @@ describe('store users actions', () => {
     const element = {
       name: '' // throw an error
     }
-
-    expect.assertions(2)
-    return store.dispatch('cml/users/add', { element }).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return expect(store.dispatch('cml/users/add', { element })).rejects.toThrow(
+      'Incorrect name or password'
+    )
   })
 
   it('updates a user', () => {
@@ -183,11 +180,9 @@ describe('store users actions', () => {
       id: ''
     }
 
-    expect.assertions(2)
-    return store.dispatch('cml/users/update', { element }).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
-    })
+    return expect(
+      store.dispatch('cml/users/update', { element })
+    ).rejects.toThrow('Api')
   })
 
   it('removes a user', () => {
@@ -210,12 +205,16 @@ describe('store users actions', () => {
   })
 
   it('removes a user (error)', () => {
-    const id = ''
+    const id = 'mocks-user-id-incorrect'
 
     expect.assertions(2)
     return store.dispatch('cml/users/remove', { id }).catch(e => {
-      expect(e).toEqual('Network error')
-      expect(store.state.cml.messages.list[0].content).toBe('Network error')
+      expect(() => {
+        throw e
+      }).toThrow('Incorrect user Id: mocks-user-id-incorrect')
+      expect(store.state.cml.messages.list[0].content).toBe(
+        'Incorrect user Id: mocks-user-id-incorrect'
+      )
     })
   })
 

@@ -13,9 +13,9 @@ export default [
     input: 'src/app.js',
     output: {
       file: pkg.browser,
-      format: 'umd'
+      format: 'umd',
+      name: 'camomile-ui.umd'
     },
-    name: 'camomile-ui',
     plugins: [
       builtins(),
       json(),

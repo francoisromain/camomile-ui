@@ -184,10 +184,10 @@ const api = {
   deleteUser (userId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        if (userId) {
-          resolve({})
+        if (users.find(u => u._id === userId)) {
+          resolve(users.filter(u => u._id !== userId))
         } else {
-          reject(new Error('Incorrect user Id'))
+          reject(new Error(`Incorrect user Id: ${userId}`))
         }
       })
     })

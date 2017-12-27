@@ -21,7 +21,6 @@ html,
 
 html {
   overflow-y: scroll;
-  min-height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;

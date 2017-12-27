@@ -81,14 +81,11 @@ describe('store user actions', () => {
   })
 
   it('logs-in (error)', () => {
-    expect.assertions(1)
-    return store
-      .dispatch('cml/user/login', {
+    return expect(
+      store.dispatch('cml/user/login', {
         user: { name: config.user.name, password: '' }
       })
-      .catch(e => {
-        expect(e).toBe('Network error')
-      })
+    ).rejects.toThrow('Incorrect username or password')
   })
 
   it('returns current user', () => {
@@ -113,18 +110,12 @@ describe('store user actions', () => {
     })
   })
 
-  it('logs-out (error)', () => {
-    expect.assertions(1)
-    return store.dispatch('cml/user/logout').catch(e => {
-      expect(e).toBe('Network error')
-    })
+  it('returns current user (error)', () => {
+    return expect(store.dispatch('cml/user/set')).rejects.toThrow('Api')
   })
 
-  it('returns current user (error)', () => {
-    expect.assertions(1)
-    return store.dispatch('cml/user/set').catch(e => {
-      expect(e).toBe('Network error')
-    })
+  it('logs-out (error)', () => {
+    return expect(store.dispatch('cml/user/logout')).rejects.toThrow('Api')
   })
 })
 

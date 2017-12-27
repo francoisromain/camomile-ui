@@ -4,7 +4,7 @@ export const state = {
   id: '',
   name: '',
   role: '',
-  description: '',
+  description: {},
   groupIds: [],
   isLogged: false,
   isAdmin: false,
@@ -25,11 +25,10 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'userLogin', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
         dispatch('cml/reset', null, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -53,11 +52,10 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'userSet', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
         dispatch('cml/reset', null, { root: true })
 
-        throw error
+        throw e
       })
   },
 
@@ -75,11 +73,10 @@ export const actions = {
       })
       .catch(e => {
         dispatch('cml/sync/stop', 'userLogout', { root: true })
-        const error = e.response ? e.response.body.error : 'Network error'
-        dispatch('cml/messages/error', error, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
         dispatch('cml/reset', null, { root: true })
 
-        throw error
+        throw e
       })
   }
 }
@@ -149,7 +146,7 @@ export const mutations = {
     state.id = ''
     state.name = ''
     state.role = ''
-    state.description = ''
+    state.description = {}
     state.groupIds = []
   },
 

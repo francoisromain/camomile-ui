@@ -53,7 +53,7 @@ export default {
       return this.properties.isLoaded || false
     },
     progressBarWidth () {
-      return `${this.timeCurrent / this.timeTotal * 100}%`
+      return this.timeTotal ? `${this.timeCurrent / this.timeTotal * 100}%` : 0
     }
   },
 

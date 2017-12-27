@@ -78,18 +78,19 @@ export default {
       const height = width * 9 / 16
       const events = {
         onReady: event => {
-          console.log('onReady', event)
+          // console.log('onReady', event)
           this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
           this.$store.commit('cml/medias/timeTotal', { time: this.player.getDuration() * 1000, uid: this.uid })
         },
         onStateChange: event => {
-          console.log('onStateChange', event.data)
+          // console.log('onStateChange', event.data, this.videoNew)
           if (event.data === -1) {
             // unstarted
           } else if (event.data === 1) {
             // playing
             if (this.videoNew) {
               this.videoNew = false
+              this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
               this.$store.commit('cml/medias/timeTotal', { time: this.player.getDuration() * 1000, uid: this.uid })
               this.player.pauseVideo()
             } else {
@@ -106,16 +107,14 @@ export default {
             this.$store.dispatch('cml/medias/stop', this.uid)
           } else if (event.data === 5) {
             // cued
-            console.log('once cued', event, this.player.getDuration())
             this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
             this.$store.commit('cml/medias/timeTotal', { time: this.player.getDuration() * 1000, uid: this.uid })
           }
         },
         onApiChange: event => {
-          console.log('onApiChange', event)
+          // console.log('onApiChange', event, this.isLoaded)
           if (!this.isLoaded) {
             this.videoNew = true
-            this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
           }
         }
       }
@@ -158,7 +157,6 @@ export default {
   },
 
   beforeDestroy () {
-    console.log('before destroy')
     if (this.player !== null && this.player.destroy) {
       this.player.destroy()
     }

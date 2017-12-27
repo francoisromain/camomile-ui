@@ -25,8 +25,14 @@ describe('store annotations actions', () => {
     }
 
     user.state = {
+      name: 'lu',
       id: 'mocks-user-id-lu',
-      groupIds: ['mocks-group-id-1']
+      groupIds: ['mocks-group-id-1'],
+      role: 'user',
+      description: {},
+      isLogged: true,
+      isAdmin: false,
+      isRoot: false
     }
 
     users.state = {
@@ -38,6 +44,9 @@ describe('store annotations actions', () => {
     }
 
     medias.state = {
+      properties: {
+        default: {}
+      },
       actives: {
         default: 'mocks-media-id-1'
       },
@@ -147,16 +156,9 @@ describe('store annotations actions', () => {
       metaddata: { data: 'Egestas Euismod Quam Condimentum' }
     }
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/annotations/add', {
-        element,
-        uid: 'default'
-      })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/annotations/add', { element, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('removes an annotation', () => {
@@ -187,13 +189,9 @@ describe('store annotations actions', () => {
   it('removes an annotation (error)', () => {
     const id = '' // throw an error
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/annotations/remove', { id, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/annotations/remove', { id, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('updates an annotation', () => {
@@ -249,13 +247,9 @@ describe('store annotations actions', () => {
       metadata: {}
     }
 
-    expect.assertions(2)
-    return store
-      .dispatch('cml/annotations/update', { element, uid: 'default' })
-      .catch(e => {
-        expect(e).toEqual('Network error')
-        expect(store.state.cml.messages.list[0].content).toBe('Network error')
-      })
+    return expect(
+      store.dispatch('cml/annotations/update', { element, uid: 'default' })
+    ).rejects.toThrow('Api')
   })
 
   it('lists all annotations', () => {
