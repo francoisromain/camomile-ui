@@ -7,6 +7,7 @@ import user from '../user'
 import groups from '../groups'
 import users from '../users'
 import corpus from '../corpus'
+import layers from '../layers'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -90,18 +91,28 @@ describe('store users actions', () => {
       }
     }
 
+    layers.state = {
+      actives: {
+        default: 'mocks-layer-id-1'
+      },
+      lists: {
+        default: []
+      }
+    }
+
     store = new Vuex.Store({
       modules: {
         cml: {
           namespaced: true,
           modules: {
-            users,
-            messages,
             sync,
-            corpus,
             popup,
+            messages,
             user,
-            groups
+            users,
+            groups,
+            corpus,
+            layers
           }
         }
       }

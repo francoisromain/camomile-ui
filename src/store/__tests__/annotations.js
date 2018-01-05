@@ -55,30 +55,74 @@ describe('store annotations actions', () => {
       }
     }
 
-    annotations.state = {
+    layers.state = {
       actives: {
-        default: 'mocks-annotation-id-1'
+        default: ['mocks-layer-id-2']
       },
       lists: {
         default: [
           {
-            id: 'mocks-annotation-id-1',
-            fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
-            metadata: { metadata: 'Maecenas faucibus mollis interdum.' },
-            mediaId: 'mocks-media-id-1',
-            layerId: 'mocks-layer-id-1'
+            corpuId: 'mocks-corpu-id-1',
+            description: { desc: 'Ornare Malesuada Fermentum Parturient' },
+            fragmentType: { fragment: 'Ornare Malesuada Fermentum Parturient' },
+            metadataType: { data: 'Ornare Malesuada Fermentum Parturient' },
+            annotations: {
+              annotations: 'Ornare Malesuada Fermentum Parturient'
+            },
+            id: 'mocks-layer-id-1',
+            name: 'layer-1',
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 2 },
+              users: { 'mocks-user-id-lu': 1, 'mocks-user-id-ji': 0 }
+            }
           },
           {
-            id: 'mocks-annotation-id-2',
-            fragment: {
-              fragment: 'Etiam porta sem malesuada magna mollis euismod.'
+            corpuId: 'mocks-corpu-id-1',
+            description: { desc: 'Condimentum Elit Mattis Quam' },
+            fragmentType: { fragment: 'Ornare Malesuada Fermentum Parturient' },
+            metadataType: { data: 'Ornare Malesuada Fermentum Parturient' },
+            annotations: {
+              annotations: 'Ornare Malesuada Fermentum Parturient'
             },
-            metadata: {
-              metadata: 'Etiam porta sem malesuada magna mollis euismod.'
-            },
-            layerId: 'mocks-layer-id-1'
+            id: 'mocks-layer-id-2',
+            name: 'layer-2',
+            permissions: {
+              groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
+              users: { 'mocks-user-id-lu': 0, 'mocks-user-id-ji': 3 }
+            }
           }
         ]
+      }
+    }
+
+    annotations.state = {
+      actives: {
+        default: {
+          'mocks-layer-id-1': ['mocks-annotation-id-1']
+        }
+      },
+      lists: {
+        default: {
+          'mocks-layer-id-1': [
+            {
+              id: 'mocks-annotation-id-1',
+              fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
+              metadata: { metadata: 'Maecenas faucibus mollis interdum.' },
+              mediaId: 'mocks-media-id-1',
+              layerId: 'mocks-layer-id-1'
+            },
+            {
+              id: 'mocks-annotation-id-2',
+              fragment: {
+                fragment: 'Etiam porta sem malesuada magna mollis euismod.'
+              },
+              metadata: {
+                metadata: 'Etiam porta sem malesuada magna mollis euismod.'
+              },
+              layerId: 'mocks-layer-id-1'
+            }
+          ]
+        }
       }
     }
 
@@ -111,41 +155,38 @@ describe('store annotations actions', () => {
       metadata: { data: 'Egestas Euismod Quam Condimentum' },
       mediaLink: true
     }
+    const layerId = 'mocks-layer-id-1'
 
     expect.assertions(2)
-    return store
-      .dispatch('cml/annotations/add', { element, uid: 'default' })
-      .then(r => {
-        expect(store.state.cml.annotations.lists['default']).toEqual([
-          {
-            fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
-            id: 'mocks-annotation-id-1',
-            layerId: 'mocks-layer-id-1',
-            mediaId: 'mocks-media-id-1',
-            metadata: { metadata: 'Maecenas faucibus mollis interdum.' }
+    return store.dispatch('cml/annotations/add', { element }).then(r => {
+      expect(store.state.cml.annotations.lists['default'][layerId]).toEqual([
+        {
+          fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
+          id: 'mocks-annotation-id-1',
+          layerId: 'mocks-layer-id-1',
+          mediaId: 'mocks-media-id-1',
+          metadata: { metadata: 'Maecenas faucibus mollis interdum.' }
+        },
+        {
+          fragment: {
+            fragment: 'Etiam porta sem malesuada magna mollis euismod.'
           },
-          {
-            fragment: {
-              fragment: 'Etiam porta sem malesuada magna mollis euismod.'
-            },
-            id: 'mocks-annotation-id-2',
-            layerId: 'mocks-layer-id-1',
-            metadata: {
-              metadata: 'Etiam porta sem malesuada magna mollis euismod.'
-            }
-          },
-          {
-            fragment: { fragment: 'Egestas Euismod Quam Condimentum' },
-            id: 'mocks-annotation-id-new',
-            layerId: 'mocks-layer-id-1',
-            mediaId: 'mocks-media-id-1',
-            metadata: { data: 'Egestas Euismod Quam Condimentum' }
+          id: 'mocks-annotation-id-2',
+          layerId: 'mocks-layer-id-1',
+          metadata: {
+            metadata: 'Etiam porta sem malesuada magna mollis euismod.'
           }
-        ])
-        expect(store.state.cml.messages.list[0].content).toBe(
-          'Annotation added'
-        )
-      })
+        },
+        {
+          fragment: { fragment: 'Egestas Euismod Quam Condimentum' },
+          id: 'mocks-annotation-id-new',
+          layerId: 'mocks-layer-id-1',
+          mediaId: 'mocks-media-id-1',
+          metadata: { data: 'Egestas Euismod Quam Condimentum' }
+        }
+      ])
+      expect(store.state.cml.messages.list[0].content).toBe('Annotation added')
+    })
   })
 
   it('adds a new annotation (error)', () => {
@@ -157,40 +198,39 @@ describe('store annotations actions', () => {
     }
 
     return expect(
-      store.dispatch('cml/annotations/add', { element, uid: 'default' })
+      store.dispatch('cml/annotations/add', { element })
     ).rejects.toThrow('Api')
   })
 
   it('removes an annotation', () => {
     const id = 'mocks-annotation-id-1'
+    const layerId = 'mocks-layer-id-1'
 
     expect.assertions(2)
-    return store
-      .dispatch('cml/annotations/remove', { id, uid: 'default' })
-      .then(r => {
-        expect(store.state.cml.annotations.lists['default']).toEqual([
-          {
-            fragment: {
-              fragment: 'Etiam porta sem malesuada magna mollis euismod.'
-            },
-            id: 'mocks-annotation-id-2',
-            layerId: 'mocks-layer-id-1',
-            metadata: {
-              metadata: 'Etiam porta sem malesuada magna mollis euismod.'
-            }
+    return store.dispatch('cml/annotations/remove', { id }).then(r => {
+      expect(store.state.cml.annotations.lists['default'][layerId]).toEqual([
+        {
+          fragment: {
+            fragment: 'Etiam porta sem malesuada magna mollis euismod.'
+          },
+          id: 'mocks-annotation-id-2',
+          layerId: 'mocks-layer-id-1',
+          metadata: {
+            metadata: 'Etiam porta sem malesuada magna mollis euismod.'
           }
-        ])
-        expect(store.state.cml.messages.list[0].content).toBe(
-          'Annotation removed'
-        )
-      })
+        }
+      ])
+      expect(store.state.cml.messages.list[0].content).toBe(
+        'Annotation removed'
+      )
+    })
   })
 
   it('removes an annotation (error)', () => {
     const id = '' // throw an error
 
     return expect(
-      store.dispatch('cml/annotations/remove', { id, uid: 'default' })
+      store.dispatch('cml/annotations/remove', { id })
     ).rejects.toThrow('Api')
   })
 
@@ -207,37 +247,37 @@ describe('store annotations actions', () => {
       layerId: 'mocks-layer-id-1'
     }
 
+    const layerId = 'mocks-layer-id-1'
+
     expect.assertions(2)
-    return store
-      .dispatch('cml/annotations/update', { element, uid: 'default' })
-      .then(r => {
-        expect(store.state.cml.annotations.lists['default']).toEqual([
-          {
-            fragment: {
-              fragment: 'Donec id elit non mi porta gravida at eget metus.'
-            },
-            id: 'mocks-annotation-id-1',
-            layerId: 'mocks-layer-id-1',
-            mediaId: 'mocks-media-id-1',
-            metadata: {
-              metadata: 'Donec id elit non mi porta gravida at eget metus.'
-            }
+    return store.dispatch('cml/annotations/update', { element }).then(r => {
+      expect(store.state.cml.annotations.lists['default'][layerId]).toEqual([
+        {
+          fragment: {
+            fragment: 'Donec id elit non mi porta gravida at eget metus.'
           },
-          {
-            fragment: {
-              fragment: 'Etiam porta sem malesuada magna mollis euismod.'
-            },
-            id: 'mocks-annotation-id-2',
-            layerId: 'mocks-layer-id-1',
-            metadata: {
-              metadata: 'Etiam porta sem malesuada magna mollis euismod.'
-            }
+          id: 'mocks-annotation-id-1',
+          layerId: 'mocks-layer-id-1',
+          mediaId: 'mocks-media-id-1',
+          metadata: {
+            metadata: 'Donec id elit non mi porta gravida at eget metus.'
           }
-        ])
-        expect(store.state.cml.messages.list[0].content).toBe(
-          'Annotation updated'
-        )
-      })
+        },
+        {
+          fragment: {
+            fragment: 'Etiam porta sem malesuada magna mollis euismod.'
+          },
+          id: 'mocks-annotation-id-2',
+          layerId: 'mocks-layer-id-1',
+          metadata: {
+            metadata: 'Etiam porta sem malesuada magna mollis euismod.'
+          }
+        }
+      ])
+      expect(store.state.cml.messages.list[0].content).toBe(
+        'Annotation updated'
+      )
+    })
   })
 
   it('updates an annotation (error)', () => {
@@ -248,16 +288,18 @@ describe('store annotations actions', () => {
     }
 
     return expect(
-      store.dispatch('cml/annotations/update', { element, uid: 'default' })
+      store.dispatch('cml/annotations/update', { element })
     ).rejects.toThrow('Api')
   })
 
   it('lists all annotations', () => {
+    const layerId = 'mocks-layer-id-1'
+
     expect.assertions(1)
     return store
-      .dispatch('cml/annotations/list', { uid: 'default' })
+      .dispatch('cml/annotations/list', { layerId, uid: 'default' })
       .then(r => {
-        expect(store.state.cml.annotations.lists['default']).toEqual([
+        expect(store.state.cml.annotations.lists['default'][layerId]).toEqual([
           {
             fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
             id: 'mocks-annotation-id-1',
@@ -281,57 +323,28 @@ describe('store annotations actions', () => {
   })
 
   it('lists all annotations (error)', () => {
+    const layerId = ''
+
     expect.assertions(1)
-    return store.dispatch('cml/annotations/list', {}).catch(e => {
-      expect(e.message).toEqual('missing uid')
-    })
+    return store
+      .dispatch('cml/annotations/list', { layerId, uid: '' })
+      .catch(e => {
+        expect(e.message).toEqual('missing uid')
+      })
   })
 
   it('sets selected annotation', () => {
-    const annotationId = 'mocks-annotation-id-2'
+    const id = 'mocks-annotation-id-2'
+    const layerId = 'mocks-layer-id-1'
+
     expect.assertions(1)
     return store
-      .dispatch('cml/annotations/set', { id: annotationId, uid: 'default' })
+      .dispatch('cml/annotations/set', { id, layerId, uid: 'default' })
       .then(r => {
-        expect(store.state.cml.annotations.actives['default']).toEqual(
-          'mocks-annotation-id-2'
-        )
+        expect(store.state.cml.annotations.actives['default']).toEqual({
+          'mocks-layer-id-1': ['mocks-annotation-id-1', 'mocks-annotation-id-2']
+        })
       })
-  })
-})
-
-describe('store annotations getters', () => {
-  let store
-
-  beforeEach(() => {
-    const state = {
-      actives: {
-        default: 'mocks-annotation-id-2'
-      },
-      lists: {
-        default: [
-          {
-            description: {},
-            id: 'mocks-annotation-id-1',
-            name: 'annotation-1'
-          },
-          {
-            description: {},
-            id: 'mocks-annotation-id-2',
-            name: 'annotation-2'
-          }
-        ]
-      }
-    }
-
-    store = new Vuex.Store({
-      state,
-      getters: annotations.getters
-    })
-  })
-
-  it('returns the id of the selected annotations', () => {
-    expect(store.getters.id('default')).toEqual('mocks-annotation-id-2')
   })
 })
 
@@ -340,22 +353,31 @@ describe('store annotations mutations', () => {
 
   beforeEach(() => {
     state.actives = {
-      default: 'an-idea'
+      default: {
+        'mocks-layer-id-1': ['mocks-annotation-id']
+      }
     }
 
     state.lists = {
-      default: [
-        { name: 'annotation-1' },
-        { name: 'annotation-2' },
-        { name: 'annotation-3' },
-        { name: 'annotation-4' }
-      ]
+      default: {
+        'mocks-layer-id-1': [
+          { name: 'annotation-1' },
+          { name: 'annotation-2' },
+          { name: 'annotation-3' },
+          { name: 'annotation-4' }
+        ]
+      }
     }
   })
 
   it('resets one annotation list', () => {
-    annotations.mutations.reset(state, 'default')
-    expect(state.lists['default']).toEqual([])
+    const layerId = 'mocks-layer-id-1'
+
+    annotations.mutations.reset(state, {
+      layerId,
+      uid: 'default'
+    })
+    expect(state.lists['default']).toEqual({})
   })
 
   it('resets all annotation lists', () => {

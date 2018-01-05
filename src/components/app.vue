@@ -1,24 +1,26 @@
 <template>
-  <div class="full-y flex flex-direction-column">
+  <div class="page">
     <cml-header></cml-header>
-    <div class="relative page">
-      <transition name="transition-top">
-        <cml-popup v-if="popup.visible"></cml-popup>
-      </transition>
-      <cml-messages></cml-messages>
-      <cml-dropdown></cml-dropdown>
-      <slot v-if="isLogged"></slot>        
-      <cml-login v-else></cml-login>
-    </div>
-    <viewport></viewport>
-    <debug></debug>
+    <main class="main relative">
+      <div class="content">
+        <slot v-if="isLogged"></slot>
+        <cml-login v-else></cml-login>
+      </div>
+      <div class="overlay">
+        <transition name="transition-top">
+          <cml-popup v-if="popup.visible"></cml-popup>
+        </transition>
+        <cml-messages></cml-messages>
+        <cml-dropdown></cml-dropdown>
+        <viewport></viewport>
+      </div>
+    </main>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import store from '../store/index'
-import debug from './utils/debug.vue'
 import viewport from './utils/viewport.vue'
 import cmlDropdown from './utils/dropdown.vue'
 import cmlPopup from './popup/index.vue'
@@ -33,7 +35,6 @@ export default {
   name: 'camomile',
 
   components: {
-    debug,
     viewport,
     cmlHeader,
     cmlLogin,

@@ -12,6 +12,8 @@ import cmlAnnotations from './components/annotations.vue'
 import cmlMediaYoutube from './components/media-youtube.vue'
 import cmlMediaController from './components/media-controller.vue'
 
+import cmlLayerTimeline from './components/layer-timeline.vue'
+
 export {
   cmlApp,
   cmlUsers,
@@ -21,5 +23,6 @@ export {
   cmlLayers,
   cmlAnnotations,
   cmlMediaYoutube,
-  cmlMediaController
+  cmlMediaController,
+  cmlLayerTimeline
 }

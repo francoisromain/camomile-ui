@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="flex flex-start">
-      <h2 class="mt-s">Corpora</h2>
+      <h2 class="mt-s mb-s">Corpora</h2>
       <button @click="popupOpen({ config: popupAddConfig, element: { id: null, description: {} } })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
     </div>
-    <div>
+    <div v-if="corpus && corpus.length > 0">
       <table class="table mb-0">
         <tr>
           <th></th><th>Name</th><th></th>
@@ -44,22 +44,19 @@ export default {
         type: 'corpus',
         closeBtn: true,
         title: 'Edit corpus',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupAddConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Add corpus',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupRemoveConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Remove corpus',
-        component: popupRemove,
-        uid: this.uid
+        component: popupRemove
       },
       popupPermissionsConfig: {
         type: 'corpus',
@@ -88,12 +85,12 @@ export default {
       this.$store.commit('cml/popup/open', { config, element })
     },
     set (e) {
-      this.$store.dispatch('cml/corpus/set', { corpuId: e.target.value, uid: this.uid })
+      this.$store.dispatch('cml/corpus/set', { id: e.target.value, uid: this.uid })
     }
   },
 
   mounted () {
-    this.$store.commit('cml/corpus/register', this.uid)
+    this.$store.dispatch('cml/corpus/register', this.uid)
   }
 }
 </script>

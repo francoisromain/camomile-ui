@@ -11,8 +11,8 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch }, { element, uid }) {
-    dispatch('cml/sync/start', `mediasAdd-${uid}`, { root: true })
+  add ({ state, commit, dispatch, rootGetters }, { element }) {
+    dispatch('cml/sync/start', `mediasAdd`, { root: true })
     return api
       .createMedium(
         element.corpuId,
@@ -21,51 +21,52 @@ export const actions = {
         element.description
       )
       .then(r => {
-        dispatch('cml/sync/stop', `mediasAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasAdd`, { root: true })
         const media = mediaFormat(r.data)
-        commit('add', { media, uid })
+        Object.keys(state.lists).forEach(uid => {
+          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
+            commit('add', { media, uid })
+            if (!state.actives[uid]) {
+              commit('set', { id: media.id, uid })
+            }
+          }
+        })
         dispatch('cml/messages/success', 'Medium added', { root: true })
-        dispatch('set', { mediaId: media.id, uid })
 
         return media
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `mediasAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasAdd`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
   },
 
-  remove ({ commit, dispatch, rootGetters }, { id, uid }) {
-    dispatch('cml/sync/start', `mediasRemove-${uid}`, { root: true })
+  remove ({ state, commit, dispatch }, { id }) {
+    dispatch('cml/sync/start', `mediasRemove`, { root: true })
     return api
       .deleteMedium(id)
       .then(r => {
-        dispatch('cml/sync/stop', `mediasRemove-${uid}`, { root: true })
-        commit('remove', { mediaId: id, uid })
+        dispatch('cml/sync/stop', `mediasRemove`, { root: true })
+        Object.keys(state.lists).forEach(uid => {
+          commit('remove', { id, uid })
+        })
         dispatch('cml/messages/success', 'Medium removed', { root: true })
-        if (state.actives[uid] === id) {
-          dispatch('set', { uid })
-        }
-        dispatch(
-          'cml/annotations/list',
-          { layerId: rootGetters['cml/layers/id'](uid), uid },
-          { root: true }
-        )
+        dispatch('setAll', { id })
 
         return id
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `mediasRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasRemove`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
   },
 
-  update ({ commit, dispatch, state, rootState }, { element, uid }) {
-    dispatch('cml/sync/start', `mediasUpdate-${uid}`, { root: true })
+  update ({ state, commit, dispatch, rootGetters }, { element }) {
+    dispatch('cml/sync/start', `mediasUpdate`, { root: true })
     return api
       .updateMedium(element.id, {
         name: element.name,
@@ -73,18 +74,23 @@ export const actions = {
         url: element.url
       })
       .then(r => {
-        dispatch('cml/sync/stop', `mediasUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasUpdate`, { root: true })
         const media = Object.assign({}, element)
         media.name = r.data.name
         media.url = r.data.url
         media.description = r.data.description || {}
-        commit('update', { media, uid })
+        Object.keys(state.lists).forEach(uid => {
+          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
+            console.log('media-update', uid, media)
+            commit('update', { media, uid })
+          }
+        })
         dispatch('cml/messages/success', 'Medium updated', { root: true })
 
         return media
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `mediasUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasUpdate`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
@@ -113,11 +119,21 @@ export const actions = {
       })
   },
 
-  set ({ state, getters, dispatch, commit }, { mediaId, uid }) {
+  setAll ({ state, dispatch }, { id }) {
+    Object.keys(state.actives).forEach(uid => {
+      if (state.actives[uid] === id) {
+        dispatch('set', { uid })
+      }
+
+      dispatch('cml/annotations/listAll', { uid }, { root: true })
+    })
+  },
+
+  set ({ state, getters, dispatch, commit }, { id, uid }) {
     if (state.properties[uid] && state.properties[uid].isPlaying) {
       dispatch('pause', uid)
     }
-    commit('set', { mediaId: mediaId || getters.id(uid), uid })
+    commit('set', { id: id || getters.id(uid), uid })
   },
 
   play ({ state, commit }, uid) {
@@ -174,10 +190,10 @@ export const getters = {
 }
 
 export const mutations = {
-  reset (state, uid) {
+  init (state, uid) {
     Vue.set(state.lists, uid, [])
-    Vue.delete(state.actives, uid)
-    Vue.delete(state.properties, uid)
+    Vue.set(state.actives, uid, null)
+    Vue.set(state.properties, uid, {})
   },
 
   resetAll (state) {
@@ -196,10 +212,10 @@ export const mutations = {
     Vue.set(state.lists[uid], index, media)
   },
 
-  remove (state, { mediaId, uid }) {
-    const index = state.lists[uid].findIndex(m => m.id === mediaId)
-    if (index !== -1) {
-      Vue.delete(state.lists[uid], index)
+  remove (state, { id, uid }) {
+    const listIndex = state.lists[uid].findIndex(m => m.id === id)
+    if (listIndex !== -1) {
+      Vue.delete(state.lists[uid], listIndex)
     }
   },
 
@@ -207,8 +223,8 @@ export const mutations = {
     Vue.set(state.lists, uid, medias)
   },
 
-  set (state, { mediaId, uid }) {
-    Vue.set(state.actives, uid, mediaId)
+  set (state, { id, uid }) {
+    Vue.set(state.actives, uid, id)
     Vue.set(state.properties, uid, {
       timeTotal: 0,
       timeCurrent: 0,

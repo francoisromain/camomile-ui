@@ -7,7 +7,9 @@ export default {
     return textNew.join('')
   },
   numberFormat (value) {
-    return Math.round(value).toString().replace(/(\d)(?=(\d{3})+$)/g, '$1 ')
+    return Math.round(value)
+      .toString()
+      .replace(/(\d)(?=(\d{3})+$)/g, '$1 ')
   },
   debounce (func, wait, immediate) {
     var timeout
@@ -26,6 +28,17 @@ export default {
   },
   map (value, inMin, inMax, outMin, outMax) {
     return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
+  },
+  range (start, end, tick) {
+    const s = Math.round(start / tick) * tick
+    return Array.from(
+      {
+        length: Math.floor((end - start) / tick)
+      },
+      (v, k) => {
+        return k * tick + s
+      }
+    )
   },
   audioFade (media, audioOn, volumeTarget) {
     var duration = 3000
@@ -84,7 +97,9 @@ export default {
     var tick = 20
     var volumeStep = (media.volume - volumeFinal) / (duration / tick)
 
-    if (!volumeStep) { return }
+    if (!volumeStep) {
+      return
+    }
 
     var audioStopDown = function () {
       var vol = Math.max(0, media.volume - volumeStep)

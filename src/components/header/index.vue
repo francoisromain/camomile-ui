@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-inverse color-bg header">
+  <header class="bg-inverse color-bg header">
     <div class="container">
       <div class="blobs">
         <div class="blob-1-4 mb-0">
@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </header>
 </template>
 
 <script>

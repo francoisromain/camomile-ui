@@ -7,12 +7,12 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch, rootState, rootGetters }, { element, uid }) {
-    dispatch('cml/sync/start', `corpusAdd-${uid}`, { root: true })
+  add ({ commit, dispatch, rootState, rootGetters }, { element }) {
+    dispatch('cml/sync/start', `corpusAdd`, { root: true })
     return api
       .createCorpus(element.name, element.description, {})
       .then(r => {
-        dispatch('cml/sync/stop', `corpusAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusAdd`, { root: true })
         const corpu = {
           name: r.data.name,
           id: r.data._id,
@@ -24,61 +24,215 @@ export const actions = {
           description: r.data.description || {}
         }
         corpu.permissions.users[rootState.cml.user.id] = 3
-        commit('add', { corpu, uid })
+        commit('add', { corpu })
         dispatch('cml/messages/success', 'Corpus added', { root: true })
-        dispatch('set', { corpuId: corpu.id, uid })
 
         return corpu
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusAdd`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
   },
 
-  remove ({ commit, dispatch, state }, { id, uid }) {
-    dispatch('cml/sync/start', `corpusRemove-${uid}`, { root: true })
+  remove ({ commit, dispatch, state }, { id }) {
+    dispatch('cml/sync/start', `corpusRemove`, { root: true })
     return api
       .deleteCorpus(id)
       .then(r => {
-        dispatch('cml/sync/stop', `corpusRemove-${uid}`, { root: true })
-        commit('remove', { corpuId: id, uid })
+        dispatch('cml/sync/stop', `corpusRemove`, { root: true })
+        commit('remove', { id })
         dispatch('cml/messages/success', 'Corpus removed', { root: true })
-        if (state.actives[uid] === id) {
-          dispatch('set', { uid })
-        }
+        dispatch('setAll', { id })
 
         return id
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusRemove-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusRemove`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
   },
 
-  update ({ commit, dispatch, state }, { element, uid }) {
-    dispatch('cml/sync/start', `corpusUpdate-${uid}`, { root: true })
+  update ({ commit, dispatch, state }, { element }) {
+    dispatch('cml/sync/start', `corpusUpdate`, { root: true })
     return api
       .updateCorpus(element.id, {
         name: element.name,
         description: element.description
       })
       .then(r => {
-        dispatch('cml/sync/stop', `corpusUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusUpdate`, { root: true })
         const corpu = Object.assign({}, element)
         corpu.name = r.data.name
         corpu.description = r.data.description || {}
-        commit('update', { corpu, uid })
+        commit('update', { corpu })
         dispatch('cml/messages/success', 'Corpus updated', { root: true })
 
         return corpu
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `corpusUpdate`, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
+      })
+  },
+
+  groupPermissionSet (
+    { commit, dispatch, rootGetters },
+    { id, groupId, permission }
+  ) {
+    dispatch('cml/sync/start', `corpusGroupPermissionSet`, {
+      root: true
+    })
+    return api
+      .setCorpusPermissionsForGroup(id, groupId, permission)
+      .then(p => {
+        const permissions = p.data
+        dispatch('cml/sync/stop', `corpusGroupPermissionSet`, {
+          root: true
+        })
+        commit('groupPermissionsUpdate', {
+          id,
+          groupId,
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
+        })
+        dispatch('cml/messages/success', 'Group permissions updated', {
+          root: true
+        })
+
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll')
+          commit(`cml/popup/close`, null, { root: true })
+        }
+
+        return permissions
+      })
+      .catch(e => {
+        dispatch('cml/sync/stop', `corpusGroupPermissionSet`, {
+          root: true
+        })
+
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
+      })
+  },
+
+  groupPermissionRemove ({ commit, dispatch, rootGetters }, { id, groupId }) {
+    dispatch('cml/sync/start', `corpusGroupPermissionRemove`, {
+      root: true
+    })
+    return api
+      .removeCorpusPermissionsForGroup(id, groupId)
+      .then(p => {
+        const permissions = p.data
+        dispatch('cml/sync/stop', `corpusGroupPermissionRemove`, {
+          root: true
+        })
+        commit('groupPermissionsUpdate', { id, groupId, permission: 0 })
+        dispatch('cml/messages/success', 'Group permissions updated', {
+          root: true
+        })
+
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll')
+          commit(`cml/popup/close`, null, { root: true })
+        }
+
+        return permissions
+      })
+      .catch(e => {
+        dispatch('cml/sync/stop', `corpusGroupPermissionRemove`, {
+          root: true
+        })
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
+      })
+  },
+
+  userPermissionSet (
+    { commit, dispatch, rootGetters },
+    { id, userId, permission }
+  ) {
+    dispatch('cml/sync/start', `corpusUserPermissionSet`, { root: true })
+    return api
+      .setCorpusPermissionsForUser(id, userId, permission)
+      .then(p => {
+        const permissions = p.data
+        dispatch('cml/sync/stop', `corpusUserPermissionSet`, {
+          root: true
+        })
+        commit('userPermissionsUpdate', {
+          id,
+          userId,
+          permission: (permissions.users && permissions.users[userId]) || 0
+        })
+        dispatch('cml/messages/success', 'User permissions updated', {
+          root: true
+        })
+
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll')
+          commit(`cml/popup/close`, null, { root: true })
+        }
+
+        return permissions
+      })
+      .catch(e => {
+        dispatch('cml/sync/stop', `corpusUserPermissionSet`, {
+          root: true
+        })
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
+      })
+  },
+
+  userPermissionRemove ({ commit, dispatch, rootGetters }, { id, userId }) {
+    dispatch('cml/sync/start', `corpusUserPermissionRemove`, {
+      root: true
+    })
+    return api
+      .removeCorpusPermissionsForUser(id, userId)
+      .then(p => {
+        const permissions = p.data
+        dispatch('cml/sync/stop', `corpusUserPermissionRemove`, {
+          root: true
+        })
+        commit('userPermissionsUpdate', { id, userId, permission: 0 })
+        dispatch('cml/messages/success', 'User permissions updated', {
+          root: true
+        })
+
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll')
+          commit(`cml/popup/close`, null, { root: true })
+        }
+
+        return permissions
+      })
+      .catch(e => {
+        dispatch('cml/sync/stop', `corpusUserPermissionRemove`, {
+          root: true
+        })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
@@ -124,178 +278,18 @@ export const actions = {
       })
   },
 
-  groupPermissionSet (
-    { commit, dispatch, rootGetters },
-    { corpuId, groupId, permission, uid }
-  ) {
-    dispatch('cml/sync/start', `corpusGroupPermissionSet-${uid}`, {
-      root: true
+  setAll ({ state, dispatch }, { id }) {
+    Object.keys(state.actives).forEach(uid => {
+      if (state.actives[uid] === id) {
+        dispatch('set', { uid })
+      }
     })
-    return api
-      .setCorpusPermissionsForGroup(corpuId, groupId, permission)
-      .then(p => {
-        const permissions = p.data
-        dispatch('cml/sync/stop', `corpusGroupPermissionSet-${uid}`, {
-          root: true
-        })
-        commit('groupPermissionsUpdate', {
-          corpuId,
-          groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0,
-          uid
-        })
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        })
-
-        if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', uid)
-          commit(`cml/popup/close`, null, { root: true })
-        }
-
-        return permissions
-      })
-      .catch(e => {
-        dispatch('cml/sync/stop', `corpusGroupPermissionSet-${uid}`, {
-          root: true
-        })
-
-        dispatch('cml/messages/error', e.message, { root: true })
-
-        throw e
-      })
   },
 
-  groupPermissionRemove (
-    { commit, dispatch, rootGetters },
-    { corpuId, groupId, uid }
-  ) {
-    dispatch('cml/sync/start', `corpusGroupPermissionRemove-${uid}`, {
-      root: true
-    })
-    return api
-      .removeCorpusPermissionsForGroup(corpuId, groupId)
-      .then(p => {
-        const permissions = p.data
-        dispatch('cml/sync/stop', `corpusGroupPermissionRemove-${uid}`, {
-          root: true
-        })
-        commit('groupPermissionsUpdate', {
-          corpuId,
-          groupId,
-          permission: 0,
-          uid
-        })
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        })
-
-        if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', uid)
-          commit(`cml/popup/close`, null, { root: true })
-        }
-
-        return permissions
-      })
-      .catch(e => {
-        dispatch('cml/sync/stop', `corpusGroupPermissionRemove-${uid}`, {
-          root: true
-        })
-        dispatch('cml/messages/error', e.message, { root: true })
-
-        throw e
-      })
-  },
-
-  userPermissionSet (
-    { commit, dispatch, rootGetters },
-    { corpuId, userId, permission, uid }
-  ) {
-    dispatch('cml/sync/start', `corpusUserPermissionSet-${uid}`, { root: true })
-    return api
-      .setCorpusPermissionsForUser(corpuId, userId, permission)
-      .then(p => {
-        const permissions = p.data
-        dispatch('cml/sync/stop', `corpusUserPermissionSet-${uid}`, {
-          root: true
-        })
-        commit('userPermissionsUpdate', {
-          corpuId,
-          userId,
-          permission: (permissions.users && permissions.users[userId]) || 0,
-          uid
-        })
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        })
-
-        if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', uid)
-          commit(`cml/popup/close`, null, { root: true })
-        }
-
-        return permissions
-      })
-      .catch(e => {
-        dispatch('cml/sync/stop', `corpusUserPermissionSet-${uid}`, {
-          root: true
-        })
-        dispatch('cml/messages/error', e.message, { root: true })
-
-        throw e
-      })
-  },
-
-  userPermissionRemove (
-    { commit, dispatch, rootGetters },
-    { corpuId, userId, uid }
-  ) {
-    dispatch('cml/sync/start', `corpusUserPermissionRemove-${uid}`, {
-      root: true
-    })
-    return api
-      .removeCorpusPermissionsForUser(corpuId, userId)
-      .then(p => {
-        const permissions = p.data
-        dispatch('cml/sync/stop', `corpusUserPermissionRemove-${uid}`, {
-          root: true
-        })
-        commit('userPermissionsUpdate', { corpuId, userId, permission: 0, uid })
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        })
-
-        if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', uid)
-          commit(`cml/popup/close`, null, { root: true })
-        }
-
-        return permissions
-      })
-      .catch(e => {
-        dispatch('cml/sync/stop', `corpusUserPermissionRemove-${uid}`, {
-          root: true
-        })
-        dispatch('cml/messages/error', e.message, { root: true })
-
-        throw e
-      })
-  },
-
-  set ({ state, getters, dispatch, commit }, { corpuId, uid }) {
-    commit('set', { corpuId: corpuId || getters.id(uid), uid })
+  set ({ state, getters, dispatch, commit }, { id, uid }) {
+    commit('set', { id: id || getters.id(uid), uid })
+    commit('cml/medias/init', uid, { root: true })
+    commit('cml/layers/init', uid, { root: true })
     if (state.actives[uid]) {
       dispatch(
         'cml/medias/list',
@@ -307,10 +301,11 @@ export const actions = {
         { corpuId: state.actives[uid], uid },
         { root: true }
       )
-    } else {
-      commit('cml/medias/reset', uid, { root: true })
-      commit('cml/layers/reset', uid, { root: true })
     }
+  },
+
+  register ({ state, commit }, uid) {
+    commit('init', uid)
   }
 }
 
@@ -324,47 +319,39 @@ export const getters = {
 }
 
 export const mutations = {
-  register (state, uid) {
+  init (state, uid) {
     Vue.set(state.lists, uid, [])
-  },
-
-  reset (state, uid) {
-    Vue.set(state.lists, uid, [])
-    Vue.delete(state.actives, uid)
+    Vue.set(state.actives, uid, null)
   },
 
   resetAll (state) {
-    state.lists = {}
-    state.actives = {}
+    Vue.set(state, 'lists', {})
+    Vue.set(state, 'actives', {})
   },
 
-  add (state, { corpu, uid }) {
-    Object.keys(state.actives).forEach(id => {
-      const index = state.lists[id].length
-      Vue.set(state.lists[id], index, corpu)
+  add (state, { corpu }) {
+    Object.keys(state.lists).forEach(uid => {
+      const index = state.lists[uid].length
+      Vue.set(state.lists[uid], index, corpu)
     })
   },
 
-  update (state, { corpu, uid }) {
-    const index = state.lists[uid].findIndex(m => m.id === corpu.id)
-    if (index !== -1) {
-      Vue.set(state.lists[uid], index, corpu)
-    }
+  update (state, { corpu }) {
+    Object.keys(state.lists).forEach(uid => {
+      const index = state.lists[uid].findIndex(m => m.id === corpu.id)
+      if (index !== -1) {
+        Vue.set(state.lists[uid], index, corpu)
+      }
+    })
   },
 
-  remove (state, { corpuId, uid }) {
-    const index = state.lists[uid].findIndex(m => m.id === corpuId)
-    if (index !== -1) {
-      Vue.delete(state.lists[uid], index)
-    }
-  },
-
-  list (state, { corpus, uid }) {
-    Vue.set(state.lists, uid, corpus)
-  },
-
-  set (state, { corpuId, uid }) {
-    Vue.set(state.actives, uid, corpuId)
+  remove (state, { id }) {
+    Object.keys(state.lists).forEach(uid => {
+      const index = state.lists[uid].findIndex(c => c.id === id)
+      if (index !== -1) {
+        Vue.delete(state.lists[uid], index)
+      }
+    })
   },
 
   groupAdd (state, groupId) {
@@ -399,18 +386,30 @@ export const mutations = {
     })
   },
 
-  groupPermissionsUpdate (state, { corpuId, groupId, permission, uid }) {
-    const index = state.lists[uid].findIndex(m => m.id === corpuId)
-    if (index !== -1) {
-      Vue.set(state.lists[uid][index].permissions.groups, groupId, permission)
-    }
+  groupPermissionsUpdate (state, { id, groupId, permission }) {
+    Object.keys(state.lists).forEach(uid => {
+      const index = state.lists[uid].findIndex(m => m.id === id)
+      if (index !== -1) {
+        Vue.set(state.lists[uid][index].permissions.groups, groupId, permission)
+      }
+    })
   },
 
-  userPermissionsUpdate (state, { corpuId, userId, permission, uid }) {
-    const index = state.lists[uid].findIndex(m => m.id === corpuId)
-    if (index !== -1) {
-      Vue.set(state.lists[uid][index].permissions.users, userId, permission)
-    }
+  userPermissionsUpdate (state, { id, userId, permission }) {
+    Object.keys(state.lists).forEach(uid => {
+      const index = state.lists[uid].findIndex(m => m.id === id)
+      if (index !== -1) {
+        Vue.set(state.lists[uid][index].permissions.users, userId, permission)
+      }
+    })
+  },
+
+  list (state, { corpus, uid }) {
+    Vue.set(state.lists, uid, corpus)
+  },
+
+  set (state, { id, uid }) {
+    Vue.set(state.actives, uid, id)
   }
 }
 

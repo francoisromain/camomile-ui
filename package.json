@@ -23,17 +23,21 @@
   "main": "dist/camomile-ui.common.js",
   "module": "dist/camomile-ui.esm.js",
   "browser": "dist/camomile-ui.umd.js",
-  "keywords": ["camomile", "ui", "collaborative", "annotation", "platform"],
+  "keywords": [
+    "camomile",
+    "ui",
+    "collaborative",
+    "annotation",
+    "platform"
+  ],
   "scripts": {
     "jest": "jest --verbose --coverage --watch",
     "test": "jest --verbose && codecov",
     "dist": "cross-env NODE_ENV=production node build/webpack.dist.js",
     "dev": "cross-env NODE_ENV=development node build/webpack.dev.js",
     "build": "rollup -c build/rollup.config.dist.js",
-    "styleguide":
-      "vue-styleguidist --config build/webpack.styleguide.config.js server",
-    "styleguide:build":
-      "vue-styleguidist --config build/webpack.styleguide.config.js build"
+    "styleguide": "vue-styleguidist --config build/webpack.styleguide.config.js server",
+    "styleguide:build": "vue-styleguidist --config build/webpack.styleguide.config.js build"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -45,8 +49,8 @@
     "@babel/core": "^7.0.0-beta.36",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.36",
     "@babel/preset-env": "^7.0.0-beta.36",
-    "@types/jest": "^21.1.9",
-    "autoprefixer": "^7.2.3",
+    "@types/jest": "^22.0.0",
+    "autoprefixer": "^7.2.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^22.0.4",
     "babel-loader": "^8.0.0-beta.0",
@@ -77,7 +81,7 @@
     "pixrem": "^4.0.1",
     "pleeease-filters": "^4.0.0",
     "plyr": "^2.0.18",
-    "postcss": "^6.0.14",
+    "postcss": "^6.0.15",
     "postcss-attribute-case-insensitive": "^2.0.0",
     "postcss-browser-reporter": "^0.5.0",
     "postcss-button": "^0.3.7",
@@ -100,7 +104,7 @@
     "postcss-import": "^11.0.0",
     "postcss-initial": "^2.0.0",
     "postcss-inline-svg": "^3.0.0",
-    "postcss-loader": "^2.0.9",
+    "postcss-loader": "^2.0.10",
     "postcss-media-minmax": "^3.0.0",
     "postcss-nesting": "^4.2.1",
     "postcss-normalize": "^4.0.0",
@@ -114,7 +118,7 @@
     "postcss-url": "^7.3.0",
     "progress-bar-webpack-plugin": "^1.10.0",
     "rimraf": "^2.6.2",
-    "rollup": "^0.53.0",
+    "rollup": "^0.53.3",
     "rollup-plugin-buble": "^0.18.0",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-json": "^2.3.0",
@@ -129,7 +133,7 @@
     "url-loader": "^0.6.2",
     "vue-hot-reload-api": "^2.2.4",
     "vue-html-loader": "^1.2.4",
-    "vue-loader": "^13.6.1",
+    "vue-loader": "^13.6.2",
     "vue-server-renderer": "^2.5.13",
     "vue-style-loader": "^3.0.3",
     "vue-styleguidist": "^1.3.9",
@@ -146,7 +150,10 @@
     "env": {
       "browser": true
     },
-    "plugins": ["html", "compat"],
+    "plugins": [
+      "html",
+      "compat"
+    ],
     "rules": {
       "compat/compat": 2,
       "arrow-parens": 0,
@@ -154,17 +161,25 @@
     }
   },
   "stylelint": {
-    "processors": ["stylelint-processor-html"],
+    "processors": [
+      "stylelint-processor-html"
+    ],
     "extends": "stylelint-config-standard",
     "rules": {
       "property-no-unknown": [
         true,
         {
-          "ignoreProperties": ["typescale", "gf", "/button-/"]
+          "ignoreProperties": [
+            "typescale",
+            "gf",
+            "/button-/"
+          ]
         }
       ]
     },
-    "ignoreFiles": ["./dist/**/*"]
+    "ignoreFiles": [
+      "./dist/**/*"
+    ]
   },
   "browserslist": [
     "Chrome >= 60",
@@ -178,14 +193,22 @@
       "^vue$": "vue/dist/vue.runtime.min.js",
       "^.+\\.(css)$": "<rootDir>/src/__mocks__/css.js"
     },
-    "moduleFileExtensions": ["js", "json", "vue"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
     "transform": {
       "^.+\\.js$": "babel-jest",
       ".*\\.(vue)$": "jest-vue-preprocessor"
     },
     "mapCoverage": true,
-    "snapshotSerializers": ["jest-serializer-vue"],
-    "roots": ["<rootDir>/src/"],
+    "snapshotSerializers": [
+      "jest-serializer-vue"
+    ],
+    "roots": [
+      "<rootDir>/src/"
+    ],
     "coverageDirectory": "<rootDir>/coverage/",
     "collectCoverage": true
   },

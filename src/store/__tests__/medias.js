@@ -1,12 +1,12 @@
 import { createLocalVue } from 'vue-test-utils'
 import Vuex from 'vuex'
-import corpus from '../corpus'
+import sync from '../sync'
+import popup from '../popup'
 import messages from '../messages'
 import user from '../user'
 import users from '../users'
 import groups from '../groups'
-import popup from '../popup'
-import sync from '../sync'
+import corpus from '../corpus'
 import medias from '../medias'
 import layers from '../layers'
 import annotations from '../annotations'
@@ -25,8 +25,14 @@ describe('store medias actions', () => {
     }
 
     user.state = {
+      name: 'lu',
       id: 'mocks-user-id-lu',
-      groupIds: ['mocks-group-id-1']
+      groupIds: ['mocks-group-id-1'],
+      role: 'user',
+      description: {},
+      isLogged: true,
+      isAdmin: false,
+      isRoot: false
     }
 
     users.state = {
@@ -35,6 +41,26 @@ describe('store medias actions', () => {
 
     groups.state = {
       list: [{ id: 'mocks-group-id-1' }, { id: 'mocks-group-id-2' }]
+    }
+
+    corpus.state = {
+      actives: {
+        default: 'mocks-corpu-id-1'
+      },
+      lists: {
+        default: [
+          {
+            id: 'mocks-corpu-id-1',
+            name: 'corpu-1',
+            description: {},
+            permission: 0,
+            permissions: {
+              groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
+              users: { 'mocks-user-id-lu': 2, 'mocks-user-id-ji': 0 }
+            }
+          }
+        ]
+      }
     }
 
     medias.state = {
@@ -66,10 +92,41 @@ describe('store medias actions', () => {
 
     layers.state = {
       actives: {
-        default: 'mocks-layer-id-1'
+        default: ['mocks-layer-id-1']
       },
       lists: {
         default: []
+      }
+    }
+
+    annotations.state = {
+      actives: {
+        default: {
+          'mocks-layer-id-1': ['mocks-annotation-id-1']
+        }
+      },
+      lists: {
+        default: {
+          'mocks-layer-id-1': [
+            {
+              id: 'mocks-annotation-id-1',
+              fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
+              metadata: { metadata: 'Maecenas faucibus mollis interdum.' },
+              mediaId: 'mocks-media-id-1',
+              layerId: 'mocks-layer-id-1'
+            },
+            {
+              id: 'mocks-annotation-id-2',
+              fragment: {
+                fragment: 'Etiam porta sem malesuada magna mollis euismod.'
+              },
+              metadata: {
+                metadata: 'Etiam porta sem malesuada magna mollis euismod.'
+              },
+              layerId: 'mocks-layer-id-1'
+            }
+          ]
+        }
       }
     }
 
@@ -78,13 +135,13 @@ describe('store medias actions', () => {
         cml: {
           namespaced: true,
           modules: {
-            user,
-            groups,
-            users,
-            corpus,
             messages,
             popup,
             sync,
+            user,
+            users,
+            groups,
+            corpus,
             medias,
             layers,
             annotations
@@ -103,34 +160,32 @@ describe('store medias actions', () => {
     }
 
     expect.assertions(2)
-    return store
-      .dispatch('cml/medias/add', { element, uid: 'default' })
-      .then(r => {
-        expect(store.state.cml.medias.lists['default']).toEqual([
-          {
-            corpuId: 'mocks-corpu-id-1',
-            description: { desc: 'Ornare Malesuada Fermentum Parturient' },
-            id: 'mocks-media-id-1',
-            name: 'media-1',
-            url: 'https://www.limsi.fr/'
-          },
-          {
-            corpuId: 'mocks-corpu-id-1',
-            description: { desc: 'Condimentum Elit Mattis Quam' },
-            id: 'mocks-media-id-2',
-            name: 'media-2',
-            url: 'https://github.com'
-          },
-          {
-            corpuId: 'mocks-corpu-id-1',
-            description: {},
-            id: 'mocks-media-id-new',
-            name: 'media-1',
-            url: 'https://en.wikipedia.org/'
-          }
-        ])
-        expect(store.state.cml.messages.list[0].content).toBe('Medium added')
-      })
+    return store.dispatch('cml/medias/add', { element }).then(r => {
+      expect(store.state.cml.medias.lists['default']).toEqual([
+        {
+          corpuId: 'mocks-corpu-id-1',
+          description: { desc: 'Ornare Malesuada Fermentum Parturient' },
+          id: 'mocks-media-id-1',
+          name: 'media-1',
+          url: 'https://www.limsi.fr/'
+        },
+        {
+          corpuId: 'mocks-corpu-id-1',
+          description: { desc: 'Condimentum Elit Mattis Quam' },
+          id: 'mocks-media-id-2',
+          name: 'media-2',
+          url: 'https://github.com'
+        },
+        {
+          corpuId: 'mocks-corpu-id-1',
+          description: {},
+          id: 'mocks-media-id-new',
+          name: 'media-1',
+          url: 'https://en.wikipedia.org/'
+        }
+      ])
+      expect(store.state.cml.messages.list[0].content).toBe('Medium added')
+    })
   })
 
   it('adds a new media (error)', () => {
@@ -142,7 +197,7 @@ describe('store medias actions', () => {
     }
 
     return expect(
-      store.dispatch('cml/medias/remove', { element, uid: 'default' })
+      store.dispatch('cml/medias/remove', { element })
     ).rejects.toThrow('Api')
   })
 
@@ -150,61 +205,59 @@ describe('store medias actions', () => {
     const id = 'mocks-media-id-1'
 
     expect.assertions(2)
-    return store
-      .dispatch('cml/medias/remove', { id, uid: 'default' })
-      .then(r => {
-        expect(store.state.cml.medias.lists['default']).toEqual([
-          {
-            corpuId: 'mocks-corpu-id-1',
-            description: { desc: 'Condimentum Elit Mattis Quam' },
-            id: 'mocks-media-id-2',
-            name: 'media-2',
-            url: 'https://github.com'
-          }
-        ])
-        expect(store.state.cml.messages.list[0].content).toBe('Medium removed')
-      })
+    return store.dispatch('cml/medias/remove', { id }).then(r => {
+      expect(store.state.cml.medias.lists['default']).toEqual([
+        {
+          corpuId: 'mocks-corpu-id-1',
+          description: { desc: 'Condimentum Elit Mattis Quam' },
+          id: 'mocks-media-id-2',
+          name: 'media-2',
+          url: 'https://github.com'
+        }
+      ])
+      expect(store.state.cml.messages.list[0].content).toBe('Medium removed')
+    })
   })
 
   it('removes a media (error)', () => {
     const id = '' // throw an error
 
-    return expect(
-      store.dispatch('cml/medias/remove', { id, uid: 'default' })
-    ).rejects.toThrow('Api')
+    return expect(store.dispatch('cml/medias/remove', { id })).rejects.toThrow(
+      'Api'
+    )
   })
 
   it('updates a media', () => {
     const element = {
       corpuId: 'mocks-corpu-id-1',
-      description: { desc: 'Sollicitudin Quam Fringilla Ullamcorper' },
+      description: { desc: 'Updated: Sollicitudin Quam Fringilla Ullamcorper' },
       id: 'mocks-media-id-1',
       name: 'media-limsi',
       url: 'https://www.limsi.fr/fr/laboratoire/soutien-a-la-recherche'
     }
 
     expect.assertions(2)
-    return store
-      .dispatch('cml/medias/update', { element, uid: 'default' })
-      .then(r => {
-        expect(store.state.cml.medias.lists['default']).toEqual([
-          {
-            corpuId: 'mocks-corpu-id-1',
-            description: { desc: 'Sollicitudin Quam Fringilla Ullamcorper' },
-            id: 'mocks-media-id-1',
-            name: 'media-limsi',
-            url: 'https://www.limsi.fr/fr/laboratoire/soutien-a-la-recherche'
+    return store.dispatch('cml/medias/update', { element }).then(r => {
+      expect(store.state.cml.medias.lists['default']).toEqual([
+        {
+          corpuId: 'mocks-corpu-id-1',
+          description: {
+            desc: 'Updated: Sollicitudin Quam Fringilla Ullamcorper'
           },
-          {
-            corpuId: 'mocks-corpu-id-1',
-            description: { desc: 'Condimentum Elit Mattis Quam' },
-            id: 'mocks-media-id-2',
-            name: 'media-2',
-            url: 'https://github.com'
-          }
-        ])
-        expect(store.state.cml.messages.list[0].content).toBe('Medium updated')
-      })
+          id: 'mocks-media-id-1',
+          name: 'media-limsi',
+          url: 'https://www.limsi.fr/fr/laboratoire/soutien-a-la-recherche'
+        },
+        {
+          corpuId: 'mocks-corpu-id-1',
+          description: { desc: 'Condimentum Elit Mattis Quam' },
+          id: 'mocks-media-id-2',
+          name: 'media-2',
+          url: 'https://github.com'
+        }
+      ])
+      expect(store.state.cml.messages.list[0].content).toBe('Medium updated')
+    })
   })
 
   it('updates a media (error)', () => {
@@ -217,7 +270,7 @@ describe('store medias actions', () => {
     }
 
     return expect(
-      store.dispatch('cml/medias/update', { element, uid: 'default' })
+      store.dispatch('cml/medias/update', { element })
     ).rejects.toThrow('Api')
   })
 
@@ -244,15 +297,13 @@ describe('store medias actions', () => {
   })
 
   it('sets selected media', () => {
-    const mediaId = 'mocks-media-id-2'
+    const id = 'mocks-media-id-2'
     expect.assertions(1)
-    return store
-      .dispatch('cml/medias/set', { mediaId, uid: 'default' })
-      .then(r => {
-        expect(store.state.cml.medias.actives['default']).toEqual(
-          'mocks-media-id-2'
-        )
-      })
+    return store.dispatch('cml/medias/set', { id, uid: 'default' }).then(r => {
+      expect(store.state.cml.medias.actives['default']).toEqual(
+        'mocks-media-id-2'
+      )
+    })
   })
 })
 

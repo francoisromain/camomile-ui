@@ -7,8 +7,8 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch, rootState, rootGetters }, { element, uid }) {
-    dispatch('cml/sync/start', `layersAdd-${uid}`, { root: true })
+  add ({ state, commit, dispatch, rootState, rootGetters }, { element }) {
+    dispatch('cml/sync/start', `layersAdd`, { root: true })
     return api
       .createLayer(
         element.corpuId,
@@ -19,7 +19,7 @@ export const actions = {
         element.annotations
       )
       .then(r => {
-        dispatch('cml/sync/stop', `layersAdd-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersAdd`, { root: true })
         const layer = {
           name: r.data.name,
           id: r.data._id,
@@ -33,49 +33,48 @@ export const actions = {
           metadataType: r.data.data_type || {},
           annotations: r.data.annotations
         }
-
         layer.permissions.users[rootState.cml.user.id] = 3
 
-        commit('add', { layer, uid })
+        Object.keys(state.lists).forEach(uid => {
+          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
+            commit('add', { layer, uid })
+          }
+        })
         dispatch('cml/messages/success', 'Layer added', { root: true })
-        dispatch('set', { layerId: layer.id, uid })
 
         return layer
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `layersAdd-${uid}`, { root: true })
-
+        dispatch('cml/sync/stop', `layersAdd`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
   },
 
-  remove ({ commit, dispatch, state, rootState }, { id, uid }) {
-    dispatch('cml/sync/start', `layersRemove-${uid}`, { root: true })
+  remove ({ state, commit, dispatch, rootState }, { id }) {
+    dispatch('cml/sync/start', `layersRemove`, { root: true })
     return api
       .deleteLayer(id)
       .then(r => {
-        dispatch('cml/sync/stop', `layersRemove-${uid}`, { root: true })
-        commit('remove', { layerId: id, uid })
+        dispatch('cml/sync/stop', `layersRemove`, { root: true })
+        Object.keys(state.lists).forEach(uid => {
+          commit('remove', { id, uid })
+        })
         dispatch('cml/messages/success', 'Layer removed', { root: true })
-        if (state.actives[uid] === id) {
-          dispatch('set', { uid })
-        }
 
         return id
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `layersRemove-${uid}`, { root: true })
-
+        dispatch('cml/sync/stop', `layersRemove`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
   },
 
-  update ({ commit, dispatch, state, rootState }, { element, uid }) {
-    dispatch('cml/sync/start', `layersUpdate-${uid}`, { root: true })
+  update ({ state, commit, dispatch, rootGetters }, { element }) {
+    dispatch('cml/sync/start', `layersUpdate`, { root: true })
     return api
       .updateLayer(element.id, {
         name: element.name,
@@ -84,23 +83,195 @@ export const actions = {
         data_type: element.metadataType
       })
       .then(r => {
-        dispatch('cml/sync/stop', `layersUpdate-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersUpdate`, { root: true })
         const layer = Object.assign({}, element)
         layer.description = r.data.description || {}
         layer.fragmentType = r.data.fragment_type || {}
         layer.metadataType = r.data.data_type || {}
-        commit('update', { layer, uid })
+
+        Object.keys(state.lists).forEach(uid => {
+          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
+            commit('update', { layer, uid })
+          }
+        })
         dispatch('cml/messages/success', 'Layer updated', { root: true })
 
         return layer
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `layersUpdate-${uid}`, { root: true })
-
+        dispatch('cml/sync/stop', `layersUpdate`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
+  },
+
+  groupPermissionSet (
+    { commit, dispatch, rootState, rootGetters },
+    { id, groupId, permission }
+  ) {
+    dispatch('cml/sync/start', `layersGroupPermissionSet`, {
+      root: true
+    })
+    return api
+      .setLayerPermissionsForGroup(id, groupId, permission)
+      .then(p => {
+        const permissions = p.data
+        dispatch('cml/sync/stop', `layersGroupPermissionSet`, {
+          root: true
+        })
+        commit('groupPermissionsUpdate', {
+          id,
+          groupId,
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
+        })
+        dispatch('cml/messages/success', 'Group permissions updated', {
+          root: true
+        })
+
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll')
+          commit('cml/popup/close', null, { root: true })
+        }
+
+        return permissions
+      })
+      .catch(e => {
+        dispatch('cml/sync/stop', `layersGroupPermissionSet`, {
+          root: true
+        })
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
+      })
+  },
+
+  groupPermissionRemove (
+    { commit, dispatch, rootState, rootGetters },
+    { id, groupId }
+  ) {
+    dispatch('cml/sync/start', `layersGroupPermissionRemove`, {
+      root: true
+    })
+    return api
+      .removeLayerPermissionsForGroup(id, groupId)
+      .then(p => {
+        const permissions = p.data
+        dispatch('cml/sync/stop', `layersGroupPermissionRemove`, {
+          root: true
+        })
+        commit('groupPermissionsUpdate', { id, groupId, permission: 0 })
+        dispatch('cml/messages/success', 'Group permissions updated', {
+          root: true
+        })
+
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll')
+          commit('cml/popup/close', null, { root: true })
+        }
+
+        return permissions
+      })
+      .catch(e => {
+        dispatch('cml/sync/stop', `layersGroupPermissionRemove`, {
+          root: true
+        })
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
+      })
+  },
+
+  userPermissionSet (
+    { commit, dispatch, rootState, rootGetters },
+    { id, userId, permission }
+  ) {
+    dispatch('cml/sync/start', `layersUserPermissionSet`, { root: true })
+    return api
+      .setLayerPermissionsForUser(id, userId, permission)
+      .then(p => {
+        const permissions = p.data
+        dispatch('cml/sync/stop', `layersUserPermissionSet`, {
+          root: true
+        })
+        commit('userPermissionsUpdate', {
+          id,
+          userId,
+          permission: (permissions.users && permissions.users[userId]) || 0
+        })
+        dispatch('cml/messages/success', 'User permissions updated', {
+          root: true
+        })
+
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll')
+          commit('cml/popup/close', null, { root: true })
+        }
+
+        return permissions
+      })
+      .catch(e => {
+        dispatch('cml/sync/stop', `layersUserPermissionSet`, {
+          root: true
+        })
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
+      })
+  },
+
+  userPermissionRemove (
+    { commit, dispatch, rootState, rootGetters },
+    { id, userId }
+  ) {
+    dispatch('cml/sync/start', `layersUserPermissionRemove`, {
+      root: true
+    })
+    return api
+      .removeLayerPermissionsForUser(id, userId)
+      .then(p => {
+        const permissions = p.data
+        dispatch('cml/sync/stop', `layersUserPermissionRemove`, {
+          root: true
+        })
+        commit('userPermissionsUpdate', { id, userId, permission: 0 })
+        dispatch('cml/messages/success', 'User permissions updated', {
+          root: true
+        })
+
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll')
+          commit('cml/popup/close', null, { root: true })
+        }
+
+        return permissions
+      })
+      .catch(e => {
+        dispatch('cml/sync/stop', `layersUserPermissionRemove`, {
+          root: true
+        })
+        dispatch('cml/messages/error', e.message, { root: true })
+
+        throw e
+      })
+  },
+
+  listAll ({ state, dispatch, rootState }) {
+    Object.keys(state.lists).forEach(uid => {
+      dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid })
+    })
   },
 
   list ({ dispatch, commit, rootGetters }, { corpuId, uid }) {
@@ -127,216 +298,40 @@ export const actions = {
           annotations: l.annotations || []
         }))
         commit('list', { layers, uid })
-        dispatch('set', { uid })
+        dispatch('setAll', { uid })
 
         return layers
       })
       .catch(e => {
         dispatch('cml/sync/stop', `layersList-${uid}`, { root: true })
+        dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
   },
 
-  groupPermissionSet (
-    { commit, dispatch, rootState, rootGetters },
-    { layerId, groupId, permission, uid }
-  ) {
-    dispatch('cml/sync/start', `layersGroupPermissionSet-${uid}`, {
-      root: true
+  setAll ({ state, dispatch, commit }, { uid }) {
+    commit('cml/annotations/init', { uid }, { root: true })
+    state.lists[uid].forEach(l => {
+      dispatch('set', { id: l.id, uid })
     })
-    return api
-      .setLayerPermissionsForGroup(layerId, groupId, permission)
-      .then(p => {
-        const permissions = p.data
-        dispatch('cml/sync/stop', `layersGroupPermissionSet-${uid}`, {
-          root: true
-        })
-        commit('groupPermissionsUpdate', {
-          layerId,
-          groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0,
-          uid
-        })
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        })
-
-        if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid })
-          commit('cml/popup/close', null, { root: true })
-        }
-
-        return permissions
-      })
-      .catch(e => {
-        dispatch('cml/sync/stop', `layersGroupPermissionSet-${uid}`, {
-          root: true
-        })
-
-        dispatch('cml/messages/error', e.message, { root: true })
-
-        throw e
-      })
   },
 
-  groupPermissionRemove (
-    { commit, dispatch, rootState, rootGetters },
-    { layerId, groupId, uid }
-  ) {
-    dispatch('cml/sync/start', `layersGroupPermissionRemove-${uid}`, {
-      root: true
-    })
-    return api
-      .removeLayerPermissionsForGroup(layerId, groupId)
-      .then(p => {
-        const permissions = p.data
-        dispatch('cml/sync/stop', `layersGroupPermissionRemove-${uid}`, {
-          root: true
-        })
-        commit('groupPermissionsUpdate', {
-          layerId,
-          groupId,
-          permission: 0,
-          uid
-        })
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        })
-
-        if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid })
-          commit('cml/popup/close', null, { root: true })
-        }
-
-        return permissions
-      })
-      .catch(e => {
-        dispatch('cml/sync/stop', `layersGroupPermissionRemove-${uid}`, {
-          root: true
-        })
-
-        dispatch('cml/messages/error', e.message, { root: true })
-
-        throw e
-      })
+  set ({ dispatch, commit }, { id, uid }) {
+    commit('set', { id, uid })
+    dispatch('cml/annotations/list', { layerId: id, uid }, { root: true })
   },
 
-  userPermissionSet (
-    { commit, dispatch, rootState, rootGetters },
-    { layerId, userId, permission, uid }
-  ) {
-    dispatch('cml/sync/start', `layersUserPermissionSet-${uid}`, { root: true })
-    return api
-      .setLayerPermissionsForUser(layerId, userId, permission)
-      .then(p => {
-        const permissions = p.data
-        dispatch('cml/sync/stop', `layersUserPermissionSet-${uid}`, {
-          root: true
-        })
-        commit('userPermissionsUpdate', {
-          layerId,
-          userId,
-          permission: (permissions.users && permissions.users[userId]) || 0,
-          uid
-        })
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        })
-
-        if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid })
-          commit('cml/popup/close', null, { root: true })
-        }
-
-        return permissions
-      })
-      .catch(e => {
-        dispatch('cml/sync/stop', `layersUserPermissionSet-${uid}`, {
-          root: true
-        })
-
-        dispatch('cml/messages/error', e.message, { root: true })
-
-        throw e
-      })
-  },
-
-  userPermissionRemove (
-    { commit, dispatch, rootState, rootGetters },
-    { layerId, userId, uid }
-  ) {
-    dispatch('cml/sync/start', `layersUserPermissionRemove-${uid}`, {
-      root: true
-    })
-    return api
-      .removeLayerPermissionsForUser(layerId, userId)
-      .then(p => {
-        const permissions = p.data
-        dispatch('cml/sync/stop', `layersUserPermissionRemove-${uid}`, {
-          root: true
-        })
-        commit('userPermissionsUpdate', { layerId, userId, permission: 0, uid })
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        })
-
-        if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid })
-          commit('cml/popup/close', null, { root: true })
-        }
-
-        return permissions
-      })
-      .catch(e => {
-        dispatch('cml/sync/stop', `layersUserPermissionRemove-${uid}`, {
-          root: true
-        })
-        dispatch('cml/messages/error', e.message, { root: true })
-
-        throw e
-      })
-  },
-
-  set ({ state, getters, dispatch, commit }, { layerId, uid }) {
-    commit('set', { layerId: layerId || getters.id(uid), uid })
-    if (state.actives[uid]) {
-      dispatch(
-        'cml/annotations/list',
-        { layerId: state.actives[uid], uid },
-        { root: true }
-      )
-    } else {
-      commit('cml/annotations/reset', uid, { root: true })
-    }
+  unset ({ dispatch, commit }, { id, uid }) {
+    commit('unset', { id, uid })
+    commit('cml/annotations/reset', { layerId: id, uid }, { root: true })
   }
 }
 
-export const getters = {
-  id: state => uid =>
-    (state.actives[uid] &&
-      state.lists[uid].map(c => c.id).indexOf(state.actives[uid]) !== -1 &&
-      state.actives[uid]) ||
-    (state.lists[uid][0] && state.lists[uid][0].id) ||
-    null
-}
-
 export const mutations = {
-  reset (state, uid) {
+  init (state, uid) {
     Vue.set(state.lists, uid, [])
-    Vue.delete(state.actives, uid)
+    Vue.set(state.actives, uid, [])
   },
 
   resetAll (state) {
@@ -349,72 +344,88 @@ export const mutations = {
     Vue.set(state.lists[uid], index, layer)
   },
 
+  remove (state, { id, uid }) {
+    const listIndex = state.lists[uid].findIndex(e => e.id === id)
+    if (listIndex !== -1) {
+      Vue.delete(state.lists[uid], listIndex)
+    }
+
+    const activeIndex = state.actives[uid].findIndex(e => e.id === id)
+    if (activeIndex !== -1) {
+      Vue.delete(state.actives[uid], activeIndex)
+    }
+  },
+
   update (state, { layer, uid }) {
     const index = state.lists[uid].findIndex(l => l.id === layer.id)
-    if (index !== -1) {
-      Vue.set(state.lists[uid], index, layer)
-    }
-  },
-
-  remove (state, { layerId, uid }) {
-    const index = state.lists[uid].findIndex(l => l.id === layerId)
-    if (index !== -1) {
-      Vue.delete(state.lists[uid], index)
-    }
-  },
-
-  list (state, { layers, uid }) {
-    Vue.set(state.lists, uid, layers)
-  },
-
-  set (state, { layerId, uid }) {
-    Vue.set(state.actives, uid, layerId)
+    Vue.set(state.lists[uid], index, layer)
   },
 
   groupAdd (state, groupId) {
     Object.keys(state.lists).forEach(uid => {
-      state.lists[uid].forEach(c => {
-        Vue.set(c.permissions.groups, groupId, 0)
+      state.lists[uid].forEach(e => {
+        Vue.set(e.permissions.groups, groupId, 0)
       })
     })
   },
 
   groupRemove (state, groupId) {
     Object.keys(state.lists).forEach(uid => {
-      state.lists[uid].forEach(c => {
-        Vue.delete(c.permissions.groups, groupId)
+      state.lists[uid].forEach(e => {
+        Vue.delete(e.permissions.groups, groupId)
       })
     })
   },
 
   userAdd (state, userId) {
     Object.keys(state.lists).forEach(uid => {
-      state.lists[uid].forEach(c => {
-        Vue.set(c.permissions.users, userId, 0)
+      state.lists[uid].forEach(e => {
+        Vue.set(e.permissions.users, userId, 0)
       })
     })
   },
 
   userRemove (state, userId) {
     Object.keys(state.lists).forEach(uid => {
-      state.lists[uid].forEach(c => {
-        Vue.delete(c.permissions.users, userId)
+      state.lists[uid].forEach(e => {
+        Vue.delete(e.permissions.users, userId)
       })
     })
   },
 
-  groupPermissionsUpdate (state, { layerId, groupId, permission, uid }) {
-    const index = state.lists[uid].findIndex(m => m.id === layerId)
-    if (index !== -1) {
-      Vue.set(state.lists[uid][index].permissions.groups, groupId, permission)
+  groupPermissionsUpdate (state, { id, groupId, permission }) {
+    Object.keys(state.lists).forEach(uid => {
+      const index = state.lists[uid].findIndex(e => e.id === id)
+      if (index !== -1) {
+        Vue.set(state.lists[uid][index].permissions.groups, groupId, permission)
+      }
+    })
+  },
+
+  userPermissionsUpdate (state, { id, userId, permission }) {
+    Object.keys(state.lists).forEach(uid => {
+      const index = state.lists[uid].findIndex(e => e.id === id)
+      if (index !== -1) {
+        Vue.set(state.lists[uid][index].permissions.users, userId, permission)
+      }
+    })
+  },
+
+  list (state, { layers, uid }) {
+    Vue.set(state.lists, uid, layers)
+  },
+
+  set (state, { id, uid }) {
+    if (!state.actives[uid]) {
+      Vue.set(state.actives, uid, [id])
+    } else {
+      Vue.set(state.actives[uid], state.actives[uid].length, id)
     }
   },
 
-  userPermissionsUpdate (state, { layerId, userId, permission, uid }) {
-    const index = state.lists[uid].findIndex(m => m.id === layerId)
-    if (index !== -1) {
-      Vue.set(state.lists[uid][index].permissions.users, userId, permission)
-    }
+  unset (state, { id, uid }) {
+    const index = state.actives[uid].indexOf(id)
+    Vue.delete(state.actives[uid], index)
   }
 }
 
@@ -422,6 +433,5 @@ export default {
   namespaced: true,
   state,
   actions,
-  getters,
   mutations
 }

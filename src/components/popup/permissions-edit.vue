@@ -37,16 +37,14 @@ export default {
     toggle (permission) {
       if (this.isActive(permission)) {
         this.$store.dispatch(`cml/${this.type}s/${this.element.type}PermissionRemove`, {
-          [`${this.type}Id`]: this.id,
-          [`${this.element.type}Id`]: this.element.id,
-          uid: this.uid
+          id: this.id,
+          [`${this.element.type}Id`]: this.element.id
         })
       } else {
         this.$store.dispatch(`cml/${this.type}s/${this.element.type}PermissionSet`, {
-          [`${this.type}Id`]: this.id,
+          id: this.id,
           [`${this.element.type}Id`]: this.element.id,
-          permission,
-          uid: this.uid
+          permission
         })
       }
     },

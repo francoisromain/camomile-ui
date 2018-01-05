@@ -74,7 +74,6 @@ export default {
     ...mapState({
       element: state => state.cml.popup.element,
       type: state => state.cml.popup.config.type,
-      uid: state => state.cml.popup.config.uid,
       rolesPermission: state => state.cml.user.id !== state.cml.popup.element.id,
       roles: state => state.cml.config.roles
     })
@@ -83,9 +82,9 @@ export default {
   methods: {
     save () {
       if (this.element.id) {
-        this.$store.dispatch(`cml/${this.type}/update`, { element: this.element, uid: this.uid })
+        this.$store.dispatch(`cml/${this.type}/update`, { element: this.element })
       } else {
-        this.$store.dispatch(`cml/${this.type}/add`, { element: this.element, uid: this.uid })
+        this.$store.dispatch(`cml/${this.type}/add`, { element: this.element })
       }
       this.$store.commit('cml/popup/close')
     },

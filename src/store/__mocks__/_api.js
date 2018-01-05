@@ -702,7 +702,7 @@ const api = {
     })
   },
 
-  getAnnotations () {
+  getAnnotations ({ filter: { id_layer } }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         resolve({ data: annotations })

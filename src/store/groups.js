@@ -7,7 +7,7 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch, state, rootState }, { element }) {
+  add ({ commit, dispatch, state }, { element }) {
     dispatch('cml/sync/start', 'groupsAdd', { root: true })
     return api
       .createGroup(element.name, element.description)
@@ -16,6 +16,7 @@ export const actions = {
         const group = groupFormat(r.data)
         commit('add', group)
         commit('cml/corpus/groupAdd', group.id, { root: true })
+        commit('cml/layers/groupAdd', group.id, { root: true })
         dispatch('cml/messages/success', 'Group added', { root: true })
 
         return group
@@ -28,7 +29,7 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch, state, rootState }, { id }) {
+  remove ({ commit, dispatch, state }, { id }) {
     dispatch('cml/sync/start', 'groupsRemove', { root: true })
     return api
       .deleteGroup(id)
@@ -36,6 +37,7 @@ export const actions = {
         dispatch('cml/sync/stop', 'groupsRemove', { root: true })
         commit('remove', id)
         commit('cml/corpus/groupRemove', id, { root: true })
+        commit('cml/layers/groupRemove', id, { root: true })
         dispatch('cml/messages/success', 'Group removed', { root: true })
 
         return id
@@ -48,7 +50,7 @@ export const actions = {
       })
   },
 
-  update ({ commit, dispatch, state, rootState }, { element }) {
+  update ({ commit, dispatch, state }, { element }) {
     dispatch('cml/sync/start', 'groupsUpdate', { root: true })
     return api
       .updateGroup(element.id, { description: element.description })
@@ -68,7 +70,7 @@ export const actions = {
       })
   },
 
-  list ({ commit, dispatch, state, rootState }) {
+  list ({ commit, dispatch, state }) {
     dispatch('cml/sync/start', 'groupsList', { root: true })
     return api
       .getGroups()

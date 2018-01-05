@@ -12,6 +12,7 @@
         <cml-annotations class="blob-1-2 p border"></cml-annotations>
       </div>
 
+      <cml-layer-timeline class="mb"></cml-layer-timeline>
       <cml-media-controller class="mb"></cml-media-controller>
       <cml-media-youtube class="mb"></cml-media-youtube>
 
@@ -37,7 +38,9 @@ import {
   cmlLayers,
   cmlAnnotations,
   cmlMediaYoutube,
-  cmlMediaController}
+  cmlMediaController,
+  cmlLayerTimeline
+}
   from '../../src/app.js'
 
 export default {
@@ -51,7 +54,8 @@ export default {
     cmlLayers,
     cmlAnnotations,
     cmlMediaYoutube,
-    cmlMediaController
+    cmlMediaController,
+    cmlLayerTimeline
   }
 }
 </script>

@@ -21,6 +21,7 @@ export const actions = {
         const user = userFormat(r.data)
         commit('add', user)
         commit('cml/corpus/userAdd', user.id, { root: true })
+        commit('cml/layers/userAdd', user.id, { root: true })
         dispatch('cml/messages/success', 'User added', { root: true })
 
         return user
@@ -68,6 +69,7 @@ export const actions = {
         dispatch('cml/sync/stop', 'usersRemove', { root: true })
         commit('remove', id)
         commit('cml/corpus/userRemove', id, { root: true })
+        commit('cml/layers/userRemove', id, { root: true })
         dispatch('cml/messages/success', 'User removed', { root: true })
 
         return id

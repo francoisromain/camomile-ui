@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="flex flex-start">
-      <h2 class="mt-s">Media</h2>
+      <h2 class="mt-s mb-s">Media</h2>
       <button @click="popupOpen({ config: popupAddConfig, element: { id: null, corpuId, description: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
     </div>
-    <div>
+    <div v-if="medias && medias.length > 0">
       <table class="table mb-0">
         <tr>
           <th></th><th>Name</th><th></th>
@@ -42,22 +42,19 @@ export default {
         type: 'medias',
         closeBtn: true,
         title: 'Edit medium',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupAddConfig: {
         type: 'medias',
         closeBtn: true,
         title: 'Add medium',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupRemoveConfig: {
         type: 'medias',
         closeBtn: true,
         title: 'Remove medium',
-        component: popupRemove,
-        uid: this.uid
+        component: popupRemove
       }
     }
   },
@@ -84,7 +81,7 @@ export default {
       return this.$store.commit('cml/popup/open', { config, element })
     },
     set (e) {
-      this.$store.dispatch('cml/medias/set', { uid: this.uid, mediaId: e.target.value })
+      this.$store.dispatch('cml/medias/set', { id: e.target.value, uid: this.uid })
     }
   }
 }
