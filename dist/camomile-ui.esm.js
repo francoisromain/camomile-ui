@@ -481,6 +481,7 @@ var actions$5 = {
         var user = userFormat(r.data);
         commit('add', user);
         commit('cml/corpus/userAdd', user.id, { root: true });
+        commit('cml/layers/userAdd', user.id, { root: true });
         dispatch('cml/messages/success', 'User added', { root: true });
 
         return user
@@ -537,6 +538,7 @@ var actions$5 = {
         dispatch('cml/sync/stop', 'usersRemove', { root: true });
         commit('remove', id);
         commit('cml/corpus/userRemove', id, { root: true });
+        commit('cml/layers/userRemove', id, { root: true });
         dispatch('cml/messages/success', 'User removed', { root: true });
 
         return id
@@ -623,7 +625,6 @@ var actions$6 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
-    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'groupsAdd', { root: true });
@@ -634,6 +635,7 @@ var actions$6 = {
         var group = groupFormat(r.data);
         commit('add', group);
         commit('cml/corpus/groupAdd', group.id, { root: true });
+        commit('cml/layers/groupAdd', group.id, { root: true });
         dispatch('cml/messages/success', 'Group added', { root: true });
 
         return group
@@ -650,7 +652,6 @@ var actions$6 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
-    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', 'groupsRemove', { root: true });
@@ -660,6 +661,7 @@ var actions$6 = {
         dispatch('cml/sync/stop', 'groupsRemove', { root: true });
         commit('remove', id);
         commit('cml/corpus/groupRemove', id, { root: true });
+        commit('cml/layers/groupRemove', id, { root: true });
         dispatch('cml/messages/success', 'Group removed', { root: true });
 
         return id
@@ -676,7 +678,6 @@ var actions$6 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
-    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'groupsUpdate', { root: true });
@@ -702,7 +703,6 @@ var actions$6 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
-    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'groupsList', { root: true });
     return api
@@ -846,13 +846,12 @@ var actions$7 = {
     var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var element = ref$1.element;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("corpusAdd-" + uid), { root: true });
+    dispatch('cml/sync/start', "corpusAdd", { root: true });
     return api
       .createCorpus(element.name, element.description, {})
       .then(function (r) {
-        dispatch('cml/sync/stop', ("corpusAdd-" + uid), { root: true });
+        dispatch('cml/sync/stop', "corpusAdd", { root: true });
         var corpu = {
           name: r.data.name,
           id: r.data._id,
@@ -864,14 +863,13 @@ var actions$7 = {
           description: r.data.description || {}
         };
         corpu.permissions.users[rootState.cml.user.id] = 3;
-        commit('add', { corpu: corpu, uid: uid });
+        commit('add', { corpu: corpu });
         dispatch('cml/messages/success', 'Corpus added', { root: true });
-        dispatch('set', { corpuId: corpu.id, uid: uid });
 
         return corpu
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("corpusAdd-" + uid), { root: true });
+        dispatch('cml/sync/stop', "corpusAdd", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -883,23 +881,20 @@ var actions$7 = {
     var dispatch = ref.dispatch;
     var state = ref.state;
     var id = ref$1.id;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("corpusRemove-" + uid), { root: true });
+    dispatch('cml/sync/start', "corpusRemove", { root: true });
     return api
       .deleteCorpus(id)
       .then(function (r) {
-        dispatch('cml/sync/stop', ("corpusRemove-" + uid), { root: true });
-        commit('remove', { corpuId: id, uid: uid });
+        dispatch('cml/sync/stop', "corpusRemove", { root: true });
+        commit('remove', { id: id });
         dispatch('cml/messages/success', 'Corpus removed', { root: true });
-        if (state.actives[uid] === id) {
-          dispatch('set', { uid: uid });
-        }
+        dispatch('setAll', { id: id });
 
         return id
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("corpusRemove-" + uid), { root: true });
+        dispatch('cml/sync/stop', "corpusRemove", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -911,26 +906,208 @@ var actions$7 = {
     var dispatch = ref.dispatch;
     var state = ref.state;
     var element = ref$1.element;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("corpusUpdate-" + uid), { root: true });
+    dispatch('cml/sync/start', "corpusUpdate", { root: true });
     return api
       .updateCorpus(element.id, {
         name: element.name,
         description: element.description
       })
       .then(function (r) {
-        dispatch('cml/sync/stop', ("corpusUpdate-" + uid), { root: true });
+        dispatch('cml/sync/stop', "corpusUpdate", { root: true });
         var corpu = Object.assign({}, element);
         corpu.name = r.data.name;
         corpu.description = r.data.description || {};
-        commit('update', { corpu: corpu, uid: uid });
+        commit('update', { corpu: corpu });
         dispatch('cml/messages/success', 'Corpus updated', { root: true });
 
         return corpu
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("corpusUpdate-" + uid), { root: true });
+        dispatch('cml/sync/stop', "corpusUpdate", { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
+      })
+  },
+
+  groupPermissionSet: function groupPermissionSet (
+    ref,
+    ref$1
+  ) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var rootGetters = ref.rootGetters;
+    var id = ref$1.id;
+    var groupId = ref$1.groupId;
+    var permission = ref$1.permission;
+
+    dispatch('cml/sync/start', "corpusGroupPermissionSet", {
+      root: true
+    });
+    return api
+      .setCorpusPermissionsForGroup(id, groupId, permission)
+      .then(function (p) {
+        var permissions = p.data;
+        dispatch('cml/sync/stop', "corpusGroupPermissionSet", {
+          root: true
+        });
+        commit('groupPermissionsUpdate', {
+          id: id,
+          groupId: groupId,
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
+        });
+        dispatch('cml/messages/success', 'Group permissions updated', {
+          root: true
+        });
+
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll');
+          commit("cml/popup/close", null, { root: true });
+        }
+
+        return permissions
+      })
+      .catch(function (e) {
+        dispatch('cml/sync/stop', "corpusGroupPermissionSet", {
+          root: true
+        });
+
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
+      })
+  },
+
+  groupPermissionRemove: function groupPermissionRemove (ref, ref$1) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var rootGetters = ref.rootGetters;
+    var id = ref$1.id;
+    var groupId = ref$1.groupId;
+
+    dispatch('cml/sync/start', "corpusGroupPermissionRemove", {
+      root: true
+    });
+    return api
+      .removeCorpusPermissionsForGroup(id, groupId)
+      .then(function (p) {
+        var permissions = p.data;
+        dispatch('cml/sync/stop', "corpusGroupPermissionRemove", {
+          root: true
+        });
+        commit('groupPermissionsUpdate', { id: id, groupId: groupId, permission: 0 });
+        dispatch('cml/messages/success', 'Group permissions updated', {
+          root: true
+        });
+
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll');
+          commit("cml/popup/close", null, { root: true });
+        }
+
+        return permissions
+      })
+      .catch(function (e) {
+        dispatch('cml/sync/stop', "corpusGroupPermissionRemove", {
+          root: true
+        });
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
+      })
+  },
+
+  userPermissionSet: function userPermissionSet (
+    ref,
+    ref$1
+  ) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var rootGetters = ref.rootGetters;
+    var id = ref$1.id;
+    var userId = ref$1.userId;
+    var permission = ref$1.permission;
+
+    dispatch('cml/sync/start', "corpusUserPermissionSet", { root: true });
+    return api
+      .setCorpusPermissionsForUser(id, userId, permission)
+      .then(function (p) {
+        var permissions = p.data;
+        dispatch('cml/sync/stop', "corpusUserPermissionSet", {
+          root: true
+        });
+        commit('userPermissionsUpdate', {
+          id: id,
+          userId: userId,
+          permission: (permissions.users && permissions.users[userId]) || 0
+        });
+        dispatch('cml/messages/success', 'User permissions updated', {
+          root: true
+        });
+
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll');
+          commit("cml/popup/close", null, { root: true });
+        }
+
+        return permissions
+      })
+      .catch(function (e) {
+        dispatch('cml/sync/stop', "corpusUserPermissionSet", {
+          root: true
+        });
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
+      })
+  },
+
+  userPermissionRemove: function userPermissionRemove (ref, ref$1) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var rootGetters = ref.rootGetters;
+    var id = ref$1.id;
+    var userId = ref$1.userId;
+
+    dispatch('cml/sync/start', "corpusUserPermissionRemove", {
+      root: true
+    });
+    return api
+      .removeCorpusPermissionsForUser(id, userId)
+      .then(function (p) {
+        var permissions = p.data;
+        dispatch('cml/sync/stop', "corpusUserPermissionRemove", {
+          root: true
+        });
+        commit('userPermissionsUpdate', { id: id, userId: userId, permission: 0 });
+        dispatch('cml/messages/success', 'User permissions updated', {
+          root: true
+        });
+
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll');
+          commit("cml/popup/close", null, { root: true });
+        }
+
+        return permissions
+      })
+      .catch(function (e) {
+        dispatch('cml/sync/stop', "corpusUserPermissionRemove", {
+          root: true
+        });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -983,204 +1160,16 @@ var actions$7 = {
       })
   },
 
-  groupPermissionSet: function groupPermissionSet (
-    ref,
-    ref$1
-  ) {
-    var commit = ref.commit;
+  setAll: function setAll (ref, ref$1) {
+    var state = ref.state;
     var dispatch = ref.dispatch;
-    var rootGetters = ref.rootGetters;
-    var corpuId = ref$1.corpuId;
-    var groupId = ref$1.groupId;
-    var permission = ref$1.permission;
-    var uid = ref$1.uid;
+    var id = ref$1.id;
 
-    dispatch('cml/sync/start', ("corpusGroupPermissionSet-" + uid), {
-      root: true
+    Object.keys(state.actives).forEach(function (uid) {
+      if (state.actives[uid] === id) {
+        dispatch('set', { uid: uid });
+      }
     });
-    return api
-      .setCorpusPermissionsForGroup(corpuId, groupId, permission)
-      .then(function (p) {
-        var permissions = p.data;
-        dispatch('cml/sync/stop', ("corpusGroupPermissionSet-" + uid), {
-          root: true
-        });
-        commit('groupPermissionsUpdate', {
-          corpuId: corpuId,
-          groupId: groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0,
-          uid: uid
-        });
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        });
-
-        if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', uid);
-          commit("cml/popup/close", null, { root: true });
-        }
-
-        return permissions
-      })
-      .catch(function (e) {
-        dispatch('cml/sync/stop', ("corpusGroupPermissionSet-" + uid), {
-          root: true
-        });
-
-        dispatch('cml/messages/error', e.message, { root: true });
-
-        throw e
-      })
-  },
-
-  groupPermissionRemove: function groupPermissionRemove (
-    ref,
-    ref$1
-  ) {
-    var commit = ref.commit;
-    var dispatch = ref.dispatch;
-    var rootGetters = ref.rootGetters;
-    var corpuId = ref$1.corpuId;
-    var groupId = ref$1.groupId;
-    var uid = ref$1.uid;
-
-    dispatch('cml/sync/start', ("corpusGroupPermissionRemove-" + uid), {
-      root: true
-    });
-    return api
-      .removeCorpusPermissionsForGroup(corpuId, groupId)
-      .then(function (p) {
-        var permissions = p.data;
-        dispatch('cml/sync/stop', ("corpusGroupPermissionRemove-" + uid), {
-          root: true
-        });
-        commit('groupPermissionsUpdate', {
-          corpuId: corpuId,
-          groupId: groupId,
-          permission: 0,
-          uid: uid
-        });
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        });
-
-        if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', uid);
-          commit("cml/popup/close", null, { root: true });
-        }
-
-        return permissions
-      })
-      .catch(function (e) {
-        dispatch('cml/sync/stop', ("corpusGroupPermissionRemove-" + uid), {
-          root: true
-        });
-        dispatch('cml/messages/error', e.message, { root: true });
-
-        throw e
-      })
-  },
-
-  userPermissionSet: function userPermissionSet (
-    ref,
-    ref$1
-  ) {
-    var commit = ref.commit;
-    var dispatch = ref.dispatch;
-    var rootGetters = ref.rootGetters;
-    var corpuId = ref$1.corpuId;
-    var userId = ref$1.userId;
-    var permission = ref$1.permission;
-    var uid = ref$1.uid;
-
-    dispatch('cml/sync/start', ("corpusUserPermissionSet-" + uid), { root: true });
-    return api
-      .setCorpusPermissionsForUser(corpuId, userId, permission)
-      .then(function (p) {
-        var permissions = p.data;
-        dispatch('cml/sync/stop', ("corpusUserPermissionSet-" + uid), {
-          root: true
-        });
-        commit('userPermissionsUpdate', {
-          corpuId: corpuId,
-          userId: userId,
-          permission: (permissions.users && permissions.users[userId]) || 0,
-          uid: uid
-        });
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        });
-
-        if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', uid);
-          commit("cml/popup/close", null, { root: true });
-        }
-
-        return permissions
-      })
-      .catch(function (e) {
-        dispatch('cml/sync/stop', ("corpusUserPermissionSet-" + uid), {
-          root: true
-        });
-        dispatch('cml/messages/error', e.message, { root: true });
-
-        throw e
-      })
-  },
-
-  userPermissionRemove: function userPermissionRemove (
-    ref,
-    ref$1
-  ) {
-    var commit = ref.commit;
-    var dispatch = ref.dispatch;
-    var rootGetters = ref.rootGetters;
-    var corpuId = ref$1.corpuId;
-    var userId = ref$1.userId;
-    var uid = ref$1.uid;
-
-    dispatch('cml/sync/start', ("corpusUserPermissionRemove-" + uid), {
-      root: true
-    });
-    return api
-      .removeCorpusPermissionsForUser(corpuId, userId)
-      .then(function (p) {
-        var permissions = p.data;
-        dispatch('cml/sync/stop', ("corpusUserPermissionRemove-" + uid), {
-          root: true
-        });
-        commit('userPermissionsUpdate', { corpuId: corpuId, userId: userId, permission: 0, uid: uid });
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        });
-
-        if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', uid);
-          commit("cml/popup/close", null, { root: true });
-        }
-
-        return permissions
-      })
-      .catch(function (e) {
-        dispatch('cml/sync/stop', ("corpusUserPermissionRemove-" + uid), {
-          root: true
-        });
-        dispatch('cml/messages/error', e.message, { root: true });
-
-        throw e
-      })
   },
 
   set: function set (ref, ref$1) {
@@ -1188,10 +1177,12 @@ var actions$7 = {
     var getters = ref.getters;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
-    var corpuId = ref$1.corpuId;
+    var id = ref$1.id;
     var uid = ref$1.uid;
 
-    commit('set', { corpuId: corpuId || getters.id(uid), uid: uid });
+    commit('set', { id: id || getters.id(uid), uid: uid });
+    commit('cml/medias/init', uid, { root: true });
+    commit('cml/layers/init', uid, { root: true });
     if (state.actives[uid]) {
       dispatch(
         'cml/medias/list',
@@ -1203,10 +1194,14 @@ var actions$7 = {
         { corpuId: state.actives[uid], uid: uid },
         { root: true }
       );
-    } else {
-      commit('cml/medias/reset', uid, { root: true });
-      commit('cml/layers/reset', uid, { root: true });
     }
+  },
+
+  register: function register (ref, uid) {
+    var state = ref.state;
+    var commit = ref.commit;
+
+    commit('init', uid);
   }
 };
 
@@ -1219,62 +1214,45 @@ var getters$4 = {
 };
 
 var mutations$7 = {
-  register: function register (state, uid) {
+  init: function init (state, uid) {
     Vue.set(state.lists, uid, []);
-  },
-
-  reset: function reset (state, uid) {
-    Vue.set(state.lists, uid, []);
-    Vue.delete(state.actives, uid);
+    Vue.set(state.actives, uid, null);
   },
 
   resetAll: function resetAll (state) {
-    state.lists = {};
-    state.actives = {};
+    Vue.set(state, 'lists', {});
+    Vue.set(state, 'actives', {});
   },
 
   add: function add (state, ref) {
     var corpu = ref.corpu;
-    var uid = ref.uid;
 
-    Object.keys(state.actives).forEach(function (id) {
-      var index = state.lists[id].length;
-      Vue.set(state.lists[id], index, corpu);
+    Object.keys(state.lists).forEach(function (uid) {
+      var index = state.lists[uid].length;
+      Vue.set(state.lists[uid], index, corpu);
     });
   },
 
   update: function update (state, ref) {
     var corpu = ref.corpu;
-    var uid = ref.uid;
 
-    var index = state.lists[uid].findIndex(function (m) { return m.id === corpu.id; });
-    if (index !== -1) {
-      Vue.set(state.lists[uid], index, corpu);
-    }
+    Object.keys(state.lists).forEach(function (uid) {
+      var index = state.lists[uid].findIndex(function (m) { return m.id === corpu.id; });
+      if (index !== -1) {
+        Vue.set(state.lists[uid], index, corpu);
+      }
+    });
   },
 
   remove: function remove (state, ref) {
-    var corpuId = ref.corpuId;
-    var uid = ref.uid;
+    var id = ref.id;
 
-    var index = state.lists[uid].findIndex(function (m) { return m.id === corpuId; });
-    if (index !== -1) {
-      Vue.delete(state.lists[uid], index);
-    }
-  },
-
-  list: function list (state, ref) {
-    var corpus = ref.corpus;
-    var uid = ref.uid;
-
-    Vue.set(state.lists, uid, corpus);
-  },
-
-  set: function set (state, ref) {
-    var corpuId = ref.corpuId;
-    var uid = ref.uid;
-
-    Vue.set(state.actives, uid, corpuId);
+    Object.keys(state.lists).forEach(function (uid) {
+      var index = state.lists[uid].findIndex(function (c) { return c.id === id; });
+      if (index !== -1) {
+        Vue.delete(state.lists[uid], index);
+      }
+    });
   },
 
   groupAdd: function groupAdd (state, groupId) {
@@ -1310,27 +1288,43 @@ var mutations$7 = {
   },
 
   groupPermissionsUpdate: function groupPermissionsUpdate (state, ref) {
-    var corpuId = ref.corpuId;
+    var id = ref.id;
     var groupId = ref.groupId;
     var permission = ref.permission;
-    var uid = ref.uid;
 
-    var index = state.lists[uid].findIndex(function (m) { return m.id === corpuId; });
-    if (index !== -1) {
-      Vue.set(state.lists[uid][index].permissions.groups, groupId, permission);
-    }
+    Object.keys(state.lists).forEach(function (uid) {
+      var index = state.lists[uid].findIndex(function (m) { return m.id === id; });
+      if (index !== -1) {
+        Vue.set(state.lists[uid][index].permissions.groups, groupId, permission);
+      }
+    });
   },
 
   userPermissionsUpdate: function userPermissionsUpdate (state, ref) {
-    var corpuId = ref.corpuId;
+    var id = ref.id;
     var userId = ref.userId;
     var permission = ref.permission;
+
+    Object.keys(state.lists).forEach(function (uid) {
+      var index = state.lists[uid].findIndex(function (m) { return m.id === id; });
+      if (index !== -1) {
+        Vue.set(state.lists[uid][index].permissions.users, userId, permission);
+      }
+    });
+  },
+
+  list: function list (state, ref) {
+    var corpus = ref.corpus;
     var uid = ref.uid;
 
-    var index = state.lists[uid].findIndex(function (m) { return m.id === corpuId; });
-    if (index !== -1) {
-      Vue.set(state.lists[uid][index].permissions.users, userId, permission);
-    }
+    Vue.set(state.lists, uid, corpus);
+  },
+
+  set: function set (state, ref) {
+    var id = ref.id;
+    var uid = ref.uid;
+
+    Vue.set(state.actives, uid, id);
   }
 };
 
@@ -1352,12 +1346,13 @@ var state$10 = {
 
 var actions$8 = {
   add: function add (ref, ref$1) {
+    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootGetters = ref.rootGetters;
     var element = ref$1.element;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("mediasAdd-" + uid), { root: true });
+    dispatch('cml/sync/start', "mediasAdd", { root: true });
     return api
       .createMedium(
         element.corpuId,
@@ -1366,16 +1361,22 @@ var actions$8 = {
         element.description
       )
       .then(function (r) {
-        dispatch('cml/sync/stop', ("mediasAdd-" + uid), { root: true });
+        dispatch('cml/sync/stop', "mediasAdd", { root: true });
         var media = mediaFormat(r.data);
-        commit('add', { media: media, uid: uid });
+        Object.keys(state.lists).forEach(function (uid) {
+          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
+            commit('add', { media: media, uid: uid });
+            if (!state.actives[uid]) {
+              commit('set', { id: media.id, uid: uid });
+            }
+          }
+        });
         dispatch('cml/messages/success', 'Medium added', { root: true });
-        dispatch('set', { mediaId: media.id, uid: uid });
 
         return media
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("mediasAdd-" + uid), { root: true });
+        dispatch('cml/sync/stop', "mediasAdd", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -1383,32 +1384,26 @@ var actions$8 = {
   },
 
   remove: function remove (ref, ref$1) {
+    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var rootGetters = ref.rootGetters;
     var id = ref$1.id;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("mediasRemove-" + uid), { root: true });
+    dispatch('cml/sync/start', "mediasRemove", { root: true });
     return api
       .deleteMedium(id)
       .then(function (r) {
-        dispatch('cml/sync/stop', ("mediasRemove-" + uid), { root: true });
-        commit('remove', { mediaId: id, uid: uid });
+        dispatch('cml/sync/stop', "mediasRemove", { root: true });
+        Object.keys(state.lists).forEach(function (uid) {
+          commit('remove', { id: id, uid: uid });
+        });
         dispatch('cml/messages/success', 'Medium removed', { root: true });
-        if (state$10.actives[uid] === id) {
-          dispatch('set', { uid: uid });
-        }
-        dispatch(
-          'cml/annotations/list',
-          { layerId: rootGetters['cml/layers/id'](uid), uid: uid },
-          { root: true }
-        );
+        dispatch('setAll', { id: id });
 
         return id
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("mediasRemove-" + uid), { root: true });
+        dispatch('cml/sync/stop', "mediasRemove", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -1416,14 +1411,13 @@ var actions$8 = {
   },
 
   update: function update (ref, ref$1) {
+    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
-    var rootState = ref.rootState;
+    var rootGetters = ref.rootGetters;
     var element = ref$1.element;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("mediasUpdate-" + uid), { root: true });
+    dispatch('cml/sync/start', "mediasUpdate", { root: true });
     return api
       .updateMedium(element.id, {
         name: element.name,
@@ -1431,18 +1425,23 @@ var actions$8 = {
         url: element.url
       })
       .then(function (r) {
-        dispatch('cml/sync/stop', ("mediasUpdate-" + uid), { root: true });
+        dispatch('cml/sync/stop', "mediasUpdate", { root: true });
         var media = Object.assign({}, element);
         media.name = r.data.name;
         media.url = r.data.url;
         media.description = r.data.description || {};
-        commit('update', { media: media, uid: uid });
+        Object.keys(state.lists).forEach(function (uid) {
+          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
+            console.log('media-update', uid, media);
+            commit('update', { media: media, uid: uid });
+          }
+        });
         dispatch('cml/messages/success', 'Medium updated', { root: true });
 
         return media
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("mediasUpdate-" + uid), { root: true });
+        dispatch('cml/sync/stop', "mediasUpdate", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -1476,18 +1475,32 @@ var actions$8 = {
       })
   },
 
+  setAll: function setAll (ref, ref$1) {
+    var state = ref.state;
+    var dispatch = ref.dispatch;
+    var id = ref$1.id;
+
+    Object.keys(state.actives).forEach(function (uid) {
+      if (state.actives[uid] === id) {
+        dispatch('set', { uid: uid });
+      }
+
+      dispatch('cml/annotations/listAll', { uid: uid }, { root: true });
+    });
+  },
+
   set: function set (ref, ref$1) {
     var state = ref.state;
     var getters = ref.getters;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
-    var mediaId = ref$1.mediaId;
+    var id = ref$1.id;
     var uid = ref$1.uid;
 
     if (state.properties[uid] && state.properties[uid].isPlaying) {
       dispatch('pause', uid);
     }
-    commit('set', { mediaId: mediaId || getters.id(uid), uid: uid });
+    commit('set', { id: id || getters.id(uid), uid: uid });
   },
 
   play: function play (ref, uid) {
@@ -1560,10 +1573,10 @@ var getters$5 = {
 };
 
 var mutations$8 = {
-  reset: function reset (state, uid) {
+  init: function init (state, uid) {
     Vue.set(state.lists, uid, []);
-    Vue.delete(state.actives, uid);
-    Vue.delete(state.properties, uid);
+    Vue.set(state.actives, uid, null);
+    Vue.set(state.properties, uid, {});
   },
 
   resetAll: function resetAll (state) {
@@ -1589,12 +1602,12 @@ var mutations$8 = {
   },
 
   remove: function remove (state, ref) {
-    var mediaId = ref.mediaId;
+    var id = ref.id;
     var uid = ref.uid;
 
-    var index = state.lists[uid].findIndex(function (m) { return m.id === mediaId; });
-    if (index !== -1) {
-      Vue.delete(state.lists[uid], index);
+    var listIndex = state.lists[uid].findIndex(function (m) { return m.id === id; });
+    if (listIndex !== -1) {
+      Vue.delete(state.lists[uid], listIndex);
     }
   },
 
@@ -1606,10 +1619,10 @@ var mutations$8 = {
   },
 
   set: function set (state, ref) {
-    var mediaId = ref.mediaId;
+    var id = ref.id;
     var uid = ref.uid;
 
-    Vue.set(state.actives, uid, mediaId);
+    Vue.set(state.actives, uid, id);
     Vue.set(state.properties, uid, {
       timeTotal: 0,
       timeCurrent: 0,
@@ -1664,14 +1677,14 @@ var state$11 = {
 
 var actions$9 = {
   add: function add (ref, ref$1) {
+    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var element = ref$1.element;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("layersAdd-" + uid), { root: true });
+    dispatch('cml/sync/start', "layersAdd", { root: true });
     return api
       .createLayer(
         element.corpuId,
@@ -1682,7 +1695,7 @@ var actions$9 = {
         element.annotations
       )
       .then(function (r) {
-        dispatch('cml/sync/stop', ("layersAdd-" + uid), { root: true });
+        dispatch('cml/sync/stop', "layersAdd", { root: true });
         var layer = {
           name: r.data.name,
           id: r.data._id,
@@ -1696,18 +1709,19 @@ var actions$9 = {
           metadataType: r.data.data_type || {},
           annotations: r.data.annotations
         };
-
         layer.permissions.users[rootState.cml.user.id] = 3;
 
-        commit('add', { layer: layer, uid: uid });
+        Object.keys(state.lists).forEach(function (uid) {
+          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
+            commit('add', { layer: layer, uid: uid });
+          }
+        });
         dispatch('cml/messages/success', 'Layer added', { root: true });
-        dispatch('set', { layerId: layer.id, uid: uid });
 
         return layer
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("layersAdd-" + uid), { root: true });
-
+        dispatch('cml/sync/stop', "layersAdd", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -1715,29 +1729,26 @@ var actions$9 = {
   },
 
   remove: function remove (ref, ref$1) {
+    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
     var rootState = ref.rootState;
     var id = ref$1.id;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("layersRemove-" + uid), { root: true });
+    dispatch('cml/sync/start', "layersRemove", { root: true });
     return api
       .deleteLayer(id)
       .then(function (r) {
-        dispatch('cml/sync/stop', ("layersRemove-" + uid), { root: true });
-        commit('remove', { layerId: id, uid: uid });
+        dispatch('cml/sync/stop', "layersRemove", { root: true });
+        Object.keys(state.lists).forEach(function (uid) {
+          commit('remove', { id: id, uid: uid });
+        });
         dispatch('cml/messages/success', 'Layer removed', { root: true });
-        if (state.actives[uid] === id) {
-          dispatch('set', { uid: uid });
-        }
 
         return id
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("layersRemove-" + uid), { root: true });
-
+        dispatch('cml/sync/stop', "layersRemove", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -1745,14 +1756,13 @@ var actions$9 = {
   },
 
   update: function update (ref, ref$1) {
+    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
-    var rootState = ref.rootState;
+    var rootGetters = ref.rootGetters;
     var element = ref$1.element;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("layersUpdate-" + uid), { root: true });
+    dispatch('cml/sync/start', "layersUpdate", { root: true });
     return api
       .updateLayer(element.id, {
         name: element.name,
@@ -1761,23 +1771,229 @@ var actions$9 = {
         data_type: element.metadataType
       })
       .then(function (r) {
-        dispatch('cml/sync/stop', ("layersUpdate-" + uid), { root: true });
+        dispatch('cml/sync/stop', "layersUpdate", { root: true });
         var layer = Object.assign({}, element);
         layer.description = r.data.description || {};
         layer.fragmentType = r.data.fragment_type || {};
         layer.metadataType = r.data.data_type || {};
-        commit('update', { layer: layer, uid: uid });
+
+        Object.keys(state.lists).forEach(function (uid) {
+          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
+            commit('update', { layer: layer, uid: uid });
+          }
+        });
         dispatch('cml/messages/success', 'Layer updated', { root: true });
 
         return layer
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("layersUpdate-" + uid), { root: true });
-
+        dispatch('cml/sync/stop', "layersUpdate", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
       })
+  },
+
+  groupPermissionSet: function groupPermissionSet (
+    ref,
+    ref$1
+  ) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
+    var rootGetters = ref.rootGetters;
+    var id = ref$1.id;
+    var groupId = ref$1.groupId;
+    var permission = ref$1.permission;
+
+    dispatch('cml/sync/start', "layersGroupPermissionSet", {
+      root: true
+    });
+    return api
+      .setLayerPermissionsForGroup(id, groupId, permission)
+      .then(function (p) {
+        var permissions = p.data;
+        dispatch('cml/sync/stop', "layersGroupPermissionSet", {
+          root: true
+        });
+        commit('groupPermissionsUpdate', {
+          id: id,
+          groupId: groupId,
+          permission: (permissions.groups && permissions.groups[groupId]) || 0
+        });
+        dispatch('cml/messages/success', 'Group permissions updated', {
+          root: true
+        });
+
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll');
+          commit('cml/popup/close', null, { root: true });
+        }
+
+        return permissions
+      })
+      .catch(function (e) {
+        dispatch('cml/sync/stop', "layersGroupPermissionSet", {
+          root: true
+        });
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
+      })
+  },
+
+  groupPermissionRemove: function groupPermissionRemove (
+    ref,
+    ref$1
+  ) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
+    var rootGetters = ref.rootGetters;
+    var id = ref$1.id;
+    var groupId = ref$1.groupId;
+
+    dispatch('cml/sync/start', "layersGroupPermissionRemove", {
+      root: true
+    });
+    return api
+      .removeLayerPermissionsForGroup(id, groupId)
+      .then(function (p) {
+        var permissions = p.data;
+        dispatch('cml/sync/stop', "layersGroupPermissionRemove", {
+          root: true
+        });
+        commit('groupPermissionsUpdate', { id: id, groupId: groupId, permission: 0 });
+        dispatch('cml/messages/success', 'Group permissions updated', {
+          root: true
+        });
+
+        if (
+          rootGetters['cml/user/isInGroup'](groupId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll');
+          commit('cml/popup/close', null, { root: true });
+        }
+
+        return permissions
+      })
+      .catch(function (e) {
+        dispatch('cml/sync/stop', "layersGroupPermissionRemove", {
+          root: true
+        });
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
+      })
+  },
+
+  userPermissionSet: function userPermissionSet (
+    ref,
+    ref$1
+  ) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
+    var rootGetters = ref.rootGetters;
+    var id = ref$1.id;
+    var userId = ref$1.userId;
+    var permission = ref$1.permission;
+
+    dispatch('cml/sync/start', "layersUserPermissionSet", { root: true });
+    return api
+      .setLayerPermissionsForUser(id, userId, permission)
+      .then(function (p) {
+        var permissions = p.data;
+        dispatch('cml/sync/stop', "layersUserPermissionSet", {
+          root: true
+        });
+        commit('userPermissionsUpdate', {
+          id: id,
+          userId: userId,
+          permission: (permissions.users && permissions.users[userId]) || 0
+        });
+        dispatch('cml/messages/success', 'User permissions updated', {
+          root: true
+        });
+
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll');
+          commit('cml/popup/close', null, { root: true });
+        }
+
+        return permissions
+      })
+      .catch(function (e) {
+        dispatch('cml/sync/stop', "layersUserPermissionSet", {
+          root: true
+        });
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
+      })
+  },
+
+  userPermissionRemove: function userPermissionRemove (
+    ref,
+    ref$1
+  ) {
+    var commit = ref.commit;
+    var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
+    var rootGetters = ref.rootGetters;
+    var id = ref$1.id;
+    var userId = ref$1.userId;
+
+    dispatch('cml/sync/start', "layersUserPermissionRemove", {
+      root: true
+    });
+    return api
+      .removeLayerPermissionsForUser(id, userId)
+      .then(function (p) {
+        var permissions = p.data;
+        dispatch('cml/sync/stop', "layersUserPermissionRemove", {
+          root: true
+        });
+        commit('userPermissionsUpdate', { id: id, userId: userId, permission: 0 });
+        dispatch('cml/messages/success', 'User permissions updated', {
+          root: true
+        });
+
+        if (
+          rootGetters['cml/user/isCurrentUser'](userId) &&
+          !rootGetters['cml/user/isAdmin'](permissions)
+        ) {
+          dispatch('listAll');
+          commit('cml/popup/close', null, { root: true });
+        }
+
+        return permissions
+      })
+      .catch(function (e) {
+        dispatch('cml/sync/stop', "layersUserPermissionRemove", {
+          root: true
+        });
+        dispatch('cml/messages/error', e.message, { root: true });
+
+        throw e
+      })
+  },
+
+  listAll: function listAll (ref) {
+    var state = ref.state;
+    var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
+
+    Object.keys(state.lists).forEach(function (uid) {
+      dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
+    });
   },
 
   list: function list (ref, ref$1) {
@@ -1810,256 +2026,55 @@ var actions$9 = {
           annotations: l.annotations || []
         }); });
         commit('list', { layers: layers, uid: uid });
-        dispatch('set', { uid: uid });
+        dispatch('setAll', { uid: uid });
 
         return layers
       })
       .catch(function (e) {
         dispatch('cml/sync/stop', ("layersList-" + uid), { root: true });
+        dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
       })
   },
 
-  groupPermissionSet: function groupPermissionSet (
-    ref,
-    ref$1
-  ) {
-    var commit = ref.commit;
+  setAll: function setAll (ref, ref$1) {
+    var state = ref.state;
     var dispatch = ref.dispatch;
-    var rootState = ref.rootState;
-    var rootGetters = ref.rootGetters;
-    var layerId = ref$1.layerId;
-    var groupId = ref$1.groupId;
-    var permission = ref$1.permission;
+    var commit = ref.commit;
     var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("layersGroupPermissionSet-" + uid), {
-      root: true
+    commit('cml/annotations/init', { uid: uid }, { root: true });
+    state.lists[uid].forEach(function (l) {
+      dispatch('set', { id: l.id, uid: uid });
     });
-    return api
-      .setLayerPermissionsForGroup(layerId, groupId, permission)
-      .then(function (p) {
-        var permissions = p.data;
-        dispatch('cml/sync/stop', ("layersGroupPermissionSet-" + uid), {
-          root: true
-        });
-        commit('groupPermissionsUpdate', {
-          layerId: layerId,
-          groupId: groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0,
-          uid: uid
-        });
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        });
-
-        if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
-          commit('cml/popup/close', null, { root: true });
-        }
-
-        return permissions
-      })
-      .catch(function (e) {
-        dispatch('cml/sync/stop', ("layersGroupPermissionSet-" + uid), {
-          root: true
-        });
-
-        dispatch('cml/messages/error', e.message, { root: true });
-
-        throw e
-      })
-  },
-
-  groupPermissionRemove: function groupPermissionRemove (
-    ref,
-    ref$1
-  ) {
-    var commit = ref.commit;
-    var dispatch = ref.dispatch;
-    var rootState = ref.rootState;
-    var rootGetters = ref.rootGetters;
-    var layerId = ref$1.layerId;
-    var groupId = ref$1.groupId;
-    var uid = ref$1.uid;
-
-    dispatch('cml/sync/start', ("layersGroupPermissionRemove-" + uid), {
-      root: true
-    });
-    return api
-      .removeLayerPermissionsForGroup(layerId, groupId)
-      .then(function (p) {
-        var permissions = p.data;
-        dispatch('cml/sync/stop', ("layersGroupPermissionRemove-" + uid), {
-          root: true
-        });
-        commit('groupPermissionsUpdate', {
-          layerId: layerId,
-          groupId: groupId,
-          permission: 0,
-          uid: uid
-        });
-        dispatch('cml/messages/success', 'Group permissions updated', {
-          root: true
-        });
-
-        if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
-          commit('cml/popup/close', null, { root: true });
-        }
-
-        return permissions
-      })
-      .catch(function (e) {
-        dispatch('cml/sync/stop', ("layersGroupPermissionRemove-" + uid), {
-          root: true
-        });
-
-        dispatch('cml/messages/error', e.message, { root: true });
-
-        throw e
-      })
-  },
-
-  userPermissionSet: function userPermissionSet (
-    ref,
-    ref$1
-  ) {
-    var commit = ref.commit;
-    var dispatch = ref.dispatch;
-    var rootState = ref.rootState;
-    var rootGetters = ref.rootGetters;
-    var layerId = ref$1.layerId;
-    var userId = ref$1.userId;
-    var permission = ref$1.permission;
-    var uid = ref$1.uid;
-
-    dispatch('cml/sync/start', ("layersUserPermissionSet-" + uid), { root: true });
-    return api
-      .setLayerPermissionsForUser(layerId, userId, permission)
-      .then(function (p) {
-        var permissions = p.data;
-        dispatch('cml/sync/stop', ("layersUserPermissionSet-" + uid), {
-          root: true
-        });
-        commit('userPermissionsUpdate', {
-          layerId: layerId,
-          userId: userId,
-          permission: (permissions.users && permissions.users[userId]) || 0,
-          uid: uid
-        });
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        });
-
-        if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
-          commit('cml/popup/close', null, { root: true });
-        }
-
-        return permissions
-      })
-      .catch(function (e) {
-        dispatch('cml/sync/stop', ("layersUserPermissionSet-" + uid), {
-          root: true
-        });
-
-        dispatch('cml/messages/error', e.message, { root: true });
-
-        throw e
-      })
-  },
-
-  userPermissionRemove: function userPermissionRemove (
-    ref,
-    ref$1
-  ) {
-    var commit = ref.commit;
-    var dispatch = ref.dispatch;
-    var rootState = ref.rootState;
-    var rootGetters = ref.rootGetters;
-    var layerId = ref$1.layerId;
-    var userId = ref$1.userId;
-    var uid = ref$1.uid;
-
-    dispatch('cml/sync/start', ("layersUserPermissionRemove-" + uid), {
-      root: true
-    });
-    return api
-      .removeLayerPermissionsForUser(layerId, userId)
-      .then(function (p) {
-        var permissions = p.data;
-        dispatch('cml/sync/stop', ("layersUserPermissionRemove-" + uid), {
-          root: true
-        });
-        commit('userPermissionsUpdate', { layerId: layerId, userId: userId, permission: 0, uid: uid });
-        dispatch('cml/messages/success', 'User permissions updated', {
-          root: true
-        });
-
-        if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
-        ) {
-          dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
-          commit('cml/popup/close', null, { root: true });
-        }
-
-        return permissions
-      })
-      .catch(function (e) {
-        dispatch('cml/sync/stop', ("layersUserPermissionRemove-" + uid), {
-          root: true
-        });
-        dispatch('cml/messages/error', e.message, { root: true });
-
-        throw e
-      })
   },
 
   set: function set (ref, ref$1) {
-    var state = ref.state;
-    var getters = ref.getters;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
-    var layerId = ref$1.layerId;
+    var id = ref$1.id;
     var uid = ref$1.uid;
 
-    commit('set', { layerId: layerId || getters.id(uid), uid: uid });
-    if (state.actives[uid]) {
-      dispatch(
-        'cml/annotations/list',
-        { layerId: state.actives[uid], uid: uid },
-        { root: true }
-      );
-    } else {
-      commit('cml/annotations/reset', uid, { root: true });
-    }
+    commit('set', { id: id, uid: uid });
+    dispatch('cml/annotations/list', { layerId: id, uid: uid }, { root: true });
+  },
+
+  unset: function unset (ref, ref$1) {
+    var dispatch = ref.dispatch;
+    var commit = ref.commit;
+    var id = ref$1.id;
+    var uid = ref$1.uid;
+
+    commit('unset', { id: id, uid: uid });
+    commit('cml/annotations/reset', { layerId: id, uid: uid }, { root: true });
   }
 };
 
-var getters$6 = {
-  id: function (state) { return function (uid) { return (state.actives[uid] &&
-      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid]) !== -1 &&
-      state.actives[uid]) ||
-    (state.lists[uid][0] && state.lists[uid][0].id) ||
-    null; }; }
-};
-
 var mutations$9 = {
-  reset: function reset (state, uid) {
+  init: function init (state, uid) {
     Vue.set(state.lists, uid, []);
-    Vue.delete(state.actives, uid);
+    Vue.set(state.actives, uid, []);
   },
 
   resetAll: function resetAll (state) {
@@ -2075,24 +2090,85 @@ var mutations$9 = {
     Vue.set(state.lists[uid], index, layer);
   },
 
+  remove: function remove (state, ref) {
+    var id = ref.id;
+    var uid = ref.uid;
+
+    var listIndex = state.lists[uid].findIndex(function (e) { return e.id === id; });
+    if (listIndex !== -1) {
+      Vue.delete(state.lists[uid], listIndex);
+    }
+
+    var activeIndex = state.actives[uid].findIndex(function (e) { return e.id === id; });
+    if (activeIndex !== -1) {
+      Vue.delete(state.actives[uid], activeIndex);
+    }
+  },
+
   update: function update (state, ref) {
     var layer = ref.layer;
     var uid = ref.uid;
 
     var index = state.lists[uid].findIndex(function (l) { return l.id === layer.id; });
-    if (index !== -1) {
-      Vue.set(state.lists[uid], index, layer);
-    }
+    Vue.set(state.lists[uid], index, layer);
   },
 
-  remove: function remove (state, ref) {
-    var layerId = ref.layerId;
-    var uid = ref.uid;
+  groupAdd: function groupAdd (state, groupId) {
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (e) {
+        Vue.set(e.permissions.groups, groupId, 0);
+      });
+    });
+  },
 
-    var index = state.lists[uid].findIndex(function (l) { return l.id === layerId; });
-    if (index !== -1) {
-      Vue.delete(state.lists[uid], index);
-    }
+  groupRemove: function groupRemove (state, groupId) {
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (e) {
+        Vue.delete(e.permissions.groups, groupId);
+      });
+    });
+  },
+
+  userAdd: function userAdd (state, userId) {
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (e) {
+        Vue.set(e.permissions.users, userId, 0);
+      });
+    });
+  },
+
+  userRemove: function userRemove (state, userId) {
+    Object.keys(state.lists).forEach(function (uid) {
+      state.lists[uid].forEach(function (e) {
+        Vue.delete(e.permissions.users, userId);
+      });
+    });
+  },
+
+  groupPermissionsUpdate: function groupPermissionsUpdate (state, ref) {
+    var id = ref.id;
+    var groupId = ref.groupId;
+    var permission = ref.permission;
+
+    Object.keys(state.lists).forEach(function (uid) {
+      var index = state.lists[uid].findIndex(function (e) { return e.id === id; });
+      if (index !== -1) {
+        Vue.set(state.lists[uid][index].permissions.groups, groupId, permission);
+      }
+    });
+  },
+
+  userPermissionsUpdate: function userPermissionsUpdate (state, ref) {
+    var id = ref.id;
+    var userId = ref.userId;
+    var permission = ref.permission;
+
+    Object.keys(state.lists).forEach(function (uid) {
+      var index = state.lists[uid].findIndex(function (e) { return e.id === id; });
+      if (index !== -1) {
+        Vue.set(state.lists[uid][index].permissions.users, userId, permission);
+      }
+    });
   },
 
   list: function list (state, ref) {
@@ -2103,66 +2179,22 @@ var mutations$9 = {
   },
 
   set: function set (state, ref) {
-    var layerId = ref.layerId;
+    var id = ref.id;
     var uid = ref.uid;
 
-    Vue.set(state.actives, uid, layerId);
-  },
-
-  groupAdd: function groupAdd (state, groupId) {
-    Object.keys(state.lists).forEach(function (uid) {
-      state.lists[uid].forEach(function (c) {
-        Vue.set(c.permissions.groups, groupId, 0);
-      });
-    });
-  },
-
-  groupRemove: function groupRemove (state, groupId) {
-    Object.keys(state.lists).forEach(function (uid) {
-      state.lists[uid].forEach(function (c) {
-        Vue.delete(c.permissions.groups, groupId);
-      });
-    });
-  },
-
-  userAdd: function userAdd (state, userId) {
-    Object.keys(state.lists).forEach(function (uid) {
-      state.lists[uid].forEach(function (c) {
-        Vue.set(c.permissions.users, userId, 0);
-      });
-    });
-  },
-
-  userRemove: function userRemove (state, userId) {
-    Object.keys(state.lists).forEach(function (uid) {
-      state.lists[uid].forEach(function (c) {
-        Vue.delete(c.permissions.users, userId);
-      });
-    });
-  },
-
-  groupPermissionsUpdate: function groupPermissionsUpdate (state, ref) {
-    var layerId = ref.layerId;
-    var groupId = ref.groupId;
-    var permission = ref.permission;
-    var uid = ref.uid;
-
-    var index = state.lists[uid].findIndex(function (m) { return m.id === layerId; });
-    if (index !== -1) {
-      Vue.set(state.lists[uid][index].permissions.groups, groupId, permission);
+    if (!state.actives[uid]) {
+      Vue.set(state.actives, uid, [id]);
+    } else {
+      Vue.set(state.actives[uid], state.actives[uid].length, id);
     }
   },
 
-  userPermissionsUpdate: function userPermissionsUpdate (state, ref) {
-    var layerId = ref.layerId;
-    var userId = ref.userId;
-    var permission = ref.permission;
+  unset: function unset (state, ref) {
+    var id = ref.id;
     var uid = ref.uid;
 
-    var index = state.lists[uid].findIndex(function (m) { return m.id === layerId; });
-    if (index !== -1) {
-      Vue.set(state.lists[uid][index].permissions.users, userId, permission);
-    }
+    var index = state.actives[uid].indexOf(id);
+    Vue.delete(state.actives[uid], index);
   }
 };
 
@@ -2170,7 +2202,6 @@ var layers = {
   namespaced: true,
   state: state$11,
   actions: actions$9,
-  getters: getters$6,
   mutations: mutations$9
 }
 
@@ -2184,9 +2215,8 @@ var actions$10 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var element = ref$1.element;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("annotationsAdd-" + uid), { root: true });
+    dispatch('cml/sync/start', "annotationsAdd", { root: true });
     return api
       .createAnnotation(
         element.layerId,
@@ -2195,7 +2225,7 @@ var actions$10 = {
         element.metadata
       )
       .then(function (r) {
-        dispatch('cml/sync/stop', ("annotationsAdd-" + uid), { root: true });
+        dispatch('cml/sync/stop', "annotationsAdd", { root: true });
         var annotation = {
           id: r.data._id,
           fragment: r.data.fragment || {},
@@ -2203,14 +2233,13 @@ var actions$10 = {
           layerId: r.data.id_layer,
           mediaId: r.data.id_medium || null
         };
-        commit('add', { annotation: annotation, uid: uid });
+        commit('add', { annotation: annotation, layerId: element.layerId });
         dispatch('cml/messages/success', 'Annotation added', { root: true });
-        dispatch('set', { id: annotation.id, uid: uid });
 
         return annotation
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("annotationsAdd-" + uid), { root: true });
+        dispatch('cml/sync/stop', "annotationsAdd", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -2221,20 +2250,19 @@ var actions$10 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var id = ref$1.id;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("annotationsRemove-" + uid), { root: true });
+    dispatch('cml/sync/start', "annotationsRemove", { root: true });
     return api
       .deleteAnnotation(id)
       .then(function (r) {
-        dispatch('cml/sync/stop', ("annotationsRemove-" + uid), { root: true });
-        commit('remove', { id: id, uid: uid });
+        dispatch('cml/sync/stop', "annotationsRemove", { root: true });
+        commit('remove', { id: id });
         dispatch('cml/messages/success', 'Annotation removed', { root: true });
 
         return id
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("annotationsRemove-" + uid), { root: true });
+        dispatch('cml/sync/stop', "annotationsRemove", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -2245,9 +2273,8 @@ var actions$10 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var element = ref$1.element;
-    var uid = ref$1.uid;
 
-    dispatch('cml/sync/start', ("annotationsUpdate-" + uid), { root: true });
+    dispatch('cml/sync/start', "annotationsUpdate", { root: true });
     return api
       .updateAnnotation(element.id, {
         fragment: element.fragment,
@@ -2257,18 +2284,28 @@ var actions$10 = {
         var annotation = Object.assign({}, element);
         annotation.fragment = r.data.fragment || {};
         annotation.metadata = r.data.data || {};
-        dispatch('cml/sync/stop', ("annotationsUpdate-" + uid), { root: true });
-        commit('update', { annotation: annotation, uid: uid });
+        dispatch('cml/sync/stop', "annotationsUpdate", { root: true });
+        commit('update', { annotation: annotation, layerId: element.layerId });
         dispatch('cml/messages/success', 'Annotation updated', { root: true });
 
         return annotation
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("annotationsUpdate-" + uid), { root: true });
+        dispatch('cml/sync/stop', "annotationsUpdate", { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
       })
+  },
+
+  listAll: function listAll (ref, ref$1) {
+    var rootState = ref.rootState;
+    var dispatch = ref.dispatch;
+    var uid = ref$1.uid;
+
+    rootState.cml.layers.actives[uid].forEach(function (layerId) {
+      dispatch('list', { layerId: layerId, uid: uid });
+    });
   },
 
   list: function list (ref, ref$1) {
@@ -2292,8 +2329,8 @@ var actions$10 = {
           layerId: a.id_layer,
           mediaId: a.id_medium || null
         }); });
-        commit('list', { annotations: annotations, uid: uid });
-        dispatch('set', { uid: uid });
+        commit('list', { annotations: annotations, layerId: layerId, uid: uid });
+        dispatch('setAll', { layerId: layerId, uid: uid });
 
         return annotations
       })
@@ -2305,27 +2342,52 @@ var actions$10 = {
       })
   },
 
-  set: function set (ref, ref$1) {
-    var getters = ref.getters;
+  setAll: function setAll (ref, ref$1) {
+    var state = ref.state;
+    var dispatch = ref.dispatch;
     var commit = ref.commit;
-    var id = ref$1.id;
+    var layerId = ref$1.layerId;
     var uid = ref$1.uid;
 
-    commit('set', { id: id || getters.id(uid), uid: uid });
+    state.lists[uid][layerId].forEach(function (i) {
+      dispatch('set', { id: i.id, layerId: layerId, uid: uid });
+    });
+  },
+
+  set: function set (ref, ref$1) {
+    var commit = ref.commit;
+    var id = ref$1.id;
+    var layerId = ref$1.layerId;
+    var uid = ref$1.uid;
+
+    commit('set', { id: id, layerId: layerId, uid: uid });
+  },
+
+  unset: function unset (ref, ref$1) {
+    var dispatch = ref.dispatch;
+    var commit = ref.commit;
+    var id = ref$1.id;
+    var layerId = ref$1.layerId;
+    var uid = ref$1.uid;
+
+    commit('unset', { id: id, layerId: layerId, uid: uid });
   }
 };
 
-var getters$7 = {
-  id: function (state) { return function (uid) { return (state.actives[uid] &&
-      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid]) !== -1 &&
-      state.actives[uid]) ||
-    (state.lists[uid][0] && state.lists[uid][0].id) ||
-    null; }; }
-};
-
 var mutations$10 = {
-  reset: function reset (state, uid) {
-    Vue.set(state.lists, uid, []);
+  init: function init (state, ref) {
+    var uid = ref.uid;
+
+    Vue.set(state.lists, uid, {});
+    Vue.set(state.actives, uid, {});
+  },
+
+  reset: function reset (state, ref) {
+    var layerId = ref.layerId;
+    var uid = ref.uid;
+
+    Vue.delete(state.lists[uid], layerId);
+    Vue.delete(state.actives[uid], layerId);
   },
 
   resetAll: function resetAll (state) {
@@ -2335,42 +2397,89 @@ var mutations$10 = {
 
   add: function add (state, ref) {
     var annotation = ref.annotation;
-    var uid = ref.uid;
+    var layerId = ref.layerId;
 
-    var index = state.lists[uid].length;
-    Vue.set(state.lists[uid], index, annotation);
+    Object.keys(state.lists).forEach(function (uid) {
+      var list = state.lists[uid][layerId];
+      if (list) {
+        Vue.set(list, list.length, annotation);
+      }
+    });
   },
 
   update: function update (state, ref) {
     var annotation = ref.annotation;
-    var uid = ref.uid;
+    var layerId = ref.layerId;
 
-    var index = state.lists[uid].findIndex(function (m) { return m.id === annotation.id; });
-    Vue.set(state.lists[uid], index, annotation);
+    Object.keys(state.lists).forEach(function (uid) {
+      var list = state.lists[uid][layerId];
+      if (list) {
+        var index = list.findIndex(function (m) { return m.id === annotation.id; });
+        Vue.set(list, index, annotation);
+      }
+    });
   },
 
   remove: function remove (state, ref) {
     var id = ref.id;
-    var uid = ref.uid;
 
-    var index = state.lists[uid].findIndex(function (m) { return m.id === id; });
-    if (index !== -1) {
-      Vue.delete(state.lists[uid], index);
-    }
+    Object.keys(state.lists).forEach(function (uid) {
+      Object.keys(state.lists[uid]).forEach(function (layerId) {
+        var list = state.lists[uid][layerId];
+        if (list) {
+          var listsIndex = list.findIndex(function (a) { return a.id === id; });
+          if (listsIndex !== -1) {
+            Vue.delete(list, listsIndex);
+          }
+        }
+        var actives = state.actives[uid][layerId];
+        console.log('annotations-remove-actives', actives);
+        if (actives) {
+          var activeIndex = actives.indexOf(id);
+          console.log('annotations-remove-actives-index', activeIndex);
+          if (activeIndex !== -1) {
+            Vue.delete(actives, activeIndex);
+          }
+        }
+      });
+    });
   },
 
   list: function list (state, ref) {
     var annotations = ref.annotations;
+    var layerId = ref.layerId;
     var uid = ref.uid;
 
-    Vue.set(state.lists, uid, annotations);
+    Vue.set(state.lists[uid], layerId, annotations);
   },
 
   set: function set (state, ref) {
     var id = ref.id;
+    var layerId = ref.layerId;
     var uid = ref.uid;
 
-    Vue.set(state.actives, uid, id);
+    if (!state.actives[uid][layerId]) {
+      Vue.set(state.actives[uid], layerId, [id]);
+    } else {
+      Vue.set(
+        state.actives[uid][layerId],
+        state.actives[uid][layerId].length,
+        id
+      );
+    }
+  },
+
+  unset: function unset (state, ref) {
+    var id = ref.id;
+    var layerId = ref.layerId;
+    var uid = ref.uid;
+
+    if (state.actives[uid][layerId]) {
+      var index = state.actives[uid][layerId].indexOf(id);
+      if (index !== -1) {
+        Vue.delete(state.actives[uid][layerId], index);
+      }
+    }
   }
 };
 
@@ -2378,7 +2487,6 @@ var annotations = {
   namespaced: true,
   state: state$12,
   actions: actions$10,
-  getters: getters$7,
   mutations: mutations$10
 }
 
@@ -2438,41 +2546,6 @@ var store = new Vuex.Store({
     }
   }
 })
-
-var debug = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.visible)?_c('pre',[_c('code',[_vm._v(_vm._s(_vm.state))])]):_vm._e()},staticRenderFns: [],_scopeId: 'data-v-5a8a2715',
-  name: 'camomile-utils-debug',
-
-  data: function data () {
-    return {
-      visible: false
-    }
-  },
-
-  computed: {
-    state: function state () {
-      return this.$store.state.cml.popup
-    }
-  },
-
-  methods: {
-    keydown: function keydown (e) {
-      if (e.keyCode >= 65 && e.keyCode <= 90) {
-        var char = (e.metaKey ? 'meta-' : '') + e.keyCode;
-        if (char === 'meta-69') {
-          this.visible = !this.visible;
-        }
-      }
-    }
-  },
-
-  created: function created () {
-    document.addEventListener('keydown', this.keydown);
-  },
-
-  beforeDestroy: function beforeDestroy () {
-    document.removeEventListener('keydown', this.keydown);
-  }
-}
 
 var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],_scopeId: 'data-v-24d69054',
   name: 'camomile-utils-viewport',
@@ -2621,7 +2694,6 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   computed: Object.assign({}, mapState({
       element: function (state) { return state.cml.popup.element; },
       type: function (state) { return state.cml.popup.config.type; },
-      uid: function (state) { return state.cml.popup.config.uid; },
       rolesPermission: function (state) { return state.cml.user.id !== state.cml.popup.element.id; },
       roles: function (state) { return state.cml.config.roles; }
     })),
@@ -2629,9 +2701,9 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   methods: {
     save: function save () {
       if (this.element.id) {
-        this.$store.dispatch(("cml/" + (this.type) + "/update"), { element: this.element, uid: this.uid });
+        this.$store.dispatch(("cml/" + (this.type) + "/update"), { element: this.element });
       } else {
-        this.$store.dispatch(("cml/" + (this.type) + "/add"), { element: this.element, uid: this.uid });
+        this.$store.dispatch(("cml/" + (this.type) + "/add"), { element: this.element });
       }
       this.$store.commit('cml/popup/close');
     },
@@ -2732,7 +2804,7 @@ var cmlSync = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
   }
 }
 
-var cmlHeader = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"bg-inverse color-bg header"},[_c('div',{staticClass:"container"},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4 mb-0"},[_c('cml-title')],1),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blob-1-2 mb-0"},[_c('div',{staticClass:"blobs-default"},[_c('div',{staticClass:"blob-default"},[_c('cml-sync',{staticClass:"mb-0 left"})],1),_vm._v(" "),_c('div',{staticClass:"blob-auto mb-0"},[_c('cml-infos')],1)])]):_vm._e(),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blob mb-0 flex-right"},[_c('cml-userbutton')],1):_vm._e()])])])},staticRenderFns: [],
+var cmlHeader = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('header',{staticClass:"bg-inverse color-bg header"},[_c('div',{staticClass:"container"},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4 mb-0"},[_c('cml-title')],1),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blob-1-2 mb-0"},[_c('div',{staticClass:"blobs-default"},[_c('div',{staticClass:"blob-default"},[_c('cml-sync',{staticClass:"mb-0 left"})],1),_vm._v(" "),_c('div',{staticClass:"blob-auto mb-0"},[_c('cml-infos')],1)])]):_vm._e(),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blob mb-0 flex-right"},[_c('cml-userbutton')],1):_vm._e()])])])},staticRenderFns: [],
   name: 'camomile-header',
 
   components: {
@@ -2793,13 +2865,12 @@ var cmlLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   }
 }
 
-var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full-y flex flex-direction-column"},[_c('cml-header'),_vm._v(" "),_c('div',{staticClass:"relative page"},[_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),(_vm.isLogged)?_vm._t("default"):_c('cml-login')],2),_vm._v(" "),_c('viewport'),_vm._v(" "),_c('debug')],1)},staticRenderFns: [],
+var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page"},[_c('cml-header'),_vm._v(" "),_c('main',{staticClass:"main relative"},[_c('div',{staticClass:"content"},[(_vm.isLogged)?_vm._t("default"):_c('cml-login')],2),_vm._v(" "),_c('div',{staticClass:"overlay"},[_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),_c('viewport')],1)])],1)},staticRenderFns: [],
   store: store,
 
   name: 'camomile',
 
   components: {
-    debug: debug,
     viewport: viewport$1,
     cmlHeader: cmlHeader,
     cmlLogin: cmlLogin,
@@ -2820,13 +2891,12 @@ var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var
 
   computed: Object.assign({}, mapState({
       element: function (state) { return state.cml.popup.element; },
-      type: function (state) { return state.cml.popup.config.type; },
-      uid: function (state) { return state.cml.popup.config.uid; }
+      type: function (state) { return state.cml.popup.config.type; }
     })),
 
   methods: {
     remove: function remove () {
-      this.$store.dispatch(("cml/" + (this.type) + "/remove"), { id: this.element.id, uid: this.uid });
+      this.$store.dispatch(("cml/" + (this.type) + "/remove"), { id: this.element.id });
       this.$store.commit("cml/popup/close");
     },
     keyup: function keyup (e) {
@@ -3025,9 +3095,13 @@ var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement
       var obj, obj$1;
 
       if (this.isActive(permission)) {
-        this.$store.dispatch(("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionRemove"), ( obj = {}, obj[((this.type) + "Id")] = this.id, obj[((this.element.type) + "Id")] = this.element.id, obj.uid = this.uid, obj));
+        this.$store.dispatch(("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionRemove"), ( obj = {
+          id: this.id
+        }, obj[((this.element.type) + "Id")] = this.element.id, obj));
       } else {
-        this.$store.dispatch(("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionSet"), ( obj$1 = {}, obj$1[((this.type) + "Id")] = this.id, obj$1[((this.element.type) + "Id")] = this.element.id, obj$1.permission = permission, obj$1.uid = this.uid, obj$1));
+        this.$store.dispatch(("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionSet"), ( obj$1 = {
+          id: this.id
+        }, obj$1[((this.element.type) + "Id")] = this.element.id, obj$1.permission = permission, obj$1));
       }
     },
     isActive: function isActive (permission) {
@@ -3052,7 +3126,7 @@ var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElemen
     }))
 }
 
-var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.corpus && _vm.corpus.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-corpus',
 
   props: {
@@ -3068,22 +3142,19 @@ var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
         type: 'corpus',
         closeBtn: true,
         title: 'Edit corpus',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupAddConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Add corpus',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupRemoveConfig: {
         type: 'corpus',
         closeBtn: true,
         title: 'Remove corpus',
-        component: popupRemove,
-        uid: this.uid
+        component: popupRemove
       },
       popupPermissionsConfig: {
         type: 'corpus',
@@ -3115,16 +3186,16 @@ var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       this.$store.commit('cml/popup/open', { config: config, element: element });
     },
     set: function set (e) {
-      this.$store.dispatch('cml/corpus/set', { corpuId: e.target.value, uid: this.uid });
+      this.$store.dispatch('cml/corpus/set', { id: e.target.value, uid: this.uid });
     }
   },
 
   mounted: function mounted () {
-    this.$store.commit('cml/corpus/register', this.uid);
+    this.$store.dispatch('cml/corpus/register', this.uid);
   }
 }
 
-var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Media")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Media")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-medias',
 
   props: {
@@ -3140,22 +3211,19 @@ var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
         type: 'medias',
         closeBtn: true,
         title: 'Edit medium',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupAddConfig: {
         type: 'medias',
         closeBtn: true,
         title: 'Add medium',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupRemoveConfig: {
         type: 'medias',
         closeBtn: true,
         title: 'Remove medium',
-        component: popupRemove,
-        uid: this.uid
+        component: popupRemove
       }
     }
   },
@@ -3187,12 +3255,12 @@ var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
     set: function set (e) {
-      this.$store.dispatch('cml/medias/set', { uid: this.uid, mediaId: e.target.value });
+      this.$store.dispatch('cml/medias/set', { id: e.target.value, uid: this.uid });
     }
   }
 }
 
-var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Layers")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":layer.id,"checked":layer.id === _vm.layerId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Layers")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.layers && _vm.layers.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"checkbox"},domProps:{"value":layer.id,"checked":_vm.actives.indexOf(layer.id) !== -1},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-layers',
 
   props: {
@@ -3208,22 +3276,19 @@ var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
         type: 'layers',
         closeBtn: true,
         title: 'Edit layer',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupAddConfig: {
         type: 'layers',
         closeBtn: true,
         title: 'Edit layer',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupRemoveConfig: {
         type: 'layers',
         closeBtn: true,
         title: 'Remove layer',
-        component: popupRemove,
-        uid: this.uid
+        component: popupRemove
       },
       popupPermissionsConfig: {
         type: 'layers',
@@ -3239,7 +3304,7 @@ var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     layers: function layers () {
       return this.$store.state.cml.layers.lists[this.uid]
     },
-    layerId: function layerId () {
+    actives: function actives () {
       return this.$store.state.cml.layers.actives[this.uid]
     },
     corpus: function corpus () {
@@ -3265,12 +3330,16 @@ var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
     set: function set (e) {
-      this.$store.dispatch('cml/layers/set', { layerId: e.target.value, uid: this.uid });
+      if (e.target.checked) {
+        this.$store.dispatch('cml/layers/set', { id: e.target.value, uid: this.uid });
+      } else {
+        this.$store.dispatch('cml/layers/unset', { id: e.target.value, uid: this.uid });
+      }
     }
   }
 }
 
-var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Annotations")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":annotation.id,"checked":annotation.id === _vm.annotationId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
+var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('div',{key:layer.id,staticClass:"mt"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v(_vm._s(layer.name))]),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: layer.id, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('table',{staticClass:"table mb-0"},[_vm._m(1,true),_vm._v(" "),_vm._l((_vm.annotations[layer.id]),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"checkbox","layer-id":layer.id},domProps:{"value":annotation.id,"checked":_vm.actives[layer.id] && _vm.actives[layer.id].indexOf(annotation.id) !== -1},on:{"change":function($event){_vm.set($event, layer.id);}}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()})],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Annotations")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
   name: 'camomile-annotations',
 
   props: {
@@ -3286,22 +3355,19 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
         type: 'annotations',
         closeBtn: true,
         title: 'Edit annotation',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupAddConfig: {
         type: 'annotations',
         closeBtn: true,
         title: 'Add annotation',
-        component: popupEdit,
-        uid: this.uid
+        component: popupEdit
       },
       popupRemoveConfig: {
         type: 'annotations',
         closeBtn: true,
         title: 'Remove annotation',
-        component: popupRemove,
-        uid: this.uid
+        component: popupRemove
       }
     }
   },
@@ -3311,23 +3377,16 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
       return this.$store.state.cml.annotations.lists[this.uid]
     },
     mediaId: function mediaId () {
-      return this.$store.state.cml.medias.actives[this.uid].id
+      return this.$store.state.cml.medias.actives[this.uid]
     },
-    layerId: function layerId () {
-      return this.$store.state.cml.layers.actives[this.uid]
+    layers: function layers () {
+      return this.$store.state.cml.layers.lists[this.uid]
     },
-    annotationId: function annotationId () {
+    actives: function actives () {
       return this.$store.state.cml.annotations.actives[this.uid]
     },
     medias: function medias () {
       return this.$store.state.cml.medias.lists[this.uid]
-    },
-    permission: function permission () {
-      var this$1 = this;
-
-      var layers = this.$store.state.cml.layers.lists;
-      var layer = layers[this.uid] && layers[this.uid].find(function (c) { return c.id === this$1.layerId; });
-      return layer ? layer.permission : 0
     }
   },
 
@@ -3338,8 +3397,13 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
-    set: function set (e) {
-      this.$store.dispatch('cml/annotations/set', { id: e.target.value, uid: this.uid });
+    set: function set (e, layerId) {
+      if (e.target.checked) {
+        this.$store.dispatch('cml/annotations/set', { id: e.target.value, layerId: layerId, uid: this.uid });
+      } else {
+
+        this.$store.dispatch('cml/annotations/unset', { id: e.target.value, layerId: layerId, uid: this.uid });
+      }
     },
     mediaName: function mediaName (mediaId) {
       if (!mediaId) { return '' }
@@ -3536,8 +3600,8 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
       var height = width * 9 / 16;
       this.player.setSize(width, height);
     },
-    media: function media (media$1) {
-      if (this.media.url) {
+    media: function media (media$1, mediaOld) {
+      if (media$1.url && media$1.url !== mediaOld.url) {
         this.videoLoad(media$1.url);
       }
     }
@@ -3612,4 +3676,190 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
   }
 }
 
-export { app as cmlApp, users$1 as cmlUsers, groups$1 as cmlGroups, corpus$1 as cmlCorpus, medias$1 as cmlMedias, layers$1 as cmlLayers, annotations$1 as cmlAnnotations, mediaYoutube as cmlMediaYoutube, mediaController as cmlMediaController };
+var timelineButton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn p-s",on:{"click":function($event){_vm.annotationCreate({ element: { id: null, layerId: _vm.layer.id, mediaId: _vm.mediaId, fragment: {}, metadata: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])},staticRenderFns: [],
+  props: {
+    layer: Object,
+    annotations: Array,
+    mediaId: String,
+    timeTotal: Number,
+    timeCurrent: Number
+  }
+}
+
+var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"annotation",staticClass:"absolute annotation",style:({ left: _vm.left, right: _vm.right })},[_c('div',{staticClass:"relative full-y"},[_c('div',{staticClass:"absolute handler handler-left",on:{"mousedown":function($event){_vm.dragLeftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handler handler-right",on:{"mousedown":function($event){_vm.dragRightOn($event);}}})])])},staticRenderFns: [],_scopeId: 'data-v-1e3bbe38',
+
+  props: {
+    id: String,
+    layerId: String,
+    uid: String,
+    timeTotal: Number,
+    containerWidth: Number,
+    containerLeft: Number,
+  },
+
+  data: function data () {
+    return {
+      leftDragging: 0,
+      rightDragging: 0,
+      leftPosition: 0,
+      rightPosition: 0,
+      handlerWidth: 32
+    }
+  },
+
+  computed: {
+    annotation: function annotation () {
+      var this$1 = this;
+
+      return this.$store.state.cml.annotations.lists[this.uid][this.layerId].find(function (e) { return e.id === this$1.id; })
+    },
+    time: function time () {
+      return this.annotation.fragment.time
+    },
+    left: function left () {
+      return this.leftDragging ? ((this.leftDragging) + "px") : ((this.time.start * this.containerWidth / this.timeTotal) + "px")
+    },
+    right: function right () {
+      return this.rightDragging ? ((this.rightDragging) + "px") : (((this.timeTotal - this.time.end) * this.containerWidth / this.timeTotal) + "px")
+    }
+  },
+
+  methods: {
+    timeUpdate: function timeUpdate (time, type) {
+      var element = Object.assign({}, this.annotation);
+      element.fragment.time[type] = time;
+      return this.$store.dispatch('cml/annotations/update', { element: element })
+    },
+    dragLeftOn: function dragLeftOn (e) {
+      document.addEventListener('mousemove', this.dragLeft);
+      document.addEventListener('mouseup', this.dragLeftOff);
+    },
+    dragLeftOff: function dragLeftOff (e) {
+      document.removeEventListener('mousemove', this.dragLeft);
+      document.removeEventListener('mouseup', this.dragLeftOff);
+      var time = Math.round(this.$refs.annotation.offsetLeft * this.timeTotal / this.containerWidth);
+      this.timeUpdate(time, 'start');
+      this.leftDragging = 0;
+    },
+    dragLeft: function dragLeft (e) {
+      this.leftDragging = e.clientX - this.containerLeft - this.handlerWidth / 2;
+    },
+    dragRightOn: function dragRightOn (e) {
+      document.addEventListener('mousemove', this.dragRight);
+      document.addEventListener('mouseup', this.dragRightOff);
+    },
+    dragRightOff: function dragRightOff (e) {
+      document.removeEventListener('mousemove', this.dragRight);
+      document.removeEventListener('mouseup', this.dragRightOff);
+      var time = Math.round((this.$refs.annotation.offsetLeft + this.$refs.annotation.offsetWidth) * this.timeTotal / this.containerWidth);
+      this.timeUpdate(time, 'end');
+      this.rightDragging = 0;
+    },
+    dragRight: function dragRight (e) {
+      this.rightDragging = this.containerWidth + this.containerLeft - e.clientX - this.handlerWidth / 2;
+    }
+  }
+
+}
+
+var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"relative annotations"},[_vm._v("co: "+_vm._s(_vm.containerWidth)+" "),_vm._l((_vm.annotations),function(annotation){return _c('annotations-blocs',{key:annotation.id,ref:"annotations",refInFor:true,staticClass:"absolute annotation",attrs:{"uid":_vm.uid,"id":annotation.id,"layer-id":_vm.layer.id,"time-total":_vm.timeTotal,"container-width":_vm.containerWidth,"container-left":_vm.containerLeft},on:{"click":function($event){_vm.zindexSet($event);}}})})],2)},staticRenderFns: [],_scopeId: 'data-v-40ee09a3',
+  components: {
+    annotationsBlocs: annotationsBlocs
+  },
+
+  props: {
+    uid: String,
+    layer: Object,
+    annotations: Array,
+    mediaId: String,
+    timeTotal: Number,
+    timeCurrent: Number
+  },
+
+  data: function data () {
+    return {
+      containerWidth: 0,
+      containerLeft: 0
+    }
+  },
+
+  methods: {
+    zindexSet: function zindexSet (e) {
+      console.log('e target', e);
+      this.$refs.annotations.forEach(function (a) {
+        a.style.zIndex = 0;
+      });
+      e.target.style.zIndex = 10;
+    }
+  },
+
+  mounted: function mounted () {
+    this.containerWidth = this.$refs.container.offsetWidth;
+    this.containerLeft = this.$refs.container.offsetLeft;
+    console.log('ref', this.$refs.annotations);
+  }
+}
+
+var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},[_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id] && layer.permission === 3)?_c('timeline-button',{key:("button-" + (layer.id))}):_vm._e()}),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('timeline-annotations',{key:("annotations-" + (layer.id)),attrs:{"uid":_vm.uid,"layer":layer,"annotations":_vm.annotations[layer.id],"media-id":_vm.mediaId,"time-total":_vm.timeTotal,"time-current":_vm.timeCurrent}}):_vm._e()})],2)},staticRenderFns: [],
+  components: {
+    timelineButton: timelineButton,
+    timelineAnnotations: timelineAnnotations
+  },
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
+
+  data: function data () {
+    return {
+      svg: {
+        w: 0,
+        h: 0
+      }
+    }
+  },
+
+  computed: {
+    viewbox: function viewbox () {
+      return ("0 0 " + (this.svg.w) + " " + (this.svg.h));
+    },
+    properties: function properties () {
+      return this.$store.state.cml.medias.properties[this.uid] || {}
+    },
+    timeCurrent: function timeCurrent () {
+      return this.properties.timeCurrent || 0
+    },
+    timeTotal: function timeTotal () {
+      return this.properties.timeTotal || 0
+    },
+    annotations: function annotations () {
+      return this.$store.state.cml.annotations.lists[this.uid]
+    },
+    mediaId: function mediaId () {
+      return this.$store.state.cml.medias.actives[this.uid]
+    },
+    layers: function layers () {
+      return this.$store.state.cml.layers.lists[this.uid]
+    },
+    actives: function actives () {
+      return this.$store.state.cml.annotations.actives[this.uid]
+    }
+  },
+
+  mounted: function mounted () {
+    window.addEventListener("resize", this.resize);
+    this.resize();
+  },
+
+  methods: {
+    resize: function resize () {
+      this.svg.w = this.$refs.container.offsetWidth;
+      this.svg.h = this.$refs.container.offsetHeight;
+    }
+  }
+}
+
+export { app as cmlApp, users$1 as cmlUsers, groups$1 as cmlGroups, corpus$1 as cmlCorpus, medias$1 as cmlMedias, layers$1 as cmlLayers, annotations$1 as cmlAnnotations, mediaYoutube as cmlMediaYoutube, mediaController as cmlMediaController, timeline as cmlLayerTimeline };
