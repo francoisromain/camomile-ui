@@ -182,8 +182,8 @@ export default {
       const height = width * 9 / 16
       this.player.setSize(width, height)
     },
-    media (media) {
-      if (this.media.url) {
+    media (media, mediaOld) {
+      if (media.url && media.url !== mediaOld.url) {
         this.videoLoad(media.url)
       }
     }

@@ -31,14 +31,10 @@ export default {
   },
   range (start, end, tick) {
     const s = Math.round(start / tick) * tick
-    return Array.from(
-      {
-        length: Math.floor((end - start) / tick)
-      },
-      (v, k) => {
-        return k * tick + s
-      }
-    )
+    const ticks = Math.floor((end - start) / tick)
+    return Array.from({ length: ticks ? ticks + 1 : 0 }, (v, k) => {
+      return k * tick + s
+    })
   },
   audioFade (media, audioOn, volumeTarget) {
     var duration = 3000

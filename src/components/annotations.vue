@@ -3,7 +3,7 @@
     <div class="flex flex-start">
       <h2 class="mt-s mb-s">Annotations</h2>
     </div>
-    <div v-for="layer in layers" :key="layer.id" class="mt" v-if="annotations && annotations[layer.id]">
+    <div v-for="layer in layers" :key="layer.id" class="mt" v-if="annotations[layer.id]">
       <div class="flex flex-start">
         <h2 class="mt-s">{{ layer.name }}</h2>
         <button @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId: layer.id, mediaId, fragment: {}, metadata: {}, mediaName: mediaName(mediaId), mediaLink: true } })" class="flex-right btn p-s" v-if="layer.permission === 3"><i class="icon-24 icon-24-plus"></i></button>
@@ -69,9 +69,6 @@ export default {
     },
     mediaId () {
       return this.$store.state.cml.medias.actives[this.uid]
-    },
-    layersActive () {
-      return this.$store.state.cml.layers.actives[this.uid]
     },
     layers () {
       return this.$store.state.cml.layers.lists[this.uid]
