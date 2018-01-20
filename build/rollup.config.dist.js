@@ -24,12 +24,10 @@ export default [
         preferBuiltins: true
       }),
       vue({
-        compileTemplate: true,
-        css: '../dist/styles.css'
+        compileTemplate: true
       }),
       postcss({
-        plugins: postcssPlugins,
-        extract: '../dist/styles.css'
+        extract: true
       }),
       buble({
         objectAssign: 'Object.assign'
@@ -45,12 +43,10 @@ export default [
     ],
     plugins: [
       vue({
-        compileTemplate: true,
-        css: 'dist/styles.css'
+        compileTemplate: true
       }),
       postcss({
-        plugins: postcssPlugins,
-        extract: 'dist/styles.css'
+        extract: true
       }),
       buble({
         objectAssign: 'Object.assign'

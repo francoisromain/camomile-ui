@@ -7,7 +7,7 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch }, { element }) {
+  add({ commit, dispatch }, { element }) {
     dispatch('cml/sync/start', `annotationsAdd`, { root: true })
     return api
       .createAnnotation(
@@ -38,7 +38,7 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch }, { id }) {
+  remove({ commit, dispatch }, { id }) {
     dispatch('cml/sync/start', `annotationsRemove`, { root: true })
     return api
       .deleteAnnotation(id)
@@ -57,7 +57,7 @@ export const actions = {
       })
   },
 
-  update ({ commit, dispatch }, { element }) {
+  update({ commit, dispatch }, { element }) {
     dispatch('cml/sync/start', `annotationsUpdate`, { root: true })
     return api
       .updateAnnotation(element.id, {
@@ -82,13 +82,13 @@ export const actions = {
       })
   },
 
-  listAll ({ rootState, dispatch }, { uid }) {
+  listAll({ rootState, dispatch }, { uid }) {
     rootState.cml.layers.actives[uid].forEach(layerId => {
       dispatch('list', { layerId, uid })
     })
   },
 
-  list ({ dispatch, commit }, { layerId, uid }) {
+  list({ dispatch, commit }, { layerId, uid }) {
     dispatch('cml/sync/start', `annotationsList-${uid}`, { root: true })
     return api
       .getAnnotations({ filter: { id_layer: layerId } })
@@ -105,7 +105,7 @@ export const actions = {
           mediaId: a.id_medium || null
         }))
         commit('list', { annotations, layerId, uid })
-        dispatch('setAll', { layerId, uid })
+        // dispatch('setAll', { layerId, uid })
 
         return annotations
       })
@@ -115,40 +115,26 @@ export const actions = {
 
         throw e
       })
-  },
-
-  setAll ({ state, dispatch, commit }, { layerId, uid }) {
-    state.lists[uid][layerId].forEach(i => {
-      dispatch('set', { id: i.id, layerId, uid })
-    })
-  },
-
-  set ({ commit }, { id, layerId, uid }) {
-    commit('set', { id, layerId, uid })
-  },
-
-  unset ({ dispatch, commit }, { id, layerId, uid }) {
-    commit('unset', { id, layerId, uid })
   }
 }
 
 export const mutations = {
-  init (state, { uid }) {
+  init(state, { uid }) {
     Vue.set(state.lists, uid, {})
     Vue.set(state.actives, uid, {})
   },
 
-  reset (state, { layerId, uid }) {
+  reset(state, { layerId, uid }) {
     Vue.delete(state.lists[uid], layerId)
     Vue.delete(state.actives[uid], layerId)
   },
 
-  resetAll (state) {
+  resetAll(state) {
     Vue.set(state, 'lists', {})
     Vue.set(state, 'actives', {})
   },
 
-  add (state, { annotation, layerId }) {
+  add(state, { annotation, layerId }) {
     Object.keys(state.lists).forEach(uid => {
       const list = state.lists[uid][layerId]
       if (list) {
@@ -157,7 +143,7 @@ export const mutations = {
     })
   },
 
-  update (state, { annotation, layerId }) {
+  update(state, { annotation, layerId }) {
     Object.keys(state.lists).forEach(uid => {
       const list = state.lists[uid][layerId]
       if (list) {
@@ -167,7 +153,7 @@ export const mutations = {
     })
   },
 
-  remove (state, { id }) {
+  remove(state, { id }) {
     Object.keys(state.lists).forEach(uid => {
       Object.keys(state.lists[uid]).forEach(layerId => {
         const list = state.lists[uid][layerId]
@@ -190,29 +176,16 @@ export const mutations = {
     })
   },
 
-  list (state, { annotations, layerId, uid }) {
+  list(state, { annotations, layerId, uid }) {
     Vue.set(state.lists[uid], layerId, annotations)
   },
 
-  set (state, { id, layerId, uid }) {
-    if (!state.actives[uid][layerId]) {
-      Vue.set(state.actives[uid], layerId, [id])
-    } else {
-      Vue.set(
-        state.actives[uid][layerId],
-        state.actives[uid][layerId].length,
-        id
-      )
-    }
+  set(state, { id, uid }) {
+    Vue.set(state.actives, uid, id)
   },
 
-  unset (state, { id, layerId, uid }) {
-    if (state.actives[uid][layerId]) {
-      const index = state.actives[uid][layerId].indexOf(id)
-      if (index !== -1) {
-        Vue.delete(state.actives[uid][layerId], index)
-      }
-    }
+  unset(state, { uid }) {
+    Vue.delete(state.actives, uid)
   }
 }
 

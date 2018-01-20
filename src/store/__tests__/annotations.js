@@ -1,4 +1,4 @@
-import { createLocalVue } from 'vue-test-utils'
+import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import corpus from '../corpus'
 import messages from '../messages'
@@ -97,9 +97,7 @@ describe('store annotations actions', () => {
 
     annotations.state = {
       actives: {
-        default: {
-          'mocks-layer-id-1': ['mocks-annotation-id-1']
-        }
+        default: 'mocks-annotation-id-1'
       },
       lists: {
         default: {
@@ -332,20 +330,6 @@ describe('store annotations actions', () => {
         expect(e.message).toEqual('missing uid')
       })
   })
-
-  it('sets selected annotation', () => {
-    const id = 'mocks-annotation-id-2'
-    const layerId = 'mocks-layer-id-1'
-
-    expect.assertions(1)
-    return store
-      .dispatch('cml/annotations/set', { id, layerId, uid: 'default' })
-      .then(r => {
-        expect(store.state.cml.annotations.actives['default']).toEqual({
-          'mocks-layer-id-1': ['mocks-annotation-id-1', 'mocks-annotation-id-2']
-        })
-      })
-  })
 })
 
 describe('store annotations mutations', () => {
@@ -353,9 +337,7 @@ describe('store annotations mutations', () => {
 
   beforeEach(() => {
     state.actives = {
-      default: {
-        'mocks-layer-id-1': ['mocks-annotation-id']
-      }
+      default: 'mocks-annotation-id'
     }
 
     state.lists = {
@@ -383,5 +365,12 @@ describe('store annotations mutations', () => {
   it('resets all annotation lists', () => {
     annotations.mutations.resetAll(state)
     expect(state.lists).toEqual({})
+  })
+
+  it('sets selected annotation', () => {
+    const id = 'mocks-annotation-id-2'
+
+    annotations.mutations.set(state, { id, uid: 'default' })
+    expect(state.actives['default']).toEqual('mocks-annotation-id-2')
   })
 })

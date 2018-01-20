@@ -13,7 +13,7 @@
           <th></th><th>Id</th><th>Medium</th><th></th>
         </tr>
         <tr v-for="annotation in annotations[layer.id]" :key="annotation.id">
-          <td><input type="checkbox" @change="set($event, layer.id)" :value="annotation.id" :checked="actives[layer.id] && actives[layer.id].indexOf(annotation.id) !== -1" :layer-id="layer.id"></td>
+          <td><input type="checkbox" @change="set($event, layer.id)" :value="annotation.id" :checked="activeId && activeId === annotation.id" :layer-id="layer.id"></td>
           <td><span class="h6 bold bg-neutral color-bg py-xxs px-xs rnd">…{{ annotation.id | stringEnd }}</span></td>
           <td>{{ mediaName(annotation.mediaId) }}</td>
           <td class="text-right">
@@ -40,7 +40,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       popupEditConfig: {
         type: 'annotations',
@@ -64,36 +64,38 @@ export default {
   },
 
   computed: {
-    annotations () {
+    annotations() {
       return this.$store.state.cml.annotations.lists[this.uid]
     },
-    mediaId () {
+    mediaId() {
       return this.$store.state.cml.medias.actives[this.uid]
     },
-    layers () {
+    layers() {
       return this.$store.state.cml.layers.lists[this.uid]
     },
-    actives () {
+    activeId() {
       return this.$store.state.cml.annotations.actives[this.uid]
     },
-    medias () {
+    medias() {
       return this.$store.state.cml.medias.lists[this.uid]
     }
   },
 
   methods: {
-    popupOpen ({ config, element }) {
+    popupOpen({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
     },
-    set (e, layerId) {
+    set(e, layerId) {
       if (e.target.checked) {
-        this.$store.dispatch('cml/annotations/set', { id: e.target.value, layerId: layerId, uid: this.uid })
+        this.$store.commit('cml/annotations/set', {
+          id: e.target.value,
+          uid: this.uid
+        })
       } else {
-
-        this.$store.dispatch('cml/annotations/unset', { id: e.target.value, layerId: layerId, uid: this.uid })
+        this.$store.commit('cml/annotations/unset', { uid: this.uid })
       }
     },
-    mediaName (mediaId) {
+    mediaName(mediaId) {
       if (!mediaId) return ''
       const media = this.medias.find(m => m.id === mediaId)
       return media ? media.name : ''
@@ -101,7 +103,7 @@ export default {
   },
 
   filters: {
-    stringEnd (value) {
+    stringEnd(value) {
       if (!value) return ''
       return value.substr(value.length - 6)
     }

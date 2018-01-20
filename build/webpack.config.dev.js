@@ -4,7 +4,7 @@ const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpackConfigBase = require('./webpack.config.base')
 
-module.exports = merge(webpackConfigBase, {
+const webpackConfigDev = {
   devtool: 'cheap-module-eval-source-map',
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
@@ -54,4 +54,6 @@ module.exports = merge(webpackConfigBase, {
       inject: true
     })
   ]
-})
+}
+
+module.exports = merge(webpackConfigBase, webpackConfigDev)

@@ -1,4 +1,4 @@
-import { createLocalVue } from 'vue-test-utils'
+import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 
 import { state, actions, getters, mutations } from '../index'

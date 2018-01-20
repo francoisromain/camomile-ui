@@ -6,13 +6,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
 const webpackConfigBase = require('./webpack.config.base')
 const MinifyPlugin = require('babel-minify-webpack-plugin')
-const WebpackMonitor = require('webpack-monitor')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
+// const WebpackMonitor = require('webpack-monitor')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const npmPackage = require('../package.json')
 const date = new Date().toISOString().slice(0, 10)
 
-module.exports = merge(webpackConfigBase, {
+const webpackConfigDist = {
   devtool: false,
   entry: {
     app: './example/src/app.js',
@@ -63,17 +62,6 @@ module.exports = merge(webpackConfigBase, {
       npmAuthorUrl: JSON.stringify(npmPackage.author.url)
     }),
     new webpack.ExtendedAPIPlugin(),
-    new MinifyPlugin(
-      {
-        mangle: {
-          keepFnName: true, // should be false, but creates an error on process.nextTick. wtf?
-          topLevel: true
-        },
-        removeConsole: true,
-        removeDebugger: true
-      },
-      { comments: false }
-    ),
     new ExtractTextPlugin({
       filename: 'styles.[hash].css',
       allChunks: true
@@ -89,6 +77,18 @@ module.exports = merge(webpackConfigBase, {
       excludeAssets: [/app.*.js/]
     }),
     new HtmlWebpackExcludeAssetsPlugin(),
+    new MinifyPlugin(
+      {
+        mangle: {
+          keepFnName: true, // should be false, but creates an error on process.nextTick. wtf?
+          topLevel: true
+        },
+        removeConsole: true,
+        removeDebugger: true
+      },
+      { comments: false }
+    ),
+    new webpack.optimize.ModuleConcatenationPlugin()
     // new WebpackMonitor({
     //   capture: true, // -> default 'true'
     //   target: '../build/webpackMonitor/webpack-stats.json', // default -> '../monitor/stats.json'
@@ -108,6 +108,7 @@ module.exports = merge(webpackConfigBase, {
     //   // https://github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
     //   logLevel: 'info' // log level: 'info', 'warn', 'error' or 'silent'
     // }),
-    new webpack.optimize.ModuleConcatenationPlugin()
   ]
-})
+}
+
+module.exports = merge(webpackConfigBase, webpackConfigDist)

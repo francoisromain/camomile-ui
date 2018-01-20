@@ -1,4 +1,4 @@
-import { createLocalVue } from 'vue-test-utils'
+import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import popup from '../popup'
 import sync from '../sync'

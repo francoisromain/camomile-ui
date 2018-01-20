@@ -4,6 +4,9 @@
       v-for="layer in layers" 
       :key="`button-${layer.id}`"
       v-if="annotations[layer.id] && layer.permission === 3"
+      :layer-id="layer.id"
+      :media-id="mediaId"
+      :time-current="timeCurrent"
     ></timeline-button>
     <timeline-annotations 
       v-for="layer in layers" 
@@ -37,7 +40,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       svg: {
         w: 0,
@@ -47,41 +50,41 @@ export default {
   },
 
   computed: {
-    viewbox () {
-      return `0 0 ${this.svg.w} ${this.svg.h}`;
+    viewbox() {
+      return `0 0 ${this.svg.w} ${this.svg.h}`
     },
-    properties () {
+    properties() {
       return this.$store.state.cml.medias.properties[this.uid] || {}
     },
-    timeCurrent () {
+    timeCurrent() {
       return this.properties.timeCurrent || 0
     },
-    timeTotal () {
+    timeTotal() {
       return this.properties.timeTotal || 0
     },
-    annotations () {
+    annotations() {
       return this.$store.state.cml.annotations.lists[this.uid]
     },
-    mediaId () {
+    mediaId() {
       return this.$store.state.cml.medias.actives[this.uid]
     },
-    layers () {
+    layers() {
       return this.$store.state.cml.layers.lists[this.uid]
     },
-    actives () {
+    actives() {
       return this.$store.state.cml.annotations.actives[this.uid]
     }
   },
 
-  mounted () {
-    window.addEventListener("resize", this.resize);
-    this.resize();
+  mounted() {
+    window.addEventListener('resize', this.resize)
+    this.resize()
   },
 
   methods: {
-    resize () {
-      this.svg.w = this.$refs.container.offsetWidth;
-      this.svg.h = this.$refs.container.offsetHeight;
+    resize() {
+      this.svg.w = this.$refs.container.offsetWidth
+      this.svg.h = this.$refs.container.offsetHeight
     }
   }
 }

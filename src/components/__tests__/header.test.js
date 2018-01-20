@@ -1,4 +1,4 @@
-import { mount, shallow, createLocalVue } from 'vue-test-utils'
+import { mount, shallow, createLocalVue } from '@vue/test-utils'
 import { createRenderer } from 'vue-server-renderer'
 import Vuex from 'vuex'
 import header from '../header/index.vue'

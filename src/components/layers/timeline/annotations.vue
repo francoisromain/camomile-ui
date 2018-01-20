@@ -1,5 +1,5 @@
 <template>
-  <div class="relative annotations" ref="container">co: {{ containerWidth}}
+  <div class="relative annotations" ref="container">
     <annotations-blocs class="absolute annotation"
       v-for="annotation in annotations"
       :key="annotation.id"
@@ -9,14 +9,13 @@
       :time-total="timeTotal"
       :container-width="containerWidth"
       :container-left="containerLeft"
-      @click="zindexSet($event)"
-      ref="annotations">
+      ref="annotations"
+      :style="{ zIndex: annotation.id === activeId ? 1 : 0}">
     </annotations-blocs>
   </div>
 </template>
 
 <script>
-
 import annotationsBlocs from './annotations-bloc.vue'
 
 export default {
@@ -33,24 +32,30 @@ export default {
     timeCurrent: Number
   },
 
-  data () {
+  data() {
     return {
       containerWidth: 0,
       containerLeft: 0
     }
   },
 
+  computed: {
+    activeId() {
+      return this.$store.state.cml.annotations.actives[this.uid]
+    }
+  },
+
   methods: {
-    zindexSet (e) {
+    zindexSet(e) {
       console.log('e target', e)
       this.$refs.annotations.forEach(a => {
         a.style.zIndex = 0
       })
-      e.target.style.zIndex = 10;
+      e.target.style.zIndex = 10
     }
   },
 
-  mounted () {
+  mounted() {
     this.containerWidth = this.$refs.container.offsetWidth
     this.containerLeft = this.$refs.container.offsetLeft
     console.log('ref', this.$refs.annotations)
