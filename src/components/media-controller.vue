@@ -7,10 +7,7 @@
     </div>
 
     <div class="mediacontroller-progress" ref="progress" :class="{ loaded: isLoaded }"
-      @click="progressClick"
-      @mousemove="progressMousemove"
-      @mousedown="progressMousedown"
-      @mouseup="progressMouseup">
+      @mousedown="progressMousedown($event)">
       <div class="pointer-none full-y">
         <div class="mediacontroller-progress-bar" :style="{ width: progressBarWidth }">
         </div>
@@ -21,7 +18,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     uid: {
@@ -30,64 +26,76 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       mousedown: false
     }
   },
 
   computed: {
-    properties () {
+    properties() {
       return this.$store.state.cml.medias.properties[this.uid] || {}
     },
-    timeCurrent () {
+    timeCurrent() {
       return this.properties.timeCurrent || 0
     },
-    timeTotal () {
+    timeTotal() {
       return this.properties.timeTotal || 0
     },
-    playButton () {
-      return this.properties.isPlaying && '❚ ❚' || '►'
+    playButton() {
+      return (this.properties.isPlaying && '❚ ❚') || '►'
     },
-    isLoaded () {
+    isLoaded() {
       return this.properties.isLoaded || false
     },
-    progressBarWidth () {
+    progressBarWidth() {
       return this.timeTotal ? `${this.timeCurrent / this.timeTotal * 100}%` : 0
     }
   },
 
   methods: {
-    mediaToggle () {
+    mediaToggle() {
       if (this.properties.isPlaying) {
         this.$store.commit('cml/medias/pause', this.uid)
       } else {
         this.$store.commit('cml/medias/play', this.uid)
       }
     },
-    progressClick (e) {
-      this.seek(e.offsetX / this.$refs.progress.offsetWidth, true, this.uid)
+    progressMousemove(e) {
+      let x
+      if (e.clientX - this.$refs.progress.offsetLeft < 0) {
+        x = 0
+      } else if (
+        e.clientX >
+        this.$refs.progress.offsetLeft + this.$refs.progress.offsetWidth
+      ) {
+        x = 1
+      } else {
+        x =
+          (e.clientX - this.$refs.progress.offsetLeft) /
+          this.$refs.progress.offsetWidth
+      }
+      this.seek(x, false, this.uid)
     },
-    progressMousemove (e) {
-      this.mousedown && this.seek(e.offsetX / this.$refs.progress.offsetWidth, false, this.uid)
+    progressMousedown(e) {
+      document.addEventListener('mousemove', this.progressMousemove)
+      document.addEventListener('mouseup', this.progressMouseup)
+      this.progressMousemove(e)
     },
-    progressMousedown () {
-      this.mousedown = true
+    progressMouseup() {
+      document.removeEventListener('mousemove', this.progressMousemove)
+      document.removeEventListener('mouseup', this.progressMouseup)
     },
-    progressMouseup () {
-      this.mousedown = false
-    },
-    seek (ratio, serverRequest, uid) {
+    seek(ratio, serverRequest, uid) {
       if (this.properties.isLoaded) {
         this.$store.dispatch('cml/medias/seek', { ratio, serverRequest, uid })
       }
     },
-    msToMinutesAndSeconds (ms) {
+    msToMinutesAndSeconds(ms) {
       const minutes = Math.floor(ms / 60000)
       const seconds = ((ms % 60000) / 1000).toFixed(0)
       return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
     }
   }
 }
-
 </script>

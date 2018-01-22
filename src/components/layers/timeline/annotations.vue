@@ -7,8 +7,8 @@
       :id="annotation.id"
       :layer-id="layer.id"
       :time-total="timeTotal"
-      :container-width="containerWidth"
-      :container-left="containerLeft"
+      :container-width="width"
+      :container-left="left"
       ref="annotations"
       :style="{ zIndex: annotation.id === activeId ? 1 : 0}">
     </annotations-blocs>
@@ -29,41 +29,20 @@ export default {
     annotations: Array,
     mediaId: String,
     timeTotal: Number,
-    timeCurrent: Number
-  },
-
-  data() {
-    return {
-      containerWidth: 0,
-      containerLeft: 0
-    }
+    timeCurrent: Number,
+    width: Number,
+    left: Number
   },
 
   computed: {
     activeId() {
       return this.$store.state.cml.annotations.actives[this.uid]
     }
-  },
-
-  methods: {
-    zindexSet(e) {
-      console.log('e target', e)
-      this.$refs.annotations.forEach(a => {
-        a.style.zIndex = 0
-      })
-      e.target.style.zIndex = 10
-    }
-  },
-
-  mounted() {
-    this.containerWidth = this.$refs.container.offsetWidth
-    this.containerLeft = this.$refs.container.offsetLeft
-    console.log('ref', this.$refs.annotations)
   }
 }
 </script>
 
-<style scoped>
+<style>
 .annotations {
   height: 40px;
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="absolute annotation"
-    :style="{ left, right }"
+    :style="{ left: `${left}px`, right: `${right}px` }"
     ref="annotation">
     <div class="relative full-y"
       @mousedown="set($event)">
@@ -41,15 +41,15 @@ export default {
     },
     left() {
       return this.leftDragging !== null
-        ? `${this.leftDragging}px`
-        : `${this.time.start * this.containerWidth / this.timeTotal}px`
+        ? this.leftDragging
+        : this.time.start * this.containerWidth / this.timeTotal
     },
     right() {
       return this.rightDragging !== null
-        ? `${this.rightDragging}px`
-        : `${(this.timeTotal - this.time.end) *
+        ? this.rightDragging
+        : (this.timeTotal - this.time.end) *
             this.containerWidth /
-            this.timeTotal}px`
+            this.timeTotal
     }
   },
 
@@ -73,8 +73,16 @@ export default {
       this.leftDragging = null
     },
     dragLeft(e) {
-      const c = e.clientX - this.containerLeft - this.handlerWidth / 2
-      this.leftDragging = c > 0 ? c : 0
+      const c = e.clientX - this.containerLeft + this.handlerWidth / 2
+
+      console.log(c, this.containerWidth - this.right)
+      if (c < 0) {
+        this.leftDragging = 0
+      } else if (c > this.containerWidth - this.right) {
+        this.leftDragging = this.containerWidth - this.right
+      } else {
+        this.leftDragging = c
+      }
     },
     dragRightOn(e) {
       document.addEventListener('mousemove', this.dragRight)
@@ -95,14 +103,12 @@ export default {
       const c =
         this.containerWidth +
         this.containerLeft -
-        e.clientX -
+        e.clientX +
         this.handlerWidth / 2
 
       this.rightDragging = c > 0 ? c : 0
-      console.log('e', this.rightDragging)
     },
     set(e) {
-      console.log('set', e.target.value)
       this.$store.commit('cml/annotations/set', {
         id: this.id,
         uid: this.uid
@@ -130,10 +136,10 @@ export default {
 }
 
 .handler-right {
-  right: 0;
+  right: -32px;
 }
 
 .handler-left {
-  left: 0;
+  left: -32px;
 }
 </style>

@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   module: {
     rules: [
@@ -22,7 +24,8 @@ module.exports = {
   },
   resolve: {
     alias: {
-      vue$: 'vue/dist/vue.esm.js'
+      vue$: 'vue/dist/vue.esm.js',
+      '~': path.resolve(__dirname, '../src/')
     }
   },
   node: {

@@ -7,19 +7,27 @@
       :layer-id="layer.id"
       :media-id="mediaId"
       :time-current="timeCurrent"
-    ></timeline-button>
-    <timeline-annotations 
-      v-for="layer in layers" 
-      :key="`annotations-${layer.id}`"
-      v-if="annotations[layer.id]"
-      :uid="uid"
-      :layer="layer"
-      :annotations="annotations[layer.id]"
-      :media-id="mediaId"
-      :time-total="timeTotal"
-      :time-current="timeCurrent"
-      >
-    </timeline-annotations>
+    ></timeline-button> left: {{ left }}
+    <div class="relative overflow-hidden" :style="{ height: `${40 * layers.length}px` }" v-if="layers">
+      <div class="absolute timeline-annotations" :style="{
+        top: 0, bottom: 0, left: `${left}px`, width: `${width}px`
+      }" ref="container">
+        <timeline-annotations 
+          v-for="layer in layers" 
+          :key="`annotations-${layer.id}`"
+          v-if="annotations[layer.id]"
+          :uid="uid"
+          :layer="layer"
+          :annotations="annotations[layer.id]"
+          :media-id="mediaId"
+          :time-total="timeTotal"
+          :time-current="timeCurrent"
+          :width="width"
+          :left="left + containerLeft"
+          >
+        </timeline-annotations>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -42,10 +50,9 @@ export default {
 
   data() {
     return {
-      svg: {
-        w: 0,
-        h: 0
-      }
+      width: 3000,
+      containerWidth: 0,
+      containerLeft: 0
     }
   },
 
@@ -73,19 +80,22 @@ export default {
     },
     actives() {
       return this.$store.state.cml.annotations.actives[this.uid]
+    },
+    left() {
+      return (
+        this.containerWidth / 2 - this.timeCurrent / this.timeTotal * this.width
+      )
     }
   },
 
   mounted() {
     window.addEventListener('resize', this.resize)
-    this.resize()
+    this.containerWidth = this.$refs.container.offsetWidth
+    this.containerLeft = this.$refs.container.offsetLeft
   },
 
   methods: {
-    resize() {
-      this.svg.w = this.$refs.container.offsetWidth
-      this.svg.h = this.$refs.container.offsetHeight
-    }
+    resize() {}
   }
 }
 </script>

@@ -40,8 +40,7 @@ import {
   cmlMediaYoutube,
   cmlMediaController,
   cmlLayerTimeline
-}
-  from '../../src/app.js'
+} from '~/app.js'
 
 export default {
   name: 'my-app',
@@ -59,4 +58,3 @@ export default {
   }
 }
 </script>
-
