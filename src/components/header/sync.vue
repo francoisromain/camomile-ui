@@ -9,18 +9,15 @@ export default {
   name: 'camomile-header-syncbutton',
 
   computed: {
-    active () {
+    active() {
       return this.$store.getters['cml/sync/active']
     }
   },
 
   methods: {
-    sync () {
+    sync() {
       this.$store.dispatch('cml/sync/all')
     }
   }
 }
 </script>
-
-
-

@@ -13,16 +13,15 @@ export default {
   name: 'camomile-utils-dropdown',
 
   computed: {
-    dropdown () {
+    dropdown() {
       return this.$store.state.cml.dropdown
     }
   },
 
   methods: {
-    close () {
+    close() {
       this.$store.commit('cml/dropdown/close')
     }
   }
 }
 </script>
-

@@ -30,27 +30,27 @@ export default {
   name: 'camomile-login-popup',
 
   computed: {
-    config () {
+    config() {
       return this.$store.state.cml.config
     }
   },
 
   methods: {
-    login (config) {
+    login(config) {
       return this.$store.dispatch('cml/user/login', config)
     },
-    keyup (e) {
+    keyup(e) {
       if ((e.which || e.keyCode) === 13) {
         this.login(this.config)
       }
     }
   },
 
-  created () {
+  created() {
     document.addEventListener('keyup', this.keyup)
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     document.removeEventListener('keyup', this.keyup)
   }
 }

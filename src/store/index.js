@@ -36,7 +36,7 @@ export const state = {
 }
 
 export const actions = {
-  set ({ dispatch }) {
+  set({ dispatch }) {
     Promise.all([
       ...['users', 'groups'].map(type =>
         dispatch(`cml/${type}/list`, {}, { root: true })
@@ -48,7 +48,7 @@ export const actions = {
     })
   },
 
-  reset ({ commit }) {
+  reset({ commit }) {
     commit('cml/user/reset', null, { root: true })
     commit('cml/users/reset', null, { root: true })
     commit('cml/groups/reset', null, { root: true })

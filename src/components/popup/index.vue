@@ -18,31 +18,31 @@ export default {
   name: 'camomile-popup',
 
   computed: {
-    config () {
+    config() {
       return this.$store.state.cml.popup.config
     }
   },
 
   methods: {
-    close () {
+    close() {
       if (this.config.closeBtn) {
         this.$store.commit('cml/popup/close')
       }
     },
-    keyup (e) {
+    keyup(e) {
       if ((e.which || e.keyCode) === 27) {
         this.close()
       }
     }
   },
 
-  created () {
+  created() {
     if (this.config.closeBtn) {
       document.addEventListener('keyup', this.keyup)
     }
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     if (this.config.closeBtn) {
       document.removeEventListener('keyup', this.keyup)
     }

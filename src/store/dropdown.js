@@ -4,12 +4,12 @@ export const state = {
 }
 
 export const mutations = {
-  close (state) {
+  close(state) {
     state.visible = false
     state.config = {}
   },
 
-  open (state, config) {
+  open(state, config) {
     state.visible = true
     state.config = config
   }

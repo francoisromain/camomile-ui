@@ -7,7 +7,7 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch, state }, { element }) {
+  add({ commit, dispatch, state }, { element }) {
     dispatch('cml/sync/start', 'groupsAdd', { root: true })
     return api
       .createGroup(element.name, element.description)
@@ -29,7 +29,7 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch, state }, { id }) {
+  remove({ commit, dispatch, state }, { id }) {
     dispatch('cml/sync/start', 'groupsRemove', { root: true })
     return api
       .deleteGroup(id)
@@ -50,7 +50,7 @@ export const actions = {
       })
   },
 
-  update ({ commit, dispatch, state }, { element }) {
+  update({ commit, dispatch, state }, { element }) {
     dispatch('cml/sync/start', 'groupsUpdate', { root: true })
     return api
       .updateGroup(element.id, { description: element.description })
@@ -70,7 +70,7 @@ export const actions = {
       })
   },
 
-  list ({ commit, dispatch, state }) {
+  list({ commit, dispatch, state }) {
     dispatch('cml/sync/start', 'groupsList', { root: true })
     return api
       .getGroups()
@@ -89,7 +89,7 @@ export const actions = {
       })
   },
 
-  userAdd ({ commit, dispatch, state, rootState }, { userId, group }) {
+  userAdd({ commit, dispatch, state, rootState }, { userId, group }) {
     dispatch('cml/sync/start', 'groupsUserAdd', { root: true })
     return api
       .addUserToGroup(userId, group.id)
@@ -117,7 +117,7 @@ export const actions = {
       })
   },
 
-  userRemove ({ commit, dispatch, state, rootState }, { userId, group }) {
+  userRemove({ commit, dispatch, state, rootState }, { userId, group }) {
     dispatch('cml/sync/start', 'groupsUserRemove', { root: true })
     return api
       .removeUserFromGroup(userId, group.id)
@@ -160,25 +160,25 @@ export const getters = {
 }
 
 export const mutations = {
-  reset (state) {
+  reset(state) {
     Vue.set(state, 'list', [])
   },
 
-  add (state, group) {
+  add(state, group) {
     state.list.push(group)
   },
 
-  update (state, group) {
+  update(state, group) {
     const index = state.list.findIndex(g => g.id === group.id)
     Vue.set(state.list, index, group)
   },
 
-  remove (state, groupId) {
+  remove(state, groupId) {
     const index = state.list.findIndex(g => g.id === groupId)
     Vue.delete(state.list, index)
   },
 
-  list (state, groups) {
+  list(state, groups) {
     Vue.set(state, 'list', groups)
   }
 }

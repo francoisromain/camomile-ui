@@ -13,7 +13,7 @@ export default {
   name: 'camomile-utils-messages',
 
   computed: {
-    messages () {
+    messages() {
       return this.$store.state.cml.messages.list
     }
   }

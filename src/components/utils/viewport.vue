@@ -7,12 +7,12 @@ export default {
   name: 'camomile-utils-viewport',
 
   methods: {
-    resize () {
+    resize() {
       return this.$store.dispatch('cml/viewport/set')
     }
   },
 
-  mounted () {
+  mounted() {
     window.addEventListener('resize', this.resize)
     this.resize()
   }

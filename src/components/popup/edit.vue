@@ -74,38 +74,41 @@ export default {
     ...mapState({
       element: state => state.cml.popup.element,
       type: state => state.cml.popup.config.type,
-      rolesPermission: state => state.cml.user.id !== state.cml.popup.element.id,
+      rolesPermission: state =>
+        state.cml.user.id !== state.cml.popup.element.id,
       roles: state => state.cml.config.roles
     })
   },
 
   methods: {
-    save () {
+    save() {
       if (this.element.id) {
-        this.$store.dispatch(`cml/${this.type}/update`, { element: this.element })
+        this.$store.dispatch(`cml/${this.type}/update`, {
+          element: this.element
+        })
       } else {
         this.$store.dispatch(`cml/${this.type}/add`, { element: this.element })
       }
       this.$store.commit('cml/popup/close')
     },
-    keyup (e) {
+    keyup(e) {
       if ((e.which || e.keyCode) === 13) {
         this.save()
       }
     }
   },
 
-  created () {
+  created() {
     document.addEventListener('keyup', this.keyup)
   },
 
-  mounted () {
+  mounted() {
     if (this.type !== 'annotations') {
       this.$refs.name.focus()
     }
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     document.removeEventListener('keyup', this.keyup)
   }
 }

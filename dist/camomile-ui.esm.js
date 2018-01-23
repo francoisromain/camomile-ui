@@ -1,6 +1,6 @@
-import Vuex, { mapState } from 'vuex';
 import Vue from 'vue';
 import Camomile from 'camomile-client';
+import Vuex, { mapState } from 'vuex';
 
 var config = {
   title: 'Camomile UI',
@@ -29,7 +29,7 @@ var log = {
   }
 }
 
-var state$1 = {
+var state = {
   name: '',
   width: 0,
   height: 0,
@@ -41,8 +41,8 @@ var state$1 = {
   animate: false
 };
 
-var actions$1 = {
-  set: function set (ref) {
+var actions = {
+  set: function set(ref) {
     var state = ref.state;
     var commit = ref.commit;
 
@@ -72,7 +72,7 @@ var actions$1 = {
 };
 
 var mutations = {
-  set: function set (state, ref) {
+  set: function set(state, ref) {
     var animate = ref.animate;
     var name = ref.name;
     var width = ref.width;
@@ -88,17 +88,17 @@ var mutations = {
 
 var viewport = {
   namespaced: true,
-  state: state$1,
+  state: state,
   mutations: mutations,
-  actions: actions$1
+  actions: actions
 }
 
-var state$2 = {
+var state$1 = {
   list: []
 };
 
-var actions$2 = {
-  all: function all (ref) {
+var actions$1 = {
+  all: function all(ref) {
     var dispatch = ref.dispatch;
 
     dispatch("cml/set", {}, { root: true }).then(function (r) {
@@ -106,13 +106,13 @@ var actions$2 = {
     });
   },
 
-  start: function start (ref, name) {
+  start: function start(ref, name) {
     var state = ref.state;
 
     state.list.push(name);
   },
 
-  stop: function stop (ref, name) {
+  stop: function stop(ref, name) {
     var state = ref.state;
 
     state.list = state.list.filter(function (n) { return n !== name; });
@@ -127,19 +127,19 @@ var getters = {
 
 var sync = {
   namespaced: true,
-  state: state$2,
-  actions: actions$2,
+  state: state$1,
+  actions: actions$1,
   getters: getters
 }
 
-var state$3 = {
+var state$2 = {
   visible: false,
   config: {},
   element: {}
 };
 
 var mutations$1 = {
-  open: function open (state, ref) {
+  open: function open(state, ref) {
     var config = ref.config;
     var element = ref.element;
 
@@ -148,12 +148,12 @@ var mutations$1 = {
     state.element = JSON.parse(JSON.stringify(element));
   },
 
-  close: function close (state) {
+  close: function close(state) {
     state.visible = false;
     state.config = {};
   },
 
-  fieldUpdate: function fieldUpdate (state, ref) {
+  fieldUpdate: function fieldUpdate(state, ref) {
     var name = ref.name;
     var value = ref.value;
 
@@ -163,22 +163,22 @@ var mutations$1 = {
 
 var popup = {
   namespaced: true,
-  state: state$3,
+  state: state$2,
   mutations: mutations$1
 }
 
-var state$4 = {
+var state$3 = {
   visible: false,
   config: {}
 };
 
 var mutations$2 = {
-  close: function close (state) {
+  close: function close(state) {
     state.visible = false;
     state.config = {};
   },
 
-  open: function open (state, config) {
+  open: function open(state, config) {
     state.visible = true;
     state.config = config;
   }
@@ -186,7 +186,7 @@ var mutations$2 = {
 
 var dropdown = {
   namespaced: true,
-  state: state$4,
+  state: state$3,
   mutations: mutations$2
 }
 
@@ -229,12 +229,12 @@ function dateCurrent () {
 //   )
 // }
 
-var state$5 = {
+var state$4 = {
   list: []
 };
 
-var actions$3 = {
-  success: function success (ref, content) {
+var actions$2 = {
+  success: function success(ref, content) {
     var commit = ref.commit;
 
     commit('add', { content: content, type: 'success', id: dateCurrent() });
@@ -243,7 +243,7 @@ var actions$3 = {
     }, 2000);
   },
 
-  error: function error (ref, content) {
+  error: function error(ref, content) {
     var commit = ref.commit;
 
     commit('add', { content: content, type: 'error', id: dateCurrent() });
@@ -254,19 +254,19 @@ var actions$3 = {
 };
 
 var mutations$3 = {
-  remove: function remove (state) {
+  remove: function remove(state) {
     state.list.shift();
   },
 
-  add: function add (state, message) {
+  add: function add(state, message) {
     state.list.push(message);
   }
 };
 
 var messages = {
   namespaced: true,
-  state: state$5,
-  actions: actions$3,
+  state: state$4,
+  actions: actions$2,
   mutations: mutations$3
 }
 
@@ -275,7 +275,7 @@ var messages = {
 // export default camomile(config.url)
 var api = new Camomile(config.url)
 
-var state$6 = {
+var state$5 = {
   id: '',
   name: '',
   role: '',
@@ -286,8 +286,8 @@ var state$6 = {
   isRoot: false
 };
 
-var actions$4 = {
-  login: function login (ref, config) {
+var actions$3 = {
+  login: function login(ref, config) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
@@ -310,7 +310,7 @@ var actions$4 = {
       })
   },
 
-  set: function set (ref) {
+  set: function set(ref) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
@@ -340,7 +340,7 @@ var actions$4 = {
       })
   },
 
-  logout: function logout (ref) {
+  logout: function logout(ref) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -418,7 +418,7 @@ var getters$1 = {
 };
 
 var mutations$4 = {
-  set: function set (state, user) {
+  set: function set(state, user) {
     state.isLogged = true;
     state.isAdmin = user.role === 'admin';
     state.isRoot = user.name === 'root';
@@ -429,7 +429,7 @@ var mutations$4 = {
     state.groupIds = user.groupIds;
   },
 
-  reset: function reset (state) {
+  reset: function reset(state) {
     state.isLogged = false;
     state.isAdmin = false;
     state.isRoot = false;
@@ -440,30 +440,30 @@ var mutations$4 = {
     state.groupIds = [];
   },
 
-  groupAdd: function groupAdd (state, groupId) {
+  groupAdd: function groupAdd(state, groupId) {
     state.groupIds.push(groupId);
   },
 
-  groupRemove: function groupRemove (state, groupId) {
+  groupRemove: function groupRemove(state, groupId) {
     state.groupIds = state.groupIds.filter(function (id) { return id !== groupId; });
   }
 };
 
 var user = {
   namespaced: true,
-  state: state$6,
-  actions: actions$4,
+  state: state$5,
+  actions: actions$3,
   getters: getters$1,
   mutations: mutations$4
 }
 
 var obj;
-var state$7 = {
+var state$6 = {
   list: []
 };
 
-var actions$5 = {
-  add: function add (ref, ref$1) {
+var actions$4 = {
+  add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var element = ref$1.element;
@@ -494,7 +494,7 @@ var actions$5 = {
       })
   },
 
-  update: function update (ref, ref$1) {
+  update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootState = ref.rootState;
@@ -526,7 +526,7 @@ var actions$5 = {
       })
   },
 
-  remove: function remove (ref, ref$1) {
+  remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var id = ref$1.id;
@@ -551,7 +551,7 @@ var actions$5 = {
       })
   },
 
-  list: function list (ref) {
+  list: function list(ref) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
@@ -584,44 +584,44 @@ var getters$2 = {
 };
 
 var mutations$5 = {
-  reset: function reset (state) {
+  reset: function reset(state) {
     Vue.set(state, 'list', []);
   },
 
-  add: function add (state, user) {
+  add: function add(state, user) {
     state.list.push(user);
   },
 
-  update: function update (state, user) {
+  update: function update(state, user) {
     var index = state.list.findIndex(function (u) { return u.id === user.id; });
     Vue.set(state.list, index, user);
   },
 
-  remove: function remove (state, userId) {
+  remove: function remove(state, userId) {
     var index = state.list.findIndex(function (u) { return u.id === userId; });
     Vue.delete(state.list, index);
   },
 
-  list: function list (state, users) {
+  list: function list(state, users) {
     Vue.set(state, 'list', users);
   }
 };
 
 var users = {
   namespaced: true,
-  state: state$7,
-  actions: actions$5,
+  state: state$6,
+  actions: actions$4,
   getters: getters$2,
   mutations: mutations$5
 }
 
 var obj$1;
-var state$8 = {
+var state$7 = {
   list: []
 };
 
-var actions$6 = {
-  add: function add (ref, ref$1) {
+var actions$5 = {
+  add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
@@ -648,7 +648,7 @@ var actions$6 = {
       })
   },
 
-  remove: function remove (ref, ref$1) {
+  remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
@@ -674,7 +674,7 @@ var actions$6 = {
       })
   },
 
-  update: function update (ref, ref$1) {
+  update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
@@ -699,7 +699,7 @@ var actions$6 = {
       })
   },
 
-  list: function list (ref) {
+  list: function list(ref) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
@@ -722,7 +722,7 @@ var actions$6 = {
       })
   },
 
-  userAdd: function userAdd (ref, ref$1) {
+  userAdd: function userAdd(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
@@ -757,7 +757,7 @@ var actions$6 = {
       })
   },
 
-  userRemove: function userRemove (ref, ref$1) {
+  userRemove: function userRemove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
@@ -803,44 +803,44 @@ var getters$3 = {
 };
 
 var mutations$6 = {
-  reset: function reset (state) {
+  reset: function reset(state) {
     Vue.set(state, 'list', []);
   },
 
-  add: function add (state, group) {
+  add: function add(state, group) {
     state.list.push(group);
   },
 
-  update: function update (state, group) {
+  update: function update(state, group) {
     var index = state.list.findIndex(function (g) { return g.id === group.id; });
     Vue.set(state.list, index, group);
   },
 
-  remove: function remove (state, groupId) {
+  remove: function remove(state, groupId) {
     var index = state.list.findIndex(function (g) { return g.id === groupId; });
     Vue.delete(state.list, index);
   },
 
-  list: function list (state, groups) {
+  list: function list(state, groups) {
     Vue.set(state, 'list', groups);
   }
 };
 
 var groups = {
   namespaced: true,
-  state: state$8,
-  actions: actions$6,
+  state: state$7,
+  actions: actions$5,
   getters: getters$3,
   mutations: mutations$6
 }
 
-var state$9 = {
+var state$8 = {
   lists: {},
   actives: {}
 };
 
-var actions$7 = {
-  add: function add (ref, ref$1) {
+var actions$6 = {
+  add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootState = ref.rootState;
@@ -876,7 +876,7 @@ var actions$7 = {
       })
   },
 
-  remove: function remove (ref, ref$1) {
+  remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
@@ -901,7 +901,7 @@ var actions$7 = {
       })
   },
 
-  update: function update (ref, ref$1) {
+  update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var state = ref.state;
@@ -931,7 +931,7 @@ var actions$7 = {
       })
   },
 
-  groupPermissionSet: function groupPermissionSet (
+  groupPermissionSet: function groupPermissionSet(
     ref,
     ref$1
   ) {
@@ -982,7 +982,7 @@ var actions$7 = {
       })
   },
 
-  groupPermissionRemove: function groupPermissionRemove (ref, ref$1) {
+  groupPermissionRemove: function groupPermissionRemove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
@@ -1024,7 +1024,7 @@ var actions$7 = {
       })
   },
 
-  userPermissionSet: function userPermissionSet (
+  userPermissionSet: function userPermissionSet(
     ref,
     ref$1
   ) {
@@ -1072,7 +1072,7 @@ var actions$7 = {
       })
   },
 
-  userPermissionRemove: function userPermissionRemove (ref, ref$1) {
+  userPermissionRemove: function userPermissionRemove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
@@ -1114,7 +1114,7 @@ var actions$7 = {
       })
   },
 
-  listAll: function listAll (ref) {
+  listAll: function listAll(ref) {
     var state = ref.state;
     var dispatch = ref.dispatch;
 
@@ -1123,7 +1123,7 @@ var actions$7 = {
     });
   },
 
-  list: function list (ref, uid) {
+  list: function list(ref, uid) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
@@ -1160,7 +1160,7 @@ var actions$7 = {
       })
   },
 
-  setAll: function setAll (ref, ref$1) {
+  setAll: function setAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var id = ref$1.id;
@@ -1172,7 +1172,7 @@ var actions$7 = {
     });
   },
 
-  set: function set (ref, ref$1) {
+  set: function set(ref, ref$1) {
     var state = ref.state;
     var getters = ref.getters;
     var dispatch = ref.dispatch;
@@ -1197,7 +1197,7 @@ var actions$7 = {
     }
   },
 
-  register: function register (ref, uid) {
+  register: function register(ref, uid) {
     var state = ref.state;
     var commit = ref.commit;
 
@@ -1214,17 +1214,17 @@ var getters$4 = {
 };
 
 var mutations$7 = {
-  init: function init (state, uid) {
+  init: function init(state, uid) {
     Vue.set(state.lists, uid, []);
     Vue.set(state.actives, uid, null);
   },
 
-  resetAll: function resetAll (state) {
+  resetAll: function resetAll(state) {
     Vue.set(state, 'lists', {});
     Vue.set(state, 'actives', {});
   },
 
-  add: function add (state, ref) {
+  add: function add(state, ref) {
     var corpu = ref.corpu;
 
     Object.keys(state.lists).forEach(function (uid) {
@@ -1233,7 +1233,7 @@ var mutations$7 = {
     });
   },
 
-  update: function update (state, ref) {
+  update: function update(state, ref) {
     var corpu = ref.corpu;
 
     Object.keys(state.lists).forEach(function (uid) {
@@ -1244,7 +1244,7 @@ var mutations$7 = {
     });
   },
 
-  remove: function remove (state, ref) {
+  remove: function remove(state, ref) {
     var id = ref.id;
 
     Object.keys(state.lists).forEach(function (uid) {
@@ -1255,7 +1255,7 @@ var mutations$7 = {
     });
   },
 
-  groupAdd: function groupAdd (state, groupId) {
+  groupAdd: function groupAdd(state, groupId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
         Vue.set(c.permissions.groups, groupId, 0);
@@ -1263,7 +1263,7 @@ var mutations$7 = {
     });
   },
 
-  groupRemove: function groupRemove (state, groupId) {
+  groupRemove: function groupRemove(state, groupId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
         Vue.delete(c.permissions.groups, groupId);
@@ -1271,7 +1271,7 @@ var mutations$7 = {
     });
   },
 
-  userAdd: function userAdd (state, userId) {
+  userAdd: function userAdd(state, userId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
         Vue.set(c.permissions.users, userId, 0);
@@ -1279,7 +1279,7 @@ var mutations$7 = {
     });
   },
 
-  userRemove: function userRemove (state, userId) {
+  userRemove: function userRemove(state, userId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
         Vue.delete(c.permissions.users, userId);
@@ -1287,7 +1287,7 @@ var mutations$7 = {
     });
   },
 
-  groupPermissionsUpdate: function groupPermissionsUpdate (state, ref) {
+  groupPermissionsUpdate: function groupPermissionsUpdate(state, ref) {
     var id = ref.id;
     var groupId = ref.groupId;
     var permission = ref.permission;
@@ -1300,7 +1300,7 @@ var mutations$7 = {
     });
   },
 
-  userPermissionsUpdate: function userPermissionsUpdate (state, ref) {
+  userPermissionsUpdate: function userPermissionsUpdate(state, ref) {
     var id = ref.id;
     var userId = ref.userId;
     var permission = ref.permission;
@@ -1313,14 +1313,14 @@ var mutations$7 = {
     });
   },
 
-  list: function list (state, ref) {
+  list: function list(state, ref) {
     var corpus = ref.corpus;
     var uid = ref.uid;
 
     Vue.set(state.lists, uid, corpus);
   },
 
-  set: function set (state, ref) {
+  set: function set(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
 
@@ -1330,22 +1330,22 @@ var mutations$7 = {
 
 var corpus = {
   namespaced: true,
-  state: state$9,
-  actions: actions$7,
+  state: state$8,
+  actions: actions$6,
   getters: getters$4,
   mutations: mutations$7
 }
 
 var interval;
 
-var state$10 = {
+var state$9 = {
   lists: {},
   actives: {},
   properties: {}
 };
 
-var actions$8 = {
-  add: function add (ref, ref$1) {
+var actions$7 = {
+  add: function add(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -1383,7 +1383,7 @@ var actions$8 = {
       })
   },
 
-  remove: function remove (ref, ref$1) {
+  remove: function remove(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -1410,7 +1410,7 @@ var actions$8 = {
       })
   },
 
-  update: function update (ref, ref$1) {
+  update: function update(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -1448,7 +1448,7 @@ var actions$8 = {
       })
   },
 
-  list: function list (ref, ref$1) {
+  list: function list(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var corpuId = ref$1.corpuId;
@@ -1475,7 +1475,7 @@ var actions$8 = {
       })
   },
 
-  setAll: function setAll (ref, ref$1) {
+  setAll: function setAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var id = ref$1.id;
@@ -1489,7 +1489,7 @@ var actions$8 = {
     });
   },
 
-  set: function set (ref, ref$1) {
+  set: function set(ref, ref$1) {
     var state = ref.state;
     var getters = ref.getters;
     var dispatch = ref.dispatch;
@@ -1503,7 +1503,7 @@ var actions$8 = {
     commit('set', { id: id || getters.id(uid), uid: uid });
   },
 
-  play: function play (ref, uid) {
+  play: function play(ref, uid) {
     var state = ref.state;
     var commit = ref.commit;
 
@@ -1517,20 +1517,20 @@ var actions$8 = {
     commit('play', uid);
   },
 
-  pause: function pause (ref, uid) {
+  pause: function pause(ref, uid) {
     var commit = ref.commit;
 
     clearInterval(interval);
     commit('pause', uid);
   },
 
-  buffering: function buffering (ref, uid) {
+  buffering: function buffering(ref, uid) {
     var commit = ref.commit;
 
     clearInterval(interval);
   },
 
-  stop: function stop (ref, uid) {
+  stop: function stop(ref, uid) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
 
@@ -1539,7 +1539,7 @@ var actions$8 = {
     dispatch('seek', { options: { ratio: 0, serverRequest: true }, uid: uid });
   },
 
-  seek: function seek (ref, ref$1) {
+  seek: function seek(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -1573,19 +1573,19 @@ var getters$5 = {
 };
 
 var mutations$8 = {
-  init: function init (state, uid) {
+  init: function init(state, uid) {
     Vue.set(state.lists, uid, []);
     Vue.set(state.actives, uid, null);
     Vue.set(state.properties, uid, {});
   },
 
-  resetAll: function resetAll (state) {
+  resetAll: function resetAll(state) {
     Vue.set(state, 'lists', {});
     Vue.set(state, 'actives', {});
     Vue.set(state, 'properties', {});
   },
 
-  add: function add (state, ref) {
+  add: function add(state, ref) {
     var media = ref.media;
     var uid = ref.uid;
 
@@ -1593,7 +1593,7 @@ var mutations$8 = {
     Vue.set(state.lists[uid], index, media);
   },
 
-  update: function update (state, ref) {
+  update: function update(state, ref) {
     var media = ref.media;
     var uid = ref.uid;
 
@@ -1601,7 +1601,7 @@ var mutations$8 = {
     Vue.set(state.lists[uid], index, media);
   },
 
-  remove: function remove (state, ref) {
+  remove: function remove(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
 
@@ -1611,14 +1611,14 @@ var mutations$8 = {
     }
   },
 
-  list: function list (state, ref) {
+  list: function list(state, ref) {
     var medias = ref.medias;
     var uid = ref.uid;
 
     Vue.set(state.lists, uid, medias);
   },
 
-  set: function set (state, ref) {
+  set: function set(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
 
@@ -1632,29 +1632,29 @@ var mutations$8 = {
     });
   },
 
-  loaded: function loaded (state, ref) {
+  loaded: function loaded(state, ref) {
     var isLoaded = ref.isLoaded;
     var uid = ref.uid;
 
     Vue.set(state.properties[uid], 'isLoaded', isLoaded);
   },
 
-  play: function play (state, uid) {
+  play: function play(state, uid) {
     Vue.set(state.properties[uid], 'isPlaying', true);
   },
 
-  pause: function pause (state, uid) {
+  pause: function pause(state, uid) {
     Vue.set(state.properties[uid], 'isPlaying', false);
   },
 
-  timeTotal: function timeTotal (state, ref) {
+  timeTotal: function timeTotal(state, ref) {
     var time = ref.time;
     var uid = ref.uid;
 
     Vue.set(state.properties[uid], 'timeTotal', time);
   },
 
-  seek: function seek (state, ref) {
+  seek: function seek(state, ref) {
     var options = ref.options;
     var uid = ref.uid;
 
@@ -1664,19 +1664,19 @@ var mutations$8 = {
 
 var medias = {
   namespaced: true,
-  state: state$10,
-  actions: actions$8,
+  state: state$9,
+  actions: actions$7,
   getters: getters$5,
   mutations: mutations$8
 }
 
-var state$11 = {
+var state$10 = {
   lists: {},
   actives: {}
 };
 
-var actions$9 = {
-  add: function add (ref, ref$1) {
+var actions$8 = {
+  add: function add(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -1728,7 +1728,7 @@ var actions$9 = {
       })
   },
 
-  remove: function remove (ref, ref$1) {
+  remove: function remove(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -1755,7 +1755,7 @@ var actions$9 = {
       })
   },
 
-  update: function update (ref, ref$1) {
+  update: function update(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -1794,7 +1794,7 @@ var actions$9 = {
       })
   },
 
-  groupPermissionSet: function groupPermissionSet (
+  groupPermissionSet: function groupPermissionSet(
     ref,
     ref$1
   ) {
@@ -1845,7 +1845,7 @@ var actions$9 = {
       })
   },
 
-  groupPermissionRemove: function groupPermissionRemove (
+  groupPermissionRemove: function groupPermissionRemove(
     ref,
     ref$1
   ) {
@@ -1891,7 +1891,7 @@ var actions$9 = {
       })
   },
 
-  userPermissionSet: function userPermissionSet (
+  userPermissionSet: function userPermissionSet(
     ref,
     ref$1
   ) {
@@ -1940,7 +1940,7 @@ var actions$9 = {
       })
   },
 
-  userPermissionRemove: function userPermissionRemove (
+  userPermissionRemove: function userPermissionRemove(
     ref,
     ref$1
   ) {
@@ -1986,7 +1986,7 @@ var actions$9 = {
       })
   },
 
-  listAll: function listAll (ref) {
+  listAll: function listAll(ref) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var rootState = ref.rootState;
@@ -1996,7 +1996,7 @@ var actions$9 = {
     });
   },
 
-  list: function list (ref, ref$1) {
+  list: function list(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var rootGetters = ref.rootGetters;
@@ -2038,7 +2038,7 @@ var actions$9 = {
       })
   },
 
-  setAll: function setAll (ref, ref$1) {
+  setAll: function setAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
@@ -2050,7 +2050,7 @@ var actions$9 = {
     });
   },
 
-  set: function set (ref, ref$1) {
+  set: function set(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var id = ref$1.id;
@@ -2060,7 +2060,7 @@ var actions$9 = {
     dispatch('cml/annotations/list', { layerId: id, uid: uid }, { root: true });
   },
 
-  unset: function unset (ref, ref$1) {
+  unset: function unset(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var id = ref$1.id;
@@ -2072,17 +2072,17 @@ var actions$9 = {
 };
 
 var mutations$9 = {
-  init: function init (state, uid) {
+  init: function init(state, uid) {
     Vue.set(state.lists, uid, []);
     Vue.set(state.actives, uid, []);
   },
 
-  resetAll: function resetAll (state) {
+  resetAll: function resetAll(state) {
     Vue.set(state, 'lists', {});
     Vue.set(state, 'actives', {});
   },
 
-  add: function add (state, ref) {
+  add: function add(state, ref) {
     var layer = ref.layer;
     var uid = ref.uid;
 
@@ -2090,7 +2090,7 @@ var mutations$9 = {
     Vue.set(state.lists[uid], index, layer);
   },
 
-  remove: function remove (state, ref) {
+  remove: function remove(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
 
@@ -2105,7 +2105,7 @@ var mutations$9 = {
     }
   },
 
-  update: function update (state, ref) {
+  update: function update(state, ref) {
     var layer = ref.layer;
     var uid = ref.uid;
 
@@ -2113,7 +2113,7 @@ var mutations$9 = {
     Vue.set(state.lists[uid], index, layer);
   },
 
-  groupAdd: function groupAdd (state, groupId) {
+  groupAdd: function groupAdd(state, groupId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (e) {
         Vue.set(e.permissions.groups, groupId, 0);
@@ -2121,7 +2121,7 @@ var mutations$9 = {
     });
   },
 
-  groupRemove: function groupRemove (state, groupId) {
+  groupRemove: function groupRemove(state, groupId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (e) {
         Vue.delete(e.permissions.groups, groupId);
@@ -2129,7 +2129,7 @@ var mutations$9 = {
     });
   },
 
-  userAdd: function userAdd (state, userId) {
+  userAdd: function userAdd(state, userId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (e) {
         Vue.set(e.permissions.users, userId, 0);
@@ -2137,7 +2137,7 @@ var mutations$9 = {
     });
   },
 
-  userRemove: function userRemove (state, userId) {
+  userRemove: function userRemove(state, userId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (e) {
         Vue.delete(e.permissions.users, userId);
@@ -2145,7 +2145,7 @@ var mutations$9 = {
     });
   },
 
-  groupPermissionsUpdate: function groupPermissionsUpdate (state, ref) {
+  groupPermissionsUpdate: function groupPermissionsUpdate(state, ref) {
     var id = ref.id;
     var groupId = ref.groupId;
     var permission = ref.permission;
@@ -2158,7 +2158,7 @@ var mutations$9 = {
     });
   },
 
-  userPermissionsUpdate: function userPermissionsUpdate (state, ref) {
+  userPermissionsUpdate: function userPermissionsUpdate(state, ref) {
     var id = ref.id;
     var userId = ref.userId;
     var permission = ref.permission;
@@ -2171,14 +2171,14 @@ var mutations$9 = {
     });
   },
 
-  list: function list (state, ref) {
+  list: function list(state, ref) {
     var layers = ref.layers;
     var uid = ref.uid;
 
     Vue.set(state.lists, uid, layers);
   },
 
-  set: function set (state, ref) {
+  set: function set(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
 
@@ -2189,7 +2189,7 @@ var mutations$9 = {
     }
   },
 
-  unset: function unset (state, ref) {
+  unset: function unset(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
 
@@ -2200,18 +2200,18 @@ var mutations$9 = {
 
 var layers = {
   namespaced: true,
-  state: state$11,
-  actions: actions$9,
+  state: state$10,
+  actions: actions$8,
   mutations: mutations$9
 }
 
-var state$12 = {
+var state$11 = {
   lists: {},
   actives: {}
 };
 
-var actions$10 = {
-  add: function add (ref, ref$1) {
+var actions$9 = {
+  add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var element = ref$1.element;
@@ -2246,7 +2246,7 @@ var actions$10 = {
       })
   },
 
-  remove: function remove (ref, ref$1) {
+  remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var id = ref$1.id;
@@ -2269,7 +2269,7 @@ var actions$10 = {
       })
   },
 
-  update: function update (ref, ref$1) {
+  update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var element = ref$1.element;
@@ -2298,7 +2298,7 @@ var actions$10 = {
       })
   },
 
-  listAll: function listAll (ref, ref$1) {
+  listAll: function listAll(ref, ref$1) {
     var rootState = ref.rootState;
     var dispatch = ref.dispatch;
     var uid = ref$1.uid;
@@ -2308,7 +2308,7 @@ var actions$10 = {
     });
   },
 
-  list: function list (ref, ref$1) {
+  list: function list(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var layerId = ref$1.layerId;
@@ -2330,7 +2330,7 @@ var actions$10 = {
           mediaId: a.id_medium || null
         }); });
         commit('list', { annotations: annotations, layerId: layerId, uid: uid });
-        dispatch('setAll', { layerId: layerId, uid: uid });
+        // dispatch('setAll', { layerId, uid })
 
         return annotations
       })
@@ -2340,49 +2340,18 @@ var actions$10 = {
 
         throw e
       })
-  },
-
-  setAll: function setAll (ref, ref$1) {
-    var state = ref.state;
-    var dispatch = ref.dispatch;
-    var commit = ref.commit;
-    var layerId = ref$1.layerId;
-    var uid = ref$1.uid;
-
-    state.lists[uid][layerId].forEach(function (i) {
-      dispatch('set', { id: i.id, layerId: layerId, uid: uid });
-    });
-  },
-
-  set: function set (ref, ref$1) {
-    var commit = ref.commit;
-    var id = ref$1.id;
-    var layerId = ref$1.layerId;
-    var uid = ref$1.uid;
-
-    commit('set', { id: id, layerId: layerId, uid: uid });
-  },
-
-  unset: function unset (ref, ref$1) {
-    var dispatch = ref.dispatch;
-    var commit = ref.commit;
-    var id = ref$1.id;
-    var layerId = ref$1.layerId;
-    var uid = ref$1.uid;
-
-    commit('unset', { id: id, layerId: layerId, uid: uid });
   }
 };
 
 var mutations$10 = {
-  init: function init (state, ref) {
+  init: function init(state, ref) {
     var uid = ref.uid;
 
     Vue.set(state.lists, uid, {});
     Vue.set(state.actives, uid, {});
   },
 
-  reset: function reset (state, ref) {
+  reset: function reset(state, ref) {
     var layerId = ref.layerId;
     var uid = ref.uid;
 
@@ -2390,12 +2359,12 @@ var mutations$10 = {
     Vue.delete(state.actives[uid], layerId);
   },
 
-  resetAll: function resetAll (state) {
+  resetAll: function resetAll(state) {
     Vue.set(state, 'lists', {});
     Vue.set(state, 'actives', {});
   },
 
-  add: function add (state, ref) {
+  add: function add(state, ref) {
     var annotation = ref.annotation;
     var layerId = ref.layerId;
 
@@ -2407,7 +2376,7 @@ var mutations$10 = {
     });
   },
 
-  update: function update (state, ref) {
+  update: function update(state, ref) {
     var annotation = ref.annotation;
     var layerId = ref.layerId;
 
@@ -2420,7 +2389,7 @@ var mutations$10 = {
     });
   },
 
-  remove: function remove (state, ref) {
+  remove: function remove(state, ref) {
     var id = ref.id;
 
     Object.keys(state.lists).forEach(function (uid) {
@@ -2445,7 +2414,7 @@ var mutations$10 = {
     });
   },
 
-  list: function list (state, ref) {
+  list: function list(state, ref) {
     var annotations = ref.annotations;
     var layerId = ref.layerId;
     var uid = ref.uid;
@@ -2453,40 +2422,24 @@ var mutations$10 = {
     Vue.set(state.lists[uid], layerId, annotations);
   },
 
-  set: function set (state, ref) {
+  set: function set(state, ref) {
     var id = ref.id;
-    var layerId = ref.layerId;
     var uid = ref.uid;
 
-    if (!state.actives[uid][layerId]) {
-      Vue.set(state.actives[uid], layerId, [id]);
-    } else {
-      Vue.set(
-        state.actives[uid][layerId],
-        state.actives[uid][layerId].length,
-        id
-      );
-    }
+    Vue.set(state.actives, uid, id);
   },
 
-  unset: function unset (state, ref) {
-    var id = ref.id;
-    var layerId = ref.layerId;
+  unset: function unset(state, ref) {
     var uid = ref.uid;
 
-    if (state.actives[uid][layerId]) {
-      var index = state.actives[uid][layerId].indexOf(id);
-      if (index !== -1) {
-        Vue.delete(state.actives[uid][layerId], index);
-      }
-    }
+    Vue.delete(state.actives, uid);
   }
 };
 
 var annotations = {
   namespaced: true,
-  state: state$12,
-  actions: actions$10,
+  state: state$11,
+  actions: actions$9,
   mutations: mutations$10
 }
 
@@ -2505,12 +2458,12 @@ var modules = {
   annotations: annotations
 };
 
-var state = {
+var state$12 = {
   config: config
 };
 
-var actions = {
-  set: function set (ref) {
+var actions$10 = {
+  set: function set(ref) {
     var dispatch = ref.dispatch;
 
     Promise.all([].concat( ['users', 'groups'].map(function (type) { return dispatch(("cml/" + type + "/list"), {}, { root: true })
@@ -2521,7 +2474,7 @@ var actions = {
     });
   },
 
-  reset: function reset (ref) {
+  reset: function reset(ref) {
     var commit = ref.commit;
 
     commit('cml/user/reset', null, { root: true });
@@ -2540,8 +2493,8 @@ var store = new Vuex.Store({
   modules: {
     cml: {
       namespaced: true,
-      state: state,
-      actions: actions,
+      state: state$12,
+      actions: actions$10,
       modules: modules
     }
   }
@@ -2551,12 +2504,12 @@ var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
   name: 'camomile-utils-viewport',
 
   methods: {
-    resize: function resize () {
+    resize: function resize() {
       return this.$store.dispatch('cml/viewport/set')
     }
   },
 
-  mounted: function mounted () {
+  mounted: function mounted() {
     window.addEventListener('resize', this.resize);
     this.resize();
   }
@@ -2566,13 +2519,13 @@ var cmlDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   name: 'camomile-utils-dropdown',
 
   computed: {
-    dropdown: function dropdown () {
+    dropdown: function dropdown() {
       return this.$store.state.cml.dropdown
     }
   },
 
   methods: {
-    close: function close () {
+    close: function close() {
       this.$store.commit('cml/dropdown/close');
     }
   }
@@ -2582,31 +2535,31 @@ var cmlPopup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   name: 'camomile-popup',
 
   computed: {
-    config: function config () {
+    config: function config() {
       return this.$store.state.cml.popup.config
     }
   },
 
   methods: {
-    close: function close () {
+    close: function close() {
       if (this.config.closeBtn) {
         this.$store.commit('cml/popup/close');
       }
     },
-    keyup: function keyup (e) {
+    keyup: function keyup(e) {
       if ((e.which || e.keyCode) === 27) {
         this.close();
       }
     }
   },
 
-  created: function created () {
+  created: function created() {
     if (this.config.closeBtn) {
       document.addEventListener('keyup', this.keyup);
     }
   },
 
-  beforeDestroy: function beforeDestroy () {
+  beforeDestroy: function beforeDestroy() {
     if (this.config.closeBtn) {
       document.removeEventListener('keyup', this.keyup);
     }
@@ -2617,7 +2570,7 @@ var cmlMessages = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   name: 'camomile-utils-messages',
 
   computed: {
-    messages: function messages () {
+    messages: function messages() {
       return this.$store.state.cml.messages.list
     }
   }
@@ -2627,7 +2580,7 @@ var cmlTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   name: 'camomile-header-title',
 
   computed: {
-    title: function title () {
+    title: function title() {
       return this.$store.state.cml.config.title
     }
   }
@@ -2637,7 +2590,7 @@ var cmlInfos = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   name: 'camomile-header-infos',
 
   computed: {
-    url: function url () {
+    url: function url() {
       return this.$store.state.cml.config.url
     }
   }
@@ -2652,19 +2605,26 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
 
   computed: {
     fields: {
-      get: function get () {
-        return JSON.stringify(this.$store.state.cml.popup.element[this.name], undefined, 2)
+      get: function get() {
+        return JSON.stringify(
+          this.$store.state.cml.popup.element[this.name],
+          undefined,
+          2
+        )
       },
-      set: function set (value) {
+      set: function set(value) {
         if (this.jsonCheck(value)) {
-          this.$store.commit('cml/popup/fieldUpdate', { name: this.name, value: JSON.parse(value) });
+          this.$store.commit('cml/popup/fieldUpdate', {
+            name: this.name,
+            value: JSON.parse(value)
+          });
         }
       }
     }
   },
 
   methods: {
-    jsonCheck: function jsonCheck (str) {
+    jsonCheck: function jsonCheck(str) {
       try {
         JSON.parse(str);
       } catch (e) {
@@ -2672,13 +2632,13 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
       }
       return true
     },
-    resize: function resize (e) {
+    resize: function resize(e) {
       var el = e.target;
       el.style.height = (el.scrollHeight) + "px";
     }
   },
 
-  mounted: function mounted () {
+  mounted: function mounted() {
     var el = this.$refs.field;
     el.style.height = (el.scrollHeight) + "px";
   }
@@ -2699,32 +2659,34 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     })),
 
   methods: {
-    save: function save () {
+    save: function save() {
       if (this.element.id) {
-        this.$store.dispatch(("cml/" + (this.type) + "/update"), { element: this.element });
+        this.$store.dispatch(("cml/" + (this.type) + "/update"), {
+          element: this.element
+        });
       } else {
         this.$store.dispatch(("cml/" + (this.type) + "/add"), { element: this.element });
       }
       this.$store.commit('cml/popup/close');
     },
-    keyup: function keyup (e) {
+    keyup: function keyup(e) {
       if ((e.which || e.keyCode) === 13) {
         this.save();
       }
     }
   },
 
-  created: function created () {
+  created: function created() {
     document.addEventListener('keyup', this.keyup);
   },
 
-  mounted: function mounted () {
+  mounted: function mounted() {
     if (this.type !== 'annotations') {
       this.$refs.name.focus();
     }
   },
 
-  beforeDestroy: function beforeDestroy () {
+  beforeDestroy: function beforeDestroy() {
     document.removeEventListener('keyup', this.keyup);
   }
 }
@@ -2732,7 +2694,7 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
 var userbuttonDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"dropdown"},[(_vm.isAdmin)?_c('div',[_c('button',{staticClass:"btn px-m py-s full-x",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: _vm.user });}}},[_vm._v("Settings…")])]):_vm._e(),_vm._v(" "),_c('div',[_c('button',{staticClass:"btn px-m py-s full-x mr home",on:{"click":_vm.logout}},[_vm._v("Logout")])])])},staticRenderFns: [],
   name: 'camomile-header-userbutton-dropdown',
 
-  data: function data () {
+  data: function data() {
     return {
       popupEditConfig: {
         type: 'users',
@@ -2744,22 +2706,22 @@ var userbuttonDropdown = {render: function(){var _vm=this;var _h=_vm.$createElem
   },
 
   computed: {
-    user: function user () {
+    user: function user() {
       return this.$store.state.cml.user
     },
-    isAdmin: function isAdmin () {
+    isAdmin: function isAdmin() {
       return this.$store.state.cml.user.isAdmin
     }
   },
 
   methods: {
-    close: function close () {
+    close: function close() {
       this.$store.commit('cml/dropdown/close');
     },
-    logout: function logout () {
+    logout: function logout() {
       return this.$store.dispatch('cml/user/logout')
     },
-    popupOpen: function popupOpen (ref) {
+    popupOpen: function popupOpen(ref) {
       var config = ref.config;
       var element = ref.element;
 
@@ -2776,7 +2738,7 @@ var cmlUserbutton = {render: function(){var _vm=this;var _h=_vm.$createElement;v
       visible: function (state) { return state.cml.dropdown.visible; }
     })),
   methods: {
-    dropdownToggle: function dropdownToggle () {
+    dropdownToggle: function dropdownToggle() {
       if (this.visible) {
         this.$store.commit('cml/dropdown/close');
       } else {
@@ -2792,13 +2754,13 @@ var cmlSync = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
   name: 'camomile-header-syncbutton',
 
   computed: {
-    active: function active () {
+    active: function active() {
       return this.$store.getters['cml/sync/active']
     }
   },
 
   methods: {
-    sync: function sync () {
+    sync: function sync() {
       this.$store.dispatch('cml/sync/all');
     }
   }
@@ -2815,7 +2777,7 @@ var cmlHeader = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   },
 
   computed: {
-    isLogged: function isLogged () {
+    isLogged: function isLogged() {
       return this.$store.state.cml.user.isLogged
     }
   }
@@ -2825,27 +2787,27 @@ var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
   name: 'camomile-login-popup',
 
   computed: {
-    config: function config () {
+    config: function config() {
       return this.$store.state.cml.config
     }
   },
 
   methods: {
-    login: function login (config) {
+    login: function login(config) {
       return this.$store.dispatch('cml/user/login', config)
     },
-    keyup: function keyup (e) {
+    keyup: function keyup(e) {
       if ((e.which || e.keyCode) === 13) {
         this.login(this.config);
       }
     }
   },
 
-  created: function created () {
+  created: function created() {
     document.addEventListener('keyup', this.keyup);
   },
 
-  beforeDestroy: function beforeDestroy () {
+  beforeDestroy: function beforeDestroy() {
     document.removeEventListener('keyup', this.keyup);
   }
 }
@@ -2853,7 +2815,7 @@ var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
 var cmlLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],
   name: 'camomile-login',
 
-  created: function created () {
+  created: function created() {
     this.$store.commit('cml/popup/open', {
       config: {
         title: 'Login',
@@ -2880,9 +2842,9 @@ var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm.
   },
 
   computed: Object.assign({}, mapState({
-      isLogged: function (state$$1) { return state$$1.cml.user.isLogged; },
-      popup: function (state$$1) { return state$$1.cml.popup; },
-      media: function (state$$1) { return state$$1.cml.medias.list.find(function (m) { return m.id === state$$1.cml.medias.id; }); }
+      isLogged: function (state) { return state.cml.user.isLogged; },
+      popup: function (state) { return state.cml.popup; },
+      media: function (state) { return state.cml.medias.list.find(function (m) { return m.id === state.cml.medias.id; }); }
     }))
 }
 
@@ -2895,20 +2857,20 @@ var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var
     })),
 
   methods: {
-    remove: function remove () {
+    remove: function remove() {
       this.$store.dispatch(("cml/" + (this.type) + "/remove"), { id: this.element.id });
       this.$store.commit("cml/popup/close");
     },
-    keyup: function keyup (e) {
+    keyup: function keyup(e) {
       if ((e.which || e.keyCode) === 13) {
         this.remove();
       }
     }
   },
-  created: function created () {
+  created: function created() {
     document.addEventListener('keyup', this.keyup);
   },
-  beforeDestroy: function beforeDestroy () {
+  beforeDestroy: function beforeDestroy() {
     document.removeEventListener('keyup', this.keyup);
   }
 }
@@ -2917,27 +2879,38 @@ var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   name: 'camomile-popup-groups',
 
   computed: {
-    groups: function groups () {
+    groups: function groups() {
       return this.$store.state.cml.groups.list
     },
-    user: function user () {
+    user: function user() {
       var this$1 = this;
 
-      return this.$store.state.cml.users.list.find(function (user) { return user.id === this$1.$store.state.cml.popup.element.id; })
+      return this.$store.state.cml.users.list.find(
+        function (user) { return user.id === this$1.$store.state.cml.popup.element.id; }
+      )
     }
   },
 
   methods: {
-    groupToggle: function groupToggle (group) {
+    groupToggle: function groupToggle(group) {
       if (this.groupActive(group.id)) {
-        this.$store.dispatch('cml/groups/userRemove', { userId: this.user.id, group: group });
+        this.$store.dispatch('cml/groups/userRemove', {
+          userId: this.user.id,
+          group: group
+        });
       } else {
-        this.$store.dispatch('cml/groups/userAdd', { userId: this.user.id, group: group });
+        this.$store.dispatch('cml/groups/userAdd', {
+          userId: this.user.id,
+          group: group
+        });
       }
     },
-    groupActive: function groupActive (groupId) {
-      return this.groups.find(function (group) { return group.id === groupId; })
-        .userIds.indexOf(this.user.id) !== -1
+    groupActive: function groupActive(groupId) {
+      return (
+        this.groups
+          .find(function (group) { return group.id === groupId; })
+          .userIds.indexOf(this.user.id) !== -1
+      )
     }
   }
 }
@@ -2945,7 +2918,7 @@ var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var
 var users$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isAdmin)?_c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {}, role: 'user' } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])]):_vm._e()},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
   name: 'camomile-users',
 
-  data: function data () {
+  data: function data() {
     return {
       popupEditConfig: {
         type: 'users',
@@ -2980,7 +2953,7 @@ var users$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
     })),
 
   methods: {
-    popupOpen: function popupOpen (ref) {
+    popupOpen: function popupOpen(ref) {
       var config = ref.config;
       var element = ref.element;
 
@@ -2993,26 +2966,34 @@ var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
   name: 'camomile-popup-users',
 
   computed: {
-    users: function users () {
+    users: function users() {
       return this.$store.state.cml.users.list
     },
-    group: function group () {
+    group: function group() {
       var this$1 = this;
 
-      return this.$store.state.cml.groups.list.find(function (group) { return group.id === this$1.$store.state.cml.popup.element.id; })
+      return this.$store.state.cml.groups.list.find(
+        function (group) { return group.id === this$1.$store.state.cml.popup.element.id; }
+      )
     }
   },
 
   methods: {
-    userToggle: function userToggle (userId) {
+    userToggle: function userToggle(userId) {
       if (this.userActive(userId)) {
-        this.$store.dispatch('cml/groups/userRemove', { userId: userId, group: this.group });
+        this.$store.dispatch('cml/groups/userRemove', {
+          userId: userId,
+          group: this.group
+        });
       } else {
-        this.$store.dispatch('cml/groups/userAdd', { userId: userId, group: this.group });
+        this.$store.dispatch('cml/groups/userAdd', {
+          userId: userId,
+          group: this.group
+        });
       }
     },
 
-    userActive: function userActive (userId) {
+    userActive: function userActive(userId) {
       return this.group.userIds.indexOf(userId) > -1
     }
   }
@@ -3021,7 +3002,7 @@ var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
 var groups$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isAdmin)?_c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn p-s flex-right",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.groups),function(group){return _c('tr',{key:group.id},[_c('td',[_vm._v(_vm._s(group.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(group.userIds.length))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupUsersConfig, element: group });}}},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: group });}}},[_vm._v("Edit")]),_vm._v(" "),(_vm.isRoot)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: group });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])]):_vm._e()},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Users")]),_c('th')])}],
   name: 'camomile-groups',
 
-  data: function data () {
+  data: function data() {
     return {
       popupRemoveConfig: {
         type: 'groups',
@@ -3056,13 +3037,13 @@ var groups$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     })),
 
   methods: {
-    popupOpen: function popupOpen (ref) {
+    popupOpen: function popupOpen(ref) {
       var config = ref.config;
       var element = ref.element;
 
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
-    refresh: function refresh () {
+    refresh: function refresh() {
       return this.$store.dispatch('cml/groups/list')
     }
   }
@@ -3077,34 +3058,42 @@ var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement
   },
 
   computed: {
-    id: function id () {
+    id: function id() {
       return this.$store.state.cml.popup.element.id
     },
-    uid: function uid () {
+    uid: function uid() {
       return this.$store.state.cml.popup.config.uid
     },
-    permission: function permission () {
+    permission: function permission() {
       var this$1 = this;
 
-      return this.$store.state.cml[((this.type) + "s")].lists[this.uid].find(function (r) { return r.id === this$1.id; }).permissions[((this.element.type) + "s")][this.element.id]
+      return this.$store.state.cml[((this.type) + "s")].lists[this.uid].find(
+        function (r) { return r.id === this$1.id; }
+      ).permissions[((this.element.type) + "s")][this.element.id]
     }
   },
 
   methods: {
-    toggle: function toggle (permission) {
+    toggle: function toggle(permission) {
       var obj, obj$1;
 
       if (this.isActive(permission)) {
-        this.$store.dispatch(("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionRemove"), ( obj = {
-          id: this.id
-        }, obj[((this.element.type) + "Id")] = this.element.id, obj));
+        this.$store.dispatch(
+          ("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionRemove"),
+          ( obj = {
+            id: this.id
+          }, obj[((this.element.type) + "Id")] = this.element.id, obj)
+        );
       } else {
-        this.$store.dispatch(("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionSet"), ( obj$1 = {
-          id: this.id
-        }, obj$1[((this.element.type) + "Id")] = this.element.id, obj$1.permission = permission, obj$1));
+        this.$store.dispatch(
+          ("cml/" + (this.type) + "s/" + (this.element.type) + "PermissionSet"),
+          ( obj$1 = {
+            id: this.id
+          }, obj$1[((this.element.type) + "Id")] = this.element.id, obj$1.permission = permission, obj$1)
+        );
       }
     },
-    isActive: function isActive (permission) {
+    isActive: function isActive(permission) {
       return this.permission === permission
     }
   }
@@ -3136,7 +3125,7 @@ var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     }
   },
 
-  data: function data () {
+  data: function data() {
     return {
       popupEditConfig: {
         type: 'corpus',
@@ -3167,30 +3156,33 @@ var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   },
 
   computed: {
-    corpus: function corpus () {
+    corpus: function corpus() {
       return this.$store.state.cml.corpus.lists[this.uid]
     },
-    corpuId: function corpuId () {
+    corpuId: function corpuId() {
       return this.$store.state.cml.corpus.actives[this.uid]
     },
-    isAdmin: function isAdmin () {
+    isAdmin: function isAdmin() {
       return this.$store.state.cml.user.isAdmin
     }
   },
 
   methods: {
-    popupOpen: function popupOpen (ref) {
+    popupOpen: function popupOpen(ref) {
       var config = ref.config;
       var element = ref.element;
 
       this.$store.commit('cml/popup/open', { config: config, element: element });
     },
-    set: function set (e) {
-      this.$store.dispatch('cml/corpus/set', { id: e.target.value, uid: this.uid });
+    set: function set(e) {
+      this.$store.dispatch('cml/corpus/set', {
+        id: e.target.value,
+        uid: this.uid
+      });
     }
   },
 
-  mounted: function mounted () {
+  mounted: function mounted() {
     this.$store.dispatch('cml/corpus/register', this.uid);
   }
 }
@@ -3205,7 +3197,7 @@ var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     }
   },
 
-  data: function data () {
+  data: function data() {
     return {
       popupEditConfig: {
         type: 'medias',
@@ -3229,33 +3221,37 @@ var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   },
 
   computed: {
-    corpuId: function corpuId () {
+    corpuId: function corpuId() {
       return this.$store.state.cml.corpus.actives[this.uid]
     },
-    mediaId: function mediaId () {
+    mediaId: function mediaId() {
       return this.$store.state.cml.medias.actives[this.uid]
     },
-    medias: function medias () {
+    medias: function medias() {
       return this.$store.state.cml.medias.lists[this.uid]
     },
-    permission: function permission () {
+    permission: function permission() {
       var this$1 = this;
 
       var corpus = this.$store.state.cml.corpus.lists;
-      var corpu = corpus[this.uid] && corpus[this.uid].find(function (c) { return c.id === this$1.corpuId; });
+      var corpu =
+        corpus[this.uid] && corpus[this.uid].find(function (c) { return c.id === this$1.corpuId; });
       return corpu ? corpu.permission : 0
     }
   },
 
   methods: {
-    popupOpen: function popupOpen (ref) {
+    popupOpen: function popupOpen(ref) {
       var config = ref.config;
       var element = ref.element;
 
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
-    set: function set (e) {
-      this.$store.dispatch('cml/medias/set', { id: e.target.value, uid: this.uid });
+    set: function set(e) {
+      this.$store.dispatch('cml/medias/set', {
+        id: e.target.value,
+        uid: this.uid
+      });
     }
   }
 }
@@ -3270,7 +3266,7 @@ var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     }
   },
 
-  data: function data () {
+  data: function data() {
     return {
       popupEditConfig: {
         type: 'layers',
@@ -3301,45 +3297,52 @@ var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   },
 
   computed: {
-    layers: function layers () {
+    layers: function layers() {
       return this.$store.state.cml.layers.lists[this.uid]
     },
-    actives: function actives () {
+    actives: function actives() {
       return this.$store.state.cml.layers.actives[this.uid]
     },
-    corpus: function corpus () {
+    corpus: function corpus() {
       return this.$store.state.cml.corpus.lists[this.uid]
     },
-    corpuId: function corpuId () {
+    corpuId: function corpuId() {
       return this.$store.state.cml.corpus.actives[this.uid]
     },
-    permission: function permission () {
+    permission: function permission() {
       var this$1 = this;
 
       var corpus = this.$store.state.cml.corpus.lists;
-      var corpu = corpus[this.uid] && corpus[this.uid].find(function (c) { return c.id === this$1.corpuId; });
+      var corpu =
+        corpus[this.uid] && corpus[this.uid].find(function (c) { return c.id === this$1.corpuId; });
       return corpu ? corpu.permission : 0
     }
   },
 
   methods: {
-    popupOpen: function popupOpen (ref) {
+    popupOpen: function popupOpen(ref) {
       var config = ref.config;
       var element = ref.element;
 
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
-    set: function set (e) {
+    set: function set(e) {
       if (e.target.checked) {
-        this.$store.dispatch('cml/layers/set', { id: e.target.value, uid: this.uid });
+        this.$store.dispatch('cml/layers/set', {
+          id: e.target.value,
+          uid: this.uid
+        });
       } else {
-        this.$store.dispatch('cml/layers/unset', { id: e.target.value, uid: this.uid });
+        this.$store.dispatch('cml/layers/unset', {
+          id: e.target.value,
+          uid: this.uid
+        });
       }
     }
   }
 }
 
-var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('div',{key:layer.id,staticClass:"mt"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v(_vm._s(layer.name))]),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: layer.id, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('table',{staticClass:"table mb-0"},[_vm._m(1,true),_vm._v(" "),_vm._l((_vm.annotations[layer.id]),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"checkbox","layer-id":layer.id},domProps:{"value":annotation.id,"checked":_vm.actives[layer.id] && _vm.actives[layer.id].indexOf(annotation.id) !== -1},on:{"change":function($event){_vm.set($event, layer.id);}}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()})],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Annotations")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
+var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('div',{key:layer.id,staticClass:"mt"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v(_vm._s(layer.name))]),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: layer.id, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('table',{staticClass:"table mb-0"},[_vm._m(1,true),_vm._v(" "),_vm._l((_vm.annotations[layer.id]),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"checkbox","layer-id":layer.id},domProps:{"value":annotation.id,"checked":_vm.activeId && _vm.activeId === annotation.id},on:{"change":function($event){_vm.set($event, layer.id);}}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()})],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Annotations")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
   name: 'camomile-annotations',
 
   props: {
@@ -3349,7 +3352,7 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     }
   },
 
-  data: function data () {
+  data: function data() {
     return {
       popupEditConfig: {
         type: 'annotations',
@@ -3373,39 +3376,41 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
   },
 
   computed: {
-    annotations: function annotations () {
+    annotations: function annotations() {
       return this.$store.state.cml.annotations.lists[this.uid]
     },
-    mediaId: function mediaId () {
+    mediaId: function mediaId() {
       return this.$store.state.cml.medias.actives[this.uid]
     },
-    layers: function layers () {
+    layers: function layers() {
       return this.$store.state.cml.layers.lists[this.uid]
     },
-    actives: function actives () {
+    activeId: function activeId() {
       return this.$store.state.cml.annotations.actives[this.uid]
     },
-    medias: function medias () {
+    medias: function medias() {
       return this.$store.state.cml.medias.lists[this.uid]
     }
   },
 
   methods: {
-    popupOpen: function popupOpen (ref) {
+    popupOpen: function popupOpen(ref) {
       var config = ref.config;
       var element = ref.element;
 
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
-    set: function set (e, layerId) {
+    set: function set(e, layerId) {
       if (e.target.checked) {
-        this.$store.dispatch('cml/annotations/set', { id: e.target.value, layerId: layerId, uid: this.uid });
+        this.$store.commit('cml/annotations/set', {
+          id: e.target.value,
+          uid: this.uid
+        });
       } else {
-
-        this.$store.dispatch('cml/annotations/unset', { id: e.target.value, layerId: layerId, uid: this.uid });
+        this.$store.commit('cml/annotations/unset', { uid: this.uid });
       }
     },
-    mediaName: function mediaName (mediaId) {
+    mediaName: function mediaName(mediaId) {
       if (!mediaId) { return '' }
       var media = this.medias.find(function (m) { return m.id === mediaId; });
       return media ? media.name : ''
@@ -3413,7 +3418,7 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
   },
 
   filters: {
-    stringEnd: function stringEnd (value) {
+    stringEnd: function stringEnd(value) {
       if (!value) { return '' }
       return value.substr(value.length - 6)
     }
@@ -3438,7 +3443,7 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
     spinner: spinner
   },
 
-  data: function data () {
+  data: function data() {
     return {
       player: null,
       videoNew: false
@@ -3446,40 +3451,46 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
   },
 
   computed: {
-    media: function media () {
+    media: function media() {
       var this$1 = this;
 
       var medias = this.$store.state.cml.medias;
-      return medias.lists[this.uid] && medias.lists[this.uid].find(function (m) { return m.id === medias.actives[this$1.uid]; }) || {}
+      return (
+        (medias.lists[this.uid] &&
+          medias.lists[this.uid].find(
+            function (m) { return m.id === medias.actives[this$1.uid]; }
+          )) ||
+        {}
+      )
     },
-    properties: function properties () {
+    properties: function properties() {
       return this.$store.state.cml.medias.properties[this.uid] || {}
     },
-    isPlaying: function isPlaying () {
+    isPlaying: function isPlaying() {
       return this.properties.isPlaying || false
     },
-    isLoaded: function isLoaded () {
+    isLoaded: function isLoaded() {
       return this.properties.isLoaded || false
     },
-    seek: function seek () {
+    seek: function seek() {
       return this.properties.seek || {}
     },
-    timeCurrent: function timeCurrent () {
+    timeCurrent: function timeCurrent() {
       return this.properties.timeCurrent || 0
     },
-    viewportWidth: function viewportWidth () {
+    viewportWidth: function viewportWidth() {
       return this.$store.state.cml.viewport.width || 0
     }
   },
 
-  mounted: function mounted () {
+  mounted: function mounted() {
     if (this.media.url) {
       this.playerLoad(this.media.url);
     }
   },
 
   methods: {
-    videoLoad: function videoLoad (mediaUrl) {
+    videoLoad: function videoLoad(mediaUrl) {
       if (this.player) {
         var videoId = this.parseYouTubeId(mediaUrl);
         this.player.loadVideoById(videoId);
@@ -3488,7 +3499,7 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
       }
     },
 
-    playerLoad: function playerLoad (mediaUrl) {
+    playerLoad: function playerLoad(mediaUrl) {
       var this$1 = this;
 
       var videoId = this.parseYouTubeId(mediaUrl);
@@ -3497,8 +3508,14 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
       var events = {
         onReady: function (event) {
           // console.log('onReady', event)
-          this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
-          this$1.$store.commit('cml/medias/timeTotal', { time: this$1.player.getDuration() * 1000, uid: this$1.uid });
+          this$1.$store.commit('cml/medias/loaded', {
+            isLoaded: true,
+            uid: this$1.uid
+          });
+          this$1.$store.commit('cml/medias/timeTotal', {
+            time: this$1.player.getDuration() * 1000,
+            uid: this$1.uid
+          });
         },
         onStateChange: function (event) {
           // console.log('onStateChange', event.data, this.videoNew)
@@ -3508,8 +3525,14 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
             // playing
             if (this$1.videoNew) {
               this$1.videoNew = false;
-              this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
-              this$1.$store.commit('cml/medias/timeTotal', { time: this$1.player.getDuration() * 1000, uid: this$1.uid });
+              this$1.$store.commit('cml/medias/loaded', {
+                isLoaded: true,
+                uid: this$1.uid
+              });
+              this$1.$store.commit('cml/medias/timeTotal', {
+                time: this$1.player.getDuration() * 1000,
+                uid: this$1.uid
+              });
               this$1.player.pauseVideo();
             } else {
               this$1.$store.dispatch('cml/medias/play', this$1.uid);
@@ -3525,8 +3548,14 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
             this$1.$store.dispatch('cml/medias/stop', this$1.uid);
           } else if (event.data === 5) {
             // cued
-            this$1.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this$1.uid });
-            this$1.$store.commit('cml/medias/timeTotal', { time: this$1.player.getDuration() * 1000, uid: this$1.uid });
+            this$1.$store.commit('cml/medias/loaded', {
+              isLoaded: true,
+              uid: this$1.uid
+            });
+            this$1.$store.commit('cml/medias/timeTotal', {
+              time: this$1.player.getDuration() * 1000,
+              uid: this$1.uid
+            });
           }
         },
         onApiChange: function (event) {
@@ -3564,17 +3593,20 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
         });
       };
     },
-    videoSeek: function videoSeek (serverRequest) {
+    videoSeek: function videoSeek(serverRequest) {
       this.player.seekTo(this.timeCurrent / 1000, serverRequest);
-      this.$store.commit('cml/medias/seek', { options: { seekign: false }, uid: this.uid });
+      this.$store.commit('cml/medias/seek', {
+        options: { seekign: false },
+        uid: this.uid
+      });
     },
-    parseYouTubeId: function parseYouTubeId (url) {
+    parseYouTubeId: function parseYouTubeId(url) {
       var regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
       return url.match(regex) ? RegExp.$2 : url
     }
   },
 
-  beforeDestroy: function beforeDestroy () {
+  beforeDestroy: function beforeDestroy() {
     if (this.player !== null && this.player.destroy) {
       this.player.destroy();
     }
@@ -3583,24 +3615,24 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
   },
 
   watch: {
-    isPlaying: function isPlaying (val) {
+    isPlaying: function isPlaying(val) {
       if (val) {
         this.player.playVideo();
       } else {
         this.player.pauseVideo();
       }
     },
-    seek: function seek (options) {
+    seek: function seek(options) {
       if (options.seeking) {
         this.videoSeek(options.serverRequest);
       }
     },
-    viewportWidth: function viewportWidth () {
+    viewportWidth: function viewportWidth() {
       var width = this.$refs.container.offsetWidth;
       var height = width * 9 / 16;
       this.player.setSize(width, height);
     },
-    media: function media (media$1, mediaOld) {
+    media: function media(media$1, mediaOld) {
       if (media$1.url && media$1.url !== mediaOld.url) {
         this.videoLoad(media$1.url);
       }
@@ -3608,7 +3640,7 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
   }
 }
 
-var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"mediacontroller"},[_c('div',{staticClass:"mediacontroller-controls clearfix pb-s"},[_c('button',{ref:"button",staticClass:"mediacontroller-button btn",attrs:{"disabled":!_vm.isLoaded},on:{"click":_vm.mediaToggle}},[_vm._v(_vm._s(_vm.playButton))]),_vm._v(" "),_c('div',{ref:"counter",staticClass:"mediacontroller-counter"},[_vm._v(_vm._s(_vm.msToMinutesAndSeconds(_vm.timeCurrent))+" / "+_vm._s(_vm.msToMinutesAndSeconds(_vm.timeTotal))+" ")])]),_vm._v(" "),_c('div',{ref:"progress",staticClass:"mediacontroller-progress",class:{ loaded: _vm.isLoaded },on:{"click":_vm.progressClick,"mousemove":_vm.progressMousemove,"mousedown":_vm.progressMousedown,"mouseup":_vm.progressMouseup}},[_c('div',{staticClass:"pointer-none full-y"},[_c('div',{staticClass:"mediacontroller-progress-bar",style:({ width: _vm.progressBarWidth })})])])])},staticRenderFns: [],
+var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"mediacontroller"},[_c('div',{staticClass:"mediacontroller-controls clearfix pb-s"},[_c('button',{ref:"button",staticClass:"mediacontroller-button btn",attrs:{"disabled":!_vm.isLoaded},on:{"click":_vm.mediaToggle}},[_vm._v(_vm._s(_vm.playButton))]),_vm._v(" "),_c('div',{ref:"counter",staticClass:"mediacontroller-counter"},[_vm._v(_vm._s(_vm.msToMinutesAndSeconds(_vm.timeCurrent))+" / "+_vm._s(_vm.msToMinutesAndSeconds(_vm.timeTotal))+" ")])]),_vm._v(" "),_c('div',{ref:"progress",staticClass:"mediacontroller-progress",class:{ loaded: _vm.isLoaded },on:{"mousedown":function($event){_vm.progressMousedown($event);}}},[_c('div',{staticClass:"pointer-none full-y"},[_c('div',{staticClass:"mediacontroller-progress-bar",style:({ width: _vm.progressBarWidth })})])])])},staticRenderFns: [],
   props: {
     uid: {
       type: String,
@@ -3616,59 +3648,72 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
     }
   },
 
-  data: function data () {
+  data: function data() {
     return {
       mousedown: false
     }
   },
 
   computed: {
-    properties: function properties () {
+    properties: function properties() {
       return this.$store.state.cml.medias.properties[this.uid] || {}
     },
-    timeCurrent: function timeCurrent () {
+    timeCurrent: function timeCurrent() {
       return this.properties.timeCurrent || 0
     },
-    timeTotal: function timeTotal () {
+    timeTotal: function timeTotal() {
       return this.properties.timeTotal || 0
     },
-    playButton: function playButton () {
-      return this.properties.isPlaying && '❚ ❚' || '►'
+    playButton: function playButton() {
+      return (this.properties.isPlaying && '❚ ❚') || '►'
     },
-    isLoaded: function isLoaded () {
+    isLoaded: function isLoaded() {
       return this.properties.isLoaded || false
     },
-    progressBarWidth: function progressBarWidth () {
+    progressBarWidth: function progressBarWidth() {
       return this.timeTotal ? ((this.timeCurrent / this.timeTotal * 100) + "%") : 0
     }
   },
 
   methods: {
-    mediaToggle: function mediaToggle () {
+    mediaToggle: function mediaToggle() {
       if (this.properties.isPlaying) {
         this.$store.commit('cml/medias/pause', this.uid);
       } else {
         this.$store.commit('cml/medias/play', this.uid);
       }
     },
-    progressClick: function progressClick (e) {
-      this.seek(e.offsetX / this.$refs.progress.offsetWidth, true, this.uid);
+    progressMousemove: function progressMousemove(e) {
+      var x;
+      if (e.clientX - this.$refs.progress.offsetLeft < 0) {
+        x = 0;
+      } else if (
+        e.clientX >
+        this.$refs.progress.offsetLeft + this.$refs.progress.offsetWidth
+      ) {
+        x = 1;
+      } else {
+        x =
+          (e.clientX - this.$refs.progress.offsetLeft) /
+          this.$refs.progress.offsetWidth;
+      }
+      this.seek(x, false, this.uid);
     },
-    progressMousemove: function progressMousemove (e) {
-      this.mousedown && this.seek(e.offsetX / this.$refs.progress.offsetWidth, false, this.uid);
+    progressMousedown: function progressMousedown(e) {
+      document.addEventListener('mousemove', this.progressMousemove);
+      document.addEventListener('mouseup', this.progressMouseup);
+      this.progressMousemove(e);
     },
-    progressMousedown: function progressMousedown () {
-      this.mousedown = true;
+    progressMouseup: function progressMouseup() {
+      document.removeEventListener('mousemove', this.progressMousemove);
+      document.removeEventListener('mouseup', this.progressMouseup);
     },
-    progressMouseup: function progressMouseup () {
-      this.mousedown = false;
-    },
-    seek: function seek (ratio, serverRequest, uid) {
+    seek: function seek(ratio, serverRequest, uid) {
       if (this.properties.isLoaded) {
         this.$store.dispatch('cml/medias/seek', { ratio: ratio, serverRequest: serverRequest, uid: uid });
       }
     },
-    msToMinutesAndSeconds: function msToMinutesAndSeconds (ms) {
+    msToMinutesAndSeconds: function msToMinutesAndSeconds(ms) {
       var minutes = Math.floor(ms / 60000);
       var seconds = ((ms % 60000) / 1000).toFixed(0);
       return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
@@ -3676,93 +3721,129 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
   }
 }
 
-var timelineButton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn p-s",on:{"click":function($event){_vm.annotationCreate({ element: { id: null, layerId: _vm.layer.id, mediaId: _vm.mediaId, fragment: {}, metadata: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])},staticRenderFns: [],
+var timelineButton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn p-s",on:{"click":function($event){_vm.annotationCreate({ id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: { time: { end: _vm.timeCurrent + 25000, start: _vm.timeCurrent } }, metadata: {} });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])},staticRenderFns: [],
   props: {
-    layer: Object,
+    layerId: String,
     annotations: Array,
     mediaId: String,
     timeTotal: Number,
     timeCurrent: Number
+  },
+  methods: {
+    annotationCreate: function annotationCreate(element) {
+      this.$store.dispatch("cml/annotations/add", { element: element });
+    }
   }
 }
 
-var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"annotation",staticClass:"absolute annotation",style:({ left: _vm.left, right: _vm.right })},[_c('div',{staticClass:"relative full-y"},[_c('div',{staticClass:"absolute handler handler-left",on:{"mousedown":function($event){_vm.dragLeftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handler handler-right",on:{"mousedown":function($event){_vm.dragRightOn($event);}}})])])},staticRenderFns: [],_scopeId: 'data-v-1e3bbe38',
-
+var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"annotation",staticClass:"absolute annotation",style:({ left: ((_vm.left) + "px"), right: ((_vm.right) + "px") })},[_c('div',{staticClass:"relative full-y",on:{"mousedown":function($event){_vm.set($event);}}},[_c('div',{staticClass:"absolute handler handler-left",on:{"mousedown":function($event){_vm.dragLeftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handler handler-right",on:{"mousedown":function($event){_vm.dragRightOn($event);}}})])])},staticRenderFns: [],_scopeId: 'data-v-1e3bbe38',
   props: {
     id: String,
     layerId: String,
     uid: String,
     timeTotal: Number,
     containerWidth: Number,
-    containerLeft: Number,
+    containerLeft: Number
   },
 
-  data: function data () {
+  data: function data() {
     return {
-      leftDragging: 0,
-      rightDragging: 0,
-      leftPosition: 0,
-      rightPosition: 0,
+      leftDragging: null,
+      rightDragging: null,
       handlerWidth: 32
     }
   },
 
   computed: {
-    annotation: function annotation () {
+    annotation: function annotation() {
       var this$1 = this;
 
-      return this.$store.state.cml.annotations.lists[this.uid][this.layerId].find(function (e) { return e.id === this$1.id; })
+      return this.$store.state.cml.annotations.lists[this.uid][
+        this.layerId
+      ].find(function (e) { return e.id === this$1.id; })
     },
-    time: function time () {
+    time: function time() {
       return this.annotation.fragment.time
     },
-    left: function left () {
-      return this.leftDragging ? ((this.leftDragging) + "px") : ((this.time.start * this.containerWidth / this.timeTotal) + "px")
+    left: function left() {
+      return this.leftDragging !== null
+        ? this.leftDragging
+        : this.time.start * this.containerWidth / this.timeTotal
     },
-    right: function right () {
-      return this.rightDragging ? ((this.rightDragging) + "px") : (((this.timeTotal - this.time.end) * this.containerWidth / this.timeTotal) + "px")
+    right: function right() {
+      return this.rightDragging !== null
+        ? this.rightDragging
+        : (this.timeTotal - this.time.end) *
+            this.containerWidth /
+            this.timeTotal
     }
   },
 
   methods: {
-    timeUpdate: function timeUpdate (time, type) {
+    timeUpdate: function timeUpdate(time, type) {
       var element = Object.assign({}, this.annotation);
       element.fragment.time[type] = time;
       return this.$store.dispatch('cml/annotations/update', { element: element })
     },
-    dragLeftOn: function dragLeftOn (e) {
+    dragLeftOn: function dragLeftOn(e) {
       document.addEventListener('mousemove', this.dragLeft);
       document.addEventListener('mouseup', this.dragLeftOff);
     },
-    dragLeftOff: function dragLeftOff (e) {
+    dragLeftOff: function dragLeftOff(e) {
       document.removeEventListener('mousemove', this.dragLeft);
       document.removeEventListener('mouseup', this.dragLeftOff);
-      var time = Math.round(this.$refs.annotation.offsetLeft * this.timeTotal / this.containerWidth);
+      var time = Math.round(
+        this.$refs.annotation.offsetLeft * this.timeTotal / this.containerWidth
+      );
       this.timeUpdate(time, 'start');
-      this.leftDragging = 0;
+      this.leftDragging = null;
     },
-    dragLeft: function dragLeft (e) {
-      this.leftDragging = e.clientX - this.containerLeft - this.handlerWidth / 2;
+    dragLeft: function dragLeft(e) {
+      var c = e.clientX - this.containerLeft + this.handlerWidth / 2;
+
+      console.log(c, this.containerWidth - this.right);
+      if (c < 0) {
+        this.leftDragging = 0;
+      } else if (c > this.containerWidth - this.right) {
+        this.leftDragging = this.containerWidth - this.right;
+      } else {
+        this.leftDragging = c;
+      }
     },
-    dragRightOn: function dragRightOn (e) {
+    dragRightOn: function dragRightOn(e) {
       document.addEventListener('mousemove', this.dragRight);
       document.addEventListener('mouseup', this.dragRightOff);
     },
-    dragRightOff: function dragRightOff (e) {
+    dragRightOff: function dragRightOff(e) {
       document.removeEventListener('mousemove', this.dragRight);
       document.removeEventListener('mouseup', this.dragRightOff);
-      var time = Math.round((this.$refs.annotation.offsetLeft + this.$refs.annotation.offsetWidth) * this.timeTotal / this.containerWidth);
+      var time = Math.round(
+        (this.$refs.annotation.offsetLeft + this.$refs.annotation.offsetWidth) *
+          this.timeTotal /
+          this.containerWidth
+      );
       this.timeUpdate(time, 'end');
-      this.rightDragging = 0;
+      this.rightDragging = null;
     },
-    dragRight: function dragRight (e) {
-      this.rightDragging = this.containerWidth + this.containerLeft - e.clientX - this.handlerWidth / 2;
+    dragRight: function dragRight(e) {
+      var c =
+        this.containerWidth +
+        this.containerLeft -
+        e.clientX +
+        this.handlerWidth / 2;
+
+      this.rightDragging = c > 0 ? c : 0;
+    },
+    set: function set(e) {
+      this.$store.commit('cml/annotations/set', {
+        id: this.id,
+        uid: this.uid
+      });
     }
   }
-
 }
 
-var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"relative annotations"},[_vm._v("co: "+_vm._s(_vm.containerWidth)+" "),_vm._l((_vm.annotations),function(annotation){return _c('annotations-blocs',{key:annotation.id,ref:"annotations",refInFor:true,staticClass:"absolute annotation",attrs:{"uid":_vm.uid,"id":annotation.id,"layer-id":_vm.layer.id,"time-total":_vm.timeTotal,"container-width":_vm.containerWidth,"container-left":_vm.containerLeft},on:{"click":function($event){_vm.zindexSet($event);}}})})],2)},staticRenderFns: [],_scopeId: 'data-v-40ee09a3',
+var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"relative annotations"},_vm._l((_vm.annotations),function(annotation){return _c('annotations-blocs',{key:annotation.id,ref:"annotations",refInFor:true,staticClass:"absolute annotation",style:({ zIndex: annotation.id === _vm.activeId ? 1 : 0}),attrs:{"uid":_vm.uid,"id":annotation.id,"layer-id":_vm.layer.id,"time-total":_vm.timeTotal,"container-width":_vm.width,"container-left":_vm.left}})}))},staticRenderFns: [],
   components: {
     annotationsBlocs: annotationsBlocs
   },
@@ -3773,34 +3854,21 @@ var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createEle
     annotations: Array,
     mediaId: String,
     timeTotal: Number,
-    timeCurrent: Number
+    timeCurrent: Number,
+    width: Number,
+    left: Number
   },
 
-  data: function data () {
-    return {
-      containerWidth: 0,
-      containerLeft: 0
+  computed: {
+    activeId: function activeId() {
+      return this.$store.state.cml.annotations.actives[this.uid]
     }
-  },
-
-  methods: {
-    zindexSet: function zindexSet (e) {
-      console.log('e target', e);
-      this.$refs.annotations.forEach(function (a) {
-        a.style.zIndex = 0;
-      });
-      e.target.style.zIndex = 10;
-    }
-  },
-
-  mounted: function mounted () {
-    this.containerWidth = this.$refs.container.offsetWidth;
-    this.containerLeft = this.$refs.container.offsetLeft;
-    console.log('ref', this.$refs.annotations);
   }
 }
 
-var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},[_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id] && layer.permission === 3)?_c('timeline-button',{key:("button-" + (layer.id))}):_vm._e()}),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('timeline-annotations',{key:("annotations-" + (layer.id)),attrs:{"uid":_vm.uid,"layer":layer,"annotations":_vm.annotations[layer.id],"media-id":_vm.mediaId,"time-total":_vm.timeTotal,"time-current":_vm.timeCurrent}}):_vm._e()})],2)},staticRenderFns: [],
+var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},[_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id] && layer.permission === 3)?_c('timeline-button',{key:("button-" + (layer.id)),attrs:{"layer-id":layer.id,"media-id":_vm.mediaId,"time-current":_vm.timeCurrent}}):_vm._e()}),_vm._v(" left: "+_vm._s(_vm.left)+" "),(_vm.layers)?_c('div',{staticClass:"relative overflow-hidden",style:({ height: ((40 * _vm.layers.length) + "px") })},[_c('div',{ref:"container",staticClass:"absolute timeline-annotations",style:({
+      top: 0, bottom: 0, left: ((_vm.left) + "px"), width: ((_vm.width) + "px")
+    })},_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('timeline-annotations',{key:("annotations-" + (layer.id)),attrs:{"uid":_vm.uid,"layer":layer,"annotations":_vm.annotations[layer.id],"media-id":_vm.mediaId,"time-total":_vm.timeTotal,"time-current":_vm.timeCurrent,"width":_vm.width,"left":_vm.left + _vm.containerLeft}}):_vm._e()}))]):_vm._e()],2)},staticRenderFns: [],
   components: {
     timelineButton: timelineButton,
     timelineAnnotations: timelineAnnotations
@@ -3813,52 +3881,54 @@ var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     }
   },
 
-  data: function data () {
+  data: function data() {
     return {
-      svg: {
-        w: 0,
-        h: 0
-      }
+      width: 3000,
+      containerWidth: 0,
+      containerLeft: 0
     }
   },
 
   computed: {
-    viewbox: function viewbox () {
-      return ("0 0 " + (this.svg.w) + " " + (this.svg.h));
+    viewbox: function viewbox() {
+      return ("0 0 " + (this.svg.w) + " " + (this.svg.h))
     },
-    properties: function properties () {
+    properties: function properties() {
       return this.$store.state.cml.medias.properties[this.uid] || {}
     },
-    timeCurrent: function timeCurrent () {
+    timeCurrent: function timeCurrent() {
       return this.properties.timeCurrent || 0
     },
-    timeTotal: function timeTotal () {
+    timeTotal: function timeTotal() {
       return this.properties.timeTotal || 0
     },
-    annotations: function annotations () {
+    annotations: function annotations() {
       return this.$store.state.cml.annotations.lists[this.uid]
     },
-    mediaId: function mediaId () {
+    mediaId: function mediaId() {
       return this.$store.state.cml.medias.actives[this.uid]
     },
-    layers: function layers () {
+    layers: function layers() {
       return this.$store.state.cml.layers.lists[this.uid]
     },
-    actives: function actives () {
+    actives: function actives() {
       return this.$store.state.cml.annotations.actives[this.uid]
+    },
+    left: function left() {
+      return (
+        this.containerWidth / 2 - this.timeCurrent / this.timeTotal * this.width
+      )
     }
   },
 
-  mounted: function mounted () {
-    window.addEventListener("resize", this.resize);
-    this.resize();
+  mounted: function mounted() {
+    window.addEventListener('resize', this.resize);
+    this.containerWidth = this.$refs.container.offsetWidth;
+    this.containerLeft = this.$refs.container.offsetLeft;
   },
 
   methods: {
-    resize: function resize () {
-      this.svg.w = this.$refs.container.offsetWidth;
-      this.svg.h = this.$refs.container.offsetHeight;
-    }
+    resize: function resize() {}
   }
 }
 

@@ -32,7 +32,7 @@ import popupGroups from './popup/groups.vue'
 export default {
   name: 'camomile-users',
 
-  data () {
+  data() {
     return {
       popupEditConfig: {
         type: 'users',
@@ -69,7 +69,7 @@ export default {
   },
 
   methods: {
-    popupOpen ({ config, element }) {
+    popupOpen({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
     }
   }

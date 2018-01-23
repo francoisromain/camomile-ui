@@ -7,7 +7,7 @@ export default {
   name: 'camomile-header-infos',
 
   computed: {
-    url () {
+    url() {
       return this.$store.state.cml.config.url
     }
   }

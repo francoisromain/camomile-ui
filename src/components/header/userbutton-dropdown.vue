@@ -15,7 +15,7 @@ import popupEdit from '../popup/edit.vue'
 export default {
   name: 'camomile-header-userbutton-dropdown',
 
-  data () {
+  data() {
     return {
       popupEditConfig: {
         type: 'users',
@@ -27,26 +27,25 @@ export default {
   },
 
   computed: {
-    user () {
+    user() {
       return this.$store.state.cml.user
     },
-    isAdmin () {
+    isAdmin() {
       return this.$store.state.cml.user.isAdmin
     }
   },
 
   methods: {
-    close () {
+    close() {
       this.$store.commit('cml/dropdown/close')
     },
-    logout () {
+    logout() {
       return this.$store.dispatch('cml/user/logout')
     },
-    popupOpen ({ config, element }) {
+    popupOpen({ config, element }) {
       this.$store.commit('cml/popup/open', { config, element })
       this.close()
     }
   }
 }
 </script>
-

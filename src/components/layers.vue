@@ -38,7 +38,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       popupEditConfig: {
         type: 'layers',
@@ -69,34 +69,41 @@ export default {
   },
 
   computed: {
-    layers () {
+    layers() {
       return this.$store.state.cml.layers.lists[this.uid]
     },
-    actives () {
+    actives() {
       return this.$store.state.cml.layers.actives[this.uid]
     },
-    corpus () {
+    corpus() {
       return this.$store.state.cml.corpus.lists[this.uid]
     },
-    corpuId () {
+    corpuId() {
       return this.$store.state.cml.corpus.actives[this.uid]
     },
-    permission () {
+    permission() {
       const corpus = this.$store.state.cml.corpus.lists
-      const corpu = corpus[this.uid] && corpus[this.uid].find(c => c.id === this.corpuId)
+      const corpu =
+        corpus[this.uid] && corpus[this.uid].find(c => c.id === this.corpuId)
       return corpu ? corpu.permission : 0
     }
   },
 
   methods: {
-    popupOpen ({ config, element }) {
+    popupOpen({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
     },
-    set (e) {
+    set(e) {
       if (e.target.checked) {
-        this.$store.dispatch('cml/layers/set', { id: e.target.value, uid: this.uid })
+        this.$store.dispatch('cml/layers/set', {
+          id: e.target.value,
+          uid: this.uid
+        })
       } else {
-        this.$store.dispatch('cml/layers/unset', { id: e.target.value, uid: this.uid })
+        this.$store.dispatch('cml/layers/unset', {
+          id: e.target.value,
+          uid: this.uid
+        })
       }
     }
   }

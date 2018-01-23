@@ -25,25 +25,36 @@ export default {
   name: 'camomile-popup-groups',
 
   computed: {
-    groups () {
+    groups() {
       return this.$store.state.cml.groups.list
     },
-    user () {
-      return this.$store.state.cml.users.list.find(user => user.id === this.$store.state.cml.popup.element.id)
+    user() {
+      return this.$store.state.cml.users.list.find(
+        user => user.id === this.$store.state.cml.popup.element.id
+      )
     }
   },
 
   methods: {
-    groupToggle (group) {
+    groupToggle(group) {
       if (this.groupActive(group.id)) {
-        this.$store.dispatch('cml/groups/userRemove', { userId: this.user.id, group })
+        this.$store.dispatch('cml/groups/userRemove', {
+          userId: this.user.id,
+          group
+        })
       } else {
-        this.$store.dispatch('cml/groups/userAdd', { userId: this.user.id, group })
+        this.$store.dispatch('cml/groups/userAdd', {
+          userId: this.user.id,
+          group
+        })
       }
     },
-    groupActive (groupId) {
-      return this.groups.find(group => group.id === groupId)
-        .userIds.indexOf(this.user.id) !== -1
+    groupActive(groupId) {
+      return (
+        this.groups
+          .find(group => group.id === groupId)
+          .userIds.indexOf(this.user.id) !== -1
+      )
     }
   }
 }

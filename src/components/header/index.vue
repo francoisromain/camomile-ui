@@ -24,7 +24,6 @@
 </template>
 
 <script>
-
 import cmlTitle from './title.vue'
 import cmlInfos from './infos.vue'
 import cmlUserbutton from './userbutton.vue'
@@ -41,10 +40,9 @@ export default {
   },
 
   computed: {
-    isLogged () {
+    isLogged() {
       return this.$store.state.cml.user.isLogged
     }
   }
 }
 </script>
-

@@ -22,33 +22,41 @@ export default {
   },
 
   computed: {
-    id () {
+    id() {
       return this.$store.state.cml.popup.element.id
     },
-    uid () {
+    uid() {
       return this.$store.state.cml.popup.config.uid
     },
-    permission () {
-      return this.$store.state.cml[`${this.type}s`].lists[this.uid].find(r => r.id === this.id).permissions[`${this.element.type}s`][this.element.id]
+    permission() {
+      return this.$store.state.cml[`${this.type}s`].lists[this.uid].find(
+        r => r.id === this.id
+      ).permissions[`${this.element.type}s`][this.element.id]
     }
   },
 
   methods: {
-    toggle (permission) {
+    toggle(permission) {
       if (this.isActive(permission)) {
-        this.$store.dispatch(`cml/${this.type}s/${this.element.type}PermissionRemove`, {
-          id: this.id,
-          [`${this.element.type}Id`]: this.element.id
-        })
+        this.$store.dispatch(
+          `cml/${this.type}s/${this.element.type}PermissionRemove`,
+          {
+            id: this.id,
+            [`${this.element.type}Id`]: this.element.id
+          }
+        )
       } else {
-        this.$store.dispatch(`cml/${this.type}s/${this.element.type}PermissionSet`, {
-          id: this.id,
-          [`${this.element.type}Id`]: this.element.id,
-          permission
-        })
+        this.$store.dispatch(
+          `cml/${this.type}s/${this.element.type}PermissionSet`,
+          {
+            id: this.id,
+            [`${this.element.type}Id`]: this.element.id,
+            permission
+          }
+        )
       }
     },
-    isActive (permission) {
+    isActive(permission) {
       return this.permission === permission
     }
   }

@@ -7,18 +7,18 @@ export const state = {
 }
 
 export const mutations = {
-  open (state, { config, element }) {
+  open(state, { config, element }) {
     state.visible = true
     state.config = config
     state.element = JSON.parse(JSON.stringify(element))
   },
 
-  close (state) {
+  close(state) {
     state.visible = false
     state.config = {}
   },
 
-  fieldUpdate (state, { name, value }) {
+  fieldUpdate(state, { name, value }) {
     Vue.set(state.element, name, value)
   }
 }

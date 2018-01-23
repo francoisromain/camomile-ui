@@ -36,7 +36,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       popupEditConfig: {
         type: 'medias',
@@ -60,28 +60,32 @@ export default {
   },
 
   computed: {
-    corpuId () {
+    corpuId() {
       return this.$store.state.cml.corpus.actives[this.uid]
     },
-    mediaId () {
+    mediaId() {
       return this.$store.state.cml.medias.actives[this.uid]
     },
-    medias () {
+    medias() {
       return this.$store.state.cml.medias.lists[this.uid]
     },
-    permission () {
+    permission() {
       const corpus = this.$store.state.cml.corpus.lists
-      const corpu = corpus[this.uid] && corpus[this.uid].find(c => c.id === this.corpuId)
+      const corpu =
+        corpus[this.uid] && corpus[this.uid].find(c => c.id === this.corpuId)
       return corpu ? corpu.permission : 0
     }
   },
 
   methods: {
-    popupOpen ({ config, element }) {
+    popupOpen({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
     },
-    set (e) {
-      this.$store.dispatch('cml/medias/set', { id: e.target.value, uid: this.uid })
+    set(e) {
+      this.$store.dispatch('cml/medias/set', {
+        id: e.target.value,
+        uid: this.uid
+      })
     }
   }
 }

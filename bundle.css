@@ -1,0 +1,255 @@
+/* system.css / settings
+-------------------------------
+http://francoisromain.github.io/postcss-structure
+*/
+
+:root {
+  /* Colors        ------------------------------- */
+
+  /* Base units    ------------------------------- */
+
+  /* font-size: 1rem = 16 px */
+
+  /* base: 1.5rem = 24 px */
+
+  /* line: 0.0625rem = 1px */
+
+  /* xxs: 0.1875rem = 3px */
+
+  /* xs: 0.375rem = 6px */
+
+  /* s: 0.75rem = 12px */
+
+  /* m: 1.125rem = 18px */
+
+  /* l: 2.25rem = 36 px */
+
+  /* xl: 3rem = 48px */
+
+  /* xxl: 3.75rem = 60 px */
+
+  /*  */
+
+  /* Lists         ------------------------------- */
+
+  /* Grid          ------------------------------- */
+
+  /*
+  postcss-grid-system configuration
+  https://github.com/francoisromain/postcss-grid-system#configuration
+  */
+
+  /* width of a single bloc in rem */
+
+  /* width of the gutter in rem */
+
+  /* padding of the main container in rem */
+
+  /* transition */
+
+  /* hr */
+}
+
+/* media queries: x * col-width + gutter */
+
+@media (min-width: 63em) {
+  .home[data-v-24d69054] {
+    background-color: #f50;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.annotations {
+  height: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.annotation[data-v-1e3bbe38] {
+  background-color: #ff0000;
+  background-color: rgba(255, 0, 0, .5);
+  top: 0;
+  bottom: 0;
+  text-align: center;
+}
+
+.handler[data-v-1e3bbe38] {
+  width: 32px;
+  background-color: yellow;
+  top: 0;
+  bottom: 0;
+  cursor: ew-resize;
+}
+
+.handler-right[data-v-1e3bbe38] {
+  right: -32px;
+}
+
+.handler-left[data-v-1e3bbe38] {
+  left: -32px;
+}
+

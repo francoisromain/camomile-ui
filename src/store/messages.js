@@ -5,14 +5,14 @@ export const state = {
 }
 
 export const actions = {
-  success ({ commit }, content) {
+  success({ commit }, content) {
     commit('add', { content, type: 'success', id: dateCurrent() })
     setTimeout(_ => {
       commit('remove')
     }, 2000)
   },
 
-  error ({ commit }, content) {
+  error({ commit }, content) {
     commit('add', { content, type: 'error', id: dateCurrent() })
     setTimeout(_ => {
       commit('remove')
@@ -21,11 +21,11 @@ export const actions = {
 }
 
 export const mutations = {
-  remove (state) {
+  remove(state) {
     state.list.shift()
   },
 
-  add (state, message) {
+  add(state, message) {
     state.list.push(message)
   }
 }

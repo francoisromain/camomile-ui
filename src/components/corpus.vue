@@ -38,7 +38,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       popupEditConfig: {
         type: 'corpus',
@@ -69,27 +69,30 @@ export default {
   },
 
   computed: {
-    corpus () {
+    corpus() {
       return this.$store.state.cml.corpus.lists[this.uid]
     },
-    corpuId () {
+    corpuId() {
       return this.$store.state.cml.corpus.actives[this.uid]
     },
-    isAdmin () {
+    isAdmin() {
       return this.$store.state.cml.user.isAdmin
     }
   },
 
   methods: {
-    popupOpen ({ config, element }) {
+    popupOpen({ config, element }) {
       this.$store.commit('cml/popup/open', { config, element })
     },
-    set (e) {
-      this.$store.dispatch('cml/corpus/set', { id: e.target.value, uid: this.uid })
+    set(e) {
+      this.$store.dispatch('cml/corpus/set', {
+        id: e.target.value,
+        uid: this.uid
+      })
     }
   },
 
-  mounted () {
+  mounted() {
     this.$store.dispatch('cml/corpus/register', this.uid)
   }
 }

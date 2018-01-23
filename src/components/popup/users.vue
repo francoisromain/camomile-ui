@@ -26,24 +26,32 @@ export default {
   name: 'camomile-popup-users',
 
   computed: {
-    users () {
+    users() {
       return this.$store.state.cml.users.list
     },
-    group () {
-      return this.$store.state.cml.groups.list.find(group => group.id === this.$store.state.cml.popup.element.id)
+    group() {
+      return this.$store.state.cml.groups.list.find(
+        group => group.id === this.$store.state.cml.popup.element.id
+      )
     }
   },
 
   methods: {
-    userToggle (userId) {
+    userToggle(userId) {
       if (this.userActive(userId)) {
-        this.$store.dispatch('cml/groups/userRemove', { userId, group: this.group })
+        this.$store.dispatch('cml/groups/userRemove', {
+          userId,
+          group: this.group
+        })
       } else {
-        this.$store.dispatch('cml/groups/userAdd', { userId, group: this.group })
+        this.$store.dispatch('cml/groups/userAdd', {
+          userId,
+          group: this.group
+        })
       }
     },
 
-    userActive (userId) {
+    userActive(userId) {
       return this.group.userIds.indexOf(userId) > -1
     }
   }

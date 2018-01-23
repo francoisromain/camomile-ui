@@ -24,7 +24,7 @@ export default {
     spinner
   },
 
-  data () {
+  data() {
     return {
       player: null,
       videoNew: false
@@ -32,38 +32,44 @@ export default {
   },
 
   computed: {
-    media () {
+    media() {
       const medias = this.$store.state.cml.medias
-      return medias.lists[this.uid] && medias.lists[this.uid].find(m => m.id === medias.actives[this.uid]) || {}
+      return (
+        (medias.lists[this.uid] &&
+          medias.lists[this.uid].find(
+            m => m.id === medias.actives[this.uid]
+          )) ||
+        {}
+      )
     },
-    properties () {
+    properties() {
       return this.$store.state.cml.medias.properties[this.uid] || {}
     },
-    isPlaying () {
+    isPlaying() {
       return this.properties.isPlaying || false
     },
-    isLoaded () {
+    isLoaded() {
       return this.properties.isLoaded || false
     },
-    seek () {
+    seek() {
       return this.properties.seek || {}
     },
-    timeCurrent () {
+    timeCurrent() {
       return this.properties.timeCurrent || 0
     },
-    viewportWidth () {
+    viewportWidth() {
       return this.$store.state.cml.viewport.width || 0
     }
   },
 
-  mounted () {
+  mounted() {
     if (this.media.url) {
       this.playerLoad(this.media.url)
     }
   },
 
   methods: {
-    videoLoad (mediaUrl) {
+    videoLoad(mediaUrl) {
       if (this.player) {
         const videoId = this.parseYouTubeId(mediaUrl)
         this.player.loadVideoById(videoId)
@@ -72,15 +78,21 @@ export default {
       }
     },
 
-    playerLoad (mediaUrl) {
+    playerLoad(mediaUrl) {
       const videoId = this.parseYouTubeId(mediaUrl)
       const width = this.$refs.container.offsetWidth
       const height = width * 9 / 16
       const events = {
         onReady: event => {
           // console.log('onReady', event)
-          this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
-          this.$store.commit('cml/medias/timeTotal', { time: this.player.getDuration() * 1000, uid: this.uid })
+          this.$store.commit('cml/medias/loaded', {
+            isLoaded: true,
+            uid: this.uid
+          })
+          this.$store.commit('cml/medias/timeTotal', {
+            time: this.player.getDuration() * 1000,
+            uid: this.uid
+          })
         },
         onStateChange: event => {
           // console.log('onStateChange', event.data, this.videoNew)
@@ -90,8 +102,14 @@ export default {
             // playing
             if (this.videoNew) {
               this.videoNew = false
-              this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
-              this.$store.commit('cml/medias/timeTotal', { time: this.player.getDuration() * 1000, uid: this.uid })
+              this.$store.commit('cml/medias/loaded', {
+                isLoaded: true,
+                uid: this.uid
+              })
+              this.$store.commit('cml/medias/timeTotal', {
+                time: this.player.getDuration() * 1000,
+                uid: this.uid
+              })
               this.player.pauseVideo()
             } else {
               this.$store.dispatch('cml/medias/play', this.uid)
@@ -107,8 +125,14 @@ export default {
             this.$store.dispatch('cml/medias/stop', this.uid)
           } else if (event.data === 5) {
             // cued
-            this.$store.commit('cml/medias/loaded', { isLoaded: true, uid: this.uid })
-            this.$store.commit('cml/medias/timeTotal', { time: this.player.getDuration() * 1000, uid: this.uid })
+            this.$store.commit('cml/medias/loaded', {
+              isLoaded: true,
+              uid: this.uid
+            })
+            this.$store.commit('cml/medias/timeTotal', {
+              time: this.player.getDuration() * 1000,
+              uid: this.uid
+            })
           }
         },
         onApiChange: event => {
@@ -146,17 +170,20 @@ export default {
         })
       }
     },
-    videoSeek (serverRequest) {
+    videoSeek(serverRequest) {
       this.player.seekTo(this.timeCurrent / 1000, serverRequest)
-      this.$store.commit('cml/medias/seek', { options: { seekign: false }, uid: this.uid })
+      this.$store.commit('cml/medias/seek', {
+        options: { seekign: false },
+        uid: this.uid
+      })
     },
-    parseYouTubeId (url) {
+    parseYouTubeId(url) {
       var regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
       return url.match(regex) ? RegExp.$2 : url
     }
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     if (this.player !== null && this.player.destroy) {
       this.player.destroy()
     }
@@ -165,29 +192,28 @@ export default {
   },
 
   watch: {
-    isPlaying (val) {
+    isPlaying(val) {
       if (val) {
         this.player.playVideo()
       } else {
         this.player.pauseVideo()
       }
     },
-    seek (options) {
+    seek(options) {
       if (options.seeking) {
         this.videoSeek(options.serverRequest)
       }
     },
-    viewportWidth () {
+    viewportWidth() {
       const width = this.$refs.container.offsetWidth
       const height = width * 9 / 16
       this.player.setSize(width, height)
     },
-    media (media, mediaOld) {
+    media(media, mediaOld) {
       if (media.url && media.url !== mediaOld.url) {
         this.videoLoad(media.url)
       }
     }
   }
 }
-
 </script>

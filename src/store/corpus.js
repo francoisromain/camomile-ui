@@ -7,7 +7,7 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch, rootState, rootGetters }, { element }) {
+  add({ commit, dispatch, rootState, rootGetters }, { element }) {
     dispatch('cml/sync/start', `corpusAdd`, { root: true })
     return api
       .createCorpus(element.name, element.description, {})
@@ -37,7 +37,7 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch, state }, { id }) {
+  remove({ commit, dispatch, state }, { id }) {
     dispatch('cml/sync/start', `corpusRemove`, { root: true })
     return api
       .deleteCorpus(id)
@@ -57,7 +57,7 @@ export const actions = {
       })
   },
 
-  update ({ commit, dispatch, state }, { element }) {
+  update({ commit, dispatch, state }, { element }) {
     dispatch('cml/sync/start', `corpusUpdate`, { root: true })
     return api
       .updateCorpus(element.id, {
@@ -82,7 +82,7 @@ export const actions = {
       })
   },
 
-  groupPermissionSet (
+  groupPermissionSet(
     { commit, dispatch, rootGetters },
     { id, groupId, permission }
   ) {
@@ -126,7 +126,7 @@ export const actions = {
       })
   },
 
-  groupPermissionRemove ({ commit, dispatch, rootGetters }, { id, groupId }) {
+  groupPermissionRemove({ commit, dispatch, rootGetters }, { id, groupId }) {
     dispatch('cml/sync/start', `corpusGroupPermissionRemove`, {
       root: true
     })
@@ -162,7 +162,7 @@ export const actions = {
       })
   },
 
-  userPermissionSet (
+  userPermissionSet(
     { commit, dispatch, rootGetters },
     { id, userId, permission }
   ) {
@@ -203,7 +203,7 @@ export const actions = {
       })
   },
 
-  userPermissionRemove ({ commit, dispatch, rootGetters }, { id, userId }) {
+  userPermissionRemove({ commit, dispatch, rootGetters }, { id, userId }) {
     dispatch('cml/sync/start', `corpusUserPermissionRemove`, {
       root: true
     })
@@ -239,13 +239,13 @@ export const actions = {
       })
   },
 
-  listAll ({ state, dispatch }) {
+  listAll({ state, dispatch }) {
     Object.keys(state.lists).forEach(uid => {
       dispatch('list', uid)
     })
   },
 
-  list ({ commit, dispatch, rootGetters }, uid) {
+  list({ commit, dispatch, rootGetters }, uid) {
     dispatch('cml/sync/start', `corpusList-${uid}`, { root: true })
     return api
       .getCorpora()
@@ -278,7 +278,7 @@ export const actions = {
       })
   },
 
-  setAll ({ state, dispatch }, { id }) {
+  setAll({ state, dispatch }, { id }) {
     Object.keys(state.actives).forEach(uid => {
       if (state.actives[uid] === id) {
         dispatch('set', { uid })
@@ -286,7 +286,7 @@ export const actions = {
     })
   },
 
-  set ({ state, getters, dispatch, commit }, { id, uid }) {
+  set({ state, getters, dispatch, commit }, { id, uid }) {
     commit('set', { id: id || getters.id(uid), uid })
     commit('cml/medias/init', uid, { root: true })
     commit('cml/layers/init', uid, { root: true })
@@ -304,7 +304,7 @@ export const actions = {
     }
   },
 
-  register ({ state, commit }, uid) {
+  register({ state, commit }, uid) {
     commit('init', uid)
   }
 }
@@ -319,24 +319,24 @@ export const getters = {
 }
 
 export const mutations = {
-  init (state, uid) {
+  init(state, uid) {
     Vue.set(state.lists, uid, [])
     Vue.set(state.actives, uid, null)
   },
 
-  resetAll (state) {
+  resetAll(state) {
     Vue.set(state, 'lists', {})
     Vue.set(state, 'actives', {})
   },
 
-  add (state, { corpu }) {
+  add(state, { corpu }) {
     Object.keys(state.lists).forEach(uid => {
       const index = state.lists[uid].length
       Vue.set(state.lists[uid], index, corpu)
     })
   },
 
-  update (state, { corpu }) {
+  update(state, { corpu }) {
     Object.keys(state.lists).forEach(uid => {
       const index = state.lists[uid].findIndex(m => m.id === corpu.id)
       if (index !== -1) {
@@ -345,7 +345,7 @@ export const mutations = {
     })
   },
 
-  remove (state, { id }) {
+  remove(state, { id }) {
     Object.keys(state.lists).forEach(uid => {
       const index = state.lists[uid].findIndex(c => c.id === id)
       if (index !== -1) {
@@ -354,7 +354,7 @@ export const mutations = {
     })
   },
 
-  groupAdd (state, groupId) {
+  groupAdd(state, groupId) {
     Object.keys(state.lists).forEach(uid => {
       state.lists[uid].forEach(c => {
         Vue.set(c.permissions.groups, groupId, 0)
@@ -362,7 +362,7 @@ export const mutations = {
     })
   },
 
-  groupRemove (state, groupId) {
+  groupRemove(state, groupId) {
     Object.keys(state.lists).forEach(uid => {
       state.lists[uid].forEach(c => {
         Vue.delete(c.permissions.groups, groupId)
@@ -370,7 +370,7 @@ export const mutations = {
     })
   },
 
-  userAdd (state, userId) {
+  userAdd(state, userId) {
     Object.keys(state.lists).forEach(uid => {
       state.lists[uid].forEach(c => {
         Vue.set(c.permissions.users, userId, 0)
@@ -378,7 +378,7 @@ export const mutations = {
     })
   },
 
-  userRemove (state, userId) {
+  userRemove(state, userId) {
     Object.keys(state.lists).forEach(uid => {
       state.lists[uid].forEach(c => {
         Vue.delete(c.permissions.users, userId)
@@ -386,7 +386,7 @@ export const mutations = {
     })
   },
 
-  groupPermissionsUpdate (state, { id, groupId, permission }) {
+  groupPermissionsUpdate(state, { id, groupId, permission }) {
     Object.keys(state.lists).forEach(uid => {
       const index = state.lists[uid].findIndex(m => m.id === id)
       if (index !== -1) {
@@ -395,7 +395,7 @@ export const mutations = {
     })
   },
 
-  userPermissionsUpdate (state, { id, userId, permission }) {
+  userPermissionsUpdate(state, { id, userId, permission }) {
     Object.keys(state.lists).forEach(uid => {
       const index = state.lists[uid].findIndex(m => m.id === id)
       if (index !== -1) {
@@ -404,11 +404,11 @@ export const mutations = {
     })
   },
 
-  list (state, { corpus, uid }) {
+  list(state, { corpus, uid }) {
     Vue.set(state.lists, uid, corpus)
   },
 
-  set (state, { id, uid }) {
+  set(state, { id, uid }) {
     Vue.set(state.actives, uid, id)
   }
 }

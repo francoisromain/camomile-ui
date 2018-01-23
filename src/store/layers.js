@@ -7,7 +7,7 @@ export const state = {
 }
 
 export const actions = {
-  add ({ state, commit, dispatch, rootState, rootGetters }, { element }) {
+  add({ state, commit, dispatch, rootState, rootGetters }, { element }) {
     dispatch('cml/sync/start', `layersAdd`, { root: true })
     return api
       .createLayer(
@@ -52,7 +52,7 @@ export const actions = {
       })
   },
 
-  remove ({ state, commit, dispatch, rootState }, { id }) {
+  remove({ state, commit, dispatch, rootState }, { id }) {
     dispatch('cml/sync/start', `layersRemove`, { root: true })
     return api
       .deleteLayer(id)
@@ -73,7 +73,7 @@ export const actions = {
       })
   },
 
-  update ({ state, commit, dispatch, rootGetters }, { element }) {
+  update({ state, commit, dispatch, rootGetters }, { element }) {
     dispatch('cml/sync/start', `layersUpdate`, { root: true })
     return api
       .updateLayer(element.id, {
@@ -106,7 +106,7 @@ export const actions = {
       })
   },
 
-  groupPermissionSet (
+  groupPermissionSet(
     { commit, dispatch, rootState, rootGetters },
     { id, groupId, permission }
   ) {
@@ -149,7 +149,7 @@ export const actions = {
       })
   },
 
-  groupPermissionRemove (
+  groupPermissionRemove(
     { commit, dispatch, rootState, rootGetters },
     { id, groupId }
   ) {
@@ -188,7 +188,7 @@ export const actions = {
       })
   },
 
-  userPermissionSet (
+  userPermissionSet(
     { commit, dispatch, rootState, rootGetters },
     { id, userId, permission }
   ) {
@@ -229,7 +229,7 @@ export const actions = {
       })
   },
 
-  userPermissionRemove (
+  userPermissionRemove(
     { commit, dispatch, rootState, rootGetters },
     { id, userId }
   ) {
@@ -268,13 +268,13 @@ export const actions = {
       })
   },
 
-  listAll ({ state, dispatch, rootState }) {
+  listAll({ state, dispatch, rootState }) {
     Object.keys(state.lists).forEach(uid => {
       dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid })
     })
   },
 
-  list ({ dispatch, commit, rootGetters }, { corpuId, uid }) {
+  list({ dispatch, commit, rootGetters }, { corpuId, uid }) {
     dispatch('cml/sync/start', `layersList-${uid}`, { root: true })
     return api
       .getLayers({ filter: { id_corpus: corpuId } })
@@ -310,41 +310,41 @@ export const actions = {
       })
   },
 
-  setAll ({ state, dispatch, commit }, { uid }) {
+  setAll({ state, dispatch, commit }, { uid }) {
     commit('cml/annotations/init', { uid }, { root: true })
     state.lists[uid].forEach(l => {
       dispatch('set', { id: l.id, uid })
     })
   },
 
-  set ({ dispatch, commit }, { id, uid }) {
+  set({ dispatch, commit }, { id, uid }) {
     commit('set', { id, uid })
     dispatch('cml/annotations/list', { layerId: id, uid }, { root: true })
   },
 
-  unset ({ dispatch, commit }, { id, uid }) {
+  unset({ dispatch, commit }, { id, uid }) {
     commit('unset', { id, uid })
     commit('cml/annotations/reset', { layerId: id, uid }, { root: true })
   }
 }
 
 export const mutations = {
-  init (state, uid) {
+  init(state, uid) {
     Vue.set(state.lists, uid, [])
     Vue.set(state.actives, uid, [])
   },
 
-  resetAll (state) {
+  resetAll(state) {
     Vue.set(state, 'lists', {})
     Vue.set(state, 'actives', {})
   },
 
-  add (state, { layer, uid }) {
+  add(state, { layer, uid }) {
     const index = state.lists[uid].length
     Vue.set(state.lists[uid], index, layer)
   },
 
-  remove (state, { id, uid }) {
+  remove(state, { id, uid }) {
     const listIndex = state.lists[uid].findIndex(e => e.id === id)
     if (listIndex !== -1) {
       Vue.delete(state.lists[uid], listIndex)
@@ -356,12 +356,12 @@ export const mutations = {
     }
   },
 
-  update (state, { layer, uid }) {
+  update(state, { layer, uid }) {
     const index = state.lists[uid].findIndex(l => l.id === layer.id)
     Vue.set(state.lists[uid], index, layer)
   },
 
-  groupAdd (state, groupId) {
+  groupAdd(state, groupId) {
     Object.keys(state.lists).forEach(uid => {
       state.lists[uid].forEach(e => {
         Vue.set(e.permissions.groups, groupId, 0)
@@ -369,7 +369,7 @@ export const mutations = {
     })
   },
 
-  groupRemove (state, groupId) {
+  groupRemove(state, groupId) {
     Object.keys(state.lists).forEach(uid => {
       state.lists[uid].forEach(e => {
         Vue.delete(e.permissions.groups, groupId)
@@ -377,7 +377,7 @@ export const mutations = {
     })
   },
 
-  userAdd (state, userId) {
+  userAdd(state, userId) {
     Object.keys(state.lists).forEach(uid => {
       state.lists[uid].forEach(e => {
         Vue.set(e.permissions.users, userId, 0)
@@ -385,7 +385,7 @@ export const mutations = {
     })
   },
 
-  userRemove (state, userId) {
+  userRemove(state, userId) {
     Object.keys(state.lists).forEach(uid => {
       state.lists[uid].forEach(e => {
         Vue.delete(e.permissions.users, userId)
@@ -393,7 +393,7 @@ export const mutations = {
     })
   },
 
-  groupPermissionsUpdate (state, { id, groupId, permission }) {
+  groupPermissionsUpdate(state, { id, groupId, permission }) {
     Object.keys(state.lists).forEach(uid => {
       const index = state.lists[uid].findIndex(e => e.id === id)
       if (index !== -1) {
@@ -402,7 +402,7 @@ export const mutations = {
     })
   },
 
-  userPermissionsUpdate (state, { id, userId, permission }) {
+  userPermissionsUpdate(state, { id, userId, permission }) {
     Object.keys(state.lists).forEach(uid => {
       const index = state.lists[uid].findIndex(e => e.id === id)
       if (index !== -1) {
@@ -411,11 +411,11 @@ export const mutations = {
     })
   },
 
-  list (state, { layers, uid }) {
+  list(state, { layers, uid }) {
     Vue.set(state.lists, uid, layers)
   },
 
-  set (state, { id, uid }) {
+  set(state, { id, uid }) {
     if (!state.actives[uid]) {
       Vue.set(state.actives, uid, [id])
     } else {
@@ -423,7 +423,7 @@ export const mutations = {
     }
   },
 
-  unset (state, { id, uid }) {
+  unset(state, { id, uid }) {
     const index = state.actives[uid].indexOf(id)
     Vue.delete(state.actives[uid], index)
   }

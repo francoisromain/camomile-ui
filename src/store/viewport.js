@@ -13,7 +13,7 @@ export const state = {
 }
 
 export const actions = {
-  set ({ state, commit }) {
+  set({ state, commit }) {
     const width = window.innerWidth
     const height = window.innerHeight
     let name
@@ -40,7 +40,7 @@ export const actions = {
 }
 
 export const mutations = {
-  set (state, { animate, name, width, height }) {
+  set(state, { animate, name, width, height }) {
     state.name = name
     state.animate = animate
     state.width = width

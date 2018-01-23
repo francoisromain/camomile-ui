@@ -111,7 +111,7 @@
     "postcss-url": "^7.3.0",
     "progress-bar-webpack-plugin": "^1.10.0",
     "rimraf": "^2.6.2",
-    "rollup": "^0.54.1",
+    "rollup": "^0.55.0",
     "rollup-plugin-buble": "^0.18.0",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-json": "^2.3.0",

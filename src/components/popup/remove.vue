@@ -40,20 +40,20 @@ export default {
   },
 
   methods: {
-    remove () {
+    remove() {
       this.$store.dispatch(`cml/${this.type}/remove`, { id: this.element.id })
       this.$store.commit(`cml/popup/close`)
     },
-    keyup (e) {
+    keyup(e) {
       if ((e.which || e.keyCode) === 13) {
         this.remove()
       }
     }
   },
-  created () {
+  created() {
     document.addEventListener('keyup', this.keyup)
   },
-  beforeDestroy () {
+  beforeDestroy() {
     document.removeEventListener('keyup', this.keyup)
   }
 }

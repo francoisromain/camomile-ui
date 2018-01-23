@@ -19,19 +19,26 @@ export default {
 
   computed: {
     fields: {
-      get () {
-        return JSON.stringify(this.$store.state.cml.popup.element[this.name], undefined, 2)
+      get() {
+        return JSON.stringify(
+          this.$store.state.cml.popup.element[this.name],
+          undefined,
+          2
+        )
       },
-      set (value) {
+      set(value) {
         if (this.jsonCheck(value)) {
-          this.$store.commit('cml/popup/fieldUpdate', { name: this.name, value: JSON.parse(value) })
+          this.$store.commit('cml/popup/fieldUpdate', {
+            name: this.name,
+            value: JSON.parse(value)
+          })
         }
       }
     }
   },
 
   methods: {
-    jsonCheck (str) {
+    jsonCheck(str) {
       try {
         JSON.parse(str)
       } catch (e) {
@@ -39,13 +46,13 @@ export default {
       }
       return true
     },
-    resize (e) {
+    resize(e) {
       const el = e.target
       el.style.height = `${el.scrollHeight}px`
     }
   },
 
-  mounted () {
+  mounted() {
     const el = this.$refs.field
     el.style.height = `${el.scrollHeight}px`
   }

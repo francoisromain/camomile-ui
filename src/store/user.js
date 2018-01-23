@@ -12,7 +12,7 @@ export const state = {
 }
 
 export const actions = {
-  login ({ commit, dispatch }, config) {
+  login({ commit, dispatch }, config) {
     dispatch('cml/sync/start', 'userLogin', { root: true })
     return api
       .login(config.user.name, config.user.password)
@@ -32,7 +32,7 @@ export const actions = {
       })
   },
 
-  set ({ commit, dispatch }) {
+  set({ commit, dispatch }) {
     dispatch('cml/sync/start', 'userSet', { root: true })
     return api
       .me()
@@ -59,7 +59,7 @@ export const actions = {
       })
   },
 
-  logout ({ state, commit, dispatch }) {
+  logout({ state, commit, dispatch }) {
     dispatch('cml/sync/start', 'userLogout', { root: true })
     return api
       .logout()
@@ -128,7 +128,7 @@ export const getters = {
 }
 
 export const mutations = {
-  set (state, user) {
+  set(state, user) {
     state.isLogged = true
     state.isAdmin = user.role === 'admin'
     state.isRoot = user.name === 'root'
@@ -139,7 +139,7 @@ export const mutations = {
     state.groupIds = user.groupIds
   },
 
-  reset (state) {
+  reset(state) {
     state.isLogged = false
     state.isAdmin = false
     state.isRoot = false
@@ -150,11 +150,11 @@ export const mutations = {
     state.groupIds = []
   },
 
-  groupAdd (state, groupId) {
+  groupAdd(state, groupId) {
     state.groupIds.push(groupId)
   },
 
-  groupRemove (state, groupId) {
+  groupRemove(state, groupId) {
     state.groupIds = state.groupIds.filter(id => id !== groupId)
   }
 }

@@ -7,7 +7,7 @@ export const state = {
 }
 
 export const actions = {
-  add ({ commit, dispatch }, { element }) {
+  add({ commit, dispatch }, { element }) {
     dispatch('cml/sync/start', 'usersAdd', { root: true })
     return api
       .createUser(
@@ -34,7 +34,7 @@ export const actions = {
       })
   },
 
-  update ({ commit, dispatch, rootState }, { element }) {
+  update({ commit, dispatch, rootState }, { element }) {
     dispatch('cml/sync/start', 'usersUpdate', { root: true })
     return api
       .updateUser(element.id, {
@@ -61,7 +61,7 @@ export const actions = {
       })
   },
 
-  remove ({ commit, dispatch }, { id }) {
+  remove({ commit, dispatch }, { id }) {
     dispatch('cml/sync/start', 'usersRemove', { root: true })
     return api
       .deleteUser(id)
@@ -82,7 +82,7 @@ export const actions = {
       })
   },
 
-  list ({ commit, dispatch }) {
+  list({ commit, dispatch }) {
     dispatch('cml/sync/start', 'usersList', { root: true })
     return api
       .getUsers()
@@ -116,25 +116,25 @@ export const getters = {
 }
 
 export const mutations = {
-  reset (state) {
+  reset(state) {
     Vue.set(state, 'list', [])
   },
 
-  add (state, user) {
+  add(state, user) {
     state.list.push(user)
   },
 
-  update (state, user) {
+  update(state, user) {
     const index = state.list.findIndex(u => u.id === user.id)
     Vue.set(state.list, index, user)
   },
 
-  remove (state, userId) {
+  remove(state, userId) {
     const index = state.list.findIndex(u => u.id === userId)
     Vue.delete(state.list, index)
   },
 
-  list (state, users) {
+  list(state, users) {
     Vue.set(state, 'list', users)
   }
 }

@@ -8,7 +8,7 @@ import popupLogin from './popup/login.vue'
 export default {
   name: 'camomile-login',
 
-  created () {
+  created() {
     this.$store.commit('cml/popup/open', {
       config: {
         title: 'Login',

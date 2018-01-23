@@ -15,7 +15,7 @@ export default {
     })
   },
   methods: {
-    dropdownToggle () {
+    dropdownToggle() {
       if (this.visible) {
         this.$store.commit('cml/dropdown/close')
       } else {
@@ -27,6 +27,3 @@ export default {
   }
 }
 </script>
-
-
-

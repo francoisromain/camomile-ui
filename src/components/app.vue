@@ -28,7 +28,6 @@ import cmlMessages from './utils/messages.vue'
 import cmlHeader from './header/index.vue'
 import cmlLogin from './login.vue'
 
-
 export default {
   store,
 
@@ -47,9 +46,9 @@ export default {
     ...mapState({
       isLogged: state => state.cml.user.isLogged,
       popup: state => state.cml.popup,
-      media: state => state.cml.medias.list.find(m => m.id === state.cml.medias.id)
+      media: state =>
+        state.cml.medias.list.find(m => m.id === state.cml.medias.id)
     })
   }
 }
 </script>
-
