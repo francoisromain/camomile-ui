@@ -23,12 +23,14 @@ export const actions = {
       .then(r => {
         dispatch('cml/sync/stop', `mediasAdd`, { root: true })
         const media = mediaFormat(r.data)
-        Object.keys(state.lists).forEach(uid => {
-          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
-            commit('add', { media, uid })
-            if (!state.actives[uid]) {
-              commit('set', { id: media.id, uid })
-            }
+        Object.keys(state.lists).forEach(corpuUid => {
+          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            commit('add', { media, corpuUid })
+            Object.keys(state.actives).forEach(uid => {
+              if (state.actives[uid].corpuUid === corpuUid) {
+                commit('set', { id: media.id, corpuUid, uid })
+              }
+            })
           }
         })
         dispatch('cml/messages/success', 'Medium added', { root: true })
@@ -49,11 +51,14 @@ export const actions = {
       .deleteMedium(id)
       .then(r => {
         dispatch('cml/sync/stop', `mediasRemove`, { root: true })
-        Object.keys(state.lists).forEach(uid => {
-          commit('remove', { id, uid })
+        Object.keys(state.lists).forEach(corpuUid => {
+          const listIndex = state.lists[corpuUid].findIndex(m => m.id === id)
+          if (listIndex !== -1) {
+            commit('remove', { listIndex, corpuUid })
+          }
         })
+        dispatch('unsetAll', { id })
         dispatch('cml/messages/success', 'Medium removed', { root: true })
-        dispatch('setAll', { id })
 
         return id
       })
@@ -79,10 +84,9 @@ export const actions = {
         media.name = r.data.name
         media.url = r.data.url
         media.description = r.data.description || {}
-        Object.keys(state.lists).forEach(uid => {
-          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
-            console.log('media-update', uid, media)
-            commit('update', { media, uid })
+        Object.keys(state.lists).forEach(corpuUid => {
+          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            commit('update', { media, corpuUid })
           }
         })
         dispatch('cml/messages/success', 'Medium updated', { root: true })
@@ -97,74 +101,91 @@ export const actions = {
       })
   },
 
-  list({ dispatch, commit }, { corpuId, uid }) {
-    dispatch('cml/sync/start', `mediasList-${uid}`, { root: true })
+  list({ dispatch, commit }, { corpuId, corpuUid }) {
+    dispatch('cml/sync/start', `mediasList-${corpuUid}`, { root: true })
     return api
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(r => {
-        dispatch('cml/sync/stop', `mediasList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasList-${corpuUid}`, { root: true })
         const medias = r.data.map(media => {
           return mediaFormat(media)
         })
-        commit('list', { medias, uid })
-        dispatch('set', { uid })
+        commit('list', { medias, corpuUid })
+
+        Object.keys(state.actives).forEach(uid => {
+          dispatch('set', { corpuUid, uid })
+        })
 
         return medias
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `mediasList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `mediasList-${corpuUid}`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
   },
 
-  setAll({ state, dispatch }, { id }) {
-    Object.keys(state.actives).forEach(uid => {
-      if (state.actives[uid] === id) {
-        dispatch('set', { uid })
-      }
+  register({ state, commit }, uid) {
+    commit('register', uid)
+  },
 
-      dispatch('cml/annotations/listAll', { uid }, { root: true })
+  unsetAll({ state, dispatch }, { id }) {
+    Object.keys(state.actives).forEach(uid => {
+      if (state.actives[uid].id === id) {
+        dispatch('set', { corpuUid: state.actives[uid].corpuUid, uid })
+      }
     })
   },
 
-  set({ state, getters, dispatch, commit }, { id, uid }) {
+  set({ state, getters, dispatch, commit }, { id, corpuUid, uid }) {
     if (state.properties[uid] && state.properties[uid].isPlaying) {
-      dispatch('pause', uid)
+      dispatch('pause', { uid })
     }
-    commit('set', { id: id || getters.id(uid), uid })
+    commit('set', { id: id || getters.id({ corpuUid, uid }), corpuUid, uid })
+    dispatch(
+      'cml/annotations/mediaSet',
+      {
+        mediaId: state.actives[uid].id,
+        mediaUid: uid
+      },
+      { root: true }
+    )
   },
 
-  play({ state, commit }, uid) {
+  play({ state, commit }, { uid }) {
     const timeStart = Date.now()
     const timeCurrent = state.properties[uid].timeCurrent
-    interval = setInterval(() => {
+    state.properties[uid].interval = setInterval(() => {
       var timeEllapsed = Date.now() - timeStart
       // commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid })
       Vue.set(state.properties[uid], 'timeCurrent', timeCurrent + timeEllapsed)
     }, 0)
-    commit('play', uid)
+    commit('play', { uid })
   },
 
-  pause({ commit }, uid) {
-    clearInterval(interval)
-    commit('pause', uid)
+  pause({ state, commit }, { uid }) {
+    clearInterval(state.properties[uid].interval)
+    commit('pause', { uid })
   },
 
-  buffering({ commit }, uid) {
-    clearInterval(interval)
+  buffering({ state, commit }, { uid }) {
+    clearInterval(state.properties[uid].interval)
   },
 
-  stop({ commit, dispatch }, uid) {
-    clearInterval(interval)
-    commit('pause', uid)
-    dispatch('seek', { options: { ratio: 0, serverRequest: true }, uid })
+  stop({ state, commit, dispatch }, { uid }) {
+    clearInterval(state.properties[uid].interval)
+    commit('pause', { uid })
+    dispatch('seek', {
+      ratio: 0,
+      serverRequest: true,
+      uid
+    })
   },
 
   seek({ state, commit, dispatch }, { ratio, serverRequest, uid }) {
     if (state.properties[uid].isPlaying) {
-      clearInterval(interval)
+      clearInterval(state.properties[uid].interval)
     }
     // commit('timeCurrent', {
     //   time: ratio * state.properties[uid].timeTotal,
@@ -181,19 +202,18 @@ export const actions = {
 }
 
 export const getters = {
-  id: state => uid =>
+  id: state => ({ corpuUid, uid }) =>
     (state.actives[uid] &&
-      state.lists[uid].map(c => c.id).indexOf(state.actives[uid]) !== -1 &&
-      state.actives[uid]) ||
-    (state.lists[uid][0] && state.lists[uid][0].id) ||
+      state.lists[corpuUid].find(c => c.id === state.actives[uid].id) &&
+      state.actives[uid].id) ||
+    (state.lists[corpuUid][0] && state.lists[corpuUid][0].id) ||
     null
 }
 
 export const mutations = {
-  init(state, uid) {
-    Vue.set(state.lists, uid, [])
+  register(state, uid) {
     Vue.set(state.actives, uid, null)
-    Vue.set(state.properties, uid, {})
+    Vue.set(state.properties, uid, null)
   },
 
   resetAll(state) {
@@ -202,29 +222,26 @@ export const mutations = {
     Vue.set(state, 'properties', {})
   },
 
-  add(state, { media, uid }) {
-    const index = state.lists[uid].length
-    Vue.set(state.lists[uid], index, media)
+  add(state, { media, corpuUid }) {
+    const index = state.lists[corpuUid].length
+    Vue.set(state.lists[corpuUid], index, media)
   },
 
-  update(state, { media, uid }) {
-    const index = state.lists[uid].findIndex(m => m.id === media.id)
-    Vue.set(state.lists[uid], index, media)
+  update(state, { media, corpuUid }) {
+    const index = state.lists[corpuUid].findIndex(m => m.id === media.id)
+    Vue.set(state.lists[corpuUid], index, media)
   },
 
-  remove(state, { id, uid }) {
-    const listIndex = state.lists[uid].findIndex(m => m.id === id)
-    if (listIndex !== -1) {
-      Vue.delete(state.lists[uid], listIndex)
-    }
+  remove(state, { listIndex, corpuUid }) {
+    Vue.delete(state.lists[corpuUid], listIndex)
   },
 
-  list(state, { medias, uid }) {
-    Vue.set(state.lists, uid, medias)
+  list(state, { medias, corpuUid }) {
+    Vue.set(state.lists, corpuUid, medias)
   },
 
-  set(state, { id, uid }) {
-    Vue.set(state.actives, uid, id)
+  set(state, { id, corpuUid, uid }) {
+    Vue.set(state.actives, uid, { corpuUid, id })
     Vue.set(state.properties, uid, {
       timeTotal: 0,
       timeCurrent: 0,
@@ -238,11 +255,11 @@ export const mutations = {
     Vue.set(state.properties[uid], 'isLoaded', isLoaded)
   },
 
-  play(state, uid) {
+  play(state, { uid }) {
     Vue.set(state.properties[uid], 'isPlaying', true)
   },
 
-  pause(state, uid) {
+  pause(state, { uid }) {
     Vue.set(state.properties[uid], 'isPlaying', false)
   },
 

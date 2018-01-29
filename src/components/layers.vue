@@ -35,6 +35,10 @@ export default {
     uid: {
       type: String,
       default: 'default'
+    },
+    corpusUid: {
+      type: String,
+      default: 'default'
     }
   },
 
@@ -63,28 +67,33 @@ export default {
         closeBtn: true,
         title: 'Layer permissions',
         component: popupPermissions,
-        uid: this.uid
+        uid: this.corpusUid
       }
     }
   },
 
   computed: {
     layers() {
-      return this.$store.state.cml.layers.lists[this.uid]
+      return this.$store.state.cml.layers.lists[this.corpusUid]
     },
     actives() {
-      return this.$store.state.cml.layers.actives[this.uid]
+      return (
+        (this.$store.state.cml.layers.actives[this.uid] &&
+          this.$store.state.cml.layers.actives[this.uid].ids) ||
+        []
+      )
     },
     corpus() {
-      return this.$store.state.cml.corpus.lists[this.uid]
+      return this.$store.state.cml.corpus.lists[this.corpusUid]
     },
     corpuId() {
-      return this.$store.state.cml.corpus.actives[this.uid]
+      return this.$store.state.cml.corpus.actives[this.corpusUid]
     },
     permission() {
       const corpus = this.$store.state.cml.corpus.lists
       const corpu =
-        corpus[this.uid] && corpus[this.uid].find(c => c.id === this.corpuId)
+        corpus[this.corpusUid] &&
+        corpus[this.corpusUid].find(c => c.id === this.corpuId)
       return corpu ? corpu.permission : 0
     }
   },
@@ -106,6 +115,13 @@ export default {
         })
       }
     }
+  },
+
+  created() {
+    this.$store.dispatch('cml/layers/register', {
+      uid: this.uid,
+      corpuUid: this.corpusUid
+    })
   }
 }
 </script>

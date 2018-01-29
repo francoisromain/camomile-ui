@@ -121,7 +121,7 @@ const annotations = [
 ]
 
 const api = {
-  login (username, password) {
+  login(username, password) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (username && password) {
@@ -137,7 +137,7 @@ const api = {
     })
   },
 
-  me () {
+  me() {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (user) {
@@ -149,7 +149,7 @@ const api = {
     })
   },
 
-  logout () {
+  logout() {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (user) {
@@ -162,7 +162,7 @@ const api = {
     })
   },
 
-  createUser (name, password, description, role) {
+  createUser(name, password, description, role) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (name && password) {
@@ -181,7 +181,7 @@ const api = {
     })
   },
 
-  deleteUser (userId) {
+  deleteUser(userId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (users.find(u => u._id === userId)) {
@@ -193,7 +193,7 @@ const api = {
     })
   },
 
-  updateUser (id, { password, description, role }) {
+  updateUser(id, { password, description, role }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const user = users.find(u => u._id === id)
@@ -213,7 +213,7 @@ const api = {
     })
   },
 
-  getUsers () {
+  getUsers() {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         resolve({ data: users })
@@ -221,7 +221,7 @@ const api = {
     })
   },
 
-  createGroup (name, description) {
+  createGroup(name, description) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (name) {
@@ -240,7 +240,7 @@ const api = {
     })
   },
 
-  deleteGroup (groupId) {
+  deleteGroup(groupId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (groupId) {
@@ -252,7 +252,7 @@ const api = {
     })
   },
 
-  updateGroup (id, { description }) {
+  updateGroup(id, { description }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const group = groups.find(g => g._id === id)
@@ -272,7 +272,7 @@ const api = {
     })
   },
 
-  getGroups () {
+  getGroups() {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         resolve({ data: groups })
@@ -280,7 +280,7 @@ const api = {
     })
   },
 
-  addUserToGroup (userId, groupId) {
+  addUserToGroup(userId, groupId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const group = groups.find(g => g._id === groupId)
@@ -300,7 +300,7 @@ const api = {
     })
   },
 
-  removeUserFromGroup (userId, groupId) {
+  removeUserFromGroup(userId, groupId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const group = groups.find(g => g._id === groupId)
@@ -320,7 +320,7 @@ const api = {
     })
   },
 
-  createCorpus (name, description) {
+  createCorpus(name, description) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (name) {
@@ -338,7 +338,7 @@ const api = {
     })
   },
 
-  deleteCorpus (groupId) {
+  deleteCorpus(groupId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (groupId) {
@@ -350,7 +350,7 @@ const api = {
     })
   },
 
-  updateCorpus (id, { name, description }) {
+  updateCorpus(id, { name, description }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const corpu = corpus.find(c => c._id === id)
@@ -369,7 +369,7 @@ const api = {
     })
   },
 
-  getCorpora () {
+  getCorpora() {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         resolve({ data: corpus })
@@ -377,7 +377,7 @@ const api = {
     })
   },
 
-  setCorpusPermissionsForGroup (corpuId, groupId, permission) {
+  setCorpusPermissionsForGroup(corpuId, groupId, permission) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const corpu = corpus.find(c => c._id === corpuId)
@@ -392,7 +392,7 @@ const api = {
     })
   },
 
-  removeCorpusPermissionsForGroup (corpuId, groupId) {
+  removeCorpusPermissionsForGroup(corpuId, groupId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const corpu = corpus.find(c => c._id === corpuId)
@@ -412,7 +412,7 @@ const api = {
     })
   },
 
-  setCorpusPermissionsForUser (corpuId, userId, permission) {
+  setCorpusPermissionsForUser(corpuId, userId, permission) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const corpu = corpus.find(c => c._id === corpuId)
@@ -427,7 +427,7 @@ const api = {
     })
   },
 
-  removeCorpusPermissionsForUser (corpuId, userId) {
+  removeCorpusPermissionsForUser(corpuId, userId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const corpu = corpus.find(c => c._id === corpuId)
@@ -447,7 +447,7 @@ const api = {
     })
   },
 
-  createMedium (corpuId, name, url, description) {
+  createMedium(corpuId, name, url, description) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (name && corpuId) {
@@ -467,7 +467,7 @@ const api = {
     })
   },
 
-  deleteMedium (mediaId) {
+  deleteMedium(mediaId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (mediaId) {
@@ -479,7 +479,7 @@ const api = {
     })
   },
 
-  updateMedium (mediaId, { name, url, description }) {
+  updateMedium(mediaId, { name, url, description }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const media = medias.find(m => m._id === mediaId)
@@ -500,7 +500,7 @@ const api = {
     })
   },
 
-  getMedia () {
+  getMedia() {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         resolve({ data: medias })
@@ -508,7 +508,7 @@ const api = {
     })
   },
 
-  createLayer (
+  createLayer(
     corpuId,
     name,
     description,
@@ -537,7 +537,7 @@ const api = {
     })
   },
 
-  deleteLayer (layerId) {
+  deleteLayer(layerId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (layerId) {
@@ -549,7 +549,7 @@ const api = {
     })
   },
 
-  updateLayer (layerId, { name, fragment_type, data_type, description }) {
+  updateLayer(layerId, { name, fragment_type, data_type, description }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const layer = layers.find(l => l._id === layerId)
@@ -570,7 +570,7 @@ const api = {
     })
   },
 
-  getLayers () {
+  getLayers() {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         resolve({ data: layers })
@@ -578,7 +578,7 @@ const api = {
     })
   },
 
-  setLayerPermissionsForGroup (layerId, groupId, permission) {
+  setLayerPermissionsForGroup(layerId, groupId, permission) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const layer = layers.find(l => l._id === layerId)
@@ -593,7 +593,7 @@ const api = {
     })
   },
 
-  removeLayerPermissionsForGroup (layerId, groupId) {
+  removeLayerPermissionsForGroup(layerId, groupId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const layer = layers.find(c => c._id === layerId)
@@ -613,7 +613,7 @@ const api = {
     })
   },
 
-  setLayerPermissionsForUser (layerId, userId, permission) {
+  setLayerPermissionsForUser(layerId, userId, permission) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const layer = layers.find(c => c._id === layerId)
@@ -628,7 +628,7 @@ const api = {
     })
   },
 
-  removeLayerPermissionsForUser (layerId, userId) {
+  removeLayerPermissionsForUser(layerId, userId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const layer = layers.find(c => c._id === layerId)
@@ -648,7 +648,7 @@ const api = {
     })
   },
 
-  createAnnotation (layerId, mediaId, fragment, data) {
+  createAnnotation(layerId, mediaId, fragment, data) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (layerId) {
@@ -669,7 +669,7 @@ const api = {
     })
   },
 
-  deleteAnnotation (annotationId) {
+  deleteAnnotation(annotationId) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         if (annotationId) {
@@ -681,7 +681,7 @@ const api = {
     })
   },
 
-  updateAnnotation (annotationId, { fragment, data }) {
+  updateAnnotation(annotationId, { fragment, data }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
         const annotation = annotations.find(m => m._id === annotationId)
@@ -702,10 +702,14 @@ const api = {
     })
   },
 
-  getAnnotations ({ filter: { id_layer } }) {
+  getAnnotations({ filter: { id_layer, id_media } }) {
     return new Promise((resolve, reject) => {
       process.nextTick(() => {
-        resolve({ data: annotations })
+        if (id_layer) {
+          resolve({ data: annotations })
+        } else {
+          reject(new Error('Api'))
+        }
       })
     })
   }

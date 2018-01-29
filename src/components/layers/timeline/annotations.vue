@@ -4,8 +4,9 @@
       v-for="annotation in annotations"
       :key="annotation.id"
       :uid="uid"
+      :layers-uid="layersUid"
       :id="annotation.id"
-      :layer-id="layer.id"
+      :layer-id="layerId"
       :time-total="timeTotal"
       :container-width="width"
       :container-left="left"
@@ -24,14 +25,14 @@ export default {
   },
 
   props: {
-    uid: String,
-    layer: Object,
+    layersUid: String,
+    layerId: String,
     annotations: Array,
-    mediaId: String,
     timeTotal: Number,
     timeCurrent: Number,
     width: Number,
-    left: Number
+    left: Number,
+    uid: String
   },
 
   computed: {

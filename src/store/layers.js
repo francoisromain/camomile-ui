@@ -35,10 +35,15 @@ export const actions = {
         }
         layer.permissions.users[rootState.cml.user.id] = 3
 
-        Object.keys(state.lists).forEach(uid => {
-          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
-            commit('add', { layer, uid })
+        Object.keys(state.lists).forEach(corpuUid => {
+          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            commit('add', { layer, corpuUid })
           }
+          Object.keys(state.actives).forEach(uid => {
+            if (state.actives[uid].corpuUid === corpuUid) {
+              dispatch('set', { uid, id: layer.id })
+            }
+          })
         })
         dispatch('cml/messages/success', 'Layer added', { root: true })
 
@@ -58,8 +63,13 @@ export const actions = {
       .deleteLayer(id)
       .then(r => {
         dispatch('cml/sync/stop', `layersRemove`, { root: true })
-        Object.keys(state.lists).forEach(uid => {
-          commit('remove', { id, uid })
+        Object.keys(state.lists).forEach(corpuUid => {
+          commit('remove', { id, corpuUid })
+        })
+        Object.keys(state.actives).forEach(uid => {
+          if (state.actives[uid].ids.findIndex(l => l.id === id) !== -1) {
+            dispatch('unset', { id, uid })
+          }
         })
         dispatch('cml/messages/success', 'Layer removed', { root: true })
 
@@ -89,9 +99,9 @@ export const actions = {
         layer.fragmentType = r.data.fragment_type || {}
         layer.metadataType = r.data.data_type || {}
 
-        Object.keys(state.lists).forEach(uid => {
-          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
-            commit('update', { layer, uid })
+        Object.keys(state.lists).forEach(corpuUid => {
+          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            commit('update', { layer, corpuUid })
           }
         })
         dispatch('cml/messages/success', 'Layer updated', { root: true })
@@ -269,17 +279,20 @@ export const actions = {
   },
 
   listAll({ state, dispatch, rootState }) {
-    Object.keys(state.lists).forEach(uid => {
-      dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid })
+    Object.keys(state.lists).forEach(corpuUid => {
+      dispatch('list', {
+        corpuId: rootState.cml.corpus.actives[corpuUid],
+        corpuUid
+      })
     })
   },
 
-  list({ dispatch, commit, rootGetters }, { corpuId, uid }) {
-    dispatch('cml/sync/start', `layersList-${uid}`, { root: true })
+  list({ dispatch, commit, rootGetters }, { corpuId, corpuUid }) {
+    dispatch('cml/sync/start', `layersList-${corpuUid}`, { root: true })
     return api
       .getLayers({ filter: { id_corpus: corpuId } })
       .then(r => {
-        dispatch('cml/sync/stop', `layersList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersList-${corpuUid}`, { root: true })
         const layers = r.data.map(l => ({
           name: l.name,
           id: l._id,
@@ -297,41 +310,54 @@ export const actions = {
           metadataType: l.data_type || {},
           annotations: l.annotations || []
         }))
-        commit('list', { layers, uid })
-        dispatch('setAll', { uid })
+
+        commit('list', { layers, corpuUid })
+        dispatch('setAll', { corpuUid })
 
         return layers
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `layersList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `layersList-${corpuUid}`, { root: true })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
   },
 
-  setAll({ state, dispatch, commit }, { uid }) {
-    commit('cml/annotations/init', { uid }, { root: true })
-    state.lists[uid].forEach(l => {
-      dispatch('set', { id: l.id, uid })
+  setAll({ state, dispatch, commit }, { corpuUid }) {
+    Object.keys(state.actives).forEach(uid => {
+      state.lists[corpuUid].forEach(l => {
+        dispatch('set', { id: l.id, corpuUid, uid })
+      })
     })
   },
 
   set({ dispatch, commit }, { id, uid }) {
     commit('set', { id, uid })
-    dispatch('cml/annotations/list', { layerId: id, uid }, { root: true })
+    dispatch(
+      'cml/annotations/layerSet',
+      { layersUid: uid, layerId: id },
+      { root: true }
+    )
   },
 
   unset({ dispatch, commit }, { id, uid }) {
     commit('unset', { id, uid })
-    commit('cml/annotations/reset', { layerId: id, uid }, { root: true })
+    dispatch(
+      'cml/annotations/layerUnset',
+      { layersUid: uid, layerId: id },
+      { root: true }
+    )
+  },
+
+  register({ state, commit }, { uid, corpuUid }) {
+    commit('register', { uid, corpuUid })
   }
 }
 
 export const mutations = {
-  init(state, uid) {
-    Vue.set(state.lists, uid, [])
-    Vue.set(state.actives, uid, [])
+  register(state, { uid, corpuUid }) {
+    Vue.set(state.actives, uid, { corpuUid, ids: [] })
   },
 
   resetAll(state) {
@@ -339,93 +365,101 @@ export const mutations = {
     Vue.set(state, 'actives', {})
   },
 
-  add(state, { layer, uid }) {
-    const index = state.lists[uid].length
-    Vue.set(state.lists[uid], index, layer)
+  add(state, { layer, corpuUid }) {
+    const index = state.lists[corpuUid].length
+    Vue.set(state.lists[corpuUid], index, layer)
   },
 
-  remove(state, { id, uid }) {
-    const listIndex = state.lists[uid].findIndex(e => e.id === id)
+  remove(state, { id, corpuUid }) {
+    const listIndex = state.lists[corpuUid].findIndex(e => e.id === id)
     if (listIndex !== -1) {
-      Vue.delete(state.lists[uid], listIndex)
+      Vue.delete(state.lists[corpuUid], listIndex)
     }
 
-    const activeIndex = state.actives[uid].findIndex(e => e.id === id)
-    if (activeIndex !== -1) {
-      Vue.delete(state.actives[uid], activeIndex)
-    }
+    Object.keys(state.actives).forEach(uid => {
+      const activeIndex = state.actives[uid].ids.indexOf(id)
+      if (activeIndex !== -1) {
+        Vue.delete(state.actives[corpuUid], activeIndex)
+      }
+    })
   },
 
-  update(state, { layer, uid }) {
-    const index = state.lists[uid].findIndex(l => l.id === layer.id)
-    Vue.set(state.lists[uid], index, layer)
+  update(state, { layer, corpuUid }) {
+    const index = state.lists[corpuUid].findIndex(l => l.id === layer.id)
+    Vue.set(state.lists[corpuUid], index, layer)
   },
 
   groupAdd(state, groupId) {
-    Object.keys(state.lists).forEach(uid => {
-      state.lists[uid].forEach(e => {
+    Object.keys(state.lists).forEach(corpuUid => {
+      state.lists[corpuUid].forEach(e => {
         Vue.set(e.permissions.groups, groupId, 0)
       })
     })
   },
 
   groupRemove(state, groupId) {
-    Object.keys(state.lists).forEach(uid => {
-      state.lists[uid].forEach(e => {
+    Object.keys(state.lists).forEach(corpuUid => {
+      state.lists[corpuUid].forEach(e => {
         Vue.delete(e.permissions.groups, groupId)
       })
     })
   },
 
   userAdd(state, userId) {
-    Object.keys(state.lists).forEach(uid => {
-      state.lists[uid].forEach(e => {
+    Object.keys(state.lists).forEach(corpuUid => {
+      state.lists[corpuUid].forEach(e => {
         Vue.set(e.permissions.users, userId, 0)
       })
     })
   },
 
   userRemove(state, userId) {
-    Object.keys(state.lists).forEach(uid => {
-      state.lists[uid].forEach(e => {
+    Object.keys(state.lists).forEach(corpuUid => {
+      state.lists[corpuUid].forEach(e => {
         Vue.delete(e.permissions.users, userId)
       })
     })
   },
 
   groupPermissionsUpdate(state, { id, groupId, permission }) {
-    Object.keys(state.lists).forEach(uid => {
-      const index = state.lists[uid].findIndex(e => e.id === id)
+    Object.keys(state.lists).forEach(corpuUid => {
+      const index = state.lists[corpuUid].findIndex(e => e.id === id)
       if (index !== -1) {
-        Vue.set(state.lists[uid][index].permissions.groups, groupId, permission)
+        Vue.set(
+          state.lists[corpuUid][index].permissions.groups,
+          groupId,
+          permission
+        )
       }
     })
   },
 
   userPermissionsUpdate(state, { id, userId, permission }) {
-    Object.keys(state.lists).forEach(uid => {
-      const index = state.lists[uid].findIndex(e => e.id === id)
+    Object.keys(state.lists).forEach(corpuUid => {
+      const index = state.lists[corpuUid].findIndex(e => e.id === id)
       if (index !== -1) {
-        Vue.set(state.lists[uid][index].permissions.users, userId, permission)
+        Vue.set(
+          state.lists[corpuUid][index].permissions.users,
+          userId,
+          permission
+        )
       }
     })
   },
 
-  list(state, { layers, uid }) {
-    Vue.set(state.lists, uid, layers)
+  list(state, { layers, corpuUid }) {
+    Vue.set(state.lists, corpuUid, layers)
   },
 
   set(state, { id, uid }) {
-    if (!state.actives[uid]) {
-      Vue.set(state.actives, uid, [id])
-    } else {
-      Vue.set(state.actives[uid], state.actives[uid].length, id)
-    }
+    Vue.set(state.actives[uid].ids, state.actives[uid].ids.length, id)
   },
 
   unset(state, { id, uid }) {
-    const index = state.actives[uid].indexOf(id)
-    Vue.delete(state.actives[uid], index)
+    const index = state.actives[uid].ids.findIndex(layerId => layerId === id)
+    if (index !== -1) {
+      Vue.delete(state.actives[uid].ids, index)
+    }
   }
 }
 

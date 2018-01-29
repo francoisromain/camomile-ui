@@ -92,7 +92,7 @@ export default {
     }
   },
 
-  mounted() {
+  created() {
     this.$store.dispatch('cml/corpus/register', this.uid)
   }
 }

@@ -65,7 +65,7 @@ describe('store layers actions', () => {
 
     layers.state = {
       actives: {
-        default: ['mocks-layer-id-2']
+        default: { corpuUid: 'default-corpu', ids: ['mocks-layer-id-2'] }
       },
       lists: {
         default: [
@@ -295,36 +295,45 @@ describe('store layers actions', () => {
 
   it('lists all layers', () => {
     expect.assertions(1)
-    return store.dispatch('cml/layers/list', { uid: 'default' }).then(r => {
-      expect(store.state.cml.layers.lists['default']).toEqual([
-        {
-          annotations: { annotations: 'Ornare Malesuada Fermentum Parturient' },
-          description: { desc: 'Ornare Malesuada Fermentum Parturient' },
-          fragmentType: { fragment: 'Ornare Malesuada Fermentum Parturient' },
-          id: 'mocks-layer-id-1',
-          metadataType: { data: 'Ornare Malesuada Fermentum Parturient' },
-          name: 'layer-1',
-          permission: 1,
-          permissions: {
-            groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 2 },
-            users: { 'mocks-user-id-lu': 1, 'mocks-user-id-ji': 0 }
+    return store
+      .dispatch('cml/layers/list', {
+        corpuId: 'mocks-corpu-id',
+        corpuUid: 'default'
+      })
+      .then(r => {
+        expect(store.state.cml.layers.lists['default']).toEqual([
+          {
+            annotations: {
+              annotations: 'Ornare Malesuada Fermentum Parturient'
+            },
+            description: { desc: 'Ornare Malesuada Fermentum Parturient' },
+            fragmentType: { fragment: 'Ornare Malesuada Fermentum Parturient' },
+            id: 'mocks-layer-id-1',
+            metadataType: { data: 'Ornare Malesuada Fermentum Parturient' },
+            name: 'layer-1',
+            permission: 1,
+            permissions: {
+              groups: { 'mocks-group-id-1': 0, 'mocks-group-id-2': 2 },
+              users: { 'mocks-user-id-lu': 1, 'mocks-user-id-ji': 0 }
+            }
+          },
+          {
+            annotations: {
+              annotations: 'Ornare Malesuada Fermentum Parturient'
+            },
+            description: { desc: 'Condimentum Elit Mattis Quam' },
+            fragmentType: { fragment: 'Ornare Malesuada Fermentum Parturient' },
+            id: 'mocks-layer-id-2',
+            metadataType: { data: 'Ornare Malesuada Fermentum Parturient' },
+            name: 'layer-2',
+            permission: 2,
+            permissions: {
+              groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
+              users: { 'mocks-user-id-lu': 0, 'mocks-user-id-ji': 3 }
+            }
           }
-        },
-        {
-          annotations: { annotations: 'Ornare Malesuada Fermentum Parturient' },
-          description: { desc: 'Condimentum Elit Mattis Quam' },
-          fragmentType: { fragment: 'Ornare Malesuada Fermentum Parturient' },
-          id: 'mocks-layer-id-2',
-          metadataType: { data: 'Ornare Malesuada Fermentum Parturient' },
-          name: 'layer-2',
-          permission: 2,
-          permissions: {
-            groups: { 'mocks-group-id-1': 2, 'mocks-group-id-2': 0 },
-            users: { 'mocks-user-id-lu': 0, 'mocks-user-id-ji': 3 }
-          }
-        }
-      ])
-    })
+        ])
+      })
   })
 
   it('sets permission on a group', () => {
@@ -565,12 +574,17 @@ describe('store layers actions', () => {
     const id = 'mocks-layer-id-1'
 
     expect.assertions(1)
-    return store.dispatch('cml/layers/set', { id, uid: 'default' }).then(r => {
-      expect(store.state.cml.layers.actives['default']).toEqual([
-        'mocks-layer-id-2',
-        'mocks-layer-id-1'
-      ])
-    })
+    return store
+      .dispatch('cml/layers/set', {
+        id,
+        uid: 'default'
+      })
+      .then(r => {
+        expect(store.state.cml.layers.actives['default']).toEqual({
+          corpuUid: 'default-corpu',
+          ids: ['mocks-layer-id-2', 'mocks-layer-id-1']
+        })
+      })
   })
 
   it('unsets a layers', () => {
@@ -580,7 +594,10 @@ describe('store layers actions', () => {
     return store
       .dispatch('cml/layers/unset', { id, uid: 'default' })
       .then(r => {
-        expect(store.state.cml.layers.actives['default']).toEqual([])
+        expect(store.state.cml.layers.actives['default']).toEqual({
+          corpuUid: 'default-corpu',
+          ids: []
+        })
       })
   })
 })
@@ -601,11 +618,6 @@ describe('store layers mutations', () => {
         { name: 'layer-4' }
       ]
     }
-  })
-
-  it('inits one layer list', () => {
-    layers.mutations.init(state, 'default')
-    expect(state.lists['default']).toEqual([])
   })
 
   it('resets all layer lists', () => {

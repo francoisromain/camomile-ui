@@ -288,38 +288,38 @@ export const actions = {
 
   set({ state, getters, dispatch, commit }, { id, uid }) {
     commit('set', { id: id || getters.id(uid), uid })
-    commit('cml/medias/init', uid, { root: true })
-    commit('cml/layers/init', uid, { root: true })
+
+    // media needs to be set
+    // before layers/set triggers annotations/lists
     if (state.actives[uid]) {
       dispatch(
         'cml/medias/list',
-        { corpuId: state.actives[uid], uid },
+        { corpuId: state.actives[uid], corpuUid: uid },
         { root: true }
       )
       dispatch(
         'cml/layers/list',
-        { corpuId: state.actives[uid], uid },
+        { corpuId: state.actives[uid], corpuUid: uid },
         { root: true }
       )
     }
   },
 
   register({ state, commit }, uid) {
-    commit('init', uid)
+    commit('register', uid)
   }
 }
 
 export const getters = {
   id: state => uid =>
     (state.actives[uid] &&
-      state.lists[uid].map(c => c.id).indexOf(state.actives[uid]) !== -1 &&
-      state.actives[uid]) ||
+      state.lists[uid].find(c => c.id === state.actives[uid]).id) ||
     (state.lists[uid][0] && state.lists[uid][0].id) ||
     null
 }
 
 export const mutations = {
-  init(state, uid) {
+  register(state, uid) {
     Vue.set(state.lists, uid, [])
     Vue.set(state.actives, uid, null)
   },

@@ -20,7 +20,7 @@
 <script>
 export default {
   props: {
-    uid: {
+    mediaUid: {
       type: String,
       default: 'default'
     }
@@ -34,7 +34,7 @@ export default {
 
   computed: {
     properties() {
-      return this.$store.state.cml.medias.properties[this.uid] || {}
+      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
     timeCurrent() {
       return this.properties.timeCurrent || 0
@@ -56,9 +56,9 @@ export default {
   methods: {
     mediaToggle() {
       if (this.properties.isPlaying) {
-        this.$store.commit('cml/medias/pause', this.uid)
+        this.$store.commit('cml/medias/pause', { uid: this.mediaUid })
       } else {
-        this.$store.commit('cml/medias/play', this.uid)
+        this.$store.commit('cml/medias/play', { uid: this.mediaUid })
       }
     },
     progressMousemove(e) {
@@ -75,7 +75,7 @@ export default {
           (e.clientX - this.$refs.progress.offsetLeft) /
           this.$refs.progress.offsetWidth
       }
-      this.seek(x, false, this.uid)
+      this.seek(x, false)
     },
     progressMousedown(e) {
       document.addEventListener('mousemove', this.progressMousemove)
@@ -88,7 +88,11 @@ export default {
     },
     seek(ratio, serverRequest, uid) {
       if (this.properties.isLoaded) {
-        this.$store.dispatch('cml/medias/seek', { ratio, serverRequest, uid })
+        this.$store.dispatch('cml/medias/seek', {
+          ratio,
+          serverRequest,
+          uid: this.mediaUid
+        })
       }
     },
     msToMinutesAndSeconds(ms) {

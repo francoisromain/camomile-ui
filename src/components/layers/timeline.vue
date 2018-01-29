@@ -7,7 +7,7 @@
       :layer-id="layer.id"
       :media-id="mediaId"
       :time-current="timeCurrent"
-    ></timeline-button> left: {{ left }}
+    ></timeline-button>
     <div class="relative overflow-hidden" :style="{ height: `${40 * layers.length}px` }" v-if="layers">
       <div class="absolute timeline-annotations" :style="{
         top: 0, bottom: 0, left: `${left}px`, width: `${width}px`
@@ -17,9 +17,9 @@
           :key="`annotations-${layer.id}`"
           v-if="annotations[layer.id]"
           :uid="uid"
-          :layer="layer"
+          :layers-uid="layersUid"
+          :layer-id="layer.id"
           :annotations="annotations[layer.id]"
-          :media-id="mediaId"
           :time-total="timeTotal"
           :time-current="timeCurrent"
           :width="width"
@@ -42,9 +42,23 @@ export default {
   },
 
   props: {
+    mediaUid: {
+      type: String,
+      default: 'default'
+    },
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
     uid: {
       type: String,
       default: 'default'
+    },
+    filter: {
+      type: Function,
+      default: (a, d) => {
+        return true
+      }
     }
   },
 
@@ -61,7 +75,7 @@ export default {
       return `0 0 ${this.svg.w} ${this.svg.h}`
     },
     properties() {
-      return this.$store.state.cml.medias.properties[this.uid] || {}
+      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
     timeCurrent() {
       return this.properties.timeCurrent || 0
@@ -73,13 +87,11 @@ export default {
       return this.$store.state.cml.annotations.lists[this.uid]
     },
     mediaId() {
-      return this.$store.state.cml.medias.actives[this.uid]
+      return this.$store.state.cml.medias.actives[this.mediaUid].id
     },
     layers() {
-      return this.$store.state.cml.layers.lists[this.uid]
-    },
-    actives() {
-      return this.$store.state.cml.annotations.actives[this.uid]
+      const active = this.$store.state.cml.layers.actives[this.layersUid]
+      return active ? this.$store.state.cml.layers.lists[active.corpuUid] : {}
     },
     left() {
       return (

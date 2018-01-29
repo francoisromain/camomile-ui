@@ -57,8 +57,7 @@ export default {
       resource: state => state.cml.popup.element,
       users: state => state.cml.users.list,
       groups: state => state.cml.groups.list,
-      type: state => state.cml.popup.config.type,
-      uid: state => state.cml.popup.config.uid
+      type: state => state.cml.popup.config.type
     })
   }
 }

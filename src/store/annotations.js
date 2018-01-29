@@ -12,7 +12,7 @@ export const actions = {
     return api
       .createAnnotation(
         element.layerId,
-        element.mediaLink ? element.mediaId : null,
+        element.mediaId || null,
         element.fragment,
         element.metadata
       )
@@ -82,21 +82,67 @@ export const actions = {
       })
   },
 
-  listAll({ rootState, dispatch }, { uid }) {
-    rootState.cml.layers.actives[uid].forEach(layerId => {
-      dispatch('list', { layerId, uid })
+  listAll({ rootState, dispatch }) {
+    rootState.cml.layers.actives.forEach(layersUid => {
+      rootState.cml.layers.actives[layersUid].forEach(l => {
+        dispatch('list', { layerId: l.id, layersUid })
+      })
     })
   },
 
-  list({ dispatch, commit }, { layerId, uid }) {
+  layerSet({ state, dispatch, rootState }, { layersUid, layerId }) {
+    Object.keys(state.lists).forEach(uid => {
+      if (
+        state.lists[uid].layersUid === layersUid &&
+        rootState.cml.medias.actives[state.lists[uid].mediaUid]
+      ) {
+        dispatch('list', {
+          uid,
+          layerId,
+          layersUid,
+          mediaId: rootState.cml.medias.actives[state.lists[uid].mediaUid].id
+        })
+      }
+    })
+  },
+
+  layerUnset({ commit }, { layersUid, layerId }) {
+    commit('reset', { layersUid, layerId })
+  },
+
+  mediaSet({ state, dispatch, rootState }, { mediaUid, mediaId }) {
+    Object.keys(state.lists).forEach(uid => {
+      if (
+        state.lists[uid].mediaUid === mediaUid &&
+        rootState.cml.layers.actives[state.lists[uid].layersUid]
+      ) {
+        rootState.cml.layers.actives[state.lists[uid].layersUid].ids.forEach(
+          layerId => {
+            dispatch('list', {
+              uid,
+              layerId: layerId,
+              layersUid: state.lists[uid].layersUid,
+              mediaId
+            })
+          }
+        )
+      }
+    })
+  },
+
+  list({ state, dispatch, commit }, { uid, layerId, layersUid, mediaId }) {
     dispatch('cml/sync/start', `annotationsList-${uid}`, { root: true })
     return api
-      .getAnnotations({ filter: { id_layer: layerId } })
-      .then(r => {
-        if (!uid) {
-          throw new Error('missing uid')
+      .getAnnotations({
+        filter: {
+          id_layer: layerId,
+          id_medium: mediaId
         }
-        dispatch('cml/sync/stop', `annotationsList-${uid}`, { root: true })
+      })
+      .then(r => {
+        dispatch('cml/sync/stop', `annotationsList-${uid}`, {
+          root: true
+        })
         const annotations = r.data.map(a => ({
           id: a._id,
           fragment: a.fragment || {},
@@ -104,34 +150,49 @@ export const actions = {
           layerId: a.id_layer,
           mediaId: a.id_medium || null
         }))
-        commit('list', { annotations, layerId, uid })
-        // dispatch('setAll', { layerId, uid })
+        commit('list', { annotations, uid, layerId, layersUid })
+        // commit('reset', { layerId, layersUid })
 
         return annotations
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `annotationsList-${uid}`, { root: true })
+        dispatch('cml/sync/stop', `annotationsList-${layersUid}`, {
+          root: true
+        })
         dispatch('cml/messages/error', e.message, { root: true })
 
         throw e
       })
+  },
+
+  register({ commit }, { uid, mediaUid, layersUid }) {
+    commit('register', { uid, mediaUid, layersUid })
   }
 }
 
 export const mutations = {
-  init(state, { uid }) {
-    Vue.set(state.lists, uid, {})
-    Vue.set(state.actives, uid, {})
-  },
-
-  reset(state, { layerId, uid }) {
-    Vue.delete(state.lists[uid], layerId)
-    Vue.delete(state.actives[uid], layerId)
+  register(state, { uid, mediaUid, layersUid }) {
+    Vue.set(state.actives, uid, null)
+    Vue.set(state.lists, uid, { mediaUid, layersUid })
   },
 
   resetAll(state) {
     Vue.set(state, 'lists', {})
     Vue.set(state, 'actives', {})
+  },
+
+  reset(state, { layersUid, layerId }) {
+    Object.keys(state.lists).forEach(uid => {
+      if (state.lists[uid].layersUid === layersUid) {
+        Vue.delete(state.lists[uid], layerId)
+      }
+    })
+
+    Object.keys(state.actives).forEach(uid => {
+      if (state.actives[uid] && state.actives[uid].layerId === layerId) {
+        Vue.set(state.actives, uid, null)
+      }
+    })
   },
 
   add(state, { annotation, layerId }) {
@@ -147,7 +208,7 @@ export const mutations = {
     Object.keys(state.lists).forEach(uid => {
       const list = state.lists[uid][layerId]
       if (list) {
-        const index = list.findIndex(m => m.id === annotation.id)
+        const index = list.findIndex(a => a.id === annotation.id)
         Vue.set(list, index, annotation)
       }
     })
@@ -163,20 +224,17 @@ export const mutations = {
             Vue.delete(list, listsIndex)
           }
         }
-        const actives = state.actives[uid][layerId]
-        console.log('annotations-remove-actives', actives)
-        if (actives) {
-          const activeIndex = actives.indexOf(id)
-          console.log('annotations-remove-actives-index', activeIndex)
-          if (activeIndex !== -1) {
-            Vue.delete(actives, activeIndex)
-          }
-        }
       })
+    })
+
+    Object.keys(state.actives).forEach(uid => {
+      if (state.actives[uid].id === id) {
+        Vue.set(state.actives, uid, null)
+      }
     })
   },
 
-  list(state, { annotations, layerId, uid }) {
+  list(state, { annotations, uid, layerId, layersUid }) {
     Vue.set(state.lists[uid], layerId, annotations)
   },
 
@@ -184,8 +242,8 @@ export const mutations = {
     Vue.set(state.actives, uid, id)
   },
 
-  unset(state, { uid }) {
-    Vue.delete(state.actives, uid)
+  unset(state, { id, uid }) {
+    Vue.set(state.actives, uid, null)
   }
 }
 

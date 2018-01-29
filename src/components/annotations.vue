@@ -6,14 +6,14 @@
     <div v-for="layer in layers" :key="layer.id" class="mt" v-if="annotations[layer.id]">
       <div class="flex flex-start">
         <h2 class="mt-s">{{ layer.name }}</h2>
-        <button @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId: layer.id, mediaId, fragment: {}, metadata: {}, mediaName: mediaName(mediaId), mediaLink: true } })" class="flex-right btn p-s" v-if="layer.permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+        <button @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId: layer.id, mediaId, fragment: {}, metadata: {}, mediaName: mediaName(mediaId) } })" class="flex-right btn p-s" v-if="layer.permission === 3"><i class="icon-24 icon-24-plus"></i></button>
       </div>
       <table class="table mb-0">
         <tr>
           <th></th><th>Id</th><th>Medium</th><th></th>
         </tr>
         <tr v-for="annotation in annotations[layer.id]" :key="annotation.id">
-          <td><input type="checkbox" @change="set($event, layer.id)" :value="annotation.id" :checked="activeId && activeId === annotation.id" :layer-id="layer.id"></td>
+          <td><input type="radio" @change="set($event, layer.id)" :value="annotation.id" :checked="activeId && activeId === annotation.id" :layer-id="layer.id"></td>
           <td><span class="h6 bold bg-neutral color-bg py-xxs px-xs rnd">…{{ annotation.id | stringEnd }}</span></td>
           <td>{{ mediaName(annotation.mediaId) }}</td>
           <td class="text-right">
@@ -34,6 +34,14 @@ export default {
   name: 'camomile-annotations',
 
   props: {
+    mediaUid: {
+      type: String,
+      default: 'default'
+    },
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
     uid: {
       type: String,
       default: 'default'
@@ -65,19 +73,25 @@ export default {
 
   computed: {
     annotations() {
-      return this.$store.state.cml.annotations.lists[this.uid]
+      return this.$store.state.cml.annotations.lists[this.uid] || {}
     },
     mediaId() {
-      return this.$store.state.cml.medias.actives[this.uid]
+      return this.$store.state.cml.medias.actives[this.mediaUid].id
     },
     layers() {
-      return this.$store.state.cml.layers.lists[this.uid]
+      const actives = this.$store.state.cml.layers.actives[this.layersUid]
+      const layers = this.$store.state.cml.layers.lists[actives.corpuUid]
+      return actives && layers
+        ? layers.filter(l => actives.ids.indexOf(l.id) !== -1)
+        : {}
     },
     activeId() {
-      return this.$store.state.cml.annotations.actives[this.uid]
+      const actives = this.$store.state.cml.annotations.actives[this.uid]
+      return actives ? actives.id : null
     },
     medias() {
-      return this.$store.state.cml.medias.lists[this.uid]
+      const active = this.$store.state.cml.medias.actives[this.mediaUid]
+      return active ? this.$store.state.cml.medias.lists[active.corpuUid] : {}
     }
   },
 
@@ -92,14 +106,34 @@ export default {
           uid: this.uid
         })
       } else {
-        this.$store.commit('cml/annotations/unset', { uid: this.uid })
+        this.$store.commit('cml/annotations/unset', {
+          id: e.target.value,
+          uid: this.uid
+        })
       }
     },
     mediaName(mediaId) {
       if (!mediaId) return ''
       const media = this.medias.find(m => m.id === mediaId)
       return media ? media.name : ''
+    },
+    annotationsUpdate(layer) {
+      const mediaId = this.$store.state.cml.medias.actives[this.mediaUid].id
+      const layerId = layer.id
+      this.$store.dispatch(
+        'cml/annotations/list',
+        { uid: this.uid, layerId, layersUid: this.layersUid, mediaId },
+        { root: true }
+      )
     }
+  },
+
+  created() {
+    this.$store.dispatch('cml/annotations/register', {
+      uid: this.uid,
+      mediaUid: this.mediaUid,
+      layersUid: this.layersUid
+    })
   },
 
   filters: {

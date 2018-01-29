@@ -14,7 +14,7 @@ export default {
   name: 'camomile-media-youtube',
 
   props: {
-    uid: {
+    mediaUid: {
       type: String,
       default: 'default'
     }
@@ -33,17 +33,15 @@ export default {
 
   computed: {
     media() {
-      const medias = this.$store.state.cml.medias
-      return (
-        (medias.lists[this.uid] &&
-          medias.lists[this.uid].find(
-            m => m.id === medias.actives[this.uid]
-          )) ||
-        {}
-      )
+      const active = this.$store.state.cml.medias.actives[this.mediaUid]
+      return active
+        ? this.$store.state.cml.medias.lists[active.corpuUid].find(
+            m => m.id === active.id
+          )
+        : {}
     },
     properties() {
-      return this.$store.state.cml.medias.properties[this.uid] || {}
+      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
     isPlaying() {
       return this.properties.isPlaying || false
@@ -87,11 +85,11 @@ export default {
           // console.log('onReady', event)
           this.$store.commit('cml/medias/loaded', {
             isLoaded: true,
-            uid: this.uid
+            uid: this.mediaUid
           })
           this.$store.commit('cml/medias/timeTotal', {
             time: this.player.getDuration() * 1000,
-            uid: this.uid
+            uid: this.mediaUid
           })
         },
         onStateChange: event => {
@@ -104,34 +102,34 @@ export default {
               this.videoNew = false
               this.$store.commit('cml/medias/loaded', {
                 isLoaded: true,
-                uid: this.uid
+                uid: this.mediaUid
               })
               this.$store.commit('cml/medias/timeTotal', {
                 time: this.player.getDuration() * 1000,
-                uid: this.uid
+                uid: this.mediaUid
               })
               this.player.pauseVideo()
             } else {
-              this.$store.dispatch('cml/medias/play', this.uid)
+              this.$store.dispatch('cml/medias/play', { uid: this.mediaUid })
             }
           } else if (event.data === 2) {
             // paused
-            this.$store.dispatch('cml/medias/pause', this.uid)
+            this.$store.dispatch('cml/medias/pause', { uid: this.mediaUid })
           } else if (event.data === 3) {
             // buffering
-            this.$store.dispatch('cml/medias/buffering', this.uid)
+            this.$store.dispatch('cml/medias/buffering', { uid: this.mediaUid })
           } else if (event.data === 0) {
             // ended
-            this.$store.dispatch('cml/medias/stop', this.uid)
+            this.$store.dispatch('cml/medias/stop', { uid: this.mediaUid })
           } else if (event.data === 5) {
             // cued
             this.$store.commit('cml/medias/loaded', {
               isLoaded: true,
-              uid: this.uid
+              uid: this.mediaUid
             })
             this.$store.commit('cml/medias/timeTotal', {
               time: this.player.getDuration() * 1000,
-              uid: this.uid
+              uid: this.mediaUid
             })
           }
         },
@@ -173,8 +171,8 @@ export default {
     videoSeek(serverRequest) {
       this.player.seekTo(this.timeCurrent / 1000, serverRequest)
       this.$store.commit('cml/medias/seek', {
-        options: { seekign: false },
-        uid: this.uid
+        options: { seeking: false },
+        uid: this.mediaUid
       })
     },
     parseYouTubeId(url) {

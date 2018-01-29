@@ -15,8 +15,9 @@
 export default {
   props: {
     id: String,
-    layerId: String,
     uid: String,
+    layerId: String,
+    layersUid: String,
     timeTotal: Number,
     containerWidth: Number,
     containerLeft: Number
@@ -75,7 +76,6 @@ export default {
     dragLeft(e) {
       const c = e.clientX - this.containerLeft + this.handlerWidth / 2
 
-      console.log(c, this.containerWidth - this.right)
       if (c < 0) {
         this.leftDragging = 0
       } else if (c > this.containerWidth - this.right) {
@@ -111,6 +111,7 @@ export default {
     set(e) {
       this.$store.commit('cml/annotations/set', {
         id: this.id,
+        layersUid: this.layersUid,
         uid: this.uid
       })
     }

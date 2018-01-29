@@ -10,7 +10,7 @@
           <th></th><th>Name</th><th></th>
         </tr>
         <tr v-for="media in medias" :key="media.id">
-          <td><input type="radio" @change="set" :value="media.id" :checked="media.id === mediaId"></td>
+          <td><input type="radio" @change="setEvent" :value="media.id" :checked="media.id === mediaId"></td>
           <td>{{ media.name }}</td>
           <td class="text-right">
             <button @click="popupOpen({ config: popupEditConfig, element: media })" class="btn px-s py-s my--s h6" v-if="permission === 3">Edit</button>
@@ -31,6 +31,10 @@ export default {
 
   props: {
     uid: {
+      type: String,
+      default: 'default'
+    },
+    corpusUid: {
       type: String,
       default: 'default'
     }
@@ -61,18 +65,19 @@ export default {
 
   computed: {
     corpuId() {
-      return this.$store.state.cml.corpus.actives[this.uid]
+      return this.$store.state.cml.corpus.actives[this.corpusUid]
     },
     mediaId() {
-      return this.$store.state.cml.medias.actives[this.uid]
+      return this.$store.state.cml.medias.actives[this.uid].id
     },
     medias() {
-      return this.$store.state.cml.medias.lists[this.uid]
+      return this.$store.state.cml.medias.lists[this.corpusUid]
     },
     permission() {
       const corpus = this.$store.state.cml.corpus.lists
       const corpu =
-        corpus[this.uid] && corpus[this.uid].find(c => c.id === this.corpuId)
+        corpus[this.corpusUid] &&
+        corpus[this.corpusUid].find(c => c.id === this.corpuId)
       return corpu ? corpu.permission : 0
     }
   },
@@ -81,12 +86,20 @@ export default {
     popupOpen({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
     },
-    set(e) {
+    setEvent(e) {
+      this.set(e.target.value)
+    },
+    set(id) {
       this.$store.dispatch('cml/medias/set', {
-        id: e.target.value,
+        id,
+        corpuUid: this.corpusUid,
         uid: this.uid
       })
     }
+  },
+
+  created() {
+    this.$store.dispatch('cml/medias/register', this.uid)
   }
 }
 </script>

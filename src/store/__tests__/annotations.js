@@ -150,8 +150,7 @@ describe('store annotations actions', () => {
       layerId: 'mocks-layer-id-1',
       mediaId: 'mocks-media-id-1',
       fragment: { fragment: 'Egestas Euismod Quam Condimentum' },
-      metadata: { data: 'Egestas Euismod Quam Condimentum' },
-      mediaLink: true
+      metadata: { data: 'Egestas Euismod Quam Condimentum' }
     }
     const layerId = 'mocks-layer-id-1'
 
@@ -292,10 +291,16 @@ describe('store annotations actions', () => {
 
   it('lists all annotations', () => {
     const layerId = 'mocks-layer-id-1'
+    const mediaId = 'mocks-media-id-1'
 
     expect.assertions(1)
     return store
-      .dispatch('cml/annotations/list', { layerId, uid: 'default' })
+      .dispatch('cml/annotations/list', {
+        uid: 'default',
+        layerId,
+        layersUid: 'default',
+        mediaId
+      })
       .then(r => {
         expect(store.state.cml.annotations.lists['default'][layerId]).toEqual([
           {
@@ -322,12 +327,18 @@ describe('store annotations actions', () => {
 
   it('lists all annotations (error)', () => {
     const layerId = ''
+    const mediaId = 'mocks-media-id-1'
 
     expect.assertions(1)
     return store
-      .dispatch('cml/annotations/list', { layerId, uid: '' })
+      .dispatch('cml/annotations/list', {
+        uid: 'default',
+        layerId,
+        layersUid: '',
+        mediaId
+      })
       .catch(e => {
-        expect(e.message).toEqual('missing uid')
+        expect(e.message).toEqual('Api')
       })
   })
 })
