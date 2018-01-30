@@ -64,14 +64,14 @@ export default {
   },
 
   computed: {
-    properties() {
+    mediaProperties() {
       return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
     timeCurrent() {
-      return this.properties.timeCurrent || 0
+      return this.mediaProperties.timeCurrent || 0
     },
     timeTotal() {
-      return this.properties.timeTotal || 0
+      return this.mediaProperties.timeTotal || 0
     },
     annotations() {
       const annotationsList = this.$store.state.cml.annotations.lists[this.uid]
