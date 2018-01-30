@@ -73,7 +73,11 @@ export default {
 
   computed: {
     annotations() {
-      return this.$store.state.cml.annotations.lists[this.uid] || {}
+      return (
+        (this.$store.state.cml.annotations.lists[this.uid] &&
+          this.$store.state.cml.annotations.lists[this.uid].layers) ||
+        {}
+      )
     },
     mediaId() {
       return this.$store.state.cml.medias.actives[this.mediaUid].id
@@ -92,6 +96,12 @@ export default {
     medias() {
       const active = this.$store.state.cml.medias.actives[this.mediaUid]
       return active ? this.$store.state.cml.medias.lists[active.corpuUid] : {}
+    },
+    properties() {
+      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
+    },
+    timeCurrent() {
+      return this.properties.timeCurrent || 0
     }
   },
 

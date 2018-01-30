@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import spinner from './utils/spinner.vue'
+import spinner from '../utils/spinner.vue'
 
 export default {
   name: 'camomile-media-youtube',

@@ -82,14 +82,6 @@ export const actions = {
       })
   },
 
-  listAll({ rootState, dispatch }) {
-    rootState.cml.layers.actives.forEach(layersUid => {
-      rootState.cml.layers.actives[layersUid].forEach(l => {
-        dispatch('list', { layerId: l.id, layersUid })
-      })
-    })
-  },
-
   layerSet({ state, dispatch, rootState }, { layersUid, layerId }) {
     Object.keys(state.lists).forEach(uid => {
       if (
@@ -116,16 +108,14 @@ export const actions = {
         state.lists[uid].mediaUid === mediaUid &&
         rootState.cml.layers.actives[state.lists[uid].layersUid]
       ) {
-        rootState.cml.layers.actives[state.lists[uid].layersUid].ids.forEach(
-          layerId => {
-            dispatch('list', {
-              uid,
-              layerId: layerId,
-              layersUid: state.lists[uid].layersUid,
-              mediaId
-            })
-          }
-        )
+        Object.keys(state.lists[uid].layers).forEach(layerId => {
+          dispatch('list', {
+            uid,
+            layerId,
+            layersUid: state.lists[uid].layersUid,
+            mediaId
+          })
+        })
       }
     })
   },
@@ -173,7 +163,7 @@ export const actions = {
 export const mutations = {
   register(state, { uid, mediaUid, layersUid }) {
     Vue.set(state.actives, uid, null)
-    Vue.set(state.lists, uid, { mediaUid, layersUid })
+    Vue.set(state.lists, uid, { mediaUid, layersUid, layers: {} })
   },
 
   resetAll(state) {
@@ -197,7 +187,7 @@ export const mutations = {
 
   add(state, { annotation, layerId }) {
     Object.keys(state.lists).forEach(uid => {
-      const list = state.lists[uid][layerId]
+      const list = state.lists[uid].layers[layerId]
       if (list) {
         Vue.set(list, list.length, annotation)
       }
@@ -206,7 +196,7 @@ export const mutations = {
 
   update(state, { annotation, layerId }) {
     Object.keys(state.lists).forEach(uid => {
-      const list = state.lists[uid][layerId]
+      const list = state.lists[uid].layers[layerId]
       if (list) {
         const index = list.findIndex(a => a.id === annotation.id)
         Vue.set(list, index, annotation)
@@ -216,8 +206,8 @@ export const mutations = {
 
   remove(state, { id }) {
     Object.keys(state.lists).forEach(uid => {
-      Object.keys(state.lists[uid]).forEach(layerId => {
-        const list = state.lists[uid][layerId]
+      Object.keys(state.lists[uid].layers).forEach(layerId => {
+        const list = state.lists[uid].layers[layerId]
         if (list) {
           const listsIndex = list.findIndex(a => a.id === id)
           if (listsIndex !== -1) {
@@ -228,14 +218,14 @@ export const mutations = {
     })
 
     Object.keys(state.actives).forEach(uid => {
-      if (state.actives[uid].id === id) {
+      if (state.actives[uid] && state.actives[uid].id === id) {
         Vue.set(state.actives, uid, null)
       }
     })
   },
 
   list(state, { annotations, uid, layerId, layersUid }) {
-    Vue.set(state.lists[uid], layerId, annotations)
+    Vue.set(state.lists[uid].layers, layerId, annotations)
   },
 
   set(state, { id, uid }) {

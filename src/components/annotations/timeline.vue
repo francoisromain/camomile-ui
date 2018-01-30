@@ -1,13 +1,5 @@
 <template>
   <div ref="container">
-    <timeline-button 
-      v-for="layer in layers" 
-      :key="`button-${layer.id}`"
-      v-if="annotations[layer.id] && layer.permission === 3"
-      :layer-id="layer.id"
-      :media-id="mediaId"
-      :time-current="timeCurrent"
-    ></timeline-button>
     <div class="relative overflow-hidden" :style="{ height: `${40 * layers.length}px` }" v-if="layers">
       <div class="absolute timeline-annotations" :style="{
         top: 0, bottom: 0, left: `${left}px`, width: `${width}px`
@@ -32,12 +24,10 @@
 </template>
 
 <script>
-import timelineButton from './timeline/button.vue'
 import timelineAnnotations from './timeline/annotations.vue'
 
 export default {
   components: {
-    timelineButton,
     timelineAnnotations
   },
 
@@ -56,9 +46,12 @@ export default {
     },
     filter: {
       type: Function,
-      default: (a, d) => {
-        return true
-      }
+      default: a =>
+        a.fragment &&
+        a.fragment.time &&
+        !isNaN(a.fragment.time.start) &&
+        !isNaN(a.fragment.time.end) &&
+        a
     }
   },
 
@@ -71,9 +64,6 @@ export default {
   },
 
   computed: {
-    viewbox() {
-      return `0 0 ${this.svg.w} ${this.svg.h}`
-    },
     properties() {
       return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
@@ -84,10 +74,17 @@ export default {
       return this.properties.timeTotal || 0
     },
     annotations() {
-      return this.$store.state.cml.annotations.lists[this.uid]
-    },
-    mediaId() {
-      return this.$store.state.cml.medias.actives[this.mediaUid].id
+      const annotationsList = this.$store.state.cml.annotations.lists[this.uid]
+      return (
+        annotationsList &&
+        Object.keys(annotationsList.layers).reduce(
+          (res, layer) =>
+            Object.assign(res, {
+              [layer]: annotationsList.layers[layer].filter(a => this.filter(a))
+            }),
+          {}
+        )
+      )
     },
     layers() {
       const active = this.$store.state.cml.layers.actives[this.layersUid]

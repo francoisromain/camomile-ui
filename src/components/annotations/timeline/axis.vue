@@ -20,7 +20,6 @@ export default {
     },
     tickXs () {
       const ticks = lib.range(this.o.xMin, this.o.xMax, 60 * 1000)
-      console.log(ticks)
       return ticks.map(tick =>
         lib.map(tick, this.o.xMin, this.o.xMax, 0, this.svg.w)
       )

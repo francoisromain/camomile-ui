@@ -3,9 +3,9 @@
     <annotations-blocs class="absolute annotation"
       v-for="annotation in annotations"
       :key="annotation.id"
+      :annotation="annotation"
       :uid="uid"
       :layers-uid="layersUid"
-      :id="annotation.id"
       :layer-id="layerId"
       :time-total="timeTotal"
       :container-width="width"
@@ -29,7 +29,6 @@ export default {
     layerId: String,
     annotations: Array,
     timeTotal: Number,
-    timeCurrent: Number,
     width: Number,
     left: Number,
     uid: String

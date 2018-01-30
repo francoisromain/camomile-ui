@@ -14,8 +14,8 @@
 <script>
 export default {
   props: {
-    id: String,
     uid: String,
+    annotation: Object,
     layerId: String,
     layersUid: String,
     timeTotal: Number,
@@ -32,11 +32,6 @@ export default {
   },
 
   computed: {
-    annotation() {
-      return this.$store.state.cml.annotations.lists[this.uid][
-        this.layerId
-      ].find(e => e.id === this.id)
-    },
     time() {
       return this.annotation.fragment.time
     },
@@ -110,7 +105,7 @@ export default {
     },
     set(e) {
       this.$store.commit('cml/annotations/set', {
-        id: this.id,
+        id: this.annotation.id,
         layersUid: this.layersUid,
         uid: this.uid
       })

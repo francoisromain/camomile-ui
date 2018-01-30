@@ -101,25 +101,29 @@ describe('store annotations actions', () => {
       },
       lists: {
         default: {
-          'mocks-layer-id-1': [
-            {
-              id: 'mocks-annotation-id-1',
-              fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
-              metadata: { metadata: 'Maecenas faucibus mollis interdum.' },
-              mediaId: 'mocks-media-id-1',
-              layerId: 'mocks-layer-id-1'
-            },
-            {
-              id: 'mocks-annotation-id-2',
-              fragment: {
-                fragment: 'Etiam porta sem malesuada magna mollis euismod.'
+          layersUid: 'default',
+          mediaUid: 'default',
+          layers: {
+            'mocks-layer-id-1': [
+              {
+                id: 'mocks-annotation-id-1',
+                fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
+                metadata: { metadata: 'Maecenas faucibus mollis interdum.' },
+                mediaId: 'mocks-media-id-1',
+                layerId: 'mocks-layer-id-1'
               },
-              metadata: {
-                metadata: 'Etiam porta sem malesuada magna mollis euismod.'
-              },
-              layerId: 'mocks-layer-id-1'
-            }
-          ]
+              {
+                id: 'mocks-annotation-id-2',
+                fragment: {
+                  fragment: 'Etiam porta sem malesuada magna mollis euismod.'
+                },
+                metadata: {
+                  metadata: 'Etiam porta sem malesuada magna mollis euismod.'
+                },
+                layerId: 'mocks-layer-id-1'
+              }
+            ]
+          }
         }
       }
     }
@@ -156,7 +160,9 @@ describe('store annotations actions', () => {
 
     expect.assertions(2)
     return store.dispatch('cml/annotations/add', { element }).then(r => {
-      expect(store.state.cml.annotations.lists['default'][layerId]).toEqual([
+      expect(
+        store.state.cml.annotations.lists['default'].layers[layerId]
+      ).toEqual([
         {
           fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
           id: 'mocks-annotation-id-1',
@@ -205,7 +211,9 @@ describe('store annotations actions', () => {
 
     expect.assertions(2)
     return store.dispatch('cml/annotations/remove', { id }).then(r => {
-      expect(store.state.cml.annotations.lists['default'][layerId]).toEqual([
+      expect(
+        store.state.cml.annotations.lists['default'].layers[layerId]
+      ).toEqual([
         {
           fragment: {
             fragment: 'Etiam porta sem malesuada magna mollis euismod.'
@@ -248,7 +256,9 @@ describe('store annotations actions', () => {
 
     expect.assertions(2)
     return store.dispatch('cml/annotations/update', { element }).then(r => {
-      expect(store.state.cml.annotations.lists['default'][layerId]).toEqual([
+      expect(
+        store.state.cml.annotations.lists['default'].layers[layerId]
+      ).toEqual([
         {
           fragment: {
             fragment: 'Donec id elit non mi porta gravida at eget metus.'
@@ -302,7 +312,9 @@ describe('store annotations actions', () => {
         mediaId
       })
       .then(r => {
-        expect(store.state.cml.annotations.lists['default'][layerId]).toEqual([
+        expect(
+          store.state.cml.annotations.lists['default'].layers[layerId]
+        ).toEqual([
           {
             fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
             id: 'mocks-annotation-id-1',

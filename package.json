@@ -23,21 +23,17 @@
   "main": "dist/camomile-ui.common.js",
   "module": "dist/camomile-ui.esm.js",
   "browser": "dist/camomile-ui.umd.js",
-  "keywords": [
-    "camomile",
-    "ui",
-    "collaborative",
-    "annotation",
-    "platform"
-  ],
+  "keywords": ["camomile", "ui", "collaborative", "annotation", "platform"],
   "scripts": {
     "jest": "jest --verbose --coverage --watch",
     "test": "jest --verbose && codecov",
     "dist": "cross-env NODE_ENV=production node build/webpack.dist.js",
     "dev": "cross-env NODE_ENV=development node build/webpack.dev.js",
     "build": "rollup -c build/rollup.config.dist.js",
-    "styleguide": "vue-styleguidist --config build/webpack.styleguide.config.js server",
-    "styleguide:build": "vue-styleguidist --config build/webpack.styleguide.config.js build"
+    "styleguide":
+      "vue-styleguidist --config build/webpack.styleguide.config.js server",
+    "styleguide:build":
+      "vue-styleguidist --config build/webpack.styleguide.config.js build"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -49,8 +45,8 @@
     "@babel/core": "^7.0.0-beta.38",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.38",
     "@babel/preset-env": "^7.0.0-beta.38",
-    "@types/jest": "^22.1.0",
-    "@vue/test-utils": "^1.0.0-beta.10",
+    "@types/jest": "^22.1.1",
+    "@vue/test-utils": "^1.0.0-beta.11",
     "autoprefixer": "^7.2.5",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^22.1.0",
@@ -65,7 +61,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-vue": "^4.2.0",
+    "eslint-plugin-vue": "^4.2.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "html-webpack-exclude-assets-plugin": "0.0.5",
@@ -74,6 +70,7 @@
     "jest": "^22.1.4",
     "jest-serializer-vue": "^0.3.0",
     "jest-vue-preprocessor": "^1.3.1",
+    "json-fn": "^1.1.1",
     "json-loader": "^0.5.7",
     "object-fit-images": "^3.2.3",
     "pixrem": "^4.0.1",
@@ -117,13 +114,13 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.55.1",
     "rollup-plugin-buble": "^0.18.0",
-    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-commonjs": "^8.3.0",
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.0.2",
-    "rollup-plugin-postcss": "^1.2.7",
+    "rollup-plugin-postcss": "^1.2.8",
     "rollup-plugin-vue": "^3.0.0",
-    "style-loader": "^0.19.1",
+    "style-loader": "^0.20.1",
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
     "stylelint-processor-html": "^1.0.0",
@@ -148,25 +145,17 @@
     }
   },
   "stylelint": {
-    "processors": [
-      "stylelint-processor-html"
-    ],
+    "processors": ["stylelint-processor-html"],
     "extends": "stylelint-config-standard",
     "rules": {
       "property-no-unknown": [
         true,
         {
-          "ignoreProperties": [
-            "typescale",
-            "gf",
-            "/button-/"
-          ]
+          "ignoreProperties": ["typescale", "gf", "/button-/"]
         }
       ]
     },
-    "ignoreFiles": [
-      "./dist/**/*"
-    ]
+    "ignoreFiles": ["./dist/**/*"]
   },
   "browserslist": [
     "Chrome >= 60",
@@ -180,22 +169,14 @@
       "^vue$": "vue/dist/vue.runtime.min.js",
       "^.+\\.(css)$": "<rootDir>/src/__mocks__/css.js"
     },
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "vue"
-    ],
+    "moduleFileExtensions": ["js", "json", "vue"],
     "transform": {
       "^.+\\.js$": "babel-jest",
       ".*\\.(vue)$": "jest-vue-preprocessor"
     },
     "mapCoverage": true,
-    "snapshotSerializers": [
-      "jest-serializer-vue"
-    ],
-    "roots": [
-      "<rootDir>/src/"
-    ],
+    "snapshotSerializers": ["jest-serializer-vue"],
+    "roots": ["<rootDir>/src/"],
     "coverageDirectory": "<rootDir>/coverage/",
     "collectCoverage": true
   },
