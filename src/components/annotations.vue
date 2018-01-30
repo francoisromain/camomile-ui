@@ -3,16 +3,14 @@
     <div class="flex flex-start">
       <h2 class="mt-s mb-s">Annotations</h2>
     </div>
-    <annotations-layer 
-      v-for="layer in layers" 
+    <annotations-layer v-for="layer in layers" 
       :key="layer.id" class="mt" 
       v-if="annotations[layer.id]"
       :layer="layer"
-      :annotations="annotations"
+      :annotations="annotations[layer.id]"
       :active-id="activeId"
       :media-id="mediaId"
       :media-name="mediaName"
-      :media-properties="mediaProperties"
       >
     </annotations-layer>
   </div>
@@ -68,9 +66,6 @@ export default {
     },
     mediaId() {
       return this.$store.state.cml.medias.actives[this.mediaUid].id
-    },
-    mediaProperties() {
-      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
     mediaName() {
       if (!this.mediaId) return ''

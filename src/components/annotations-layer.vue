@@ -2,14 +2,13 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">{{ layer.name }}</h2>
-      <button @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId: layer.id, mediaId, fragment: fragmentType(), metadata: {} } })" class="flex-right btn p-s" v-if="layer.permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <button @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId: layer.id, mediaId, fragment: layer.fragmentType, metadata: {} } })" class="flex-right btn p-s" v-if="layer.permission === 3"><i class="icon-24 icon-24-plus"></i></button>
     </div>
     <table class="table mb-0">
       <tr>
         <th></th><th>Id</th><th>Medium</th><th></th>
       </tr>
-      <annotations-layer-detail 
-        v-for="annotation in annotations[layer.id]"
+      <annotations-layer-detail v-for="annotation in annotations"
         :key="annotation.id"
         :annotation="annotation"
         :uid="uid"
@@ -39,11 +38,10 @@ export default {
       default: 'default'
     },
     layer: Object,
-    annotations: Object,
+    annotations: Array,
     activeId: String,
     mediaId: String,
-    mediaName: String,
-    mediaProperties: Object
+    mediaName: String
   },
 
   data() {

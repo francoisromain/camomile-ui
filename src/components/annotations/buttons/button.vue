@@ -13,17 +13,7 @@ export default {
     mediaId: String,
     timeTotal: Number,
     timeCurrent: Number,
-    fragmentType: {
-      type: Object,
-      default: () => {
-        return {
-          time: {
-            start: this.timeCurrent,
-            end: this.timeCurrent + 25000
-          }
-        }
-      }
-    }
+    fragmentType: Object
   },
   methods: {
     annotationCreate() {
@@ -31,10 +21,19 @@ export default {
         id: null,
         layerId: this.layerId,
         mediaId: this.mediaId,
-        fragment: this.fragmentType(),
+        fragment: this.fragmentTypeFormat(this.fragmentType),
         metadata: {}
       }
       this.$store.dispatch(`cml/annotations/add`, { element })
+    },
+
+    fragmentTypeFormat(fragmentType) {
+      if (!fragmentType.time) {
+        fragmentType.time = {}
+      }
+      fragmentType.time.start = this.timeCurrent
+      fragmentType.time.end = this.timeCurrent + 25000
+      return fragmentType
     }
   }
 }
