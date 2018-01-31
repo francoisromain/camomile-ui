@@ -10,6 +10,7 @@ import cmlLayers from './components/layers.vue'
 import cmlAnnotations from './components/annotations.vue'
 
 import cmlMediasYoutube from './components/medias/youtube.vue'
+import cmlMediasVideo from './components/medias/video.vue'
 import cmlMediasController from './components/medias/controller.vue'
 
 import cmlAnnotationsButtons from './components/annotations/buttons.vue'
@@ -24,6 +25,7 @@ export {
   cmlLayers,
   cmlAnnotations,
   cmlMediasYoutube,
+  cmlMediasVideo,
   cmlMediasController,
   cmlAnnotationsButtons,
   cmlAnnotationsTimeline

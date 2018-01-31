@@ -108,7 +108,7 @@ ins {
   border-bottom: 1px solid;
 }
 
-img {
+img, video {
   max-width: 100%;
   font-style: italic;
   vertical-align: middle;

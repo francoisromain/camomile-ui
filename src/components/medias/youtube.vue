@@ -17,6 +17,11 @@ export default {
     mediaUid: {
       type: String,
       default: 'default'
+    },
+    filter: {
+      type: Function,
+      default: media =>
+        media.description.type && media.description.type === 'youtube' && media
     }
   },
 
@@ -35,13 +40,19 @@ export default {
     media() {
       const active = this.$store.state.cml.medias.actives[this.mediaUid]
       return active
-        ? this.$store.state.cml.medias.lists[active.corpuUid].find(
-            m => m.id === active.id
+        ? this.filter(
+            this.$store.state.cml.medias.lists[active.corpuUid].find(
+              m => m.id === active.id
+            )
           )
-        : {}
+        : null
     },
     properties() {
-      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
+      return (
+        (this.media &&
+          this.$store.state.cml.medias.properties[this.mediaUid]) ||
+        {}
+      )
     },
     isPlaying() {
       return this.properties.isPlaying || false
@@ -61,7 +72,7 @@ export default {
   },
 
   mounted() {
-    if (this.media.url) {
+    if (this.media && this.media.url) {
       this.playerLoad(this.media.url)
     }
   },
@@ -208,7 +219,13 @@ export default {
       this.player.setSize(width, height)
     },
     media(media, mediaOld) {
-      if (media.url && media.url !== mediaOld.url) {
+      if (
+        media &&
+        media.url &&
+        mediaOld &&
+        mediaOld.url &&
+        media.url !== mediaOld.url
+      ) {
         this.videoLoad(media.url)
       }
     }
