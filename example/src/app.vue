@@ -18,7 +18,7 @@
       <cml-annotations-timeline class="mb"></cml-annotations-timeline>
       <cml-medias-controller class="mb"></cml-medias-controller>
       <cml-medias-youtube class="mb"></cml-medias-youtube>
-      <cml-medias-video class="mb"></cml-medias-video>
+      <cml-medias-videozoning class="mb"></cml-medias-videozoning>
 
       <div class="blobs">
         <cml-corpus class="blob-1-2 p border" uid="test"></cml-corpus>
@@ -42,6 +42,7 @@ import {
   cmlAnnotations,
   cmlMediasYoutube,
   cmlMediasVideo,
+  cmlMediasVideozoning,
   cmlMediasController,
   cmlAnnotationsButtons,
   cmlAnnotationsTimeline
@@ -59,6 +60,7 @@ export default {
     cmlAnnotations,
     cmlMediasYoutube,
     cmlMediasVideo,
+    cmlMediasVideozoning,
     cmlMediasController,
     cmlAnnotationsButtons,
     cmlAnnotationsTimeline

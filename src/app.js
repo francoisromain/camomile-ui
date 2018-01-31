@@ -11,6 +11,7 @@ import cmlAnnotations from './components/annotations.vue'
 
 import cmlMediasYoutube from './components/medias/youtube.vue'
 import cmlMediasVideo from './components/medias/video.vue'
+import cmlMediasVideozoning from './components/medias/videozoning.vue'
 import cmlMediasController from './components/medias/controller.vue'
 
 import cmlAnnotationsButtons from './components/annotations/buttons.vue'
@@ -26,6 +27,7 @@ export {
   cmlAnnotations,
   cmlMediasYoutube,
   cmlMediasVideo,
+  cmlMediasVideozoning,
   cmlMediasController,
   cmlAnnotationsButtons,
   cmlAnnotationsTimeline

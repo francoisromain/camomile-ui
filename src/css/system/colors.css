@@ -27,10 +27,6 @@
   background-color: var(--color-bg);
 }
 
-.bg-alpha {
-  background-color: color(var(--color-bg) alpha(50%));
-}
-
 .bg-highlight {
   background-color: var(--color-highlight);
 }
@@ -61,6 +57,14 @@
 
 .bg-success {
   background: var(--color-success);
+}
+
+.bg-bg-alpha {
+  background-color: color(var(--color-bg) alpha(50%));
+}
+
+.bg-alt-alpha {
+  background-color: color(var(--color-alt) alpha(50%));
 }
 
 .border-bg {
