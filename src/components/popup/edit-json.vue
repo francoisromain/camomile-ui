@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import JSONfn from 'json-fn'
-
 export default {
   name: 'camomile-popup-edit-json',
   props: {
@@ -22,13 +20,17 @@ export default {
   computed: {
     fields: {
       get() {
-        return JSONfn.stringify(this.$store.state.cml.popup.element[this.name])
+        return JSON.stringify(
+          this.$store.state.cml.popup.element[this.name],
+          undefined,
+          2
+        )
       },
       set(value) {
         if (this.jsonCheck(value)) {
           this.$store.commit('cml/popup/fieldUpdate', {
             name: this.name,
-            value: JSONfn.parse(value)
+            value: JSON.parse(value)
           })
         }
       }
@@ -38,7 +40,7 @@ export default {
   methods: {
     jsonCheck(str) {
       try {
-        JSONfn.parse(str)
+        JSON.parse(str)
       } catch (e) {
         return false
       }
