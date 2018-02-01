@@ -1,6 +1,6 @@
 {
   "name": "@camomile/camomile-ui",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "UI Component library for Camomile",
   "license": "MIT",
   "homepage": "https://github.com/francoisromain/camomile-ui#readme",
@@ -116,7 +116,7 @@
     "postcss-url": "^7.3.0",
     "progress-bar-webpack-plugin": "^1.10.0",
     "rimraf": "^2.6.2",
-    "rollup": "^0.55.2",
+    "rollup": "^0.55.3",
     "rollup-plugin-buble": "^0.18.0",
     "rollup-plugin-commonjs": "^8.3.0",
     "rollup-plugin-json": "^2.3.0",

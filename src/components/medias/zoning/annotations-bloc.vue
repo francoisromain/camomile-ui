@@ -35,6 +35,12 @@ export default {
   },
 
   computed: {
+    timeStart() {
+      return this.annotation.fragment.time.start
+    },
+    timeEnd() {
+      return this.annotation.fragment.time.end
+    },
     positionIndex() {
       return this.annotation.fragment.positions
         .slice()
@@ -42,7 +48,11 @@ export default {
         .findIndex(pos => pos.time <= this.timeCurrent)
     },
     visible() {
-      return this.positionIndex !== -1
+      return (
+        this.positionIndex !== -1 &&
+        this.timeStart <= this.timeCurrent &&
+        this.timeEnd >= this.timeCurrent
+      )
     },
     position() {
       return this.annotation.fragment.positions[this.positionIndex]

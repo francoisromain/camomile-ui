@@ -41,6 +41,8 @@ export default {
         a.fragment.time &&
         !isNaN(a.fragment.time.start) &&
         !isNaN(a.fragment.time.end) &&
+        a.fragment.positions &&
+        a.fragment.positions instanceof Array &&
         a
     },
     layers: Array

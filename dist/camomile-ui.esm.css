@@ -2057,6 +2057,51 @@ hr.border-bg {
   margin-top: 0.75rem;
 }
 
+.annotation {
+  background-color: #ff0000;
+  background-color: rgba(255, 0, 0, .5);
+}
+
+.handle {
+  width: 32px;
+  background-color: yellow;
+  cursor: ew-resize;
+}
+
+.handle-right {
+  right: -32px;
+  top: 0;
+  bottom: 0;
+}
+
+.handle-left {
+  left: -32px;
+  top: 0;
+  bottom: 0;
+}
+
+.handle-topleft {
+  top: 0;
+  left: 0;
+  height: 32px;
+}
+
+.handle-bottomright {
+  bottom: 0;
+  right: 0;
+  height: 32px;
+}
+
+.timeline-cursor {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  width: 0.0625rem;
+  background-color: rgb(0, 162, 255);
+  top: 0;
+  bottom: 0;
+}
+
 @media (min-width: 42.5em) {
   --header-height: 3rem;
 

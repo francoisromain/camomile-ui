@@ -103,6 +103,15 @@ hr.border-bg {
   height: 32px;
 }
 
+.timeline-cursor {
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--unit-line);
+  background-color: var(--color-brand);
+  top: 0;
+  bottom: 0;
+}
+
 @media (--viewport-tablet) {
   --header-height: calc(var(--unit) * 2);
 

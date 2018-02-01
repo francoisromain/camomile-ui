@@ -1,6 +1,7 @@
 <template>
   <div ref="container">
     <div class="relative overflow-hidden" :style="{ height: `${40 * layers.length}px` }" v-if="layers">
+      <div class="absolute timeline-cursor"></div>
       <div class="absolute timeline-annotations" :style="{
         top: 0, bottom: 0, left: `${left}px`, width: `${width}px`
       }">

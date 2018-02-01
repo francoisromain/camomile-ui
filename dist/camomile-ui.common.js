@@ -4068,7 +4068,190 @@ var videoPlayer = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   }
 }
 
-var zoningAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._v("annotation")])},staticRenderFns: [],}
+var annotationsBloc = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.visible)?_c('div',{ref:"annotation",style:({ left: ((_vm.left) + "%"), top: ((_vm.top) + "%"), width:((_vm.width) + "%"), height:((_vm.height) + "%") })},[_c('div',{staticClass:"relative full-y",on:{"mousedown":function($event){_vm.set($event);}}},[_c('div',{staticClass:"absolute handle handle-topleft",on:{"mousedown":function($event){_vm.dragTopleftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handle handle-bottomright",on:{"mousedown":function($event){_vm.dragBottomrightOn($event);}}})])]):_vm._e()},staticRenderFns: [],
+  props: {
+    uid: String,
+    annotation: Object,
+    layerId: String,
+    layersUid: String,
+    timeTotal: Number,
+    timeCurrent: Number,
+    containerWidth: Number,
+    containerHeight: Number
+  },
+
+  data: function data() {
+    return {
+      leftDragging: null,
+      topDragging: null,
+      rightDragging: null,
+      bottomDragging: null,
+      handleWidth: 32
+    }
+  },
+
+  computed: {
+    timeStart: function timeStart() {
+      return this.annotation.fragment.time.start
+    },
+    timeEnd: function timeEnd() {
+      return this.annotation.fragment.time.end
+    },
+    positionIndex: function positionIndex() {
+      var this$1 = this;
+
+      return this.annotation.fragment.positions
+        .slice()
+        .reverse()
+        .findIndex(function (pos) { return pos.time <= this$1.timeCurrent; })
+    },
+    visible: function visible() {
+      return (
+        this.positionIndex !== -1 &&
+        this.timeStart <= this.timeCurrent &&
+        this.timeEnd >= this.timeCurrent
+      )
+    },
+    position: function position() {
+      return this.annotation.fragment.positions[this.positionIndex]
+    },
+    left: function left() {
+      if (this.visible) {
+        return this.leftDragging !== null
+          ? this.leftDragging
+          : this.position.left
+      }
+    },
+    top: function top() {
+      if (this.visible) {
+        return this.topDragging !== null ? this.topDragging : this.position.top
+      }
+    },
+    width: function width() {
+      if (this.visible) {
+        return this.bottomDragging !== null
+          ? this.bottomDragging
+          : this.position.width
+      }
+    },
+    height: function height() {
+      if (this.visible) {
+        return this.bottomDragging !== null
+          ? this.bottomDragging
+          : this.position.height
+      }
+    }
+  },
+
+  methods: {
+    positionUpdate: function positionUpdate(positions) {
+      var element = Object.assign({}, this.annotation);
+      positions.forEach(
+        function (position) { return (element.fragment.position[position.type] = position.value); }
+      );
+      return this.$store.dispatch('cml/annotations/update', { element: element })
+    },
+    dragTopleftOn: function dragTopleftOn(e) {
+      document.addEventListener('mousemove', this.dragTopleft);
+      document.addEventListener('mouseup', this.dragTopleftOff);
+    },
+    dragTopleftOff: function dragTopleftOff(e) {
+      document.removeEventListener('mousemove', this.dragTopleft);
+      document.removeEventListener('mouseup', this.dragTopleftOff);
+      var positions = [
+        {
+          type: 'top',
+          value: this.$refs.annotation.offsetTop
+        },
+        {
+          type: 'top',
+          value: this.$refs.annotation.offsetLeft
+        }
+      ];
+      this.positionUpdate(positions);
+      this.topleftDragging = null;
+    },
+    dragTopleft: function dragTopleft(e) {
+      var c = e.clientX - this.containerLeft + this.handleWidth / 2;
+
+      if (c < 0) {
+        this.topDragging = 0;
+      } else if (c > this.containerWidth - this.right) {
+        this.topDragging = this.containerWidth - this.right;
+      } else {
+        this.topDragging = c;
+      }
+    },
+    dragBottomrightOn: function dragBottomrightOn(e) {
+      document.addEventListener('mousemove', this.dragRight);
+      document.addEventListener('mouseup', this.dragRightOff);
+    },
+    dragRightOff: function dragRightOff(e) {
+      document.removeEventListener('mousemove', this.dragRight);
+      document.removeEventListener('mouseup', this.dragRightOff);
+      var time = Math.round(
+        (this.$refs.annotation.offsetLeft + this.$refs.annotation.offsetWidth) *
+          this.timeTotal /
+          this.containerWidth
+      );
+      this.positionUpdate(time, 'end');
+      this.bottomDragging = null;
+    },
+    dragRight: function dragRight(e) {
+      var c =
+        this.containerWidth +
+        this.containerLeft -
+        e.clientX +
+        this.handleWidth / 2;
+
+      this.bottomDragging = c > 0 ? c : 0;
+    },
+    set: function set(e) {
+      this.$store.commit('cml/annotations/set', {
+        id: this.annotation.id,
+        uid: this.uid
+      });
+    }
+  }
+}
+
+var zoningAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},_vm._l((_vm.annotations),function(annotation){return _c('annotations-bloc',{key:annotation.id,staticClass:"absolute annotation",style:({ zIndex: annotation.id === _vm.activeId ? 1 : 0}),attrs:{"annotation":annotation,"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":_vm.layerId,"time-total":_vm.timeTotal,"time-current":_vm.timeCurrent,"container-width":_vm.containerWidth,"container-height":_vm.containerHeight}})}))},staticRenderFns: [],
+  components: {
+    annotationsBloc: annotationsBloc
+  },
+
+  props: {
+    uid: String,
+    layersUid: String,
+    layerId: String,
+    annotations: Array,
+    timeTotal: Number,
+    timeCurrent: Number
+  },
+
+  data: function data() {
+    return {
+      containerWidth: 0,
+      containerHeight: 0
+    }
+  },
+
+  computed: {
+    activeId: function activeId() {
+      return this.$store.state.cml.annotations.actives[this.uid]
+    }
+  },
+
+  methods: {
+    resize: function resize() {}
+  },
+
+  mounted: function mounted() {
+    window.addEventListener('resize', this.resize);
+    this.containerWidth = this.$refs.container.offsetWidth;
+    this.containerHeight = this.$refs.container.offsetHeight;
+  }
+}
 
 var zoning = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"relative full-y"},_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('zoning-annotations',{key:("annotations-" + (layer.id)),staticClass:"absolute full",attrs:{"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":layer.id,"annotations":_vm.annotations[layer.id],"time-total":_vm.timeTotal,"time-current":_vm.timeCurrent}}):_vm._e()}))},staticRenderFns: [],
   components: { zoningAnnotations: zoningAnnotations },
@@ -4092,6 +4275,8 @@ var zoning = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_
         a.fragment.time &&
         !isNaN(a.fragment.time.start) &&
         !isNaN(a.fragment.time.end) &&
+        a.fragment.positions &&
+        a.fragment.positions instanceof Array &&
         a; }
     },
     layers: Array
@@ -4326,7 +4511,7 @@ var buttons = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
   }
 }
 
-var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"annotation",staticClass:"absolute annotation",style:({ left: ((_vm.left) + "px"), right: ((_vm.right) + "px") })},[_c('div',{staticClass:"relative full-y",on:{"mousedown":function($event){_vm.set($event);}}},[_c('div',{staticClass:"absolute handler handler-left",on:{"mousedown":function($event){_vm.dragLeftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handler handler-right",on:{"mousedown":function($event){_vm.dragRightOn($event);}}})])])},staticRenderFns: [],_scopeId: 'data-v-0f3e34aa',
+var annotationsBloc$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"annotation",style:({ left: ((_vm.left) + "px"), right: ((_vm.right) + "px") })},[_c('div',{staticClass:"relative full-y",on:{"mousedown":function($event){_vm.set($event);}}},[_c('div',{staticClass:"absolute handle handle-left",on:{"mousedown":function($event){_vm.dragLeftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handle handle-right",on:{"mousedown":function($event){_vm.dragRightOn($event);}}})])])},staticRenderFns: [],
   props: {
     uid: String,
     annotation: Object,
@@ -4341,7 +4526,7 @@ var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElemen
     return {
       leftDragging: null,
       rightDragging: null,
-      handlerWidth: 32
+      handleWidth: 32
     }
   },
 
@@ -4383,7 +4568,7 @@ var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElemen
       this.leftDragging = null;
     },
     dragLeft: function dragLeft(e) {
-      var c = e.clientX - this.containerLeft + this.handlerWidth / 2;
+      var c = e.clientX - this.containerLeft + this.handleWidth / 2;
 
       if (c < 0) {
         this.leftDragging = 0;
@@ -4413,7 +4598,7 @@ var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElemen
         this.containerWidth +
         this.containerLeft -
         e.clientX +
-        this.handlerWidth / 2;
+        this.handleWidth / 2;
 
       this.rightDragging = c > 0 ? c : 0;
     },
@@ -4426,9 +4611,9 @@ var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElemen
   }
 }
 
-var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},_vm._l((_vm.annotations),function(annotation){return _c('annotations-blocs',{key:annotation.id,ref:"annotations",refInFor:true,staticClass:"absolute annotation",style:({ zIndex: annotation.id === _vm.activeId ? 1 : 0}),attrs:{"annotation":annotation,"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":_vm.layerId,"time-total":_vm.timeTotal,"container-width":_vm.width,"container-left":_vm.left}})}))},staticRenderFns: [],
+var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},_vm._l((_vm.annotations),function(annotation){return _c('annotations-bloc',{key:annotation.id,staticClass:"absolute annotation",style:({ zIndex: annotation.id === _vm.activeId ? 1 : 0}),attrs:{"annotation":annotation,"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":_vm.layerId,"time-total":_vm.timeTotal,"container-width":_vm.width,"container-left":_vm.left}})}))},staticRenderFns: [],_scopeId: 'data-v-d1d8581e',
   components: {
-    annotationsBlocs: annotationsBlocs
+    annotationsBloc: annotationsBloc$1
   },
 
   props: {
@@ -4448,7 +4633,7 @@ var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createEle
   }
 }
 
-var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},[(_vm.layers)?_c('div',{staticClass:"relative overflow-hidden",style:({ height: ((40 * _vm.layers.length) + "px") })},[_c('div',{staticClass:"absolute timeline-annotations",style:({
+var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},[(_vm.layers)?_c('div',{staticClass:"relative overflow-hidden",style:({ height: ((40 * _vm.layers.length) + "px") })},[_c('div',{staticClass:"absolute timeline-cursor"}),_vm._v(" "),_c('div',{staticClass:"absolute timeline-annotations",style:({
       top: 0, bottom: 0, left: ((_vm.left) + "px"), width: ((_vm.width) + "px")
     })},_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('timeline-annotations',{key:("annotations-" + (layer.id)),staticClass:"relative annotations",attrs:{"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":layer.id,"annotations":_vm.annotations[layer.id],"time-total":_vm.timeTotal,"width":_vm.width,"left":_vm.left + _vm.containerLeft}}):_vm._e()}))]):_vm._e()])},staticRenderFns: [],
   components: {

@@ -169,6 +169,7 @@ http://francoisromain.github.io/postcss-structure
 
 
 
+
 .annotations {
   height: 40px;
 }
@@ -217,100 +218,9 @@ http://francoisromain.github.io/postcss-structure
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.annotation[data-v-0f3e34aa] {
-  background-color: #ff0000;
-  background-color: rgba(255, 0, 0, .5);
+.annotation[data-v-d1d8581e] {
   top: 0;
   bottom: 0;
   text-align: center;
-}
-
-.handler[data-v-0f3e34aa] {
-  width: 32px;
-  background-color: yellow;
-  top: 0;
-  bottom: 0;
-  cursor: ew-resize;
-}
-
-.handler-right[data-v-0f3e34aa] {
-  right: -32px;
-}
-
-.handler-left[data-v-0f3e34aa] {
-  left: -32px;
 }
 
