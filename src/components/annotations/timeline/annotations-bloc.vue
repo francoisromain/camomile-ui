@@ -1,12 +1,11 @@
 <template>
-  <div class="absolute annotation"
-    :style="{ left: `${left}px`, right: `${right}px` }"
-    ref="annotation">
+  <div ref="annotation"
+    :style="{ left: `${left}px`, right: `${right}px` }">
     <div class="relative full-y"
       @mousedown="set($event)">
-      <div class="absolute handler handler-left"
+      <div class="absolute handle handle-left"
         @mousedown="dragLeftOn($event)"></div>
-      <div class="absolute handler handler-right"
+      <div class="absolute handle handle-right"
         @mousedown="dragRightOn($event)"></div>
     </div>
   </div>
@@ -27,7 +26,7 @@ export default {
     return {
       leftDragging: null,
       rightDragging: null,
-      handlerWidth: 32
+      handleWidth: 32
     }
   },
 
@@ -69,7 +68,7 @@ export default {
       this.leftDragging = null
     },
     dragLeft(e) {
-      const c = e.clientX - this.containerLeft + this.handlerWidth / 2
+      const c = e.clientX - this.containerLeft + this.handleWidth / 2
 
       if (c < 0) {
         this.leftDragging = 0
@@ -99,43 +98,16 @@ export default {
         this.containerWidth +
         this.containerLeft -
         e.clientX +
-        this.handlerWidth / 2
+        this.handleWidth / 2
 
       this.rightDragging = c > 0 ? c : 0
     },
     set(e) {
       this.$store.commit('cml/annotations/set', {
         id: this.annotation.id,
-        layersUid: this.layersUid,
         uid: this.uid
       })
     }
   }
 }
 </script>
-
-
-<style scoped>
-.annotation {
-  background-color: rgba(255, 0, 0, 0.5);
-  top: 0;
-  bottom: 0;
-  text-align: center;
-}
-
-.handler {
-  width: 32px;
-  background-color: yellow;
-  top: 0;
-  bottom: 0;
-  cursor: ew-resize;
-}
-
-.handler-right {
-  right: -32px;
-}
-
-.handler-left {
-  left: -32px;
-}
-</style>

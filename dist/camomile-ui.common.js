@@ -8,6 +8,7 @@ var Vue = _interopDefault(require('vue'));
 var Camomile = _interopDefault(require('camomile-client'));
 var Vuex = require('vuex');
 var Vuex__default = _interopDefault(Vuex);
+var JSONfn = _interopDefault(require('json-fn'));
 
 var config = {
   title: 'Camomile UI',
@@ -1188,17 +1189,18 @@ var actions$6 = {
     var uid = ref$1.uid;
 
     commit('set', { id: id || getters.id(uid), uid: uid });
-    commit('cml/medias/init', uid, { root: true });
-    commit('cml/layers/init', uid, { root: true });
+
+    // media needs to be set
+    // before layers/set triggers annotations/lists
     if (state.actives[uid]) {
       dispatch(
         'cml/medias/list',
-        { corpuId: state.actives[uid], uid: uid },
+        { corpuId: state.actives[uid], corpuUid: uid },
         { root: true }
       );
       dispatch(
         'cml/layers/list',
-        { corpuId: state.actives[uid], uid: uid },
+        { corpuId: state.actives[uid], corpuUid: uid },
         { root: true }
       );
     }
@@ -1208,20 +1210,19 @@ var actions$6 = {
     var state = ref.state;
     var commit = ref.commit;
 
-    commit('init', uid);
+    commit('register', uid);
   }
 };
 
 var getters$4 = {
   id: function (state) { return function (uid) { return (state.actives[uid] &&
-      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid]) !== -1 &&
-      state.actives[uid]) ||
+      state.lists[uid].find(function (c) { return c.id === state.actives[uid]; }).id) ||
     (state.lists[uid][0] && state.lists[uid][0].id) ||
     null; }; }
 };
 
 var mutations$7 = {
-  init: function init(state, uid) {
+  register: function register(state, uid) {
     Vue.set(state.lists, uid, []);
     Vue.set(state.actives, uid, null);
   },
@@ -1343,8 +1344,6 @@ var corpus = {
   mutations: mutations$7
 }
 
-var interval;
-
 var state$9 = {
   lists: {},
   actives: {},
@@ -1370,12 +1369,14 @@ var actions$7 = {
       .then(function (r) {
         dispatch('cml/sync/stop', "mediasAdd", { root: true });
         var media = mediaFormat(r.data);
-        Object.keys(state.lists).forEach(function (uid) {
-          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
-            commit('add', { media: media, uid: uid });
-            if (!state.actives[uid]) {
-              commit('set', { id: media.id, uid: uid });
-            }
+        Object.keys(state.lists).forEach(function (corpuUid) {
+          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            commit('add', { media: media, corpuUid: corpuUid });
+            Object.keys(state.actives).forEach(function (uid) {
+              if (state.actives[uid].corpuUid === corpuUid) {
+                commit('set', { id: media.id, corpuUid: corpuUid, uid: uid });
+              }
+            });
           }
         });
         dispatch('cml/messages/success', 'Medium added', { root: true });
@@ -1401,11 +1402,14 @@ var actions$7 = {
       .deleteMedium(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "mediasRemove", { root: true });
-        Object.keys(state.lists).forEach(function (uid) {
-          commit('remove', { id: id, uid: uid });
+        Object.keys(state.lists).forEach(function (corpuUid) {
+          var listIndex = state.lists[corpuUid].findIndex(function (m) { return m.id === id; });
+          if (listIndex !== -1) {
+            commit('remove', { listIndex: listIndex, corpuUid: corpuUid });
+          }
         });
+        dispatch('unsetAll', { id: id });
         dispatch('cml/messages/success', 'Medium removed', { root: true });
-        dispatch('setAll', { id: id });
 
         return id
       })
@@ -1437,10 +1441,9 @@ var actions$7 = {
         media.name = r.data.name;
         media.url = r.data.url;
         media.description = r.data.description || {};
-        Object.keys(state.lists).forEach(function (uid) {
-          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
-            console.log('media-update', uid, media);
-            commit('update', { media: media, uid: uid });
+        Object.keys(state.lists).forEach(function (corpuUid) {
+          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            commit('update', { media: media, corpuUid: corpuUid });
           }
         });
         dispatch('cml/messages/success', 'Medium updated', { root: true });
@@ -1459,40 +1462,48 @@ var actions$7 = {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var corpuId = ref$1.corpuId;
-    var uid = ref$1.uid;
+    var corpuUid = ref$1.corpuUid;
 
-    dispatch('cml/sync/start', ("mediasList-" + uid), { root: true });
+    dispatch('cml/sync/start', ("mediasList-" + corpuUid), { root: true });
     return api
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(function (r) {
-        dispatch('cml/sync/stop', ("mediasList-" + uid), { root: true });
+        dispatch('cml/sync/stop', ("mediasList-" + corpuUid), { root: true });
         var medias = r.data.map(function (media) {
           return mediaFormat(media)
         });
-        commit('list', { medias: medias, uid: uid });
-        dispatch('set', { uid: uid });
+        commit('list', { medias: medias, corpuUid: corpuUid });
+
+        Object.keys(state$9.actives).forEach(function (uid) {
+          dispatch('set', { corpuUid: corpuUid, uid: uid });
+        });
 
         return medias
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("mediasList-" + uid), { root: true });
+        dispatch('cml/sync/stop', ("mediasList-" + corpuUid), { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
       })
   },
 
-  setAll: function setAll(ref, ref$1) {
+  register: function register(ref, uid) {
+    var state = ref.state;
+    var commit = ref.commit;
+
+    commit('register', uid);
+  },
+
+  unsetAll: function unsetAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var id = ref$1.id;
 
     Object.keys(state.actives).forEach(function (uid) {
-      if (state.actives[uid] === id) {
-        dispatch('set', { uid: uid });
+      if (state.actives[uid].id === id) {
+        dispatch('set', { corpuUid: state.actives[uid].corpuUid, uid: uid });
       }
-
-      dispatch('cml/annotations/listAll', { uid: uid }, { root: true });
     });
   },
 
@@ -1502,48 +1513,68 @@ var actions$7 = {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var id = ref$1.id;
+    var corpuUid = ref$1.corpuUid;
     var uid = ref$1.uid;
 
     if (state.properties[uid] && state.properties[uid].isPlaying) {
-      dispatch('pause', uid);
+      dispatch('pause', { uid: uid });
     }
-    commit('set', { id: id || getters.id(uid), uid: uid });
+    commit('set', { id: id || getters.id({ corpuUid: corpuUid, uid: uid }), corpuUid: corpuUid, uid: uid });
+    dispatch(
+      'cml/annotations/mediaSet',
+      {
+        mediaId: state.actives[uid].id,
+        mediaUid: uid
+      },
+      { root: true }
+    );
   },
 
-  play: function play(ref, uid) {
+  play: function play(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
+    var uid = ref$1.uid;
 
     var timeStart = Date.now();
     var timeCurrent = state.properties[uid].timeCurrent;
-    interval = setInterval(function () {
+    state.properties[uid].interval = setInterval(function () {
       var timeEllapsed = Date.now() - timeStart;
       // commit('timeCurrent', { time: timeCurrent + timeEllapsed, uid })
       Vue.set(state.properties[uid], 'timeCurrent', timeCurrent + timeEllapsed);
     }, 0);
-    commit('play', uid);
+    commit('play', { uid: uid });
   },
 
-  pause: function pause(ref, uid) {
+  pause: function pause(ref, ref$1) {
+    var state = ref.state;
     var commit = ref.commit;
+    var uid = ref$1.uid;
 
-    clearInterval(interval);
-    commit('pause', uid);
+    clearInterval(state.properties[uid].interval);
+    commit('pause', { uid: uid });
   },
 
-  buffering: function buffering(ref, uid) {
+  buffering: function buffering(ref, ref$1) {
+    var state = ref.state;
     var commit = ref.commit;
+    var uid = ref$1.uid;
 
-    clearInterval(interval);
+    clearInterval(state.properties[uid].interval);
   },
 
-  stop: function stop(ref, uid) {
+  stop: function stop(ref, ref$1) {
+    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var uid = ref$1.uid;
 
-    clearInterval(interval);
-    commit('pause', uid);
-    dispatch('seek', { options: { ratio: 0, serverRequest: true }, uid: uid });
+    clearInterval(state.properties[uid].interval);
+    commit('pause', { uid: uid });
+    dispatch('seek', {
+      ratio: 0,
+      serverRequest: true,
+      uid: uid
+    });
   },
 
   seek: function seek(ref, ref$1) {
@@ -1555,7 +1586,7 @@ var actions$7 = {
     var uid = ref$1.uid;
 
     if (state.properties[uid].isPlaying) {
-      clearInterval(interval);
+      clearInterval(state.properties[uid].interval);
     }
     // commit('timeCurrent', {
     //   time: ratio * state.properties[uid].timeTotal,
@@ -1572,18 +1603,22 @@ var actions$7 = {
 };
 
 var getters$5 = {
-  id: function (state) { return function (uid) { return (state.actives[uid] &&
-      state.lists[uid].map(function (c) { return c.id; }).indexOf(state.actives[uid]) !== -1 &&
-      state.actives[uid]) ||
-    (state.lists[uid][0] && state.lists[uid][0].id) ||
-    null; }; }
+  id: function (state) { return function (ref) {
+      var corpuUid = ref.corpuUid;
+      var uid = ref.uid;
+
+      return (state.actives[uid] &&
+      state.lists[corpuUid].find(function (c) { return c.id === state.actives[uid].id; }) &&
+      state.actives[uid].id) ||
+    (state.lists[corpuUid][0] && state.lists[corpuUid][0].id) ||
+    null;
+ }    }
 };
 
 var mutations$8 = {
-  init: function init(state, uid) {
-    Vue.set(state.lists, uid, []);
+  register: function register(state, uid) {
     Vue.set(state.actives, uid, null);
-    Vue.set(state.properties, uid, {});
+    Vue.set(state.properties, uid, null);
   },
 
   resetAll: function resetAll(state) {
@@ -1594,42 +1629,40 @@ var mutations$8 = {
 
   add: function add(state, ref) {
     var media = ref.media;
-    var uid = ref.uid;
+    var corpuUid = ref.corpuUid;
 
-    var index = state.lists[uid].length;
-    Vue.set(state.lists[uid], index, media);
+    var index = state.lists[corpuUid].length;
+    Vue.set(state.lists[corpuUid], index, media);
   },
 
   update: function update(state, ref) {
     var media = ref.media;
-    var uid = ref.uid;
+    var corpuUid = ref.corpuUid;
 
-    var index = state.lists[uid].findIndex(function (m) { return m.id === media.id; });
-    Vue.set(state.lists[uid], index, media);
+    var index = state.lists[corpuUid].findIndex(function (m) { return m.id === media.id; });
+    Vue.set(state.lists[corpuUid], index, media);
   },
 
   remove: function remove(state, ref) {
-    var id = ref.id;
-    var uid = ref.uid;
+    var listIndex = ref.listIndex;
+    var corpuUid = ref.corpuUid;
 
-    var listIndex = state.lists[uid].findIndex(function (m) { return m.id === id; });
-    if (listIndex !== -1) {
-      Vue.delete(state.lists[uid], listIndex);
-    }
+    Vue.delete(state.lists[corpuUid], listIndex);
   },
 
   list: function list(state, ref) {
     var medias = ref.medias;
-    var uid = ref.uid;
+    var corpuUid = ref.corpuUid;
 
-    Vue.set(state.lists, uid, medias);
+    Vue.set(state.lists, corpuUid, medias);
   },
 
   set: function set(state, ref) {
     var id = ref.id;
+    var corpuUid = ref.corpuUid;
     var uid = ref.uid;
 
-    Vue.set(state.actives, uid, id);
+    Vue.set(state.actives, uid, { corpuUid: corpuUid, id: id });
     Vue.set(state.properties, uid, {
       timeTotal: 0,
       timeCurrent: 0,
@@ -1646,11 +1679,15 @@ var mutations$8 = {
     Vue.set(state.properties[uid], 'isLoaded', isLoaded);
   },
 
-  play: function play(state, uid) {
+  play: function play(state, ref) {
+    var uid = ref.uid;
+
     Vue.set(state.properties[uid], 'isPlaying', true);
   },
 
-  pause: function pause(state, uid) {
+  pause: function pause(state, ref) {
+    var uid = ref.uid;
+
     Vue.set(state.properties[uid], 'isPlaying', false);
   },
 
@@ -1718,10 +1755,15 @@ var actions$8 = {
         };
         layer.permissions.users[rootState.cml.user.id] = 3;
 
-        Object.keys(state.lists).forEach(function (uid) {
-          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
-            commit('add', { layer: layer, uid: uid });
+        Object.keys(state.lists).forEach(function (corpuUid) {
+          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            commit('add', { layer: layer, corpuUid: corpuUid });
           }
+          Object.keys(state.actives).forEach(function (uid) {
+            if (state.actives[uid].corpuUid === corpuUid) {
+              dispatch('set', { uid: uid, id: layer.id });
+            }
+          });
         });
         dispatch('cml/messages/success', 'Layer added', { root: true });
 
@@ -1747,8 +1789,13 @@ var actions$8 = {
       .deleteLayer(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "layersRemove", { root: true });
-        Object.keys(state.lists).forEach(function (uid) {
-          commit('remove', { id: id, uid: uid });
+        Object.keys(state.lists).forEach(function (corpuUid) {
+          commit('remove', { id: id, corpuUid: corpuUid });
+        });
+        Object.keys(state.actives).forEach(function (uid) {
+          if (state.actives[uid].ids.findIndex(function (l) { return l.id === id; }) !== -1) {
+            dispatch('unset', { id: id, uid: uid });
+          }
         });
         dispatch('cml/messages/success', 'Layer removed', { root: true });
 
@@ -1784,9 +1831,9 @@ var actions$8 = {
         layer.fragmentType = r.data.fragment_type || {};
         layer.metadataType = r.data.data_type || {};
 
-        Object.keys(state.lists).forEach(function (uid) {
-          if (rootGetters['cml/corpus/id'](uid) === element.corpuId) {
-            commit('update', { layer: layer, uid: uid });
+        Object.keys(state.lists).forEach(function (corpuUid) {
+          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            commit('update', { layer: layer, corpuUid: corpuUid });
           }
         });
         dispatch('cml/messages/success', 'Layer updated', { root: true });
@@ -1998,8 +2045,11 @@ var actions$8 = {
     var dispatch = ref.dispatch;
     var rootState = ref.rootState;
 
-    Object.keys(state.lists).forEach(function (uid) {
-      dispatch('list', { corpuId: rootState.cml.corpus.actives[uid], uid: uid });
+    Object.keys(state.lists).forEach(function (corpuUid) {
+      dispatch('list', {
+        corpuId: rootState.cml.corpus.actives[corpuUid],
+        corpuUid: corpuUid
+      });
     });
   },
 
@@ -2008,13 +2058,13 @@ var actions$8 = {
     var commit = ref.commit;
     var rootGetters = ref.rootGetters;
     var corpuId = ref$1.corpuId;
-    var uid = ref$1.uid;
+    var corpuUid = ref$1.corpuUid;
 
-    dispatch('cml/sync/start', ("layersList-" + uid), { root: true });
+    dispatch('cml/sync/start', ("layersList-" + corpuUid), { root: true });
     return api
       .getLayers({ filter: { id_corpus: corpuId } })
       .then(function (r) {
-        dispatch('cml/sync/stop', ("layersList-" + uid), { root: true });
+        dispatch('cml/sync/stop', ("layersList-" + corpuUid), { root: true });
         var layers = r.data.map(function (l) { return ({
           name: l.name,
           id: l._id,
@@ -2032,13 +2082,14 @@ var actions$8 = {
           metadataType: l.data_type || {},
           annotations: l.annotations || []
         }); });
-        commit('list', { layers: layers, uid: uid });
-        dispatch('setAll', { uid: uid });
+
+        commit('list', { layers: layers, corpuUid: corpuUid });
+        dispatch('setAll', { corpuUid: corpuUid });
 
         return layers
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("layersList-" + uid), { root: true });
+        dispatch('cml/sync/stop', ("layersList-" + corpuUid), { root: true });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
@@ -2049,11 +2100,12 @@ var actions$8 = {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
-    var uid = ref$1.uid;
+    var corpuUid = ref$1.corpuUid;
 
-    commit('cml/annotations/init', { uid: uid }, { root: true });
-    state.lists[uid].forEach(function (l) {
-      dispatch('set', { id: l.id, uid: uid });
+    Object.keys(state.actives).forEach(function (uid) {
+      state.lists[corpuUid].forEach(function (l) {
+        dispatch('set', { id: l.id, corpuUid: corpuUid, uid: uid });
+      });
     });
   },
 
@@ -2064,7 +2116,11 @@ var actions$8 = {
     var uid = ref$1.uid;
 
     commit('set', { id: id, uid: uid });
-    dispatch('cml/annotations/list', { layerId: id, uid: uid }, { root: true });
+    dispatch(
+      'cml/annotations/layerSet',
+      { layersUid: uid, layerId: id },
+      { root: true }
+    );
   },
 
   unset: function unset(ref, ref$1) {
@@ -2074,14 +2130,29 @@ var actions$8 = {
     var uid = ref$1.uid;
 
     commit('unset', { id: id, uid: uid });
-    commit('cml/annotations/reset', { layerId: id, uid: uid }, { root: true });
+    dispatch(
+      'cml/annotations/layerUnset',
+      { layersUid: uid, layerId: id },
+      { root: true }
+    );
+  },
+
+  register: function register(ref, ref$1) {
+    var state = ref.state;
+    var commit = ref.commit;
+    var uid = ref$1.uid;
+    var corpuUid = ref$1.corpuUid;
+
+    commit('register', { uid: uid, corpuUid: corpuUid });
   }
 };
 
 var mutations$9 = {
-  init: function init(state, uid) {
-    Vue.set(state.lists, uid, []);
-    Vue.set(state.actives, uid, []);
+  register: function register(state, ref) {
+    var uid = ref.uid;
+    var corpuUid = ref.corpuUid;
+
+    Vue.set(state.actives, uid, { corpuUid: corpuUid, ids: [] });
   },
 
   resetAll: function resetAll(state) {
@@ -2091,62 +2162,64 @@ var mutations$9 = {
 
   add: function add(state, ref) {
     var layer = ref.layer;
-    var uid = ref.uid;
+    var corpuUid = ref.corpuUid;
 
-    var index = state.lists[uid].length;
-    Vue.set(state.lists[uid], index, layer);
+    var index = state.lists[corpuUid].length;
+    Vue.set(state.lists[corpuUid], index, layer);
   },
 
   remove: function remove(state, ref) {
     var id = ref.id;
-    var uid = ref.uid;
+    var corpuUid = ref.corpuUid;
 
-    var listIndex = state.lists[uid].findIndex(function (e) { return e.id === id; });
+    var listIndex = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
     if (listIndex !== -1) {
-      Vue.delete(state.lists[uid], listIndex);
+      Vue.delete(state.lists[corpuUid], listIndex);
     }
 
-    var activeIndex = state.actives[uid].findIndex(function (e) { return e.id === id; });
-    if (activeIndex !== -1) {
-      Vue.delete(state.actives[uid], activeIndex);
-    }
+    Object.keys(state.actives).forEach(function (uid) {
+      var activeIndex = state.actives[uid].ids.indexOf(id);
+      if (activeIndex !== -1) {
+        Vue.delete(state.actives[corpuUid], activeIndex);
+      }
+    });
   },
 
   update: function update(state, ref) {
     var layer = ref.layer;
-    var uid = ref.uid;
+    var corpuUid = ref.corpuUid;
 
-    var index = state.lists[uid].findIndex(function (l) { return l.id === layer.id; });
-    Vue.set(state.lists[uid], index, layer);
+    var index = state.lists[corpuUid].findIndex(function (l) { return l.id === layer.id; });
+    Vue.set(state.lists[corpuUid], index, layer);
   },
 
   groupAdd: function groupAdd(state, groupId) {
-    Object.keys(state.lists).forEach(function (uid) {
-      state.lists[uid].forEach(function (e) {
+    Object.keys(state.lists).forEach(function (corpuUid) {
+      state.lists[corpuUid].forEach(function (e) {
         Vue.set(e.permissions.groups, groupId, 0);
       });
     });
   },
 
   groupRemove: function groupRemove(state, groupId) {
-    Object.keys(state.lists).forEach(function (uid) {
-      state.lists[uid].forEach(function (e) {
+    Object.keys(state.lists).forEach(function (corpuUid) {
+      state.lists[corpuUid].forEach(function (e) {
         Vue.delete(e.permissions.groups, groupId);
       });
     });
   },
 
   userAdd: function userAdd(state, userId) {
-    Object.keys(state.lists).forEach(function (uid) {
-      state.lists[uid].forEach(function (e) {
+    Object.keys(state.lists).forEach(function (corpuUid) {
+      state.lists[corpuUid].forEach(function (e) {
         Vue.set(e.permissions.users, userId, 0);
       });
     });
   },
 
   userRemove: function userRemove(state, userId) {
-    Object.keys(state.lists).forEach(function (uid) {
-      state.lists[uid].forEach(function (e) {
+    Object.keys(state.lists).forEach(function (corpuUid) {
+      state.lists[corpuUid].forEach(function (e) {
         Vue.delete(e.permissions.users, userId);
       });
     });
@@ -2157,10 +2230,14 @@ var mutations$9 = {
     var groupId = ref.groupId;
     var permission = ref.permission;
 
-    Object.keys(state.lists).forEach(function (uid) {
-      var index = state.lists[uid].findIndex(function (e) { return e.id === id; });
+    Object.keys(state.lists).forEach(function (corpuUid) {
+      var index = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
       if (index !== -1) {
-        Vue.set(state.lists[uid][index].permissions.groups, groupId, permission);
+        Vue.set(
+          state.lists[corpuUid][index].permissions.groups,
+          groupId,
+          permission
+        );
       }
     });
   },
@@ -2170,38 +2247,40 @@ var mutations$9 = {
     var userId = ref.userId;
     var permission = ref.permission;
 
-    Object.keys(state.lists).forEach(function (uid) {
-      var index = state.lists[uid].findIndex(function (e) { return e.id === id; });
+    Object.keys(state.lists).forEach(function (corpuUid) {
+      var index = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
       if (index !== -1) {
-        Vue.set(state.lists[uid][index].permissions.users, userId, permission);
+        Vue.set(
+          state.lists[corpuUid][index].permissions.users,
+          userId,
+          permission
+        );
       }
     });
   },
 
   list: function list(state, ref) {
     var layers = ref.layers;
-    var uid = ref.uid;
+    var corpuUid = ref.corpuUid;
 
-    Vue.set(state.lists, uid, layers);
+    Vue.set(state.lists, corpuUid, layers);
   },
 
   set: function set(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
 
-    if (!state.actives[uid]) {
-      Vue.set(state.actives, uid, [id]);
-    } else {
-      Vue.set(state.actives[uid], state.actives[uid].length, id);
-    }
+    Vue.set(state.actives[uid].ids, state.actives[uid].ids.length, id);
   },
 
   unset: function unset(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
 
-    var index = state.actives[uid].indexOf(id);
-    Vue.delete(state.actives[uid], index);
+    var index = state.actives[uid].ids.findIndex(function (layerId) { return layerId === id; });
+    if (index !== -1) {
+      Vue.delete(state.actives[uid].ids, index);
+    }
   }
 };
 
@@ -2227,7 +2306,7 @@ var actions$9 = {
     return api
       .createAnnotation(
         element.layerId,
-        element.mediaLink ? element.mediaId : null,
+        element.mediaId || null,
         element.fragment,
         element.metadata
       )
@@ -2305,30 +2384,81 @@ var actions$9 = {
       })
   },
 
-  listAll: function listAll(ref, ref$1) {
-    var rootState = ref.rootState;
+  layerSet: function layerSet(ref, ref$1) {
+    var state = ref.state;
     var dispatch = ref.dispatch;
-    var uid = ref$1.uid;
+    var rootState = ref.rootState;
+    var layersUid = ref$1.layersUid;
+    var layerId = ref$1.layerId;
 
-    rootState.cml.layers.actives[uid].forEach(function (layerId) {
-      dispatch('list', { layerId: layerId, uid: uid });
+    Object.keys(state.lists).forEach(function (uid) {
+      if (
+        state.lists[uid].layersUid === layersUid &&
+        rootState.cml.medias.actives[state.lists[uid].mediaUid]
+      ) {
+        dispatch('list', {
+          uid: uid,
+          layerId: layerId,
+          layersUid: layersUid,
+          mediaId: rootState.cml.medias.actives[state.lists[uid].mediaUid].id
+        });
+      }
+    });
+  },
+
+  layerUnset: function layerUnset(ref, ref$1) {
+    var commit = ref.commit;
+    var layersUid = ref$1.layersUid;
+    var layerId = ref$1.layerId;
+
+    commit('reset', { layersUid: layersUid, layerId: layerId });
+  },
+
+  mediaSet: function mediaSet(ref, ref$1) {
+    var state = ref.state;
+    var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
+    var mediaUid = ref$1.mediaUid;
+    var mediaId = ref$1.mediaId;
+
+    Object.keys(state.lists).forEach(function (uid) {
+      if (
+        state.lists[uid].mediaUid === mediaUid &&
+        rootState.cml.layers.actives[state.lists[uid].layersUid]
+      ) {
+        Object.keys(state.lists[uid].layers).forEach(function (layerId) {
+          dispatch('list', {
+            uid: uid,
+            layerId: layerId,
+            layersUid: state.lists[uid].layersUid,
+            mediaId: mediaId
+          });
+        });
+      }
     });
   },
 
   list: function list(ref, ref$1) {
+    var state = ref.state;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
-    var layerId = ref$1.layerId;
     var uid = ref$1.uid;
+    var layerId = ref$1.layerId;
+    var layersUid = ref$1.layersUid;
+    var mediaId = ref$1.mediaId;
 
     dispatch('cml/sync/start', ("annotationsList-" + uid), { root: true });
     return api
-      .getAnnotations({ filter: { id_layer: layerId } })
-      .then(function (r) {
-        if (!uid) {
-          throw new Error('missing uid')
+      .getAnnotations({
+        filter: {
+          id_layer: layerId,
+          id_medium: mediaId
         }
-        dispatch('cml/sync/stop', ("annotationsList-" + uid), { root: true });
+      })
+      .then(function (r) {
+        dispatch('cml/sync/stop', ("annotationsList-" + uid), {
+          root: true
+        });
         var annotations = r.data.map(function (a) { return ({
           id: a._id,
           fragment: a.fragment || {},
@@ -2336,34 +2466,39 @@ var actions$9 = {
           layerId: a.id_layer,
           mediaId: a.id_medium || null
         }); });
-        commit('list', { annotations: annotations, layerId: layerId, uid: uid });
-        // dispatch('setAll', { layerId, uid })
+        commit('list', { annotations: annotations, uid: uid, layerId: layerId, layersUid: layersUid });
+        // commit('reset', { layerId, layersUid })
 
         return annotations
       })
       .catch(function (e) {
-        dispatch('cml/sync/stop', ("annotationsList-" + uid), { root: true });
+        dispatch('cml/sync/stop', ("annotationsList-" + layersUid), {
+          root: true
+        });
         dispatch('cml/messages/error', e.message, { root: true });
 
         throw e
       })
+  },
+
+  register: function register(ref, ref$1) {
+    var commit = ref.commit;
+    var uid = ref$1.uid;
+    var mediaUid = ref$1.mediaUid;
+    var layersUid = ref$1.layersUid;
+
+    commit('register', { uid: uid, mediaUid: mediaUid, layersUid: layersUid });
   }
 };
 
 var mutations$10 = {
-  init: function init(state, ref) {
+  register: function register(state, ref) {
     var uid = ref.uid;
+    var mediaUid = ref.mediaUid;
+    var layersUid = ref.layersUid;
 
-    Vue.set(state.lists, uid, {});
-    Vue.set(state.actives, uid, {});
-  },
-
-  reset: function reset(state, ref) {
-    var layerId = ref.layerId;
-    var uid = ref.uid;
-
-    Vue.delete(state.lists[uid], layerId);
-    Vue.delete(state.actives[uid], layerId);
+    Vue.set(state.actives, uid, null);
+    Vue.set(state.lists, uid, { mediaUid: mediaUid, layersUid: layersUid, layers: {} });
   },
 
   resetAll: function resetAll(state) {
@@ -2371,12 +2506,29 @@ var mutations$10 = {
     Vue.set(state, 'actives', {});
   },
 
+  reset: function reset(state, ref) {
+    var layersUid = ref.layersUid;
+    var layerId = ref.layerId;
+
+    Object.keys(state.lists).forEach(function (uid) {
+      if (state.lists[uid].layersUid === layersUid) {
+        Vue.delete(state.lists[uid], layerId);
+      }
+    });
+
+    Object.keys(state.actives).forEach(function (uid) {
+      if (state.actives[uid] && state.actives[uid].layerId === layerId) {
+        Vue.set(state.actives, uid, null);
+      }
+    });
+  },
+
   add: function add(state, ref) {
     var annotation = ref.annotation;
     var layerId = ref.layerId;
 
     Object.keys(state.lists).forEach(function (uid) {
-      var list = state.lists[uid][layerId];
+      var list = state.lists[uid].layers[layerId];
       if (list) {
         Vue.set(list, list.length, annotation);
       }
@@ -2388,9 +2540,9 @@ var mutations$10 = {
     var layerId = ref.layerId;
 
     Object.keys(state.lists).forEach(function (uid) {
-      var list = state.lists[uid][layerId];
+      var list = state.lists[uid].layers[layerId];
       if (list) {
-        var index = list.findIndex(function (m) { return m.id === annotation.id; });
+        var index = list.findIndex(function (a) { return a.id === annotation.id; });
         Vue.set(list, index, annotation);
       }
     });
@@ -2400,33 +2552,31 @@ var mutations$10 = {
     var id = ref.id;
 
     Object.keys(state.lists).forEach(function (uid) {
-      Object.keys(state.lists[uid]).forEach(function (layerId) {
-        var list = state.lists[uid][layerId];
+      Object.keys(state.lists[uid].layers).forEach(function (layerId) {
+        var list = state.lists[uid].layers[layerId];
         if (list) {
           var listsIndex = list.findIndex(function (a) { return a.id === id; });
           if (listsIndex !== -1) {
             Vue.delete(list, listsIndex);
           }
         }
-        var actives = state.actives[uid][layerId];
-        console.log('annotations-remove-actives', actives);
-        if (actives) {
-          var activeIndex = actives.indexOf(id);
-          console.log('annotations-remove-actives-index', activeIndex);
-          if (activeIndex !== -1) {
-            Vue.delete(actives, activeIndex);
-          }
-        }
       });
+    });
+
+    Object.keys(state.actives).forEach(function (uid) {
+      if (state.actives[uid] && state.actives[uid].id === id) {
+        Vue.set(state.actives, uid, null);
+      }
     });
   },
 
   list: function list(state, ref) {
     var annotations = ref.annotations;
-    var layerId = ref.layerId;
     var uid = ref.uid;
+    var layerId = ref.layerId;
+    var layersUid = ref.layersUid;
 
-    Vue.set(state.lists[uid], layerId, annotations);
+    Vue.set(state.lists[uid].layers, layerId, annotations);
   },
 
   set: function set(state, ref) {
@@ -2437,9 +2587,10 @@ var mutations$10 = {
   },
 
   unset: function unset(state, ref) {
+    var id = ref.id;
     var uid = ref.uid;
 
-    Vue.delete(state.actives, uid);
+    Vue.set(state.actives, uid, null);
   }
 };
 
@@ -2613,17 +2764,13 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   computed: {
     fields: {
       get: function get() {
-        return JSON.stringify(
-          this.$store.state.cml.popup.element[this.name],
-          undefined,
-          2
-        )
+        return JSONfn.stringify(this.$store.state.cml.popup.element[this.name])
       },
       set: function set(value) {
         if (this.jsonCheck(value)) {
           this.$store.commit('cml/popup/fieldUpdate', {
             name: this.name,
-            value: JSON.parse(value)
+            value: JSONfn.parse(value)
           });
         }
       }
@@ -2633,7 +2780,7 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   methods: {
     jsonCheck: function jsonCheck(str) {
       try {
-        JSON.parse(str);
+        JSONfn.parse(str);
       } catch (e) {
         return false
       }
@@ -2651,7 +2798,7 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   }
 }
 
-var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations' && !_vm.element.id && _vm.element.mediaId)?_c('div',{staticClass:"blobs"},[_vm._m(4),_vm._v(" "),_c('div',{staticClass:"blob-3-4 p-s"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.mediaLink),expression:"element.mediaLink"}],staticClass:"select-alt",attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.element.mediaLink)?_vm._i(_vm.element.mediaLink,null)>-1:(_vm.element.mediaLink)},on:{"change":function($event){var $$a=_vm.element.mediaLink,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.element.mediaLink=$$a.concat([$$v]));}else{$$i>-1&&(_vm.element.mediaLink=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.$set(_vm.element, "mediaLink", $$c);}}}}),_vm._v(" "+_vm._s(_vm.element.mediaName)+" ")])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Link to media")])])}],
+var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Name","disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups')},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(1),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"select-alt",attrs:{"type":"text","disabled":!_vm.rolesPermission},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"blobs"},[_vm._m(2),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"input-alt",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"blobs"},[_vm._m(3),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"input-alt",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Url")])])}],
   name: 'camomile-popup-edit',
 
   components: {
@@ -3117,8 +3264,7 @@ var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElemen
       resource: function (state) { return state.cml.popup.element; },
       users: function (state) { return state.cml.users.list; },
       groups: function (state) { return state.cml.groups.list; },
-      type: function (state) { return state.cml.popup.config.type; },
-      uid: function (state) { return state.cml.popup.config.uid; }
+      type: function (state) { return state.cml.popup.config.type; }
     }))
 }
 
@@ -3189,16 +3335,20 @@ var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     }
   },
 
-  mounted: function mounted() {
+  created: function created() {
     this.$store.dispatch('cml/corpus/register', this.uid);
   }
 }
 
-var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Media")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Media")]),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.setEvent}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'camomile-medias',
 
   props: {
     uid: {
+      type: String,
+      default: 'default'
+    },
+    corpusUid: {
       type: String,
       default: 'default'
     }
@@ -3229,20 +3379,21 @@ var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
 
   computed: {
     corpuId: function corpuId() {
-      return this.$store.state.cml.corpus.actives[this.uid]
+      return this.$store.state.cml.corpus.actives[this.corpusUid]
     },
     mediaId: function mediaId() {
-      return this.$store.state.cml.medias.actives[this.uid]
+      return this.$store.state.cml.medias.actives[this.uid].id
     },
     medias: function medias() {
-      return this.$store.state.cml.medias.lists[this.uid]
+      return this.$store.state.cml.medias.lists[this.corpusUid]
     },
     permission: function permission() {
       var this$1 = this;
 
       var corpus = this.$store.state.cml.corpus.lists;
       var corpu =
-        corpus[this.uid] && corpus[this.uid].find(function (c) { return c.id === this$1.corpuId; });
+        corpus[this.corpusUid] &&
+        corpus[this.corpusUid].find(function (c) { return c.id === this$1.corpuId; });
       return corpu ? corpu.permission : 0
     }
   },
@@ -3254,12 +3405,20 @@ var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
 
       return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
-    set: function set(e) {
+    setEvent: function setEvent(e) {
+      this.set(e.target.value);
+    },
+    set: function set(id) {
       this.$store.dispatch('cml/medias/set', {
-        id: e.target.value,
+        id: id,
+        corpuUid: this.corpusUid,
         uid: this.uid
       });
     }
+  },
+
+  created: function created() {
+    this.$store.dispatch('cml/medias/register', this.uid);
   }
 }
 
@@ -3268,6 +3427,10 @@ var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
 
   props: {
     uid: {
+      type: String,
+      default: 'default'
+    },
+    corpusUid: {
       type: String,
       default: 'default'
     }
@@ -3298,30 +3461,35 @@ var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
         closeBtn: true,
         title: 'Layer permissions',
         component: popupPermissions,
-        uid: this.uid
+        uid: this.corpusUid
       }
     }
   },
 
   computed: {
     layers: function layers() {
-      return this.$store.state.cml.layers.lists[this.uid]
+      return this.$store.state.cml.layers.lists[this.corpusUid]
     },
     actives: function actives() {
-      return this.$store.state.cml.layers.actives[this.uid]
+      return (
+        (this.$store.state.cml.layers.actives[this.uid] &&
+          this.$store.state.cml.layers.actives[this.uid].ids) ||
+        []
+      )
     },
     corpus: function corpus() {
-      return this.$store.state.cml.corpus.lists[this.uid]
+      return this.$store.state.cml.corpus.lists[this.corpusUid]
     },
     corpuId: function corpuId() {
-      return this.$store.state.cml.corpus.actives[this.uid]
+      return this.$store.state.cml.corpus.actives[this.corpusUid]
     },
     permission: function permission() {
       var this$1 = this;
 
       var corpus = this.$store.state.cml.corpus.lists;
       var corpu =
-        corpus[this.uid] && corpus[this.uid].find(function (c) { return c.id === this$1.corpuId; });
+        corpus[this.corpusUid] &&
+        corpus[this.corpusUid].find(function (c) { return c.id === this$1.corpuId; });
       return corpu ? corpu.permission : 0
     }
   },
@@ -3346,17 +3514,29 @@ var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
         });
       }
     }
+  },
+
+  created: function created() {
+    this.$store.dispatch('cml/layers/register', {
+      uid: this.uid,
+      corpuUid: this.corpusUid
+    });
   }
 }
 
-var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('div',{key:layer.id,staticClass:"mt"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v(_vm._s(layer.name))]),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: layer.id, mediaId: _vm.mediaId, fragment: {}, metadata: {}, mediaName: _vm.mediaName(_vm.mediaId), mediaLink: true } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('table',{staticClass:"table mb-0"},[_vm._m(1,true),_vm._v(" "),_vm._l((_vm.annotations[layer.id]),function(annotation){return _c('tr',{key:annotation.id},[_c('td',[_c('input',{attrs:{"type":"checkbox","layer-id":layer.id},domProps:{"value":annotation.id,"checked":_vm.activeId && _vm.activeId === annotation.id},on:{"change":function($event){_vm.set($event, layer.id);}}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName(annotation.mediaId)))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: annotation });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()})],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Annotations")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
+var annotationsLayerDetail = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":_vm.annotation.id,"checked":_vm.activeId && _vm.activeId === _vm.annotation.id},on:{"change":function($event){_vm.set($event);}}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(_vm.annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.layerPermission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: _vm.annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.layerPermission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: _vm.annotation });}}},[_vm._v("Remove")]):_vm._e()])])},staticRenderFns: [],
   name: 'camomile-annotations',
 
   props: {
     uid: {
       type: String,
       default: 'default'
-    }
+    },
+    annotation: Object,
+    layerPermission: Number,
+    mediaName: String,
+    mediaId: String,
+    activeId: String
   },
 
   data: function data() {
@@ -3365,12 +3545,6 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
         type: 'annotations',
         closeBtn: true,
         title: 'Edit annotation',
-        component: popupEdit
-      },
-      popupAddConfig: {
-        type: 'annotations',
-        closeBtn: true,
-        title: 'Add annotation',
         component: popupEdit
       },
       popupRemoveConfig: {
@@ -3382,21 +3556,63 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     }
   },
 
-  computed: {
-    annotations: function annotations() {
-      return this.$store.state.cml.annotations.lists[this.uid]
+  methods: {
+    popupOpen: function popupOpen(ref) {
+      var config = ref.config;
+      var element = ref.element;
+
+      return this.$store.commit('cml/popup/open', { config: config, element: element })
     },
-    mediaId: function mediaId() {
-      return this.$store.state.cml.medias.actives[this.uid]
+    set: function set(e) {
+      if (e.target.checked) {
+        this.$store.commit('cml/annotations/set', {
+          id: e.target.value,
+          uid: this.uid
+        });
+      } else {
+        this.$store.commit('cml/annotations/unset', {
+          id: e.target.value,
+          uid: this.uid
+        });
+      }
+    }
+  },
+
+  filters: {
+    stringEnd: function stringEnd(value) {
+      if (!value) { return '' }
+      return value.substr(value.length - 6)
+    }
+  }
+}
+
+var annotationsLayer = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v(_vm._s(_vm.layer.name))]),_vm._v(" "),(_vm.layer.permission === 3)?_c('button',{staticClass:"flex-right btn p-s",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layer.id, mediaId: _vm.mediaId, fragment: _vm.layer.fragmentType, metadata: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('annotations-layer-detail',{key:annotation.id,attrs:{"annotation":annotation,"uid":_vm.uid,"layer-permission":_vm.layer.permission,"media-name":_vm.mediaName,"media-id":_vm.mediaId,"active-id":_vm.activeId}})})],2)])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
+  name: 'camomile-annotations',
+
+  components: {
+    annotationsLayerDetail: annotationsLayerDetail
+  },
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
     },
-    layers: function layers() {
-      return this.$store.state.cml.layers.lists[this.uid]
-    },
-    activeId: function activeId() {
-      return this.$store.state.cml.annotations.actives[this.uid]
-    },
-    medias: function medias() {
-      return this.$store.state.cml.medias.lists[this.uid]
+    layer: Object,
+    annotations: Array,
+    activeId: String,
+    mediaId: String,
+    mediaName: String
+  },
+
+  data: function data() {
+    return {
+      popupAddConfig: {
+        type: 'annotations',
+        closeBtn: true,
+        title: 'Add annotation',
+        component: popupEdit
+      }
     }
   },
 
@@ -3414,21 +3630,78 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
           uid: this.uid
         });
       } else {
-        this.$store.commit('cml/annotations/unset', { uid: this.uid });
+        this.$store.commit('cml/annotations/unset', {
+          id: e.target.value,
+          uid: this.uid
+        });
       }
+    }
+  }
+}
+
+var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('annotations-layer',{key:layer.id,staticClass:"mt",attrs:{"layer":layer,"annotations":_vm.annotations[layer.id],"active-id":_vm.activeId,"media-id":_vm.mediaId,"media-name":_vm.mediaName}}):_vm._e()})],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s mb-s"},[_vm._v("Annotations")])])}],
+  name: 'camomile-annotations',
+
+  components: {
+    annotationsLayer: annotationsLayer
+  },
+
+  props: {
+    mediaUid: {
+      type: String,
+      default: 'default'
     },
-    mediaName: function mediaName(mediaId) {
-      if (!mediaId) { return '' }
-      var media = this.medias.find(function (m) { return m.id === mediaId; });
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
+
+  computed: {
+    annotations: function annotations() {
+      return (
+        (this.$store.state.cml.annotations.lists[this.uid] &&
+          this.$store.state.cml.annotations.lists[this.uid].layers) ||
+        {}
+      )
+    },
+    activeId: function activeId() {
+      var actives = this.$store.state.cml.annotations.actives[this.uid];
+      return actives ? actives : null
+    },
+    layers: function layers() {
+      var actives = this.$store.state.cml.layers.actives[this.layersUid];
+      var layers = this.$store.state.cml.layers.lists[actives.corpuUid];
+      return actives && layers
+        ? layers.filter(function (l) { return actives.ids.indexOf(l.id) !== -1; })
+        : {}
+    },
+    medias: function medias() {
+      var active = this.$store.state.cml.medias.actives[this.mediaUid];
+      return active ? this.$store.state.cml.medias.lists[active.corpuUid] : {}
+    },
+    mediaId: function mediaId() {
+      return this.$store.state.cml.medias.actives[this.mediaUid].id
+    },
+    mediaName: function mediaName() {
+      var this$1 = this;
+
+      if (!this.mediaId) { return '' }
+      var media = this.medias.find(function (m) { return m.id === this$1.mediaId; });
       return media ? media.name : ''
     }
   },
 
-  filters: {
-    stringEnd: function stringEnd(value) {
-      if (!value) { return '' }
-      return value.substr(value.length - 6)
-    }
+  created: function created() {
+    this.$store.dispatch('cml/annotations/register', {
+      uid: this.uid,
+      mediaUid: this.mediaUid,
+      layersUid: this.layersUid
+    });
   }
 }
 
@@ -3436,13 +3709,17 @@ var spinner = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
   name: 'camomile-utils-spinner'
 }
 
-var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.media)?_c('div',{ref:"container"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isLoaded),expression:"isLoaded"}]},[_c('div',{attrs:{"id":"player"}})]),_vm._v(" "),(!_vm.isLoaded)?_c('spinner'):_vm._e()],1):_vm._e()},staticRenderFns: [],
+var youtube = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.media)?_c('div',{ref:"container"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isLoaded),expression:"isLoaded"}]},[_c('div',{attrs:{"id":"player"}})]),_vm._v(" "),(!_vm.isLoaded)?_c('spinner'):_vm._e()],1):_vm._e()},staticRenderFns: [],
   name: 'camomile-media-youtube',
 
   props: {
-    uid: {
+    mediaUid: {
       type: String,
       default: 'default'
+    },
+    filter: {
+      type: Function,
+      default: function (media) { return media.description.type && media.description.type === 'youtube' && media; }
     }
   },
 
@@ -3459,19 +3736,21 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
   computed: {
     media: function media() {
-      var this$1 = this;
-
-      var medias = this.$store.state.cml.medias;
-      return (
-        (medias.lists[this.uid] &&
-          medias.lists[this.uid].find(
-            function (m) { return m.id === medias.actives[this$1.uid]; }
-          )) ||
-        {}
-      )
+      var active = this.$store.state.cml.medias.actives[this.mediaUid];
+      return active
+        ? this.filter(
+            this.$store.state.cml.medias.lists[active.corpuUid].find(
+              function (m) { return m.id === active.id; }
+            )
+          )
+        : null
     },
     properties: function properties() {
-      return this.$store.state.cml.medias.properties[this.uid] || {}
+      return (
+        (this.media &&
+          this.$store.state.cml.medias.properties[this.mediaUid]) ||
+        {}
+      )
     },
     isPlaying: function isPlaying() {
       return this.properties.isPlaying || false
@@ -3491,7 +3770,7 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
   },
 
   mounted: function mounted() {
-    if (this.media.url) {
+    if (this.media && this.media.url) {
       this.playerLoad(this.media.url);
     }
   },
@@ -3517,11 +3796,11 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
           // console.log('onReady', event)
           this$1.$store.commit('cml/medias/loaded', {
             isLoaded: true,
-            uid: this$1.uid
+            uid: this$1.mediaUid
           });
           this$1.$store.commit('cml/medias/timeTotal', {
             time: this$1.player.getDuration() * 1000,
-            uid: this$1.uid
+            uid: this$1.mediaUid
           });
         },
         onStateChange: function (event) {
@@ -3534,34 +3813,34 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
               this$1.videoNew = false;
               this$1.$store.commit('cml/medias/loaded', {
                 isLoaded: true,
-                uid: this$1.uid
+                uid: this$1.mediaUid
               });
               this$1.$store.commit('cml/medias/timeTotal', {
                 time: this$1.player.getDuration() * 1000,
-                uid: this$1.uid
+                uid: this$1.mediaUid
               });
               this$1.player.pauseVideo();
             } else {
-              this$1.$store.dispatch('cml/medias/play', this$1.uid);
+              this$1.$store.dispatch('cml/medias/play', { uid: this$1.mediaUid });
             }
           } else if (event.data === 2) {
             // paused
-            this$1.$store.dispatch('cml/medias/pause', this$1.uid);
+            this$1.$store.dispatch('cml/medias/pause', { uid: this$1.mediaUid });
           } else if (event.data === 3) {
             // buffering
-            this$1.$store.dispatch('cml/medias/buffering', this$1.uid);
+            this$1.$store.dispatch('cml/medias/buffering', { uid: this$1.mediaUid });
           } else if (event.data === 0) {
             // ended
-            this$1.$store.dispatch('cml/medias/stop', this$1.uid);
+            this$1.$store.dispatch('cml/medias/stop', { uid: this$1.mediaUid });
           } else if (event.data === 5) {
             // cued
             this$1.$store.commit('cml/medias/loaded', {
               isLoaded: true,
-              uid: this$1.uid
+              uid: this$1.mediaUid
             });
             this$1.$store.commit('cml/medias/timeTotal', {
               time: this$1.player.getDuration() * 1000,
-              uid: this$1.uid
+              uid: this$1.mediaUid
             });
           }
         },
@@ -3603,8 +3882,8 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
     videoSeek: function videoSeek(serverRequest) {
       this.player.seekTo(this.timeCurrent / 1000, serverRequest);
       this.$store.commit('cml/medias/seek', {
-        options: { seekign: false },
-        uid: this.uid
+        options: { seeking: false },
+        uid: this.mediaUid
       });
     },
     parseYouTubeId: function parseYouTubeId(url) {
@@ -3635,21 +3914,251 @@ var mediaYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;va
       }
     },
     viewportWidth: function viewportWidth() {
-      var width = this.$refs.container.offsetWidth;
-      var height = width * 9 / 16;
-      this.player.setSize(width, height);
+      if (this.media) {
+        var width = this.$refs.container.offsetWidth;
+        var height = width * 9 / 16;
+        this.player.setSize(width, height);
+      }
     },
     media: function media(media$1, mediaOld) {
-      if (media$1.url && media$1.url !== mediaOld.url) {
+      if (
+        media$1 &&
+        media$1.url &&
+        mediaOld &&
+        mediaOld.url &&
+        media$1.url !== mediaOld.url
+      ) {
         this.videoLoad(media$1.url);
       }
     }
   }
 }
 
-var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"mediacontroller"},[_c('div',{staticClass:"mediacontroller-controls clearfix pb-s"},[_c('button',{ref:"button",staticClass:"mediacontroller-button btn",attrs:{"disabled":!_vm.isLoaded},on:{"click":_vm.mediaToggle}},[_vm._v(_vm._s(_vm.playButton))]),_vm._v(" "),_c('div',{ref:"counter",staticClass:"mediacontroller-counter"},[_vm._v(_vm._s(_vm.msToMinutesAndSeconds(_vm.timeCurrent))+" / "+_vm._s(_vm.msToMinutesAndSeconds(_vm.timeTotal))+" ")])]),_vm._v(" "),_c('div',{ref:"progress",staticClass:"mediacontroller-progress",class:{ loaded: _vm.isLoaded },on:{"mousedown":function($event){_vm.progressMousedown($event);}}},[_c('div',{staticClass:"pointer-none full-y"},[_c('div',{staticClass:"mediacontroller-progress-bar",style:({ width: _vm.progressBarWidth })})])])])},staticRenderFns: [],
+var videoPlayer = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.media)?_c('div',{ref:"container"},[_c('video',{directives:[{name:"show",rawName:"v-show",value:(_vm.isLoaded),expression:"isLoaded"}],ref:"video",staticClass:"object-fit",attrs:{"id":"bgvid"},on:{"ended":_vm.videoEnded,"click":_vm.videoToggle,"play":_vm.buttonToggle,"pause":_vm.buttonToggle,"timeupdate":_vm.videoTimeupdate,"canplay":_vm.videoLoad}},[_c('source',{attrs:{"src":_vm.media.url,"type":"video/mp4"}})]),_vm._v(" "),(!_vm.isLoaded)?_c('spinner'):_vm._e()],1):_vm._e()},staticRenderFns: [],
+  name: 'camomile-media-video',
+
   props: {
+    mediaUid: {
+      type: String,
+      default: 'default'
+    },
+    filter: {
+      type: Function,
+      default: function (media) { return media.description.type && media.description.type === 'video' && media; }
+    }
+  },
+
+  components: {
+    spinner: spinner
+  },
+
+  data: function data() {
+    return {
+      mousedown: false,
+      videoLoaded: false,
+      timeTotal: 0
+    }
+  },
+
+  computed: {
+    media: function media() {
+      var active = this.$store.state.cml.medias.actives[this.mediaUid];
+      return active
+        ? this.filter(
+            this.$store.state.cml.medias.lists[active.corpuUid].find(
+              function (m) { return m.id === active.id; }
+            )
+          )
+        : null
+    },
+    properties: function properties() {
+      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
+    },
+    isPlaying: function isPlaying() {
+      return this.properties.isPlaying || false
+    },
+    isLoaded: function isLoaded() {
+      return this.properties.isLoaded || false
+    },
+    seek: function seek() {
+      return this.properties.seek || {}
+    },
+    timeCurrent: function timeCurrent() {
+      return this.properties.timeCurrent || 0
+    },
+    viewportWidth: function viewportWidth() {
+      return this.$store.state.cml.viewport.width || 0
+    }
+  },
+
+  methods: {
+    videoEnded: function videoEnded() {
+      this.$store.dispatch('cml/medias/stop', { uid: this.mediaUid });
+    },
+    videoToggle: function videoToggle() {
+      if (this.$refs.video.paused) {
+        this.$refs.video.play();
+      } else {
+        this.$refs.video.pause();
+      }
+    },
+    buttonToggle: function buttonToggle() {
+      if (this.$refs.video.paused) {
+        this.$store.dispatch('cml/medias/pause', { uid: this.mediaUid });
+      } else {
+        this.$store.dispatch('cml/medias/play', { uid: this.mediaUid });
+      }
+    },
+    videoTimeupdate: function videoTimeupdate() {
+      if (this.$refs.video) {
+        var percent =
+          this.$refs.video.currentTime / this.$refs.video.duration * 100;
+      }
+    },
+    videoSeek: function videoSeek(e) {
+      this.$refs.video.currentTime = this.timeCurrent / 1000;
+    },
+    videoLoad: function videoLoad() {
+      console.log('videoLoad');
+      this.$store.commit('cml/medias/loaded', {
+        isLoaded: true,
+        uid: this.mediaUid
+      });
+
+      this.$store.commit('cml/medias/timeTotal', {
+        time: this.$refs.video.duration * 1000,
+        uid: this.mediaUid
+      });
+      this.$refs.video.volume = 0;
+    }
+  },
+
+  beforeDestroy: function beforeDestroy() {
+    this.video = null;
+  },
+
+  watch: {
+    isPlaying: function isPlaying(val) {
+      if (val) {
+        this.$refs.video.play();
+      } else {
+        this.$refs.video.pause();
+      }
+    },
+    seek: function seek(options) {
+      if (options.seeking) {
+        this.videoSeek();
+      }
+    },
+    viewportWidth: function viewportWidth() {
+      var width = this.$refs.container.offsetWidth;
+      
+    },
+    media: function media(media$1, mediaOld) {
+      if (
+        media$1 &&
+        media$1.url &&
+        mediaOld &&
+        mediaOld.url &&
+        media$1.url !== mediaOld.url
+      ) {
+        this.videoLoad();
+      }
+    }
+  }
+}
+
+var zoningAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._v("annotation")])},staticRenderFns: [],}
+
+var zoning = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"relative full-y"},_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('zoning-annotations',{key:("annotations-" + (layer.id)),staticClass:"absolute full",attrs:{"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":layer.id,"annotations":_vm.annotations[layer.id],"time-total":_vm.timeTotal,"time-current":_vm.timeCurrent}}):_vm._e()}))},staticRenderFns: [],
+  components: { zoningAnnotations: zoningAnnotations },
+
+  props: {
+    mediaUid: {
+      type: String,
+      default: 'default'
+    },
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
     uid: {
+      type: String,
+      default: 'default'
+    },
+    filter: {
+      type: Function,
+      default: function (a) { return a.fragment &&
+        a.fragment.time &&
+        !isNaN(a.fragment.time.start) &&
+        !isNaN(a.fragment.time.end) &&
+        a; }
+    },
+    layers: Array
+  },
+
+  computed: {
+    mediaProperties: function mediaProperties() {
+      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
+    },
+    timeCurrent: function timeCurrent() {
+      return this.mediaProperties.timeCurrent || 0
+    },
+    timeTotal: function timeTotal() {
+      return this.mediaProperties.timeTotal || 0
+    },
+    annotations: function annotations() {
+      var this$1 = this;
+      var obj;
+
+      var annotationsList = this.$store.state.cml.annotations.lists[this.uid];
+      return (
+        annotationsList &&
+        Object.keys(annotationsList.layers).reduce(
+          function (res, layer) { return Object.assign(res, ( obj = {}, obj[layer] = annotationsList.layers[layer].filter(function (a) { return this$1.filter(a); }), obj)); },
+          {}
+        )
+      )
+    }
+  }
+}
+
+var videozoning = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"relative"},[(_vm.layers)?_c('zoning',{staticClass:"absolute full",attrs:{"media-uid":_vm.mediaUid,"uid":_vm.uid,"layers-uid":_vm.layersUid,"filter":_vm.annotationsFilter,"layers":_vm.layers}}):_vm._e(),_vm._v(" "),_c('video-player',{attrs:{"media-uid":_vm.mediaUid,"filter":_vm.mediaFilter}})],1)},staticRenderFns: [],
+  name: 'camomile-media-video',
+
+  props: {
+    mediaUid: {
+      type: String,
+      default: 'default'
+    },
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
+    uid: {
+      type: String,
+      default: 'default'
+    },
+    annotationsFilter: Function,
+    mediaFilter: Function
+  },
+
+  components: {
+    videoPlayer: videoPlayer,
+    zoning: zoning
+  },
+
+  computed: {
+    layers: function layers() {
+      var active = this.$store.state.cml.layers.actives[this.layersUid];
+      return active ? this.$store.state.cml.layers.lists[active.corpuUid] : {}
+    }
+  }
+}
+
+var controller = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"mediacontroller"},[_c('div',{staticClass:"mediacontroller-controls clearfix pb-s"},[_c('button',{ref:"button",staticClass:"mediacontroller-button btn",attrs:{"disabled":!_vm.isLoaded},on:{"click":_vm.mediaToggle}},[_vm._v(_vm._s(_vm.playButton))]),_vm._v(" "),_c('div',{ref:"counter",staticClass:"mediacontroller-counter"},[_vm._v(_vm._s(_vm.msToMinutesAndSeconds(_vm.timeCurrent))+" / "+_vm._s(_vm.msToMinutesAndSeconds(_vm.timeTotal))+" ")])]),_vm._v(" "),_c('div',{ref:"progress",staticClass:"mediacontroller-progress",class:{ loaded: _vm.isLoaded },on:{"mousedown":function($event){_vm.progressMousedown($event);}}},[_c('div',{staticClass:"pointer-none full-y"},[_c('div',{staticClass:"mediacontroller-progress-bar",style:({ width: _vm.progressBarWidth })})])])])},staticRenderFns: [],
+  props: {
+    mediaUid: {
       type: String,
       default: 'default'
     }
@@ -3663,7 +4172,7 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
 
   computed: {
     properties: function properties() {
-      return this.$store.state.cml.medias.properties[this.uid] || {}
+      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
     timeCurrent: function timeCurrent() {
       return this.properties.timeCurrent || 0
@@ -3685,9 +4194,9 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
   methods: {
     mediaToggle: function mediaToggle() {
       if (this.properties.isPlaying) {
-        this.$store.commit('cml/medias/pause', this.uid);
+        this.$store.commit('cml/medias/pause', { uid: this.mediaUid });
       } else {
-        this.$store.commit('cml/medias/play', this.uid);
+        this.$store.commit('cml/medias/play', { uid: this.mediaUid });
       }
     },
     progressMousemove: function progressMousemove(e) {
@@ -3704,7 +4213,7 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
           (e.clientX - this.$refs.progress.offsetLeft) /
           this.$refs.progress.offsetWidth;
       }
-      this.seek(x, false, this.uid);
+      this.seek(x, false);
     },
     progressMousedown: function progressMousedown(e) {
       document.addEventListener('mousemove', this.progressMousemove);
@@ -3717,7 +4226,11 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
     },
     seek: function seek(ratio, serverRequest, uid) {
       if (this.properties.isLoaded) {
-        this.$store.dispatch('cml/medias/seek', { ratio: ratio, serverRequest: serverRequest, uid: uid });
+        this.$store.dispatch('cml/medias/seek', {
+          ratio: ratio,
+          serverRequest: serverRequest,
+          uid: this.mediaUid
+        });
       }
     },
     msToMinutesAndSeconds: function msToMinutesAndSeconds(ms) {
@@ -3728,26 +4241,97 @@ var mediaController = {render: function(){var _vm=this;var _h=_vm.$createElement
   }
 }
 
-var timelineButton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn p-s",on:{"click":function($event){_vm.annotationCreate({ id: null, layerId: _vm.layerId, mediaId: _vm.mediaId, fragment: { time: { end: _vm.timeCurrent + 25000, start: _vm.timeCurrent } }, metadata: {} });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])},staticRenderFns: [],
+var annotationButton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn p-s",on:{"click":_vm.annotationCreate}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])},staticRenderFns: [],
   props: {
     layerId: String,
     annotations: Array,
     mediaId: String,
     timeTotal: Number,
-    timeCurrent: Number
+    timeCurrent: Number,
+    fragmentType: Object
   },
   methods: {
-    annotationCreate: function annotationCreate(element) {
+    annotationCreate: function annotationCreate() {
+      var element = {
+        id: null,
+        layerId: this.layerId,
+        mediaId: this.mediaId,
+        fragment: this.fragmentTypeFormat(this.fragmentType),
+        metadata: {}
+      };
       this.$store.dispatch("cml/annotations/add", { element: element });
+    },
+
+    fragmentTypeFormat: function fragmentTypeFormat(fragmentType) {
+      if (!fragmentType.time) {
+        fragmentType.time = {};
+      }
+      fragmentType.time.start = this.timeCurrent;
+      fragmentType.time.end = this.timeCurrent + 25000;
+      return fragmentType
     }
   }
 }
 
-var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"annotation",staticClass:"absolute annotation",style:({ left: ((_vm.left) + "px"), right: ((_vm.right) + "px") })},[_c('div',{staticClass:"relative full-y",on:{"mousedown":function($event){_vm.set($event);}}},[_c('div',{staticClass:"absolute handler handler-left",on:{"mousedown":function($event){_vm.dragLeftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handler handler-right",on:{"mousedown":function($event){_vm.dragRightOn($event);}}})])])},staticRenderFns: [],_scopeId: 'data-v-1e3bbe38',
+var buttons = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id] && layer.permission === 3)?_c('annotation-button',{key:("annotation-button-" + (layer.id)),attrs:{"layer-id":layer.id,"media-id":_vm.mediaId,"time-current":_vm.timeCurrent,"fragmentType":layer.fragmentType}}):_vm._e()}))},staticRenderFns: [],
+  components: {
+    annotationButton: annotationButton
+  },
+
   props: {
-    id: String,
-    layerId: String,
+    mediaUid: {
+      type: String,
+      default: 'default'
+    },
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
+    uid: {
+      type: String,
+      default: 'default'
+    },
+    filter: {
+      type: Function,
+      default: function (a, d) {
+        return true
+      }
+    }
+  },
+
+  computed: {
+    properties: function properties() {
+      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
+    },
+    timeCurrent: function timeCurrent() {
+      return this.properties.timeCurrent || 0
+    },
+    annotations: function annotations() {
+      return (
+        this.$store.state.cml.annotations.lists[this.uid] &&
+        this.$store.state.cml.annotations.lists[this.uid].layers
+      )
+    },
+    mediaId: function mediaId() {
+      return this.$store.state.cml.medias.actives[this.mediaUid].id
+    },
+    layers: function layers() {
+      var active = this.$store.state.cml.layers.actives[this.layersUid];
+      return active ? this.$store.state.cml.layers.lists[active.corpuUid] : {}
+    }
+  },
+
+  methods: {
+    resize: function resize() {}
+  }
+}
+
+var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"annotation",staticClass:"absolute annotation",style:({ left: ((_vm.left) + "px"), right: ((_vm.right) + "px") })},[_c('div',{staticClass:"relative full-y",on:{"mousedown":function($event){_vm.set($event);}}},[_c('div',{staticClass:"absolute handler handler-left",on:{"mousedown":function($event){_vm.dragLeftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handler handler-right",on:{"mousedown":function($event){_vm.dragRightOn($event);}}})])])},staticRenderFns: [],_scopeId: 'data-v-0f3e34aa',
+  props: {
     uid: String,
+    annotation: Object,
+    layerId: String,
+    layersUid: String,
     timeTotal: Number,
     containerWidth: Number,
     containerLeft: Number
@@ -3762,13 +4346,6 @@ var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElemen
   },
 
   computed: {
-    annotation: function annotation() {
-      var this$1 = this;
-
-      return this.$store.state.cml.annotations.lists[this.uid][
-        this.layerId
-      ].find(function (e) { return e.id === this$1.id; })
-    },
     time: function time() {
       return this.annotation.fragment.time
     },
@@ -3808,7 +4385,6 @@ var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElemen
     dragLeft: function dragLeft(e) {
       var c = e.clientX - this.containerLeft + this.handlerWidth / 2;
 
-      console.log(c, this.containerWidth - this.right);
       if (c < 0) {
         this.leftDragging = 0;
       } else if (c > this.containerWidth - this.right) {
@@ -3843,27 +4419,26 @@ var annotationsBlocs = {render: function(){var _vm=this;var _h=_vm.$createElemen
     },
     set: function set(e) {
       this.$store.commit('cml/annotations/set', {
-        id: this.id,
+        id: this.annotation.id,
         uid: this.uid
       });
     }
   }
 }
 
-var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"relative annotations"},_vm._l((_vm.annotations),function(annotation){return _c('annotations-blocs',{key:annotation.id,ref:"annotations",refInFor:true,staticClass:"absolute annotation",style:({ zIndex: annotation.id === _vm.activeId ? 1 : 0}),attrs:{"uid":_vm.uid,"id":annotation.id,"layer-id":_vm.layer.id,"time-total":_vm.timeTotal,"container-width":_vm.width,"container-left":_vm.left}})}))},staticRenderFns: [],
+var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},_vm._l((_vm.annotations),function(annotation){return _c('annotations-blocs',{key:annotation.id,ref:"annotations",refInFor:true,staticClass:"absolute annotation",style:({ zIndex: annotation.id === _vm.activeId ? 1 : 0}),attrs:{"annotation":annotation,"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":_vm.layerId,"time-total":_vm.timeTotal,"container-width":_vm.width,"container-left":_vm.left}})}))},staticRenderFns: [],
   components: {
     annotationsBlocs: annotationsBlocs
   },
 
   props: {
-    uid: String,
-    layer: Object,
+    layersUid: String,
+    layerId: String,
     annotations: Array,
-    mediaId: String,
     timeTotal: Number,
-    timeCurrent: Number,
     width: Number,
-    left: Number
+    left: Number,
+    uid: String
   },
 
   computed: {
@@ -3873,18 +4448,33 @@ var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createEle
   }
 }
 
-var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},[_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id] && layer.permission === 3)?_c('timeline-button',{key:("button-" + (layer.id)),attrs:{"layer-id":layer.id,"media-id":_vm.mediaId,"time-current":_vm.timeCurrent}}):_vm._e()}),_vm._v(" left: "+_vm._s(_vm.left)+" "),(_vm.layers)?_c('div',{staticClass:"relative overflow-hidden",style:({ height: ((40 * _vm.layers.length) + "px") })},[_c('div',{ref:"container",staticClass:"absolute timeline-annotations",style:({
+var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},[(_vm.layers)?_c('div',{staticClass:"relative overflow-hidden",style:({ height: ((40 * _vm.layers.length) + "px") })},[_c('div',{staticClass:"absolute timeline-annotations",style:({
       top: 0, bottom: 0, left: ((_vm.left) + "px"), width: ((_vm.width) + "px")
-    })},_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('timeline-annotations',{key:("annotations-" + (layer.id)),attrs:{"uid":_vm.uid,"layer":layer,"annotations":_vm.annotations[layer.id],"media-id":_vm.mediaId,"time-total":_vm.timeTotal,"time-current":_vm.timeCurrent,"width":_vm.width,"left":_vm.left + _vm.containerLeft}}):_vm._e()}))]):_vm._e()],2)},staticRenderFns: [],
+    })},_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('timeline-annotations',{key:("annotations-" + (layer.id)),staticClass:"relative annotations",attrs:{"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":layer.id,"annotations":_vm.annotations[layer.id],"time-total":_vm.timeTotal,"width":_vm.width,"left":_vm.left + _vm.containerLeft}}):_vm._e()}))]):_vm._e()])},staticRenderFns: [],
   components: {
-    timelineButton: timelineButton,
     timelineAnnotations: timelineAnnotations
   },
 
   props: {
+    mediaUid: {
+      type: String,
+      default: 'default'
+    },
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
     uid: {
       type: String,
       default: 'default'
+    },
+    filter: {
+      type: Function,
+      default: function (a) { return a.fragment &&
+        a.fragment.time &&
+        !isNaN(a.fragment.time.start) &&
+        !isNaN(a.fragment.time.end) &&
+        a; }
     }
   },
 
@@ -3897,29 +4487,31 @@ var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
   },
 
   computed: {
-    viewbox: function viewbox() {
-      return ("0 0 " + (this.svg.w) + " " + (this.svg.h))
-    },
-    properties: function properties() {
-      return this.$store.state.cml.medias.properties[this.uid] || {}
+    mediaProperties: function mediaProperties() {
+      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
     timeCurrent: function timeCurrent() {
-      return this.properties.timeCurrent || 0
+      return this.mediaProperties.timeCurrent || 0
     },
     timeTotal: function timeTotal() {
-      return this.properties.timeTotal || 0
+      return this.mediaProperties.timeTotal || 0
     },
     annotations: function annotations() {
-      return this.$store.state.cml.annotations.lists[this.uid]
-    },
-    mediaId: function mediaId() {
-      return this.$store.state.cml.medias.actives[this.uid]
+      var this$1 = this;
+      var obj;
+
+      var annotationsList = this.$store.state.cml.annotations.lists[this.uid];
+      return (
+        annotationsList &&
+        Object.keys(annotationsList.layers).reduce(
+          function (res, layer) { return Object.assign(res, ( obj = {}, obj[layer] = annotationsList.layers[layer].filter(function (a) { return this$1.filter(a); }), obj)); },
+          {}
+        )
+      )
     },
     layers: function layers() {
-      return this.$store.state.cml.layers.lists[this.uid]
-    },
-    actives: function actives() {
-      return this.$store.state.cml.annotations.actives[this.uid]
+      var active = this.$store.state.cml.layers.actives[this.layersUid];
+      return active ? this.$store.state.cml.layers.lists[active.corpuUid] : {}
     },
     left: function left() {
       return (
@@ -3946,6 +4538,9 @@ exports.cmlCorpus = corpus$1;
 exports.cmlMedias = medias$1;
 exports.cmlLayers = layers$1;
 exports.cmlAnnotations = annotations$1;
-exports.cmlMediaYoutube = mediaYoutube;
-exports.cmlMediaController = mediaController;
-exports.cmlLayerTimeline = timeline;
+exports.cmlMediasYoutube = youtube;
+exports.cmlMediasVideo = videoPlayer;
+exports.cmlMediasVideozoning = videozoning;
+exports.cmlMediasController = controller;
+exports.cmlAnnotationsButtons = buttons;
+exports.cmlAnnotationsTimeline = timeline;

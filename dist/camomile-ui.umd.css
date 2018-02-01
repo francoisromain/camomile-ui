@@ -213,7 +213,7 @@ ins {
   border-bottom: 1px solid;
 }
 
-img {
+img, video {
   max-width: 100%;
   font-style: italic;
   vertical-align: middle;
@@ -1621,11 +1621,6 @@ http://cssmojo.com/the-very-latest-clearfix-reloaded/
   background-color: white;
 }
 
-.bg-alpha {
-  background-color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
 .bg-highlight {
   background-color: #f50;
 }
@@ -1656,6 +1651,16 @@ http://cssmojo.com/the-very-latest-clearfix-reloaded/
 
 .bg-success {
   background: #6ea040;
+}
+
+.bg-bg-alpha {
+  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.bg-alt-alpha {
+  background-color: #f8f7f3;
+  background-color: rgba(248, 247, 243, 0.5);
 }
 
 .border-bg {

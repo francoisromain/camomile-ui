@@ -214,9 +214,11 @@ export default {
       }
     },
     viewportWidth() {
-      const width = this.$refs.container.offsetWidth
-      const height = width * 9 / 16
-      this.player.setSize(width, height)
+      if (this.media) {
+        const width = this.$refs.container.offsetWidth
+        const height = width * 9 / 16
+        this.player.setSize(width, height)
+      }
     },
     media(media, mediaOld) {
       if (

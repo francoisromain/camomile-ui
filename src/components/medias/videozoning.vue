@@ -1,13 +1,17 @@
 <template>
   <div class="relative">
     <zoning class="absolute full"
-      :media-uid="mediaUid">
-
+      v-if="layers"
+      :media-uid="mediaUid"
+      :uid="uid"
+      :layers-uid="layersUid"
+      :filter="annotationsFilter"
+      :layers="layers">
     </zoning>
+
     <video-player 
       :media-uid="mediaUid"
-      :filter="mediafilter">
-
+      :filter="mediaFilter">
     </video-player>
   </div>  
 </template>
@@ -32,25 +36,20 @@ export default {
       type: String,
       default: 'default'
     },
-    annotationsFilter: {
-      type: Function,
-      default: a =>
-        a.fragment &&
-        a.fragment.time &&
-        !isNaN(a.fragment.time.start) &&
-        !isNaN(a.fragment.time.end) &&
-        a
-    },
-    mediaFilter: {
-      type: Function,
-      default: media =>
-        media.description.type && media.description.type === 'video' && media
-    }
+    annotationsFilter: Function,
+    mediaFilter: Function
   },
 
   components: {
     videoPlayer,
     zoning
+  },
+
+  computed: {
+    layers() {
+      const active = this.$store.state.cml.layers.actives[this.layersUid]
+      return active ? this.$store.state.cml.layers.lists[active.corpuUid] : {}
+    }
   }
 }
 </script>

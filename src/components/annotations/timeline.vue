@@ -3,8 +3,8 @@
     <div class="relative overflow-hidden" :style="{ height: `${40 * layers.length}px` }" v-if="layers">
       <div class="absolute timeline-annotations" :style="{
         top: 0, bottom: 0, left: `${left}px`, width: `${width}px`
-      }" ref="container">
-        <timeline-annotations 
+      }">
+        <timeline-annotations class="relative annotations" 
           v-for="layer in layers" 
           :key="`annotations-${layer.id}`"
           v-if="annotations[layer.id]"
@@ -13,7 +13,6 @@
           :layer-id="layer.id"
           :annotations="annotations[layer.id]"
           :time-total="timeTotal"
-          :time-current="timeCurrent"
           :width="width"
           :left="left + containerLeft"
           >
@@ -108,3 +107,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.annotations {
+  height: 40px;
+}
+</style>

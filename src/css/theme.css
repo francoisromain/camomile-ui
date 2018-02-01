@@ -69,6 +69,40 @@ hr.border-bg {
   margin-top: var(--unit-s);
 }
 
+.annotation {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.handle {
+  width: 32px;
+  background-color: yellow;
+  cursor: ew-resize;
+}
+
+.handle-right {
+  right: -32px;
+  top: 0;
+  bottom: 0;
+}
+
+.handle-left {
+  left: -32px;
+  top: 0;
+  bottom: 0;
+}
+
+.handle-topleft {
+  top: 0;
+  left: 0;
+  height: 32px;
+}
+
+.handle-bottomright {
+  bottom: 0;
+  right: 0;
+  height: 32px;
+}
+
 @media (--viewport-tablet) {
   --header-height: calc(var(--unit) * 2);
 

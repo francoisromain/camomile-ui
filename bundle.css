@@ -103,6 +103,72 @@ http://francoisromain.github.io/postcss-structure
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .annotations {
   height: 40px;
 }
@@ -224,12 +290,7 @@ http://francoisromain.github.io/postcss-structure
 
 
 
-
-
-
-
-
-.annotation[data-v-1e3bbe38] {
+.annotation[data-v-0f3e34aa] {
   background-color: #ff0000;
   background-color: rgba(255, 0, 0, .5);
   top: 0;
@@ -237,7 +298,7 @@ http://francoisromain.github.io/postcss-structure
   text-align: center;
 }
 
-.handler[data-v-1e3bbe38] {
+.handler[data-v-0f3e34aa] {
   width: 32px;
   background-color: yellow;
   top: 0;
@@ -245,11 +306,11 @@ http://francoisromain.github.io/postcss-structure
   cursor: ew-resize;
 }
 
-.handler-right[data-v-1e3bbe38] {
+.handler-right[data-v-0f3e34aa] {
   right: -32px;
 }
 
-.handler-left[data-v-1e3bbe38] {
+.handler-left[data-v-0f3e34aa] {
   left: -32px;
 }
 

@@ -51,7 +51,7 @@ export default {
     },
     activeId() {
       const actives = this.$store.state.cml.annotations.actives[this.uid]
-      return actives ? actives.id : null
+      return actives ? actives : null
     },
     layers() {
       const actives = this.$store.state.cml.layers.actives[this.layersUid]
