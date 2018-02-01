@@ -8,7 +8,6 @@ var Vue = _interopDefault(require('vue'));
 var Camomile = _interopDefault(require('camomile-client'));
 var Vuex = require('vuex');
 var Vuex__default = _interopDefault(Vuex);
-var JSONfn = _interopDefault(require('json-fn'));
 
 var config = {
   title: 'Camomile UI',
@@ -2764,13 +2763,17 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   computed: {
     fields: {
       get: function get() {
-        return JSONfn.stringify(this.$store.state.cml.popup.element[this.name])
+        return JSON.stringify(
+          this.$store.state.cml.popup.element[this.name],
+          undefined,
+          2
+        )
       },
       set: function set(value) {
         if (this.jsonCheck(value)) {
           this.$store.commit('cml/popup/fieldUpdate', {
             name: this.name,
-            value: JSONfn.parse(value)
+            value: JSON.parse(value)
           });
         }
       }
@@ -2780,7 +2783,7 @@ var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
   methods: {
     jsonCheck: function jsonCheck(str) {
       try {
-        JSONfn.parse(str);
+        JSON.parse(str);
       } catch (e) {
         return false
       }
