@@ -1,18 +1,18 @@
 <template>
   <div class="page">
-    <cml-header></cml-header>
+    <cml-header />
     <main class="main relative">
       <div class="content">
-        <slot v-if="isLogged"></slot>
-        <cml-login v-else></cml-login>
+        <slot v-if="isLogged" />
+        <cml-login v-else />
       </div>
       <div class="overlay">
         <transition name="transition-top">
-          <cml-popup v-if="popup.visible"></cml-popup>
+          <cml-popup v-if="popup.visible" />
         </transition>
-        <cml-messages></cml-messages>
-        <cml-dropdown></cml-dropdown>
-        <viewport></viewport>
+        <cml-messages />
+        <cml-dropdown />
+        <viewport />
       </div>
     </main>
   </div>
@@ -31,7 +31,7 @@ import cmlLogin from './login.vue'
 export default {
   store,
 
-  name: 'camomile',
+  name: 'Camomile',
 
   components: {
     viewport,

@@ -1,14 +1,14 @@
 <template>
-  <div></div>
+  <div />
 </template>
 
 <script>
 import popupLogin from './popup/login.vue'
 
 export default {
-  name: 'camomile-login',
+  name: 'CamomileLogin',
 
-  created() {
+  created () {
     this.$store.commit('cml/popup/open', {
       config: {
         title: 'Login',

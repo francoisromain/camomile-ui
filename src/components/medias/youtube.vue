@@ -1,9 +1,11 @@
 <template>
-  <div v-if="media" ref="container">
+  <div
+    v-if="media"
+    ref="container">
     <div v-show="isLoaded">
-      <div id="player"></div>
+      <div id="player" />
     </div>
-    <spinner v-if="!isLoaded"></spinner>
+    <spinner v-if="!isLoaded" />
   </div>
 </template>
 
@@ -11,7 +13,11 @@
 import spinner from '../utils/spinner.vue'
 
 export default {
-  name: 'camomile-media-youtube',
+  name: 'CamomileMediaYoutube',
+
+  components: {
+    spinner
+  },
 
   props: {
     mediaUid: {
@@ -21,15 +27,13 @@ export default {
     filter: {
       type: Function,
       default: media =>
+        media &&
+        media.description &&
         media.description.type && media.description.type === 'youtube' && media
     }
   },
 
-  components: {
-    spinner
-  },
-
-  data() {
+  data () {
     return {
       player: null,
       videoNew: false
@@ -37,48 +41,78 @@ export default {
   },
 
   computed: {
-    media() {
-      const active = this.$store.state.cml.medias.actives[this.mediaUid]
-      return active
-        ? this.filter(
-            this.$store.state.cml.medias.lists[active.corpuUid].find(
-              m => m.id === active.id
-            )
-          )
-        : null
+    media () {
+      return this.$store.getters['cml/medias/active'](this.mediaUid, this.filter)
     },
-    properties() {
-      return (
-        (this.media &&
-          this.$store.state.cml.medias.properties[this.mediaUid]) ||
-        {}
-      )
+    properties () {
+      return this.$store.getters['cml/medias/properties'](this.mediaUid, this.filter)
     },
-    isPlaying() {
+    isPlaying () {
       return this.properties.isPlaying || false
     },
-    isLoaded() {
+    isLoaded () {
       return this.properties.isLoaded || false
     },
-    seek() {
+    seek () {
       return this.properties.seek || {}
     },
-    timeCurrent() {
+    timeCurrent () {
       return this.properties.timeCurrent || 0
     },
-    viewportWidth() {
+    viewportWidth () {
       return this.$store.state.cml.viewport.width || 0
     }
   },
 
-  mounted() {
+  watch: {
+    isPlaying (val) {
+      if (val) {
+        this.player.playVideo()
+      } else {
+        this.player.pauseVideo()
+      }
+    },
+    seek (options) {
+      if (options.seeking) {
+        this.videoSeek(options.serverRequest)
+      }
+    },
+    viewportWidth () {
+      if (this.media) {
+        const width = this.$refs.container.offsetWidth
+        const height = width * 9 / 16
+        this.player.setSize(width, height)
+      }
+    },
+    media (media, mediaOld) {
+      if (
+        media &&
+        media.url &&
+        mediaOld &&
+        mediaOld.url &&
+        media.url !== mediaOld.url
+      ) {
+        this.videoLoad(media.url)
+      }
+    }
+  },
+
+  mounted () {
     if (this.media && this.media.url) {
       this.playerLoad(this.media.url)
     }
   },
 
+  beforeDestroy () {
+    if (this.player !== null && this.player.destroy) {
+      this.player.destroy()
+    }
+
+    this.player = null
+  },
+
   methods: {
-    videoLoad(mediaUrl) {
+    videoLoad (mediaUrl) {
       if (this.player) {
         const videoId = this.parseYouTubeId(mediaUrl)
         this.player.loadVideoById(videoId)
@@ -87,7 +121,7 @@ export default {
       }
     },
 
-    playerLoad(mediaUrl) {
+    playerLoad (mediaUrl) {
       const videoId = this.parseYouTubeId(mediaUrl)
       const width = this.$refs.container.offsetWidth
       const height = width * 9 / 16
@@ -169,7 +203,10 @@ export default {
       tag.src = 'https://www.youtube.com/iframe_api'
       scriptTagLast.parentNode.insertBefore(tag, scriptTagLast.nextSibling)
 
+      // @ts-ignore
       window.onYouTubeIframeAPIReady = () => {
+        /* global YT */
+        // @ts-ignore
         this.player = new YT.Player('player', {
           width,
           height,
@@ -179,57 +216,16 @@ export default {
         })
       }
     },
-    videoSeek(serverRequest) {
+    videoSeek (serverRequest) {
       this.player.seekTo(this.timeCurrent / 1000, serverRequest)
       this.$store.commit('cml/medias/seek', {
         options: { seeking: false },
         uid: this.mediaUid
       })
     },
-    parseYouTubeId(url) {
-      var regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+    parseYouTubeId (url) {
+      var regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
       return url.match(regex) ? RegExp.$2 : url
-    }
-  },
-
-  beforeDestroy() {
-    if (this.player !== null && this.player.destroy) {
-      this.player.destroy()
-    }
-
-    this.player = null
-  },
-
-  watch: {
-    isPlaying(val) {
-      if (val) {
-        this.player.playVideo()
-      } else {
-        this.player.pauseVideo()
-      }
-    },
-    seek(options) {
-      if (options.seeking) {
-        this.videoSeek(options.serverRequest)
-      }
-    },
-    viewportWidth() {
-      if (this.media) {
-        const width = this.$refs.container.offsetWidth
-        const height = width * 9 / 16
-        this.player.setSize(width, height)
-      }
-    },
-    media(media, mediaOld) {
-      if (
-        media &&
-        media.url &&
-        mediaOld &&
-        mediaOld.url &&
-        media.url !== mediaOld.url
-      ) {
-        this.videoLoad(media.url)
-      }
     }
   }
 }

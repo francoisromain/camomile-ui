@@ -1,18 +1,17 @@
 <template>
   <div class="relative">
-    <zoning class="absolute full"
+    <zoning
       v-if="layers"
       :media-uid="mediaUid"
       :uid="uid"
       :layers-uid="layersUid"
       :filter="annotationsFilter"
-      :layers="layers">
-    </zoning>
+      :layers="layers" 
+      class="absolute full"/>
 
     <video-player 
       :media-uid="mediaUid"
-      :filter="mediaFilter">
-    </video-player>
+      :filter="mediaFilter" />
   </div>  
 </template>
 
@@ -21,7 +20,12 @@ import videoPlayer from './video.vue'
 import zoning from './zoning.vue'
 
 export default {
-  name: 'camomile-media-video',
+  name: 'CamomileMediaVideo',
+
+  components: {
+    videoPlayer,
+    zoning
+  },
 
   props: {
     mediaUid: {
@@ -40,13 +44,8 @@ export default {
     mediaFilter: Function
   },
 
-  components: {
-    videoPlayer,
-    zoning
-  },
-
   computed: {
-    layers() {
+    layers () {
       const active = this.$store.state.cml.layers.actives[this.layersUid]
       return active ? this.$store.state.cml.layers.lists[active.corpuUid] : {}
     }

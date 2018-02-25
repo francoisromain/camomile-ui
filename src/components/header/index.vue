@@ -3,20 +3,24 @@
     <div class="container">
       <div class="blobs">
         <div class="blob-1-4 mb-0">
-          <cml-title></cml-title>
+          <cml-title />
         </div>
-        <div class="blob-1-2 mb-0" v-if="isLogged">
+        <div
+          v-if="isLogged"
+          class="blob-1-2 mb-0">
           <div class="blobs-default">
             <div class="blob-default">
-              <cml-sync class="mb-0 left"></cml-sync>
+              <cml-sync class="mb-0 left" />
             </div>
             <div class="blob-auto mb-0">  
-              <cml-infos></cml-infos>
+              <cml-infos />
             </div>
           </div>
         </div>
-        <div class="blob mb-0 flex-right" v-if="isLogged">
-          <cml-userbutton></cml-userbutton>
+        <div
+          v-if="isLogged"
+          class="blob mb-0 flex-right">
+          <cml-userbutton />
         </div>
       </div>
     </div>
@@ -30,7 +34,7 @@ import cmlUserbutton from './userbutton.vue'
 import cmlSync from './sync.vue'
 
 export default {
-  name: 'camomile-header',
+  name: 'CamomileHeader',
 
   components: {
     cmlTitle,
@@ -40,7 +44,7 @@ export default {
   },
 
   computed: {
-    isLogged() {
+    isLogged () {
       return this.$store.state.cml.user.isLogged
     }
   }

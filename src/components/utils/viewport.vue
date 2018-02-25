@@ -1,25 +1,27 @@
 <template>
-<div></div>
+  <div/>
 </template>
 
 <script>
 export default {
-  name: 'camomile-utils-viewport',
+  name: 'CamomileUtilsViewport',
 
-  methods: {
-    resize() {
-      return this.$store.dispatch('cml/viewport/set')
-    }
-  },
-
-  mounted() {
+  mounted () {
     window.addEventListener('resize', this.resize)
     this.resize()
+  },
+
+  methods: {
+    resize () {
+      return this.$store.dispatch('cml/viewport/set')
+    }
   }
 }
 </script>
+
 <style scoped>
 @import '../../css/settings.css';
+
 @media (--viewport-desktop) {
   .home {
     background-color: var(--color-highlight);

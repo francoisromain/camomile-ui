@@ -160,6 +160,20 @@ export const actions = {
   }
 }
 
+export const getters = {
+  actives: state => uid => (state.lists[uid] && state.lists[uid].layers) || {},
+
+  filter: state => (uid, filter) =>
+    state.lists[uid] &&
+    Object.keys(state.lists[uid].layers).reduce(
+      (res, layer) =>
+        Object.assign(res, {
+          [layer]: state.lists[uid].layers[layer].filter(a => filter(a))
+        }),
+      {}
+    )
+}
+
 export const mutations = {
   register(state, { uid, mediaUid, layersUid }) {
     Vue.set(state.actives, uid, null)
@@ -241,5 +255,6 @@ export default {
   namespaced: true,
   state,
   actions,
+  getters,
   mutations
 }

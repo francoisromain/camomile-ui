@@ -1,21 +1,25 @@
 <template>
-  <button @click="sync" class="btn-menubar px-m py-s full-x"><i class="icon-24 icon-24-dot" :class="{ blink: active }" ></i></button>
+  <button
+    class="btn-menubar px-m py-s full-x"
+    @click="sync">
+    <i
+      :class="{ blink: active }"
+      class="icon-24 icon-24-dot" />
+  </button>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-  name: 'camomile-header-syncbutton',
+  name: 'CamomileHeaderSyncbutton',
 
   computed: {
-    active() {
+    active () {
       return this.$store.getters['cml/sync/active']
     }
   },
 
   methods: {
-    sync() {
+    sync () {
       this.$store.dispatch('cml/sync/all')
     }
   }

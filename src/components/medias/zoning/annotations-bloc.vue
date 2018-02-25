@@ -1,12 +1,17 @@
 <template>
-  <div ref="annotation" v-if="visible"
+  <div
+    v-if="visible"
+    ref="annotation"
     :style="{ left: `${left}%`, top: `${top}%`, width:`${width}%`, height:`${height}%` }">
-    <div class="relative full-y"
+    <div
+      class="relative full-y"
       @mousedown="set($event)">
-      <div class="absolute handle handle-topleft"
-        @mousedown="dragTopleftOn($event)"></div>
-      <div class="absolute handle handle-bottomright"
-        @mousedown="dragBottomrightOn($event)"></div>
+      <div
+        class="absolute handle handle-topleft"
+        @mousedown="dragTopleftOn($event)" />
+      <div
+        class="absolute handle handle-bottomright"
+        @mousedown="dragBottomrightOn($event)"/>
     </div>
   </div>
 </template>
@@ -14,17 +19,33 @@
 <script>
 export default {
   props: {
-    uid: String,
-    annotation: Object,
-    layerId: String,
-    layersUid: String,
-    timeTotal: Number,
-    timeCurrent: Number,
-    containerWidth: Number,
-    containerHeight: Number
+    uid: {
+      type: String,
+      default: 'default'
+    },
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
+    annotation: {
+      type: Object,
+      default: () => ({})
+    },
+    timeTotal: {
+      type: Number,
+      default: 0
+    },
+    timeCurrent: {
+      type: Number,
+      default: 0
+    },
+    containerWidth: {
+      type: Number,
+      default: 0
+    }
   },
 
-  data() {
+  data () {
     return {
       leftDragging: null,
       topDragging: null,
@@ -35,48 +56,48 @@ export default {
   },
 
   computed: {
-    timeStart() {
+    timeStart () {
       return this.annotation.fragment.time.start
     },
-    timeEnd() {
+    timeEnd () {
       return this.annotation.fragment.time.end
     },
-    positionIndex() {
+    positionIndex () {
       return this.annotation.fragment.positions
         .slice()
         .reverse()
         .findIndex(pos => pos.time <= this.timeCurrent)
     },
-    visible() {
+    visible () {
       return (
         this.positionIndex !== -1 &&
         this.timeStart <= this.timeCurrent &&
         this.timeEnd >= this.timeCurrent
       )
     },
-    position() {
+    position () {
       return this.annotation.fragment.positions[this.positionIndex]
     },
-    left() {
+    left () {
       if (this.visible) {
         return this.leftDragging !== null
           ? this.leftDragging
           : this.position.left
       }
     },
-    top() {
+    top () {
       if (this.visible) {
         return this.topDragging !== null ? this.topDragging : this.position.top
       }
     },
-    width() {
+    width () {
       if (this.visible) {
         return this.bottomDragging !== null
           ? this.bottomDragging
           : this.position.width
       }
     },
-    height() {
+    height () {
       if (this.visible) {
         return this.bottomDragging !== null
           ? this.bottomDragging
@@ -86,18 +107,18 @@ export default {
   },
 
   methods: {
-    positionUpdate(positions) {
+    positionUpdate (positions) {
       const element = Object.assign({}, this.annotation)
       positions.forEach(
         position => (element.fragment.position[position.type] = position.value)
       )
       return this.$store.dispatch('cml/annotations/update', { element })
     },
-    dragTopleftOn(e) {
+    dragTopleftOn (e) {
       document.addEventListener('mousemove', this.dragTopleft)
       document.addEventListener('mouseup', this.dragTopleftOff)
     },
-    dragTopleftOff(e) {
+    dragTopleftOff (e) {
       document.removeEventListener('mousemove', this.dragTopleft)
       document.removeEventListener('mouseup', this.dragTopleftOff)
       const positions = [
@@ -113,7 +134,7 @@ export default {
       this.positionUpdate(positions)
       this.topleftDragging = null
     },
-    dragTopleft(e) {
+    dragTopleft (e) {
       const c = e.clientX - this.containerLeft + this.handleWidth / 2
 
       if (c < 0) {
@@ -124,22 +145,22 @@ export default {
         this.topDragging = c
       }
     },
-    dragBottomrightOn(e) {
+    dragBottomrightOn (e) {
       document.addEventListener('mousemove', this.dragRight)
       document.addEventListener('mouseup', this.dragRightOff)
     },
-    dragRightOff(e) {
+    dragRightOff (e) {
       document.removeEventListener('mousemove', this.dragRight)
       document.removeEventListener('mouseup', this.dragRightOff)
       const time = Math.round(
         (this.$refs.annotation.offsetLeft + this.$refs.annotation.offsetWidth) *
-          this.timeTotal /
-          this.containerWidth
+        this.timeTotal /
+        this.containerWidth
       )
       this.positionUpdate(time, 'end')
       this.bottomDragging = null
     },
-    dragRight(e) {
+    dragRight (e) {
       const c =
         this.containerWidth +
         this.containerLeft -
@@ -148,7 +169,7 @@ export default {
 
       this.bottomDragging = c > 0 ? c : 0
     },
-    set(e) {
+    set (e) {
       this.$store.commit('cml/annotations/set', {
         id: this.annotation.id,
         uid: this.uid

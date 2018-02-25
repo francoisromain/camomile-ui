@@ -2,11 +2,10 @@ import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import vue from 'rollup-plugin-vue'
 import postcss from 'rollup-plugin-postcss'
-import postcssPlugins from './rollup.postcss.config.js'
 import json from 'rollup-plugin-json'
 import builtins from 'rollup-plugin-node-builtins'
 import buble from 'rollup-plugin-buble'
-const pkg = require('../package.json')
+import pkg from '../package.json'
 
 export default [
   {
@@ -24,11 +23,9 @@ export default [
         preferBuiltins: true
       }),
       vue({
-        compileTemplate: true
+        css: true
       }),
-      postcss({
-        extract: true
-      }),
+      postcss(),
       buble({
         objectAssign: 'Object.assign'
       })
@@ -43,11 +40,9 @@ export default [
     ],
     plugins: [
       vue({
-        compileTemplate: true
+        css: true
       }),
-      postcss({
-        extract: true
-      }),
+      postcss(),
       buble({
         objectAssign: 'Object.assign'
       })

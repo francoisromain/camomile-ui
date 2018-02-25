@@ -315,7 +315,14 @@ export const getters = {
     (state.actives[uid] &&
       state.lists[uid].find(c => c.id === state.actives[uid]).id) ||
     (state.lists[uid][0] && state.lists[uid][0].id) ||
-    null
+    null,
+
+  permission: state => uid => {
+    const corpu =
+      state.lists[uid] &&
+      state.lists[uid].find(c => c.id === state.actives[uid])
+    return corpu ? corpu.permission : 0
+  }
 }
 
 export const mutations = {

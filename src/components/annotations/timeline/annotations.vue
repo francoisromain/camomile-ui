@@ -1,6 +1,6 @@
 <template>
   <div ref="container">
-    <annotations-bloc class="absolute annotation"
+    <annotations-bloc
       v-for="annotation in annotations"
       :key="annotation.id"
       :annotation="annotation"
@@ -10,8 +10,8 @@
       :time-total="timeTotal"
       :container-width="width"
       :container-left="left"
-      :style="{ zIndex: annotation.id === activeId ? 1 : 0}">
-    </annotations-bloc>
+      :class="{ active: annotation.id === activeId }"
+      class="absolute annotation" />
   </div>
 </template>
 
@@ -24,17 +24,38 @@ export default {
   },
 
   props: {
-    layersUid: String,
-    layerId: String,
-    annotations: Array,
-    timeTotal: Number,
-    width: Number,
-    left: Number,
-    uid: String
+    uid: {
+      type: String,
+      default: 'default'
+    },
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
+    layerId: {
+      type: String,
+      default: 'layerIdHash'
+    },
+    annotations: {
+      type: Array,
+      default: () => []
+    },
+    timeTotal: {
+      type: Number,
+      default: 0
+    },
+    width: {
+      type: Number,
+      default: 0
+    },
+    left: {
+      type: Number,
+      default: 0
+    }
   },
 
   computed: {
-    activeId() {
+    activeId () {
       return this.$store.state.cml.annotations.actives[this.uid]
     }
   }
@@ -46,5 +67,10 @@ export default {
   top: 0;
   bottom: 0;
   text-align: center;
+}
+
+.annotation.active {
+  z-index: 1;
+  background-color: rgba(255, 0, 0, 1);
 }
 </style>

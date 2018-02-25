@@ -60,11 +60,11 @@
 }
 
 .bg-bg-alpha {
-  background-color: color(var(--color-bg) alpha(50%));
+  background-color: color-mod(var(--color-bg) alpha(50%));
 }
 
 .bg-alt-alpha {
-  background-color: color(var(--color-alt) alpha(50%));
+  background-color: color-mod(var(--color-alt) alpha(50%));
 }
 
 .border-bg {

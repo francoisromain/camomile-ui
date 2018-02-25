@@ -1,26 +1,42 @@
 <template>
   <div>
-    <div class="blobs" v-if="type !== 'annotations'">
+    <div
+      v-if="type !== 'annotations'"
+      class="blobs">
       <div class="blob-1-4">
         <h4 class="pt-s mb-0">Name</h4>
       </div>
       <div class="blob-3-4">
-        <input type="text" v-model="element.name" class="input-alt" placeholder="Name" :disabled="element.id">
+        <input
+          v-model="element.name"
+          :disabled="element.id"
+          type="text"
+          class="input-alt"
+          placeholder="Name">
       </div>
     </div>
-    <div class="blobs" v-if="type === 'annotations'">
+    <div 
+      v-if="type === 'annotations'"
+      class="blobs">
       <div class="blob-1-4">
         <h4 class="pt-s mb-0">Id</h4>
       </div>
       <div class="blob-3-4">
-        <input type="text" v-model="element.id" class="input-alt" placeholder="Name" :disabled="element.id">
+        <input
+          v-model="element.id"
+          :disabled="element.id"
+          type="text"
+          class="input-alt"
+          placeholder="Name">
       </div>
     </div>
     <div class="blobs">
-      <div class="blob-1-4">
-      </div>
+      <div class="blob-1-4" />
       <div class="blob-3-4">
-        <button @click="remove" @keyup.enter="remove" class="btn-alt p-s full-x">Remove</button>
+        <button
+          class="btn-alt p-s full-x"
+          @click="remove"
+          @keyup.enter="remove">Remove</button>
       </div>
     </div>
   </div>
@@ -30,7 +46,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'camomile-popup-remove',
+  name: 'CamomilePopupRemove',
 
   computed: {
     ...mapState({
@@ -39,22 +55,24 @@ export default {
     })
   },
 
+  created () {
+    document.addEventListener('keyup', this.keyup)
+  },
+
+  beforeDestroy () {
+    document.removeEventListener('keyup', this.keyup)
+  },
+
   methods: {
-    remove() {
+    remove () {
       this.$store.dispatch(`cml/${this.type}/remove`, { id: this.element.id })
       this.$store.commit(`cml/popup/close`)
     },
-    keyup(e) {
+    keyup (e) {
       if ((e.which || e.keyCode) === 13) {
         this.remove()
       }
     }
-  },
-  created() {
-    document.addEventListener('keyup', this.keyup)
-  },
-  beforeDestroy() {
-    document.removeEventListener('keyup', this.keyup)
   }
 }
 </script>

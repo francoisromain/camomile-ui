@@ -2,20 +2,40 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s mb-s">Layers</h2>
-      <button @click="popupOpen({ config: popupAddConfig, element: { id: null, corpuId, description: {}, metadataType: {}, fragmentType: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <button
+        v-if="corpuPermission === 3"
+        class="flex-right btn p-s"
+        @click="popupOpen({ config: popupAddConfig, element: { id: null, corpuId, description: {}, metadataType: {}, fragmentType: {} } })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div v-if="layers && layers.length > 0">
       <table class="table mb-0">
         <tr>
-          <th></th><th>Name</th><th></th>
+          <th /><th>Name</th><th />
         </tr>
-        <tr v-for="layer in layers" :key="layer.id">
-          <td><input type="checkbox" @change="set" :value="layer.id" :checked="actives.indexOf(layer.id) !== -1"></td>
+        <tr
+          v-for="layer in layers"
+          :key="layer.id">
+          <td>
+            <input
+              :value="layer.id"
+              :checked="activeIds.indexOf(layer.id) !== -1"
+              type="checkbox"
+              @change="set">
+          </td>
           <td>{{ layer.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupPermissionsConfig, element: layer })" class="btn px-s py-s my--s h6" v-if="layer.permission === 3">Permissions</button>
-            <button @click="popupOpen({ config: popupEditConfig, element: layer })" class="btn px-s py-s my--s h6" v-if="layer.permission === 3">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: layer })" class="btn px-s py-s my--s h6" v-if="layer.permission === 3">Remove</button>
+            <button
+              v-if="layer.permission === 3"
+              class="btn px-s py-s my--s h6"
+              @click="popupOpen({ config: popupPermissionsConfig, element: layer })">Permissions</button>
+            <button
+              v-if="layer.permission === 3"
+              class="btn px-s py-s my--s h6"
+              @click="popupOpen({ config: popupEditConfig, element: layer })">Edit</button>
+            <button
+              v-if="layer.permission === 3"
+              class="btn px-s py-s my--s h6"
+              @click="popupOpen({ config: popupRemoveConfig, element: layer })">Remove</button>
           </td>
         </tr>
       </table>
@@ -29,7 +49,7 @@ import popupRemove from './popup/remove.vue'
 import popupPermissions from './popup/permissions.vue'
 
 export default {
-  name: 'camomile-layers',
+  name: 'CamomileLayers',
 
   props: {
     uid: {
@@ -42,7 +62,7 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       popupEditConfig: {
         type: 'layers',
@@ -73,36 +93,35 @@ export default {
   },
 
   computed: {
-    layers() {
+    layers () {
       return this.$store.state.cml.layers.lists[this.corpusUid]
     },
-    actives() {
-      return (
-        (this.$store.state.cml.layers.actives[this.uid] &&
-          this.$store.state.cml.layers.actives[this.uid].ids) ||
-        []
-      )
+    activeIds () {
+      return this.$store.getters['cml/layers/activeIds'](this.uid)
     },
-    corpus() {
+    corpus () {
       return this.$store.state.cml.corpus.lists[this.corpusUid]
     },
-    corpuId() {
+    corpuId () {
       return this.$store.state.cml.corpus.actives[this.corpusUid]
     },
-    permission() {
-      const corpus = this.$store.state.cml.corpus.lists
-      const corpu =
-        corpus[this.corpusUid] &&
-        corpus[this.corpusUid].find(c => c.id === this.corpuId)
-      return corpu ? corpu.permission : 0
+    corpuPermission () {
+      return this.$store.getters['cml/corpus/permission'](this.corpusUid)
     }
   },
 
+  created () {
+    this.$store.dispatch('cml/layers/register', {
+      uid: this.uid,
+      corpuUid: this.corpusUid
+    })
+  },
+
   methods: {
-    popupOpen({ config, element }) {
+    popupOpen ({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
     },
-    set(e) {
+    set (e) {
       if (e.target.checked) {
         this.$store.dispatch('cml/layers/set', {
           id: e.target.value,
@@ -115,13 +134,6 @@ export default {
         })
       }
     }
-  },
-
-  created() {
-    this.$store.dispatch('cml/layers/register', {
-      uid: this.uid,
-      corpuUid: this.corpusUid
-    })
   }
 }
 </script>

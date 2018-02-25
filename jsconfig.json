@@ -1,18 +1,12 @@
 {
   "compilerOptions": {
     "checkJs": true,
-    "target": "es5",
-    "lib": [
-      "es2015",
-      "es2017",
-      "dom"
-    ],
-    "module": "commonjs"
+    "target": "es2017",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "**/node_modules/*",
-    "dist",
-    "example/dist"
-  ]
+  "exclude": ["node_modules", "**/node_modules/*", "dist", "example/dist"],
+  "include": ["./src/**/*"]
 }

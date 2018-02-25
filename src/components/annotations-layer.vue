@@ -2,21 +2,24 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s">{{ layer.name }}</h2>
-      <button @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId: layer.id, mediaId, fragment: layer.fragmentType, metadata: {} } })" class="flex-right btn p-s" v-if="layer.permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <button
+        v-if="layer.permission === 3"
+        class="flex-right btn p-s"
+        @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId: layer.id, mediaId, fragment: layer.fragmentType, metadata: layer.metadataType } })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <table class="table mb-0">
       <tr>
-        <th></th><th>Id</th><th>Medium</th><th></th>
+        <th /><th>Id</th><th>Medium</th><th />
       </tr>
-      <annotations-layer-detail v-for="annotation in annotations"
+      <annotations-layer-detail
+        v-for="annotation in annotations"
         :key="annotation.id"
         :annotation="annotation"
         :uid="uid"
         :layer-permission="layer.permission"
         :media-name="mediaName"
         :media-id="mediaId"
-        :active-id="activeId">
-      </annotations-layer-detail>
+        :active-id="activeId" />
     </table>
   </div>
 </template>
@@ -26,7 +29,7 @@ import popupEdit from './popup/edit.vue'
 import annotationsLayerDetail from './annotations-layer-detail.vue'
 
 export default {
-  name: 'camomile-annotations',
+  name: 'CamomileLayers',
 
   components: {
     annotationsLayerDetail
@@ -37,14 +40,29 @@ export default {
       type: String,
       default: 'default'
     },
-    layer: Object,
-    annotations: Array,
-    activeId: String,
-    mediaId: String,
-    mediaName: String
+    layer: {
+      type: Object,
+      default: () => ({})
+    },
+    annotations: {
+      type: Array,
+      default: () => []
+    },
+    activeId: {
+      type: String,
+      default: 'hash'
+    },
+    mediaId: {
+      type: String,
+      default: 'hash'
+    },
+    mediaName: {
+      type: String,
+      default: 'hash'
+    }
   },
 
-  data() {
+  data () {
     return {
       popupAddConfig: {
         type: 'annotations',
@@ -56,10 +74,10 @@ export default {
   },
 
   methods: {
-    popupOpen({ config, element }) {
+    popupOpen ({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
     },
-    set(e, layerId) {
+    set (e, layerId) {
       if (e.target.checked) {
         this.$store.commit('cml/annotations/set', {
           id: e.target.value,

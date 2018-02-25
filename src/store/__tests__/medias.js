@@ -322,6 +322,12 @@ describe('store medias getters', () => {
       actives: {
         default: { id: 'mocks-media-id-2', corpuUid: 'default' }
       },
+      properties: {
+        default: {
+          propOne: 'one',
+          propTwo: 'two'
+        }
+      },
       lists: {
         default: [
           {
@@ -344,10 +350,25 @@ describe('store medias getters', () => {
     })
   })
 
-  it('returns the id of the active medias', () => {
+  it('returns the id of the active media', () => {
     expect(store.getters.id({ corpuUid: 'default', uid: 'default' })).toEqual(
       'mocks-media-id-2'
     )
+  })
+
+  it('returns the properties of the active media', () => {
+    expect(store.getters.properties('default')).toEqual({
+      propOne: 'one',
+      propTwo: 'two'
+    })
+  })
+
+  it('returns the active media', () => {
+    expect(store.getters.active('default')).toEqual({
+      description: {},
+      id: 'mocks-media-id-2',
+      name: 'media-2'
+    })
   })
 })
 

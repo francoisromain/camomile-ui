@@ -2,20 +2,40 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s mb-s">Corpora</h2>
-      <button @click="popupOpen({ config: popupAddConfig, element: { id: null, description: {} } })" class="flex-right btn p-s" v-if="isAdmin"><i class="icon-24 icon-24-plus"></i></button>
+      <button
+        v-if="isAdmin"
+        class="flex-right btn p-s"
+        @click="popupOpen({ config: popupAddConfig, element: { id: null, description: {} } })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div v-if="corpus && corpus.length > 0">
       <table class="table mb-0">
         <tr>
-          <th></th><th>Name</th><th></th>
+          <th /><th>Name</th><th />
         </tr>
-        <tr v-for="corpu in corpus" :key="corpu.id">
-          <td><input type="radio" @change="set" :value="corpu.id" :checked="corpu.id === corpuId"></td>
+        <tr
+          v-for="corpu in corpus"
+          :key="corpu.id">
+          <td>
+            <input
+              :value="corpu.id"
+              :checked="corpu.id === corpuId"
+              type="radio"
+              @change="set">
+          </td>
           <td>{{ corpu.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupPermissionsConfig, element: corpu })" class="btn px-s py-s my--s h6" v-if="corpu.permission === 3">Permissions</button>
-            <button @click="popupOpen({ config: popupEditConfig, element: corpu })" class="btn px-s py-s my--s h6" v-if="corpu.permission === 3">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: corpu })" class="btn px-s py-s my--s h6" v-if="isAdmin && corpu.permission === 3">Remove</button>
+            <button
+              v-if="corpu.permission === 3"
+              class="btn px-s py-s my--s h6"
+              @click="popupOpen({ config: popupPermissionsConfig, element: corpu })">Permissions</button>
+            <button
+              v-if="corpu.permission === 3"
+              class="btn px-s py-s my--s h6"
+              @click="popupOpen({ config: popupEditConfig, element: corpu })">Edit</button>
+            <button
+              v-if="isAdmin && corpu.permission === 3"
+              class="btn px-s py-s my--s h6"
+              @click="popupOpen({ config: popupRemoveConfig, element: corpu })">Remove</button>
           </td>
         </tr>
       </table>
@@ -29,7 +49,7 @@ import popupRemove from './popup/remove.vue'
 import popupPermissions from './popup/permissions.vue'
 
 export default {
-  name: 'camomile-corpus',
+  name: 'CamomileCorpus',
 
   props: {
     uid: {
@@ -38,7 +58,7 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       popupEditConfig: {
         type: 'corpus',
@@ -69,31 +89,31 @@ export default {
   },
 
   computed: {
-    corpus() {
+    corpus () {
       return this.$store.state.cml.corpus.lists[this.uid]
     },
-    corpuId() {
+    corpuId () {
       return this.$store.state.cml.corpus.actives[this.uid]
     },
-    isAdmin() {
+    isAdmin () {
       return this.$store.state.cml.user.isAdmin
     }
   },
 
+  created () {
+    this.$store.dispatch('cml/corpus/register', this.uid)
+  },
+
   methods: {
-    popupOpen({ config, element }) {
+    popupOpen ({ config, element }) {
       this.$store.commit('cml/popup/open', { config, element })
     },
-    set(e) {
+    set (e) {
       this.$store.dispatch('cml/corpus/set', {
         id: e.target.value,
         uid: this.uid
       })
     }
-  },
-
-  created() {
-    this.$store.dispatch('cml/corpus/register', this.uid)
   }
 }
 </script>

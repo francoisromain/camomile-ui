@@ -2,19 +2,36 @@
   <div>
     <div class="flex flex-start">
       <h2 class="mt-s mb-s">Media</h2>
-      <button @click="popupOpen({ config: popupAddConfig, element: { id: null, corpuId, description: {} } })" class="flex-right btn p-s" v-if="permission === 3"><i class="icon-24 icon-24-plus"></i></button>
+      <button
+        v-if="corpuPermission === 3"
+        class="flex-right btn p-s"
+        @click="popupOpen({ config: popupAddConfig, element: { id: null, corpuId, description: {} } })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div v-if="medias && medias.length > 0">
       <table class="table mb-0">
         <tr>
-          <th></th><th>Name</th><th></th>
+          <th /><th>Name</th><th />
         </tr>
-        <tr v-for="media in medias" :key="media.id">
-          <td><input type="radio" @change="setEvent" :value="media.id" :checked="media.id === mediaId"></td>
+        <tr
+          v-for="media in medias"
+          :key="media.id">
+          <td>
+            <input
+              :value="media.id"
+              :checked="media.id === mediaId"
+              type="radio"
+              @change="setEvent">
+          </td>
           <td>{{ media.name }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupEditConfig, element: media })" class="btn px-s py-s my--s h6" v-if="permission === 3">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: media })" class="btn px-s py-s my--s h6" v-if="permission === 3">Remove</button>
+            <button
+              v-if="corpuPermission === 3"
+              class="btn px-s py-s my--s h6"
+              @click="popupOpen({ config: popupEditConfig, element: media })">Edit</button>
+            <button
+              v-if="corpuPermission === 3"
+              class="btn px-s py-s my--s h6"
+              @click="popupOpen({ config: popupRemoveConfig, element: media })">Remove</button>
           </td>
         </tr>
       </table>
@@ -27,7 +44,7 @@ import popupEdit from './popup/edit.vue'
 import popupRemove from './popup/remove.vue'
 
 export default {
-  name: 'camomile-medias',
+  name: 'CamomileMedias',
 
   props: {
     uid: {
@@ -40,7 +57,7 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       popupEditConfig: {
         type: 'medias',
@@ -64,42 +81,38 @@ export default {
   },
 
   computed: {
-    corpuId() {
+    corpuId () {
       return this.$store.state.cml.corpus.actives[this.corpusUid]
     },
-    mediaId() {
+    mediaId () {
       return this.$store.state.cml.medias.actives[this.uid].id
     },
-    medias() {
+    medias () {
       return this.$store.state.cml.medias.lists[this.corpusUid]
     },
-    permission() {
-      const corpus = this.$store.state.cml.corpus.lists
-      const corpu =
-        corpus[this.corpusUid] &&
-        corpus[this.corpusUid].find(c => c.id === this.corpuId)
-      return corpu ? corpu.permission : 0
+    corpuPermission () {
+      return this.$store.getters['cml/corpus/permission'](this.corpusUid)
     }
   },
 
+  created () {
+    this.$store.dispatch('cml/medias/register', { uid: this.uid, corpuUid: this.corpusUid })
+  },
+
   methods: {
-    popupOpen({ config, element }) {
+    popupOpen ({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
     },
-    setEvent(e) {
+    setEvent (e) {
       this.set(e.target.value)
     },
-    set(id) {
+    set (id) {
       this.$store.dispatch('cml/medias/set', {
         id,
         corpuUid: this.corpusUid,
         uid: this.uid
       })
     }
-  },
-
-  created() {
-    this.$store.dispatch('cml/medias/register', this.uid)
   }
 }
 </script>

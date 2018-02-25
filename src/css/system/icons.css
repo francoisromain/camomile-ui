@@ -33,7 +33,7 @@
   background-image: svg-load(
     './icons/24-close.svg',
     fill=none,
-    stroke=var(--color-text),
+    stroke='#666',
     stroke-linecap=round,
     stroke-linejoin=round,
     stroke-miterlimit=10,
@@ -45,7 +45,7 @@
   background-image: svg-load(
     './icons/24-close.svg',
     fill=none,
-    stroke=var(--color-bg),
+    stroke='white',
     stroke-linecap=round,
     stroke-linejoin=round,
     stroke-miterlimit=10,
@@ -57,7 +57,7 @@
   background-image: svg-load(
     './icons/24-plus.svg',
     fill=none,
-    stroke=var(--color-text),
+    stroke='#666',
     stroke-linecap=round,
     stroke-linejoin=round,
     stroke-miterlimit=10,
@@ -71,7 +71,7 @@
   background-image: svg-load(
     './icons/24-plus.svg',
     fill=none,
-    stroke=var(--color-bg),
+    stroke='white',
     stroke-linecap=round,
     stroke-linejoin=round,
     stroke-miterlimit=10,
@@ -84,7 +84,7 @@
   background-image: svg-load(
     './icons/24-minus.svg',
     fill=none,
-    stroke=var(--color-bg),
+    stroke='white',
     stroke-linecap=round,
     stroke-linejoin=round,
     stroke-miterlimit=10,
@@ -96,7 +96,7 @@
   background-image: svg-load(
     './icons/24-dot.svg',
     fill=none,
-    stroke=var(--color-bg),
+    stroke='white',
     stroke-linecap=round,
     stroke-linejoin=round,
     stroke-miterlimit=10,
@@ -110,7 +110,7 @@
 
 @keyframes blinker {
   50% {
-    background-image: svg-load('./icons/24-dot.svg', fill=var(--color-bg));
+    background-image: svg-load('./icons/24-dot.svg', fill='white');
   }
 }
 

@@ -16,6 +16,7 @@ import cmlMediasController from './components/medias/controller.vue'
 
 import cmlAnnotationsButtons from './components/annotations/buttons.vue'
 import cmlAnnotationsTimeline from './components/annotations/timeline.vue'
+import cmlAnnotationsEdit from './components/annotations/edit.vue'
 
 export {
   cmlApp,
@@ -30,5 +31,6 @@ export {
   cmlMediasVideozoning,
   cmlMediasController,
   cmlAnnotationsButtons,
-  cmlAnnotationsTimeline
+  cmlAnnotationsTimeline,
+  cmlAnnotationsEdit
 }

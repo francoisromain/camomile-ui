@@ -5,15 +5,26 @@
         <h4 class="pt-s mb-0">Name</h4>
       </div>
       <div class="blob-3-4">
-        <input type="text" v-model="group.name" class="input-alt" placeholder="Name" disabled>
+        <input
+          v-model="group.name"
+          type="text"
+          class="input-alt"
+          placeholder="Name"
+          disabled>
       </div>
     </div>
     <div class="blobs">
       <div class="blob-1">
         <h3 class="pt-s mb-s">Users</h3>
         <ul class="list-inline">
-          <li v-for="user in users" :key="user.id" class="tag" :class="{ active: userActive(user.id) }">
-            <button class="btn px-m py-xs h5 pill" @click="userToggle(user.id)">{{ user.name }}</button>
+          <li
+            v-for="user in users"
+            :class="{ active: userActive(user.id) }"
+            :key="user.id"
+            class="tag">
+            <button
+              class="btn px-m py-xs h5 pill"
+              @click="userToggle(user.id)">{{ user.name }}</button>
           </li>
         </ul>
       </div>
@@ -23,21 +34,21 @@
 
 <script>
 export default {
-  name: 'camomile-popup-users',
+  name: 'CamomilePopupUsers',
 
   computed: {
-    users() {
+    users () {
       return this.$store.state.cml.users.list
     },
-    group() {
+    group () {
       return this.$store.state.cml.groups.list.find(
-        group => group.id === this.$store.state.cml.popup.element.id
+        g => g.id === this.$store.state.cml.popup.element.id
       )
     }
   },
 
   methods: {
-    userToggle(userId) {
+    userToggle (userId) {
       if (this.userActive(userId)) {
         this.$store.dispatch('cml/groups/userRemove', {
           userId,
@@ -51,7 +62,7 @@ export default {
       }
     },
 
-    userActive(userId) {
+    userActive (userId) {
       return this.group.userIds.indexOf(userId) > -1
     }
   }

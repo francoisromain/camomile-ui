@@ -1,10 +1,14 @@
 <template>
   <div class="dropdown">
     <div v-if="isAdmin">
-      <button @click="popupOpen({ config: popupEditConfig, element: user })" class="btn px-m py-s full-x">Settings…</button>
+      <button
+        class="btn px-m py-s full-x"
+        @click="popupOpen({ config: popupEditConfig, element: user })">Settings…</button>
     </div>
     <div>
-      <button @click="logout" class="btn px-m py-s full-x mr home">Logout</button>
+      <button
+        class="btn px-m py-s full-x mr home"
+        @click="logout">Logout</button>
     </div>
   </div>
 </template>
@@ -13,9 +17,9 @@
 import popupEdit from '../popup/edit.vue'
 
 export default {
-  name: 'camomile-header-userbutton-dropdown',
+  name: 'CamomileHeaderUserbuttonDropdown',
 
-  data() {
+  data () {
     return {
       popupEditConfig: {
         type: 'users',
@@ -27,22 +31,22 @@ export default {
   },
 
   computed: {
-    user() {
+    user () {
       return this.$store.state.cml.user
     },
-    isAdmin() {
+    isAdmin () {
       return this.$store.state.cml.user.isAdmin
     }
   },
 
   methods: {
-    close() {
+    close () {
       this.$store.commit('cml/dropdown/close')
     },
-    logout() {
+    logout () {
       return this.$store.dispatch('cml/user/logout')
     },
-    popupOpen({ config, element }) {
+    popupOpen ({ config, element }) {
       this.$store.commit('cml/popup/open', { config, element })
       this.close()
     }

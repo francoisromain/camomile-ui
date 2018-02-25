@@ -4,10 +4,10 @@
 
 <script>
 export default {
-  name: 'camomile-header-infos',
+  name: 'CamomileHeaderInfos',
 
   computed: {
-    url() {
+    url () {
       return this.$store.state.cml.config.url
     }
   }

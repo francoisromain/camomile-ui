@@ -18,6 +18,10 @@
   margin-right: auto;
 }
 
+.header {
+  box-shadow: color-mod(var(--color-inverse) alpha(25%)) 4px 4px 16px;
+}
+
 .menubar-infos {
   padding-top: 0;
   padding-bottom: var(--unit-s);
@@ -131,6 +135,8 @@ hr.border-bg {
     left: 50%;
     right: auto;
     bottom: auto;
+    z-index: 2;
+    box-shadow: color-mod(var(--color-inverse) alpha(25%)) 4px 4px 16px;
   }
 
   .messages {

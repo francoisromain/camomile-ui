@@ -1,16 +1,26 @@
 <template>
   <div class="mediacontroller">
     <div class="mediacontroller-controls clearfix pb-s">
-      <button class="mediacontroller-button btn" ref="button" @click="mediaToggle" :disabled="!isLoaded">{{ playButton }}</button>
-      <div class="mediacontroller-counter" ref="counter">{{ msToMinutesAndSeconds(timeCurrent) }} / {{ msToMinutesAndSeconds(timeTotal) }}
+      <button
+        ref="button"
+        :disabled="!isLoaded"
+        class="mediacontroller-button btn"
+        @click="mediaToggle">{{ playButton }}</button>
+      <div
+        ref="counter"
+        class="mediacontroller-counter">{{ msToMinutesAndSeconds(timeCurrent) }} / {{ msToMinutesAndSeconds(timeTotal) }}
       </div>
     </div>
 
-    <div class="mediacontroller-progress" ref="progress" :class="{ loaded: isLoaded }"
+    <div
+      ref="progress"
+      :class="{ loaded: isLoaded }"
+      class="mediacontroller-progress"
       @mousedown="progressMousedown($event)">
       <div class="pointer-none full-y">
-        <div class="mediacontroller-progress-bar" :style="{ width: progressBarWidth }">
-        </div>
+        <div
+          :style="{ width: progressBarWidth }"
+          class="mediacontroller-progress-bar" />
       </div>
     </div>
 
@@ -26,42 +36,42 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       mousedown: false
     }
   },
 
   computed: {
-    properties() {
+    properties () {
       return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
-    timeCurrent() {
+    timeCurrent () {
       return this.properties.timeCurrent || 0
     },
-    timeTotal() {
+    timeTotal () {
       return this.properties.timeTotal || 0
     },
-    playButton() {
+    playButton () {
       return (this.properties.isPlaying && '❚ ❚') || '►'
     },
-    isLoaded() {
+    isLoaded () {
       return this.properties.isLoaded || false
     },
-    progressBarWidth() {
+    progressBarWidth () {
       return this.timeTotal ? `${this.timeCurrent / this.timeTotal * 100}%` : 0
     }
   },
 
   methods: {
-    mediaToggle() {
+    mediaToggle () {
       if (this.properties.isPlaying) {
         this.$store.commit('cml/medias/pause', { uid: this.mediaUid })
       } else {
         this.$store.commit('cml/medias/play', { uid: this.mediaUid })
       }
     },
-    progressMousemove(e) {
+    progressMousemove (e) {
       let x
       if (e.clientX - this.$refs.progress.offsetLeft < 0) {
         x = 0
@@ -77,16 +87,16 @@ export default {
       }
       this.seek(x, false)
     },
-    progressMousedown(e) {
+    progressMousedown (e) {
       document.addEventListener('mousemove', this.progressMousemove)
       document.addEventListener('mouseup', this.progressMouseup)
       this.progressMousemove(e)
     },
-    progressMouseup() {
+    progressMouseup () {
       document.removeEventListener('mousemove', this.progressMousemove)
       document.removeEventListener('mouseup', this.progressMouseup)
     },
-    seek(ratio, serverRequest, uid) {
+    seek (ratio, serverRequest, uid) {
       if (this.properties.isLoaded) {
         this.$store.dispatch('cml/medias/seek', {
           ratio,
@@ -95,10 +105,10 @@ export default {
         })
       }
     },
-    msToMinutesAndSeconds(ms) {
+    msToMinutesAndSeconds (ms) {
       const minutes = Math.floor(ms / 60000)
-      const seconds = ((ms % 60000) / 1000).toFixed(0)
-      return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
+      const seconds = (ms % 60000) / 1000
+      return minutes + ':' + (seconds < 10 ? '0' : '') + seconds.toFixed(0)
     }
   }
 }

@@ -1,2 +1,11 @@
 {
+  "eslint.autoFixOnSave": true,
+  "eslint.enable": true,
+  "eslint.validate": ["javascript", "vue"],
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "prettier.eslintIntegration": true,
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "prettier.stylelintIntegration": true,
+  "vetur.format.defaultFormatter.js": "vscode-typescript"
 }

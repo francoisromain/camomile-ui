@@ -355,6 +355,20 @@ export const actions = {
   }
 }
 
+export const getters = {
+  activeIds: state => uid => {
+    return (state.actives[uid] && state.actives[uid].ids) || []
+  },
+
+  actives: state => uid => {
+    const actives = state.actives[uid]
+    const layers = state.lists[actives.corpuUid]
+    return actives && layers
+      ? layers.filter(l => actives.ids.indexOf(l.id) !== -1)
+      : {}
+  }
+}
+
 export const mutations = {
   register(state, { uid, corpuUid }) {
     Vue.set(state.actives, uid, { corpuUid, ids: [] })
@@ -379,7 +393,7 @@ export const mutations = {
     Object.keys(state.actives).forEach(uid => {
       const activeIndex = state.actives[uid].ids.indexOf(id)
       if (activeIndex !== -1) {
-        Vue.delete(state.actives[corpuUid], activeIndex)
+        Vue.delete(state.actives[uid], activeIndex)
       }
     })
   },
@@ -467,5 +481,6 @@ export default {
   namespaced: true,
   state,
   actions,
+  getters,
   mutations
 }

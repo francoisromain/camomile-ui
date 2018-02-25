@@ -1,34 +1,52 @@
 <template>
   <ul class="list-inline">
-    <li class="tag" :class="{ active: isActive(1) }">
-      <button class="btn px-s py-xs my--xs h5 mono pill" @click="toggle(1)">R</button>
+    <li
+      :class="{ active: isActive(1) }"
+      class="tag">
+      <button
+        class="btn px-s py-xs my--xs h5 mono pill"
+        @click="toggle(1)">R</button>
     </li>
-    <li class="tag" :class="{ active: isActive(2) }">
-      <button class="btn px-s py-xs my--xs h5 mono pill" @click="toggle(2)">W</button>
+    <li
+      :class="{ active: isActive(2) }"
+      class="tag">
+      <button
+        class="btn px-s py-xs my--xs h5 mono pill"
+        @click="toggle(2)">W</button>
     </li>
-    <li class="tag" :class="{ active: isActive(3) }">
-      <button class="btn px-s py-xs my--xs h5 mono pill" @click="toggle(3)">A</button>
+    <li
+      :class="{ active: isActive(3) }"
+      class="tag">
+      <button
+        class="btn px-s py-xs my--xs h5 mono pill"
+        @click="toggle(3)">A</button>
     </li>
   </ul>
 </template>
 
 <script>
 export default {
-  name: 'camomile-popup-permissions-edit',
+  name: 'CamomilePopupPermissionsEdit',
 
   props: {
-    element: Object,
-    type: String
+    element: {
+      type: Object,
+      default: () => ({})
+    },
+    type: {
+      type: String,
+      default: 'default'
+    }
   },
 
   computed: {
-    id() {
+    id () {
       return this.$store.state.cml.popup.element.id
     },
-    uid() {
+    uid () {
       return this.$store.state.cml.popup.config.uid
     },
-    permission() {
+    permission () {
       return this.$store.state.cml[`${this.type}s`].lists[this.uid].find(
         r => r.id === this.id
       ).permissions[`${this.element.type}s`][this.element.id]
@@ -36,7 +54,7 @@ export default {
   },
 
   methods: {
-    toggle(permission) {
+    toggle (permission) {
       if (this.isActive(permission)) {
         this.$store.dispatch(
           `cml/${this.type}s/${this.element.type}PermissionRemove`,
@@ -56,7 +74,7 @@ export default {
         )
       }
     },
-    isActive(permission) {
+    isActive (permission) {
       return this.permission === permission
     }
   }

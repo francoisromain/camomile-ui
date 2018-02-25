@@ -3,16 +3,16 @@
     <div class="flex flex-start">
       <h2 class="mt-s mb-s">Annotations</h2>
     </div>
-    <annotations-layer v-for="layer in layers" 
-      :key="layer.id" class="mt" 
+    <annotations-layer
+      v-for="layer in layers" 
       v-if="annotations[layer.id]"
+      :key="layer.id"
       :layer="layer"
       :annotations="annotations[layer.id]"
       :active-id="activeId"
       :media-id="mediaId"
       :media-name="mediaName"
-      >
-    </annotations-layer>
+      class="mt" />
   </div>
 </template>
 
@@ -20,7 +20,7 @@
 import annotationsLayer from './annotations-layer.vue'
 
 export default {
-  name: 'camomile-annotations',
+  name: 'CamomileAnnotations',
 
   components: {
     annotationsLayer
@@ -42,39 +42,25 @@ export default {
   },
 
   computed: {
-    annotations() {
-      return (
-        (this.$store.state.cml.annotations.lists[this.uid] &&
-          this.$store.state.cml.annotations.lists[this.uid].layers) ||
-        {}
-      )
+    annotations () {
+      return this.$store.getters['cml/annotations/actives'](this.uid)
     },
-    activeId() {
-      const actives = this.$store.state.cml.annotations.actives[this.uid]
-      return actives ? actives : null
+    activeId () {
+      return this.$store.state.cml.annotations.actives[this.uid] || null
     },
-    layers() {
-      const actives = this.$store.state.cml.layers.actives[this.layersUid]
-      const layers = this.$store.state.cml.layers.lists[actives.corpuUid]
-      return actives && layers
-        ? layers.filter(l => actives.ids.indexOf(l.id) !== -1)
-        : {}
+    layers () {
+      return this.$store.getters['cml/layers/actives'](this.layersUid)
     },
-    medias() {
-      const active = this.$store.state.cml.medias.actives[this.mediaUid]
-      return active ? this.$store.state.cml.medias.lists[active.corpuUid] : {}
-    },
-    mediaId() {
+    mediaId () {
       return this.$store.state.cml.medias.actives[this.mediaUid].id
     },
-    mediaName() {
-      if (!this.mediaId) return ''
-      const media = this.medias.find(m => m.id === this.mediaId)
+    mediaName () {
+      const media = this.$store.getters['cml/medias/active'](this.mediaUid)
       return media ? media.name : ''
     }
   },
 
-  created() {
+  created () {
     this.$store.dispatch('cml/annotations/register', {
       uid: this.uid,
       mediaUid: this.mediaUid,

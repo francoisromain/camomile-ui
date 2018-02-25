@@ -1,8 +1,11 @@
 <template>
   <transition name="transition-top">
-    <div @click.self="close" class="absolute full bg-alpha" v-if="dropdown.visible" >
+    <div
+      v-if="dropdown.visible" 
+      class="absolute full bg-alpha"
+      @click.self="close">
       <div class="container relative">
-        <component :is="dropdown.config.component"></component>
+        <component :is="dropdown.config.component" />
       </div>
     </div>
   </transition>
@@ -10,16 +13,16 @@
 
 <script>
 export default {
-  name: 'camomile-utils-dropdown',
+  name: 'CamomileUtilsDropdown',
 
   computed: {
-    dropdown() {
+    dropdown () {
       return this.$store.state.cml.dropdown
     }
   },
 
   methods: {
-    close() {
+    close () {
       this.$store.commit('cml/dropdown/close')
     }
   }

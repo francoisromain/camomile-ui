@@ -1,14 +1,17 @@
 <template>
   <div ref="container">
-    <div class="relative overflow-hidden" :style="{ height: `${40 * layers.length}px` }" v-if="layers">
-      <div class="absolute timeline-cursor"></div>
-      <div class="absolute timeline-annotations" :style="{
-        top: 0, bottom: 0, left: `${left}px`, width: `${width}px`
-      }">
-        <timeline-annotations class="relative annotations" 
+    <div
+      v-if="layers"
+      :style="{ height: `${40 * layers.length}px` }"
+      class="relative overflow-hidden">
+      <div class="absolute timeline-cursor"/>
+      <div
+        :style="{ top: 0, bottom: 0, left: `${left}px`, width: `${width}px` }"
+        class="absolute timeline-annotations">
+        <timeline-annotations
           v-for="layer in layers" 
-          :key="`annotations-${layer.id}`"
           v-if="annotations[layer.id]"
+          :key="`annotations-${layer.id}`"
           :uid="uid"
           :layers-uid="layersUid"
           :layer-id="layer.id"
@@ -16,8 +19,8 @@
           :time-total="timeTotal"
           :width="width"
           :left="left + containerLeft"
-          >
-        </timeline-annotations>
+          :fragment-type="layer.fragmentType"
+          class="relative annotations" />
       </div>
     </div>
   </div>
@@ -55,7 +58,7 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       width: 3000,
       containerWidth: 0,
@@ -64,52 +67,44 @@ export default {
   },
 
   computed: {
-    mediaProperties() {
-      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
+    mediaProperties () {
+      return this.$store.getters['cml/medias/properties'](this.mediaUid)
     },
-    timeCurrent() {
+    timeCurrent () {
       return this.mediaProperties.timeCurrent || 0
     },
-    timeTotal() {
+    timeTotal () {
       return this.mediaProperties.timeTotal || 0
     },
-    annotations() {
-      const annotationsList = this.$store.state.cml.annotations.lists[this.uid]
-      return (
-        annotationsList &&
-        Object.keys(annotationsList.layers).reduce(
-          (res, layer) =>
-            Object.assign(res, {
-              [layer]: annotationsList.layers[layer].filter(a => this.filter(a))
-            }),
-          {}
-        )
-      )
+    annotations () {
+      return this.$store.getters['cml/annotations/filter'](this.uid, this.filter)
     },
-    layers() {
-      const active = this.$store.state.cml.layers.actives[this.layersUid]
-      return active ? this.$store.state.cml.layers.lists[active.corpuUid] : {}
+    layers () {
+      return this.$store.getters['cml/layers/actives'](this.layersUid)
     },
-    left() {
+    left () {
       return (
         this.containerWidth / 2 - this.timeCurrent / this.timeTotal * this.width
       )
     }
   },
 
-  mounted() {
+  mounted () {
     window.addEventListener('resize', this.resize)
     this.containerWidth = this.$refs.container.offsetWidth
     this.containerLeft = this.$refs.container.offsetLeft
   },
 
   methods: {
-    resize() {}
+    resize () { }
   }
 }
 </script>
 
 <style>
+.timeline-annotations {
+  z-index: 0;
+}
 .annotations {
   height: 40px;
 }

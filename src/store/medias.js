@@ -2,8 +2,6 @@ import Vue from 'vue'
 import api from './_api'
 import { mediaFormat } from './_helpers'
 
-let interval
-
 export const state = {
   lists: {},
   actives: {},
@@ -11,6 +9,7 @@ export const state = {
 }
 
 export const actions = {
+  // Add a new media
   add({ state, commit, dispatch, rootGetters }, { element }) {
     dispatch('cml/sync/start', `mediasAdd`, { root: true })
     return api
@@ -23,12 +22,19 @@ export const actions = {
       .then(r => {
         dispatch('cml/sync/stop', `mediasAdd`, { root: true })
         const media = mediaFormat(r.data)
+
+        // Loop over the media-lists to add the new media
         Object.keys(state.lists).forEach(corpuUid => {
+          // If the new media belongs to the same corpus as the current media-list
           if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            // Add the new media to the media-list
             commit('add', { media, corpuUid })
+            // Loop over the active medias
             Object.keys(state.actives).forEach(uid => {
+              // If the active media belongs to the same corpus Uid as the current media-list
               if (state.actives[uid].corpuUid === corpuUid) {
-                commit('set', { id: media.id, corpuUid, uid })
+                // Activate the new media
+                dispatch('set', { id: media.id, corpuUid, uid })
               }
             })
           }
@@ -101,19 +107,29 @@ export const actions = {
       })
   },
 
+  // List the medias
   list({ dispatch, commit }, { corpuId, corpuUid }) {
     dispatch('cml/sync/start', `mediasList-${corpuUid}`, { root: true })
     return api
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(r => {
         dispatch('cml/sync/stop', `mediasList-${corpuUid}`, { root: true })
+        // Format the server response
         const medias = r.data.map(media => {
           return mediaFormat(media)
         })
-        commit('list', { medias, corpuUid })
 
+        // Commit media list
+        commit('list', { medias, corpuUid })
+        console.log('rrr', r)
+
+        // Loop over the active medias
         Object.keys(state.actives).forEach(uid => {
-          dispatch('set', { corpuUid, uid })
+          // If the active media belongs to the same corpus Uid as the current media-list
+          if (state.actives[uid].corpuUid === corpuUid) {
+            // Activate a media
+            dispatch('set', { corpuUid, uid })
+          }
         })
 
         return medias
@@ -126,8 +142,8 @@ export const actions = {
       })
   },
 
-  register({ state, commit }, uid) {
-    commit('register', uid)
+  register({ state, commit }, { uid, corpuUid }) {
+    commit('register', { uid, corpuUid })
   },
 
   unsetAll({ state, dispatch }, { id }) {
@@ -138,10 +154,15 @@ export const actions = {
     })
   },
 
+  // Set the active media for a uid
   set({ state, getters, dispatch, commit }, { id, corpuUid, uid }) {
+    // Before, stop the media if playing
     if (state.properties[uid] && state.properties[uid].isPlaying) {
       dispatch('pause', { uid })
     }
+
+    // Set the active media for this uid
+    // If the media id is not defined, get one
     commit('set', { id: id || getters.id({ corpuUid, uid }), corpuUid, uid })
     dispatch(
       'cml/annotations/mediaSet',
@@ -202,17 +223,39 @@ export const actions = {
 }
 
 export const getters = {
+  // Get the id of the active media
+  // or the id of the first media in the list
   id: state => ({ corpuUid, uid }) =>
+    // If an active media is defined for this uid
     (state.actives[uid] &&
       state.lists[corpuUid].find(c => c.id === state.actives[uid].id) &&
       state.actives[uid].id) ||
+    // Else, get the first id of the media-list
     (state.lists[corpuUid][0] && state.lists[corpuUid][0].id) ||
-    null
+    null,
+
+  // Get the prpoerties of the active media
+  properties: (state, getters) => (uid, filter) => {
+    return getters.active(uid, filter) ? state.properties[uid] : {}
+  },
+
+  // Get the active media
+  active: state => (uid, filter) => {
+    const active = state.actives[uid]
+    filter =
+      filter ||
+      function(m) {
+        return m
+      }
+    return active && state.lists[active.corpuUid]
+      ? filter(state.lists[active.corpuUid].find(m => m.id === active.id))
+      : null
+  }
 }
 
 export const mutations = {
-  register(state, uid) {
-    Vue.set(state.actives, uid, null)
+  register(state, { uid, corpuUid }) {
+    Vue.set(state.actives, uid, { corpuUid })
     Vue.set(state.properties, uid, null)
   },
 

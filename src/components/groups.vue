@@ -2,20 +2,31 @@
   <div v-if="isAdmin">
     <div class="flex flex-start">
       <h2 class="mt-s">Groups</h2>
-      <button @click="popupOpen({ config: popupAddConfig, element: { description: {} } })" class="btn p-s flex-right"><i class="icon-24 icon-24-plus"></i></button>
+      <button 
+        class="btn p-s flex-right"
+        @click="popupOpen({ config: popupAddConfig, element: { description: {} } })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div>
       <table class="table mb-0">
         <tr>
-          <th>Name</th><th>Users</th><th></th>
+          <th>Name</th><th>Users</th><th />
         </tr>
-        <tr v-for="group in groups" :key="group.id">
+        <tr
+          v-for="group in groups"
+          :key="group.id">
           <td>{{ group.name }}</td>
           <td>{{ group.userIds.length }}</td>
           <td class="text-right">
-            <button @click="popupOpen({ config: popupUsersConfig, element: group })" class="btn px-s py-s my--s h6">Users</button>
-            <button @click="popupOpen({ config: popupEditConfig, element: group })" class="btn px-s py-s my--s h6">Edit</button>
-            <button @click="popupOpen({ config: popupRemoveConfig, element: group })" class="btn px-s py-s my--s h6" v-if="isRoot">Remove</button>
+            <button
+              class="btn p-s my--s h6"
+              @click="popupOpen({ config: popupUsersConfig, element: group })">Users</button>
+            <button
+              class="btn p-s my--s h6"
+              @click="popupOpen({ config: popupEditConfig, element: group })">Edit</button>
+            <button
+              v-if="isRoot"
+              class="btn px-s py-s my--s h6"
+              @click="popupOpen({ config: popupRemoveConfig, element: group })">Remove</button>
           </td>
         </tr>
       </table>
@@ -30,9 +41,9 @@ import popupRemove from './popup/remove.vue'
 import popupUsers from './popup/users.vue'
 
 export default {
-  name: 'camomile-groups',
+  name: 'CamomileGroups',
 
-  data() {
+  data () {
     return {
       popupRemoveConfig: {
         type: 'groups',
@@ -69,10 +80,10 @@ export default {
   },
 
   methods: {
-    popupOpen({ config, element }) {
+    popupOpen ({ config, element }) {
       return this.$store.commit('cml/popup/open', { config, element })
     },
-    refresh() {
+    refresh () {
       return this.$store.dispatch('cml/groups/list')
     }
   }

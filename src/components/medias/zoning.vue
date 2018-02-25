@@ -1,17 +1,18 @@
 <template>
-  <div class="relative full-y" ref="container">
-    <zoning-annotations class="absolute full"
+  <div
+    ref="container"
+    class="relative full-y">
+    <zoning-annotations
       v-for="layer in layers" 
-      :key="`annotations-${layer.id}`"
       v-if="annotations[layer.id]"
+      :key="`annotations-${layer.id}`"
       :uid="uid"
       :layers-uid="layersUid"
       :layer-id="layer.id"
       :annotations="annotations[layer.id]"
       :time-total="timeTotal"
       :time-current="timeCurrent"
-      >
-    </zoning-annotations>
+      class="absolute full" />
   </div>
 </template>
 
@@ -34,6 +35,10 @@ export default {
       type: String,
       default: 'default'
     },
+    layers: {
+      type: Array,
+      default: () => []
+    },
     filter: {
       type: Function,
       default: a =>
@@ -44,32 +49,21 @@ export default {
         a.fragment.positions &&
         a.fragment.positions instanceof Array &&
         a
-    },
-    layers: Array
+    }
   },
 
   computed: {
-    mediaProperties() {
+    mediaProperties () {
       return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
-    timeCurrent() {
+    timeCurrent () {
       return this.mediaProperties.timeCurrent || 0
     },
-    timeTotal() {
+    timeTotal () {
       return this.mediaProperties.timeTotal || 0
     },
-    annotations() {
-      const annotationsList = this.$store.state.cml.annotations.lists[this.uid]
-      return (
-        annotationsList &&
-        Object.keys(annotationsList.layers).reduce(
-          (res, layer) =>
-            Object.assign(res, {
-              [layer]: annotationsList.layers[layer].filter(a => this.filter(a))
-            }),
-          {}
-        )
-      )
+    annotations () {
+      return this.$store.getters['cml/annotations/filter'](this.uid, this.filter)
     }
   }
 }

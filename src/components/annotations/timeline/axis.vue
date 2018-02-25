@@ -1,10 +1,27 @@
 <template>
   <g>
-    <text x="0" y="35" font-family="Verdana" font-size="35">
-      {{ o.xMax }}
+    <text
+      x="0"
+      y="35"
+      font-family="Verdana"
+      font-size="35">{{ o.xMax }}
     </text>
-    <line x1="0" :y1="y" :x2="svg.w" :y2="y" stroke-width="1" stroke="silver"/>
-    <line :x1="tickX" :y1="y" :x2="tickX" :y2="y + 5" stroke-width="1" stroke="silver" v-for="(tickX, $index) in tickXs" :key="$index"/>
+    <line
+      :y1="y"
+      :x2="svg.w"
+      :y2="y"
+      x1="0"
+      stroke-width="1"
+      stroke="silver" />
+    <line
+      v-for="(tickX, $index) in tickXs"
+      :key="$index"
+      :x1="tickX"
+      :y1="y"
+      :x2="tickX"
+      :y2="y + 5"
+      stroke-width="1"
+      stroke="silver" />
   </g>
 </template>
 
