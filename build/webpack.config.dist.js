@@ -3,7 +3,6 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
 const webpackConfigBase = require('./webpack.config.base')
 const MinifyPlugin = require('babel-minify-webpack-plugin')
 // const WebpackMonitor = require('webpack-monitor')
@@ -12,10 +11,10 @@ const npmPackage = require('../package.json')
 const date = new Date().toISOString().slice(0, 10)
 
 const webpackConfigDist = {
+  mode: 'production',
   devtool: false,
   entry: {
-    app: './example/src/app.js',
-    loader: './example/src/js/loader.js'
+    app: './example/src/app.js'
   },
   output: {
     filename: '[name].[hash].js',
@@ -73,10 +72,8 @@ const webpackConfigDist = {
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: true
-      },
-      excludeAssets: [/app.*.js/]
+      }
     }),
-    new HtmlWebpackExcludeAssetsPlugin(),
     new MinifyPlugin(
       {
         mangle: {

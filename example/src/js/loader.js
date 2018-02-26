@@ -64,4 +64,4 @@ req.addEventListener(
 app.style.visibility = 'hidden'
 req.open('GET', fileName)
 req.send()
-credits()
+// credits()
