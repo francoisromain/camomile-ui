@@ -8,11 +8,10 @@ import groups from '../groups'
 import users from '../users'
 import corpus from '../corpus'
 import layers from '../layers'
+import api from '../__mocks__/_api.js'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
-
-jest.mock('../_api.js')
 
 describe('store users actions', () => {
   let store
@@ -104,6 +103,9 @@ describe('store users actions', () => {
       modules: {
         cml: {
           namespaced: true,
+          state: {
+            api
+          },
           modules: {
             sync,
             popup,

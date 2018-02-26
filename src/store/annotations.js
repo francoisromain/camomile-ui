@@ -1,15 +1,55 @@
 import Vue from 'vue'
-import api from './_api'
 
+// Lists contains the annotations data
+// Actives contains the currently activated annotations
+
+/* 
+Example: 
+
+{
+  lists: {
+    'annotations-uid-string-1': {
+      layerUid: 'layer-uid-string',
+      mediaUid: 'media-uid-string',
+      // The lists of annotations organised by layers
+      layers: {
+        'layer-id-hash-1': [{
+          id: 'annotation-id-hash',
+          layerId: 'layer-id-hash',
+          mediaId: 'media-id-hash',
+          fragment: {
+            positions: [ … ],
+            time: { … }
+          },
+          metadata: {
+            label: 'lulu'
+          }
+        },
+        { …
+        }],
+        'layer-id-hash-2': [ …
+        ]
+      }
+    },
+    'annotations-uid-string-2': { …
+    }
+  },
+  actives: {
+    'annotations-uid-string-1': 'annotation-id-hash',
+    'annotations-uid-string-2': null // no annotation is activated for this uid
+  }
+}
+*/
 export const state = {
   lists: {},
   actives: {}
 }
 
 export const actions = {
-  add({ commit, dispatch }, { element }) {
+  // Add a new annotation
+  add({ commit, dispatch, rootState }, { element }) {
     dispatch('cml/sync/start', `annotationsAdd`, { root: true })
-    return api
+    return rootState.cml.api
       .createAnnotation(
         element.layerId,
         element.mediaId || null,
@@ -18,6 +58,8 @@ export const actions = {
       )
       .then(r => {
         dispatch('cml/sync/stop', `annotationsAdd`, { root: true })
+
+        // Format server response
         const annotation = {
           id: r.data._id,
           fragment: r.data.fragment || {},
@@ -25,6 +67,8 @@ export const actions = {
           layerId: r.data.id_layer,
           mediaId: r.data.id_medium || null
         }
+
+        // Commit response
         commit('add', { annotation, layerId: element.layerId })
         dispatch('cml/messages/success', 'Annotation added', { root: true })
 
@@ -38,9 +82,10 @@ export const actions = {
       })
   },
 
-  remove({ commit, dispatch }, { id }) {
+  // Remove an annotation
+  remove({ commit, dispatch, rootState }, { id }) {
     dispatch('cml/sync/start', `annotationsRemove`, { root: true })
-    return api
+    return rootState.cml.api
       .deleteAnnotation(id)
       .then(r => {
         dispatch('cml/sync/stop', `annotationsRemove`, { root: true })
@@ -57,18 +102,23 @@ export const actions = {
       })
   },
 
-  update({ commit, dispatch }, { element }) {
+  // Update an annotation
+  update({ commit, dispatch, rootState }, { element }) {
     dispatch('cml/sync/start', `annotationsUpdate`, { root: true })
-    return api
+    return rootState.cml.api
       .updateAnnotation(element.id, {
         fragment: element.fragment,
         data: element.metadata
       })
       .then(r => {
+        dispatch('cml/sync/stop', `annotationsUpdate`, { root: true })
+
+        // Format server response
         const annotation = Object.assign({}, element)
         annotation.fragment = r.data.fragment || {}
         annotation.metadata = r.data.data || {}
-        dispatch('cml/sync/stop', `annotationsUpdate`, { root: true })
+
+        // Commit response
         commit('update', { annotation, layerId: element.layerId })
         dispatch('cml/messages/success', 'Annotation updated', { root: true })
 
@@ -82,37 +132,55 @@ export const actions = {
       })
   },
 
+  // Activate the annotations for a layerId in a layersUid group
   layerSet({ state, dispatch, rootState }, { layersUid, layerId }) {
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(uid => {
+      const mediaUid = state.lists[uid].mediaUid
+
+      // If the current list's layersUid equals layersUid
+      // And if the current list's mediaUid is active
       if (
         state.lists[uid].layersUid === layersUid &&
-        rootState.cml.medias.actives[state.lists[uid].mediaUid]
+        rootState.cml.medias.actives[mediaUid]
       ) {
+        // Get the annotation list
         dispatch('list', {
           uid,
           layerId,
           layersUid,
-          mediaId: rootState.cml.medias.actives[state.lists[uid].mediaUid].id
+          mediaId: rootState.cml.medias.actives[mediaUid].id
         })
       }
     })
   },
 
+  // When a layer is deactivated,
+  // deactivate the annotations for this layerId in this layersUid group
   layerUnset({ commit }, { layersUid, layerId }) {
     commit('reset', { layersUid, layerId })
   },
 
+  // When the active media changes,
+  // display the related annotations
   mediaSet({ state, dispatch, rootState }, { mediaUid, mediaId }) {
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(uid => {
+      const list = state.lists[uid]
+
+      // If the current list's mediaUid equals mediaUid
+      // And if the current list's LayersUid is active
       if (
-        state.lists[uid].mediaUid === mediaUid &&
-        rootState.cml.layers.actives[state.lists[uid].layersUid]
+        list.mediaUid === mediaUid &&
+        rootState.cml.layers.actives[list.layersUid]
       ) {
-        Object.keys(state.lists[uid].layers).forEach(layerId => {
+        // Loop over the layers
+        Object.keys(list.layers).forEach(layerId => {
+          // Get the annotation list
           dispatch('list', {
             uid,
             layerId,
-            layersUid: state.lists[uid].layersUid,
+            layersUid: list.layersUid,
             mediaId
           })
         })
@@ -120,9 +188,13 @@ export const actions = {
     })
   },
 
-  list({ state, dispatch, commit }, { uid, layerId, layersUid, mediaId }) {
+  // List the annotations
+  list(
+    { state, dispatch, commit, rootState },
+    { uid, layerId, layersUid, mediaId }
+  ) {
     dispatch('cml/sync/start', `annotationsList-${uid}`, { root: true })
-    return api
+    return rootState.cml.api
       .getAnnotations({
         filter: {
           id_layer: layerId,
@@ -133,6 +205,8 @@ export const actions = {
         dispatch('cml/sync/stop', `annotationsList-${uid}`, {
           root: true
         })
+
+        // Format server response
         const annotations = r.data.map(a => ({
           id: a._id,
           fragment: a.fragment || {},
@@ -140,8 +214,9 @@ export const actions = {
           layerId: a.id_layer,
           mediaId: a.id_medium || null
         }))
+
+        // Commit response
         commit('list', { annotations, uid, layerId, layersUid })
-        // commit('reset', { layerId, layersUid })
 
         return annotations
       })
@@ -161,8 +236,10 @@ export const actions = {
 }
 
 export const getters = {
-  actives: state => uid => (state.lists[uid] && state.lists[uid].layers) || {},
+  // Get the lists of annotations
+  lists: state => uid => (state.lists[uid] && state.lists[uid].layers) || {},
 
+  // Get the lists of annotations, filtered
   filter: state => (uid, filter) =>
     state.lists[uid] &&
     Object.keys(state.lists[uid].layers).reduce(
@@ -175,31 +252,43 @@ export const getters = {
 }
 
 export const mutations = {
+  // Register an annotation list by uid
   register(state, { uid, mediaUid, layersUid }) {
+    // Create an uid entry in state.actives
     Vue.set(state.actives, uid, null)
+
+    // Create an uid entry in state.lists,
+    // with value { mediaUid, LayersUid, layers: {}}
     Vue.set(state.lists, uid, { mediaUid, layersUid, layers: {} })
   },
 
+  // Reset all (on log-out)
   resetAll(state) {
     Vue.set(state, 'lists', {})
     Vue.set(state, 'actives', {})
   },
 
+  // Reset a list (if a layer is deactivated for example)
   reset(state, { layersUid, layerId }) {
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(uid => {
-      if (state.lists[uid].layersUid === layersUid) {
-        Vue.delete(state.lists[uid], layerId)
-      }
-    })
+      const list = state.lists[uid]
 
-    Object.keys(state.actives).forEach(uid => {
-      if (state.actives[uid] && state.actives[uid].layerId === layerId) {
+      // If current list's layersUid equals layersUid
+      // - delete the list
+      // - set the active annotation to null
+      if (list.layersUid === layersUid) {
+        Vue.delete(list, layerId)
         Vue.set(state.actives, uid, null)
       }
     })
   },
 
+  // Add an annotation to a layer
   add(state, { annotation, layerId }) {
+    // Loop over the annotation lists
+    // If a list contains a layer which id's equals to layerId,
+    // Prepend the new annotation to the list
     Object.keys(state.lists).forEach(uid => {
       const list = state.lists[uid].layers[layerId]
       if (list) {
@@ -208,44 +297,52 @@ export const mutations = {
     })
   },
 
+  // Update an annotation
   update(state, { annotation, layerId }) {
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(uid => {
+      // If a list contains a layer which id's equals to layerId
       const list = state.lists[uid].layers[layerId]
       if (list) {
+        // Find the annotation index in the list and update
         const index = list.findIndex(a => a.id === annotation.id)
         Vue.set(list, index, annotation)
       }
     })
   },
 
+  // Remove an annotation by id
   remove(state, { id }) {
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(uid => {
+      // Loop over the the layers in each list
       Object.keys(state.lists[uid].layers).forEach(layerId => {
+        // If the list contains the annotation
+        // - delete the annotation
+        // - if the annotation was active, unset it
         const list = state.lists[uid].layers[layerId]
-        if (list) {
-          const listsIndex = list.findIndex(a => a.id === id)
-          if (listsIndex !== -1) {
-            Vue.delete(list, listsIndex)
+        const listsIndex = list.findIndex(a => a.id === id)
+        if (listsIndex !== -1) {
+          Vue.delete(list, listsIndex)
+          if (state.actives[uid] === id) {
+            Vue.set(state.actives, uid, null)
           }
         }
       })
     })
-
-    Object.keys(state.actives).forEach(uid => {
-      if (state.actives[uid] && state.actives[uid].id === id) {
-        Vue.set(state.actives, uid, null)
-      }
-    })
   },
 
+  // Set the list of annotation
   list(state, { annotations, uid, layerId, layersUid }) {
     Vue.set(state.lists[uid].layers, layerId, annotations)
   },
 
+  // Set the active annotation
   set(state, { id, uid }) {
     Vue.set(state.actives, uid, id)
   },
 
+  // Unset an active annotation
   unset(state, { id, uid }) {
     Vue.set(state.actives, uid, null)
   }

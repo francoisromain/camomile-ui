@@ -45,8 +45,8 @@
       </div>
       <div class="blob-3-4">
         <input
-          type="password"
           v-model="element.password"
+          type="password"
           class="input-alt"
           placeholder="••••••••">
       </div>
@@ -59,8 +59,8 @@
       </div>
       <div class="blob-3-4">
         <input
-          type="text"
           v-model="element.url"
+          type="text"
           class="input-alt"
           placeholder="http://…">
       </div>
@@ -82,17 +82,17 @@
       :name="'metadataType'"
       :title="'Meta-data type'" />
     <object-field
+      v-if="type !== 'annotations'"
       :name="'description'"
-      :title="'Description'"
-      v-if="type !== 'annotations'" />
+      :title="'Description'" />
     <div class="blobs">
       <div class="blob-1-4" />
       <div class="blob-3-4">
         <button
-          @click="save"
-          @keyup.enter="save"
+          :disabled="!element.name && type !== 'annotations'"
           class="btn-alt p-s full-x"
-          :disabled="!element.name && type !== 'annotations'">Save</button>
+          @click="save"
+          @keyup.enter="save">Save</button>
       </div>
     </div>
   </div>
@@ -109,13 +109,18 @@ export default {
     objectField
   },
 
+  data () {
+    return {
+      roles: ['admin', 'user']
+    }
+  },
+
   computed: {
     ...mapState({
       element: state => state.cml.popup.element,
       type: state => state.cml.popup.config.type,
       rolesPermission: state =>
-        state.cml.user.id !== state.cml.popup.element.id,
-      roles: state => state.cml.config.roles
+        state.cml.user.id !== state.cml.popup.element.id
     })
   },
 

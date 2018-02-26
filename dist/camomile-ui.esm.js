@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import Camomile from 'camomile-client';
 import Vuex, { mapState } from 'vuex';
+import Camomile from 'camomile-client';
 import popupAnnotationLabel from '~/components/popup/annotation-label.vue';
 
 function styleInject(css, ref) {
@@ -32,16 +32,6 @@ function styleInject(css, ref) {
 
 var css = "/* Settings        ------------------------------- */\n\n/* system.css / settings\n-------------------------------\nhttp://francoisromain.github.io/postcss-structure\n*/\n\n:root {\n  /* Colors        ------------------------------- */\n  --color-text: #666;\n  --color-bg: white;\n  --color-transparent: rgba(248, 247, 243, 0);\n  --color-inverse: #3d3d35;\n  --color-neutral: #bcb9af;\n  --color-alt: #f8f7f3;\n  --color-highlight: #f50;\n  --color-brand: rgb(0, 162, 255);\n  --color-error: #e82239;\n  --color-warning: #ff891c;\n  --color-info: #5798aa;\n  --color-success: #6ea040;\n\n  /* Base units    ------------------------------- */\n\n  /* font-size: 1rem = 16 px */\n  --base-font-size: 16px;\n  --base-font-size: 1rem;\n\n  /* base: 1.5rem = 24 px */\n  --unit: 24px;\n  --unit: 1.5rem;\n\n  /* line: 0.0625rem = 1px */\n  --unit-line: 1px;\n  --unit-line: 0.0625rem;\n  --unit-line: calc(var(--unit) / 24);\n\n  /* xxs: 0.1875rem = 3px */\n  --unit-xxs: 3px;\n  --unit-xxs: 0.1875rem;\n  --unit-xxs: calc(var(--unit) / 8);\n\n  /* xs: 0.375rem = 6px */\n  --unit-xs: 6px;\n  --unit-xs: 0.375rem;\n  --unit-xs: calc(var(--unit) / 4);\n\n  /* s: 0.75rem = 12px */\n  --unit-s: 12px;\n  --unit-s: 0.75rem;\n  --unit-s: calc(var(--unit) / 2);\n\n  /* m: 1.125rem = 18px */\n  --unit-m: 18px;\n  --unit-m: 1.125rem;\n  --unit-m: calc(var(--unit) * 3 / 4);\n\n  /* l: 2.25rem = 36 px */\n  --unit-l: 36px;\n  --unit-l: 2.25rem;\n  --unit-l: calc(var(--unit) * 3 / 2);\n\n  /* xl: 3rem = 48px */\n  --unit-xl: 48px;\n  --unit-xl: 3rem;\n  --unit-xl: calc(var(--unit) * 2);\n\n  /* xxl: 3.75rem = 60 px */\n  --unit-xxl: 60px;\n  --unit-xxl: 3.75rem;\n  --unit-xxl: calc(var(--unit) * 2.5);\n\n  /*  */\n  --unit-infinity: 9999px;\n\n  /* Lists         ------------------------------- */\n  --list-postfix: ',';\n  --list-prefix: '―';\n\n  /* Grid          ------------------------------- */\n\n  /*\n  postcss-grid-system configuration\n  https://github.com/francoisromain/postcss-grid-system#configuration\n  */\n\n  /* width of a single bloc in rem */\n  --col-width: 328px;\n  --col-width: 20.5rem;\n\n  /* width of the gutter in rem */\n  --gutter: 24px;\n  --gutter: 1.5rem;\n  --gutter: var(--unit);\n\n  /* padding of the main container in rem */\n  --container-padding: 24px;\n  --container-padding: 1.5rem;\n  --container-padding: var(--unit);\n\n  /* transition */\n  --transition: opacity 0.5s, background-color 0.5s, border 0.5s,\n    box-shadow 0.5s, fill 0.5s;\n\n  /* hr */\n  --border-style: solid;\n  --border-color: #bcb9af;\n  --border-color: var(--color-neutral);\n}\n\n/* media queries: x * col-width + gutter */\n\n/* Reset           ------------------------------- */\n\n/*\n    Print\n-------------------------------\n\nFrom HTML5 Boilerplate\nhttps://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css\n\nBlack prints faster: http://www.sanbeiji.com/archives/953\n*/\n\n@media print {\n  *,\n  *:before,\n  *:after,\n  *:first-letter,\n  *:first-line {\n    background: transparent !important;\n    color: #000 !important;\n    box-shadow: none !important;\n    text-shadow: none !important;\n  }\n\n  a,\n  a:visited {\n    text-decoration: underline;\n  }\n\n  a[href]:after {\n    content: ' (' attr(href) ')';\n  }\n\n  abbr[title]:after {\n    content: ' (' attr(title) ')';\n  }\n\n  /*\n  Don't show links that are fragment identifiers,\n  or use the `javascript:` pseudo protocol\n  */\n  a[href^='#']:after,\n  a[href^='javascript:']:after {\n    content: '';\n  }\n}\n\n/*\n    Reset\n-------------------------------\n*/\n\n/*\n  css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice\n  paulirish.com/2012/box-sizing-border-box-ftw\n*/\n\nhtml,\n* {\n  box-sizing: border-box;\n}\n\n*,\n*:before,\n*:after {\n  box-sizing: inherit;\n}\n\nhtml {\n  overflow-y: scroll;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-font-smoothing: antialiased;\n  text-rendering: optimizeLegibility;\n  background-color: white;\n  background-color: var(--color-bg);\n  color: #666;\n  color: var(--color-text);\n  font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Droid Sans, Helvetica Neue;\n  font-size: 16px;\n  font-size: 1rem;\n  font-size: calc(1 * var(--base-font-size));\n  line-height: 24px;\n  line-height: 1.5rem;\n  line-height: calc(1 * var(--unit));\n}\n\nbody,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\np,\nblockquote,\npre,\ndl,\ndd,\nol,\nul,\nform,\nfieldset,\nlegend,\nfigure,\ntable,\nth,\ntd,\ncaption,\nhr {\n  margin: 0;\n  padding: 0;\n}\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-weight: normal;\n  font-style: normal;\n  text-decoration: none;\n}\n\nabbr[title],\ndfn[title] {\n  cursor: help;\n}\n\nbutton,\ninput,\ntextarea,\nselect,\noptgroup {\n  font: inherit;\n  font-size: 16px;\n  font-size: 1rem;\n  font-size: calc(1 * var(--base-font-size));\n  line-height: 24px;\n  line-height: 1.5rem;\n  line-height: calc(1 * var(--unit));\n  text-align: left;\n}\n\nfieldset {\n  border: 0 none transparent;\n}\n\n*:focus,\ntextarea:focus,\ninput:focus {\n  outline: none;\n  outline: 0;\n}\n\nlabel {\n  cursor: pointer;\n  display: block;\n}\n\nu,\nins {\n  text-decoration: none;\n}\n\nins {\n  border-bottom: 1px solid;\n}\n\nimg, video {\n  max-width: 100%;\n  font-style: italic;\n  vertical-align: middle;\n  height: auto;\n  outline: 0;\n}\n\n/* remove yellow bg on automplete in chrome */\n\ninput:-webkit-autofill,\nselect:-webkit-autofill {\n  -webkit-box-shadow: 0 0 0 1000px white inset;\n}\n\n/* remove round corner on iOs */\n\ninput:not([type='radio']):not([type='checkbox']):not(.rnd),\nselect {\n  -webkit-appearance: none;\n  border-radius: 0;\n}\n\n/* https://github.com/necolas/normalize.css/pull/697/commits/c3762f068feca8e218e69f54daf397cd0f33176d */\n\nbutton,\nhtml [type='button'],\n[type='reset'],\n[type='submit'] {\n  border-radius: 0;\n}\n\n/* Elements        ------------------------------- */\n\n/*\n    Typography\n-------------------------------\n*/\n\nh1,\nh2,\nh3,\nh4,\nh5,\nul,\nol,\ndl,\nblockquote,\np,\naddress,\ntable,\nfieldset,\nfigure,\npre {\n  margin-bottom: 24px;\n  margin-bottom: 1.5rem;\n  margin-bottom: var(--unit);\n}\n\n.h0 {\n  font-size: 95.367px;\n  font-size: 5.96046rem;\n  font-size: calc(5.96046 * var(--base-font-size));\n  line-height: 144px;\n  line-height: 9rem;\n  line-height: calc(6 * var(--unit));\n}\n\nh1,\n.h1 {\n  font-size: 16px;\n  font-size: 1rem;\n  font-size: calc(1 * var(--base-font-size));\n  line-height: 48px;\n  line-height: 3rem;\n  line-height: calc(2 * var(--unit));\n}\n\nh2,\n.h2 {\n  font-size: 16px;\n  font-size: 1rem;\n  font-size: calc(1 * var(--base-font-size));\n  line-height: 24px;\n  line-height: 1.5rem;\n  line-height: calc(1 * var(--unit));\n}\n\nh3,\nh4,\nh5,\n.h5 {\n  font-weight: 700;\n}\n\nh3,\n.h3 {\n  font-size: 16px;\n  font-size: 1rem;\n  font-size: calc(1 * var(--base-font-size));\n  line-height: 24px;\n  line-height: 1.5rem;\n  line-height: calc(1 * var(--unit));\n  border-bottom: 1px solid #bcb9af;\n  border-bottom: 0.0625rem solid #bcb9af;\n  border-bottom: var(--unit-line) var(--border-style) var(--border-color);\n  padding-bottom: 12px;\n  padding-bottom: 0.75rem;\n  padding-bottom: var(--unit-s);\n  margin-bottom: 23px;\n  margin-bottom: 1.4375rem;\n  margin-bottom: calc(var(--unit) - var(--unit-line));\n}\n\nh4,\n.h4 {\n  font-size: 16px;\n  font-size: 1rem;\n  font-size: calc(1 * var(--base-font-size));\n  line-height: 24px;\n  line-height: 1.5rem;\n  line-height: calc(1 * var(--unit));\n}\n\nh5,\n.h5 {\n  font-size: 12.8px;\n  font-size: 0.8rem;\n  font-size: calc(0.8 * var(--base-font-size));\n  line-height: 24px;\n  line-height: 1.5rem;\n  line-height: calc(1 * var(--unit));\n}\n\nh6,\n.h6,\nsmall {\n  font-size: 11.448px;\n  font-size: 0.71554rem;\n  font-size: calc(0.71554 * var(--base-font-size));\n  line-height: 12px;\n  line-height: 0.75rem;\n  line-height: calc(0.5 * var(--unit));\n}\n\nlabel,\nh6 {\n  margin-bottom: 12px;\n  margin-bottom: 0.75rem;\n  margin-bottom: var(--unit-s);\n}\n\nh1,\nh2,\nh5 {\n  font-weight: 700;\n}\n\nblockquote {\n  font-size: 17.888px;\n  font-size: 1.11803rem;\n  font-size: calc(1.11803 * var(--base-font-size));\n  line-height: 36px;\n  line-height: 2.25rem;\n  line-height: calc(1.5 * var(--unit));\n  font-style: italic;\n  background: #f8f7f3;\n  background: var(--color-alt);\n  padding: 24px;\n  padding: 1.5rem;\n  padding: var(--unit);\n  border-left: 1px solid #bcb9af;\n  border-left: 0.0625rem solid #bcb9af;\n  border-left: var(--unit-line) var(--border-style) var(--border-color);\n}\n\nblockquote :last-child {\n  margin-bottom: 0;\n}\n\nhr {\n  border: 0;\n  height: 0;\n  border-top: 1px solid #bcb9af;\n  border-top: 0.0625rem solid #bcb9af;\n  border-top: var(--unit-line) var(--border-style) var(--border-color);\n  margin-bottom: 23px;\n  margin-bottom: 1.4375rem;\n  margin-bottom: calc(var(--unit) - var(--unit-line));\n  clear: both;\n}\n\na {\n  text-decoration: none;\n  color: #f50;\n  color: var(--color-highlight)\n}\n\na:visited {\n  color: #f50;\n  color: var(--color-highlight);\n}\n\na:hover,\n  a:active,\n  a:focus {\n  color: #f50;\n  color: var(--color-highlight);\n}\n\nb,\nstrong,\n.strong,\n.bold {\n  font-weight: 700;\n}\n\ni,\n.italic {\n  font-style: italic;\n}\n\n.cap {\n  text-transform: capitalize;\n}\n\n.caps {\n  text-transform: uppercase;\n  letter-spacing: 0.25em;\n}\n\n.line-through {\n  color: #bcb9af;\n  color: var(--color-neutral);\n  text-decoration: line-through;\n}\n\n.underline {\n  border-bottom: 1px solid;\n}\n\n.nowrap {\n  white-space: nowrap;\n}\n\n.truncate {\n  max-width: 100%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.text-center {\n  text-align: center;\n}\n\n.text-left {\n  text-align: right;\n}\n\n.text-right {\n  text-align: right;\n}\n\n.mono {\n  font-family: 'Lucida Sans Typewriter', monaco, 'Lucida Console', monospace;\n  font-weight: bold;\n}\n\n/*\n      Lists\n-------------------------------\n\n*/\n\nul,\nol,\ndd {\n  list-style-position: inside;\n\n  /* overflow: auto; */\n}\n\nul > li > ul,\nul > li > ol,\nol > li > ul,\nol > li > ol {\n  margin-left: 36px;\n  margin-left: 2.25rem;\n  margin-left: var(--unit-l);\n}\n\nol {\n  list-style-type: decimal;\n}\n\nli > ul,\n  li > ol {\n  margin-bottom: 0;\n}\n\n.list-sans {\n  padding: 0;\n  list-style: none;\n}\n\n.list-inline {\n  padding: 0;\n  list-style: none;\n  margin-bottom: 18px;\n  margin-bottom: 1.125rem;\n  margin-bottom: calc(var(--unit) - var(--unit-xs))\n}\n\n.list-inline > li:not(.right) {\n  margin-bottom: 6px;\n  margin-bottom: 0.375rem;\n  margin-bottom: var(--unit-xs);\n  margin-right: 6px;\n  margin-right: 0.375rem;\n  margin-right: var(--unit-xs);\n  float: left;\n}\n\n.list-inline > li.right {\n  margin-bottom: 6px;\n  margin-bottom: 0.375rem;\n  margin-bottom: var(--unit-xs);\n  margin-left: 6px;\n  margin-left: 0.375rem;\n  margin-left: var(--unit-xs);\n  float: right;\n}\n\n.list-prefix {\n  list-style: none\n}\n\n.list-prefix > li:before {\n  content: '―';\n  content: var(--list-prefix);\n  margin-right: 6px;\n  margin-right: 0.375rem;\n  margin-right: var(--unit-xs);\n  color: #bcb9af;\n  color: var(--color-neutral);\n}\n\n.list-postfix {\n  list-style: none\n}\n\n.list-postfix > li:after {\n  content: ',';\n  content: var(--list-postfix);\n}\n\n.list-inline.list-postfix li:last-child:after {\n  content: none;\n}\n\n/*\n    Table\n-------------------------------\n*/\n\ntable {\n  width: 100%;\n  border-collapse: collapse;\n  border-spacing: 0;\n  border: none;\n}\n\nth {\n  text-align: left;\n  font-weight: 700;\n  font-size: 12.8px;\n  font-size: 0.8rem;\n  font-size: calc(0.8 * var(--base-font-size));\n  line-height: 12px;\n  line-height: 0.75rem;\n  line-height: calc(0.5 * var(--unit));\n}\n\ntr {\n  border-bottom: 1px solid #bcb9af;\n  border-bottom: 0.0625rem solid #bcb9af;\n  border-bottom: var(--unit-line) var(--border-style) var(--border-color);\n}\n\ntd,\nth {\n  vertical-align: top;\n  word-wrap: break-word;\n  padding-bottom: 12px;\n  padding-bottom: 0.75rem;\n  padding-bottom: var(--unit-s);\n  padding-top: 11px;\n  padding-top: 0.6875rem;\n  padding-top: calc(var(--unit-s) - var(--unit-line));\n}\n\n.table-xs td,\n.table-xs th {\n  padding-top: 6px;\n  padding-top: 0.375rem;\n  padding-top: var(--unit-xs);\n  padding-bottom: 5px;\n  padding-bottom: 0.3125rem;\n  padding-bottom: calc(var(--unit-xs) - var(--unit-line));\n}\n\n.table-xxs td,\n.table-xxs th {\n  padding-top: 3px;\n  padding-top: 0.1875rem;\n  padding-top: var(--unit-xxs);\n  padding-bottom: 2px;\n  padding-bottom: 0.125rem;\n  padding-bottom: calc(var(--unit-xxs) - var(--unit-line));\n}\n\n.table-fixed {\n  display: table;\n  table-layout: fixed;\n}\n\n/*\n      Buttons\n-------------------------------\n*/\n\n.btn,.btn:visited {\n  cursor: pointer;\n  text-decoration: none;\n  border: none;\n  display: inline-block;\n  color: var(--color-text);\n  background-color: var(--color-alt);\n  font-weight: 700;\n  border-radius: 0.1875rem;\n  border-radius: var(--unit-xxs);\n}\n\n.btn:active,.btn.active {\n  color: var(--color-inverse);\n  background-color: var(--color-alt);\n}\n\n.btn:hover,.btn.active:hover {\n  color: var(--color-bg);\n  background-color: var(--color-highlight);\n}\n\n.btn:disabled,.btn:disabled:active,.btn:disabled:hover,.btn.disabled,.btn.disabled:active,.btn.disabled:hover {\n  opacity: 0.25;\n  cursor: default;\n  color: var(--color-text);\n  background-color: var(--color-alt);\n  box-shadow: inset 0 0 0 0 grey;\n}\n\n.btn-border,.btn-border:visited {\n  cursor: pointer;\n  text-decoration: none;\n  border: none;\n  display: inline-block;\n  color: var(--color-text);\n  background-color: var(--color-alt);\n  box-shadow: inset 0 0 0 var(--unit-line) var(--color-neutral);\n}\n\n.btn-border:active,.btn-border.active {\n  color: var(--color-inverse);\n  background-color: var(--color-bg);\n  box-shadow: inset 0 0 0 var(--unit-line) var(--color-highlight);\n}\n\n.btn-border:hover,.btn-border.active:hover {\n  color: var(--color-inverse);\n  background-color: var(--color-bg);\n  box-shadow: inset 0 0 0 var(--unit-line) var(--color-highlight);\n}\n\n.btn-border:disabled,.btn-border:disabled:active,.btn-border:disabled:hover,.btn-border.disabled,.btn-border.disabled:active,.btn-border.disabled:hover {\n  opacity: 0.25;\n  cursor: default;\n  color: var(--color-text);\n  background-color: var(--color-alt);\n  box-shadow: inset 0 0 0 var(--unit-line) var(--color-neutral);\n}\n\n.tag .btn,.tag:visited .btn,\n.btn-alt,.btn-alt:visited {\n  cursor: pointer;\n  text-decoration: none;\n  border: none;\n  display: inline-block;\n  color: var(--color-bg);\n  background-color: var(--color-neutral);\n  font-weight: 700;\n}\n\n.tag:active .btn,.tag.active .btn, .btn-alt:active,.btn-alt.active {\n  color: var(--color-bg);\n  background-color: var(--color-inverse);\n}\n\n.tag:hover .btn,.tag.active:hover .btn, .btn-alt:hover,.btn-alt.active:hover {\n  color: var(--color-bg);\n  background-color: var(--color-highlight);\n}\n\n.tag:disabled .btn,.tag:disabled:active .btn,.tag:disabled:hover .btn,.tag.disabled .btn,.tag.disabled:active .btn,.tag.disabled:hover .btn, .btn-alt:disabled,.btn-alt:disabled:active,.btn-alt:disabled:hover,.btn-alt.disabled,.btn-alt.disabled:active,.btn-alt.disabled:hover {\n  opacity: 0.25;\n  cursor: default;\n  color: var(--color-bg);\n  background-color: var(--color-neutral);\n  box-shadow: inset 0 0 0 0 grey;\n}\n\n.btn,\n.btn-alt,\n.btn-border,\n.btn-transparent {\n  transition: opacity 0.5s, background-color 0.5s, border 0.5s,\n    box-shadow 0.5s, fill 0.5s;\n  transition: var(--transition);\n}\n\n.btn-icon {\n  line-height: 16px;\n  line-height: 1rem;\n}\n\n/*\n      Forms\n-------------------------------\n*/\n\ninput[type='text'],\ninput[type='email'],\ninput[type='search'],\ninput[type='password'],\ninput[type='tel'],\nselect,\ntextarea {\n  width: 100%;\n  padding: 12px;\n  padding: 0.75rem;\n  padding: var(--unit-s);\n  border: 0 none;\n  background-color: #f8f7f3;\n  background-color: var(--color-alt);\n  height: auto;\n  color: inherit;\n}\n\nselect {\n  background-image: url(\n    \"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%233d3d35' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='1px'%3E %3Cpath d='M22 9L12 19 2 9'/%3E %3C/svg%3E\"\n  );\n  background-image: url(\n    \"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='var(--color-inverse)' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='1px'%3E %3Cpath d='M22 9L12 19 2 9'/%3E %3C/svg%3E\"\n  );\n  background-position: right 12px center;\n  background-position: right 0.75rem center;\n  background-position: right var(--unit-s) center;\n  background-repeat: no-repeat;\n\n  /* for FF: http://stackoverflow.com/a/18317228/2112538 */\n  -moz-appearance: none;\n  text-indent: 0.01px;\n  text-overflow: ellipsis;\n}\n\ntextarea {\n  /* http://stackoverflow.com/a/5196591/2112538 */\n  vertical-align: top;\n  resize: vertical;\n}\n\ntextarea:focus,\ninput:focus,\nselect:focus {\n  border-right: 12px solid #f50;\n  border-right: 0.75rem solid #f50;\n  border-right: var(--unit-s) solid var(--color-highlight);\n}\n\ninput[type='text'].input-alt,\ninput[type='email'].input-alt,\ninput[type='search'].input-alt,\ninput[type='password'].input-alt,\ninput[type='tel'].input-alt,\nselect.select-alt,\ntextarea.textarea-alt {\n  background-color: white;\n  background-color: var(--color-bg);\n}\n\ninput.success {\n  border-right: 12px solid #6ea040;\n  border-right: 0.75rem solid #6ea040;\n  border-right: var(--unit-s) solid var(--color-success);\n}\n\ninput.error {\n  border-right: 12px solid #e82239;\n  border-right: 0.75rem solid #e82239;\n  border-right: var(--unit-s) solid var(--color-error);\n}\n\ninput:disabled,\ntextarea:disabled,\nselect:disabled {\n  background-color: rgba(248, 247, 243, 0.5);\n  background-color: rgba(248, 247, 243, 0.5);\n}\n\ninput.input-alt:disabled,\ntextarea.textarea-alt:disabled,\nselect.select-alt:disabled {\n  background-color: rgba(255, 255, 255, 0.5);\n  background-color: rgba(255, 255, 255, 0.5);\n}\n\n*::-webkit-input-placeholder {\n  /* WebKit, Blink, Edge */\n  color: #bcb9af;\n  color: var(--color-neutral);\n}\n\n*:-moz-placeholder {\n  /* Mozilla Firefox 4 to 18 */\n  color: #bcb9af;\n  color: var(--color-neutral);\n  opacity: 1;\n}\n\n*::-moz-placeholder {\n  /* Mozilla Firefox 19+ */\n  color: #bcb9af;\n  color: var(--color-neutral);\n  opacity: 1;\n}\n\n*:-ms-input-placeholder {\n  /* Internet Explorer 10-11 */\n  color: #bcb9af;\n  color: var(--color-neutral);\n}\n\n*::-ms-input-placeholder {\n  /* Microsoft Edge */\n  color: #bcb9af;\n  color: var(--color-neutral);\n}\n\n/* Layout          ------------------------------- */\n\n/* @import 'system/grid-system.css'; */\n\n/*\n      postcss-grid-fluid\n-------------------------------\n\nhttps://github.com/francoisromain/postcss-grid-fluid\n*/\n\n.bloc-code,\n.blob-1,\n.blob-1-2,\n.blob-1-3,\n.blob-2-3,\n.blob-1-4,\n.blob-3-4,\n.blob-btn,\n.blob-3-4-btn {\n  margin-bottom: 24px;\n  margin-bottom: 1.5rem;\n  margin-bottom: var(--unit);\n}\n\n.blobs-default {\n  clear: both;\n  margin-right: calc(-1 * var(--gutter));\n  display: flex;\n  flex-flow: row wrap;\n  align-items: flex-start;\n  align-content: flex-start;\n}\n\n.blobs-default::after {\n  content: \"\";\n  display: table;\n  clear: both;\n}\n\n.blob-default {\n  margin-right: 24px;\n  margin-right: 1.5rem;\n  margin-right: var(--gutter);\n  flex: 0 1 0;\n}\n\n@media (min-width: 42.5em) {\n  .blobs {\n    clear: both;\n    margin-right: calc(-1 * var(--gutter));\n    display: flex;\n    flex-flow: row wrap;\n    align-items: flex-start;\n    align-content: flex-start;\n  }\n  .blobs::after {\n    content: \"\";\n    display: table;\n    clear: both;\n  }\n\n  .blob {\n    margin-right: 1.5rem;\n    margin-right: var(--gutter);\n    margin-bottom: 1.5rem;\n    margin-bottom: var(--gutter);\n    flex: 0 1 0;\n  }\n\n  .blob-auto {\n    margin-right: 1.5rem;\n    margin-right: var(--gutter);\n    margin-bottom: 1.5rem;\n    margin-bottom: var(--gutter);\n    flex: 0 1 auto;\n  }\n\n  .blob-1 {\n    margin-right: var(--gutter);\n    margin-bottom: var(--gutter);\n    flex: 0 1 calc(100% - var(--gutter));\n  }\n\n  .blob-code,\n  .blob-1-2 {\n    margin-right: var(--gutter);\n    margin-bottom: var(--gutter);\n    flex: 0 1 calc(50% - var(--gutter));\n  }\n\n  .blob-1-3 {\n    margin-right: var(--gutter);\n    margin-bottom: var(--gutter);\n    flex: 0 1 calc(33.333333333333336% - var(--gutter));\n  }\n\n  .blob-2-3 {\n    margin-right: var(--gutter);\n    margin-bottom: var(--gutter);\n    flex: 0 1 calc(66.66666666666667% - var(--gutter));\n  }\n\n  .blob-1-4 {\n    margin-right: var(--gutter);\n    margin-bottom: var(--gutter);\n    flex: 0 1 calc(25% - var(--gutter));\n  }\n\n  .blob-3-4 {\n    margin-right: var(--gutter);\n    margin-bottom: var(--gutter);\n    flex: 0 1 calc(75% - var(--gutter));\n  }\n\n  .blob-btn {\n    margin-right: 1.5rem;\n    margin-right: var(--gutter);\n    margin-bottom: 1.5rem;\n    margin-bottom: var(--gutter);\n    flex: 0 1 3rem;\n  }\n\n  .blob-3-4-btn {\n    margin-right: 1.5rem;\n    margin-right: var(--gutter);\n    margin-bottom: 1.5rem;\n    margin-bottom: var(--gutter);\n    flex: 0 1 calc(75% - 6rem);\n    flex: 0 1 calc(75% - var(--gutter) - 3rem - var(--gutter));\n  }\n}\n\n/*\n    Utils\n-------------------------------\n*/\n\n/*\nhttp://cssmojo.com/the-very-latest-clearfix-reloaded/\n*/\n\n.clearfix:before,\n.clearfix:after {\n  content: '';\n  display: block;\n  clear: both;\n}\n\n.hide {\n  display: none;\n  visibility: hidden;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.pointer-none {\n  pointer-events: none;\n}\n\n.overflow-hidden {\n  overflow: hidden;\n}\n\n.inline-block {\n  display: inline-block;\n}\n\n.flex {\n  display: flex;\n}\n\n.flex-start {\n  align-items: flex-start;\n}\n\n.flex-direction-column {\n  flex-direction: column;\n}\n\n.left {\n  float: left;\n}\n\n.right {\n  float: right;\n}\n\n.flex-right {\n  margin-left: auto;\n}\n\n.relative {\n  position: relative;\n}\n\n.fixed {\n  position: fixed;\n}\n\n.absolute {\n  position: absolute;\n}\n\n.center {\n  left: 50%;\n  transform: translate(-50%, 0);\n}\n\n.full {\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n}\n\n.full-x {\n  width: 100%;\n}\n\n.full-y {\n  height: 100%;\n}\n\n/*\n      Margins\n-------------------------------\n\n*/\n\n.m {\n  margin: 24px;\n  margin: 1.5rem;\n  margin: var(--unit);\n}\n\n.m-xxs {\n  margin: 3px;\n  margin: 0.1875rem;\n  margin: var(--unit-xxs);\n}\n\n.m-xs {\n  margin: 6px;\n  margin: 0.375rem;\n  margin: var(--unit-xs);\n}\n\n.m-s {\n  margin: 12px;\n  margin: 0.75rem;\n  margin: var(--unit-s);\n}\n\n.m-m {\n  margin: 18px;\n  margin: 1.125rem;\n  margin: var(--unit-m);\n}\n\n.m-l {\n  margin: 36px;\n  margin: 2.25rem;\n  margin: var(--unit-l);\n}\n\n.m-xl {\n  margin: 48px;\n  margin: 3rem;\n  margin: var(--unit-xl);\n}\n\n.m-0 {\n  margin: 0;\n}\n\n.mr {\n  margin-right: 24px;\n  margin-right: 1.5rem;\n  margin-right: var(--unit);\n}\n\n.mr-xxs {\n  margin-right: 3px;\n  margin-right: 0.1875rem;\n  margin-right: var(--unit-xxs);\n}\n\n.mr-xs {\n  margin-right: 6px;\n  margin-right: 0.375rem;\n  margin-right: var(--unit-xs);\n}\n\n.mr-s {\n  margin-right: 12px;\n  margin-right: 0.75rem;\n  margin-right: var(--unit-s);\n}\n\n.mr-m {\n  margin-right: 18px;\n  margin-right: 1.125rem;\n  margin-right: var(--unit-m);\n}\n\n.mr-l {\n  margin-right: 36px;\n  margin-right: 2.25rem;\n  margin-right: var(--unit-l);\n}\n\n.mr-xl {\n  margin-right: 48px;\n  margin-right: 3rem;\n  margin-right: var(--unit-xl);\n}\n\n.mr-0 {\n  margin-right: 0;\n}\n\n.ml {\n  margin-left: 24px;\n  margin-left: 1.5rem;\n  margin-left: var(--unit);\n}\n\n.ml-xxs {\n  margin-left: 3px;\n  margin-left: 0.1875rem;\n  margin-left: var(--unit-xxs);\n}\n\n.ml-xs {\n  margin-left: 6px;\n  margin-left: 0.375rem;\n  margin-left: var(--unit-xs);\n}\n\n.ml-s {\n  margin-left: 12px;\n  margin-left: 0.75rem;\n  margin-left: var(--unit-s);\n}\n\n.ml-m {\n  margin-left: 18px;\n  margin-left: 1.125rem;\n  margin-left: var(--unit-m);\n}\n\n.ml-l {\n  margin-left: 36px;\n  margin-left: 2.25rem;\n  margin-left: var(--unit-l);\n}\n\n.ml-xl {\n  margin-left: 48px;\n  margin-left: 3rem;\n  margin-left: var(--unit-xl);\n}\n\n.ml-0 {\n  margin-left: 0;\n}\n\n.mt {\n  margin-top: 24px;\n  margin-top: 1.5rem;\n  margin-top: var(--unit);\n}\n\n.mt-xxs {\n  margin-top: 3px;\n  margin-top: 0.1875rem;\n  margin-top: var(--unit-xxs);\n}\n\n.mt-xs {\n  margin-top: 6px;\n  margin-top: 0.375rem;\n  margin-top: var(--unit-xs);\n}\n\n.mt-s {\n  margin-top: 12px;\n  margin-top: 0.75rem;\n  margin-top: var(--unit-s);\n}\n\n.mt-m {\n  margin-top: 18px;\n  margin-top: 1.125rem;\n  margin-top: var(--unit-m);\n}\n\n.mt-l {\n  margin-top: 36px;\n  margin-top: 2.25rem;\n  margin-top: var(--unit-l);\n}\n\n.mt-xl {\n  margin-top: 48px;\n  margin-top: 3rem;\n  margin-top: var(--unit-xl);\n}\n\n.mt-xxl {\n  margin-top: 60px;\n  margin-top: 3.75rem;\n  margin-top: var(--unit-xxl);\n}\n\n.mt-0 {\n  margin-top: 0;\n}\n\n.mb {\n  margin-bottom: 24px;\n  margin-bottom: 1.5rem;\n  margin-bottom: var(--unit);\n}\n\n.mb-xxs {\n  margin-bottom: 3px;\n  margin-bottom: 0.1875rem;\n  margin-bottom: var(--unit-xxs);\n}\n\n.mb-xs {\n  margin-bottom: 6px;\n  margin-bottom: 0.375rem;\n  margin-bottom: var(--unit-xs);\n}\n\n.mb-s {\n  margin-bottom: 12px;\n  margin-bottom: 0.75rem;\n  margin-bottom: var(--unit-s);\n}\n\n.mb-m {\n  margin-bottom: 18px;\n  margin-bottom: 1.125rem;\n  margin-bottom: var(--unit-m);\n}\n\n.mb-l {\n  margin-bottom: 36px;\n  margin-bottom: 2.25rem;\n  margin-bottom: var(--unit-l);\n}\n\n.mb-xl {\n  margin-bottom: 48px;\n  margin-bottom: 3rem;\n  margin-bottom: var(--unit-xl);\n}\n\n.mb-xxl {\n  margin-bottom: 60px;\n  margin-bottom: 3.75rem;\n  margin-bottom: var(--unit-xxl);\n}\n\n.mb-0 {\n  margin-bottom: 0;\n}\n\n.mx {\n  margin-right: 24px;\n  margin-right: 1.5rem;\n  margin-right: var(--unit);\n  margin-left: 24px;\n  margin-left: 1.5rem;\n  margin-left: var(--unit);\n}\n\n.mx-xxs {\n  margin-right: 3px;\n  margin-right: 0.1875rem;\n  margin-right: var(--unit-xxs);\n  margin-left: 3px;\n  margin-left: 0.1875rem;\n  margin-left: var(--unit-xxs);\n}\n\n.mx-xs {\n  margin-right: 6px;\n  margin-right: 0.375rem;\n  margin-right: var(--unit-xs);\n  margin-left: 6px;\n  margin-left: 0.375rem;\n  margin-left: var(--unit-xs);\n}\n\n.mx-s {\n  margin-right: 12px;\n  margin-right: 0.75rem;\n  margin-right: var(--unit-s);\n  margin-left: 12px;\n  margin-left: 0.75rem;\n  margin-left: var(--unit-s);\n}\n\n.mx-m {\n  margin-right: 18px;\n  margin-right: 1.125rem;\n  margin-right: var(--unit-m);\n  margin-left: 18px;\n  margin-left: 1.125rem;\n  margin-left: var(--unit-m);\n}\n\n.mx-l {\n  margin-right: 36px;\n  margin-right: 2.25rem;\n  margin-right: var(--unit-l);\n  margin-left: 36px;\n  margin-left: 2.25rem;\n  margin-left: var(--unit-l);\n}\n\n.mx-xl {\n  margin-right: 48px;\n  margin-right: 3rem;\n  margin-right: var(--unit-xl);\n  margin-left: 48px;\n  margin-left: 3rem;\n  margin-left: var(--unit-xl);\n}\n\n.mx-xxl {\n  margin-right: 60px;\n  margin-right: 3.75rem;\n  margin-right: var(--unit-xxl);\n  margin-left: 60px;\n  margin-left: 3.75rem;\n  margin-left: var(--unit-xxl);\n}\n\n.mx-0 {\n  margin-right: 0;\n  margin-left: 0;\n}\n\n.my {\n  margin-top: 24px;\n  margin-top: 1.5rem;\n  margin-top: var(--unit);\n  margin-bottom: 24px;\n  margin-bottom: 1.5rem;\n  margin-bottom: var(--unit);\n}\n\n.my-xxs {\n  margin-top: 3px;\n  margin-top: 0.1875rem;\n  margin-top: var(--unit-xxs);\n  margin-bottom: 3px;\n  margin-bottom: 0.1875rem;\n  margin-bottom: var(--unit-xxs);\n}\n\n.my-xs {\n  margin-top: 6px;\n  margin-top: 0.375rem;\n  margin-top: var(--unit-xs);\n  margin-bottom: 6px;\n  margin-bottom: 0.375rem;\n  margin-bottom: var(--unit-xs);\n}\n\n.my-s {\n  margin-top: 12px;\n  margin-top: 0.75rem;\n  margin-top: var(--unit-s);\n  margin-bottom: 12px;\n  margin-bottom: 0.75rem;\n  margin-bottom: var(--unit-s);\n}\n\n.my-m {\n  margin-top: 18px;\n  margin-top: 1.125rem;\n  margin-top: var(--unit-m);\n  margin-bottom: 18px;\n  margin-bottom: 1.125rem;\n  margin-bottom: var(--unit-m);\n}\n\n.my-l {\n  margin-top: 36px;\n  margin-top: 2.25rem;\n  margin-top: var(--unit-l);\n  margin-bottom: 36px;\n  margin-bottom: 2.25rem;\n  margin-bottom: var(--unit-l);\n}\n\n.my-xl {\n  margin-top: 48px;\n  margin-top: 3rem;\n  margin-top: var(--unit-xl);\n  margin-bottom: 48px;\n  margin-bottom: 3rem;\n  margin-bottom: var(--unit-xl);\n}\n\n.my-0 {\n  margin-top: 0;\n  margin-bottom: 0;\n}\n\n.mx-auto {\n  margin-left: auto;\n  margin-right: auto;\n}\n\n.mt--m {\n  margin-top: -18px;\n  margin-top: -1.125rem;\n  margin-top: calc(var(--unit-m) * -1);\n}\n\n.my--s {\n  margin-top: -12px;\n  margin-top: -0.75rem;\n  margin-top: calc(var(--unit-s) * -1);\n  margin-bottom: -12px;\n  margin-bottom: -0.75rem;\n  margin-bottom: calc(var(--unit-s) * -1);\n}\n\n.my--xs {\n  margin-top: -6px;\n  margin-top: -0.375rem;\n  margin-top: calc(var(--unit-xs) * -1);\n  margin-bottom: -6px;\n  margin-bottom: -0.375rem;\n  margin-bottom: calc(var(--unit-xs) * -1);\n}\n\n/*\n    Padding\n-------------------------------\n*/\n\n.p {\n  padding: 24px;\n  padding: 1.5rem;\n  padding: var(--unit);\n}\n\n.p-xxs {\n  padding: 3px;\n  padding: 0.1875rem;\n  padding: var(--unit-xxs);\n}\n\n.p-xs {\n  padding: 6px;\n  padding: 0.375rem;\n  padding: var(--unit-xs);\n}\n\n.p-s {\n  padding: 12px;\n  padding: 0.75rem;\n  padding: var(--unit-s);\n}\n\n.p-m {\n  padding: 18px;\n  padding: 1.125rem;\n  padding: var(--unit-m);\n}\n\n.p-l {\n  padding: 36px;\n  padding: 2.25rem;\n  padding: var(--unit-l);\n}\n\n.p-xl {\n  padding: 48px;\n  padding: 3rem;\n  padding: var(--unit-xl);\n}\n\n.p-xxl {\n  padding: 60px;\n  padding: 3.75rem;\n  padding: var(--unit-xxl);\n}\n\n.px {\n  padding-left: 24px;\n  padding-left: 1.5rem;\n  padding-left: var(--unit);\n  padding-right: 24px;\n  padding-right: 1.5rem;\n  padding-right: var(--unit);\n}\n\n.px-xxs {\n  padding-left: 3px;\n  padding-left: 0.1875rem;\n  padding-left: var(--unit-xxs);\n  padding-right: 3px;\n  padding-right: 0.1875rem;\n  padding-right: var(--unit-xxs);\n}\n\n.px-xs {\n  padding-left: 6px;\n  padding-left: 0.375rem;\n  padding-left: var(--unit-xs);\n  padding-right: 6px;\n  padding-right: 0.375rem;\n  padding-right: var(--unit-xs);\n}\n\n.px-s {\n  padding-left: 12px;\n  padding-left: 0.75rem;\n  padding-left: var(--unit-s);\n  padding-right: 12px;\n  padding-right: 0.75rem;\n  padding-right: var(--unit-s);\n}\n\n.px-m {\n  padding-left: 18px;\n  padding-left: 1.125rem;\n  padding-left: var(--unit-m);\n  padding-right: 18px;\n  padding-right: 1.125rem;\n  padding-right: var(--unit-m);\n}\n\n.px-l {\n  padding-left: 36px;\n  padding-left: 2.25rem;\n  padding-left: var(--unit-l);\n  padding-right: 36px;\n  padding-right: 2.25rem;\n  padding-right: var(--unit-l);\n}\n\n.px-xl {\n  padding-left: 48px;\n  padding-left: 3rem;\n  padding-left: var(--unit-xl);\n  padding-right: 48px;\n  padding-right: 3rem;\n  padding-right: var(--unit-xl);\n}\n\n.px-xxl {\n  padding-left: 60px;\n  padding-left: 3.75rem;\n  padding-left: var(--unit-xxl);\n  padding-right: 60px;\n  padding-right: 3.75rem;\n  padding-right: var(--unit-xxl);\n}\n\n.py {\n  padding-top: 24px;\n  padding-top: 1.5rem;\n  padding-top: var(--unit);\n  padding-bottom: 24px;\n  padding-bottom: 1.5rem;\n  padding-bottom: var(--unit);\n}\n\n.py-xxs {\n  padding-top: 3px;\n  padding-top: 0.1875rem;\n  padding-top: var(--unit-xxs);\n  padding-bottom: 3px;\n  padding-bottom: 0.1875rem;\n  padding-bottom: var(--unit-xxs);\n}\n\n.py-xs {\n  padding-top: 6px;\n  padding-top: 0.375rem;\n  padding-top: var(--unit-xs);\n  padding-bottom: 6px;\n  padding-bottom: 0.375rem;\n  padding-bottom: var(--unit-xs);\n}\n\n.py-s {\n  padding-top: 12px;\n  padding-top: 0.75rem;\n  padding-top: var(--unit-s);\n  padding-bottom: 12px;\n  padding-bottom: 0.75rem;\n  padding-bottom: var(--unit-s);\n}\n\n.py-m {\n  padding-top: 18px;\n  padding-top: 1.125rem;\n  padding-top: var(--unit-m);\n  padding-bottom: 18px;\n  padding-bottom: 1.125rem;\n  padding-bottom: var(--unit-m);\n}\n\n.py-l {\n  padding-top: 36px;\n  padding-top: 2.25rem;\n  padding-top: var(--unit-l);\n  padding-bottom: 36px;\n  padding-bottom: 2.25rem;\n  padding-bottom: var(--unit-l);\n}\n\n.py-xl {\n  padding-top: 48px;\n  padding-top: 3rem;\n  padding-top: var(--unit-xl);\n  padding-bottom: 48px;\n  padding-bottom: 3rem;\n  padding-bottom: var(--unit-xl);\n}\n\n.py-xxl {\n  padding-top: 60px;\n  padding-top: 3.75rem;\n  padding-top: var(--unit-xxl);\n  padding-bottom: 60px;\n  padding-bottom: 3.75rem;\n  padding-bottom: var(--unit-xxl);\n}\n\n.pt {\n  padding-top: 24px;\n  padding-top: 1.5rem;\n  padding-top: var(--unit);\n}\n\n.pt-xxs {\n  padding-top: 3px;\n  padding-top: 0.1875rem;\n  padding-top: var(--unit-xxs);\n}\n\n.pt-xs {\n  padding-top: 6px;\n  padding-top: 0.375rem;\n  padding-top: var(--unit-xs);\n}\n\n.pt-s {\n  padding-top: 12px;\n  padding-top: 0.75rem;\n  padding-top: var(--unit-s);\n}\n\n.pt-m {\n  padding-top: 18px;\n  padding-top: 1.125rem;\n  padding-top: var(--unit-m);\n}\n\n.pt-l {\n  padding-top: 36px;\n  padding-top: 2.25rem;\n  padding-top: var(--unit-l);\n}\n\n.pt-xl {\n  padding-top: 48px;\n  padding-top: 3rem;\n  padding-top: var(--unit-xl);\n}\n\n.pt-xxl {\n  padding-top: 60px;\n  padding-top: 3.75rem;\n  padding-top: var(--unit-xxl);\n}\n\n.pb {\n  padding-bottom: 24px;\n  padding-bottom: 1.5rem;\n  padding-bottom: var(--unit);\n}\n\n.pb-xxs {\n  padding-bottom: 3px;\n  padding-bottom: 0.1875rem;\n  padding-bottom: var(--unit-xxs);\n}\n\n.pb-xs {\n  padding-bottom: 6px;\n  padding-bottom: 0.375rem;\n  padding-bottom: var(--unit-xs);\n}\n\n.pb-s {\n  padding-bottom: 12px;\n  padding-bottom: 0.75rem;\n  padding-bottom: var(--unit-s);\n}\n\n.pb-m {\n  padding-bottom: 18px;\n  padding-bottom: 1.125rem;\n  padding-bottom: var(--unit-m);\n}\n\n.pb-l {\n  padding-bottom: 36px;\n  padding-bottom: 2.25rem;\n  padding-bottom: var(--unit-l);\n}\n\n.pb-xl {\n  padding-bottom: 48px;\n  padding-bottom: 3rem;\n  padding-bottom: var(--unit-xl);\n}\n\n.pb-xxl {\n  padding-bottom: 60px;\n  padding-bottom: 3.75rem;\n  padding-bottom: var(--unit-xxl);\n}\n\n/* Ui             ------------------------------- */\n\n/*\n    Colors\n-------------------------------\n*/\n\n.color-bg {\n  color: white;\n  color: var(--color-bg);\n}\n\n.color-highlight {\n  color: #f50;\n  color: var(--color-highlight);\n}\n\n.color-alt {\n  color: #f8f7f3;\n  color: var(--color-alt);\n}\n\n.color-neutral {\n  color: #bcb9af;\n  color: var(--color-neutral);\n}\n\n.color-inverse {\n  color: #3d3d35;\n  color: var(--color-inverse);\n}\n\n.bg-bg {\n  background-color: white;\n  background-color: var(--color-bg);\n}\n\n.bg-highlight {\n  background-color: #f50;\n  background-color: var(--color-highlight);\n}\n\n.bg-alt {\n  background-color: #f8f7f3;\n  background-color: var(--color-alt);\n}\n\n.bg-neutral {\n  background-color: #bcb9af;\n  background-color: var(--color-neutral);\n}\n\n.bg-inverse {\n  background-color: #3d3d35;\n  background-color: var(--color-inverse);\n}\n\n.bg-info {\n  background: #5798aa;\n  background: var(--color-info);\n}\n\n.bg-error {\n  background: #e82239;\n  background: var(--color-error);\n}\n\n.bg-warning {\n  background: #ff891c;\n  background: var(--color-warning);\n}\n\n.bg-success {\n  background: #6ea040;\n  background: var(--color-success);\n}\n\n.bg-bg-alpha {\n  background-color: rgba(255, 255, 255, 0.5);\n  background-color: rgba(255, 255, 255, 0.5);\n}\n\n.bg-alt-alpha {\n  background-color: rgba(248, 247, 243, 0.5);\n  background-color: rgba(248, 247, 243, 0.5);\n}\n\n.border-bg {\n  border-color: white;\n  border-color: var(--color-bg);\n}\n\n/*\n    UI elements\n-------------------------------\n*/\n\n.pill {\n  border-radius: 9999px;\n  border-radius: var(--unit-infinity);\n}\n\n.rnd {\n  border-radius: 0.375rem;\n  border-radius: var(--unit-xs);\n}\n\n.border-bottom {\n  border-bottom: 1px solid;\n  border-bottom: 0.0625rem solid;\n  border-bottom: var(--unit-line) var(--border-style);\n  margin-bottom: 23px;\n  margin-bottom: 1.4375rem;\n  margin-bottom: calc(var(--unit) - var(--unit-line));\n  border-color: #bcb9af;\n  border-color: var(--border-color);\n}\n\n.border {\n  border: 1px solid;\n  border: 0.0625rem solid;\n  border: var(--unit-line) var(--border-style);\n  border-color: #bcb9af;\n  border-color: var(--border-color);\n  padding: 23px\n    23px 24px;\n  padding: 1.4375rem\n    1.4375rem 1.5rem;\n  padding: calc(var(--unit) - var(--unit-line))\n    calc(var(--unit) - var(--unit-line)) var(--unit);\n  margin-bottom: 23px;\n  margin-bottom: 1.4375rem;\n  margin-bottom: calc(var(--unit) - var(--unit-line));\n}\n\n.tooltip {\n  position: relative;\n}\n\n.tooltip span {\n  position: absolute;\n  color: #f8f7f3;\n  color: var(--color-alt);\n  background: #bcb9af;\n  background: var(--color-neutral);\n  text-align: center;\n  border-radius: 0.375rem;\n  border-radius: var(--unit-xs);\n  top: -48px;\n  top: -3rem;\n  top: calc(var(--unit-xl) * -1);\n  right: 0;\n  padding: 6px;\n  padding: 0.375rem;\n  padding: var(--unit-xs);\n  z-index: 999;\n}\n\n.tooltip span:after {\n  content: '';\n  position: absolute;\n  top: 100%;\n  right: 24px;\n  right: 1.5rem;\n  right: var(--unit);\n  border-top: 6px solid #bcb9af;\n  border-top: 0.375rem solid #bcb9af;\n  border-top: var(--unit-xs) solid var(--color-neutral);\n  border-right: 6px solid transparent;\n  border-right: 0.375rem solid transparent;\n  border-right: var(--unit-xs) solid transparent;\n  border-left: 6px solid transparent;\n  border-left: 0.375rem solid transparent;\n  border-left: var(--unit-xs) solid transparent;\n}\n\npre code {\n  display: block;\n}\n\ncode {\n  background-color: #f8f7f3;\n  background-color: var(--color-alt);\n  padding: 6px 12px;\n  padding: 0.375rem 0.75rem;\n  padding: var(--unit-xs) var(--unit-s);\n  border-radius: 0.375rem;\n  border-radius: var(--unit-xs);\n  white-space: pre;\n  -webkit-hyphens: none;\n      -ms-hyphens: none;\n          hyphens: none;\n  word-wrap: break-word;\n}\n\n.icon {\n  width: 100%;\n  height: 100%;\n  display: inline-block;\n  vertical-align: middle;\n  background-size: cover;\n}\n\n.icon-8 {\n  width: 8px;\n  width: 0.5rem;\n  width: calc(var(--base-font-size) / 2);\n  height: 8px;\n  height: 0.5rem;\n  height: calc(var(--base-font-size) / 2);\n  display: inline-block;\n  vertical-align: middle;\n}\n\n.icon-24 {\n  width: 24px;\n  width: 1.5rem;\n  width: var(--unit);\n  height: 24px;\n  height: 1.5rem;\n  height: var(--unit);\n  display: inline-block;\n  vertical-align: middle;\n  background-repeat: no-repeat;\n}\n\n.icon-48 {\n  width: 48px;\n  width: 3rem;\n  width: var(--unit-xl);\n  height: 48px;\n  height: 3rem;\n  height: var(--unit-xl);\n  display: inline-block;\n  vertical-align: middle;\n  background-repeat: no-repeat;\n}\n\n.icon-24-close {\n  background-image: url(\n    \"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%23666' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='1px'%3E %3Cpath class='st0' d='M2 2l20 20m0-20L2 22'/%3E %3C/svg%3E\"\n  );\n}\n\n.btn:hover .icon-24-close {\n  background-image: url(\n    \"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='1px'%3E %3Cpath class='st0' d='M2 2l20 20m0-20L2 22'/%3E %3C/svg%3E\"\n  );\n}\n\n.icon-24-plus {\n  background-image: url(\n    \"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%23666' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='1px'%3E %3Cpath class='st0' d='M1.5 11.5h20m-10 10v-20'/%3E %3C/svg%3E\"\n  );\n}\n\n.btn-alt .icon-24-plus,\n.btn-alt:hover .icon-24-plus,\n.btn:hover .icon-24-plus {\n  background-image: url(\n    \"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='1px'%3E %3Cpath class='st0' d='M1.5 11.5h20m-10 10v-20'/%3E %3C/svg%3E\"\n  );\n}\n\n.btn-alt .icon-24-minus,\n.btn-alt:hover .icon-24-minus {\n  background-image: url(\n    \"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='1px'%3E %3Cpath d='M1.5 11.5h20'/%3E %3C/svg%3E\"\n  );\n}\n\n.btn-menubar .icon-24-dot {\n  background-image: url(\n    \"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='1px'%3E %3Ccircle cx='11.5' cy='11.5' r='6'/%3E %3C/svg%3E\"\n  );\n}\n\n.icon-24-dot.blink {\n  animation: blinker 0.2s ease infinite;\n}\n\n@keyframes blinker {\n  50% {\n    background-image: url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='white'%3E %3Ccircle cx='11.5' cy='11.5' r='6'/%3E %3C/svg%3E\");\n  }\n}\n\n/* .icon-48-close {\n  background-image: svg-load(\n    './icons/48-close.svg',\n    fill=none,\n    stroke=var(--color-highlight),\n    stroke-linecap=round,\n    stroke-linejoin=round,\n    stroke-miterlimit=10,\n    stroke-width=1px\n  );\n}\n\n.btn-icon:hover .icon-48-close {\n  background-image: svg-load(\n    './icons/48-close.svg',\n    stroke=var(--color-bg),\n    stroke-linecap=round,\n    stroke-linejoin=round,\n    stroke-miterlimit=10,\n    stroke-width=1px\n  );\n} */\n\n/* Tools          ------------------------------- */\n\n/* Debug trick -------------------------------\nhttp://qr.ae/ROqymT */\n\n.debug {\n  background-color: rgba(255, 0, 0, 0.2);\n}\n\n.debug * {\n  background-color: rgba(0, 255, 0, 0.2);\n}\n\n.debug * * {\n  background-color: rgba(0, 0, 255, 0.2);\n}\n\n.debug * * * {\n  background-color: rgba(255, 0, 255, 0.2);\n}\n\n.debug * * * * {\n  background-color: rgba(0, 255, 255, 0.2);\n}\n\n.debug * * * * * {\n  background-color: rgba(255, 255, 0, 0.2);\n}\n\n.debug * * * * * * {\n  background-color: rgba(255, 255, 0, 0.2);\n}\n\n.grid {\n  background-size: 20.5rem 0.75rem;\n  background-size: var(--col-width) calc(var(--unit) / 2);\n  background-position: center top;\n  background-image: linear-gradient(\n    rgba(0, 0, 0, 0.05) 0.01rem,\n    transparent 0.09rem\n  ),\n    linear-gradient(90deg, rgba(255, 0, 0, 0.25) 0, transparent 0.25%),\n    linear-gradient(\n    90deg,\n    transparent 50%,\n    rgba(255, 0, 0, 0.25) 50%,\n    transparent 50.25%\n  );\n}\n\n/* Theme          ------------------------------- */\n\n/*\n    Sticky footer\n-------------------------------\nhttp://mystrd.at/modern-clean-css-sticky-footer/\n*/\n\n:root {\n  --footer-height: 0;\n}\n\nhtml {\n  position: relative;\n  height: 100%;\n}\n\nbody {\n  margin: 0 0 0;\n  margin: 0 0 var(--footer-height);\n  height: 100%;\n}\n\nfooter {\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  height: 0;\n  height: var(--footer-height);\n  width: 100%;\n}\n\n#loader-app {\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n}\n\n#loader-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  background-color: white;\n  background-color: var(--color-bg);\n}\n\n#app {\n  overflow: hidden;\n}\n\n/*\n    Theme\n-------------------------------\n*/\n\n:root {\n  --header-height: 48px;\n  --header-height: 3rem;\n  --header-height: calc(var(--unit) * 2);\n}\n\n[v-cloak] {\n  display: none;\n}\n\n.container {\n  padding-left: 24px;\n  padding-left: 1.5rem;\n  padding-left: var(--container-padding);\n  padding-right: 24px;\n  padding-right: 1.5rem;\n  padding-right: var(--container-padding);\n  margin-left: auto;\n  margin-right: auto;\n}\n\n.header {\n  box-shadow: rgba(61, 61, 53, 0.25) 4px 4px 16px;\n  box-shadow: rgba(61, 61, 53, 0.25) 4px 4px 16px;\n}\n\n.menubar-infos {\n  padding-top: 0;\n  padding-bottom: 12px;\n  padding-bottom: 0.75rem;\n  padding-bottom: var(--unit-s);\n}\n\n.btn-menubar,.btn-menubar:visited {\n  cursor: pointer;\n  text-decoration: none;\n  border: none;\n  display: inline-block;\n  color: var(--color-bg);\n  background-color: var(--color-transparent);\n  font-weight: 700;\n  height: 48px;\n  height: 3rem;\n}\n\n.btn-menubar:active,.btn-menubar.active {\n  color: var(--color-inverse);\n  background-color: var(--color-alt);\n}\n\n.btn-menubar:hover,.btn-menubar.active:hover {\n  color: var(--color-bg);\n  background-color: var(--color-highlight);\n}\n\n.btn-menubar:disabled,.btn-menubar:disabled:active,.btn-menubar:disabled:hover,.btn-menubar.disabled,.btn-menubar.disabled:active,.btn-menubar.disabled:hover {\n  opacity: 0.25;\n  cursor: default;\n  color: var(--color-bg);\n  background-color: var(--color-transparent);\n  box-shadow: inset 0 0 0 0 grey;\n}\n\n.page {\n  display: flex;\n  flex-direction: column;\n  height: 100vh;\n}\n\n.main {\n  display: flex;\n  flex-direction: column;\n  flex: 1 1 auto;\n}\n\n.content {\n  overflow-y: scroll;\n  flex: 1 1 auto;\n}\n\n.messages {\n  bottom: 0;\n}\n\nhr.border-bg {\n  border-top: 3px solid white;\n  border-top: 0.1875rem solid white;\n  border-top: var(--unit-xxs) solid var(--color-bg);\n  margin-bottom: 21px;\n  margin-bottom: 1.3125rem;\n  margin-bottom: calc(var(--unit) - var(--unit-xxs));\n  clear: both;\n  margin-left: -36px;\n  margin-left: -2.25rem;\n  margin-left: calc(var(--unit-l) * -1);\n  margin-right: -36px;\n  margin-right: -2.25rem;\n  margin-right: calc(var(--unit-l) * -1);\n}\n\n.dropdown {\n  margin-bottom: 24px;\n  margin-bottom: 1.5rem;\n  margin-bottom: var(--unit);\n  background-color: #f8f7f3;\n  background-color: var(--color-alt);\n}\n\n.menubar-infos {\n  margin-top: 12px;\n  margin-top: 0.75rem;\n  margin-top: var(--unit-s);\n}\n\n.annotation {\n  background-color: rgba(255, 0, 0, 0.5);\n}\n\n.handle {\n  width: 32px;\n  background-color: yellow;\n  cursor: ew-resize;\n}\n\n.handle-right {\n  right: -32px;\n  top: 0;\n  bottom: 0;\n}\n\n.handle-left {\n  left: -32px;\n  top: 0;\n  bottom: 0;\n}\n\n.handle-topleft {\n  top: 0;\n  left: 0;\n  height: 32px;\n}\n\n.handle-bottomright {\n  bottom: 0;\n  right: 0;\n  height: 32px;\n}\n\n.timeline-cursor {\n  left: 50%;\n  transform: translateX(-50%);\n  width: 1px;\n  width: 0.0625rem;\n  width: var(--unit-line);\n  background-color: rgb(0, 162, 255);\n  background-color: var(--color-brand);\n  top: 0;\n  bottom: 0;\n}\n\n@media (min-width: 42.5em) {\n  --header-height: 3rem;\n  --header-height: calc(var(--unit) * 2);\n\n  .container {\n    width: 42.5rem;\n    width: calc(2 * var(--col-width) + var(--gutter));\n  }\n\n  .menubar-infos {\n    padding-top: 1.125rem;\n    padding-top: var(--unit-m);\n    margin-top: 0;\n  }\n\n  .pophover {\n    width: 39.5rem;\n    width: calc(2 * var(--col-width) - var(--gutter));\n    transform: translate(-50%, 0);\n    top: 3rem;\n    top: var(--header-height);\n    left: 50%;\n    right: auto;\n    bottom: auto;\n    z-index: 2;\n    box-shadow: rgba(61, 61, 53, 0.25) 4px 4px 16px;\n    box-shadow: rgba(61, 61, 53, 0.25) 4px 4px 16px;\n  }\n\n  .messages {\n    width: 39.5rem;\n    width: calc(2 * var(--col-width) - var(--gutter));\n  }\n\n  .dropdown {\n    position: absolute;\n    right: 1.5rem;\n    right: var(--gutter);\n    top: 0;\n  }\n}\n\n@media (min-width: 63em) {\n  .container {\n    width: 63rem;\n    width: calc(3 * var(--col-width) + var(--gutter));\n  }\n}\n\n.truncate-demo {\n  height: 48px;\n  height: 3rem;\n  height: var(--unit-xl);\n}\n\n.transition-bottom-enter-active,\n.transition-bottom-leave-active,\n.transition-fade-enter-active,\n.transition-fade-leave-active,\n.transition-top-enter-active,\n.transition-top-leave-active,\n.transition-top-enter-active .pophover,\n.transition-top-leave-active .pophover {\n  transition: all 0.5s;\n}\n\n.transition-bottom-enter,\n.transition-bottom-leave-to {\n  opacity: 0;\n  margin-bottom: -60px;\n  margin-bottom: -3.75rem;\n  margin-bottom: calc(var(--unit-xxl) * -1);\n}\n\n.transition-fade-enter,\n.transition-fade-leave-to {\n  opacity: 0;\n}\n\n.transition-top-enter,\n.transition-top-leave-to {\n  opacity: 0;\n}\n\n.transition-top-enter .pophover,\n.transition-top-leave-to .pophover {\n  margin-top: -60px;\n  margin-top: -3.75rem;\n  margin-top: calc(var(--unit-xxl) * -1);\n}\n\n/* from https://github.com/PrismJS/prism/blob/gh-pages/themes/prism.css */\n\n:not(pre) > code[class*='language-'] {\n  padding: 0.1em;\n  white-space: normal;\n}\n\n.token.comment,\n.token.prolog,\n.token.doctype,\n.token.cdata {\n  color: #bcb9af;\n  color: var(--color-neutral);\n}\n\n.token.punctuation {\n  color: #bcb9af;\n  color: var(--color-neutral);\n}\n\n.namespace {\n  opacity: 0.7;\n}\n\n.token.property,\n.token.tag,\n.token.boolean,\n.token.number,\n.token.constant,\n.token.symbol,\n.token.deleted {\n  color: rgba(212, 67, 74, 1);\n}\n\n.token.selector,\n.token.attr-name,\n.token.string,\n.token.char,\n.token.builtin,\n.token.inserted {\n  color: rgba(57, 119, 191, 1);\n}\n\n.token.operator,\n.token.entity,\n.token.url,\n.language-css .token.string,\n.style .token.string {\n  color: #a67f59;\n  background: hsla(0, 0%, 100%, 0.5);\n}\n\n.token.atrule,\n.token.attr-value,\n.token.keyword {\n  color: rgba(105, 134, 46, 1);\n}\n\n.token.function {\n  color: #dd4a68;\n}\n\n.token.regex,\n.token.important,\n.token.variable {\n  color: #e90;\n}\n\n.token.important,\n.token.bold {\n  font-weight: bold;\n}\n\n.token.italic {\n  font-style: italic;\n}\n\n.token.entity {\n  cursor: help;\n}\n\n.spinner {\n  margin: 25% auto;\n  width: 160px;\n  width: 10rem;\n  text-align: center;\n}\n\n.spinner > div {\n  width: 24px;\n  width: 1.5rem;\n  width: var(--unit);\n  height: 24px;\n  height: 1.5rem;\n  height: var(--unit);\n  background-color: #3d3d35;\n  background-color: var(--color-inverse);\n  border-radius: 100%;\n  display: inline-block;\n  animation: sk-bouncedelay 1.4s infinite ease-in-out both;\n}\n\n.spinner .bounce1 {\n  animation-delay: -0.32s;\n}\n\n.spinner .bounce2 {\n  animation-delay: -0.16s;\n}\n\n@keyframes sk-bouncedelay {\n  0%,\n  80%,\n  100% {\n    transform: scale(0);\n  }\n\n  50% {\n    transform: scale(1);\n  }\n}\n\n.mediacontroller {\n  transition: all 0.3s;\n}\n\n.mediacontroller-button {\n  height: 36px;\n  height: 2.25rem;\n  height: var(--unit-l);\n  width: 48px;\n  width: 3rem;\n  width: var(--unit-xl);\n  padding: 0;\n  line-height: 1;\n  text-align: center;\n  float: left;\n}\n\n.mediacontroller-counter {\n  height: 36px;\n  height: 2.25rem;\n  height: var(--unit-l);\n  padding: 6px 12px;\n  padding: 0.375rem 0.75rem;\n  padding: var(--unit-xs) var(--unit-s);\n  float: left;\n}\n\n.mediacontroller-progress {\n  position: relative;\n  height: 24px;\n  height: 1.5rem;\n  height: var(--unit);\n  background-color: rgba(248, 247, 243, 0.5);\n  background-color: rgba(248, 247, 243, 0.5);\n}\n\n.mediacontroller-progress.loaded {\n  background-color: #f8f7f3;\n  background-color: var(--color-alt);\n  cursor: ew-resize;\n}\n\n.mediacontroller-progress-bar {\n  background: #f50;\n  background: var(--color-highlight);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  top: 0;\n\n  /*transition: width 1s;*/\n}\n";
 styleInject(css);
-
-var config = {
-  title: 'Camomile UI',
-  user: {
-    name: 'root',
-    password: 'roO7p4s5wOrD'
-  },
-  url: 'http://localhost:3000',
-  roles: ['admin', 'user']
-}
 
 var log = {
   simple: function simple (key, value) {
@@ -301,8 +291,24 @@ var messages = {
   mutations: mutations$3
 }
 
-// export default camomile(config.url)
-var api = new Camomile(config.url)
+// Current user
+
+/* Example
+
+{
+  id: 'user-id-hash',
+  name: 'user-name-string',
+  role: 'admin', // user or admin
+  isLogged: false,
+  isAdmin: false,
+  isRoot: false
+  description: { … },
+  groupIds: [
+    'group-id-hash-1',
+    'group-id-hash-2'
+  ]
+}
+*/
 
 var state$5 = {
   id: '',
@@ -316,16 +322,20 @@ var state$5 = {
 };
 
 var actions$3 = {
+  // user login
   login: function login(ref, config) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'userLogin', { root: true });
-    return api
+    return rootState.cml.api
       .login(config.user.name, config.user.password)
       .then(function (r) {
         dispatch('cml/sync/stop', 'userLogin', { root: true });
         commit('cml/popup/close', null, { root: true });
+
+        // Get the user properties
         dispatch('set');
 
         return r.message
@@ -339,14 +349,17 @@ var actions$3 = {
       })
   },
 
+  // Get the user properties
   set: function set(ref) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'userSet', { root: true });
-    return api
+    return rootState.cml.api
       .me()
       .then(function (r) {
+        // Format server response
         var user = {
           id: r.data._id,
           name: r.data.username,
@@ -355,7 +368,10 @@ var actions$3 = {
           groupIds: r.data.groups || []
         };
         dispatch('cml/sync/stop', 'userSet', { root: true });
+        // Commit user
         commit('set', user);
+
+        // Bootstrap app from index.js / set
         dispatch('cml/set', null, { root: true });
 
         return user
@@ -369,16 +385,19 @@ var actions$3 = {
       })
   },
 
+  // User logout
   logout: function logout(ref) {
-    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'userLogout', { root: true });
-    return api
+    return rootState.cml.api
       .logout()
       .then(function (r) {
         dispatch('cml/sync/stop', 'userLogout', { root: true });
+
+        // Reset the app from index.js / reset
         dispatch('cml/reset', null, { root: true });
         commit('cml/popup/close', null, { root: true });
         commit('cml/dropdown/close', null, { root: true });
@@ -396,15 +415,19 @@ var actions$3 = {
 };
 
 var getters$1 = {
+  // Get if the user is admin or belongs to an admin group
   isAdmin: function (state) { return function (ref) {
     var users = ref.users; if ( users === void 0 ) users = {};
     var groups = ref.groups; if ( groups === void 0 ) groups = {};
 
     var isAdmin = users[state.id] === 3;
 
+    // Loop over the groups
     var isInAdminGroup = Object.keys(groups).reduce(function (result, id) {
+      // Check if the group is admin
       var groupIsAdmin = groups[id] === 3;
 
+      // Check if the group
       var userIsInGroup = state.groupIds.reduce(function (isIn, groupId) {
         return isIn || groupId === id
       }, false);
@@ -412,17 +435,21 @@ var getters$1 = {
       return result || (groupIsAdmin && userIsInGroup)
     }, false);
 
+    // Return true if the user is admin or is in an admin group
     return isAdmin || isInAdminGroup
   }; },
 
+  // Check if a user id is the current user
   isCurrentUser: function (state) { return function (userId) {
     return state.id === userId
   }; },
 
+  // Check if the current user is a group
   isInGroup: function (state) { return function (groupId) {
     return state.groupIds.indexOf(groupId) !== -1
   }; },
 
+  // Check the permission level for the current user on a permission object
   permission: function (state) { return function (ref) {
     var users = ref.users; if ( users === void 0 ) users = {};
     var groups = ref.groups; if ( groups === void 0 ) groups = {};
@@ -447,6 +474,7 @@ var getters$1 = {
 };
 
 var mutations$4 = {
+  // Set the current user properties (on log-in)
   set: function set(state, user) {
     state.isLogged = true;
     state.isAdmin = user.role === 'admin';
@@ -458,6 +486,7 @@ var mutations$4 = {
     state.groupIds = user.groupIds;
   },
 
+  // Reset the current user properties (on log-out)
   reset: function reset(state) {
     state.isLogged = false;
     state.isAdmin = false;
@@ -469,10 +498,12 @@ var mutations$4 = {
     state.groupIds = [];
   },
 
+  // Add the current user to a group
   groupAdd: function groupAdd(state, groupId) {
     state.groupIds.push(groupId);
   },
 
+  // Remove the current user from a group
   groupRemove: function groupRemove(state, groupId) {
     state.groupIds = state.groupIds.filter(function (id) { return id !== groupId; });
   }
@@ -486,18 +517,36 @@ var user = {
   mutations: mutations$4
 }
 
+/* Example
+
+list: [{
+  id: 'user-id-hash-1',
+  name: 'user-name-string',
+  role: 'user', // user or admin
+  description: {
+    …
+  },
+  {
+    …
+  }
+}]
+
+*/
+
 var state$6 = {
   list: []
 };
 
 var actions$4 = {
+  // Add a new user
   add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'usersAdd', { root: true });
-    return api
+    return rootState.cml.api
       .createUser(
         element.name,
         element.password,
@@ -508,6 +557,8 @@ var actions$4 = {
         dispatch('cml/sync/stop', 'usersAdd', { root: true });
         var user = userFormat(r.data);
         commit('add', user);
+
+        // Add the new user to every corpus and layers
         commit('cml/corpus/userAdd', user.id, { root: true });
         commit('cml/layers/userAdd', user.id, { root: true });
         dispatch('cml/messages/success', 'User added', { root: true });
@@ -522,6 +573,7 @@ var actions$4 = {
       })
   },
 
+  // Update a user
   update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -529,7 +581,7 @@ var actions$4 = {
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'usersUpdate', { root: true });
-    return api
+    return rootState.cml.api
       .updateUser(element.id, {
         password: element.password,
         role: element.role,
@@ -539,7 +591,10 @@ var actions$4 = {
         dispatch('cml/sync/stop', 'usersUpdate', { root: true });
         var user = userFormat(r.data);
         commit('update', user);
+
+        // If the user is the current user (logged-in)
         if (user.name === rootState.cml.user.name) {
+          // Update the current user
           commit('cml/user/set', user, { root: true });
         }
         dispatch('cml/messages/success', 'User updated', { root: true });
@@ -554,17 +609,21 @@ var actions$4 = {
       })
   },
 
+  // Remove a user
   remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', 'usersRemove', { root: true });
-    return api
+    return rootState.cml.api
       .deleteUser(id)
       .then(function (r) {
         dispatch('cml/sync/stop', 'usersRemove', { root: true });
         commit('remove', id);
+
+        // Remove the user from every corpus and layers
         commit('cml/corpus/userRemove', id, { root: true });
         commit('cml/layers/userRemove', id, { root: true });
         dispatch('cml/messages/success', 'User removed', { root: true });
@@ -579,12 +638,14 @@ var actions$4 = {
       })
   },
 
+  // List all users
   list: function list(ref) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'usersList', { root: true });
-    return api
+    return rootState.cml.api
       .getUsers()
       .then(function (r) {
         dispatch('cml/sync/stop', 'usersList', { root: true });
@@ -603,6 +664,7 @@ var actions$4 = {
 };
 
 var getters$2 = {
+  // Get the permissions for every users from a permissions object
   permissions: function (state) { return function (permissions) {
     return state.list.reduce(
       function (p, user) {
@@ -616,24 +678,29 @@ var getters$2 = {
 };
 
 var mutations$5 = {
+  // Reset users (on log-out)
   reset: function reset(state) {
     Vue.set(state, 'list', []);
   },
 
+  // Add a new user
   add: function add(state, user) {
     state.list.push(user);
   },
 
+  // Update a user in the list
   update: function update(state, user) {
     var index = state.list.findIndex(function (u) { return u.id === user.id; });
     Vue.set(state.list, index, user);
   },
 
+  // Remove a user from the list
   remove: function remove(state, userId) {
     var index = state.list.findIndex(function (u) { return u.id === userId; });
     Vue.delete(state.list, index);
   },
 
+  // Set the user list
   list: function list(state, users) {
     Vue.set(state, 'list', users);
   }
@@ -647,24 +714,46 @@ var users = {
   mutations: mutations$5
 }
 
+// list contains the groups
+
+/* Example
+
+{
+  list: [{
+    id: 'group-id-hash-1',
+    name: 'group-name-1',
+    description: { … },
+    userIds: [
+      'user-id-hash-1',
+      'user-id-hash-2'
+  },
+  { …
+  }]
+}
+
+*/
+
 var state$7 = {
   list: []
 };
 
 var actions$5 = {
+  // Add a new group
   add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'groupsAdd', { root: true });
-    return api
+    return rootState.cml.api
       .createGroup(element.name, element.description)
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsAdd', { root: true });
         var group = groupFormat(r.data);
         commit('add', group);
+
+        // Add the new group to every corpus and layers
         commit('cml/corpus/groupAdd', group.id, { root: true });
         commit('cml/layers/groupAdd', group.id, { root: true });
         dispatch('cml/messages/success', 'Group added', { root: true });
@@ -679,18 +768,20 @@ var actions$5 = {
       })
   },
 
+  // Remove a group
   remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', 'groupsRemove', { root: true });
-    return api
+    return rootState.cml.api
       .deleteGroup(id)
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsRemove', { root: true });
         commit('remove', id);
+        // Add the group from every corpus and layers
         commit('cml/corpus/groupRemove', id, { root: true });
         commit('cml/layers/groupRemove', id, { root: true });
         dispatch('cml/messages/success', 'Group removed', { root: true });
@@ -705,14 +796,15 @@ var actions$5 = {
       })
   },
 
+  // Update a group
   update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'groupsUpdate', { root: true });
-    return api
+    return rootState.cml.api
       .updateGroup(element.id, { description: element.description })
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsUpdate', { root: true });
@@ -730,13 +822,14 @@ var actions$5 = {
       })
   },
 
+  // List groups
   list: function list(ref) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'groupsList', { root: true });
-    return api
+    return rootState.cml.api
       .getGroups()
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsList', { root: true });
@@ -753,16 +846,16 @@ var actions$5 = {
       })
   },
 
+  // Add a user to a group
   userAdd: function userAdd(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
     var rootState = ref.rootState;
     var userId = ref$1.userId;
     var group = ref$1.group;
 
     dispatch('cml/sync/start', 'groupsUserAdd', { root: true });
-    return api
+    return rootState.cml.api
       .addUserToGroup(userId, group.id)
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsUserAdd', { root: true });
@@ -788,16 +881,16 @@ var actions$5 = {
       })
   },
 
+  // remove a user from a group
   userRemove: function userRemove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
     var rootState = ref.rootState;
     var userId = ref$1.userId;
     var group = ref$1.group;
 
     dispatch('cml/sync/start', 'groupsUserRemove', { root: true });
-    return api
+    return rootState.cml.api
       .removeUserFromGroup(userId, group.id)
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsUserRemove', { root: true });
@@ -825,6 +918,8 @@ var actions$5 = {
 };
 
 var getters$3 = {
+  // Get the permissions for every groups
+  // { 'group-id-hash-1': 0, 'group-id-hash-2': 3, … }
   permissions: function (state) { return function (permissions) {
     return state.list.reduce(
       function (p, group) {
@@ -838,24 +933,29 @@ var getters$3 = {
 };
 
 var mutations$6 = {
+  // Reset list (on log-out)
   reset: function reset(state) {
     Vue.set(state, 'list', []);
   },
 
+  // Add a group to the list
   add: function add(state, group) {
     state.list.push(group);
   },
 
+  // Update a group
   update: function update(state, group) {
     var index = state.list.findIndex(function (g) { return g.id === group.id; });
     Vue.set(state.list, index, group);
   },
 
+  // Remove a group
   remove: function remove(state, groupId) {
     var index = state.list.findIndex(function (g) { return g.id === groupId; });
     Vue.delete(state.list, index);
   },
 
+  // Set the group list
   list: function list(state, groups) {
     Vue.set(state, 'list', groups);
   }
@@ -869,12 +969,51 @@ var groups = {
   mutations: mutations$6
 }
 
+// The latin word should be corpus (singular) / corpora (plural), but…
+// For consistency with other sections (users, groups, medias, layers, annotations),
+// I use corpu (singular) / corpus (plural)
+
+// Lists contains the corpu data
+// Actives contains the active corpu for each uid
+
+/* Example:
+
+{
+  lists: {
+    'corpu-uid-string-1': [{
+      id: 'corpu-id-hash',
+      name: 'corpu-name-string'
+      permission: 3,
+      permissions: {
+        groups: {
+          'group-id-hash-1': 2,
+          'group-id-hash-2': …
+        },
+        users: {
+          'user-id-hash-1': 1,
+          'user-id-hash-2': …
+        }
+      }
+    },
+    { …
+    }],
+    'corpu-uid-string-2': [ … 
+    ]
+  },
+  actives: {
+    'corpu-uid-string-1': 'corpu-id-hash-1',
+    'corpu-uid-string-2': …
+  }
+}
+*/
+
 var state$8 = {
   lists: {},
   actives: {}
 };
 
 var actions$6 = {
+  // Add a new corpu
   add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -883,10 +1022,12 @@ var actions$6 = {
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "corpusAdd", { root: true });
-    return api
+    return rootState.cml.api
       .createCorpus(element.name, element.description, {})
       .then(function (r) {
         dispatch('cml/sync/stop', "corpusAdd", { root: true });
+
+        // Format server response
         var corpu = {
           name: r.data.name,
           id: r.data._id,
@@ -897,7 +1038,11 @@ var actions$6 = {
           },
           description: r.data.description || {}
         };
+
+        // Set the permissions for the current user
         corpu.permissions.users[rootState.cml.user.id] = 3;
+
+        // Commit the corpu
         commit('add', { corpu: corpu });
         dispatch('cml/messages/success', 'Corpus added', { root: true });
 
@@ -911,19 +1056,24 @@ var actions$6 = {
       })
   },
 
+  // Remove a corpu
   remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', "corpusRemove", { root: true });
-    return api
+    return rootState.cml.api
       .deleteCorpus(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "corpusRemove", { root: true });
         commit('remove', { id: id });
         dispatch('cml/messages/success', 'Corpus removed', { root: true });
+
+        // For every uid,
+        // If the removed corpus was active
+        // Set a new one
         dispatch('setAll', { id: id });
 
         return id
@@ -936,20 +1086,26 @@ var actions$6 = {
       })
   },
 
+  // Update a corpu
   update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "corpusUpdate", { root: true });
-    return api
+    return rootState.cml.api
       .updateCorpus(element.id, {
         name: element.name,
         description: element.description
       })
       .then(function (r) {
         dispatch('cml/sync/stop', "corpusUpdate", { root: true });
+
+        // Format server response
+        // The server does not send back the permissions,
+        // To keep them, we copy the original element
+        // Then overwrite the name and description
         var corpu = Object.assign({}, element);
         corpu.name = r.data.name;
         corpu.description = r.data.description || {};
@@ -966,6 +1122,7 @@ var actions$6 = {
       })
   },
 
+  // Set the permission for a group on a corpu
   groupPermissionSet: function groupPermissionSet(
     ref,
     ref$1
@@ -973,6 +1130,7 @@ var actions$6 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
     var id = ref$1.id;
     var groupId = ref$1.groupId;
     var permission = ref$1.permission;
@@ -980,26 +1138,33 @@ var actions$6 = {
     dispatch('cml/sync/start', "corpusGroupPermissionSet", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .setCorpusPermissionsForGroup(id, groupId, permission)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "corpusGroupPermissionSet", {
           root: true
         });
-        commit('groupPermissionsUpdate', {
+
+        // Commit server response
+        commit('permissionsUpdate', {
           id: id,
-          groupId: groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0
+          typeId: groupId,
+          permission: (permissions.groups && permissions.groups[groupId]) || 0,
+          type: 'groups'
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
 
+        // If the current user is in the updated group
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the corpus in every uid
           dispatch('listAll');
           commit("cml/popup/close", null, { root: true });
         }
@@ -1017,32 +1182,46 @@ var actions$6 = {
       })
   },
 
-  groupPermissionRemove: function groupPermissionRemove(ref, ref$1) {
+  // Remove a permission for a group on a corpu
+  groupPermissionRemove: function groupPermissionRemove(
+    ref,
+    ref$1
+  ) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
     var id = ref$1.id;
     var groupId = ref$1.groupId;
 
     dispatch('cml/sync/start', "corpusGroupPermissionRemove", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .removeCorpusPermissionsForGroup(id, groupId)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "corpusGroupPermissionRemove", {
           root: true
         });
-        commit('groupPermissionsUpdate', { id: id, groupId: groupId, permission: 0 });
+        commit('permissionsUpdate', {
+          id: id,
+          typeId: groupId,
+          permission: 0,
+          type: 'groups'
+        });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
 
+        // If the current user is in the updated group
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the corpus in every uid
           dispatch('listAll');
           commit("cml/popup/close", null, { root: true });
         }
@@ -1059,6 +1238,7 @@ var actions$6 = {
       })
   },
 
+  // Set the permission for a user on a corpu
   userPermissionSet: function userPermissionSet(
     ref,
     ref$1
@@ -1066,31 +1246,37 @@ var actions$6 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
     var id = ref$1.id;
     var userId = ref$1.userId;
     var permission = ref$1.permission;
 
     dispatch('cml/sync/start', "corpusUserPermissionSet", { root: true });
-    return api
+    return rootState.cml.api
       .setCorpusPermissionsForUser(id, userId, permission)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "corpusUserPermissionSet", {
           root: true
         });
-        commit('userPermissionsUpdate', {
+        commit('permissionsUpdate', {
           id: id,
-          userId: userId,
-          permission: (permissions.users && permissions.users[userId]) || 0
+          typeId: userId,
+          permission: (permissions.users && permissions.users[userId]) || 0,
+          type: 'users'
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
 
+        // If the current user is the updated user
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the corpus in every uid
           dispatch('listAll');
           commit("cml/popup/close", null, { root: true });
         }
@@ -1107,28 +1293,41 @@ var actions$6 = {
       })
   },
 
-  userPermissionRemove: function userPermissionRemove(ref, ref$1) {
+  // Remove the permission for a user on a corpu
+  userPermissionRemove: function userPermissionRemove(
+    ref,
+    ref$1
+  ) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
     var id = ref$1.id;
     var userId = ref$1.userId;
 
     dispatch('cml/sync/start', "corpusUserPermissionRemove", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .removeCorpusPermissionsForUser(id, userId)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "corpusUserPermissionRemove", {
           root: true
         });
-        commit('userPermissionsUpdate', { id: id, userId: userId, permission: 0 });
+        commit('permissionsUpdate', {
+          id: id,
+          typeId: userId,
+          permission: 0,
+          type: 'users'
+        });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
 
+        // If the current user is the updated user
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
@@ -1153,26 +1352,34 @@ var actions$6 = {
     var state = ref.state;
     var dispatch = ref.dispatch;
 
+    // Loop over the corpu lists
     Object.keys(state.lists).forEach(function (uid) {
+      // List the corpus for this uid
       dispatch('list', uid);
     });
   },
 
+  // List the corpus for a uid
   list: function list(ref, uid) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', ("corpusList-" + uid), { root: true });
-    return api
+    return rootState.cml.api
       .getCorpora()
       .then(function (r) {
         dispatch('cml/sync/stop', ("corpusList-" + uid), { root: true });
+
+        // Format server response
         var corpus = r.data.map(function (c) { return ({
           name: c.name,
           id: c._id,
           description: c.description || {},
+          // Get permission for the current user
           permission: rootGetters['cml/user/permission'](c.permissions || {}),
+          // Get permissions for every users and groups
           permissions: {
             users: rootGetters['cml/users/permissions'](
               (c.permissions && c.permissions.users) || {}
@@ -1182,7 +1389,11 @@ var actions$6 = {
             )
           }
         }); });
+
+        // Commit the update corpu list
         commit('list', { corpus: corpus, uid: uid });
+
+        // Set the active corpu for this list
         dispatch('set', { uid: uid });
 
         return corpus
@@ -1195,6 +1406,9 @@ var actions$6 = {
       })
   },
 
+  // For every uid,
+  // If the corpus id was active
+  // And set a new one
   setAll: function setAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
@@ -1207,6 +1421,7 @@ var actions$6 = {
     });
   },
 
+  // Set the active corpus for a uid
   set: function set(ref, ref$1) {
     var state = ref.state;
     var getters = ref.getters;
@@ -1215,10 +1430,13 @@ var actions$6 = {
     var id = ref$1.id;
     var uid = ref$1.uid;
 
+    // Set the active corpus
+    // If the id is note defined, get one
     commit('set', { id: id || getters.id(uid), uid: uid });
 
-    // media needs to be set
-    // before layers/set triggers annotations/lists
+    // If the corpu active is set
+    // - list the medias
+    // - list the layers
     if (state.actives[uid]) {
       dispatch(
         'cml/medias/list',
@@ -1233,6 +1451,7 @@ var actions$6 = {
     }
   },
 
+  // Register a corpu uid
   register: function register(ref, uid) {
     var state = ref.state;
     var commit = ref.commit;
@@ -1242,11 +1461,15 @@ var actions$6 = {
 };
 
 var getters$4 = {
+  // Get the id of the active corpu
+  // If, for this uid, active is set and its id is still in the list
+  // If not, get the first corpu of the list
   id: function (state) { return function (uid) { return (state.actives[uid] &&
       state.lists[uid].find(function (c) { return c.id === state.actives[uid]; }).id) ||
     (state.lists[uid][0] && state.lists[uid][0].id) ||
     null; }; },
 
+  // Get the permission level for the active corpu
   permission: function (state) { return function (uid) {
     var corpu =
       state.lists[uid] &&
@@ -1256,16 +1479,21 @@ var getters$4 = {
 };
 
 var mutations$7 = {
+  // Register a new uid
+  // - lists is an empty array
+  // - actives is null
   register: function register(state, uid) {
     Vue.set(state.lists, uid, []);
     Vue.set(state.actives, uid, null);
   },
 
+  // Reset all (on log-out)
   resetAll: function resetAll(state) {
     Vue.set(state, 'lists', {});
     Vue.set(state, 'actives', {});
   },
 
+  // Add a new corpu in every uids
   add: function add(state, ref) {
     var corpu = ref.corpu;
 
@@ -1275,6 +1503,7 @@ var mutations$7 = {
     });
   },
 
+  // Update a corpu in every uids
   update: function update(state, ref) {
     var corpu = ref.corpu;
 
@@ -1286,6 +1515,7 @@ var mutations$7 = {
     });
   },
 
+  // Remove a corpu in every uids
   remove: function remove(state, ref) {
     var id = ref.id;
 
@@ -1297,6 +1527,7 @@ var mutations$7 = {
     });
   },
 
+  // Add a new group to every corpus
   groupAdd: function groupAdd(state, groupId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
@@ -1305,6 +1536,7 @@ var mutations$7 = {
     });
   },
 
+  // Remove a group from every corpus
   groupRemove: function groupRemove(state, groupId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
@@ -1313,6 +1545,7 @@ var mutations$7 = {
     });
   },
 
+  // Add a user to every corpus
   userAdd: function userAdd(state, userId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
@@ -1321,6 +1554,7 @@ var mutations$7 = {
     });
   },
 
+  // Remove a user from every corpus
   userRemove: function userRemove(state, userId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
@@ -1329,32 +1563,24 @@ var mutations$7 = {
     });
   },
 
-  groupPermissionsUpdate: function groupPermissionsUpdate(state, ref) {
+  // Update permissions on a corpu
+  permissionsUpdate: function permissionsUpdate(state, ref) {
     var id = ref.id;
-    var groupId = ref.groupId;
+    var typeId = ref.typeId;
     var permission = ref.permission;
+    var type = ref.type;
 
+    // Loop over the corpus lists
+    // If the current corpu is in the list, update the permissions
     Object.keys(state.lists).forEach(function (uid) {
       var index = state.lists[uid].findIndex(function (m) { return m.id === id; });
       if (index !== -1) {
-        Vue.set(state.lists[uid][index].permissions.groups, groupId, permission);
+        Vue.set(state.lists[uid][index].permissions[type], typeId, permission);
       }
     });
   },
 
-  userPermissionsUpdate: function userPermissionsUpdate(state, ref) {
-    var id = ref.id;
-    var userId = ref.userId;
-    var permission = ref.permission;
-
-    Object.keys(state.lists).forEach(function (uid) {
-      var index = state.lists[uid].findIndex(function (m) { return m.id === id; });
-      if (index !== -1) {
-        Vue.set(state.lists[uid][index].permissions.users, userId, permission);
-      }
-    });
-  },
-
+  // Set the corpu list for a uid
   list: function list(state, ref) {
     var corpus = ref.corpus;
     var uid = ref.uid;
@@ -1362,6 +1588,7 @@ var mutations$7 = {
     Vue.set(state.lists, uid, corpus);
   },
 
+  // Set the active corpus for a uid
   set: function set(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
@@ -1378,6 +1605,56 @@ var corpus = {
   mutations: mutations$7
 }
 
+// Lists contains, for each corpuUid, an array of media objects
+// Actives contains, for each mediaUid, a media id and a reference to the corpuUid
+// Properties contains, for each mediaUid, the properties of the current media
+
+/* Example
+
+{
+  lists {
+    'copu-uid-string-1': [{
+      id: 'media-id-hash-1',
+      name: 'media-name-string',
+      url: 'http://media-string.url',
+      corpuId: 'corpu-id-hash-1',
+      description: {
+        type: 'media-type-string',
+        …
+      }
+    }, {
+      …
+    }],
+    'corpu-uid-string-2: [
+      …
+    ]
+  },
+  actives: {
+    'media-uid-string-1': {
+      id: 'media-id-hash-1',
+      corpuUid: 'corpu-uid-string'
+    },
+    'media-uid-string-2': {
+      …
+    }
+  },
+  porperties: {
+    'media-uid-string-1': {
+      isLoaded: boolean,
+      isPlaying: boolean,
+      timecurrent: Number,
+      timeTotal: number,
+      seek: {
+        seeking: Boolean
+      }
+    }, 
+    'media-uid-string-2': {
+      …
+    }
+  }
+}
+*/
+
 var state$9 = {
   lists: {},
   actives: {},
@@ -1390,11 +1667,12 @@ var actions$7 = {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "mediasAdd", { root: true });
-    return api
+    return rootState.cml.api
       .createMedium(
         element.corpuId,
         element.name,
@@ -1433,23 +1711,31 @@ var actions$7 = {
       })
   },
 
+  // Remove a media
   remove: function remove(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', "mediasRemove", { root: true });
-    return api
+    return rootState.cml.api
       .deleteMedium(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "mediasRemove", { root: true });
+
+        // Loop over the corpuUid
         Object.keys(state.lists).forEach(function (corpuUid) {
+          // If the media belongs to this corpuuid
           var listIndex = state.lists[corpuUid].findIndex(function (m) { return m.id === id; });
           if (listIndex !== -1) {
+            // Remove the media from the list
             commit('remove', { listIndex: listIndex, corpuUid: corpuUid });
           }
         });
+
+        // Re-set a new media in every mediaUid where it is active
         dispatch('unsetAll', { id: id });
         dispatch('cml/messages/success', 'Medium removed', { root: true });
 
@@ -1463,15 +1749,17 @@ var actions$7 = {
       })
   },
 
+  // Update a media
   update: function update(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "mediasUpdate", { root: true });
-    return api
+    return rootState.cml.api
       .updateMedium(element.id, {
         name: element.name,
         description: element.description,
@@ -1483,8 +1771,12 @@ var actions$7 = {
         media.name = r.data.name;
         media.url = r.data.url;
         media.description = r.data.description || {};
+
+        // Loop over the corpuUid
         Object.keys(state.lists).forEach(function (corpuUid) {
+          // If the corpu active in this corpuUid equals the media's corpuUid
           if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            // update the media
             commit('update', { media: media, corpuUid: corpuUid });
           }
         });
@@ -1504,11 +1796,12 @@ var actions$7 = {
   list: function list(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var rootState = ref.rootState;
     var corpuId = ref$1.corpuId;
     var corpuUid = ref$1.corpuUid;
 
     dispatch('cml/sync/start', ("mediasList-" + corpuUid), { root: true });
-    return api
+    return rootState.cml.api
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(function (r) {
         dispatch('cml/sync/stop', ("mediasList-" + corpuUid), { root: true });
@@ -1519,7 +1812,6 @@ var actions$7 = {
 
         // Commit media list
         commit('list', { medias: medias, corpuUid: corpuUid });
-        console.log('rrr', r);
 
         // Loop over the active medias
         Object.keys(state$9.actives).forEach(function (uid) {
@@ -1540,8 +1832,8 @@ var actions$7 = {
       })
   },
 
+  // Register a mediaUid in a corpuUid
   register: function register(ref, ref$1) {
-    var state = ref.state;
     var commit = ref.commit;
     var uid = ref$1.uid;
     var corpuUid = ref$1.corpuUid;
@@ -1549,13 +1841,17 @@ var actions$7 = {
     commit('register', { uid: uid, corpuUid: corpuUid });
   },
 
+  // Re-set a new media in every mediaUid where it is active
   unsetAll: function unsetAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var id = ref$1.id;
 
+    // loop over the mediaUids
     Object.keys(state.actives).forEach(function (uid) {
+      // If the media is active in this mediaUid
       if (state.actives[uid].id === id) {
+        // Set a new active media
         dispatch('set', { corpuUid: state.actives[uid].corpuUid, uid: uid });
       }
     });
@@ -1589,6 +1885,7 @@ var actions$7 = {
     );
   },
 
+  // Play the media in a mediaUid
   play: function play(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -1604,6 +1901,7 @@ var actions$7 = {
     commit('play', { uid: uid });
   },
 
+  // Pause a media in a mediaUid
   pause: function pause(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -1613,6 +1911,7 @@ var actions$7 = {
     commit('pause', { uid: uid });
   },
 
+  // Wait the media while buffering, in a mediaUid
   buffering: function buffering(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -1621,6 +1920,7 @@ var actions$7 = {
     clearInterval(state.properties[uid].interval);
   },
 
+  // Stop a media in a mediaUid
   stop: function stop(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -1636,6 +1936,7 @@ var actions$7 = {
     });
   },
 
+  // Seek a media in a mediaUid
   seek: function seek(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -1696,6 +1997,7 @@ var getters$5 = {
 };
 
 var mutations$8 = {
+  // Register a mediaUid in a corpuUid
   register: function register(state, ref) {
     var uid = ref.uid;
     var corpuUid = ref.corpuUid;
@@ -1704,12 +2006,14 @@ var mutations$8 = {
     Vue.set(state.properties, uid, null);
   },
 
+  // Reset all (on log-out)
   resetAll: function resetAll(state) {
     Vue.set(state, 'lists', {});
     Vue.set(state, 'actives', {});
     Vue.set(state, 'properties', {});
   },
 
+  // Add a new media in a corpuuid
   add: function add(state, ref) {
     var media = ref.media;
     var corpuUid = ref.corpuUid;
@@ -1718,6 +2022,7 @@ var mutations$8 = {
     Vue.set(state.lists[corpuUid], index, media);
   },
 
+  // Update a media in a corpuuid
   update: function update(state, ref) {
     var media = ref.media;
     var corpuUid = ref.corpuUid;
@@ -1726,6 +2031,7 @@ var mutations$8 = {
     Vue.set(state.lists[corpuUid], index, media);
   },
 
+  // Remove a media from a corpuUid
   remove: function remove(state, ref) {
     var listIndex = ref.listIndex;
     var corpuUid = ref.corpuUid;
@@ -1733,6 +2039,7 @@ var mutations$8 = {
     Vue.delete(state.lists[corpuUid], listIndex);
   },
 
+  // List medias in a corpuUid
   list: function list(state, ref) {
     var medias = ref.medias;
     var corpuUid = ref.corpuUid;
@@ -1740,6 +2047,7 @@ var mutations$8 = {
     Vue.set(state.lists, corpuUid, medias);
   },
 
+  // Set the active media in a mediaUid
   set: function set(state, ref) {
     var id = ref.id;
     var corpuUid = ref.corpuUid;
@@ -1755,6 +2063,7 @@ var mutations$8 = {
     });
   },
 
+  // Set the isLoaded property for a mediaUid
   loaded: function loaded(state, ref) {
     var isLoaded = ref.isLoaded;
     var uid = ref.uid;
@@ -1762,18 +2071,21 @@ var mutations$8 = {
     Vue.set(state.properties[uid], 'isLoaded', isLoaded);
   },
 
+  // Set the isplaying property to true in a mediauid
   play: function play(state, ref) {
     var uid = ref.uid;
 
     Vue.set(state.properties[uid], 'isPlaying', true);
   },
 
+  // Set the isplaying property to false in a mediauid
   pause: function pause(state, ref) {
     var uid = ref.uid;
 
     Vue.set(state.properties[uid], 'isPlaying', false);
   },
 
+  // Set the timetotal property in a mediaUid
   timeTotal: function timeTotal(state, ref) {
     var time = ref.time;
     var uid = ref.uid;
@@ -1781,6 +2093,7 @@ var mutations$8 = {
     Vue.set(state.properties[uid], 'timeTotal', time);
   },
 
+  // Set the seek property in a mediauid
   seek: function seek(state, ref) {
     var options = ref.options;
     var uid = ref.uid;
@@ -1797,12 +2110,58 @@ var medias = {
   mutations: mutations$8
 }
 
+// Lists contains, for each corpuUid, an array of layers
+// Actives contains, for each layersUid, a reference to the corpuUid and a list of layer Ids
+
+/* Example 
+
+{
+  lists: {
+    'corpu-uid-string-1': [{
+      id: 'layer-id-hash-1',
+      name: 'layer-two',
+      permission: 3,
+      permissions: {
+        groups: {
+          'group-id-hash-1': 0,
+          …
+        },
+        users: {
+          'user-id-hash-1': 0,
+          …
+        }
+      },
+      description: { … },
+      fragmentType: { … },
+      metadataType: { … }
+    }],
+    'corpu-uid-string-2': [ 
+      …
+    ]
+  },
+  actives: {
+    'layers-uid-string-1': {
+      corpuUid: 'corpu-uid-string-1',
+      ids: [
+        'layer-id-hash-1',
+        'layer-id-hash-2',
+        …
+      ]
+    },
+    'layers-uid-string-2': {
+      …
+    }
+  }
+}
+*/
+
 var state$10 = {
   lists: {},
   actives: {}
 };
 
 var actions$8 = {
+  // Add a new layer
   add: function add(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -1812,7 +2171,7 @@ var actions$8 = {
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "layersAdd", { root: true });
-    return api
+    return rootState.cml.api
       .createLayer(
         element.corpuId,
         element.name,
@@ -1823,10 +2182,14 @@ var actions$8 = {
       )
       .then(function (r) {
         dispatch('cml/sync/stop', "layersAdd", { root: true });
+
+        // Format server response
         var layer = {
           name: r.data.name,
           id: r.data._id,
+          // The current user who created the layer has max permission level (3)
           permission: 3,
+          // Init permissions for groups and users
           permissions: {
             users: rootGetters['cml/users/permissions']({}),
             groups: rootGetters['cml/groups/permissions']({})
@@ -1836,14 +2199,23 @@ var actions$8 = {
           metadataType: r.data.data_type || {},
           annotations: r.data.annotations
         };
+
+        // Set permissions for the current user
         layer.permissions.users[rootState.cml.user.id] = 3;
 
+        // Loop over the corpu Uids
         Object.keys(state.lists).forEach(function (corpuUid) {
+          // If the new layer belongs to the active corpu in this Uid
           if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            // Add the layer to the corpus
             commit('add', { layer: layer, corpuUid: corpuUid });
           }
+
+          // Loop over the layers uids
           Object.keys(state.actives).forEach(function (uid) {
+            // If this layers uid's belongs to the current corpuUid
             if (state.actives[uid].corpuUid === corpuUid) {
+              // Activate the new layer
               dispatch('set', { uid: uid, id: layer.id });
             }
           });
@@ -1860,6 +2232,7 @@ var actions$8 = {
       })
   },
 
+  // Remove a layer
   remove: function remove(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -1868,18 +2241,28 @@ var actions$8 = {
     var id = ref$1.id;
 
     dispatch('cml/sync/start', "layersRemove", { root: true });
-    return api
+    return rootState.cml.api
       .deleteLayer(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "layersRemove", { root: true });
+
+        // Loop over the corpuUids
+        // If the layer belongs to this corpuUid, remove the layer
         Object.keys(state.lists).forEach(function (corpuUid) {
-          commit('remove', { id: id, corpuUid: corpuUid });
+          var listIndex = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
+          if (listIndex !== -1) {
+            commit('remove', { listIndex: listIndex, corpuUid: corpuUid });
+          }
         });
+
+        // Loop over the layers uids
+        // If the layer is active, unset it
         Object.keys(state.actives).forEach(function (uid) {
           if (state.actives[uid].ids.findIndex(function (l) { return l.id === id; }) !== -1) {
             dispatch('unset', { id: id, uid: uid });
           }
         });
+
         dispatch('cml/messages/success', 'Layer removed', { root: true });
 
         return id
@@ -1892,15 +2275,17 @@ var actions$8 = {
       })
   },
 
+  // Update a layer
   update: function update(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "layersUpdate", { root: true });
-    return api
+    return rootState.cml.api
       .updateLayer(element.id, {
         name: element.name,
         description: element.description,
@@ -1909,13 +2294,20 @@ var actions$8 = {
       })
       .then(function (r) {
         dispatch('cml/sync/stop', "layersUpdate", { root: true });
+
+        // The server response does not contain the permissions
+        // Copy the original element to keep the permissions
+        // Overwrite properties with the server response
         var layer = Object.assign({}, element);
         layer.description = r.data.description || {};
         layer.fragmentType = r.data.fragment_type || {};
         layer.metadataType = r.data.data_type || {};
 
+        // Loop over the corpuUid
         Object.keys(state.lists).forEach(function (corpuUid) {
+          // If the element's corpuUid equals this corpuuid
           if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            // Update the layer
             commit('update', { layer: layer, corpuUid: corpuUid });
           }
         });
@@ -1931,6 +2323,7 @@ var actions$8 = {
       })
   },
 
+  // Set the permission for a group on a layer
   groupPermissionSet: function groupPermissionSet(
     ref,
     ref$1
@@ -1946,26 +2339,31 @@ var actions$8 = {
     dispatch('cml/sync/start', "layersGroupPermissionSet", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .setLayerPermissionsForGroup(id, groupId, permission)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "layersGroupPermissionSet", {
           root: true
         });
-        commit('groupPermissionsUpdate', {
+        commit('permissionsUpdate', {
           id: id,
-          groupId: groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0
+          typeId: groupId,
+          permission: (permissions.groups && permissions.groups[groupId]) || 0,
+          type: 'groups'
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
 
+        // If the current user is in the updated group
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the layers in every corpuUids
           dispatch('listAll');
           commit('cml/popup/close', null, { root: true });
         }
@@ -1982,6 +2380,7 @@ var actions$8 = {
       })
   },
 
+  // Remove permission for a group on a layer
   groupPermissionRemove: function groupPermissionRemove(
     ref,
     ref$1
@@ -1996,22 +2395,31 @@ var actions$8 = {
     dispatch('cml/sync/start', "layersGroupPermissionRemove", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .removeLayerPermissionsForGroup(id, groupId)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "layersGroupPermissionRemove", {
           root: true
         });
-        commit('groupPermissionsUpdate', { id: id, groupId: groupId, permission: 0 });
+        commit('permissionsUpdate', {
+          id: id,
+          typeId: groupId,
+          permission: 0,
+          type: 'groups'
+        });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
 
+        // If the current user is in the updated group
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the layers in every corpuUids
           dispatch('listAll');
           commit('cml/popup/close', null, { root: true });
         }
@@ -2028,6 +2436,7 @@ var actions$8 = {
       })
   },
 
+  // Set the permission for a user on a layer
   userPermissionSet: function userPermissionSet(
     ref,
     ref$1
@@ -2041,26 +2450,31 @@ var actions$8 = {
     var permission = ref$1.permission;
 
     dispatch('cml/sync/start', "layersUserPermissionSet", { root: true });
-    return api
+    return rootState.cml.api
       .setLayerPermissionsForUser(id, userId, permission)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "layersUserPermissionSet", {
           root: true
         });
-        commit('userPermissionsUpdate', {
+        commit('permissionsUpdate', {
           id: id,
-          userId: userId,
-          permission: (permissions.users && permissions.users[userId]) || 0
+          typeId: userId,
+          permission: (permissions.users && permissions.users[userId]) || 0,
+          type: 'users'
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
 
+        // If the current user was updated
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the layers in every corpuUids
           dispatch('listAll');
           commit('cml/popup/close', null, { root: true });
         }
@@ -2077,6 +2491,7 @@ var actions$8 = {
       })
   },
 
+  // Remove the permission for a user on a layer
   userPermissionRemove: function userPermissionRemove(
     ref,
     ref$1
@@ -2091,22 +2506,31 @@ var actions$8 = {
     dispatch('cml/sync/start', "layersUserPermissionRemove", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .removeLayerPermissionsForUser(id, userId)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "layersUserPermissionRemove", {
           root: true
         });
-        commit('userPermissionsUpdate', { id: id, userId: userId, permission: 0 });
+        commit('permissionsUpdate', {
+          id: id,
+          typeId: userId,
+          permission: 0,
+          type: 'users'
+        });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
 
+        // If the current user was updated
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the layers in every corpuUids
           dispatch('listAll');
           commit('cml/popup/close', null, { root: true });
         }
@@ -2123,6 +2547,7 @@ var actions$8 = {
       })
   },
 
+  // List the layers for every corpuUids
   listAll: function listAll(ref) {
     var state = ref.state;
     var dispatch = ref.dispatch;
@@ -2136,18 +2561,22 @@ var actions$8 = {
     });
   },
 
+  // List the layers for a corpuUid
   list: function list(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var corpuId = ref$1.corpuId;
     var corpuUid = ref$1.corpuUid;
 
     dispatch('cml/sync/start', ("layersList-" + corpuUid), { root: true });
-    return api
+    return rootState.cml.api
       .getLayers({ filter: { id_corpus: corpuId } })
       .then(function (r) {
         dispatch('cml/sync/stop', ("layersList-" + corpuUid), { root: true });
+
+        // Format server response
         var layers = r.data.map(function (l) { return ({
           name: l.name,
           id: l._id,
@@ -2166,7 +2595,10 @@ var actions$8 = {
           annotations: l.annotations || []
         }); });
 
+        // Commit list to a corpuUid
         commit('list', { layers: layers, corpuUid: corpuUid });
+
+        // Activate every layers in the list
         dispatch('setAll', { corpuUid: corpuUid });
 
         return layers
@@ -2179,19 +2611,24 @@ var actions$8 = {
       })
   },
 
+  // Activate every layers in a corpuUid
   setAll: function setAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var corpuUid = ref$1.corpuUid;
 
+    // Loop over every layers uids
     Object.keys(state.actives).forEach(function (uid) {
+      // Loop over every layers in a corpuUid
       state.lists[corpuUid].forEach(function (l) {
+        // Activate the layer
         dispatch('set', { id: l.id, corpuUid: corpuUid, uid: uid });
       });
     });
   },
 
+  // Activate a layer in a layers uid
   set: function set(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
@@ -2206,6 +2643,7 @@ var actions$8 = {
     );
   },
 
+  // Deactivate a layer in a layers uid
   unset: function unset(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
@@ -2220,6 +2658,7 @@ var actions$8 = {
     );
   },
 
+  // Register a layers uid
   register: function register(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -2231,10 +2670,12 @@ var actions$8 = {
 };
 
 var getters$6 = {
+  // Get the active layer ids
   activeIds: function (state) { return function (uid) {
     return (state.actives[uid] && state.actives[uid].ids) || []
   }; },
 
+  // Get the active layer objects
   actives: function (state) { return function (uid) {
     var actives = state.actives[uid];
     var layers = state.lists[actives.corpuUid];
@@ -2245,6 +2686,7 @@ var getters$6 = {
 };
 
 var mutations$9 = {
+  // register a layers uid
   register: function register(state, ref) {
     var uid = ref.uid;
     var corpuUid = ref.corpuUid;
@@ -2252,11 +2694,13 @@ var mutations$9 = {
     Vue.set(state.actives, uid, { corpuUid: corpuUid, ids: [] });
   },
 
+  // Reset all layers (on log-out)
   resetAll: function resetAll(state) {
     Vue.set(state, 'lists', {});
     Vue.set(state, 'actives', {});
   },
 
+  // Add a layer in a corpuUid
   add: function add(state, ref) {
     var layer = ref.layer;
     var corpuUid = ref.corpuUid;
@@ -2265,23 +2709,15 @@ var mutations$9 = {
     Vue.set(state.lists[corpuUid], index, layer);
   },
 
+  // Remove a layer in a corpuUid
   remove: function remove(state, ref) {
-    var id = ref.id;
+    var listIndex = ref.listIndex;
     var corpuUid = ref.corpuUid;
 
-    var listIndex = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
-    if (listIndex !== -1) {
-      Vue.delete(state.lists[corpuUid], listIndex);
-    }
-
-    Object.keys(state.actives).forEach(function (uid) {
-      var activeIndex = state.actives[uid].ids.indexOf(id);
-      if (activeIndex !== -1) {
-        Vue.delete(state.actives[uid], activeIndex);
-      }
-    });
+    Vue.delete(state.lists[corpuUid], listIndex);
   },
 
+  // Update a layer in a corpuUid
   update: function update(state, ref) {
     var layer = ref.layer;
     var corpuUid = ref.corpuUid;
@@ -2290,6 +2726,7 @@ var mutations$9 = {
     Vue.set(state.lists[corpuUid], index, layer);
   },
 
+  // Add a group to every layers in every corpuUid
   groupAdd: function groupAdd(state, groupId) {
     Object.keys(state.lists).forEach(function (corpuUid) {
       state.lists[corpuUid].forEach(function (e) {
@@ -2298,6 +2735,7 @@ var mutations$9 = {
     });
   },
 
+  // Remove a group from every layers in every corpuUid
   groupRemove: function groupRemove(state, groupId) {
     Object.keys(state.lists).forEach(function (corpuUid) {
       state.lists[corpuUid].forEach(function (e) {
@@ -2306,6 +2744,7 @@ var mutations$9 = {
     });
   },
 
+  // Add a user to every layers in every corpuUid
   userAdd: function userAdd(state, userId) {
     Object.keys(state.lists).forEach(function (corpuUid) {
       state.lists[corpuUid].forEach(function (e) {
@@ -2314,6 +2753,7 @@ var mutations$9 = {
     });
   },
 
+  // Remove a user from every layers in every corpuUid
   userRemove: function userRemove(state, userId) {
     Object.keys(state.lists).forEach(function (corpuUid) {
       state.lists[corpuUid].forEach(function (e) {
@@ -2322,34 +2762,19 @@ var mutations$9 = {
     });
   },
 
-  groupPermissionsUpdate: function groupPermissionsUpdate(state, ref) {
+  // Update permissions on a layer in every corpuUid
+  permissionsUpdate: function permissionsUpdate(state, ref) {
     var id = ref.id;
-    var groupId = ref.groupId;
+    var typeId = ref.typeId;
     var permission = ref.permission;
+    var type = ref.type;
 
     Object.keys(state.lists).forEach(function (corpuUid) {
       var index = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
       if (index !== -1) {
         Vue.set(
-          state.lists[corpuUid][index].permissions.groups,
-          groupId,
-          permission
-        );
-      }
-    });
-  },
-
-  userPermissionsUpdate: function userPermissionsUpdate(state, ref) {
-    var id = ref.id;
-    var userId = ref.userId;
-    var permission = ref.permission;
-
-    Object.keys(state.lists).forEach(function (corpuUid) {
-      var index = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
-      if (index !== -1) {
-        Vue.set(
-          state.lists[corpuUid][index].permissions.users,
-          userId,
+          state.lists[corpuUid][index].permissions[type],
+          typeId,
           permission
         );
       }
@@ -2389,19 +2814,61 @@ var layers = {
   mutations: mutations$9
 }
 
+// Lists contains the annotations data
+// Actives contains the currently activated annotations
+
+/* 
+Example: 
+
+{
+  lists: {
+    'annotations-uid-string-1': {
+      layerUid: 'layer-uid-string',
+      mediaUid: 'media-uid-string',
+      // The lists of annotations organised by layers
+      layers: {
+        'layer-id-hash-1': [{
+          id: 'annotation-id-hash',
+          layerId: 'layer-id-hash',
+          mediaId: 'media-id-hash',
+          fragment: {
+            positions: [ … ],
+            time: { … }
+          },
+          metadata: {
+            label: 'lulu'
+          }
+        },
+        { …
+        }],
+        'layer-id-hash-2': [ …
+        ]
+      }
+    },
+    'annotations-uid-string-2': { …
+    }
+  },
+  actives: {
+    'annotations-uid-string-1': 'annotation-id-hash',
+    'annotations-uid-string-2': null // no annotation is activated for this uid
+  }
+}
+*/
 var state$11 = {
   lists: {},
   actives: {}
 };
 
 var actions$9 = {
+  // Add a new annotation
   add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "annotationsAdd", { root: true });
-    return api
+    return rootState.cml.api
       .createAnnotation(
         element.layerId,
         element.mediaId || null,
@@ -2410,6 +2877,8 @@ var actions$9 = {
       )
       .then(function (r) {
         dispatch('cml/sync/stop', "annotationsAdd", { root: true });
+
+        // Format server response
         var annotation = {
           id: r.data._id,
           fragment: r.data.fragment || {},
@@ -2417,6 +2886,8 @@ var actions$9 = {
           layerId: r.data.id_layer,
           mediaId: r.data.id_medium || null
         };
+
+        // Commit response
         commit('add', { annotation: annotation, layerId: element.layerId });
         dispatch('cml/messages/success', 'Annotation added', { root: true });
 
@@ -2430,13 +2901,15 @@ var actions$9 = {
       })
   },
 
+  // Remove an annotation
   remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', "annotationsRemove", { root: true });
-    return api
+    return rootState.cml.api
       .deleteAnnotation(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "annotationsRemove", { root: true });
@@ -2453,22 +2926,28 @@ var actions$9 = {
       })
   },
 
+  // Update an annotation
   update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "annotationsUpdate", { root: true });
-    return api
+    return rootState.cml.api
       .updateAnnotation(element.id, {
         fragment: element.fragment,
         data: element.metadata
       })
       .then(function (r) {
+        dispatch('cml/sync/stop', "annotationsUpdate", { root: true });
+
+        // Format server response
         var annotation = Object.assign({}, element);
         annotation.fragment = r.data.fragment || {};
         annotation.metadata = r.data.data || {};
-        dispatch('cml/sync/stop', "annotationsUpdate", { root: true });
+
+        // Commit response
         commit('update', { annotation: annotation, layerId: element.layerId });
         dispatch('cml/messages/success', 'Annotation updated', { root: true });
 
@@ -2482,6 +2961,7 @@ var actions$9 = {
       })
   },
 
+  // Activate the annotations for a layerId in a layersUid group
   layerSet: function layerSet(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
@@ -2489,21 +2969,29 @@ var actions$9 = {
     var layersUid = ref$1.layersUid;
     var layerId = ref$1.layerId;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
+      var mediaUid = state.lists[uid].mediaUid;
+
+      // If the current list's layersUid equals layersUid
+      // And if the current list's mediaUid is active
       if (
         state.lists[uid].layersUid === layersUid &&
-        rootState.cml.medias.actives[state.lists[uid].mediaUid]
+        rootState.cml.medias.actives[mediaUid]
       ) {
+        // Get the annotation list
         dispatch('list', {
           uid: uid,
           layerId: layerId,
           layersUid: layersUid,
-          mediaId: rootState.cml.medias.actives[state.lists[uid].mediaUid].id
+          mediaId: rootState.cml.medias.actives[mediaUid].id
         });
       }
     });
   },
 
+  // When a layer is deactivated,
+  // deactivate the annotations for this layerId in this layersUid group
   layerUnset: function layerUnset(ref, ref$1) {
     var commit = ref.commit;
     var layersUid = ref$1.layersUid;
@@ -2512,6 +3000,8 @@ var actions$9 = {
     commit('reset', { layersUid: layersUid, layerId: layerId });
   },
 
+  // When the active media changes,
+  // display the related annotations
   mediaSet: function mediaSet(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
@@ -2519,16 +3009,23 @@ var actions$9 = {
     var mediaUid = ref$1.mediaUid;
     var mediaId = ref$1.mediaId;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
+      var list = state.lists[uid];
+
+      // If the current list's mediaUid equals mediaUid
+      // And if the current list's LayersUid is active
       if (
-        state.lists[uid].mediaUid === mediaUid &&
-        rootState.cml.layers.actives[state.lists[uid].layersUid]
+        list.mediaUid === mediaUid &&
+        rootState.cml.layers.actives[list.layersUid]
       ) {
-        Object.keys(state.lists[uid].layers).forEach(function (layerId) {
+        // Loop over the layers
+        Object.keys(list.layers).forEach(function (layerId) {
+          // Get the annotation list
           dispatch('list', {
             uid: uid,
             layerId: layerId,
-            layersUid: state.lists[uid].layersUid,
+            layersUid: list.layersUid,
             mediaId: mediaId
           });
         });
@@ -2536,17 +3033,22 @@ var actions$9 = {
     });
   },
 
-  list: function list(ref, ref$1) {
+  // List the annotations
+  list: function list(
+    ref,
+    ref$1
+  ) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var rootState = ref.rootState;
     var uid = ref$1.uid;
     var layerId = ref$1.layerId;
     var layersUid = ref$1.layersUid;
     var mediaId = ref$1.mediaId;
 
     dispatch('cml/sync/start', ("annotationsList-" + uid), { root: true });
-    return api
+    return rootState.cml.api
       .getAnnotations({
         filter: {
           id_layer: layerId,
@@ -2557,6 +3059,8 @@ var actions$9 = {
         dispatch('cml/sync/stop', ("annotationsList-" + uid), {
           root: true
         });
+
+        // Format server response
         var annotations = r.data.map(function (a) { return ({
           id: a._id,
           fragment: a.fragment || {},
@@ -2564,8 +3068,9 @@ var actions$9 = {
           layerId: a.id_layer,
           mediaId: a.id_medium || null
         }); });
+
+        // Commit response
         commit('list', { annotations: annotations, uid: uid, layerId: layerId, layersUid: layersUid });
-        // commit('reset', { layerId, layersUid })
 
         return annotations
       })
@@ -2590,8 +3095,10 @@ var actions$9 = {
 };
 
 var getters$7 = {
-  actives: function (state) { return function (uid) { return (state.lists[uid] && state.lists[uid].layers) || {}; }; },
+  // Get the lists of annotations
+  lists: function (state) { return function (uid) { return (state.lists[uid] && state.lists[uid].layers) || {}; }; },
 
+  // Get the lists of annotations, filtered
   filter: function (state) { return function (uid, filter) { return state.lists[uid] &&
     Object.keys(state.lists[uid].layers).reduce(
       function (res, layer) {
@@ -2604,41 +3111,53 @@ var getters$7 = {
 };
 
 var mutations$10 = {
+  // Register an annotation list by uid
   register: function register(state, ref) {
     var uid = ref.uid;
     var mediaUid = ref.mediaUid;
     var layersUid = ref.layersUid;
 
+    // Create an uid entry in state.actives
     Vue.set(state.actives, uid, null);
+
+    // Create an uid entry in state.lists,
+    // with value { mediaUid, LayersUid, layers: {}}
     Vue.set(state.lists, uid, { mediaUid: mediaUid, layersUid: layersUid, layers: {} });
   },
 
+  // Reset all (on log-out)
   resetAll: function resetAll(state) {
     Vue.set(state, 'lists', {});
     Vue.set(state, 'actives', {});
   },
 
+  // Reset a list (if a layer is deactivated for example)
   reset: function reset(state, ref) {
     var layersUid = ref.layersUid;
     var layerId = ref.layerId;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
-      if (state.lists[uid].layersUid === layersUid) {
-        Vue.delete(state.lists[uid], layerId);
-      }
-    });
+      var list = state.lists[uid];
 
-    Object.keys(state.actives).forEach(function (uid) {
-      if (state.actives[uid] && state.actives[uid].layerId === layerId) {
+      // If current list's layersUid equals layersUid
+      // - delete the list
+      // - set the active annotation to null
+      if (list.layersUid === layersUid) {
+        Vue.delete(list, layerId);
         Vue.set(state.actives, uid, null);
       }
     });
   },
 
+  // Add an annotation to a layer
   add: function add(state, ref) {
     var annotation = ref.annotation;
     var layerId = ref.layerId;
 
+    // Loop over the annotation lists
+    // If a list contains a layer which id's equals to layerId,
+    // Prepend the new annotation to the list
     Object.keys(state.lists).forEach(function (uid) {
       var list = state.lists[uid].layers[layerId];
       if (list) {
@@ -2647,41 +3166,47 @@ var mutations$10 = {
     });
   },
 
+  // Update an annotation
   update: function update(state, ref) {
     var annotation = ref.annotation;
     var layerId = ref.layerId;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
+      // If a list contains a layer which id's equals to layerId
       var list = state.lists[uid].layers[layerId];
       if (list) {
+        // Find the annotation index in the list and update
         var index = list.findIndex(function (a) { return a.id === annotation.id; });
         Vue.set(list, index, annotation);
       }
     });
   },
 
+  // Remove an annotation by id
   remove: function remove(state, ref) {
     var id = ref.id;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
+      // Loop over the the layers in each list
       Object.keys(state.lists[uid].layers).forEach(function (layerId) {
+        // If the list contains the annotation
+        // - delete the annotation
+        // - if the annotation was active, unset it
         var list = state.lists[uid].layers[layerId];
-        if (list) {
-          var listsIndex = list.findIndex(function (a) { return a.id === id; });
-          if (listsIndex !== -1) {
-            Vue.delete(list, listsIndex);
+        var listsIndex = list.findIndex(function (a) { return a.id === id; });
+        if (listsIndex !== -1) {
+          Vue.delete(list, listsIndex);
+          if (state.actives[uid] === id) {
+            Vue.set(state.actives, uid, null);
           }
         }
       });
     });
-
-    Object.keys(state.actives).forEach(function (uid) {
-      if (state.actives[uid] && state.actives[uid].id === id) {
-        Vue.set(state.actives, uid, null);
-      }
-    });
   },
 
+  // Set the list of annotation
   list: function list(state, ref) {
     var annotations = ref.annotations;
     var uid = ref.uid;
@@ -2691,6 +3216,7 @@ var mutations$10 = {
     Vue.set(state.lists[uid].layers, layerId, annotations);
   },
 
+  // Set the active annotation
   set: function set(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
@@ -2698,6 +3224,7 @@ var mutations$10 = {
     Vue.set(state.actives, uid, id);
   },
 
+  // Unset an active annotation
   unset: function unset(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
@@ -2714,6 +3241,8 @@ var annotations = {
   mutations: mutations$10
 }
 
+// Vuex Store main entry point
+
 var modules = {
   viewport: viewport,
   sync: sync,
@@ -2729,22 +3258,23 @@ var modules = {
   annotations: annotations
 };
 
-var state$12 = {
-  config: config
-};
-
 var actions$10 = {
+  // Bootstrap the application (on log-in)
   set: function set(ref) {
     var dispatch = ref.dispatch;
 
+    // First get the users and groups
+    // to get permissions…
     Promise.all([].concat( ['users', 'groups'].map(function (type) { return dispatch(("cml/" + type + "/list"), {}, { root: true })
           .then(function (r) { return r; })
           .catch(function (e) { return e; }); }
       ) )).then(function (res) {
+      // …then list the corpus
       dispatch('cml/corpus/listAll', null, { root: true });
     });
   },
 
+  // Reset (on log-out)
   reset: function reset(ref) {
     var commit = ref.commit;
 
@@ -2758,14 +3288,30 @@ var actions$10 = {
   }
 };
 
+var mutations$11 = {
+  // Register the app, to connect to the api
+  register: function register(state$$1, ref) {
+    var url = ref.url;
+    var title = ref.title;
+    var user$$1 = ref.user;
+
+    state$$1.config = {
+      url: url,
+      title: title,
+      user: user$$1
+    };
+    state$$1.api = new Camomile(url);
+  }
+};
+
 Vue.use(Vuex);
 
 var store = new Vuex.Store({
   modules: {
     cml: {
       namespaced: true,
-      state: state$12,
       actions: actions$10,
+      mutations: mutations$11,
       modules: modules
     }
   }
@@ -3013,11 +3559,16 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     objectField: objectField
   },
 
+  data: function data () {
+    return {
+      roles: ['admin', 'user']
+    }
+  },
+
   computed: Object.assign({}, mapState({
       element: function (state) { return state.cml.popup.element; },
       type: function (state) { return state.cml.popup.config.type; },
-      rolesPermission: function (state) { return state.cml.user.id !== state.cml.popup.element.id; },
-      roles: function (state) { return state.cml.config.roles; }
+      rolesPermission: function (state) { return state.cml.user.id !== state.cml.popup.element.id; }
     })),
 
   created: function created () {
@@ -3261,11 +3812,41 @@ var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm.
     cmlDropdown: cmlDropdown
   },
 
+  props: {
+    userName: {
+      type: String,
+      default: ''
+    },
+    userPassword: {
+      type: String,
+      default: ''
+    },
+    url: {
+      type: String,
+      default: 'http://localhost:3000'
+    },
+    title: {
+      type: String,
+      default: 'Camomile UI'
+    }
+  },
+
   computed: Object.assign({}, mapState({
       isLogged: function (state) { return state.cml.user.isLogged; },
       popup: function (state) { return state.cml.popup; },
       media: function (state) { return state.cml.medias.list.find(function (m) { return m.id === state.cml.medias.id; }); }
-    }))
+    })),
+
+  created: function created () {
+    this.$store.commit('cml/register', {
+      url: this.url,
+      title: this.title,
+      user: {
+        name: this.userName,
+        password: this.userPassword
+      }
+    });
+  }
 }
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
@@ -4067,7 +4648,7 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
   computed: {
     annotations: function annotations () {
-      return this.$store.getters['cml/annotations/actives'](this.uid)
+      return this.$store.getters['cml/annotations/lists'](this.uid)
     },
     activeId: function activeId () {
       return this.$store.state.cml.annotations.actives[this.uid] || null
@@ -4986,7 +5567,7 @@ var buttons = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
       return this.mediaProperties.timeTotal || 0
     },
     annotations: function annotations () {
-      return this.$store.getters['cml/annotations/actives'](this.uid)
+      return this.$store.getters['cml/annotations/lists'](this.uid)
     },
     mediaId: function mediaId () {
       return this.$store.state.cml.medias.actives[this.mediaUid].id
@@ -5285,7 +5866,7 @@ var edit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm
 
   computed: {
     annotations: function annotations () {
-      return this.$store.getters['cml/annotations/actives'](this.uid)
+      return this.$store.getters['cml/annotations/lists'](this.uid)
     },
     mediaId: function mediaId () {
       return this.$store.state.cml.medias.actives[this.mediaUid].id

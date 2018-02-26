@@ -1,7 +1,7 @@
 import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 
-import { state, actions, getters, mutations } from '../index'
+import { actions, mutations } from '../index'
 import messages from '../messages'
 import popup from '../popup'
 import sync from '../sync'
@@ -12,11 +12,10 @@ import corpus from '../corpus'
 import medias from '../medias'
 import layers from '../layers'
 import annotations from '../annotations'
+import api from '../__mocks__/_api.js'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
-
-jest.mock('../_api.js')
 
 describe('store sync actions', () => {
   let store
@@ -30,10 +29,11 @@ describe('store sync actions', () => {
       modules: {
         cml: {
           namespaced: true,
-          state,
+          state: {
+            api
+          },
           actions,
           mutations,
-          getters,
           modules: {
             users,
             messages,

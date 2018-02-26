@@ -42,12 +42,42 @@ export default {
     cmlDropdown
   },
 
+  props: {
+    userName: {
+      type: String,
+      default: ''
+    },
+    userPassword: {
+      type: String,
+      default: ''
+    },
+    url: {
+      type: String,
+      default: 'http://localhost:3000'
+    },
+    title: {
+      type: String,
+      default: 'Camomile UI'
+    }
+  },
+
   computed: {
     ...mapState({
       isLogged: state => state.cml.user.isLogged,
       popup: state => state.cml.popup,
       media: state =>
         state.cml.medias.list.find(m => m.id === state.cml.medias.id)
+    })
+  },
+
+  created () {
+    this.$store.commit('cml/register', {
+      url: this.url,
+      title: this.title,
+      user: {
+        name: this.userName,
+        password: this.userPassword
+      }
     })
   }
 }

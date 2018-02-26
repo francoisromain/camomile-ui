@@ -67,6 +67,7 @@
     "eslint-plugin-vue": "^4.3.0",
     "extract-text-webpack-plugin": "^4.0.0-alpha.0",
     "file-loader": "^1.1.9",
+    "html-webpack-exclude-assets-plugin": "0.0.5",
     "html-webpack-plugin": "github:webpack-contrib/html-webpack-plugin",
     "imports-loader": "^0.8.0",
     "jest": "^22.4.2",

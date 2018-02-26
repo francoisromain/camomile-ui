@@ -43,7 +43,7 @@ export default {
 
   computed: {
     annotations () {
-      return this.$store.getters['cml/annotations/actives'](this.uid)
+      return this.$store.getters['cml/annotations/lists'](this.uid)
     },
     activeId () {
       return this.$store.state.cml.annotations.actives[this.uid] || null

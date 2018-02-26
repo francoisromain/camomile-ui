@@ -1,7 +1,8 @@
+// Vuex Store main entry point
+
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-import config from '../config.js'
+import Camomile from 'camomile-client'
 
 import viewport from './viewport'
 import sync from './sync'
@@ -31,12 +32,18 @@ const modules = {
   annotations
 }
 
+// Config contains the api url, userName and userPassword
+// Api stores the camomile js api
 export const state = {
-  config: config
+  config: {},
+  api: null
 }
 
 export const actions = {
+  // Bootstrap the application (on log-in)
   set({ dispatch }) {
+    // First get the users and groups
+    // to get permissions…
     Promise.all([
       ...['users', 'groups'].map(type =>
         dispatch(`cml/${type}/list`, {}, { root: true })
@@ -44,10 +51,12 @@ export const actions = {
           .catch(e => e)
       )
     ]).then(res => {
+      // …then list the corpus
       dispatch('cml/corpus/listAll', null, { root: true })
     })
   },
 
+  // Reset (on log-out)
   reset({ commit }) {
     commit('cml/user/reset', null, { root: true })
     commit('cml/users/reset', null, { root: true })
@@ -59,14 +68,26 @@ export const actions = {
   }
 }
 
+export const mutations = {
+  // Register the app, to connect to the api
+  register(state, { url, title, user }) {
+    state.config = {
+      url,
+      title,
+      user
+    }
+    state.api = new Camomile(url)
+  }
+}
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
     cml: {
       namespaced: true,
-      state,
       actions,
+      mutations,
       modules
     }
   }

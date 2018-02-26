@@ -46,8 +46,7 @@ export default {
       element: state => state.cml.popup.element,
       type: state => state.cml.popup.config.type,
       rolesPermission: state =>
-        state.cml.user.id !== state.cml.popup.element.id,
-      roles: state => state.cml.config.roles
+        state.cml.user.id !== state.cml.popup.element.id
     })
   },
 

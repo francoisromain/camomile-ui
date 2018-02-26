@@ -1,6 +1,55 @@
 import Vue from 'vue'
-import api from './_api'
 import { mediaFormat } from './_helpers'
+
+// Lists contains, for each corpuUid, an array of media objects
+// Actives contains, for each mediaUid, a media id and a reference to the corpuUid
+// Properties contains, for each mediaUid, the properties of the current media
+
+/* Example
+
+{
+  lists {
+    'copu-uid-string-1': [{
+      id: 'media-id-hash-1',
+      name: 'media-name-string',
+      url: 'http://media-string.url',
+      corpuId: 'corpu-id-hash-1',
+      description: {
+        type: 'media-type-string',
+        …
+      }
+    }, {
+      …
+    }],
+    'corpu-uid-string-2: [
+      …
+    ]
+  },
+  actives: {
+    'media-uid-string-1': {
+      id: 'media-id-hash-1',
+      corpuUid: 'corpu-uid-string'
+    },
+    'media-uid-string-2': {
+      …
+    }
+  },
+  porperties: {
+    'media-uid-string-1': {
+      isLoaded: boolean,
+      isPlaying: boolean,
+      timecurrent: Number,
+      timeTotal: number,
+      seek: {
+        seeking: Boolean
+      }
+    }, 
+    'media-uid-string-2': {
+      …
+    }
+  }
+}
+*/
 
 export const state = {
   lists: {},
@@ -10,9 +59,9 @@ export const state = {
 
 export const actions = {
   // Add a new media
-  add({ state, commit, dispatch, rootGetters }, { element }) {
+  add({ state, commit, dispatch, rootState, rootGetters }, { element }) {
     dispatch('cml/sync/start', `mediasAdd`, { root: true })
-    return api
+    return rootState.cml.api
       .createMedium(
         element.corpuId,
         element.name,
@@ -51,18 +100,25 @@ export const actions = {
       })
   },
 
-  remove({ state, commit, dispatch }, { id }) {
+  // Remove a media
+  remove({ state, commit, dispatch, rootState }, { id }) {
     dispatch('cml/sync/start', `mediasRemove`, { root: true })
-    return api
+    return rootState.cml.api
       .deleteMedium(id)
       .then(r => {
         dispatch('cml/sync/stop', `mediasRemove`, { root: true })
+
+        // Loop over the corpuUid
         Object.keys(state.lists).forEach(corpuUid => {
+          // If the media belongs to this corpuuid
           const listIndex = state.lists[corpuUid].findIndex(m => m.id === id)
           if (listIndex !== -1) {
+            // Remove the media from the list
             commit('remove', { listIndex, corpuUid })
           }
         })
+
+        // Re-set a new media in every mediaUid where it is active
         dispatch('unsetAll', { id })
         dispatch('cml/messages/success', 'Medium removed', { root: true })
 
@@ -76,9 +132,10 @@ export const actions = {
       })
   },
 
-  update({ state, commit, dispatch, rootGetters }, { element }) {
+  // Update a media
+  update({ state, commit, dispatch, rootState, rootGetters }, { element }) {
     dispatch('cml/sync/start', `mediasUpdate`, { root: true })
-    return api
+    return rootState.cml.api
       .updateMedium(element.id, {
         name: element.name,
         description: element.description,
@@ -90,8 +147,12 @@ export const actions = {
         media.name = r.data.name
         media.url = r.data.url
         media.description = r.data.description || {}
+
+        // Loop over the corpuUid
         Object.keys(state.lists).forEach(corpuUid => {
+          // If the corpu active in this corpuUid equals the media's corpuUid
           if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            // update the media
             commit('update', { media, corpuUid })
           }
         })
@@ -108,9 +169,9 @@ export const actions = {
   },
 
   // List the medias
-  list({ dispatch, commit }, { corpuId, corpuUid }) {
+  list({ dispatch, commit, rootState }, { corpuId, corpuUid }) {
     dispatch('cml/sync/start', `mediasList-${corpuUid}`, { root: true })
-    return api
+    return rootState.cml.api
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(r => {
         dispatch('cml/sync/stop', `mediasList-${corpuUid}`, { root: true })
@@ -121,7 +182,6 @@ export const actions = {
 
         // Commit media list
         commit('list', { medias, corpuUid })
-        console.log('rrr', r)
 
         // Loop over the active medias
         Object.keys(state.actives).forEach(uid => {
@@ -142,13 +202,18 @@ export const actions = {
       })
   },
 
-  register({ state, commit }, { uid, corpuUid }) {
+  // Register a mediaUid in a corpuUid
+  register({ commit }, { uid, corpuUid }) {
     commit('register', { uid, corpuUid })
   },
 
+  // Re-set a new media in every mediaUid where it is active
   unsetAll({ state, dispatch }, { id }) {
+    // loop over the mediaUids
     Object.keys(state.actives).forEach(uid => {
+      // If the media is active in this mediaUid
       if (state.actives[uid].id === id) {
+        // Set a new active media
         dispatch('set', { corpuUid: state.actives[uid].corpuUid, uid })
       }
     })
@@ -174,6 +239,7 @@ export const actions = {
     )
   },
 
+  // Play the media in a mediaUid
   play({ state, commit }, { uid }) {
     const timeStart = Date.now()
     const timeCurrent = state.properties[uid].timeCurrent
@@ -185,15 +251,18 @@ export const actions = {
     commit('play', { uid })
   },
 
+  // Pause a media in a mediaUid
   pause({ state, commit }, { uid }) {
     clearInterval(state.properties[uid].interval)
     commit('pause', { uid })
   },
 
+  // Wait the media while buffering, in a mediaUid
   buffering({ state, commit }, { uid }) {
     clearInterval(state.properties[uid].interval)
   },
 
+  // Stop a media in a mediaUid
   stop({ state, commit, dispatch }, { uid }) {
     clearInterval(state.properties[uid].interval)
     commit('pause', { uid })
@@ -204,6 +273,7 @@ export const actions = {
     })
   },
 
+  // Seek a media in a mediaUid
   seek({ state, commit, dispatch }, { ratio, serverRequest, uid }) {
     if (state.properties[uid].isPlaying) {
       clearInterval(state.properties[uid].interval)
@@ -254,35 +324,42 @@ export const getters = {
 }
 
 export const mutations = {
+  // Register a mediaUid in a corpuUid
   register(state, { uid, corpuUid }) {
     Vue.set(state.actives, uid, { corpuUid })
     Vue.set(state.properties, uid, null)
   },
 
+  // Reset all (on log-out)
   resetAll(state) {
     Vue.set(state, 'lists', {})
     Vue.set(state, 'actives', {})
     Vue.set(state, 'properties', {})
   },
 
+  // Add a new media in a corpuuid
   add(state, { media, corpuUid }) {
     const index = state.lists[corpuUid].length
     Vue.set(state.lists[corpuUid], index, media)
   },
 
+  // Update a media in a corpuuid
   update(state, { media, corpuUid }) {
     const index = state.lists[corpuUid].findIndex(m => m.id === media.id)
     Vue.set(state.lists[corpuUid], index, media)
   },
 
+  // Remove a media from a corpuUid
   remove(state, { listIndex, corpuUid }) {
     Vue.delete(state.lists[corpuUid], listIndex)
   },
 
+  // List medias in a corpuUid
   list(state, { medias, corpuUid }) {
     Vue.set(state.lists, corpuUid, medias)
   },
 
+  // Set the active media in a mediaUid
   set(state, { id, corpuUid, uid }) {
     Vue.set(state.actives, uid, { corpuUid, id })
     Vue.set(state.properties, uid, {
@@ -294,22 +371,27 @@ export const mutations = {
     })
   },
 
+  // Set the isLoaded property for a mediaUid
   loaded(state, { isLoaded, uid }) {
     Vue.set(state.properties[uid], 'isLoaded', isLoaded)
   },
 
+  // Set the isplaying property to true in a mediauid
   play(state, { uid }) {
     Vue.set(state.properties[uid], 'isPlaying', true)
   },
 
+  // Set the isplaying property to false in a mediauid
   pause(state, { uid }) {
     Vue.set(state.properties[uid], 'isPlaying', false)
   },
 
+  // Set the timetotal property in a mediaUid
   timeTotal(state, { time, uid }) {
     Vue.set(state.properties[uid], 'timeTotal', time)
   },
 
+  // Set the seek property in a mediauid
   seek(state, { options, uid }) {
     Vue.set(state.properties[uid], 'seek', options)
   }

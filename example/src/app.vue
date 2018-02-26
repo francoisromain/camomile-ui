@@ -1,5 +1,9 @@
 <template>
-  <cml-app>
+  <cml-app
+    user-name="root"
+    user-password="roO7p4s5wOrD"
+    url="http://localhost:3000"
+    title="Camomile UI">
     <div class="container pt">
       
       <div class="blobs">
@@ -14,8 +18,6 @@
         <cml-annotations class="blob-1-2 p border" />
       </div>
 
-
-      
       <div class="blobs">
         <cml-annotations-buttons class="blob-1-2" />
         <cml-annotations-edit class="blob-1-2" />
@@ -68,7 +70,7 @@ import {
 } from '~/app.js'
 
 export default {
-  name: 'my-app',
+  name: 'MyApp',
   components: {
     cmlApp,
     cmlUsers,

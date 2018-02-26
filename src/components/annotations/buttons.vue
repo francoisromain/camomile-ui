@@ -46,7 +46,7 @@ export default {
       return this.mediaProperties.timeTotal || 0
     },
     annotations () {
-      return this.$store.getters['cml/annotations/actives'](this.uid)
+      return this.$store.getters['cml/annotations/lists'](this.uid)
     },
     mediaId () {
       return this.$store.state.cml.medias.actives[this.mediaUid].id

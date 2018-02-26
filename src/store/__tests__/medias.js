@@ -10,11 +10,10 @@ import corpus from '../corpus'
 import medias from '../medias'
 import layers from '../layers'
 import annotations from '../annotations'
+import api from '../__mocks__/_api.js'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
-
-jest.mock('../_api.js')
 
 describe('store medias actions', () => {
   let store
@@ -134,6 +133,9 @@ describe('store medias actions', () => {
       modules: {
         cml: {
           namespaced: true,
+          state: {
+            api
+          },
           modules: {
             messages,
             popup,

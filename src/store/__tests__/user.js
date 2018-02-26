@@ -12,11 +12,10 @@ import corpus from '../corpus'
 import medias from '../medias'
 import layers from '../layers'
 import annotations from '../annotations'
+import api from '../__mocks__/_api.js'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
-
-jest.mock('../_api.js')
 
 describe('store user actions', () => {
   let store
@@ -49,6 +48,9 @@ describe('store user actions', () => {
       modules: {
         cml: {
           namespaced: true,
+          state: {
+            api
+          },
           actions,
           mutations,
           modules: {
@@ -83,7 +85,7 @@ describe('store user actions', () => {
   it('logs-in (error)', () => {
     return expect(
       store.dispatch('cml/user/login', {
-        user: { name: config.user.name, password: '' }
+        user: { name: config.userName, password: '' }
       })
     ).rejects.toThrow('Incorrect username or password')
   })

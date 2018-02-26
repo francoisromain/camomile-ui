@@ -8889,274 +8889,6 @@ Vue$3.nextTick(function () {
   }
 }, 0);
 
-var config$1 = {
-  title: 'Camomile UI',
-  user: {
-    name: 'root',
-    password: 'roO7p4s5wOrD'
-  },
-  url: 'http://localhost:3000',
-  roles: ['admin', 'user']
-}
-
-var log = {
-  simple: function simple (key, value) {
-    console.log(
-      ("%c| " + key + ": %c" + value), // eslint-disable-line camelcase
-      'padding:8px 0; color:#666; line-height:24px;',
-      'padding:8px 32px 8px 0; color:#f40; line-height:24px;'
-    );
-  },
-  button: function button (key, value) {
-    console.log(
-      ("%c" + key + " %c" + value),
-      'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 24px; line-height:96px; margin-left: 4px; border-radius: 8px 0 0 8px; color:#333; background:linear-gradient(to bottom, #E5E4E5, #CFCFCF); text-shadow: -1px -1px 1px #ccc,  1px 1px 3px #fff;',
-      'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 12px; line-height:96px; text-decoration: none; color:#fff; background:linear-gradient(to bottom, #f62, #f30); text-shadow: -1px -1px 1px #a50,  1px 1px 3px #fa0; border-radius: 0 8px 8px 0; '
-    );
-  }
-}
-
-var state = {
-  name: '',
-  width: 0,
-  height: 0,
-  svg: {
-    height: 0,
-    width: 0,
-    scale: 1
-  },
-  animate: false
-};
-
-var actions = {
-  set: function set(ref) {
-    var state = ref.state;
-    var commit = ref.commit;
-
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-    var name;
-    var animate;
-    if (window.matchMedia('(min-width: 83.5em)').matches) {
-      name = 'large';
-      animate = true;
-    } else if (window.matchMedia('(min-width: 63em)').matches) {
-      name = 'desktop';
-      animate = true;
-    } else if (window.matchMedia('(min-width: 42.5em)').matches) {
-      name = 'tablet';
-      animate = false;
-    } else if (window.matchMedia('(min-width: 22em)').matches) {
-      name = 'mobile';
-      animate = false;
-    } else {
-      log.simple('Viewport', 'Default');
-      name = 'default';
-      animate = false;
-    }
-    commit('set', { name: name, animate: animate, width: width, height: height });
-  }
-};
-
-var mutations = {
-  set: function set(state, ref) {
-    var animate = ref.animate;
-    var name = ref.name;
-    var width = ref.width;
-    var height = ref.height;
-
-    state.name = name;
-    state.animate = animate;
-    state.width = width;
-    state.height = height;
-    log.simple('Viewport', name);
-  }
-};
-
-var viewport = {
-  namespaced: true,
-  state: state,
-  mutations: mutations,
-  actions: actions
-}
-
-var state$1 = {
-  list: []
-};
-
-var actions$1 = {
-  all: function all(ref) {
-    var dispatch = ref.dispatch;
-
-    dispatch("cml/set", {}, { root: true }).then(function (r) {
-      dispatch('cml/messages/success', 'Synced with server', { root: true });
-    });
-  },
-
-  start: function start(ref, name) {
-    var state = ref.state;
-
-    state.list.push(name);
-  },
-
-  stop: function stop(ref, name) {
-    var state = ref.state;
-
-    state.list = state.list.filter(function (n) { return n !== name; });
-  }
-};
-
-var getters = {
-  active: function (state) {
-    return state.list.length
-  }
-};
-
-var sync = {
-  namespaced: true,
-  state: state$1,
-  actions: actions$1,
-  getters: getters
-}
-
-var state$2 = {
-  visible: false,
-  config: {},
-  element: {}
-};
-
-var mutations$1 = {
-  open: function open(state, ref) {
-    var config = ref.config;
-    var element = ref.element;
-
-    state.visible = true;
-    state.config = config;
-    state.element = JSON.parse(JSON.stringify(element));
-  },
-
-  close: function close(state) {
-    state.visible = false;
-    state.config = {};
-  },
-
-  fieldUpdate: function fieldUpdate(state, ref) {
-    var name = ref.name;
-    var value = ref.value;
-
-    Vue$3.set(state.element, name, value);
-  }
-};
-
-var popup = {
-  namespaced: true,
-  state: state$2,
-  mutations: mutations$1
-}
-
-var state$3 = {
-  visible: false,
-  config: {}
-};
-
-var mutations$2 = {
-  close: function close(state) {
-    state.visible = false;
-    state.config = {};
-  },
-
-  open: function open(state, config) {
-    state.visible = true;
-    state.config = config;
-  }
-};
-
-var dropdown = {
-  namespaced: true,
-  state: state$3,
-  mutations: mutations$2
-}
-
-function userFormat (user) {
-  return {
-    name: user.username,
-    id: user._id,
-    description: user.description || {},
-    role: user.role
-  }
-}
-
-function groupFormat (group) {
-  return {
-    name: group.name,
-    id: group._id,
-    description: group.description || {},
-    userIds: group.users
-  }
-}
-
-function mediaFormat (media) {
-  return {
-    name: media.name,
-    id: media._id,
-    url: media.url,
-    corpuId: media.id_corpus,
-    description: media.description || {}
-  }
-}
-
-function dateCurrent () {
-  return new Date().valueOf()
-}
-
-// export function observerClean (obj) {
-//   return Object.keys(obj).reduce(
-//     (res, e) => Object.assign(res, { [e]: obj[e] }),
-//     {}
-//   )
-// }
-
-var state$4 = {
-  list: []
-};
-
-var actions$2 = {
-  success: function success(ref, content) {
-    var commit = ref.commit;
-
-    commit('add', { content: content, type: 'success', id: dateCurrent() });
-    setTimeout(function (_) {
-      commit('remove');
-    }, 2000);
-  },
-
-  error: function error(ref, content) {
-    var commit = ref.commit;
-
-    commit('add', { content: content, type: 'error', id: dateCurrent() });
-    setTimeout(function (_) {
-      commit('remove');
-    }, 2000);
-  }
-};
-
-var mutations$3 = {
-  remove: function remove(state) {
-    state.list.shift();
-  },
-
-  add: function add(state, message) {
-    state.list.push(message);
-  }
-};
-
-var messages = {
-  namespaced: true,
-  state: state$4,
-  actions: actions$2,
-  mutations: mutations$3
-}
-
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function commonjsRequire () {
@@ -16090,7 +15822,7 @@ var argv = [];
 var version$1 = ''; // empty string to avoid regexp issues
 var versions = {};
 var release = {};
-var config$2 = {};
+var config$1 = {};
 
 function noop$1() {}
 
@@ -16167,7 +15899,7 @@ var process$1 = {
   hrtime: hrtime,
   platform: platform,
   release: release,
-  config: config$2,
+  config: config$1,
   uptime: uptime
 };
 
@@ -16710,7 +16442,7 @@ function timestamp() {
 
 
 // log is just a thin wrapper to console.log that prepends a timestamp
-function log$1() {
+function log() {
   console.log('%s - %s', timestamp(), format.apply(null, arguments));
 }
 
@@ -16732,7 +16464,7 @@ function hasOwnProperty$2(obj, prop) {
 var util$1 = {
   inherits: inherits$3,
   _extend: _extend,
-  log: log$1,
+  log: log,
   isBuffer: isBuffer,
   isPrimitive: isPrimitive$2,
   isFunction: isFunction$1,
@@ -16775,7 +16507,7 @@ var util$2 = Object.freeze({
 	isFunction: isFunction$1,
 	isPrimitive: isPrimitive$2,
 	isBuffer: isBuffer,
-	log: log$1,
+	log: log,
 	inherits: inherits$3,
 	_extend: _extend,
 	default: util$1
@@ -53759,7 +53491,7 @@ function runJob(iterator, key, item, callback)
 }
 
 // API
-var state_1 = state$5;
+var state_1 = state;
 
 /**
  * Creates initial state object
@@ -53770,7 +53502,7 @@ var state_1 = state$5;
  *                                     or `null` to keep them as is
  * @returns {object} - initial state object
  */
-function state$5(list, sortMethod)
+function state(list, sortMethod)
 {
   var isNamedList = !Array.isArray(list)
     , initState =
@@ -61106,7 +60838,7 @@ var $schema$12 = "http://json-schema.org/draft-06/schema#";
 var type$11 = "object";
 var required$11 = ["version","creator","entries"];
 var properties$13 = {"version":{"type":"string"},"creator":{"$ref":"creator.json#"},"browser":{"$ref":"browser.json#"},"pages":{"type":"array","items":{"$ref":"page.json#"}},"entries":{"type":"array","items":{"$ref":"entry.json#"}},"comment":{"type":"string"}};
-var log$2 = {
+var log$1 = {
 	$id: $id$12,
 	$schema: $schema$12,
 	type: type$11,
@@ -61114,13 +60846,13 @@ var log$2 = {
 	properties: properties$13
 };
 
-var log$3 = Object.freeze({
+var log$2 = Object.freeze({
 	$id: $id$12,
 	$schema: $schema$12,
 	type: type$11,
 	required: required$11,
 	properties: properties$13,
-	default: log$2
+	default: log$1
 });
 
 var $id$13 = "page.json#";
@@ -61297,7 +61029,7 @@ var require$$8 = ( har$1 && har ) || har$1;
 
 var require$$9 = ( header$3 && header$2 ) || header$3;
 
-var require$$10 = ( log$3 && log$2 ) || log$3;
+var require$$10 = ( log$2 && log$1 ) || log$2;
 
 var require$$11 = ( page$1 && page ) || page$1;
 
@@ -61394,7 +61126,7 @@ var header$4 = function (data) {
   return validate$3('header', data)
 };
 
-var log$4 = function (data) {
+var log$3 = function (data) {
   return validate$3('log', data)
 };
 
@@ -61437,7 +61169,7 @@ var promise$1 = {
 	entry: entry$2,
 	har: har$2,
 	header: header$4,
-	log: log$4,
+	log: log$3,
 	page: page$2,
 	pageTimings: pageTimings$2,
 	postData: postData$2,
@@ -66254,8 +65986,282 @@ Camomile.prototype.getDate = function getDate () {
 
 var camomileClient = Camomile;
 
-// export default camomile(config.url)
-var api = new camomileClient(config$1.url)
+var log$4 = {
+  simple: function simple (key, value) {
+    console.log(
+      ("%c| " + key + ": %c" + value), // eslint-disable-line camelcase
+      'padding:8px 0; color:#666; line-height:24px;',
+      'padding:8px 32px 8px 0; color:#f40; line-height:24px;'
+    );
+  },
+  button: function button (key, value) {
+    console.log(
+      ("%c" + key + " %c" + value),
+      'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 24px; line-height:96px; margin-left: 4px; border-radius: 8px 0 0 8px; color:#333; background:linear-gradient(to bottom, #E5E4E5, #CFCFCF); text-shadow: -1px -1px 1px #ccc,  1px 1px 3px #fff;',
+      'font-family: sans-serif; font-size: 13px; padding:12px 16px 12px 12px; line-height:96px; text-decoration: none; color:#fff; background:linear-gradient(to bottom, #f62, #f30); text-shadow: -1px -1px 1px #a50,  1px 1px 3px #fa0; border-radius: 0 8px 8px 0; '
+    );
+  }
+}
+
+var state$1 = {
+  name: '',
+  width: 0,
+  height: 0,
+  svg: {
+    height: 0,
+    width: 0,
+    scale: 1
+  },
+  animate: false
+};
+
+var actions = {
+  set: function set(ref) {
+    var state = ref.state;
+    var commit = ref.commit;
+
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var name;
+    var animate;
+    if (window.matchMedia('(min-width: 83.5em)').matches) {
+      name = 'large';
+      animate = true;
+    } else if (window.matchMedia('(min-width: 63em)').matches) {
+      name = 'desktop';
+      animate = true;
+    } else if (window.matchMedia('(min-width: 42.5em)').matches) {
+      name = 'tablet';
+      animate = false;
+    } else if (window.matchMedia('(min-width: 22em)').matches) {
+      name = 'mobile';
+      animate = false;
+    } else {
+      log$4.simple('Viewport', 'Default');
+      name = 'default';
+      animate = false;
+    }
+    commit('set', { name: name, animate: animate, width: width, height: height });
+  }
+};
+
+var mutations = {
+  set: function set(state, ref) {
+    var animate = ref.animate;
+    var name = ref.name;
+    var width = ref.width;
+    var height = ref.height;
+
+    state.name = name;
+    state.animate = animate;
+    state.width = width;
+    state.height = height;
+    log$4.simple('Viewport', name);
+  }
+};
+
+var viewport = {
+  namespaced: true,
+  state: state$1,
+  mutations: mutations,
+  actions: actions
+}
+
+var state$2 = {
+  list: []
+};
+
+var actions$1 = {
+  all: function all(ref) {
+    var dispatch = ref.dispatch;
+
+    dispatch("cml/set", {}, { root: true }).then(function (r) {
+      dispatch('cml/messages/success', 'Synced with server', { root: true });
+    });
+  },
+
+  start: function start(ref, name) {
+    var state = ref.state;
+
+    state.list.push(name);
+  },
+
+  stop: function stop(ref, name) {
+    var state = ref.state;
+
+    state.list = state.list.filter(function (n) { return n !== name; });
+  }
+};
+
+var getters = {
+  active: function (state) {
+    return state.list.length
+  }
+};
+
+var sync = {
+  namespaced: true,
+  state: state$2,
+  actions: actions$1,
+  getters: getters
+}
+
+var state$3 = {
+  visible: false,
+  config: {},
+  element: {}
+};
+
+var mutations$1 = {
+  open: function open(state, ref) {
+    var config = ref.config;
+    var element = ref.element;
+
+    state.visible = true;
+    state.config = config;
+    state.element = JSON.parse(JSON.stringify(element));
+  },
+
+  close: function close(state) {
+    state.visible = false;
+    state.config = {};
+  },
+
+  fieldUpdate: function fieldUpdate(state, ref) {
+    var name = ref.name;
+    var value = ref.value;
+
+    Vue$3.set(state.element, name, value);
+  }
+};
+
+var popup = {
+  namespaced: true,
+  state: state$3,
+  mutations: mutations$1
+}
+
+var state$4 = {
+  visible: false,
+  config: {}
+};
+
+var mutations$2 = {
+  close: function close(state) {
+    state.visible = false;
+    state.config = {};
+  },
+
+  open: function open(state, config) {
+    state.visible = true;
+    state.config = config;
+  }
+};
+
+var dropdown = {
+  namespaced: true,
+  state: state$4,
+  mutations: mutations$2
+}
+
+function userFormat (user) {
+  return {
+    name: user.username,
+    id: user._id,
+    description: user.description || {},
+    role: user.role
+  }
+}
+
+function groupFormat (group) {
+  return {
+    name: group.name,
+    id: group._id,
+    description: group.description || {},
+    userIds: group.users
+  }
+}
+
+function mediaFormat (media) {
+  return {
+    name: media.name,
+    id: media._id,
+    url: media.url,
+    corpuId: media.id_corpus,
+    description: media.description || {}
+  }
+}
+
+function dateCurrent () {
+  return new Date().valueOf()
+}
+
+// export function observerClean (obj) {
+//   return Object.keys(obj).reduce(
+//     (res, e) => Object.assign(res, { [e]: obj[e] }),
+//     {}
+//   )
+// }
+
+var state$5 = {
+  list: []
+};
+
+var actions$2 = {
+  success: function success(ref, content) {
+    var commit = ref.commit;
+
+    commit('add', { content: content, type: 'success', id: dateCurrent() });
+    setTimeout(function (_) {
+      commit('remove');
+    }, 2000);
+  },
+
+  error: function error(ref, content) {
+    var commit = ref.commit;
+
+    commit('add', { content: content, type: 'error', id: dateCurrent() });
+    setTimeout(function (_) {
+      commit('remove');
+    }, 2000);
+  }
+};
+
+var mutations$3 = {
+  remove: function remove(state) {
+    state.list.shift();
+  },
+
+  add: function add(state, message) {
+    state.list.push(message);
+  }
+};
+
+var messages = {
+  namespaced: true,
+  state: state$5,
+  actions: actions$2,
+  mutations: mutations$3
+}
+
+// Current user
+
+/* Example
+
+{
+  id: 'user-id-hash',
+  name: 'user-name-string',
+  role: 'admin', // user or admin
+  isLogged: false,
+  isAdmin: false,
+  isRoot: false
+  description: { … },
+  groupIds: [
+    'group-id-hash-1',
+    'group-id-hash-2'
+  ]
+}
+*/
 
 var state$6 = {
   id: '',
@@ -66269,16 +66275,20 @@ var state$6 = {
 };
 
 var actions$3 = {
+  // user login
   login: function login(ref, config) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'userLogin', { root: true });
-    return api
+    return rootState.cml.api
       .login(config.user.name, config.user.password)
       .then(function (r) {
         dispatch('cml/sync/stop', 'userLogin', { root: true });
         commit('cml/popup/close', null, { root: true });
+
+        // Get the user properties
         dispatch('set');
 
         return r.message
@@ -66292,14 +66302,17 @@ var actions$3 = {
       })
   },
 
+  // Get the user properties
   set: function set(ref) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'userSet', { root: true });
-    return api
+    return rootState.cml.api
       .me()
       .then(function (r) {
+        // Format server response
         var user = {
           id: r.data._id,
           name: r.data.username,
@@ -66308,7 +66321,10 @@ var actions$3 = {
           groupIds: r.data.groups || []
         };
         dispatch('cml/sync/stop', 'userSet', { root: true });
+        // Commit user
         commit('set', user);
+
+        // Bootstrap app from index.js / set
         dispatch('cml/set', null, { root: true });
 
         return user
@@ -66322,16 +66338,19 @@ var actions$3 = {
       })
   },
 
+  // User logout
   logout: function logout(ref) {
-    var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'userLogout', { root: true });
-    return api
+    return rootState.cml.api
       .logout()
       .then(function (r) {
         dispatch('cml/sync/stop', 'userLogout', { root: true });
+
+        // Reset the app from index.js / reset
         dispatch('cml/reset', null, { root: true });
         commit('cml/popup/close', null, { root: true });
         commit('cml/dropdown/close', null, { root: true });
@@ -66349,15 +66368,19 @@ var actions$3 = {
 };
 
 var getters$1 = {
+  // Get if the user is admin or belongs to an admin group
   isAdmin: function (state) { return function (ref) {
     var users = ref.users; if ( users === void 0 ) users = {};
     var groups = ref.groups; if ( groups === void 0 ) groups = {};
 
     var isAdmin = users[state.id] === 3;
 
+    // Loop over the groups
     var isInAdminGroup = Object.keys(groups).reduce(function (result, id) {
+      // Check if the group is admin
       var groupIsAdmin = groups[id] === 3;
 
+      // Check if the group
       var userIsInGroup = state.groupIds.reduce(function (isIn, groupId) {
         return isIn || groupId === id
       }, false);
@@ -66365,17 +66388,21 @@ var getters$1 = {
       return result || (groupIsAdmin && userIsInGroup)
     }, false);
 
+    // Return true if the user is admin or is in an admin group
     return isAdmin || isInAdminGroup
   }; },
 
+  // Check if a user id is the current user
   isCurrentUser: function (state) { return function (userId) {
     return state.id === userId
   }; },
 
+  // Check if the current user is a group
   isInGroup: function (state) { return function (groupId) {
     return state.groupIds.indexOf(groupId) !== -1
   }; },
 
+  // Check the permission level for the current user on a permission object
   permission: function (state) { return function (ref) {
     var users = ref.users; if ( users === void 0 ) users = {};
     var groups = ref.groups; if ( groups === void 0 ) groups = {};
@@ -66400,6 +66427,7 @@ var getters$1 = {
 };
 
 var mutations$4 = {
+  // Set the current user properties (on log-in)
   set: function set(state, user) {
     state.isLogged = true;
     state.isAdmin = user.role === 'admin';
@@ -66411,6 +66439,7 @@ var mutations$4 = {
     state.groupIds = user.groupIds;
   },
 
+  // Reset the current user properties (on log-out)
   reset: function reset(state) {
     state.isLogged = false;
     state.isAdmin = false;
@@ -66422,10 +66451,12 @@ var mutations$4 = {
     state.groupIds = [];
   },
 
+  // Add the current user to a group
   groupAdd: function groupAdd(state, groupId) {
     state.groupIds.push(groupId);
   },
 
+  // Remove the current user from a group
   groupRemove: function groupRemove(state, groupId) {
     state.groupIds = state.groupIds.filter(function (id) { return id !== groupId; });
   }
@@ -66439,18 +66470,36 @@ var user = {
   mutations: mutations$4
 }
 
+/* Example
+
+list: [{
+  id: 'user-id-hash-1',
+  name: 'user-name-string',
+  role: 'user', // user or admin
+  description: {
+    …
+  },
+  {
+    …
+  }
+}]
+
+*/
+
 var state$7 = {
   list: []
 };
 
 var actions$4 = {
+  // Add a new user
   add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'usersAdd', { root: true });
-    return api
+    return rootState.cml.api
       .createUser(
         element.name,
         element.password,
@@ -66461,6 +66510,8 @@ var actions$4 = {
         dispatch('cml/sync/stop', 'usersAdd', { root: true });
         var user = userFormat(r.data);
         commit('add', user);
+
+        // Add the new user to every corpus and layers
         commit('cml/corpus/userAdd', user.id, { root: true });
         commit('cml/layers/userAdd', user.id, { root: true });
         dispatch('cml/messages/success', 'User added', { root: true });
@@ -66475,6 +66526,7 @@ var actions$4 = {
       })
   },
 
+  // Update a user
   update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -66482,7 +66534,7 @@ var actions$4 = {
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'usersUpdate', { root: true });
-    return api
+    return rootState.cml.api
       .updateUser(element.id, {
         password: element.password,
         role: element.role,
@@ -66492,7 +66544,10 @@ var actions$4 = {
         dispatch('cml/sync/stop', 'usersUpdate', { root: true });
         var user = userFormat(r.data);
         commit('update', user);
+
+        // If the user is the current user (logged-in)
         if (user.name === rootState.cml.user.name) {
+          // Update the current user
           commit('cml/user/set', user, { root: true });
         }
         dispatch('cml/messages/success', 'User updated', { root: true });
@@ -66507,17 +66562,21 @@ var actions$4 = {
       })
   },
 
+  // Remove a user
   remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', 'usersRemove', { root: true });
-    return api
+    return rootState.cml.api
       .deleteUser(id)
       .then(function (r) {
         dispatch('cml/sync/stop', 'usersRemove', { root: true });
         commit('remove', id);
+
+        // Remove the user from every corpus and layers
         commit('cml/corpus/userRemove', id, { root: true });
         commit('cml/layers/userRemove', id, { root: true });
         dispatch('cml/messages/success', 'User removed', { root: true });
@@ -66532,12 +66591,14 @@ var actions$4 = {
       })
   },
 
+  // List all users
   list: function list(ref) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'usersList', { root: true });
-    return api
+    return rootState.cml.api
       .getUsers()
       .then(function (r) {
         dispatch('cml/sync/stop', 'usersList', { root: true });
@@ -66556,6 +66617,7 @@ var actions$4 = {
 };
 
 var getters$2 = {
+  // Get the permissions for every users from a permissions object
   permissions: function (state) { return function (permissions) {
     return state.list.reduce(
       function (p, user) {
@@ -66569,24 +66631,29 @@ var getters$2 = {
 };
 
 var mutations$5 = {
+  // Reset users (on log-out)
   reset: function reset(state) {
     Vue$3.set(state, 'list', []);
   },
 
+  // Add a new user
   add: function add(state, user) {
     state.list.push(user);
   },
 
+  // Update a user in the list
   update: function update(state, user) {
     var index = state.list.findIndex(function (u) { return u.id === user.id; });
     Vue$3.set(state.list, index, user);
   },
 
+  // Remove a user from the list
   remove: function remove(state, userId) {
     var index = state.list.findIndex(function (u) { return u.id === userId; });
     Vue$3.delete(state.list, index);
   },
 
+  // Set the user list
   list: function list(state, users) {
     Vue$3.set(state, 'list', users);
   }
@@ -66600,24 +66667,46 @@ var users = {
   mutations: mutations$5
 }
 
+// list contains the groups
+
+/* Example
+
+{
+  list: [{
+    id: 'group-id-hash-1',
+    name: 'group-name-1',
+    description: { … },
+    userIds: [
+      'user-id-hash-1',
+      'user-id-hash-2'
+  },
+  { …
+  }]
+}
+
+*/
+
 var state$8 = {
   list: []
 };
 
 var actions$5 = {
+  // Add a new group
   add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'groupsAdd', { root: true });
-    return api
+    return rootState.cml.api
       .createGroup(element.name, element.description)
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsAdd', { root: true });
         var group = groupFormat(r.data);
         commit('add', group);
+
+        // Add the new group to every corpus and layers
         commit('cml/corpus/groupAdd', group.id, { root: true });
         commit('cml/layers/groupAdd', group.id, { root: true });
         dispatch('cml/messages/success', 'Group added', { root: true });
@@ -66632,18 +66721,20 @@ var actions$5 = {
       })
   },
 
+  // Remove a group
   remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', 'groupsRemove', { root: true });
-    return api
+    return rootState.cml.api
       .deleteGroup(id)
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsRemove', { root: true });
         commit('remove', id);
+        // Add the group from every corpus and layers
         commit('cml/corpus/groupRemove', id, { root: true });
         commit('cml/layers/groupRemove', id, { root: true });
         dispatch('cml/messages/success', 'Group removed', { root: true });
@@ -66658,14 +66749,15 @@ var actions$5 = {
       })
   },
 
+  // Update a group
   update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', 'groupsUpdate', { root: true });
-    return api
+    return rootState.cml.api
       .updateGroup(element.id, { description: element.description })
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsUpdate', { root: true });
@@ -66683,13 +66775,14 @@ var actions$5 = {
       })
   },
 
+  // List groups
   list: function list(ref) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', 'groupsList', { root: true });
-    return api
+    return rootState.cml.api
       .getGroups()
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsList', { root: true });
@@ -66706,16 +66799,16 @@ var actions$5 = {
       })
   },
 
+  // Add a user to a group
   userAdd: function userAdd(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
     var rootState = ref.rootState;
     var userId = ref$1.userId;
     var group = ref$1.group;
 
     dispatch('cml/sync/start', 'groupsUserAdd', { root: true });
-    return api
+    return rootState.cml.api
       .addUserToGroup(userId, group.id)
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsUserAdd', { root: true });
@@ -66741,16 +66834,16 @@ var actions$5 = {
       })
   },
 
+  // remove a user from a group
   userRemove: function userRemove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
     var rootState = ref.rootState;
     var userId = ref$1.userId;
     var group = ref$1.group;
 
     dispatch('cml/sync/start', 'groupsUserRemove', { root: true });
-    return api
+    return rootState.cml.api
       .removeUserFromGroup(userId, group.id)
       .then(function (r) {
         dispatch('cml/sync/stop', 'groupsUserRemove', { root: true });
@@ -66778,6 +66871,8 @@ var actions$5 = {
 };
 
 var getters$3 = {
+  // Get the permissions for every groups
+  // { 'group-id-hash-1': 0, 'group-id-hash-2': 3, … }
   permissions: function (state) { return function (permissions) {
     return state.list.reduce(
       function (p, group) {
@@ -66791,24 +66886,29 @@ var getters$3 = {
 };
 
 var mutations$6 = {
+  // Reset list (on log-out)
   reset: function reset(state) {
     Vue$3.set(state, 'list', []);
   },
 
+  // Add a group to the list
   add: function add(state, group) {
     state.list.push(group);
   },
 
+  // Update a group
   update: function update(state, group) {
     var index = state.list.findIndex(function (g) { return g.id === group.id; });
     Vue$3.set(state.list, index, group);
   },
 
+  // Remove a group
   remove: function remove(state, groupId) {
     var index = state.list.findIndex(function (g) { return g.id === groupId; });
     Vue$3.delete(state.list, index);
   },
 
+  // Set the group list
   list: function list(state, groups) {
     Vue$3.set(state, 'list', groups);
   }
@@ -66822,12 +66922,51 @@ var groups = {
   mutations: mutations$6
 }
 
+// The latin word should be corpus (singular) / corpora (plural), but…
+// For consistency with other sections (users, groups, medias, layers, annotations),
+// I use corpu (singular) / corpus (plural)
+
+// Lists contains the corpu data
+// Actives contains the active corpu for each uid
+
+/* Example:
+
+{
+  lists: {
+    'corpu-uid-string-1': [{
+      id: 'corpu-id-hash',
+      name: 'corpu-name-string'
+      permission: 3,
+      permissions: {
+        groups: {
+          'group-id-hash-1': 2,
+          'group-id-hash-2': …
+        },
+        users: {
+          'user-id-hash-1': 1,
+          'user-id-hash-2': …
+        }
+      }
+    },
+    { …
+    }],
+    'corpu-uid-string-2': [ … 
+    ]
+  },
+  actives: {
+    'corpu-uid-string-1': 'corpu-id-hash-1',
+    'corpu-uid-string-2': …
+  }
+}
+*/
+
 var state$9 = {
   lists: {},
   actives: {}
 };
 
 var actions$6 = {
+  // Add a new corpu
   add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
@@ -66836,10 +66975,12 @@ var actions$6 = {
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "corpusAdd", { root: true });
-    return api
+    return rootState.cml.api
       .createCorpus(element.name, element.description, {})
       .then(function (r) {
         dispatch('cml/sync/stop', "corpusAdd", { root: true });
+
+        // Format server response
         var corpu = {
           name: r.data.name,
           id: r.data._id,
@@ -66850,7 +66991,11 @@ var actions$6 = {
           },
           description: r.data.description || {}
         };
+
+        // Set the permissions for the current user
         corpu.permissions.users[rootState.cml.user.id] = 3;
+
+        // Commit the corpu
         commit('add', { corpu: corpu });
         dispatch('cml/messages/success', 'Corpus added', { root: true });
 
@@ -66864,19 +67009,24 @@ var actions$6 = {
       })
   },
 
+  // Remove a corpu
   remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', "corpusRemove", { root: true });
-    return api
+    return rootState.cml.api
       .deleteCorpus(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "corpusRemove", { root: true });
         commit('remove', { id: id });
         dispatch('cml/messages/success', 'Corpus removed', { root: true });
+
+        // For every uid,
+        // If the removed corpus was active
+        // Set a new one
         dispatch('setAll', { id: id });
 
         return id
@@ -66889,20 +67039,26 @@ var actions$6 = {
       })
   },
 
+  // Update a corpu
   update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
-    var state = ref.state;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "corpusUpdate", { root: true });
-    return api
+    return rootState.cml.api
       .updateCorpus(element.id, {
         name: element.name,
         description: element.description
       })
       .then(function (r) {
         dispatch('cml/sync/stop', "corpusUpdate", { root: true });
+
+        // Format server response
+        // The server does not send back the permissions,
+        // To keep them, we copy the original element
+        // Then overwrite the name and description
         var corpu = Object.assign({}, element);
         corpu.name = r.data.name;
         corpu.description = r.data.description || {};
@@ -66919,6 +67075,7 @@ var actions$6 = {
       })
   },
 
+  // Set the permission for a group on a corpu
   groupPermissionSet: function groupPermissionSet(
     ref,
     ref$1
@@ -66926,6 +67083,7 @@ var actions$6 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
     var id = ref$1.id;
     var groupId = ref$1.groupId;
     var permission = ref$1.permission;
@@ -66933,26 +67091,33 @@ var actions$6 = {
     dispatch('cml/sync/start', "corpusGroupPermissionSet", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .setCorpusPermissionsForGroup(id, groupId, permission)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "corpusGroupPermissionSet", {
           root: true
         });
-        commit('groupPermissionsUpdate', {
+
+        // Commit server response
+        commit('permissionsUpdate', {
           id: id,
-          groupId: groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0
+          typeId: groupId,
+          permission: (permissions.groups && permissions.groups[groupId]) || 0,
+          type: 'groups'
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
 
+        // If the current user is in the updated group
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the corpus in every uid
           dispatch('listAll');
           commit("cml/popup/close", null, { root: true });
         }
@@ -66970,32 +67135,46 @@ var actions$6 = {
       })
   },
 
-  groupPermissionRemove: function groupPermissionRemove(ref, ref$1) {
+  // Remove a permission for a group on a corpu
+  groupPermissionRemove: function groupPermissionRemove(
+    ref,
+    ref$1
+  ) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
     var id = ref$1.id;
     var groupId = ref$1.groupId;
 
     dispatch('cml/sync/start', "corpusGroupPermissionRemove", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .removeCorpusPermissionsForGroup(id, groupId)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "corpusGroupPermissionRemove", {
           root: true
         });
-        commit('groupPermissionsUpdate', { id: id, groupId: groupId, permission: 0 });
+        commit('permissionsUpdate', {
+          id: id,
+          typeId: groupId,
+          permission: 0,
+          type: 'groups'
+        });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
 
+        // If the current user is in the updated group
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the corpus in every uid
           dispatch('listAll');
           commit("cml/popup/close", null, { root: true });
         }
@@ -67012,6 +67191,7 @@ var actions$6 = {
       })
   },
 
+  // Set the permission for a user on a corpu
   userPermissionSet: function userPermissionSet(
     ref,
     ref$1
@@ -67019,31 +67199,37 @@ var actions$6 = {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
     var id = ref$1.id;
     var userId = ref$1.userId;
     var permission = ref$1.permission;
 
     dispatch('cml/sync/start', "corpusUserPermissionSet", { root: true });
-    return api
+    return rootState.cml.api
       .setCorpusPermissionsForUser(id, userId, permission)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "corpusUserPermissionSet", {
           root: true
         });
-        commit('userPermissionsUpdate', {
+        commit('permissionsUpdate', {
           id: id,
-          userId: userId,
-          permission: (permissions.users && permissions.users[userId]) || 0
+          typeId: userId,
+          permission: (permissions.users && permissions.users[userId]) || 0,
+          type: 'users'
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
 
+        // If the current user is the updated user
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the corpus in every uid
           dispatch('listAll');
           commit("cml/popup/close", null, { root: true });
         }
@@ -67060,28 +67246,41 @@ var actions$6 = {
       })
   },
 
-  userPermissionRemove: function userPermissionRemove(ref, ref$1) {
+  // Remove the permission for a user on a corpu
+  userPermissionRemove: function userPermissionRemove(
+    ref,
+    ref$1
+  ) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
     var id = ref$1.id;
     var userId = ref$1.userId;
 
     dispatch('cml/sync/start', "corpusUserPermissionRemove", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .removeCorpusPermissionsForUser(id, userId)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "corpusUserPermissionRemove", {
           root: true
         });
-        commit('userPermissionsUpdate', { id: id, userId: userId, permission: 0 });
+        commit('permissionsUpdate', {
+          id: id,
+          typeId: userId,
+          permission: 0,
+          type: 'users'
+        });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
 
+        // If the current user is the updated user
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
@@ -67106,26 +67305,34 @@ var actions$6 = {
     var state = ref.state;
     var dispatch = ref.dispatch;
 
+    // Loop over the corpu lists
     Object.keys(state.lists).forEach(function (uid) {
+      // List the corpus for this uid
       dispatch('list', uid);
     });
   },
 
+  // List the corpus for a uid
   list: function list(ref, uid) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
     var rootGetters = ref.rootGetters;
+    var rootState = ref.rootState;
 
     dispatch('cml/sync/start', ("corpusList-" + uid), { root: true });
-    return api
+    return rootState.cml.api
       .getCorpora()
       .then(function (r) {
         dispatch('cml/sync/stop', ("corpusList-" + uid), { root: true });
+
+        // Format server response
         var corpus = r.data.map(function (c) { return ({
           name: c.name,
           id: c._id,
           description: c.description || {},
+          // Get permission for the current user
           permission: rootGetters['cml/user/permission'](c.permissions || {}),
+          // Get permissions for every users and groups
           permissions: {
             users: rootGetters['cml/users/permissions'](
               (c.permissions && c.permissions.users) || {}
@@ -67135,7 +67342,11 @@ var actions$6 = {
             )
           }
         }); });
+
+        // Commit the update corpu list
         commit('list', { corpus: corpus, uid: uid });
+
+        // Set the active corpu for this list
         dispatch('set', { uid: uid });
 
         return corpus
@@ -67148,6 +67359,9 @@ var actions$6 = {
       })
   },
 
+  // For every uid,
+  // If the corpus id was active
+  // And set a new one
   setAll: function setAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
@@ -67160,6 +67374,7 @@ var actions$6 = {
     });
   },
 
+  // Set the active corpus for a uid
   set: function set(ref, ref$1) {
     var state = ref.state;
     var getters = ref.getters;
@@ -67168,10 +67383,13 @@ var actions$6 = {
     var id = ref$1.id;
     var uid = ref$1.uid;
 
+    // Set the active corpus
+    // If the id is note defined, get one
     commit('set', { id: id || getters.id(uid), uid: uid });
 
-    // media needs to be set
-    // before layers/set triggers annotations/lists
+    // If the corpu active is set
+    // - list the medias
+    // - list the layers
     if (state.actives[uid]) {
       dispatch(
         'cml/medias/list',
@@ -67186,6 +67404,7 @@ var actions$6 = {
     }
   },
 
+  // Register a corpu uid
   register: function register(ref, uid) {
     var state = ref.state;
     var commit = ref.commit;
@@ -67195,11 +67414,15 @@ var actions$6 = {
 };
 
 var getters$4 = {
+  // Get the id of the active corpu
+  // If, for this uid, active is set and its id is still in the list
+  // If not, get the first corpu of the list
   id: function (state) { return function (uid) { return (state.actives[uid] &&
       state.lists[uid].find(function (c) { return c.id === state.actives[uid]; }).id) ||
     (state.lists[uid][0] && state.lists[uid][0].id) ||
     null; }; },
 
+  // Get the permission level for the active corpu
   permission: function (state) { return function (uid) {
     var corpu =
       state.lists[uid] &&
@@ -67209,16 +67432,21 @@ var getters$4 = {
 };
 
 var mutations$7 = {
+  // Register a new uid
+  // - lists is an empty array
+  // - actives is null
   register: function register(state, uid) {
     Vue$3.set(state.lists, uid, []);
     Vue$3.set(state.actives, uid, null);
   },
 
+  // Reset all (on log-out)
   resetAll: function resetAll(state) {
     Vue$3.set(state, 'lists', {});
     Vue$3.set(state, 'actives', {});
   },
 
+  // Add a new corpu in every uids
   add: function add(state, ref) {
     var corpu = ref.corpu;
 
@@ -67228,6 +67456,7 @@ var mutations$7 = {
     });
   },
 
+  // Update a corpu in every uids
   update: function update(state, ref) {
     var corpu = ref.corpu;
 
@@ -67239,6 +67468,7 @@ var mutations$7 = {
     });
   },
 
+  // Remove a corpu in every uids
   remove: function remove(state, ref) {
     var id = ref.id;
 
@@ -67250,6 +67480,7 @@ var mutations$7 = {
     });
   },
 
+  // Add a new group to every corpus
   groupAdd: function groupAdd(state, groupId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
@@ -67258,6 +67489,7 @@ var mutations$7 = {
     });
   },
 
+  // Remove a group from every corpus
   groupRemove: function groupRemove(state, groupId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
@@ -67266,6 +67498,7 @@ var mutations$7 = {
     });
   },
 
+  // Add a user to every corpus
   userAdd: function userAdd(state, userId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
@@ -67274,6 +67507,7 @@ var mutations$7 = {
     });
   },
 
+  // Remove a user from every corpus
   userRemove: function userRemove(state, userId) {
     Object.keys(state.lists).forEach(function (uid) {
       state.lists[uid].forEach(function (c) {
@@ -67282,32 +67516,24 @@ var mutations$7 = {
     });
   },
 
-  groupPermissionsUpdate: function groupPermissionsUpdate(state, ref) {
+  // Update permissions on a corpu
+  permissionsUpdate: function permissionsUpdate(state, ref) {
     var id = ref.id;
-    var groupId = ref.groupId;
+    var typeId = ref.typeId;
     var permission = ref.permission;
+    var type = ref.type;
 
+    // Loop over the corpus lists
+    // If the current corpu is in the list, update the permissions
     Object.keys(state.lists).forEach(function (uid) {
       var index = state.lists[uid].findIndex(function (m) { return m.id === id; });
       if (index !== -1) {
-        Vue$3.set(state.lists[uid][index].permissions.groups, groupId, permission);
+        Vue$3.set(state.lists[uid][index].permissions[type], typeId, permission);
       }
     });
   },
 
-  userPermissionsUpdate: function userPermissionsUpdate(state, ref) {
-    var id = ref.id;
-    var userId = ref.userId;
-    var permission = ref.permission;
-
-    Object.keys(state.lists).forEach(function (uid) {
-      var index = state.lists[uid].findIndex(function (m) { return m.id === id; });
-      if (index !== -1) {
-        Vue$3.set(state.lists[uid][index].permissions.users, userId, permission);
-      }
-    });
-  },
-
+  // Set the corpu list for a uid
   list: function list(state, ref) {
     var corpus = ref.corpus;
     var uid = ref.uid;
@@ -67315,6 +67541,7 @@ var mutations$7 = {
     Vue$3.set(state.lists, uid, corpus);
   },
 
+  // Set the active corpus for a uid
   set: function set(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
@@ -67331,6 +67558,56 @@ var corpus = {
   mutations: mutations$7
 }
 
+// Lists contains, for each corpuUid, an array of media objects
+// Actives contains, for each mediaUid, a media id and a reference to the corpuUid
+// Properties contains, for each mediaUid, the properties of the current media
+
+/* Example
+
+{
+  lists {
+    'copu-uid-string-1': [{
+      id: 'media-id-hash-1',
+      name: 'media-name-string',
+      url: 'http://media-string.url',
+      corpuId: 'corpu-id-hash-1',
+      description: {
+        type: 'media-type-string',
+        …
+      }
+    }, {
+      …
+    }],
+    'corpu-uid-string-2: [
+      …
+    ]
+  },
+  actives: {
+    'media-uid-string-1': {
+      id: 'media-id-hash-1',
+      corpuUid: 'corpu-uid-string'
+    },
+    'media-uid-string-2': {
+      …
+    }
+  },
+  porperties: {
+    'media-uid-string-1': {
+      isLoaded: boolean,
+      isPlaying: boolean,
+      timecurrent: Number,
+      timeTotal: number,
+      seek: {
+        seeking: Boolean
+      }
+    }, 
+    'media-uid-string-2': {
+      …
+    }
+  }
+}
+*/
+
 var state$10 = {
   lists: {},
   actives: {},
@@ -67343,11 +67620,12 @@ var actions$7 = {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "mediasAdd", { root: true });
-    return api
+    return rootState.cml.api
       .createMedium(
         element.corpuId,
         element.name,
@@ -67386,23 +67664,31 @@ var actions$7 = {
       })
   },
 
+  // Remove a media
   remove: function remove(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', "mediasRemove", { root: true });
-    return api
+    return rootState.cml.api
       .deleteMedium(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "mediasRemove", { root: true });
+
+        // Loop over the corpuUid
         Object.keys(state.lists).forEach(function (corpuUid) {
+          // If the media belongs to this corpuuid
           var listIndex = state.lists[corpuUid].findIndex(function (m) { return m.id === id; });
           if (listIndex !== -1) {
+            // Remove the media from the list
             commit('remove', { listIndex: listIndex, corpuUid: corpuUid });
           }
         });
+
+        // Re-set a new media in every mediaUid where it is active
         dispatch('unsetAll', { id: id });
         dispatch('cml/messages/success', 'Medium removed', { root: true });
 
@@ -67416,15 +67702,17 @@ var actions$7 = {
       })
   },
 
+  // Update a media
   update: function update(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "mediasUpdate", { root: true });
-    return api
+    return rootState.cml.api
       .updateMedium(element.id, {
         name: element.name,
         description: element.description,
@@ -67436,8 +67724,12 @@ var actions$7 = {
         media.name = r.data.name;
         media.url = r.data.url;
         media.description = r.data.description || {};
+
+        // Loop over the corpuUid
         Object.keys(state.lists).forEach(function (corpuUid) {
+          // If the corpu active in this corpuUid equals the media's corpuUid
           if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            // update the media
             commit('update', { media: media, corpuUid: corpuUid });
           }
         });
@@ -67457,11 +67749,12 @@ var actions$7 = {
   list: function list(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var rootState = ref.rootState;
     var corpuId = ref$1.corpuId;
     var corpuUid = ref$1.corpuUid;
 
     dispatch('cml/sync/start', ("mediasList-" + corpuUid), { root: true });
-    return api
+    return rootState.cml.api
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(function (r) {
         dispatch('cml/sync/stop', ("mediasList-" + corpuUid), { root: true });
@@ -67472,7 +67765,6 @@ var actions$7 = {
 
         // Commit media list
         commit('list', { medias: medias, corpuUid: corpuUid });
-        console.log('rrr', r);
 
         // Loop over the active medias
         Object.keys(state$10.actives).forEach(function (uid) {
@@ -67493,8 +67785,8 @@ var actions$7 = {
       })
   },
 
+  // Register a mediaUid in a corpuUid
   register: function register(ref, ref$1) {
-    var state = ref.state;
     var commit = ref.commit;
     var uid = ref$1.uid;
     var corpuUid = ref$1.corpuUid;
@@ -67502,13 +67794,17 @@ var actions$7 = {
     commit('register', { uid: uid, corpuUid: corpuUid });
   },
 
+  // Re-set a new media in every mediaUid where it is active
   unsetAll: function unsetAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var id = ref$1.id;
 
+    // loop over the mediaUids
     Object.keys(state.actives).forEach(function (uid) {
+      // If the media is active in this mediaUid
       if (state.actives[uid].id === id) {
+        // Set a new active media
         dispatch('set', { corpuUid: state.actives[uid].corpuUid, uid: uid });
       }
     });
@@ -67542,6 +67838,7 @@ var actions$7 = {
     );
   },
 
+  // Play the media in a mediaUid
   play: function play(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -67557,6 +67854,7 @@ var actions$7 = {
     commit('play', { uid: uid });
   },
 
+  // Pause a media in a mediaUid
   pause: function pause(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -67566,6 +67864,7 @@ var actions$7 = {
     commit('pause', { uid: uid });
   },
 
+  // Wait the media while buffering, in a mediaUid
   buffering: function buffering(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -67574,6 +67873,7 @@ var actions$7 = {
     clearInterval(state.properties[uid].interval);
   },
 
+  // Stop a media in a mediaUid
   stop: function stop(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -67589,6 +67889,7 @@ var actions$7 = {
     });
   },
 
+  // Seek a media in a mediaUid
   seek: function seek(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -67649,6 +67950,7 @@ var getters$5 = {
 };
 
 var mutations$8 = {
+  // Register a mediaUid in a corpuUid
   register: function register(state, ref) {
     var uid = ref.uid;
     var corpuUid = ref.corpuUid;
@@ -67657,12 +67959,14 @@ var mutations$8 = {
     Vue$3.set(state.properties, uid, null);
   },
 
+  // Reset all (on log-out)
   resetAll: function resetAll(state) {
     Vue$3.set(state, 'lists', {});
     Vue$3.set(state, 'actives', {});
     Vue$3.set(state, 'properties', {});
   },
 
+  // Add a new media in a corpuuid
   add: function add(state, ref) {
     var media = ref.media;
     var corpuUid = ref.corpuUid;
@@ -67671,6 +67975,7 @@ var mutations$8 = {
     Vue$3.set(state.lists[corpuUid], index, media);
   },
 
+  // Update a media in a corpuuid
   update: function update(state, ref) {
     var media = ref.media;
     var corpuUid = ref.corpuUid;
@@ -67679,6 +67984,7 @@ var mutations$8 = {
     Vue$3.set(state.lists[corpuUid], index, media);
   },
 
+  // Remove a media from a corpuUid
   remove: function remove(state, ref) {
     var listIndex = ref.listIndex;
     var corpuUid = ref.corpuUid;
@@ -67686,6 +67992,7 @@ var mutations$8 = {
     Vue$3.delete(state.lists[corpuUid], listIndex);
   },
 
+  // List medias in a corpuUid
   list: function list(state, ref) {
     var medias = ref.medias;
     var corpuUid = ref.corpuUid;
@@ -67693,6 +68000,7 @@ var mutations$8 = {
     Vue$3.set(state.lists, corpuUid, medias);
   },
 
+  // Set the active media in a mediaUid
   set: function set(state, ref) {
     var id = ref.id;
     var corpuUid = ref.corpuUid;
@@ -67708,6 +68016,7 @@ var mutations$8 = {
     });
   },
 
+  // Set the isLoaded property for a mediaUid
   loaded: function loaded(state, ref) {
     var isLoaded = ref.isLoaded;
     var uid = ref.uid;
@@ -67715,18 +68024,21 @@ var mutations$8 = {
     Vue$3.set(state.properties[uid], 'isLoaded', isLoaded);
   },
 
+  // Set the isplaying property to true in a mediauid
   play: function play(state, ref) {
     var uid = ref.uid;
 
     Vue$3.set(state.properties[uid], 'isPlaying', true);
   },
 
+  // Set the isplaying property to false in a mediauid
   pause: function pause(state, ref) {
     var uid = ref.uid;
 
     Vue$3.set(state.properties[uid], 'isPlaying', false);
   },
 
+  // Set the timetotal property in a mediaUid
   timeTotal: function timeTotal(state, ref) {
     var time = ref.time;
     var uid = ref.uid;
@@ -67734,6 +68046,7 @@ var mutations$8 = {
     Vue$3.set(state.properties[uid], 'timeTotal', time);
   },
 
+  // Set the seek property in a mediauid
   seek: function seek(state, ref) {
     var options = ref.options;
     var uid = ref.uid;
@@ -67750,12 +68063,58 @@ var medias = {
   mutations: mutations$8
 }
 
+// Lists contains, for each corpuUid, an array of layers
+// Actives contains, for each layersUid, a reference to the corpuUid and a list of layer Ids
+
+/* Example 
+
+{
+  lists: {
+    'corpu-uid-string-1': [{
+      id: 'layer-id-hash-1',
+      name: 'layer-two',
+      permission: 3,
+      permissions: {
+        groups: {
+          'group-id-hash-1': 0,
+          …
+        },
+        users: {
+          'user-id-hash-1': 0,
+          …
+        }
+      },
+      description: { … },
+      fragmentType: { … },
+      metadataType: { … }
+    }],
+    'corpu-uid-string-2': [ 
+      …
+    ]
+  },
+  actives: {
+    'layers-uid-string-1': {
+      corpuUid: 'corpu-uid-string-1',
+      ids: [
+        'layer-id-hash-1',
+        'layer-id-hash-2',
+        …
+      ]
+    },
+    'layers-uid-string-2': {
+      …
+    }
+  }
+}
+*/
+
 var state$11 = {
   lists: {},
   actives: {}
 };
 
 var actions$8 = {
+  // Add a new layer
   add: function add(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -67765,7 +68124,7 @@ var actions$8 = {
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "layersAdd", { root: true });
-    return api
+    return rootState.cml.api
       .createLayer(
         element.corpuId,
         element.name,
@@ -67776,10 +68135,14 @@ var actions$8 = {
       )
       .then(function (r) {
         dispatch('cml/sync/stop', "layersAdd", { root: true });
+
+        // Format server response
         var layer = {
           name: r.data.name,
           id: r.data._id,
+          // The current user who created the layer has max permission level (3)
           permission: 3,
+          // Init permissions for groups and users
           permissions: {
             users: rootGetters['cml/users/permissions']({}),
             groups: rootGetters['cml/groups/permissions']({})
@@ -67789,14 +68152,23 @@ var actions$8 = {
           metadataType: r.data.data_type || {},
           annotations: r.data.annotations
         };
+
+        // Set permissions for the current user
         layer.permissions.users[rootState.cml.user.id] = 3;
 
+        // Loop over the corpu Uids
         Object.keys(state.lists).forEach(function (corpuUid) {
+          // If the new layer belongs to the active corpu in this Uid
           if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            // Add the layer to the corpus
             commit('add', { layer: layer, corpuUid: corpuUid });
           }
+
+          // Loop over the layers uids
           Object.keys(state.actives).forEach(function (uid) {
+            // If this layers uid's belongs to the current corpuUid
             if (state.actives[uid].corpuUid === corpuUid) {
+              // Activate the new layer
               dispatch('set', { uid: uid, id: layer.id });
             }
           });
@@ -67813,6 +68185,7 @@ var actions$8 = {
       })
   },
 
+  // Remove a layer
   remove: function remove(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -67821,18 +68194,28 @@ var actions$8 = {
     var id = ref$1.id;
 
     dispatch('cml/sync/start', "layersRemove", { root: true });
-    return api
+    return rootState.cml.api
       .deleteLayer(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "layersRemove", { root: true });
+
+        // Loop over the corpuUids
+        // If the layer belongs to this corpuUid, remove the layer
         Object.keys(state.lists).forEach(function (corpuUid) {
-          commit('remove', { id: id, corpuUid: corpuUid });
+          var listIndex = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
+          if (listIndex !== -1) {
+            commit('remove', { listIndex: listIndex, corpuUid: corpuUid });
+          }
         });
+
+        // Loop over the layers uids
+        // If the layer is active, unset it
         Object.keys(state.actives).forEach(function (uid) {
           if (state.actives[uid].ids.findIndex(function (l) { return l.id === id; }) !== -1) {
             dispatch('unset', { id: id, uid: uid });
           }
         });
+
         dispatch('cml/messages/success', 'Layer removed', { root: true });
 
         return id
@@ -67845,15 +68228,17 @@ var actions$8 = {
       })
   },
 
+  // Update a layer
   update: function update(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "layersUpdate", { root: true });
-    return api
+    return rootState.cml.api
       .updateLayer(element.id, {
         name: element.name,
         description: element.description,
@@ -67862,13 +68247,20 @@ var actions$8 = {
       })
       .then(function (r) {
         dispatch('cml/sync/stop', "layersUpdate", { root: true });
+
+        // The server response does not contain the permissions
+        // Copy the original element to keep the permissions
+        // Overwrite properties with the server response
         var layer = Object.assign({}, element);
         layer.description = r.data.description || {};
         layer.fragmentType = r.data.fragment_type || {};
         layer.metadataType = r.data.data_type || {};
 
+        // Loop over the corpuUid
         Object.keys(state.lists).forEach(function (corpuUid) {
+          // If the element's corpuUid equals this corpuuid
           if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+            // Update the layer
             commit('update', { layer: layer, corpuUid: corpuUid });
           }
         });
@@ -67884,6 +68276,7 @@ var actions$8 = {
       })
   },
 
+  // Set the permission for a group on a layer
   groupPermissionSet: function groupPermissionSet(
     ref,
     ref$1
@@ -67899,26 +68292,31 @@ var actions$8 = {
     dispatch('cml/sync/start', "layersGroupPermissionSet", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .setLayerPermissionsForGroup(id, groupId, permission)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "layersGroupPermissionSet", {
           root: true
         });
-        commit('groupPermissionsUpdate', {
+        commit('permissionsUpdate', {
           id: id,
-          groupId: groupId,
-          permission: (permissions.groups && permissions.groups[groupId]) || 0
+          typeId: groupId,
+          permission: (permissions.groups && permissions.groups[groupId]) || 0,
+          type: 'groups'
         });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
 
+        // If the current user is in the updated group
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the layers in every corpuUids
           dispatch('listAll');
           commit('cml/popup/close', null, { root: true });
         }
@@ -67935,6 +68333,7 @@ var actions$8 = {
       })
   },
 
+  // Remove permission for a group on a layer
   groupPermissionRemove: function groupPermissionRemove(
     ref,
     ref$1
@@ -67949,22 +68348,31 @@ var actions$8 = {
     dispatch('cml/sync/start', "layersGroupPermissionRemove", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .removeLayerPermissionsForGroup(id, groupId)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "layersGroupPermissionRemove", {
           root: true
         });
-        commit('groupPermissionsUpdate', { id: id, groupId: groupId, permission: 0 });
+        commit('permissionsUpdate', {
+          id: id,
+          typeId: groupId,
+          permission: 0,
+          type: 'groups'
+        });
         dispatch('cml/messages/success', 'Group permissions updated', {
           root: true
         });
 
+        // If the current user is in the updated group
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isInGroup'](groupId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the layers in every corpuUids
           dispatch('listAll');
           commit('cml/popup/close', null, { root: true });
         }
@@ -67981,6 +68389,7 @@ var actions$8 = {
       })
   },
 
+  // Set the permission for a user on a layer
   userPermissionSet: function userPermissionSet(
     ref,
     ref$1
@@ -67994,26 +68403,31 @@ var actions$8 = {
     var permission = ref$1.permission;
 
     dispatch('cml/sync/start', "layersUserPermissionSet", { root: true });
-    return api
+    return rootState.cml.api
       .setLayerPermissionsForUser(id, userId, permission)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "layersUserPermissionSet", {
           root: true
         });
-        commit('userPermissionsUpdate', {
+        commit('permissionsUpdate', {
           id: id,
-          userId: userId,
-          permission: (permissions.users && permissions.users[userId]) || 0
+          typeId: userId,
+          permission: (permissions.users && permissions.users[userId]) || 0,
+          type: 'users'
         });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
 
+        // If the current user was updated
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the layers in every corpuUids
           dispatch('listAll');
           commit('cml/popup/close', null, { root: true });
         }
@@ -68030,6 +68444,7 @@ var actions$8 = {
       })
   },
 
+  // Remove the permission for a user on a layer
   userPermissionRemove: function userPermissionRemove(
     ref,
     ref$1
@@ -68044,22 +68459,31 @@ var actions$8 = {
     dispatch('cml/sync/start', "layersUserPermissionRemove", {
       root: true
     });
-    return api
+    return rootState.cml.api
       .removeLayerPermissionsForUser(id, userId)
       .then(function (p) {
         var permissions = p.data;
         dispatch('cml/sync/stop', "layersUserPermissionRemove", {
           root: true
         });
-        commit('userPermissionsUpdate', { id: id, userId: userId, permission: 0 });
+        commit('permissionsUpdate', {
+          id: id,
+          typeId: userId,
+          permission: 0,
+          type: 'users'
+        });
         dispatch('cml/messages/success', 'User permissions updated', {
           root: true
         });
 
+        // If the current user was updated
+        // And if the current user is not an admin
+        // => the permissions for the current user have changed
         if (
           rootGetters['cml/user/isCurrentUser'](userId) &&
           !rootGetters['cml/user/isAdmin'](permissions)
         ) {
+          // Re-list the layers in every corpuUids
           dispatch('listAll');
           commit('cml/popup/close', null, { root: true });
         }
@@ -68076,6 +68500,7 @@ var actions$8 = {
       })
   },
 
+  // List the layers for every corpuUids
   listAll: function listAll(ref) {
     var state = ref.state;
     var dispatch = ref.dispatch;
@@ -68089,18 +68514,22 @@ var actions$8 = {
     });
   },
 
+  // List the layers for a corpuUid
   list: function list(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var rootState = ref.rootState;
     var rootGetters = ref.rootGetters;
     var corpuId = ref$1.corpuId;
     var corpuUid = ref$1.corpuUid;
 
     dispatch('cml/sync/start', ("layersList-" + corpuUid), { root: true });
-    return api
+    return rootState.cml.api
       .getLayers({ filter: { id_corpus: corpuId } })
       .then(function (r) {
         dispatch('cml/sync/stop', ("layersList-" + corpuUid), { root: true });
+
+        // Format server response
         var layers = r.data.map(function (l) { return ({
           name: l.name,
           id: l._id,
@@ -68119,7 +68548,10 @@ var actions$8 = {
           annotations: l.annotations || []
         }); });
 
+        // Commit list to a corpuUid
         commit('list', { layers: layers, corpuUid: corpuUid });
+
+        // Activate every layers in the list
         dispatch('setAll', { corpuUid: corpuUid });
 
         return layers
@@ -68132,19 +68564,24 @@ var actions$8 = {
       })
   },
 
+  // Activate every layers in a corpuUid
   setAll: function setAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
     var corpuUid = ref$1.corpuUid;
 
+    // Loop over every layers uids
     Object.keys(state.actives).forEach(function (uid) {
+      // Loop over every layers in a corpuUid
       state.lists[corpuUid].forEach(function (l) {
+        // Activate the layer
         dispatch('set', { id: l.id, corpuUid: corpuUid, uid: uid });
       });
     });
   },
 
+  // Activate a layer in a layers uid
   set: function set(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
@@ -68159,6 +68596,7 @@ var actions$8 = {
     );
   },
 
+  // Deactivate a layer in a layers uid
   unset: function unset(ref, ref$1) {
     var dispatch = ref.dispatch;
     var commit = ref.commit;
@@ -68173,6 +68611,7 @@ var actions$8 = {
     );
   },
 
+  // Register a layers uid
   register: function register(ref, ref$1) {
     var state = ref.state;
     var commit = ref.commit;
@@ -68184,10 +68623,12 @@ var actions$8 = {
 };
 
 var getters$6 = {
+  // Get the active layer ids
   activeIds: function (state) { return function (uid) {
     return (state.actives[uid] && state.actives[uid].ids) || []
   }; },
 
+  // Get the active layer objects
   actives: function (state) { return function (uid) {
     var actives = state.actives[uid];
     var layers = state.lists[actives.corpuUid];
@@ -68198,6 +68639,7 @@ var getters$6 = {
 };
 
 var mutations$9 = {
+  // register a layers uid
   register: function register(state, ref) {
     var uid = ref.uid;
     var corpuUid = ref.corpuUid;
@@ -68205,11 +68647,13 @@ var mutations$9 = {
     Vue$3.set(state.actives, uid, { corpuUid: corpuUid, ids: [] });
   },
 
+  // Reset all layers (on log-out)
   resetAll: function resetAll(state) {
     Vue$3.set(state, 'lists', {});
     Vue$3.set(state, 'actives', {});
   },
 
+  // Add a layer in a corpuUid
   add: function add(state, ref) {
     var layer = ref.layer;
     var corpuUid = ref.corpuUid;
@@ -68218,23 +68662,15 @@ var mutations$9 = {
     Vue$3.set(state.lists[corpuUid], index, layer);
   },
 
+  // Remove a layer in a corpuUid
   remove: function remove(state, ref) {
-    var id = ref.id;
+    var listIndex = ref.listIndex;
     var corpuUid = ref.corpuUid;
 
-    var listIndex = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
-    if (listIndex !== -1) {
-      Vue$3.delete(state.lists[corpuUid], listIndex);
-    }
-
-    Object.keys(state.actives).forEach(function (uid) {
-      var activeIndex = state.actives[uid].ids.indexOf(id);
-      if (activeIndex !== -1) {
-        Vue$3.delete(state.actives[uid], activeIndex);
-      }
-    });
+    Vue$3.delete(state.lists[corpuUid], listIndex);
   },
 
+  // Update a layer in a corpuUid
   update: function update(state, ref) {
     var layer = ref.layer;
     var corpuUid = ref.corpuUid;
@@ -68243,6 +68679,7 @@ var mutations$9 = {
     Vue$3.set(state.lists[corpuUid], index, layer);
   },
 
+  // Add a group to every layers in every corpuUid
   groupAdd: function groupAdd(state, groupId) {
     Object.keys(state.lists).forEach(function (corpuUid) {
       state.lists[corpuUid].forEach(function (e) {
@@ -68251,6 +68688,7 @@ var mutations$9 = {
     });
   },
 
+  // Remove a group from every layers in every corpuUid
   groupRemove: function groupRemove(state, groupId) {
     Object.keys(state.lists).forEach(function (corpuUid) {
       state.lists[corpuUid].forEach(function (e) {
@@ -68259,6 +68697,7 @@ var mutations$9 = {
     });
   },
 
+  // Add a user to every layers in every corpuUid
   userAdd: function userAdd(state, userId) {
     Object.keys(state.lists).forEach(function (corpuUid) {
       state.lists[corpuUid].forEach(function (e) {
@@ -68267,6 +68706,7 @@ var mutations$9 = {
     });
   },
 
+  // Remove a user from every layers in every corpuUid
   userRemove: function userRemove(state, userId) {
     Object.keys(state.lists).forEach(function (corpuUid) {
       state.lists[corpuUid].forEach(function (e) {
@@ -68275,34 +68715,19 @@ var mutations$9 = {
     });
   },
 
-  groupPermissionsUpdate: function groupPermissionsUpdate(state, ref) {
+  // Update permissions on a layer in every corpuUid
+  permissionsUpdate: function permissionsUpdate(state, ref) {
     var id = ref.id;
-    var groupId = ref.groupId;
+    var typeId = ref.typeId;
     var permission = ref.permission;
+    var type = ref.type;
 
     Object.keys(state.lists).forEach(function (corpuUid) {
       var index = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
       if (index !== -1) {
         Vue$3.set(
-          state.lists[corpuUid][index].permissions.groups,
-          groupId,
-          permission
-        );
-      }
-    });
-  },
-
-  userPermissionsUpdate: function userPermissionsUpdate(state, ref) {
-    var id = ref.id;
-    var userId = ref.userId;
-    var permission = ref.permission;
-
-    Object.keys(state.lists).forEach(function (corpuUid) {
-      var index = state.lists[corpuUid].findIndex(function (e) { return e.id === id; });
-      if (index !== -1) {
-        Vue$3.set(
-          state.lists[corpuUid][index].permissions.users,
-          userId,
+          state.lists[corpuUid][index].permissions[type],
+          typeId,
           permission
         );
       }
@@ -68342,19 +68767,61 @@ var layers = {
   mutations: mutations$9
 }
 
+// Lists contains the annotations data
+// Actives contains the currently activated annotations
+
+/* 
+Example: 
+
+{
+  lists: {
+    'annotations-uid-string-1': {
+      layerUid: 'layer-uid-string',
+      mediaUid: 'media-uid-string',
+      // The lists of annotations organised by layers
+      layers: {
+        'layer-id-hash-1': [{
+          id: 'annotation-id-hash',
+          layerId: 'layer-id-hash',
+          mediaId: 'media-id-hash',
+          fragment: {
+            positions: [ … ],
+            time: { … }
+          },
+          metadata: {
+            label: 'lulu'
+          }
+        },
+        { …
+        }],
+        'layer-id-hash-2': [ …
+        ]
+      }
+    },
+    'annotations-uid-string-2': { …
+    }
+  },
+  actives: {
+    'annotations-uid-string-1': 'annotation-id-hash',
+    'annotations-uid-string-2': null // no annotation is activated for this uid
+  }
+}
+*/
 var state$12 = {
   lists: {},
   actives: {}
 };
 
 var actions$9 = {
+  // Add a new annotation
   add: function add(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "annotationsAdd", { root: true });
-    return api
+    return rootState.cml.api
       .createAnnotation(
         element.layerId,
         element.mediaId || null,
@@ -68363,6 +68830,8 @@ var actions$9 = {
       )
       .then(function (r) {
         dispatch('cml/sync/stop', "annotationsAdd", { root: true });
+
+        // Format server response
         var annotation = {
           id: r.data._id,
           fragment: r.data.fragment || {},
@@ -68370,6 +68839,8 @@ var actions$9 = {
           layerId: r.data.id_layer,
           mediaId: r.data.id_medium || null
         };
+
+        // Commit response
         commit('add', { annotation: annotation, layerId: element.layerId });
         dispatch('cml/messages/success', 'Annotation added', { root: true });
 
@@ -68383,13 +68854,15 @@ var actions$9 = {
       })
   },
 
+  // Remove an annotation
   remove: function remove(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var id = ref$1.id;
 
     dispatch('cml/sync/start', "annotationsRemove", { root: true });
-    return api
+    return rootState.cml.api
       .deleteAnnotation(id)
       .then(function (r) {
         dispatch('cml/sync/stop', "annotationsRemove", { root: true });
@@ -68406,22 +68879,28 @@ var actions$9 = {
       })
   },
 
+  // Update an annotation
   update: function update(ref, ref$1) {
     var commit = ref.commit;
     var dispatch = ref.dispatch;
+    var rootState = ref.rootState;
     var element = ref$1.element;
 
     dispatch('cml/sync/start', "annotationsUpdate", { root: true });
-    return api
+    return rootState.cml.api
       .updateAnnotation(element.id, {
         fragment: element.fragment,
         data: element.metadata
       })
       .then(function (r) {
+        dispatch('cml/sync/stop', "annotationsUpdate", { root: true });
+
+        // Format server response
         var annotation = Object.assign({}, element);
         annotation.fragment = r.data.fragment || {};
         annotation.metadata = r.data.data || {};
-        dispatch('cml/sync/stop', "annotationsUpdate", { root: true });
+
+        // Commit response
         commit('update', { annotation: annotation, layerId: element.layerId });
         dispatch('cml/messages/success', 'Annotation updated', { root: true });
 
@@ -68435,6 +68914,7 @@ var actions$9 = {
       })
   },
 
+  // Activate the annotations for a layerId in a layersUid group
   layerSet: function layerSet(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
@@ -68442,21 +68922,29 @@ var actions$9 = {
     var layersUid = ref$1.layersUid;
     var layerId = ref$1.layerId;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
+      var mediaUid = state.lists[uid].mediaUid;
+
+      // If the current list's layersUid equals layersUid
+      // And if the current list's mediaUid is active
       if (
         state.lists[uid].layersUid === layersUid &&
-        rootState.cml.medias.actives[state.lists[uid].mediaUid]
+        rootState.cml.medias.actives[mediaUid]
       ) {
+        // Get the annotation list
         dispatch('list', {
           uid: uid,
           layerId: layerId,
           layersUid: layersUid,
-          mediaId: rootState.cml.medias.actives[state.lists[uid].mediaUid].id
+          mediaId: rootState.cml.medias.actives[mediaUid].id
         });
       }
     });
   },
 
+  // When a layer is deactivated,
+  // deactivate the annotations for this layerId in this layersUid group
   layerUnset: function layerUnset(ref, ref$1) {
     var commit = ref.commit;
     var layersUid = ref$1.layersUid;
@@ -68465,6 +68953,8 @@ var actions$9 = {
     commit('reset', { layersUid: layersUid, layerId: layerId });
   },
 
+  // When the active media changes,
+  // display the related annotations
   mediaSet: function mediaSet(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
@@ -68472,16 +68962,23 @@ var actions$9 = {
     var mediaUid = ref$1.mediaUid;
     var mediaId = ref$1.mediaId;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
+      var list = state.lists[uid];
+
+      // If the current list's mediaUid equals mediaUid
+      // And if the current list's LayersUid is active
       if (
-        state.lists[uid].mediaUid === mediaUid &&
-        rootState.cml.layers.actives[state.lists[uid].layersUid]
+        list.mediaUid === mediaUid &&
+        rootState.cml.layers.actives[list.layersUid]
       ) {
-        Object.keys(state.lists[uid].layers).forEach(function (layerId) {
+        // Loop over the layers
+        Object.keys(list.layers).forEach(function (layerId) {
+          // Get the annotation list
           dispatch('list', {
             uid: uid,
             layerId: layerId,
-            layersUid: state.lists[uid].layersUid,
+            layersUid: list.layersUid,
             mediaId: mediaId
           });
         });
@@ -68489,17 +68986,22 @@ var actions$9 = {
     });
   },
 
-  list: function list(ref, ref$1) {
+  // List the annotations
+  list: function list(
+    ref,
+    ref$1
+  ) {
     var state = ref.state;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var rootState = ref.rootState;
     var uid = ref$1.uid;
     var layerId = ref$1.layerId;
     var layersUid = ref$1.layersUid;
     var mediaId = ref$1.mediaId;
 
     dispatch('cml/sync/start', ("annotationsList-" + uid), { root: true });
-    return api
+    return rootState.cml.api
       .getAnnotations({
         filter: {
           id_layer: layerId,
@@ -68510,6 +69012,8 @@ var actions$9 = {
         dispatch('cml/sync/stop', ("annotationsList-" + uid), {
           root: true
         });
+
+        // Format server response
         var annotations = r.data.map(function (a) { return ({
           id: a._id,
           fragment: a.fragment || {},
@@ -68517,8 +69021,9 @@ var actions$9 = {
           layerId: a.id_layer,
           mediaId: a.id_medium || null
         }); });
+
+        // Commit response
         commit('list', { annotations: annotations, uid: uid, layerId: layerId, layersUid: layersUid });
-        // commit('reset', { layerId, layersUid })
 
         return annotations
       })
@@ -68543,8 +69048,10 @@ var actions$9 = {
 };
 
 var getters$7 = {
-  actives: function (state) { return function (uid) { return (state.lists[uid] && state.lists[uid].layers) || {}; }; },
+  // Get the lists of annotations
+  lists: function (state) { return function (uid) { return (state.lists[uid] && state.lists[uid].layers) || {}; }; },
 
+  // Get the lists of annotations, filtered
   filter: function (state) { return function (uid, filter) { return state.lists[uid] &&
     Object.keys(state.lists[uid].layers).reduce(
       function (res, layer) {
@@ -68557,41 +69064,53 @@ var getters$7 = {
 };
 
 var mutations$10 = {
+  // Register an annotation list by uid
   register: function register(state, ref) {
     var uid = ref.uid;
     var mediaUid = ref.mediaUid;
     var layersUid = ref.layersUid;
 
+    // Create an uid entry in state.actives
     Vue$3.set(state.actives, uid, null);
+
+    // Create an uid entry in state.lists,
+    // with value { mediaUid, LayersUid, layers: {}}
     Vue$3.set(state.lists, uid, { mediaUid: mediaUid, layersUid: layersUid, layers: {} });
   },
 
+  // Reset all (on log-out)
   resetAll: function resetAll(state) {
     Vue$3.set(state, 'lists', {});
     Vue$3.set(state, 'actives', {});
   },
 
+  // Reset a list (if a layer is deactivated for example)
   reset: function reset(state, ref) {
     var layersUid = ref.layersUid;
     var layerId = ref.layerId;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
-      if (state.lists[uid].layersUid === layersUid) {
-        Vue$3.delete(state.lists[uid], layerId);
-      }
-    });
+      var list = state.lists[uid];
 
-    Object.keys(state.actives).forEach(function (uid) {
-      if (state.actives[uid] && state.actives[uid].layerId === layerId) {
+      // If current list's layersUid equals layersUid
+      // - delete the list
+      // - set the active annotation to null
+      if (list.layersUid === layersUid) {
+        Vue$3.delete(list, layerId);
         Vue$3.set(state.actives, uid, null);
       }
     });
   },
 
+  // Add an annotation to a layer
   add: function add(state, ref) {
     var annotation = ref.annotation;
     var layerId = ref.layerId;
 
+    // Loop over the annotation lists
+    // If a list contains a layer which id's equals to layerId,
+    // Prepend the new annotation to the list
     Object.keys(state.lists).forEach(function (uid) {
       var list = state.lists[uid].layers[layerId];
       if (list) {
@@ -68600,41 +69119,47 @@ var mutations$10 = {
     });
   },
 
+  // Update an annotation
   update: function update(state, ref) {
     var annotation = ref.annotation;
     var layerId = ref.layerId;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
+      // If a list contains a layer which id's equals to layerId
       var list = state.lists[uid].layers[layerId];
       if (list) {
+        // Find the annotation index in the list and update
         var index = list.findIndex(function (a) { return a.id === annotation.id; });
         Vue$3.set(list, index, annotation);
       }
     });
   },
 
+  // Remove an annotation by id
   remove: function remove(state, ref) {
     var id = ref.id;
 
+    // Loop over the annotation lists
     Object.keys(state.lists).forEach(function (uid) {
+      // Loop over the the layers in each list
       Object.keys(state.lists[uid].layers).forEach(function (layerId) {
+        // If the list contains the annotation
+        // - delete the annotation
+        // - if the annotation was active, unset it
         var list = state.lists[uid].layers[layerId];
-        if (list) {
-          var listsIndex = list.findIndex(function (a) { return a.id === id; });
-          if (listsIndex !== -1) {
-            Vue$3.delete(list, listsIndex);
+        var listsIndex = list.findIndex(function (a) { return a.id === id; });
+        if (listsIndex !== -1) {
+          Vue$3.delete(list, listsIndex);
+          if (state.actives[uid] === id) {
+            Vue$3.set(state.actives, uid, null);
           }
         }
       });
     });
-
-    Object.keys(state.actives).forEach(function (uid) {
-      if (state.actives[uid] && state.actives[uid].id === id) {
-        Vue$3.set(state.actives, uid, null);
-      }
-    });
   },
 
+  // Set the list of annotation
   list: function list(state, ref) {
     var annotations = ref.annotations;
     var uid = ref.uid;
@@ -68644,6 +69169,7 @@ var mutations$10 = {
     Vue$3.set(state.lists[uid].layers, layerId, annotations);
   },
 
+  // Set the active annotation
   set: function set(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
@@ -68651,6 +69177,7 @@ var mutations$10 = {
     Vue$3.set(state.actives, uid, id);
   },
 
+  // Unset an active annotation
   unset: function unset(state, ref) {
     var id = ref.id;
     var uid = ref.uid;
@@ -68667,6 +69194,8 @@ var annotations = {
   mutations: mutations$10
 }
 
+// Vuex Store main entry point
+
 var modules$1 = {
   viewport: viewport,
   sync: sync,
@@ -68682,22 +69211,23 @@ var modules$1 = {
   annotations: annotations
 };
 
-var state$13 = {
-  config: config$1
-};
-
 var actions$10 = {
+  // Bootstrap the application (on log-in)
   set: function set(ref) {
     var dispatch = ref.dispatch;
 
+    // First get the users and groups
+    // to get permissions…
     Promise.all([].concat( ['users', 'groups'].map(function (type) { return dispatch(("cml/" + type + "/list"), {}, { root: true })
           .then(function (r) { return r; })
           .catch(function (e) { return e; }); }
       ) )).then(function (res) {
+      // …then list the corpus
       dispatch('cml/corpus/listAll', null, { root: true });
     });
   },
 
+  // Reset (on log-out)
   reset: function reset(ref) {
     var commit = ref.commit;
 
@@ -68711,14 +69241,30 @@ var actions$10 = {
   }
 };
 
+var mutations$11 = {
+  // Register the app, to connect to the api
+  register: function register(state, ref) {
+    var url = ref.url;
+    var title = ref.title;
+    var user$$1 = ref.user;
+
+    state.config = {
+      url: url,
+      title: title,
+      user: user$$1
+    };
+    state.api = new camomileClient(url);
+  }
+};
+
 Vue$3.use(index_esm);
 
 var store$1 = new index_esm.Store({
   modules: {
     cml: {
       namespaced: true,
-      state: state$13,
       actions: actions$10,
+      mutations: mutations$11,
       modules: modules$1
     }
   }
@@ -68966,11 +69512,16 @@ var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     objectField: objectField
   },
 
+  data: function data () {
+    return {
+      roles: ['admin', 'user']
+    }
+  },
+
   computed: Object.assign({}, mapState({
       element: function (state) { return state.cml.popup.element; },
       type: function (state) { return state.cml.popup.config.type; },
-      rolesPermission: function (state) { return state.cml.user.id !== state.cml.popup.element.id; },
-      roles: function (state) { return state.cml.config.roles; }
+      rolesPermission: function (state) { return state.cml.user.id !== state.cml.popup.element.id; }
     })),
 
   created: function created () {
@@ -69214,11 +69765,41 @@ var app = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm.
     cmlDropdown: cmlDropdown
   },
 
+  props: {
+    userName: {
+      type: String,
+      default: ''
+    },
+    userPassword: {
+      type: String,
+      default: ''
+    },
+    url: {
+      type: String,
+      default: 'http://localhost:3000'
+    },
+    title: {
+      type: String,
+      default: 'Camomile UI'
+    }
+  },
+
   computed: Object.assign({}, mapState({
       isLogged: function (state) { return state.cml.user.isLogged; },
       popup: function (state) { return state.cml.popup; },
       media: function (state) { return state.cml.medias.list.find(function (m) { return m.id === state.cml.medias.id; }); }
-    }))
+    })),
+
+  created: function created () {
+    this.$store.commit('cml/register', {
+      url: this.url,
+      title: this.title,
+      user: {
+        name: this.userName,
+        password: this.userPassword
+      }
+    });
+  }
 }
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
@@ -70020,7 +70601,7 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
   computed: {
     annotations: function annotations () {
-      return this.$store.getters['cml/annotations/actives'](this.uid)
+      return this.$store.getters['cml/annotations/lists'](this.uid)
     },
     activeId: function activeId () {
       return this.$store.state.cml.annotations.actives[this.uid] || null
@@ -70939,7 +71520,7 @@ var buttons = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
       return this.mediaProperties.timeTotal || 0
     },
     annotations: function annotations () {
-      return this.$store.getters['cml/annotations/actives'](this.uid)
+      return this.$store.getters['cml/annotations/lists'](this.uid)
     },
     mediaId: function mediaId () {
       return this.$store.state.cml.medias.actives[this.mediaUid].id
@@ -71238,7 +71819,7 @@ var edit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm
 
   computed: {
     annotations: function annotations () {
-      return this.$store.getters['cml/annotations/actives'](this.uid)
+      return this.$store.getters['cml/annotations/lists'](this.uid)
     },
     mediaId: function mediaId () {
       return this.$store.state.cml.medias.actives[this.mediaUid].id

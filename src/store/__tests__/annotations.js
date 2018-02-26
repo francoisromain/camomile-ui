@@ -10,11 +10,12 @@ import sync from '../sync'
 import medias from '../medias'
 import layers from '../layers'
 import annotations from '../annotations'
+import api from '../__mocks__/_api.js'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
-jest.mock('../_api.js')
+// jest.mock(api)
 
 describe('store annotations actions', () => {
   let store
@@ -132,6 +133,9 @@ describe('store annotations actions', () => {
       modules: {
         cml: {
           namespaced: true,
+          state: {
+            api
+          },
           modules: {
             user,
             groups,
