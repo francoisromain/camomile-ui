@@ -9,7 +9,7 @@ import { mediaFormat } from './_helpers'
 
 {
   lists {
-    'copu-uid-string-1': [{
+    'corpu-uid-string-1': [{
       id: 'media-id-hash-1',
       name: 'media-name-string',
       url: 'http://media-string.url',
