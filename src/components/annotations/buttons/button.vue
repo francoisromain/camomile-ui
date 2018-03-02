@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import popupAnnotationLabel from '~/components/popup/annotation-label.vue'
+import popupAnnotationLabel from '../../popup/annotation-label.vue'
 
 export default {
   props: {

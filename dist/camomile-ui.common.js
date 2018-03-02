@@ -8,7 +8,6 @@ var Vue = _interopDefault(require('vue'));
 var Vuex = require('vuex');
 var Vuex__default = _interopDefault(Vuex);
 var Camomile = _interopDefault(require('camomile-client'));
-var popupAnnotationLabel = _interopDefault(require('~/components/popup/annotation-label.vue'));
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) { ref = {}; }
@@ -5470,6 +5469,52 @@ var controller = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
       var minutes = Math.floor(ms / 60000);
       var seconds = (ms % 60000) / 1000;
       return minutes + ':' + (seconds < 10 ? '0' : '') + seconds.toFixed(0)
+    }
+  }
+}
+
+(function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+
+var popupAnnotationLabel = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.metadata.label),expression:"element.metadata.label"}],ref:"label",staticClass:"input-alt",attrs:{"type":"text","placeholder":"Label"},domProps:{"value":(_vm.element.metadata.label)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element.metadata, "label", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key)){ return null; }_vm.save($event);}}},[_vm._v("Save")]),_vm._v(" "),(_vm.error)?_c('div',{staticClass:"p-s bg-error color-bg italic mt"},[_vm._v(_vm._s(_vm.error))]):_vm._e()])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"blob-1-4"},[_c('h4',{staticClass:"pt-s mb-0"},[_vm._v("Label")])])}],
+  name: 'CamomileAnnotationsPopupEdit',
+
+  data: function data () {
+    return {
+      error: null
+    }
+  },
+
+  computed: Object.assign({}, Vuex.mapState({
+      element: function (state) { return state.cml.popup.element; },
+      type: function (state) { return state.cml.popup.config.type; },
+      rolesPermission: function (state) { return state.cml.user.id !== state.cml.popup.element.id; }
+    })),
+
+  created: function created () {
+    document.addEventListener('keyup', this.keyup);
+  },
+
+  mounted: function mounted () {
+    this.$refs.label.focus();
+  },
+
+  beforeDestroy: function beforeDestroy () {
+    document.removeEventListener('keyup', this.keyup);
+  },
+
+  methods: {
+    save: function save () {
+      if (this.element.metadata.label !== '') {
+        this.$store.dispatch('cml/annotations/add', { element: this.element });
+        this.$store.commit('cml/popup/close');
+      } else {
+        this.error = 'Fill in the label.';
+      }
+    },
+    keyup: function keyup (e) {
+      if ((e.which || e.keyCode) === 13) {
+        this.save();
+      }
     }
   }
 }
