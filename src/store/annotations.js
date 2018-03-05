@@ -243,11 +243,19 @@ export const getters = {
   filter: state => (uid, filter) =>
     state.lists[uid] &&
     Object.keys(state.lists[uid].layers).reduce(
-      (res, layer) =>
+      (res, layerId) =>
         Object.assign(res, {
-          [layer]: state.lists[uid].layers[layer].filter(a => filter(a))
+          [layerId]: state.lists[uid].layers[layerId].filter(a => filter(a))
         }),
       {}
+    ),
+
+  active: state => uid =>
+    Object.keys(state.lists[uid].layers).reduce(
+      (res, layerId) =>
+        res ||
+        state.lists[uid].layers[layerId].find(a => a.id === state.actives[uid]),
+      null
     )
 }
 

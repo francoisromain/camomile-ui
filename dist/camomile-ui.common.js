@@ -1664,7 +1664,13 @@ var corpus = {
 var state$9 = {
   lists: {},
   actives: {},
-  properties: {}
+  properties: {
+    timeTotal: 0,
+    timeCurrent: 0,
+    isPlaying: false,
+    isLoaded: false,
+    seek: { seeking: false }
+  }
 };
 
 var actions$7 = {
@@ -2676,18 +2682,23 @@ var actions$8 = {
 };
 
 var getters$6 = {
-  // Get the active layer ids
-  activeIds: function (state) { return function (uid) {
-    return (state.actives[uid] && state.actives[uid].ids) || []
-  }; },
+  // Get the active layers ids
+  activeIds: function (state) { return function (uid) { return (state.actives[uid] && state.actives[uid].ids) || []; }; },
 
-  // Get the active layer objects
+  // Get the active layers
   actives: function (state) { return function (uid) {
     var actives = state.actives[uid];
     var layers = state.lists[actives.corpuUid];
     return actives && layers
       ? layers.filter(function (l) { return actives.ids.indexOf(l.id) !== -1; })
       : {}
+  }; },
+
+  // Get the layer by id
+  details: function (state) { return function (uid, id) {
+    var actives = state.actives[uid];
+    var layers = state.lists[actives.corpuUid];
+    return actives && layers ? layers.find(function (l) { return l.id === id; }) : {}
   }; }
 };
 
@@ -3107,12 +3118,18 @@ var getters$7 = {
   // Get the lists of annotations, filtered
   filter: function (state) { return function (uid, filter) { return state.lists[uid] &&
     Object.keys(state.lists[uid].layers).reduce(
-      function (res, layer) {
+      function (res, layerId) {
           var obj;
 
-          return Object.assign(res, ( obj = {}, obj[layer] = state.lists[uid].layers[layer].filter(function (a) { return filter(a); }), obj));
+          return Object.assign(res, ( obj = {}, obj[layerId] = state.lists[uid].layers[layerId].filter(function (a) { return filter(a); }), obj));
       },
       {}
+    ); }; },
+
+  active: function (state) { return function (uid) { return Object.keys(state.lists[uid].layers).reduce(
+      function (res, layerId) { return res ||
+        state.lists[uid].layers[layerId].find(function (a) { return a.id === state.actives[uid]; }); },
+      null
     ); }; }
 };
 
@@ -5897,10 +5914,7 @@ var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
-
-
-
-var edit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],
+var edit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":_vm.popupEditOpen}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.layer.permission === 3)?_c('button',{staticClass:"btn px-s py-s my--s h6",on:{"click":_vm.popupRemoveOpen}},[_vm._v("Remove")]):_vm._e()])},staticRenderFns: [],
   props: {
     mediaUid: {
       type: String,
@@ -5916,18 +5930,41 @@ var edit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm
     }
   },
 
-  computed: {
-    annotations: function annotations () {
-      return this.$store.getters['cml/annotations/lists'](this.uid)
-    },
-    mediaId: function mediaId () {
-      return this.$store.state.cml.medias.actives[this.mediaUid].id
-    },
-    layers: function layers () {
-      return this.$store.getters['cml/layers/actives'](this.layersUid)
+  data: function data () {
+    return {
+      popupEditConfig: {
+        type: 'annotations',
+        closeBtn: true,
+        title: 'Edit annotation',
+        component: popupEdit
+      },
+      popupRemoveConfig: {
+        type: 'annotations',
+        closeBtn: true,
+        title: 'Remove annotation',
+        component: popupRemove
+      },
+      layerPermission: 3
     }
   },
 
+  computed: {
+    annotation: function annotation () {
+      return this.$store.getters['cml/annotations/active'](this.uid)
+    },
+    layer: function layer () {
+      return this.annotation ? this.$store.getters['cml/layers/details'](this.layersUid, this.annotation.layerId) : {}
+    }
+  },
+
+  methods: {
+    popupEditOpen: function popupEditOpen () {
+      return this.$store.commit('cml/popup/open', { config: this.popupEditConfig, element: this.annotation })
+    },
+    popupRemoveOpen: function popupRemoveOpen () {
+      return this.$store.commit('cml/popup/open', { config: this.popupRemoveConfig, element: this.annotation })
+    }
+  }
 }
 
 exports.cmlApp = app;

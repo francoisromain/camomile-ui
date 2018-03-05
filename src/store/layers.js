@@ -479,18 +479,24 @@ export const actions = {
 }
 
 export const getters = {
-  // Get the active layer ids
-  activeIds: state => uid => {
-    return (state.actives[uid] && state.actives[uid].ids) || []
-  },
+  // Get the active layers ids
+  activeIds: state => uid =>
+    (state.actives[uid] && state.actives[uid].ids) || [],
 
-  // Get the active layer objects
+  // Get the active layers
   actives: state => uid => {
     const actives = state.actives[uid]
     const layers = state.lists[actives.corpuUid]
     return actives && layers
       ? layers.filter(l => actives.ids.indexOf(l.id) !== -1)
       : {}
+  },
+
+  // Get the layer by id
+  details: state => (uid, id) => {
+    const actives = state.actives[uid]
+    const layers = state.lists[actives.corpuUid]
+    return actives && layers ? layers.find(l => l.id === id) : {}
   }
 }
 

@@ -54,7 +54,13 @@ import { mediaFormat } from './_helpers'
 export const state = {
   lists: {},
   actives: {},
-  properties: {}
+  properties: {
+    timeTotal: 0,
+    timeCurrent: 0,
+    isPlaying: false,
+    isLoaded: false,
+    seek: { seeking: false }
+  }
 }
 
 export const actions = {
