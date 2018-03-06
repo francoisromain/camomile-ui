@@ -36,7 +36,6 @@
       "vue-styleguidist --config build/webpack.config.styleguide.js build"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "camomile-client": "^0.8.0",
     "vue": "^2.5.13",
     "vuex": "^3.0.1"
@@ -69,7 +68,7 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "html-webpack-exclude-assets-plugin": "0.0.6",
-    "html-webpack-plugin": "^3.0.4",
+    "html-webpack-plugin": "^3.0.6",
     "imports-loader": "^0.8.0",
     "jest": "^22.4.2",
     "jest-serializer-vue": "^0.3.0",

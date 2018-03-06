@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Camomile from 'camomile-client'
+// import Camomile from '../../../camomile-client-javascript' /* debug with local version */
 
 import viewport from './viewport'
 import sync from './sync'

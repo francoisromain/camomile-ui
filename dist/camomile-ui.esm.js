@@ -1405,9 +1405,9 @@ var actions$6 = {
       })
   },
 
-  // For every uid,
-  // If the corpus id was active
-  // And set a new one
+  // For every uids,
+  // If the corpus id was active,
+  // Set a new one
   setAll: function setAll(ref, ref$1) {
     var state = ref.state;
     var dispatch = ref.dispatch;
@@ -1426,13 +1426,17 @@ var actions$6 = {
     var getters = ref.getters;
     var dispatch = ref.dispatch;
     var commit = ref.commit;
+    var rootState = ref.rootState;
     var id = ref$1.id;
     var uid = ref$1.uid;
 
     // Set the active corpus
-    // If the id is note defined, get one
+    // If the id is not defined, get one
     commit('set', { id: id || getters.id(uid), uid: uid });
 
+    // rootState.cml.api.watchCorpus(state.actives[uid], (error, data) => {
+    //   console.log('watcher', error, data)
+    // })
     // If the corpu active is set
     // - list the medias
     // - list the layers

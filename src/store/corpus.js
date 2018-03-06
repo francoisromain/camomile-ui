@@ -383,9 +383,9 @@ export const actions = {
       })
   },
 
-  // For every uid,
-  // If the corpus id was active
-  // And set a new one
+  // For every uids,
+  // If the corpus id was active,
+  // Set a new one
   setAll({ state, dispatch }, { id }) {
     Object.keys(state.actives).forEach(uid => {
       if (state.actives[uid] === id) {
@@ -395,11 +395,14 @@ export const actions = {
   },
 
   // Set the active corpus for a uid
-  set({ state, getters, dispatch, commit }, { id, uid }) {
+  set({ state, getters, dispatch, commit, rootState }, { id, uid }) {
     // Set the active corpus
-    // If the id is note defined, get one
+    // If the id is not defined, get one
     commit('set', { id: id || getters.id(uid), uid })
 
+    // rootState.cml.api.watchCorpus(state.actives[uid], (error, data) => {
+    //   console.log('watcher', error, data)
+    // })
     // If the corpu active is set
     // - list the medias
     // - list the layers
