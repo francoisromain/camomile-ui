@@ -6,7 +6,6 @@
         <textarea
           ref="field"
           v-model="fields"
-          class="textarea-alt"
           @keyup="resize" ></textarea>
       </div>
     </div>

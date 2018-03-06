@@ -8,7 +8,6 @@
         <input
           v-model="resource.name"
           type="text"
-          class="input-alt"
           placeholder="Name"
           disabled>
       </div>

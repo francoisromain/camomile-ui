@@ -96,11 +96,13 @@ blockquote :last-child {
 }
 
 hr {
+  clear: both;
   border: 0;
   height: 0;
-  border-top: var(--unit-line) var(--border-style) var(--border-color);
+  border-top-width: var(--border-width);
+  border-top-style: var(--border-style);
+  border-top-color: var(--border-color);
   margin-bottom: calc(var(--unit) - var(--unit-line));
-  clear: both;
 }
 
 a {

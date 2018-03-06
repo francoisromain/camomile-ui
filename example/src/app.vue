@@ -7,20 +7,21 @@
     <div class="container pt">
       
       <div class="blobs">
-        <cml-users class="blob-1-2 p border" />
-        <cml-groups class="blob-1-2 p border" />
+        <cml-users class="blob-1-2 p bg-bg" />
+        <cml-groups class="blob-1-2 p bg-bg" />
       </div>
       
       <div class="blobs">
-        <cml-corpus class="blob-1-2 p border" />
-        <cml-medias class="blob-1-2 p border" />
-        <cml-layers class="blob-1-2 p border" />
-        <cml-annotations class="blob-1-2 p border" />
+        <cml-corpus class="blob-1-2 p bg-bg" />
+        <cml-medias class="blob-1-2 p bg-bg" />
+        <cml-layers class="blob-1-2 p bg-bg" />
+        <cml-annotations class="blob-1-2 p bg-bg" />
       </div>
 
       <div class="blobs">
-        <cml-annotations-buttons class="blob-1-2" />
-        <cml-annotations-edit class="blob-1-2" />
+        <cml-layers-add class="blob-1-4 p bg-bg" />
+        <cml-annotations-buttons class="blob-1-2 p bg-bg" />
+        <cml-annotations-edit class="blob-1-4 p bg-bg" />
       </div>
 
       <cml-annotations-timeline class="mb" />
@@ -30,18 +31,18 @@
 
       <div class="blobs">
         <cml-corpus
-          class="blob-1-2 p border" 
+          class="blob-1-2 p bg-bg" 
           uid="test-corpus" />
         <cml-medias
-          class="blob-1-2 p border"
+          class="blob-1-2 p bg-bg"
           corpus-uid="test-corpus"
           uid="test-media" />
         <cml-layers
-          class="blob-1-2 p border" 
+          class="blob-1-2 p bg-bg" 
           corpus-uid="test-corpus"
           uid="test-layers" />
         <cml-annotations
-          class="blob-1-2 p border" 
+          class="blob-1-2 p bg-bg" 
           media-uid="test-media"
           layers-uid="test-layers"
           uid="test-annotations" />
@@ -64,6 +65,7 @@ import {
   cmlMediasVideo,
   cmlMediasVideozoning,
   cmlMediasController,
+  cmlLayersAdd,
   cmlAnnotationsButtons,
   cmlAnnotationsTimeline,
   cmlAnnotationsEdit
@@ -83,6 +85,7 @@ export default {
     cmlMediasVideo,
     cmlMediasVideozoning,
     cmlMediasController,
+    cmlLayersAdd,
     cmlAnnotationsButtons,
     cmlAnnotationsTimeline,
     cmlAnnotationsEdit

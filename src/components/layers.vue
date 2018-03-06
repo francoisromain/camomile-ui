@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="flex flex-start">
-      <h2 class="mt-s mb-s">Layers</h2>
+      <h2 class="mt-xs">Layers</h2>
       <button
         v-if="corpuPermission === 3"
-        class="flex-right btn p-s"
+        class="flex-right btn px-s py-xs"
         @click="popupOpen({ config: popupAddConfig, element: { id: null, corpuId, description: {}, metadataType: {}, fragmentType: {} } })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div v-if="layers && layers.length > 0">
@@ -26,15 +26,15 @@
           <td class="text-right">
             <button
               v-if="layer.permission === 3"
-              class="btn px-s py-s my--s h6"
+              class="btn p-s my--s h6"
               @click="popupOpen({ config: popupPermissionsConfig, element: layer })">Permissions</button>
             <button
               v-if="layer.permission === 3"
-              class="btn px-s py-s my--s h6"
+              class="btn p-s my--s h6"
               @click="popupOpen({ config: popupEditConfig, element: layer })">Edit</button>
             <button
               v-if="layer.permission === 3"
-              class="btn px-s py-s my--s h6"
+              class="btn p-s my--s h6"
               @click="popupOpen({ config: popupRemoveConfig, element: layer })">Remove</button>
           </td>
         </tr>

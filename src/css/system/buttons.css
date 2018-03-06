@@ -12,8 +12,6 @@
 
 .btn {
   button: default;
-  font-weight: 700;
-  border-radius: var(--unit-xxs);
 }
 
 .btn-border {
@@ -30,7 +28,6 @@
   button-background: var(--color-neutral) var(--color-inverse)
     var(--color-highlight);
   button-class: active disabled;
-  font-weight: 700;
 }
 
 .btn,
@@ -38,6 +35,8 @@
 .btn-border,
 .btn-transparent {
   transition: var(--transition);
+  border-radius: var(--unit-xxs);
+  font-weight: 700;
 }
 
 .btn-icon {

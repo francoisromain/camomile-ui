@@ -8,7 +8,6 @@
         <input
           v-model="group.name"
           type="text"
-          class="input-alt"
           placeholder="Name"
           disabled>
       </div>

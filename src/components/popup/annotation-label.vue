@@ -9,7 +9,6 @@
           ref="label"
           v-model="element.metadata.label"
           type="text"
-          class="input-alt"
           placeholder="Label">
       </div>
     </div>

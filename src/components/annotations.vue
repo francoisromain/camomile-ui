@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex flex-start">
-      <h2 class="mt-s mb-s">Annotations</h2>
+      <h2 class="mt-xs">Annotations</h2>
     </div>
     <annotations-layer
       v-for="layer in layers" 

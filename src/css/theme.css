@@ -56,14 +56,6 @@
   bottom: 0;
 }
 
-hr.border-bg {
-  border-top: var(--unit-xxs) solid var(--color-bg);
-  margin-bottom: calc(var(--unit) - var(--unit-xxs));
-  clear: both;
-  margin-left: calc(var(--unit-l) * -1);
-  margin-right: calc(var(--unit-l) * -1);
-}
-
 .dropdown {
   margin-bottom: var(--unit);
   background-color: var(--color-alt);
@@ -114,6 +106,15 @@ hr.border-bg {
   background-color: var(--color-brand);
   top: 0;
   bottom: 0;
+}
+
+.pophover hr {
+  border-top-width: var(--unit-xxs);
+  border-top-style: solid;
+  border-top-color: var(--color-alt);
+  margin-bottom: calc(var(--unit) - var(--unit-xxs));
+  margin-left: calc(var(--unit-l) * -1);
+  margin-right: calc(var(--unit-l) * -1);
 }
 
 @media (--viewport-tablet) {

@@ -9,7 +9,6 @@
         <input
           v-model="config.user.name"
           type="text"
-          class="input-alt"
           placeholder="Name">
       </div>
       
@@ -20,7 +19,6 @@
         <input
           v-model="config.user.password"
           type="password"
-          class="input-alt"
           placeholder="Password">
       </div>
 

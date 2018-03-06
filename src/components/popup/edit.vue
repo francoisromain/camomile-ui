@@ -12,7 +12,6 @@
           v-model="element.name"
           :disabled="element.id && (type === 'users' || type === 'groups')"
           type="text"
-          class="input-alt"
           placeholder="Name">
       </div>
     </div>
@@ -26,8 +25,7 @@
         <select
           v-model="element.role"
           :disabled="!rolesPermission"
-          type="text"
-          class="select-alt">
+          type="text">
           <option
             v-for="role in roles"
             :value="role"
@@ -47,7 +45,6 @@
         <input
           v-model="element.password"
           type="password"
-          class="input-alt"
           placeholder="••••••••">
       </div>
     </div>
@@ -61,7 +58,6 @@
         <input
           v-model="element.url"
           type="text"
-          class="input-alt"
           placeholder="http://…">
       </div>
     </div>

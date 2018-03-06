@@ -3,7 +3,7 @@
     <div
       v-if="layers"
       :style="{ height: `${40 * layers.length}px` }"
-      class="relative overflow-hidden">
+      class="relative overflow-hidden bg-bg">
       <div class="absolute timeline-cursor"/>
       <div
         :style="{ top: 0, bottom: 0, left: `${left}px`, width: `${width}px` }"

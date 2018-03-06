@@ -11,7 +11,6 @@
           v-model="element.name"
           :disabled="element.id"
           type="text"
-          class="input-alt"
           placeholder="Name">
       </div>
     </div>
@@ -26,7 +25,6 @@
           v-model="element.id"
           :disabled="element.id"
           type="text"
-          class="input-alt"
           placeholder="Name">
       </div>
     </div>

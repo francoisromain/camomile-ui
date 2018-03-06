@@ -11,11 +11,11 @@
     <td class="text-right">
       <button
         v-if="layerPermission === 3"
-        class="btn px-s py-s my--s h6"
+        class="btn p-s my--s h6"
         @click="popupOpen({ config: popupEditConfig, element: annotation })">Edit</button>
       <button
         v-if="layerPermission === 3"
-        class="btn px-s py-s my--s h6"
+        class="btn p-s my--s h6"
         @click="popupOpen({ config: popupRemoveConfig, element: annotation })">Remove</button>
     </td>
   </tr>
@@ -27,12 +27,6 @@ import popupRemove from './popup/remove.vue'
 
 export default {
   name: 'CamomileAnnotations',
-
-  filters: {
-    stringEnd (value) {
-      return value ? value.substr(value.length - 6) : ''
-    }
-  },
 
   props: {
     uid: {

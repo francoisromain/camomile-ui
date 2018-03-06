@@ -81,6 +81,7 @@ export const mutations = {
 }
 
 Vue.use(Vuex)
+Vue.filter('stringEnd', str => str.substr(str.length - 6))
 
 export default new Vuex.Store({
   modules: {

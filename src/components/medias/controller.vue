@@ -4,7 +4,7 @@
       <button
         ref="button"
         :disabled="!isLoaded"
-        class="mediacontroller-button btn"
+        class="mediacontroller-button btn-alt"
         @click="mediaToggle">{{ playButton }}</button>
       <div
         ref="counter"
@@ -17,7 +17,7 @@
       :class="{ loaded: isLoaded }"
       class="mediacontroller-progress"
       @mousedown="progressMousedown($event)">
-      <div class="pointer-none full-y">
+      <div class="pointer-none full-y bg-bg">
         <div
           :style="{ width: progressBarWidth }"
           class="mediacontroller-progress-bar" />

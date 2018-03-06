@@ -4,7 +4,7 @@
       <h2 class="mt-s">{{ layer.name }}</h2>
       <button
         v-if="layer.permission === 3"
-        class="flex-right btn p-s"
+        class="flex-right btn px-s py-xs"
         @click="popupOpen({ config: popupAddConfig, element: { id: null, layerId: layer.id, mediaId, fragment: layer.fragmentType, metadata: layer.metadataType } })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <table class="table mb-0">

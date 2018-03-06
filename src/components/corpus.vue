@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="flex flex-start">
-      <h2 class="mt-s mb-s">Corpora</h2>
+      <h2 class="mt-xs">Corpora</h2>
       <button
         v-if="isAdmin"
-        class="flex-right btn p-s"
+        class="flex-right btn px-s py-xs"
         @click="popupOpen({ config: popupAddConfig, element: { id: null, description: {} } })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div v-if="corpus && corpus.length > 0">
@@ -26,15 +26,15 @@
           <td class="text-right">
             <button
               v-if="corpu.permission === 3"
-              class="btn px-s py-s my--s h6"
+              class="btn p-s my--s h6"
               @click="popupOpen({ config: popupPermissionsConfig, element: corpu })">Permissions</button>
             <button
               v-if="corpu.permission === 3"
-              class="btn px-s py-s my--s h6"
+              class="btn p-s my--s h6"
               @click="popupOpen({ config: popupEditConfig, element: corpu })">Edit</button>
             <button
               v-if="isAdmin && corpu.permission === 3"
-              class="btn px-s py-s my--s h6"
+              class="btn p-s my--s h6"
               @click="popupOpen({ config: popupRemoveConfig, element: corpu })">Remove</button>
           </td>
         </tr>

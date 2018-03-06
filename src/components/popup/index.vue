@@ -3,7 +3,7 @@
     <div
       class="absolute full bg-alpha" 
       @click="close" />
-    <div class="pophover absolute full bg-alt p-l pb-s">
+    <div class="pophover absolute full bg-bg p-l pb-s">
       <div class="flex flex-start">
         <h2>{{ config.title }}</h2>
         <button
@@ -11,7 +11,7 @@
           class="flex-right btn p-s mt--m"
           @click="close"><i class="icon-24 icon-24-close" /></button>
       </div>
-      <hr class="border-bg">
+      <hr>
       <component :is="config.component" />
     </div>
   </div>

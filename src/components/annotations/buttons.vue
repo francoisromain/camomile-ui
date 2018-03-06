@@ -1,10 +1,12 @@
 <template>
   <div>
+    <h2>Annotations</h2>
     <annotation-button 
       v-for="layer in layers" 
       v-if="annotations[layer.id] && layer.permission === 3"
       :key="`annotation-button-${layer.id}`"
       :layer-id="layer.id"
+      :layer-name="layer.name"
       :media-id="mediaId"
       :time-current="timeCurrent"
       :time-total="timeTotal"

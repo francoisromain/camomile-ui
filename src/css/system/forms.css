@@ -22,7 +22,7 @@ select {
   background-image: svg-load(
     './icons/24-chevron-b.svg',
     fill=none,
-    stroke=var(--color-inverse),
+    stroke='#666',
     stroke-linecap=round,
     stroke-linejoin=round,
     stroke-miterlimit=10,
@@ -49,13 +49,13 @@ select:focus {
   border-right: var(--unit-s) solid var(--color-highlight);
 }
 
-input[type='text'].input-alt,
-input[type='email'].input-alt,
-input[type='search'].input-alt,
-input[type='password'].input-alt,
-input[type='tel'].input-alt,
-select.select-alt,
-textarea.textarea-alt {
+input[type='text'].bg-bg,
+input[type='email'].bg-bg,
+input[type='search'].bg-bg,
+input[type='password'].bg-bg,
+input[type='tel'].bg-bg,
+select.bg-bg,
+textarea.bg-bg {
   background-color: var(--color-bg);
 }
 
@@ -73,9 +73,9 @@ select:disabled {
   background-color: color-mod(var(--color-alt) alpha(50%));
 }
 
-input.input-alt:disabled,
-textarea.textarea-alt:disabled,
-select.select-alt:disabled {
+input.bg-bg:disabled,
+textarea.bg-bg:disabled,
+select.bg-bg:disabled {
   background-color: color-mod(var(--color-bg) alpha(50%));
 }
 

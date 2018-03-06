@@ -1,8 +1,9 @@
 <template>
   <button
-    class="btn p-s"
+    class="btn px-s py-xs mr-s h6"
     @click="popupAnnotationLabelOpen">
-    <i class="icon-24 icon-24-plus" />
+    <i class="icon-24 icon-24-plus mr-xs" />
+    {{ layerName }}
   </button>
 </template>
 
@@ -14,6 +15,10 @@ export default {
     layerId: {
       type: String,
       default: 'layerIdHash'
+    },
+    layerName: {
+      type: String,
+      default: ''
     },
     mediaId: {
       type: String,

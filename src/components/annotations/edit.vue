@@ -1,13 +1,18 @@
 <template>
   <div>
-    <button
-      v-if="layer.permission === 3"
-      class="btn px-s py-s my--s h6"
-      @click="popupEditOpen">Edit</button>
-    <button
-      v-if="layer.permission === 3"
-      class="btn px-s py-s my--s h6"
-      @click="popupRemoveOpen">Remove</button>
+    <h2>Annotation 
+      <span class="h6 bold bg-neutral color-bg py-xxs px-xs rnd right mt-xxs">…{{ annotation ? annotation.id : '' | stringEnd }}</span>
+    </h2>
+    <div>
+      <button
+        v-if="layer.permission === 3"
+        class="btn p-s h6"
+        @click="popupEditOpen">Edit</button>
+      <button
+        v-if="layer.permission === 3"
+        class="btn p-s h6"
+        @click="popupRemoveOpen">Remove</button>
+    </div>
   </div>
 </template>
 <script>

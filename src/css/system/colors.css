@@ -66,7 +66,3 @@
 .bg-alt-alpha {
   background-color: color-mod(var(--color-alt) alpha(50%));
 }
-
-.border-bg {
-  border-color: var(--color-bg);
-}
