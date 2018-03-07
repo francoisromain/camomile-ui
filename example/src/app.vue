@@ -7,15 +7,15 @@
     <div class="container pt">
       
       <div class="blobs">
-        <cml-users class="blob-1-2 p bg-bg" />
-        <cml-groups class="blob-1-2 p bg-bg" />
+        <cml-admin-users class="blob-1-2 p bg-bg" />
+        <cml-admin-groups class="blob-1-2 p bg-bg" />
       </div>
       
       <div class="blobs">
-        <cml-corpus class="blob-1-2 p bg-bg" />
-        <cml-medias class="blob-1-2 p bg-bg" />
-        <cml-layers class="blob-1-2 p bg-bg" />
-        <cml-annotations class="blob-1-2 p bg-bg" />
+        <cml-corpus-list class="blob-1-2 p bg-bg" />
+        <cml-medias-list class="blob-1-2 p bg-bg" />
+        <cml-layers-list class="blob-1-2 p bg-bg" />
+        <cml-annotations-list class="blob-1-2 p bg-bg" />
       </div>
 
       <div class="blobs">
@@ -30,18 +30,18 @@
       <cml-medias-videozoning class="mb" />
 
       <div class="blobs">
-        <cml-corpus
+        <cml-corpus-list
           class="blob-1-2 p bg-bg" 
           uid="test-corpus" />
-        <cml-medias
+        <cml-medias-list
           class="blob-1-2 p bg-bg"
           corpus-uid="test-corpus"
           uid="test-media" />
-        <cml-layers
+        <cml-layers-list
           class="blob-1-2 p bg-bg" 
           corpus-uid="test-corpus"
           uid="test-layers" />
-        <cml-annotations
+        <cml-annotations-list
           class="blob-1-2 p bg-bg" 
           media-uid="test-media"
           layers-uid="test-layers"
@@ -55,12 +55,12 @@
 <script>
 import {
   cmlApp,
-  cmlUsers,
-  cmlGroups,
-  cmlCorpus,
-  cmlMedias,
-  cmlLayers,
-  cmlAnnotations,
+  cmlAdminUsers,
+  cmlAdminGroups,
+  cmlCorpusList,
+  cmlMediasList,
+  cmlLayersList,
+  cmlAnnotationsList,
   cmlMediasYoutube,
   cmlMediasVideo,
   cmlMediasVideozoning,
@@ -75,12 +75,12 @@ export default {
   name: 'MyApp',
   components: {
     cmlApp,
-    cmlUsers,
-    cmlGroups,
-    cmlCorpus,
-    cmlMedias,
-    cmlLayers,
-    cmlAnnotations,
+    cmlAdminUsers,
+    cmlAdminGroups,
+    cmlCorpusList,
+    cmlMediasList,
+    cmlLayersList,
+    cmlAnnotationsList,
     cmlMediasYoutube,
     cmlMediasVideo,
     cmlMediasVideozoning,

@@ -1,13 +1,13 @@
 import './css/styles.css'
 import cmlApp from './components/app.vue'
 
-import cmlUsers from './components/admin/users.vue'
-import cmlGroups from './components/admin/groups.vue'
+import cmlAdminUsers from './components/admin/users.vue'
+import cmlAdminGroups from './components/admin/groups.vue'
 
-import cmlCorpus from './components/corpus/list.vue'
-import cmlMedias from './components/medias/list.vue'
-import cmlLayers from './components/layers/list.vue'
-import cmlAnnotations from './components/annotations/list.vue'
+import cmlCorpusList from './components/corpus/list.vue'
+import cmlMediasList from './components/medias/list.vue'
+import cmlLayersList from './components/layers/list.vue'
+import cmlAnnotationsList from './components/annotations/list.vue'
 
 import cmlMediasYoutube from './components/medias/youtube.vue'
 import cmlMediasVideo from './components/medias/video.vue'
@@ -22,12 +22,12 @@ import cmlAnnotationsEdit from './components/annotations/edit.vue'
 
 export {
   cmlApp,
-  cmlUsers,
-  cmlGroups,
-  cmlCorpus,
-  cmlMedias,
-  cmlLayers,
-  cmlAnnotations,
+  cmlAdminUsers,
+  cmlAdminGroups,
+  cmlCorpusList,
+  cmlMediasList,
+  cmlLayersList,
+  cmlAnnotationsList,
   cmlMediasYoutube,
   cmlMediasVideo,
   cmlMediasVideozoning,
