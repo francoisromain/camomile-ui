@@ -1,10 +1,10 @@
 import { mount, shallow, createLocalVue } from '@vue/test-utils'
 import { createRenderer } from 'vue-server-renderer'
 import Vuex from 'vuex'
-import header from '../header/index.vue'
-import headerTitle from '../header/title.vue'
-import headerSync from '../header/sync.vue'
-import headerUserbutton from '../header/userbutton.vue'
+import header from '../ui/header/index.vue'
+import headerTitle from '../ui/header/title.vue'
+import headerSync from '../ui/header/sync.vue'
+import headerUserbutton from '../ui/header/userbutton.vue'
 
 const localVue = createLocalVue()
 const renderer = createRenderer()
