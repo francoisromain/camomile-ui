@@ -311,15 +311,18 @@ export const getters = {
   },
 
   // Get the active media
-  active: state => (uid, filter) => {
+  filter: state => (uid, filter) => {
     const active = state.actives[uid]
-    filter =
-      filter ||
-      function(m) {
-        return m
-      }
     return active && state.lists[active.corpuUid]
       ? filter(state.lists[active.corpuUid].find(m => m.id === active.id))
+      : null
+  },
+
+  // Get the active media
+  active: state => uid => {
+    const active = state.actives[uid]
+    return active && state.lists[active.corpuUid]
+      ? state.lists[active.corpuUid].find(m => m.id === active.id)
       : null
   }
 }

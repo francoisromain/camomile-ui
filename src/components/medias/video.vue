@@ -49,7 +49,7 @@ export default {
 
   computed: {
     media () {
-      return this.$store.getters['medias/active'](this.uid, this.filter)
+      return this.$store.getters['medias/filter'](this.uid, this.filter)
     },
     properties () {
       return this.$store.getters['medias/properties'](this.uid, this.filter)
