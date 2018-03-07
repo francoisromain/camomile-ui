@@ -44,7 +44,7 @@ import popupEdit from '../ui/popup/edit.vue'
 import popupRemove from '../ui/popup/remove.vue'
 
 export default {
-  name: 'CamomileMedias',
+  name: 'CamomileMediasList',
 
   props: {
     uid: {
@@ -93,10 +93,6 @@ export default {
     corpuPermission () {
       return this.$store.getters['cml/corpus/permission'](this.corpusUid)
     }
-  },
-
-  created () {
-    this.$store.dispatch('cml/medias/register', { uid: this.uid, corpuUid: this.corpusUid })
   },
 
   methods: {

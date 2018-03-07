@@ -4,6 +4,11 @@ import cmlApp from './components/app.vue'
 import cmlAdminUsers from './components/admin/users.vue'
 import cmlAdminGroups from './components/admin/groups.vue'
 
+import cmlCorpus from './components/corpus/index.vue'
+import cmlMedias from './components/medias/index.vue'
+import cmlLayers from './components/layers/index.vue'
+import cmlAnnotations from './components/annotations/index.vue'
+
 import cmlCorpusList from './components/corpus/list.vue'
 import cmlMediasList from './components/medias/list.vue'
 import cmlLayersList from './components/layers/list.vue'
@@ -24,6 +29,10 @@ export {
   cmlApp,
   cmlAdminUsers,
   cmlAdminGroups,
+  cmlCorpus,
+  cmlMedias,
+  cmlLayers,
+  cmlAnnotations,
   cmlCorpusList,
   cmlMediasList,
   cmlLayersList,

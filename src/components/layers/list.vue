@@ -49,7 +49,7 @@ import popupRemove from '../ui/popup/remove.vue'
 import popupPermissions from '../ui/popup/permissions.vue'
 
 export default {
-  name: 'CamomileLayers',
+  name: 'CamomileLayersList',
 
   props: {
     uid: {
@@ -108,13 +108,6 @@ export default {
     corpuPermission () {
       return this.$store.getters['cml/corpus/permission'](this.corpusUid)
     }
-  },
-
-  created () {
-    this.$store.dispatch('cml/layers/register', {
-      uid: this.uid,
-      corpuUid: this.corpusUid
-    })
   },
 
   methods: {

@@ -10,6 +10,13 @@
         <cml-admin-users class="blob-1-2 p bg-bg" />
         <cml-admin-groups class="blob-1-2 p bg-bg" />
       </div>
+
+      <div class="blobs">
+        <cml-corpus class="blob-1-2 p bg-bg" />
+        <cml-medias class="blob-1-2 p bg-bg" />
+        <cml-layers class="blob-1-2 p bg-bg" />
+        <cml-annotations class="blob-1-2 p bg-bg" />
+      </div>
       
       <div class="blobs">
         <cml-corpus-list class="blob-1-2 p bg-bg" />
@@ -28,6 +35,25 @@
       <cml-medias-controller class="mb" />
       <cml-medias-youtube class="mb"/>
       <cml-medias-videozoning class="mb" />
+
+      <div class="blobs">
+        <cml-corpus
+          class="blob-1-2 p bg-bg" 
+          uid="test-corpus" />
+        <cml-medias
+          class="blob-1-2 p bg-bg"
+          corpus-uid="test-corpus"
+          uid="test-media" />
+        <cml-layers
+          class="blob-1-2 p bg-bg" 
+          corpus-uid="test-corpus"
+          uid="test-layers" />
+        <cml-annotations
+          class="blob-1-2 p bg-bg" 
+          media-uid="test-media"
+          layers-uid="test-layers"
+          uid="test-annotations" />
+      </div>
 
       <div class="blobs">
         <cml-corpus-list
@@ -57,6 +83,10 @@ import {
   cmlApp,
   cmlAdminUsers,
   cmlAdminGroups,
+  cmlCorpus,
+  cmlMedias,
+  cmlLayers,
+  cmlAnnotations,
   cmlCorpusList,
   cmlMediasList,
   cmlLayersList,
@@ -77,6 +107,10 @@ export default {
     cmlApp,
     cmlAdminUsers,
     cmlAdminGroups,
+    cmlCorpus,
+    cmlMedias,
+    cmlLayers,
+    cmlAnnotations,
     cmlCorpusList,
     cmlMediasList,
     cmlLayersList,

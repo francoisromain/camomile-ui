@@ -20,7 +20,7 @@
 import annotationsLayer from './list/layer.vue'
 
 export default {
-  name: 'CamomileAnnotations',
+  name: 'CamomileAnnotationsList',
 
   components: {
     annotationsLayer
@@ -58,14 +58,6 @@ export default {
       const media = this.$store.getters['cml/medias/active'](this.mediaUid)
       return media ? media.name : ''
     }
-  },
-
-  created () {
-    this.$store.dispatch('cml/annotations/register', {
-      uid: this.uid,
-      mediaUid: this.mediaUid,
-      layersUid: this.layersUid
-    })
   }
 }
 </script>

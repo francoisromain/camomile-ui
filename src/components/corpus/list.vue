@@ -49,7 +49,7 @@ import popupRemove from '../ui/popup/remove.vue'
 import popupPermissions from '../ui/popup/permissions.vue'
 
 export default {
-  name: 'CamomileCorpus',
+  name: 'CamomileCorpusList',
 
   props: {
     uid: {
@@ -98,10 +98,6 @@ export default {
     isAdmin () {
       return this.$store.state.cml.user.isAdmin
     }
-  },
-
-  created () {
-    this.$store.dispatch('cml/corpus/register', this.uid)
   },
 
   methods: {
