@@ -38,15 +38,6 @@ export default {
     uid: {
       type: String,
       default: 'default'
-    },
-    filter: {
-      type: Function,
-      default: a =>
-        a.fragment &&
-        a.fragment.time &&
-        !isNaN(a.fragment.time.start) &&
-        !isNaN(a.fragment.time.end) &&
-        a
     }
   },
 
@@ -75,7 +66,7 @@ export default {
       return this.mediaProperties.timeTotal || 0
     },
     annotations () {
-      return this.$store.getters['annotations/filter'](this.uid, this.filter)
+      return this.$store.getters['annotations/filtered'](this.uid)
     },
     layers () {
       return this.$store.getters['layers/actives'](this.layersUid)
@@ -87,6 +78,13 @@ export default {
     }
   },
 
+  created () {
+    this.$store.commit('annotations/filterRegister', {
+      uid: this.uid,
+      filter: this.filter
+    })
+  },
+
   mounted () {
     window.addEventListener('resize', this.resize)
     this.containerWidth = this.$refs.container.offsetWidth
@@ -94,16 +92,14 @@ export default {
   },
 
   methods: {
+    filter (a) {
+      return a.fragment &&
+        a.fragment.time &&
+        !isNaN(a.fragment.time.start) &&
+        !isNaN(a.fragment.time.end) &&
+        a
+    },
     resize () { }
   }
 }
 </script>
-
-<style>
-.timeline-annotations {
-  z-index: 0;
-}
-.annotations {
-  height: 40px;
-}
-</style>

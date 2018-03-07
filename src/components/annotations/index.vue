@@ -24,7 +24,7 @@ export default {
   },
 
   created () {
-    this.$store.dispatch('annotations/register', {
+    this.$store.commit('annotations/register', {
       uid: this.uid,
       mediaUid: this.mediaUid,
       layersUid: this.layersUid

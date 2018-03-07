@@ -4,7 +4,7 @@
 */
 
 @button default {
-  button-border-width: 0;
+  button-border: var(--unit-line) var(--color-bg) var(--color-bg) var(--color-bg);
   button-color: var(--color-text) var(--color-inverse) var(--color-bg);
   button-background: var(--color-alt) var(--color-alt) var(--color-highlight);
   button-class: active disabled active;
@@ -35,7 +35,7 @@
 .btn-border,
 .btn-transparent {
   transition: var(--transition);
-  border-radius: var(--unit-xxs);
+  border-radius: var(--unit-xs);
   font-weight: 700;
 }
 

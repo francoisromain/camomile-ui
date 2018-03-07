@@ -36,13 +36,6 @@ export default {
     uid: {
       type: String,
       default: 'default'
-    },
-    filter: {
-      type: Function,
-      default: media =>
-        media &&
-        media.description &&
-        media.description.type && media.description.type === 'video' && media
     }
   },
 
@@ -109,6 +102,11 @@ export default {
   },
 
   methods: {
+    filter (media) {
+      return media &&
+        media.description &&
+        media.description.type && media.description.type === 'video' && media
+    },
     videoEnded () {
       this.$store.dispatch('medias/stop', { uid: this.uid })
     },

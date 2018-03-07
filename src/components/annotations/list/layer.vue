@@ -15,6 +15,7 @@
         v-for="annotation in annotations"
         :key="annotation.id"
         :annotation="annotation"
+        :disabled="annotationsFiltered.findIndex(a => a.id === annotation.id) !== -1"
         :uid="uid"
         :layer-permission="layer.permission"
         :media-name="mediaName"
@@ -45,6 +46,10 @@ export default {
       default: () => ({})
     },
     annotations: {
+      type: Array,
+      default: () => []
+    },
+    annotationsFiltered: {
       type: Array,
       default: () => []
     },

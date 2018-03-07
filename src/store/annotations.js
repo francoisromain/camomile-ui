@@ -11,6 +11,11 @@ Example:
     'annotations-uid-string-1': {
       layerUid: 'layer-uid-string',
       mediaUid: 'media-uid-string',
+      // An array of filter function registered by components
+      filters: [(a) +> {
+        return a
+      }, 
+      … ]
       // The lists of annotations organised by layers
       layers: {
         'layer-id-hash-1': [{
@@ -228,10 +233,6 @@ export const actions = {
 
         throw e
       })
-  },
-
-  register({ commit }, { uid, mediaUid, layersUid }) {
-    commit('register', { uid, mediaUid, layersUid })
   }
 }
 
@@ -243,11 +244,26 @@ export const getters = {
   filter: state => (uid, filter) =>
     state.lists[uid] &&
     Object.keys(state.lists[uid].layers).reduce(
-      (res, layerId) =>
-        Object.assign(res, {
+      (layers, layerId) =>
+        Object.assign(layers, {
           [layerId]: state.lists[uid].layers[layerId].filter(a => filter(a))
         }),
       {}
+    ),
+
+  // Get the lists of annotations, filtered
+  filtered: state => uid =>
+    state.lists[uid] &&
+    state.lists[uid].filters.reduce(
+      (layers, filter) =>
+        Object.keys(layers).reduce(
+          (layersFiltered, layerId) =>
+            Object.assign(layersFiltered, {
+              [layerId]: layers[layerId].filter(a => filter(a))
+            }),
+          {}
+        ),
+      state.lists[uid].layers
     ),
 
   active: state => uid =>
@@ -267,7 +283,11 @@ export const mutations = {
 
     // Create an uid entry in state.lists,
     // with value { mediaUid, LayersUid, layers: {}}
-    Vue.set(state.lists, uid, { mediaUid, layersUid, layers: {} })
+    Vue.set(state.lists, uid, { mediaUid, layersUid, layers: {}, filters: [] })
+  },
+
+  filterRegister(state, { uid, filter }) {
+    state.lists[uid].filters.push(filter)
   },
 
   // Reset all (on log-out)

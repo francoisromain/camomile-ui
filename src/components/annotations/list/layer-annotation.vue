@@ -1,8 +1,9 @@
 <template>
-  <tr>
+  <tr :class="{ 'bg-alt': disabled }">
     <td><input
       :value="annotation.id"
       :checked="activeId && activeId === annotation.id"
+      :disabled="disabled"
       type="radio"
       @change="set($event)">
     </td>
@@ -36,6 +37,10 @@ export default {
     annotation: {
       type: Object,
       default: () => ({})
+    },
+    disabled: {
+      type: Boolean,
+      default: true
     },
     layerPermission: {
       type: Number,

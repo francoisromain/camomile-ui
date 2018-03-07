@@ -470,11 +470,6 @@ export const actions = {
       { layersUid: uid, layerId: id },
       { root: true }
     )
-  },
-
-  // Register a layers uid
-  register({ state, commit }, { uid, corpuUid }) {
-    commit('register', { uid, corpuUid })
   }
 }
 

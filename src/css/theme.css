@@ -108,6 +108,13 @@
   bottom: 0;
 }
 
+.timeline-annotations {
+  z-index: 0;
+}
+.annotations {
+  height: 40px;
+}
+
 .pophover hr {
   border-top-width: var(--unit-xxs);
   border-top-style: solid;

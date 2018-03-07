@@ -1,22 +1,24 @@
 export default {
-  splitText (text) {
+  splitText(text) {
     var textNew = []
-    text.replace(/./g, function (char) {
+    text.replace(/./g, function(char) {
       textNew.push(`<span class="typed">${char}</span>`)
     })
     return textNew.join('')
   },
-  numberFormat (value) {
+
+  numberFormat(value) {
     return Math.round(value)
       .toString()
       .replace(/(\d)(?=(\d{3})+$)/g, '$1 ')
   },
-  debounce (func, wait, immediate) {
+
+  debounce(func, wait, immediate) {
     var timeout
-    return function () {
+    return function() {
       var context = this
       var args = arguments
-      var later = function () {
+      var later = function() {
         timeout = null
         if (!immediate) func.apply(context, args)
       }
@@ -26,22 +28,25 @@ export default {
       if (callNow) func.apply(context, args)
     }
   },
-  map (value, inMin, inMax, outMin, outMax) {
+
+  map(value, inMin, inMax, outMin, outMax) {
     return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
   },
-  range (start, end, tick) {
+
+  range(start, end, tick) {
     const s = Math.round(start / tick) * tick
     const ticks = Math.floor((end - start) / tick)
     return Array.from({ length: ticks ? ticks + 1 : 0 }, (v, k) => {
       return k * tick + s
     })
   },
-  audioFade (media, audioOn, volumeTarget) {
+
+  audioFade(media, audioOn, volumeTarget) {
     var duration = 3000
     var tick = 20
     var volumeStep = (media.volume - volumeTarget) / (duration / tick)
 
-    var fade = function () {
+    var fade = function() {
       var vol = Math.min(volumeTarget, media.volume + volumeStep)
       media.volume = vol
       if (media.transition === 'audioStart' && media.volume < volumeTarget) {
@@ -51,7 +56,7 @@ export default {
       }
     }
 
-    var fadeStart = function () {
+    var fadeStart = function() {
       media.removeEventListener('timeupdate', fadeStart)
       fade()
     }
@@ -61,13 +66,14 @@ export default {
       media.transition = 'audioStart'
     }
   },
-  audioStart (media, audioOn) {
+
+  audioStart(media, audioOn) {
     var volumeFinal = 1
     var duration = 3000
     var tick = 20
     var volumeStep = volumeFinal / (duration / tick)
 
-    var audioStartUp = function () {
+    var audioStartUp = function() {
       var vol = Math.min(volumeFinal, media.volume + volumeStep)
       media.volume = vol
       if (media.transition === 'audioStart' && media.volume < volumeFinal) {
@@ -77,7 +83,7 @@ export default {
       }
     }
 
-    var audioStartBegin = function () {
+    var audioStartBegin = function() {
       media.removeEventListener('timeupdate', audioStartBegin)
       audioStartUp()
     }
@@ -87,7 +93,8 @@ export default {
       media.transition = 'audioStart'
     }
   },
-  audioStop (media) {
+
+  audioStop(media) {
     var volumeFinal = 0.05
     var duration = 2000
     var tick = 20
@@ -97,7 +104,7 @@ export default {
       return
     }
 
-    var audioStopDown = function () {
+    var audioStopDown = function() {
       var vol = Math.max(0, media.volume - volumeStep)
       media.volume = vol
 
@@ -111,7 +118,8 @@ export default {
     media.transition = 'audioStop'
     audioStopDown()
   },
-  findIndexByPage (page, pages) {
+
+  findIndexByPage(page, pages) {
     return pages.findIndex((v, i, array) => {
       return page.params.id
         ? v.name === page.name && v.params.id === Number(page.params.id)

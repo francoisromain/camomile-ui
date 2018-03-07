@@ -15,7 +15,7 @@ export default {
   },
 
   created () {
-    this.$store.dispatch('corpus/register', this.uid)
+    this.$store.commit('corpus/register', this.uid)
   }
 }
 </script>

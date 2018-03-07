@@ -23,13 +23,6 @@ export default {
     uid: {
       type: String,
       default: 'default'
-    },
-    filter: {
-      type: Function,
-      default: media =>
-        media &&
-        media.description &&
-        media.description.type && media.description.type === 'youtube' && media
     }
   },
 
@@ -112,6 +105,11 @@ export default {
   },
 
   methods: {
+    filter (media) {
+      return media &&
+        media.description &&
+        media.description.type && media.description.type === 'youtube' && media
+    },
     videoLoad (mediaUrl) {
       if (this.player) {
         const videoId = this.parseYouTubeId(mediaUrl)

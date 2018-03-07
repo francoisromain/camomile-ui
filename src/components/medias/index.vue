@@ -19,7 +19,7 @@ export default {
   },
 
   created () {
-    this.$store.dispatch('medias/register', { uid: this.uid, corpuUid: this.corpusUid })
+    this.$store.commit('medias/register', { uid: this.uid, corpuUid: this.corpusUid })
   }
 }
 </script>

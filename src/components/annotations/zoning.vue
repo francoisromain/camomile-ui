@@ -28,17 +28,6 @@ export default {
     uid: {
       type: String,
       default: 'default'
-    },
-    filter: {
-      type: Function,
-      default: a =>
-        a.fragment &&
-        a.fragment.time &&
-        !isNaN(a.fragment.time.start) &&
-        !isNaN(a.fragment.time.end) &&
-        a.fragment.positions &&
-        a.fragment.positions instanceof Array &&
-        a
     }
   },
 
@@ -64,6 +53,25 @@ export default {
     layers () {
       const active = this.$store.state.layers.actives[this.layersUid]
       return active ? this.$store.state.layers.lists[active.corpuUid] : []
+    }
+  },
+
+  created () {
+    this.$store.commit('annotations/filterRegister', {
+      uid: this.uid,
+      filter: this.filter
+    })
+  },
+
+  methods: {
+    filter (a) {
+      return a.fragment &&
+        a.fragment.time &&
+        !isNaN(a.fragment.time.start) &&
+        !isNaN(a.fragment.time.end) &&
+        a.fragment.positions &&
+        a.fragment.positions instanceof Array &&
+        a
     }
   }
 }

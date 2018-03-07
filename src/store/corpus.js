@@ -418,11 +418,6 @@ export const actions = {
         { root: true }
       )
     }
-  },
-
-  // Register a corpu uid
-  register({ state, commit }, uid) {
-    commit('register', uid)
   }
 }
 

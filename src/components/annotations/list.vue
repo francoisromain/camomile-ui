@@ -9,6 +9,7 @@
       :key="layer.id"
       :layer="layer"
       :annotations="annotations[layer.id]"
+      :annotations-filtered="annotationsFiltered[layer.id]"
       :active-id="activeId"
       :media-id="mediaId"
       :media-name="mediaName"
@@ -36,6 +37,9 @@ export default {
   computed: {
     annotations () {
       return this.$store.getters['annotations/lists'](this.uid)
+    },
+    annotationsFiltered () {
+      return this.$store.getters['annotations/filtered'](this.uid)
     },
     activeId () {
       return this.$store.state.annotations.actives[this.uid] || null

@@ -208,11 +208,6 @@ export const actions = {
       })
   },
 
-  // Register a mediaUid in a corpuUid
-  register({ commit }, { uid, corpuUid }) {
-    commit('register', { uid, corpuUid })
-  },
-
   // Re-set a new media in every mediaUid where it is active
   unsetAll({ state, dispatch }, { id }) {
     // loop over the mediaUids
