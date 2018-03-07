@@ -38,7 +38,7 @@ export default {
 
   computed: {
     config () {
-      return this.$store.state.cml.config
+      return this.$store.state.config
     }
   },
 
@@ -52,7 +52,7 @@ export default {
 
   methods: {
     login (config) {
-      return this.$store.dispatch('cml/user/login', config)
+      return this.$store.dispatch('user/login', config)
     },
     keyup (e) {
       if ((e.which || e.keyCode) === 13) {

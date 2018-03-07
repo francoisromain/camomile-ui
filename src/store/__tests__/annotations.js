@@ -130,25 +130,20 @@ describe('store annotations actions', () => {
     }
 
     store = new Vuex.Store({
+      state: {
+        api
+      },
       modules: {
-        cml: {
-          namespaced: true,
-          state: {
-            api
-          },
-          modules: {
-            user,
-            groups,
-            users,
-            corpus,
-            messages,
-            popup,
-            sync,
-            medias,
-            layers,
-            annotations
-          }
-        }
+        user,
+        groups,
+        users,
+        corpus,
+        messages,
+        popup,
+        sync,
+        medias,
+        layers,
+        annotations
       }
     })
   })
@@ -163,10 +158,8 @@ describe('store annotations actions', () => {
     const layerId = 'mocks-layer-id-1'
 
     expect.assertions(2)
-    return store.dispatch('cml/annotations/add', { element }).then(r => {
-      expect(
-        store.state.cml.annotations.lists['default'].layers[layerId]
-      ).toEqual([
+    return store.dispatch('annotations/add', { element }).then(r => {
+      expect(store.state.annotations.lists['default'].layers[layerId]).toEqual([
         {
           fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
           id: 'mocks-annotation-id-1',
@@ -192,7 +185,7 @@ describe('store annotations actions', () => {
           metadata: { data: 'Egestas Euismod Quam Condimentum' }
         }
       ])
-      expect(store.state.cml.messages.list[0].content).toBe('Annotation added')
+      expect(store.state.messages.list[0].content).toBe('Annotation added')
     })
   })
 
@@ -205,7 +198,7 @@ describe('store annotations actions', () => {
     }
 
     return expect(
-      store.dispatch('cml/annotations/add', { element })
+      store.dispatch('annotations/add', { element })
     ).rejects.toThrow('Api')
   })
 
@@ -214,10 +207,8 @@ describe('store annotations actions', () => {
     const layerId = 'mocks-layer-id-1'
 
     expect.assertions(2)
-    return store.dispatch('cml/annotations/remove', { id }).then(r => {
-      expect(
-        store.state.cml.annotations.lists['default'].layers[layerId]
-      ).toEqual([
+    return store.dispatch('annotations/remove', { id }).then(r => {
+      expect(store.state.annotations.lists['default'].layers[layerId]).toEqual([
         {
           fragment: {
             fragment: 'Etiam porta sem malesuada magna mollis euismod.'
@@ -229,18 +220,16 @@ describe('store annotations actions', () => {
           }
         }
       ])
-      expect(store.state.cml.messages.list[0].content).toBe(
-        'Annotation removed'
-      )
+      expect(store.state.messages.list[0].content).toBe('Annotation removed')
     })
   })
 
   it('removes an annotation (error)', () => {
     const id = '' // throw an error
 
-    return expect(
-      store.dispatch('cml/annotations/remove', { id })
-    ).rejects.toThrow('Api')
+    return expect(store.dispatch('annotations/remove', { id })).rejects.toThrow(
+      'Api'
+    )
   })
 
   it('updates an annotation', () => {
@@ -259,10 +248,8 @@ describe('store annotations actions', () => {
     const layerId = 'mocks-layer-id-1'
 
     expect.assertions(2)
-    return store.dispatch('cml/annotations/update', { element }).then(r => {
-      expect(
-        store.state.cml.annotations.lists['default'].layers[layerId]
-      ).toEqual([
+    return store.dispatch('annotations/update', { element }).then(r => {
+      expect(store.state.annotations.lists['default'].layers[layerId]).toEqual([
         {
           fragment: {
             fragment: 'Donec id elit non mi porta gravida at eget metus.'
@@ -285,9 +272,7 @@ describe('store annotations actions', () => {
           }
         }
       ])
-      expect(store.state.cml.messages.list[0].content).toBe(
-        'Annotation updated'
-      )
+      expect(store.state.messages.list[0].content).toBe('Annotation updated')
     })
   })
 
@@ -299,7 +284,7 @@ describe('store annotations actions', () => {
     }
 
     return expect(
-      store.dispatch('cml/annotations/update', { element })
+      store.dispatch('annotations/update', { element })
     ).rejects.toThrow('Api')
   })
 
@@ -309,7 +294,7 @@ describe('store annotations actions', () => {
 
     expect.assertions(1)
     return store
-      .dispatch('cml/annotations/list', {
+      .dispatch('annotations/list', {
         uid: 'default',
         layerId,
         layersUid: 'default',
@@ -317,7 +302,7 @@ describe('store annotations actions', () => {
       })
       .then(r => {
         expect(
-          store.state.cml.annotations.lists['default'].layers[layerId]
+          store.state.annotations.lists['default'].layers[layerId]
         ).toEqual([
           {
             fragment: { fragment: 'Maecenas faucibus mollis interdum.' },
@@ -347,7 +332,7 @@ describe('store annotations actions', () => {
 
     expect.assertions(1)
     return store
-      .dispatch('cml/annotations/list', {
+      .dispatch('annotations/list', {
         uid: 'default',
         layerId,
         layersUid: '',

@@ -75,16 +75,16 @@ export default {
 
   methods: {
     popupOpen ({ config, element }) {
-      return this.$store.commit('cml/popup/open', { config, element })
+      return this.$store.commit('popup/open', { config, element })
     },
     set (e, layerId) {
       if (e.target.checked) {
-        this.$store.commit('cml/annotations/set', {
+        this.$store.commit('annotations/set', {
           id: e.target.value,
           uid: this.uid
         })
       } else {
-        this.$store.commit('cml/annotations/unset', {
+        this.$store.commit('annotations/unset', {
           id: e.target.value,
           uid: this.uid
         })

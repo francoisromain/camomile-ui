@@ -48,16 +48,11 @@ describe('header', () => {
 
   beforeEach(() => {
     store = new Vuex.Store({
+      state,
       modules: {
-        cml: {
-          namespaced: true,
-          state,
-          modules: {
-            user,
-            dropdown,
-            sync
-          }
-        }
+        user,
+        dropdown,
+        sync
       }
     })
   })
@@ -74,7 +69,7 @@ describe('header', () => {
   })
 
   it('renders the correct markup after login', () => {
-    store.state.cml.user.isLogged = true
+    store.state.user.isLogged = true
     const wrapper = shallow(header, { store, localVue })
     expect(wrapper.html()).toContain(
       '<header class="bg-inverse color-bg header"><div class="container"><div class="blobs"><div class="blob-1-4 mb-0"><!----></div> <div class="blob-1-2 mb-0"><div class="blobs-default"><div class="blob-default"><!----></div> <div class="blob-auto mb-0"><!----></div></div></div> <div class="blob mb-0 flex-right"><!----></div></div></div></header>'
@@ -82,7 +77,7 @@ describe('header', () => {
   })
 
   it('has not changed snapshot before login', () => {
-    store.state.cml.user.isLogged = false
+    store.state.user.isLogged = false
     const wrapper = shallow(header, { store, localVue })
     renderer.renderToString(wrapper.vm, (err, str) => {
       if (err) throw err
@@ -92,7 +87,7 @@ describe('header', () => {
 
   it('has not changed snapshot after login', () => {
     const wrapper = shallow(header, { store, localVue })
-    store.state.cml.user.isLogged = true
+    store.state.user.isLogged = true
     renderer.renderToString(wrapper.vm, (err, str) => {
       if (err) throw err
       expect(str).toMatchSnapshot()
@@ -116,7 +111,7 @@ describe('header', () => {
   it('close dropdown when user clicks again on user button', () => {
     const wrapper = mount(headerUserbutton, { store, localVue })
     const button = wrapper.find('button')
-    store.state.cml.dropdown.visible = true
+    store.state.dropdown.visible = true
     button.trigger('click')
     expect(dropdown.mutations.close).toHaveBeenCalled()
   })

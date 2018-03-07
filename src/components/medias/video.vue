@@ -56,10 +56,10 @@ export default {
 
   computed: {
     media () {
-      return this.$store.getters['cml/medias/active'](this.uid, this.filter)
+      return this.$store.getters['medias/active'](this.uid, this.filter)
     },
     properties () {
-      return this.$store.getters['cml/medias/properties'](this.uid, this.filter)
+      return this.$store.getters['medias/properties'](this.uid, this.filter)
     },
     isPlaying () {
       return this.properties.isPlaying || false
@@ -74,7 +74,7 @@ export default {
       return this.properties.timeCurrent || 0
     },
     viewportWidth () {
-      return this.$store.state.cml.viewport.width || 0
+      return this.$store.state.viewport.width || 0
     }
   },
 
@@ -110,7 +110,7 @@ export default {
 
   methods: {
     videoEnded () {
-      this.$store.dispatch('cml/medias/stop', { uid: this.uid })
+      this.$store.dispatch('medias/stop', { uid: this.uid })
     },
     videoToggle () {
       if (this.$refs.video.paused) {
@@ -121,9 +121,9 @@ export default {
     },
     buttonToggle () {
       if (this.$refs.video.paused) {
-        this.$store.dispatch('cml/medias/pause', { uid: this.uid })
+        this.$store.dispatch('medias/pause', { uid: this.uid })
       } else {
-        this.$store.dispatch('cml/medias/play', { uid: this.uid })
+        this.$store.dispatch('medias/play', { uid: this.uid })
       }
     },
     videoTimeupdate () {
@@ -136,12 +136,12 @@ export default {
       this.$refs.video.currentTime = this.timeCurrent / 1000
     },
     videoLoad () {
-      this.$store.commit('cml/medias/loaded', {
+      this.$store.commit('medias/loaded', {
         isLoaded: true,
         uid: this.uid
       })
 
-      this.$store.commit('cml/medias/timeTotal', {
+      this.$store.commit('medias/timeTotal', {
         time: this.$refs.video.duration * 1000,
         uid: this.uid
       })

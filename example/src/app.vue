@@ -37,18 +37,14 @@
 
       <div class="blobs">
         <cml-corpus
-          class="blob-1-2 p bg-bg" 
           uid="test-corpus" />
         <cml-medias
-          class="blob-1-2 p bg-bg"
           corpus-uid="test-corpus"
           uid="test-media" />
         <cml-layers
-          class="blob-1-2 p bg-bg" 
           corpus-uid="test-corpus"
           uid="test-layers" />
         <cml-annotations
-          class="blob-1-2 p bg-bg" 
           media-uid="test-media"
           layers-uid="test-layers"
           uid="test-annotations" />
@@ -60,16 +56,12 @@
           uid="test-corpus" />
         <cml-medias-list
           class="blob-1-2 p bg-bg"
-          corpus-uid="test-corpus"
           uid="test-media" />
         <cml-layers-list
           class="blob-1-2 p bg-bg" 
-          corpus-uid="test-corpus"
           uid="test-layers" />
         <cml-annotations-list
           class="blob-1-2 p bg-bg" 
-          media-uid="test-media"
-          layers-uid="test-layers"
           uid="test-annotations" />
       </div>
 

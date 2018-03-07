@@ -8,7 +8,7 @@ export default {
 
   computed: {
     title () {
-      return this.$store.state.cml.config.title
+      return this.$store.state.config.title
     }
   }
 }

@@ -15,12 +15,7 @@ describe('store messages actions', () => {
     messages.state = { list: [] }
     store = new Vuex.Store({
       modules: {
-        cml: {
-          namespaced: true,
-          modules: {
-            messages
-          }
-        }
+        messages
       }
     })
   })
@@ -29,12 +24,12 @@ describe('store messages actions', () => {
     const content = 'the success message'
 
     expect.assertions(2)
-    return store.dispatch('cml/messages/success', content).then(r => {
-      expect(store.state.cml.messages.list).toEqual([
+    return store.dispatch('messages/success', content).then(r => {
+      expect(store.state.messages.list).toEqual([
         { content: 'the success message', id: 86400000, type: 'success' }
       ])
       jest.runAllTimers()
-      expect(store.state.cml.messages.list).toEqual([])
+      expect(store.state.messages.list).toEqual([])
     })
   })
 
@@ -42,12 +37,12 @@ describe('store messages actions', () => {
     const content = 'the error message'
 
     expect.assertions(2)
-    return store.dispatch('cml/messages/error', content).then(r => {
-      expect(store.state.cml.messages.list).toEqual([
+    return store.dispatch('messages/error', content).then(r => {
+      expect(store.state.messages.list).toEqual([
         { content: 'the error message', id: 86400000, type: 'error' }
       ])
       jest.runAllTimers()
-      expect(store.state.cml.messages.list).toEqual([])
+      expect(store.state.messages.list).toEqual([])
     })
   })
 })

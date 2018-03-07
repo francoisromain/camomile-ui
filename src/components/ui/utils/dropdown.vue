@@ -17,13 +17,13 @@ export default {
 
   computed: {
     dropdown () {
-      return this.$store.state.cml.dropdown
+      return this.$store.state.dropdown
     }
   },
 
   methods: {
     close () {
-      this.$store.commit('cml/dropdown/close')
+      this.$store.commit('dropdown/close')
     }
   }
 }

@@ -90,22 +90,22 @@ export default {
 
   computed: {
     corpus () {
-      return this.$store.state.cml.corpus.lists[this.uid]
+      return this.$store.state.corpus.lists[this.uid]
     },
     corpuId () {
-      return this.$store.state.cml.corpus.actives[this.uid]
+      return this.$store.state.corpus.actives[this.uid]
     },
     isAdmin () {
-      return this.$store.state.cml.user.isAdmin
+      return this.$store.state.user.isAdmin
     }
   },
 
   methods: {
     popupOpen ({ config, element }) {
-      this.$store.commit('cml/popup/open', { config, element })
+      this.$store.commit('popup/open', { config, element })
     },
     set (e) {
-      this.$store.dispatch('cml/corpus/set', {
+      this.$store.dispatch('corpus/set', {
         id: e.target.value,
         uid: this.uid
       })

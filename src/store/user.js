@@ -31,12 +31,12 @@ export const state = {
 export const actions = {
   // user login
   login({ commit, dispatch, rootState }, config) {
-    dispatch('cml/sync/start', 'userLogin', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'userLogin', { root: true })
+    return rootState.api
       .login(config.user.name, config.user.password)
       .then(r => {
-        dispatch('cml/sync/stop', 'userLogin', { root: true })
-        commit('cml/popup/close', null, { root: true })
+        dispatch('sync/stop', 'userLogin', { root: true })
+        commit('popup/close', null, { root: true })
 
         // Get the user properties
         dispatch('set')
@@ -44,9 +44,9 @@ export const actions = {
         return r.message
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'userLogin', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
-        dispatch('cml/reset', null, { root: true })
+        dispatch('sync/stop', 'userLogin', { root: true })
+        dispatch('messages/error', e.message, { root: true })
+        dispatch('reset', null, { root: true })
 
         throw e
       })
@@ -54,8 +54,8 @@ export const actions = {
 
   // Get the user properties
   set({ commit, dispatch, rootState }) {
-    dispatch('cml/sync/start', 'userSet', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'userSet', { root: true })
+    return rootState.api
       .me()
       .then(r => {
         // Format server response
@@ -66,19 +66,19 @@ export const actions = {
           description: r.data.description || {},
           groupIds: r.data.groups || []
         }
-        dispatch('cml/sync/stop', 'userSet', { root: true })
+        dispatch('sync/stop', 'userSet', { root: true })
         // Commit user
         commit('set', user)
 
         // Bootstrap app from index.js / set
-        dispatch('cml/set', null, { root: true })
+        dispatch('set', null, { root: true })
 
         return user
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'userSet', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
-        dispatch('cml/reset', null, { root: true })
+        dispatch('sync/stop', 'userSet', { root: true })
+        dispatch('messages/error', e.message, { root: true })
+        dispatch('reset', null, { root: true })
 
         throw e
       })
@@ -86,23 +86,23 @@ export const actions = {
 
   // User logout
   logout({ commit, dispatch, rootState }) {
-    dispatch('cml/sync/start', 'userLogout', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'userLogout', { root: true })
+    return rootState.api
       .logout()
       .then(r => {
-        dispatch('cml/sync/stop', 'userLogout', { root: true })
+        dispatch('sync/stop', 'userLogout', { root: true })
 
         // Reset the app from index.js / reset
-        dispatch('cml/reset', null, { root: true })
-        commit('cml/popup/close', null, { root: true })
-        commit('cml/dropdown/close', null, { root: true })
+        dispatch('reset', null, { root: true })
+        commit('popup/close', null, { root: true })
+        commit('dropdown/close', null, { root: true })
 
         return r.message
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'userLogout', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
-        dispatch('cml/reset', null, { root: true })
+        dispatch('sync/stop', 'userLogout', { root: true })
+        dispatch('messages/error', e.message, { root: true })
+        dispatch('reset', null, { root: true })
 
         throw e
       })

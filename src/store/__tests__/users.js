@@ -100,23 +100,18 @@ describe('store users actions', () => {
     }
 
     store = new Vuex.Store({
+      state: {
+        api
+      },
       modules: {
-        cml: {
-          namespaced: true,
-          state: {
-            api
-          },
-          modules: {
-            sync,
-            popup,
-            messages,
-            user,
-            users,
-            groups,
-            corpus,
-            layers
-          }
-        }
+        sync,
+        popup,
+        messages,
+        user,
+        users,
+        groups,
+        corpus,
+        layers
       }
     })
   })
@@ -129,8 +124,8 @@ describe('store users actions', () => {
     }
 
     expect.assertions(3)
-    return store.dispatch('cml/users/add', { element }).then(r => {
-      expect(store.state.cml.users.list).toEqual([
+    return store.dispatch('users/add', { element }).then(r => {
+      expect(store.state.users.list).toEqual([
         { description: {}, id: 'mocks-user-id-lu', name: 'lu', role: 'user' },
         { description: {}, id: 'mocks-user-id-ji', name: 'ji', role: 'admin' },
         { description: {}, id: 'mocks-user-id-joe', name: 'joe', role: 'user' },
@@ -141,15 +136,13 @@ describe('store users actions', () => {
           role: 'user'
         }
       ])
-      expect(
-        store.state.cml.corpus.lists['default'][0].permissions.users
-      ).toEqual({
+      expect(store.state.corpus.lists['default'][0].permissions.users).toEqual({
         'mocks-user-id-ji': 2,
         'mocks-user-id-joe': 3,
         'mocks-user-id-lu': 1,
         'mocks-user-id-new': 0
       })
-      expect(store.state.cml.messages.list[0].content).toBe('User added')
+      expect(store.state.messages.list[0].content).toBe('User added')
     })
   })
 
@@ -157,7 +150,7 @@ describe('store users actions', () => {
     const element = {
       name: '' // throw an error
     }
-    return expect(store.dispatch('cml/users/add', { element })).rejects.toThrow(
+    return expect(store.dispatch('users/add', { element })).rejects.toThrow(
       'Incorrect name or password'
     )
   })
@@ -172,8 +165,8 @@ describe('store users actions', () => {
     }
 
     expect.assertions(3)
-    return store.dispatch('cml/users/update', { element }).then(r => {
-      expect(store.state.cml.users.list).toEqual([
+    return store.dispatch('users/update', { element }).then(r => {
+      expect(store.state.users.list).toEqual([
         {
           description: { test: 'meoi oiou' },
           id: 'mocks-user-id-lu',
@@ -183,8 +176,8 @@ describe('store users actions', () => {
         { description: {}, id: 'mocks-user-id-ji', name: 'ji', role: 'admin' },
         { description: {}, id: 'mocks-user-id-joe', name: 'joe', role: 'user' }
       ])
-      expect(store.state.cml.user.description).toEqual({ test: 'meoi oiou' })
-      expect(store.state.cml.messages.list[0].content).toBe('User updated')
+      expect(store.state.user.description).toEqual({ test: 'meoi oiou' })
+      expect(store.state.messages.list[0].content).toBe('User updated')
     })
   })
 
@@ -193,24 +186,22 @@ describe('store users actions', () => {
       id: ''
     }
 
-    return expect(
-      store.dispatch('cml/users/update', { element })
-    ).rejects.toThrow('Api')
+    return expect(store.dispatch('users/update', { element })).rejects.toThrow(
+      'Api'
+    )
   })
 
   it('removes a user', () => {
     const id = 'mocks-user-id-lu'
 
     expect.assertions(3)
-    return store.dispatch('cml/users/remove', { id }).then(r => {
-      expect(store.state.cml.messages.list[0].content).toBe('User removed')
-      expect(store.state.cml.users.list).toEqual([
+    return store.dispatch('users/remove', { id }).then(r => {
+      expect(store.state.messages.list[0].content).toBe('User removed')
+      expect(store.state.users.list).toEqual([
         { description: {}, id: 'mocks-user-id-ji', name: 'ji', role: 'admin' },
         { description: {}, id: 'mocks-user-id-joe', name: 'joe', role: 'user' }
       ])
-      expect(
-        store.state.cml.corpus.lists['default'][0].permissions.users
-      ).toEqual({
+      expect(store.state.corpus.lists['default'][0].permissions.users).toEqual({
         'mocks-user-id-ji': 2,
         'mocks-user-id-joe': 3
       })
@@ -221,11 +212,11 @@ describe('store users actions', () => {
     const id = 'mocks-user-id-incorrect'
 
     expect.assertions(2)
-    return store.dispatch('cml/users/remove', { id }).catch(e => {
+    return store.dispatch('users/remove', { id }).catch(e => {
       expect(() => {
         throw e
       }).toThrow('Incorrect user Id: mocks-user-id-incorrect')
-      expect(store.state.cml.messages.list[0].content).toBe(
+      expect(store.state.messages.list[0].content).toBe(
         'Incorrect user Id: mocks-user-id-incorrect'
       )
     })
@@ -233,8 +224,8 @@ describe('store users actions', () => {
 
   it('list all users', () => {
     expect.assertions(1)
-    return store.dispatch('cml/users/list').then(r => {
-      expect(store.state.cml.users.list).toEqual([
+    return store.dispatch('users/list').then(r => {
+      expect(store.state.users.list).toEqual([
         { description: {}, id: 'mocks-user-id-lu', name: 'lu', role: 'user' },
         { description: {}, id: 'mocks-user-id-ji', name: 'ji', role: 'admin' },
         { description: {}, id: 'mocks-user-id-joe', name: 'joe', role: 'user' }
@@ -272,12 +263,7 @@ describe('store users getters', () => {
 
     store = new Vuex.Store({
       modules: {
-        cml: {
-          namespaced: true,
-          modules: {
-            users
-          }
-        }
+        users
       }
     })
   })
@@ -288,7 +274,7 @@ describe('store users getters', () => {
   }
 
   it('returns user permissions', () => {
-    expect(store.getters['cml/users/permissions'](permissions)).toEqual({
+    expect(store.getters['users/permissions'](permissions)).toEqual({
       'mocks-user-id-ji': 0,
       'mocks-user-id-joe': 3,
       'mocks-user-id-lu': 2

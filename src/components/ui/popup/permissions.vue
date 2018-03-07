@@ -66,10 +66,10 @@ export default {
 
   computed: {
     ...mapState({
-      resource: state => state.cml.popup.element,
-      users: state => state.cml.users.list,
-      groups: state => state.cml.groups.list,
-      type: state => state.cml.popup.config.type
+      resource: state => state.popup.element,
+      users: state => state.users.list,
+      groups: state => state.groups.list,
+      type: state => state.popup.config.type
     })
   }
 }

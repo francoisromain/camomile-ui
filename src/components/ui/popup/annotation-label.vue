@@ -42,10 +42,10 @@ export default {
 
   computed: {
     ...mapState({
-      element: state => state.cml.popup.element,
-      type: state => state.cml.popup.config.type,
+      element: state => state.popup.element,
+      type: state => state.popup.config.type,
       rolesPermission: state =>
-        state.cml.user.id !== state.cml.popup.element.id
+        state.user.id !== state.popup.element.id
     })
   },
 
@@ -64,8 +64,8 @@ export default {
   methods: {
     save () {
       if (this.element.metadata.label !== '') {
-        this.$store.dispatch('cml/annotations/add', { element: this.element })
-        this.$store.commit('cml/popup/close')
+        this.$store.dispatch('annotations/add', { element: this.element })
+        this.$store.commit('popup/close')
       } else {
         this.error = 'Fill in the label.'
       }

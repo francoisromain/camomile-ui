@@ -47,25 +47,25 @@ export default {
 
   computed: {
     mediaUid () {
-      return this.$store.state.cml.annotations.lists[this.uid].mediaUid
+      return this.$store.state.annotations.lists[this.uid].mediaUid
     },
     layersUid () {
-      return this.$store.state.cml.annotations.lists[this.uid].layersUid
+      return this.$store.state.annotations.lists[this.uid].layersUid
     },
     annotation () {
-      return this.$store.getters['cml/annotations/active'](this.uid)
+      return this.$store.getters['annotations/active'](this.uid)
     },
     layer () {
-      return this.annotation ? this.$store.getters['cml/layers/details'](this.layersUid, this.annotation.layerId) : {}
+      return this.annotation ? this.$store.getters['layers/details'](this.layersUid, this.annotation.layerId) : {}
     }
   },
 
   methods: {
     popupEditOpen () {
-      return this.$store.commit('cml/popup/open', { config: this.popupEditConfig, element: this.annotation })
+      return this.$store.commit('popup/open', { config: this.popupEditConfig, element: this.annotation })
     },
     popupRemoveOpen () {
-      return this.$store.commit('cml/popup/open', { config: this.popupRemoveConfig, element: this.annotation })
+      return this.$store.commit('popup/open', { config: this.popupRemoveConfig, element: this.annotation })
     }
   }
 }

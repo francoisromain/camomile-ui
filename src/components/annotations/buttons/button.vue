@@ -62,7 +62,7 @@ export default {
         fragment: this.fragmentTypeFormat(this.fragmentType),
         metadata: { label: '' }
       }
-      return this.$store.commit('cml/popup/open', {
+      return this.$store.commit('popup/open', {
         config: this.popupAnnotationLabelConfig,
         element
       })

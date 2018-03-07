@@ -9,7 +9,7 @@ export default {
   name: 'CamomileLogin',
 
   created () {
-    this.$store.commit('cml/popup/open', {
+    this.$store.commit('popup/open', {
       config: {
         title: 'Login',
         closeBtn: false,

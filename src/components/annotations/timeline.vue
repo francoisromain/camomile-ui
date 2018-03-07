@@ -60,13 +60,13 @@ export default {
 
   computed: {
     mediaUid () {
-      return this.$store.state.cml.annotations.lists[this.uid].mediaUid
+      return this.$store.state.annotations.lists[this.uid].mediaUid
     },
     layersUid () {
-      return this.$store.state.cml.annotations.lists[this.uid].layersUid
+      return this.$store.state.annotations.lists[this.uid].layersUid
     },
     mediaProperties () {
-      return this.$store.getters['cml/medias/properties'](this.mediaUid)
+      return this.$store.getters['medias/properties'](this.mediaUid)
     },
     timeCurrent () {
       return this.mediaProperties.timeCurrent || 0
@@ -75,10 +75,10 @@ export default {
       return this.mediaProperties.timeTotal || 0
     },
     annotations () {
-      return this.$store.getters['cml/annotations/filter'](this.uid, this.filter)
+      return this.$store.getters['annotations/filter'](this.uid, this.filter)
     },
     layers () {
-      return this.$store.getters['cml/layers/actives'](this.layersUid)
+      return this.$store.getters['layers/actives'](this.layersUid)
     },
     left () {
       return (

@@ -13,7 +13,7 @@ export default {
 
   methods: {
     resize () {
-      return this.$store.dispatch('cml/viewport/set')
+      return this.$store.dispatch('viewport/set')
     }
   }
 }

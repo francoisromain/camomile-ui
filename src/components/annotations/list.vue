@@ -35,25 +35,25 @@ export default {
 
   computed: {
     annotations () {
-      return this.$store.getters['cml/annotations/lists'](this.uid)
+      return this.$store.getters['annotations/lists'](this.uid)
     },
     activeId () {
-      return this.$store.state.cml.annotations.actives[this.uid] || null
+      return this.$store.state.annotations.actives[this.uid] || null
     },
     mediaUid () {
-      return this.$store.state.cml.annotations.lists[this.uid].mediaUid
+      return this.$store.state.annotations.lists[this.uid].mediaUid
     },
     layersUid () {
-      return this.$store.state.cml.annotations.lists[this.uid].layersUid
+      return this.$store.state.annotations.lists[this.uid].layersUid
     },
     layers () {
-      return this.$store.getters['cml/layers/actives'](this.layersUid)
+      return this.$store.getters['layers/actives'](this.layersUid)
     },
     mediaId () {
-      return this.$store.state.cml.medias.actives[this.mediaUid].id
+      return this.$store.state.medias.actives[this.mediaUid].id
     },
     mediaName () {
-      const media = this.$store.getters['cml/medias/active'](this.mediaUid)
+      const media = this.$store.getters['medias/active'](this.mediaUid)
       return media ? media.name : ''
     }
   }

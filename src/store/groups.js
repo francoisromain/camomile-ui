@@ -27,24 +27,24 @@ export const state = {
 export const actions = {
   // Add a new group
   add({ commit, dispatch, rootState }, { element }) {
-    dispatch('cml/sync/start', 'groupsAdd', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'groupsAdd', { root: true })
+    return rootState.api
       .createGroup(element.name, element.description)
       .then(r => {
-        dispatch('cml/sync/stop', 'groupsAdd', { root: true })
+        dispatch('sync/stop', 'groupsAdd', { root: true })
         const group = groupFormat(r.data)
         commit('add', group)
 
         // Add the new group to every corpus and layers
-        commit('cml/corpus/groupAdd', group.id, { root: true })
-        commit('cml/layers/groupAdd', group.id, { root: true })
-        dispatch('cml/messages/success', 'Group added', { root: true })
+        commit('corpus/groupAdd', group.id, { root: true })
+        commit('layers/groupAdd', group.id, { root: true })
+        dispatch('messages/success', 'Group added', { root: true })
 
         return group
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'groupsAdd', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'groupsAdd', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -52,22 +52,22 @@ export const actions = {
 
   // Remove a group
   remove({ commit, dispatch, rootState }, { id }) {
-    dispatch('cml/sync/start', 'groupsRemove', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'groupsRemove', { root: true })
+    return rootState.api
       .deleteGroup(id)
       .then(r => {
-        dispatch('cml/sync/stop', 'groupsRemove', { root: true })
+        dispatch('sync/stop', 'groupsRemove', { root: true })
         commit('remove', id)
         // Add the group from every corpus and layers
-        commit('cml/corpus/groupRemove', id, { root: true })
-        commit('cml/layers/groupRemove', id, { root: true })
-        dispatch('cml/messages/success', 'Group removed', { root: true })
+        commit('corpus/groupRemove', id, { root: true })
+        commit('layers/groupRemove', id, { root: true })
+        dispatch('messages/success', 'Group removed', { root: true })
 
         return id
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'groupsRemove', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'groupsRemove', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -75,20 +75,20 @@ export const actions = {
 
   // Update a group
   update({ commit, dispatch, rootState }, { element }) {
-    dispatch('cml/sync/start', 'groupsUpdate', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'groupsUpdate', { root: true })
+    return rootState.api
       .updateGroup(element.id, { description: element.description })
       .then(r => {
-        dispatch('cml/sync/stop', 'groupsUpdate', { root: true })
+        dispatch('sync/stop', 'groupsUpdate', { root: true })
         const group = groupFormat(r.data)
         commit('update', group)
-        dispatch('cml/messages/success', 'Group updated', { root: true })
+        dispatch('messages/success', 'Group updated', { root: true })
 
         return group
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'groupsUpdate', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'groupsUpdate', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -96,19 +96,19 @@ export const actions = {
 
   // List groups
   list({ commit, dispatch, rootState }) {
-    dispatch('cml/sync/start', 'groupsList', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'groupsList', { root: true })
+    return rootState.api
       .getGroups()
       .then(r => {
-        dispatch('cml/sync/stop', 'groupsList', { root: true })
+        dispatch('sync/stop', 'groupsList', { root: true })
         const groups = r.data.map(group => groupFormat(group))
         commit('list', groups)
 
         return groups
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'groupsList', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'groupsList', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -116,19 +116,19 @@ export const actions = {
 
   // Add a user to a group
   userAdd({ commit, dispatch, rootState }, { userId, group }) {
-    dispatch('cml/sync/start', 'groupsUserAdd', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'groupsUserAdd', { root: true })
+    return rootState.api
       .addUserToGroup(userId, group.id)
       .then(r => {
-        dispatch('cml/sync/stop', 'groupsUserAdd', { root: true })
+        dispatch('sync/stop', 'groupsUserAdd', { root: true })
         const group = groupFormat(r.data)
         commit('update', group)
-        dispatch('cml/messages/success', 'User added to group', {
+        dispatch('messages/success', 'User added to group', {
           root: true
         })
-        if (userId === rootState.cml.user.id) {
-          commit('cml/user/groupAdd', group.id, { root: true })
-          dispatch('cml/corpus/listAll', null, {
+        if (userId === rootState.user.id) {
+          commit('user/groupAdd', group.id, { root: true })
+          dispatch('corpus/listAll', null, {
             root: true
           })
         }
@@ -136,8 +136,8 @@ export const actions = {
         return group
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'groupsUserAdd', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'groupsUserAdd', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -145,19 +145,19 @@ export const actions = {
 
   // remove a user from a group
   userRemove({ commit, dispatch, rootState }, { userId, group }) {
-    dispatch('cml/sync/start', 'groupsUserRemove', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'groupsUserRemove', { root: true })
+    return rootState.api
       .removeUserFromGroup(userId, group.id)
       .then(r => {
-        dispatch('cml/sync/stop', 'groupsUserRemove', { root: true })
+        dispatch('sync/stop', 'groupsUserRemove', { root: true })
         const group = groupFormat(r.data)
         commit('update', group)
-        dispatch('cml/messages/success', 'User removed from group', {
+        dispatch('messages/success', 'User removed from group', {
           root: true
         })
-        if (userId === rootState.cml.user.id) {
-          commit('cml/user/groupRemove', group.id, { root: true })
-          dispatch('cml/corpus/listAll', null, {
+        if (userId === rootState.user.id) {
+          commit('user/groupRemove', group.id, { root: true })
+          dispatch('corpus/listAll', null, {
             root: true
           })
         }
@@ -165,8 +165,8 @@ export const actions = {
         return group
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'groupsUserRemove', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'groupsUserRemove', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })

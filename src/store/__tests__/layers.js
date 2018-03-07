@@ -103,25 +103,20 @@ describe('store layers actions', () => {
     }
 
     store = new Vuex.Store({
+      state: {
+        api
+      },
       modules: {
-        cml: {
-          namespaced: true,
-          state: {
-            api
-          },
-          modules: {
-            messages,
-            popup,
-            sync,
-            user,
-            users,
-            groups,
-            corpus,
-            medias,
-            layers,
-            annotations
-          }
-        }
+        messages,
+        popup,
+        sync,
+        user,
+        users,
+        groups,
+        corpus,
+        medias,
+        layers,
+        annotations
       }
     })
   })
@@ -137,8 +132,8 @@ describe('store layers actions', () => {
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/layers/add', { element }).then(r => {
-      expect(store.state.cml.layers.lists['default']).toEqual([
+    return store.dispatch('layers/add', { element }).then(r => {
+      expect(store.state.layers.lists['default']).toEqual([
         {
           annotations: {
             annotations: 'Ornare Malesuada Fermentum Parturient'
@@ -183,7 +178,7 @@ describe('store layers actions', () => {
           }
         }
       ])
-      expect(store.state.cml.messages.list[0].content).toBe('Layer added')
+      expect(store.state.messages.list[0].content).toBe('Layer added')
     })
   })
 
@@ -193,17 +188,17 @@ describe('store layers actions', () => {
       corpuId: '' // throw an error
     }
 
-    return expect(
-      store.dispatch('cml/layers/add', { element })
-    ).rejects.toThrow('Api')
+    return expect(store.dispatch('layers/add', { element })).rejects.toThrow(
+      'Api'
+    )
   })
 
   it('removes a layer', () => {
     const id = 'mocks-layer-id-1'
 
     expect.assertions(2)
-    return store.dispatch('cml/layers/remove', { id }).then(r => {
-      expect(store.state.cml.layers.lists['default']).toEqual([
+    return store.dispatch('layers/remove', { id }).then(r => {
+      expect(store.state.layers.lists['default']).toEqual([
         {
           annotations: {
             annotations: 'Ornare Malesuada Fermentum Parturient'
@@ -220,14 +215,14 @@ describe('store layers actions', () => {
           }
         }
       ])
-      expect(store.state.cml.messages.list[0].content).toBe('Layer removed')
+      expect(store.state.messages.list[0].content).toBe('Layer removed')
     })
   })
 
   it('removes a layer (error)', () => {
     const id = '' // throw an error
 
-    return expect(store.dispatch('cml/layers/remove', { id })).rejects.toThrow(
+    return expect(store.dispatch('layers/remove', { id })).rejects.toThrow(
       'Api'
     )
   })
@@ -248,8 +243,8 @@ describe('store layers actions', () => {
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/layers/update', { element }).then(r => {
-      expect(store.state.cml.layers.lists['default']).toEqual([
+    return store.dispatch('layers/update', { element }).then(r => {
+      expect(store.state.layers.lists['default']).toEqual([
         {
           annotations: {
             annotations: 'New: Ridiculus Etiam Vehicula Egestas'
@@ -281,7 +276,7 @@ describe('store layers actions', () => {
           }
         }
       ])
-      expect(store.state.cml.messages.list[0].content).toBe('Layer updated')
+      expect(store.state.messages.list[0].content).toBe('Layer updated')
     })
   })
 
@@ -291,19 +286,19 @@ describe('store layers actions', () => {
     }
 
     return expect(
-      store.dispatch('cml/layers/update', { element, uid: 'default' })
+      store.dispatch('layers/update', { element, uid: 'default' })
     ).rejects.toThrow('Api')
   })
 
   it('lists all layers', () => {
     expect.assertions(1)
     return store
-      .dispatch('cml/layers/list', {
+      .dispatch('layers/list', {
         corpuId: 'mocks-corpu-id',
         corpuUid: 'default'
       })
       .then(r => {
-        expect(store.state.cml.layers.lists['default']).toEqual([
+        expect(store.state.layers.lists['default']).toEqual([
           {
             annotations: {
               annotations: 'Ornare Malesuada Fermentum Parturient'
@@ -345,9 +340,9 @@ describe('store layers actions', () => {
 
     expect.assertions(2)
     return store
-      .dispatch('cml/layers/groupPermissionSet', { id, groupId, permission })
+      .dispatch('layers/groupPermissionSet', { id, groupId, permission })
       .then(r => {
-        expect(store.state.cml.layers.lists['default']).toEqual([
+        expect(store.state.layers.lists['default']).toEqual([
           {
             annotations: {
               annotations: 'Ornare Malesuada Fermentum Parturient'
@@ -379,7 +374,7 @@ describe('store layers actions', () => {
             }
           }
         ])
-        expect(store.state.cml.messages.list[0].content).toBe(
+        expect(store.state.messages.list[0].content).toBe(
           'Group permissions updated'
         )
       })
@@ -391,7 +386,7 @@ describe('store layers actions', () => {
     const permission = 1
 
     return expect(
-      store.dispatch('cml/layers/groupPermissionSet', {
+      store.dispatch('layers/groupPermissionSet', {
         id,
         groupId,
         permission
@@ -405,9 +400,9 @@ describe('store layers actions', () => {
 
     expect.assertions(2)
     return store
-      .dispatch('cml/layers/groupPermissionRemove', { id, groupId })
+      .dispatch('layers/groupPermissionRemove', { id, groupId })
       .then(r => {
-        expect(store.state.cml.layers.lists['default']).toEqual([
+        expect(store.state.layers.lists['default']).toEqual([
           {
             annotations: {
               annotations: 'Ornare Malesuada Fermentum Parturient'
@@ -439,7 +434,7 @@ describe('store layers actions', () => {
             }
           }
         ])
-        expect(store.state.cml.messages.list[0].content).toBe(
+        expect(store.state.messages.list[0].content).toBe(
           'Group permissions updated'
         )
       })
@@ -450,7 +445,7 @@ describe('store layers actions', () => {
     const groupId = '' // throw an error
 
     return expect(
-      store.dispatch('cml/layers/groupPermissionRemove', { id, groupId })
+      store.dispatch('layers/groupPermissionRemove', { id, groupId })
     ).rejects.toThrow('Api')
   })
 
@@ -461,9 +456,9 @@ describe('store layers actions', () => {
 
     expect.assertions(2)
     return store
-      .dispatch('cml/layers/userPermissionSet', { id, userId, permission })
+      .dispatch('layers/userPermissionSet', { id, userId, permission })
       .then(r => {
-        expect(store.state.cml.layers.lists['default']).toEqual([
+        expect(store.state.layers.lists['default']).toEqual([
           {
             annotations: {
               annotations: 'Ornare Malesuada Fermentum Parturient'
@@ -498,7 +493,7 @@ describe('store layers actions', () => {
             }
           }
         ])
-        expect(store.state.cml.messages.list[0].content).toBe(
+        expect(store.state.messages.list[0].content).toBe(
           'User permissions updated'
         )
       })
@@ -510,7 +505,7 @@ describe('store layers actions', () => {
     const permission = 1
 
     return expect(
-      store.dispatch('cml/layers/userPermissionSet', { id, userId, permission })
+      store.dispatch('layers/userPermissionSet', { id, userId, permission })
     ).rejects.toThrow('Api')
   })
 
@@ -520,9 +515,9 @@ describe('store layers actions', () => {
 
     expect.assertions(2)
     return store
-      .dispatch('cml/layers/userPermissionRemove', { id, userId })
+      .dispatch('layers/userPermissionRemove', { id, userId })
       .then(r => {
-        expect(store.state.cml.layers.lists['default']).toEqual([
+        expect(store.state.layers.lists['default']).toEqual([
           {
             annotations: {
               annotations: 'Ornare Malesuada Fermentum Parturient'
@@ -557,7 +552,7 @@ describe('store layers actions', () => {
             }
           }
         ])
-        expect(store.state.cml.messages.list[0].content).toBe(
+        expect(store.state.messages.list[0].content).toBe(
           'User permissions updated'
         )
       })
@@ -568,7 +563,7 @@ describe('store layers actions', () => {
     const userId = '' // throw an error
 
     return expect(
-      store.dispatch('cml/layers/userPermissionRemove', { id, userId })
+      store.dispatch('layers/userPermissionRemove', { id, userId })
     ).rejects.toThrow('Api')
   })
 
@@ -577,12 +572,12 @@ describe('store layers actions', () => {
 
     expect.assertions(1)
     return store
-      .dispatch('cml/layers/set', {
+      .dispatch('layers/set', {
         id,
         uid: 'default'
       })
       .then(r => {
-        expect(store.state.cml.layers.actives['default']).toEqual({
+        expect(store.state.layers.actives['default']).toEqual({
           corpuUid: 'default-corpu',
           ids: ['mocks-layer-id-2', 'mocks-layer-id-1']
         })
@@ -593,14 +588,12 @@ describe('store layers actions', () => {
     const id = 'mocks-layer-id-2'
 
     expect.assertions(1)
-    return store
-      .dispatch('cml/layers/unset', { id, uid: 'default' })
-      .then(r => {
-        expect(store.state.cml.layers.actives['default']).toEqual({
-          corpuUid: 'default-corpu',
-          ids: []
-        })
+    return store.dispatch('layers/unset', { id, uid: 'default' }).then(r => {
+      expect(store.state.layers.actives['default']).toEqual({
+        corpuUid: 'default-corpu',
+        ids: []
       })
+    })
   })
 })
 

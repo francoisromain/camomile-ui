@@ -63,15 +63,15 @@ export default {
 
   computed: {
     ...mapState({
-      isLogged: state => state.cml.user.isLogged,
-      popup: state => state.cml.popup,
+      isLogged: state => state.user.isLogged,
+      popup: state => state.popup,
       media: state =>
-        state.cml.medias.list.find(m => m.id === state.cml.medias.id)
+        state.medias.list.find(m => m.id === state.medias.id)
     })
   },
 
   created () {
-    this.$store.commit('cml/register', {
+    this.$store.commit('register', {
       url: this.url,
       title: this.title,
       user: {

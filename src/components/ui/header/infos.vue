@@ -8,7 +8,7 @@ export default {
 
   computed: {
     url () {
-      return this.$store.state.cml.config.url
+      return this.$store.state.config.url
     }
   }
 }

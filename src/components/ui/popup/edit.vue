@@ -113,10 +113,10 @@ export default {
 
   computed: {
     ...mapState({
-      element: state => state.cml.popup.element,
-      type: state => state.cml.popup.config.type,
+      element: state => state.popup.element,
+      type: state => state.popup.config.type,
       rolesPermission: state =>
-        state.cml.user.id !== state.cml.popup.element.id
+        state.user.id !== state.popup.element.id
     })
   },
 
@@ -137,13 +137,13 @@ export default {
   methods: {
     save () {
       if (this.element.id) {
-        this.$store.dispatch(`cml/${this.type}/update`, {
+        this.$store.dispatch(`${this.type}/update`, {
           element: this.element
         })
       } else {
-        this.$store.dispatch(`cml/${this.type}/add`, { element: this.element })
+        this.$store.dispatch(`${this.type}/add`, { element: this.element })
       }
-      this.$store.commit('cml/popup/close')
+      this.$store.commit('popup/close')
     },
     keyup (e) {
       if ((e.which || e.keyCode) === 13) {

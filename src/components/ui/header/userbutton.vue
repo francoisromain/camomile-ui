@@ -13,16 +13,16 @@ export default {
   name: 'CamomileHeaderUserbutton',
   computed: {
     ...mapState({
-      user: state => state.cml.user,
-      visible: state => state.cml.dropdown.visible
+      user: state => state.user,
+      visible: state => state.dropdown.visible
     })
   },
   methods: {
     dropdownToggle () {
       if (this.visible) {
-        this.$store.commit('cml/dropdown/close')
+        this.$store.commit('dropdown/close')
       } else {
-        this.$store.commit('cml/dropdown/open', {
+        this.$store.commit('dropdown/open', {
           component: userbuttonDropdown
         })
       }

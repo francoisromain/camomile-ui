@@ -112,7 +112,7 @@ export default {
       positions.forEach(
         position => (element.fragment.position[position.type] = position.value)
       )
-      return this.$store.dispatch('cml/annotations/update', { element })
+      return this.$store.dispatch('annotations/update', { element })
     },
     dragTopleftOn (e) {
       document.addEventListener('mousemove', this.dragTopleft)
@@ -170,7 +170,7 @@ export default {
       this.bottomDragging = c > 0 ? c : 0
     },
     set (e) {
-      this.$store.commit('cml/annotations/set', {
+      this.$store.commit('annotations/set', {
         id: this.annotation.id,
         uid: this.uid
       })

@@ -41,13 +41,13 @@ export default {
 
   computed: {
     id () {
-      return this.$store.state.cml.popup.element.id
+      return this.$store.state.popup.element.id
     },
     uid () {
-      return this.$store.state.cml.popup.config.uid
+      return this.$store.state.popup.config.uid
     },
     permission () {
-      return this.$store.state.cml[`${this.type}s`].lists[this.uid].find(
+      return this.$store.state[`${this.type}s`].lists[this.uid].find(
         r => r.id === this.id
       ).permissions[`${this.element.type}s`][this.element.id]
     }
@@ -57,7 +57,7 @@ export default {
     toggle (permission) {
       if (this.isActive(permission)) {
         this.$store.dispatch(
-          `cml/${this.type}s/${this.element.type}PermissionRemove`,
+          `${this.type}s/${this.element.type}PermissionRemove`,
           {
             id: this.id,
             [`${this.element.type}Id`]: this.element.id
@@ -65,7 +65,7 @@ export default {
         )
       } else {
         this.$store.dispatch(
-          `cml/${this.type}s/${this.element.type}PermissionSet`,
+          `${this.type}s/${this.element.type}PermissionSet`,
           {
             id: this.id,
             [`${this.element.type}Id`]: this.element.id,

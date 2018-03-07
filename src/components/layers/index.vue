@@ -19,7 +19,7 @@ export default {
   },
 
   created () {
-    this.$store.dispatch('cml/layers/register', {
+    this.$store.dispatch('layers/register', {
       uid: this.uid,
       corpuUid: this.corpusUid
     })

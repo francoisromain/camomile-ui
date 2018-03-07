@@ -34,19 +34,19 @@ export default {
 
   computed: {
     corpuUid () {
-      return this.$store.state.cml.layers.actives[this.uid].corpuUid
+      return this.$store.state.layers.actives[this.uid].corpuUid
     },
     corpuPermission () {
-      return this.$store.getters['cml/corpus/permission'](this.corpuUid)
+      return this.$store.getters['corpus/permission'](this.corpuUid)
     },
     corpuId () {
-      return this.$store.state.cml.corpus.actives[this.corpuUid]
+      return this.$store.state.corpus.actives[this.corpuUid]
     }
   },
 
   methods: {
     popupOpen ({ config, element }) {
-      return this.$store.commit('cml/popup/open', { config, element })
+      return this.$store.commit('popup/open', { config, element })
     }
   }
 }

@@ -87,7 +87,7 @@ export default {
     timeUpdate (time, type) {
       const element = Object.assign({}, this.annotation)
       element.fragment.time[type] = time
-      return this.$store.dispatch('cml/annotations/update', { element })
+      return this.$store.dispatch('annotations/update', { element })
     },
     dragLeftOn (e) {
       document.addEventListener('mousemove', this.dragLeft)
@@ -138,14 +138,14 @@ export default {
       this.rightDragging = c > 0 ? c : 0
     },
     set (e) {
-      this.$store.commit('cml/annotations/set', {
+      this.$store.commit('annotations/set', {
         id: this.annotation.id,
         uid: this.uid
       })
     },
     popupAnotationLabelOpen () {
       const element = this.annotation
-      return this.$store.commit('cml/popup/open', {
+      return this.$store.commit('popup/open', {
         config: this.popupAnnotationLabelConfig,
         element
       })

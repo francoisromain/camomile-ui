@@ -31,14 +31,14 @@ export default {
     fields: {
       get () {
         return JSON.stringify(
-          this.$store.state.cml.popup.element[this.name],
+          this.$store.state.popup.element[this.name],
           undefined,
           2
         )
       },
       set (value) {
         if (this.jsonCheck(value)) {
-          this.$store.commit('cml/popup/fieldUpdate', {
+          this.$store.commit('popup/fieldUpdate', {
             name: this.name,
             value: JSON.parse(value)
           })

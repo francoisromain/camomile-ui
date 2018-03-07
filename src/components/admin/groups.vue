@@ -73,18 +73,18 @@ export default {
 
   computed: {
     ...mapState({
-      isAdmin: state => state.cml.user.isAdmin,
-      groups: state => state.cml.groups.list,
-      isRoot: state => state.cml.user.isRoot
+      isAdmin: state => state.user.isAdmin,
+      groups: state => state.groups.list,
+      isRoot: state => state.user.isRoot
     })
   },
 
   methods: {
     popupOpen ({ config, element }) {
-      return this.$store.commit('cml/popup/open', { config, element })
+      return this.$store.commit('popup/open', { config, element })
     },
     refresh () {
-      return this.$store.dispatch('cml/groups/list')
+      return this.$store.dispatch('groups/list')
     }
   }
 }

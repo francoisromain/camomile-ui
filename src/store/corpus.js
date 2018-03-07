@@ -46,11 +46,11 @@ export const state = {
 export const actions = {
   // Add a new corpu
   add({ commit, dispatch, rootState, rootGetters }, { element }) {
-    dispatch('cml/sync/start', `corpusAdd`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `corpusAdd`, { root: true })
+    return rootState.api
       .createCorpus(element.name, element.description, {})
       .then(r => {
-        dispatch('cml/sync/stop', `corpusAdd`, { root: true })
+        dispatch('sync/stop', `corpusAdd`, { root: true })
 
         // Format server response
         const corpu = {
@@ -58,24 +58,24 @@ export const actions = {
           id: r.data._id,
           permission: 3,
           permissions: {
-            users: rootGetters['cml/users/permissions']({}),
-            groups: rootGetters['cml/groups/permissions']({})
+            users: rootGetters['users/permissions']({}),
+            groups: rootGetters['groups/permissions']({})
           },
           description: r.data.description || {}
         }
 
         // Set the permissions for the current user
-        corpu.permissions.users[rootState.cml.user.id] = 3
+        corpu.permissions.users[rootState.user.id] = 3
 
         // Commit the corpu
         commit('add', { corpu })
-        dispatch('cml/messages/success', 'Corpus added', { root: true })
+        dispatch('messages/success', 'Corpus added', { root: true })
 
         return corpu
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusAdd`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `corpusAdd`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -83,13 +83,13 @@ export const actions = {
 
   // Remove a corpu
   remove({ commit, dispatch, rootState }, { id }) {
-    dispatch('cml/sync/start', `corpusRemove`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `corpusRemove`, { root: true })
+    return rootState.api
       .deleteCorpus(id)
       .then(r => {
-        dispatch('cml/sync/stop', `corpusRemove`, { root: true })
+        dispatch('sync/stop', `corpusRemove`, { root: true })
         commit('remove', { id })
-        dispatch('cml/messages/success', 'Corpus removed', { root: true })
+        dispatch('messages/success', 'Corpus removed', { root: true })
 
         // For every uid,
         // If the removed corpus was active
@@ -99,8 +99,8 @@ export const actions = {
         return id
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusRemove`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `corpusRemove`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -108,14 +108,14 @@ export const actions = {
 
   // Update a corpu
   update({ commit, dispatch, rootState }, { element }) {
-    dispatch('cml/sync/start', `corpusUpdate`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `corpusUpdate`, { root: true })
+    return rootState.api
       .updateCorpus(element.id, {
         name: element.name,
         description: element.description
       })
       .then(r => {
-        dispatch('cml/sync/stop', `corpusUpdate`, { root: true })
+        dispatch('sync/stop', `corpusUpdate`, { root: true })
 
         // Format server response
         // The server does not send back the permissions,
@@ -125,13 +125,13 @@ export const actions = {
         corpu.name = r.data.name
         corpu.description = r.data.description || {}
         commit('update', { corpu })
-        dispatch('cml/messages/success', 'Corpus updated', { root: true })
+        dispatch('messages/success', 'Corpus updated', { root: true })
 
         return corpu
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusUpdate`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `corpusUpdate`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -142,14 +142,14 @@ export const actions = {
     { commit, dispatch, rootGetters, rootState },
     { id, groupId, permission }
   ) {
-    dispatch('cml/sync/start', `corpusGroupPermissionSet`, {
+    dispatch('sync/start', `corpusGroupPermissionSet`, {
       root: true
     })
-    return rootState.cml.api
+    return rootState.api
       .setCorpusPermissionsForGroup(id, groupId, permission)
       .then(p => {
         const permissions = p.data
-        dispatch('cml/sync/stop', `corpusGroupPermissionSet`, {
+        dispatch('sync/stop', `corpusGroupPermissionSet`, {
           root: true
         })
 
@@ -160,7 +160,7 @@ export const actions = {
           permission: (permissions.groups && permissions.groups[groupId]) || 0,
           type: 'groups'
         })
-        dispatch('cml/messages/success', 'Group permissions updated', {
+        dispatch('messages/success', 'Group permissions updated', {
           root: true
         })
 
@@ -168,22 +168,22 @@ export const actions = {
         // And if the current user is not an admin
         // => the permissions for the current user have changed
         if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
+          rootGetters['user/isInGroup'](groupId) &&
+          !rootGetters['user/isAdmin'](permissions)
         ) {
           // Re-list the corpus in every uid
           dispatch('listAll')
-          commit(`cml/popup/close`, null, { root: true })
+          commit(`popup/close`, null, { root: true })
         }
 
         return permissions
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusGroupPermissionSet`, {
+        dispatch('sync/stop', `corpusGroupPermissionSet`, {
           root: true
         })
 
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -194,14 +194,14 @@ export const actions = {
     { commit, dispatch, rootGetters, rootState },
     { id, groupId }
   ) {
-    dispatch('cml/sync/start', `corpusGroupPermissionRemove`, {
+    dispatch('sync/start', `corpusGroupPermissionRemove`, {
       root: true
     })
-    return rootState.cml.api
+    return rootState.api
       .removeCorpusPermissionsForGroup(id, groupId)
       .then(p => {
         const permissions = p.data
-        dispatch('cml/sync/stop', `corpusGroupPermissionRemove`, {
+        dispatch('sync/stop', `corpusGroupPermissionRemove`, {
           root: true
         })
         commit('permissionsUpdate', {
@@ -210,7 +210,7 @@ export const actions = {
           permission: 0,
           type: 'groups'
         })
-        dispatch('cml/messages/success', 'Group permissions updated', {
+        dispatch('messages/success', 'Group permissions updated', {
           root: true
         })
 
@@ -218,21 +218,21 @@ export const actions = {
         // And if the current user is not an admin
         // => the permissions for the current user have changed
         if (
-          rootGetters['cml/user/isInGroup'](groupId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
+          rootGetters['user/isInGroup'](groupId) &&
+          !rootGetters['user/isAdmin'](permissions)
         ) {
           // Re-list the corpus in every uid
           dispatch('listAll')
-          commit(`cml/popup/close`, null, { root: true })
+          commit(`popup/close`, null, { root: true })
         }
 
         return permissions
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusGroupPermissionRemove`, {
+        dispatch('sync/stop', `corpusGroupPermissionRemove`, {
           root: true
         })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -243,12 +243,12 @@ export const actions = {
     { commit, dispatch, rootGetters, rootState },
     { id, userId, permission }
   ) {
-    dispatch('cml/sync/start', `corpusUserPermissionSet`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `corpusUserPermissionSet`, { root: true })
+    return rootState.api
       .setCorpusPermissionsForUser(id, userId, permission)
       .then(p => {
         const permissions = p.data
-        dispatch('cml/sync/stop', `corpusUserPermissionSet`, {
+        dispatch('sync/stop', `corpusUserPermissionSet`, {
           root: true
         })
         commit('permissionsUpdate', {
@@ -257,7 +257,7 @@ export const actions = {
           permission: (permissions.users && permissions.users[userId]) || 0,
           type: 'users'
         })
-        dispatch('cml/messages/success', 'User permissions updated', {
+        dispatch('messages/success', 'User permissions updated', {
           root: true
         })
 
@@ -265,21 +265,21 @@ export const actions = {
         // And if the current user is not an admin
         // => the permissions for the current user have changed
         if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
+          rootGetters['user/isCurrentUser'](userId) &&
+          !rootGetters['user/isAdmin'](permissions)
         ) {
           // Re-list the corpus in every uid
           dispatch('listAll')
-          commit(`cml/popup/close`, null, { root: true })
+          commit(`popup/close`, null, { root: true })
         }
 
         return permissions
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusUserPermissionSet`, {
+        dispatch('sync/stop', `corpusUserPermissionSet`, {
           root: true
         })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -290,14 +290,14 @@ export const actions = {
     { commit, dispatch, rootGetters, rootState },
     { id, userId }
   ) {
-    dispatch('cml/sync/start', `corpusUserPermissionRemove`, {
+    dispatch('sync/start', `corpusUserPermissionRemove`, {
       root: true
     })
-    return rootState.cml.api
+    return rootState.api
       .removeCorpusPermissionsForUser(id, userId)
       .then(p => {
         const permissions = p.data
-        dispatch('cml/sync/stop', `corpusUserPermissionRemove`, {
+        dispatch('sync/stop', `corpusUserPermissionRemove`, {
           root: true
         })
         commit('permissionsUpdate', {
@@ -306,7 +306,7 @@ export const actions = {
           permission: 0,
           type: 'users'
         })
-        dispatch('cml/messages/success', 'User permissions updated', {
+        dispatch('messages/success', 'User permissions updated', {
           root: true
         })
 
@@ -314,20 +314,20 @@ export const actions = {
         // And if the current user is not an admin
         // => the permissions for the current user have changed
         if (
-          rootGetters['cml/user/isCurrentUser'](userId) &&
-          !rootGetters['cml/user/isAdmin'](permissions)
+          rootGetters['user/isCurrentUser'](userId) &&
+          !rootGetters['user/isAdmin'](permissions)
         ) {
           dispatch('listAll')
-          commit(`cml/popup/close`, null, { root: true })
+          commit(`popup/close`, null, { root: true })
         }
 
         return permissions
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusUserPermissionRemove`, {
+        dispatch('sync/stop', `corpusUserPermissionRemove`, {
           root: true
         })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -343,11 +343,11 @@ export const actions = {
 
   // List the corpus for a uid
   list({ commit, dispatch, rootGetters, rootState }, uid) {
-    dispatch('cml/sync/start', `corpusList-${uid}`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `corpusList-${uid}`, { root: true })
+    return rootState.api
       .getCorpora()
       .then(r => {
-        dispatch('cml/sync/stop', `corpusList-${uid}`, { root: true })
+        dispatch('sync/stop', `corpusList-${uid}`, { root: true })
 
         // Format server response
         const corpus = r.data.map(c => ({
@@ -355,13 +355,13 @@ export const actions = {
           id: c._id,
           description: c.description || {},
           // Get permission for the current user
-          permission: rootGetters['cml/user/permission'](c.permissions || {}),
+          permission: rootGetters['user/permission'](c.permissions || {}),
           // Get permissions for every users and groups
           permissions: {
-            users: rootGetters['cml/users/permissions'](
+            users: rootGetters['users/permissions'](
               (c.permissions && c.permissions.users) || {}
             ),
-            groups: rootGetters['cml/groups/permissions'](
+            groups: rootGetters['groups/permissions'](
               (c.permissions && c.permissions.groups) || {}
             )
           }
@@ -376,8 +376,8 @@ export const actions = {
         return corpus
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `corpusList-${uid}`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `corpusList-${uid}`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -400,20 +400,20 @@ export const actions = {
     // If the id is not defined, get one
     commit('set', { id: id || getters.id(uid), uid })
 
-    rootState.cml.api.watchCorpus(state.actives[uid], (error, data) => {
-      console.log('watcher', error, data)
-    })
+    // rootState.api.watchCorpus(state.actives[uid], (error, data) => {
+    //   console.log('watcher', error, data)
+    // })
     // If the corpu active is set
     // - list the medias
     // - list the layers
     if (state.actives[uid]) {
       dispatch(
-        'cml/medias/list',
+        'medias/list',
         { corpuId: state.actives[uid], corpuUid: uid },
         { root: true }
       )
       dispatch(
-        'cml/layers/list',
+        'layers/list',
         { corpuId: state.actives[uid], corpuUid: uid },
         { root: true }
       )

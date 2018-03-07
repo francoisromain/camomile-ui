@@ -78,31 +78,31 @@ export default {
 
   computed: {
     corpuUid () {
-      return this.$store.state.cml.medias.actives[this.uid].corpuUid
+      return this.$store.state.medias.actives[this.uid].corpuUid
     },
     corpuId () {
-      return this.$store.state.cml.corpus.actives[this.corpuUid]
+      return this.$store.state.corpus.actives[this.corpuUid]
     },
     mediaId () {
-      return this.$store.state.cml.medias.actives[this.uid].id
+      return this.$store.state.medias.actives[this.uid].id
     },
     medias () {
-      return this.$store.state.cml.medias.lists[this.corpuUid]
+      return this.$store.state.medias.lists[this.corpuUid]
     },
     corpuPermission () {
-      return this.$store.getters['cml/corpus/permission'](this.corpuUid)
+      return this.$store.getters['corpus/permission'](this.corpuUid)
     }
   },
 
   methods: {
     popupOpen ({ config, element }) {
-      return this.$store.commit('cml/popup/open', { config, element })
+      return this.$store.commit('popup/open', { config, element })
     },
     setEvent (e) {
       this.set(e.target.value)
     },
     set (id) {
-      this.$store.dispatch('cml/medias/set', {
+      this.$store.dispatch('medias/set', {
         id,
         corpuUid: this.corpuUid,
         uid: this.uid

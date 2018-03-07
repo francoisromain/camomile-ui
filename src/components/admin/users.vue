@@ -73,15 +73,15 @@ export default {
 
   computed: {
     ...mapState({
-      isAdmin: state => state.cml.user.isAdmin,
-      users: state => state.cml.users.list,
-      userId: state => state.cml.user.id
+      isAdmin: state => state.user.isAdmin,
+      users: state => state.users.list,
+      userId: state => state.user.id
     })
   },
 
   methods: {
     popupOpen ({ config, element }) {
-      return this.$store.commit('cml/popup/open', { config, element })
+      return this.$store.commit('popup/open', { config, element })
     }
   }
 }

@@ -23,7 +23,7 @@ export default {
 
   computed: {
     config () {
-      return this.$store.state.cml.popup.config
+      return this.$store.state.popup.config
     }
   },
 
@@ -42,7 +42,7 @@ export default {
   methods: {
     close () {
       if (this.config.closeBtn) {
-        this.$store.commit('cml/popup/close')
+        this.$store.commit('popup/close')
       }
     },
     keyup (e) {

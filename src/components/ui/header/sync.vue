@@ -14,13 +14,13 @@ export default {
 
   computed: {
     active () {
-      return this.$store.getters['cml/sync/active']
+      return this.$store.getters['sync/active']
     }
   },
 
   methods: {
     sync () {
-      this.$store.dispatch('cml/sync/all')
+      this.$store.dispatch('sync/all')
     }
   }
 }

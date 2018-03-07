@@ -24,8 +24,8 @@ export const state = {
 export const actions = {
   // Add a new user
   add({ commit, dispatch, rootState }, { element }) {
-    dispatch('cml/sync/start', 'usersAdd', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'usersAdd', { root: true })
+    return rootState.api
       .createUser(
         element.name,
         element.password,
@@ -33,20 +33,20 @@ export const actions = {
         element.role
       )
       .then(r => {
-        dispatch('cml/sync/stop', 'usersAdd', { root: true })
+        dispatch('sync/stop', 'usersAdd', { root: true })
         const user = userFormat(r.data)
         commit('add', user)
 
         // Add the new user to every corpus and layers
-        commit('cml/corpus/userAdd', user.id, { root: true })
-        commit('cml/layers/userAdd', user.id, { root: true })
-        dispatch('cml/messages/success', 'User added', { root: true })
+        commit('corpus/userAdd', user.id, { root: true })
+        commit('layers/userAdd', user.id, { root: true })
+        dispatch('messages/success', 'User added', { root: true })
 
         return user
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'usersAdd', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'usersAdd', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -54,30 +54,30 @@ export const actions = {
 
   // Update a user
   update({ commit, dispatch, rootState }, { element }) {
-    dispatch('cml/sync/start', 'usersUpdate', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'usersUpdate', { root: true })
+    return rootState.api
       .updateUser(element.id, {
         password: element.password,
         role: element.role,
         description: element.description
       })
       .then(r => {
-        dispatch('cml/sync/stop', 'usersUpdate', { root: true })
+        dispatch('sync/stop', 'usersUpdate', { root: true })
         const user = userFormat(r.data)
         commit('update', user)
 
         // If the user is the current user (logged-in)
-        if (user.name === rootState.cml.user.name) {
+        if (user.name === rootState.user.name) {
           // Update the current user
-          commit('cml/user/set', user, { root: true })
+          commit('user/set', user, { root: true })
         }
-        dispatch('cml/messages/success', 'User updated', { root: true })
+        dispatch('messages/success', 'User updated', { root: true })
 
         return user
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'usersUpdate', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'usersUpdate', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -85,23 +85,23 @@ export const actions = {
 
   // Remove a user
   remove({ commit, dispatch, rootState }, { id }) {
-    dispatch('cml/sync/start', 'usersRemove', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'usersRemove', { root: true })
+    return rootState.api
       .deleteUser(id)
       .then(r => {
-        dispatch('cml/sync/stop', 'usersRemove', { root: true })
+        dispatch('sync/stop', 'usersRemove', { root: true })
         commit('remove', id)
 
         // Remove the user from every corpus and layers
-        commit('cml/corpus/userRemove', id, { root: true })
-        commit('cml/layers/userRemove', id, { root: true })
-        dispatch('cml/messages/success', 'User removed', { root: true })
+        commit('corpus/userRemove', id, { root: true })
+        commit('layers/userRemove', id, { root: true })
+        dispatch('messages/success', 'User removed', { root: true })
 
         return id
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'usersRemove', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'usersRemove', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -109,19 +109,19 @@ export const actions = {
 
   // List all users
   list({ commit, dispatch, rootState }) {
-    dispatch('cml/sync/start', 'usersList', { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', 'usersList', { root: true })
+    return rootState.api
       .getUsers()
       .then(r => {
-        dispatch('cml/sync/stop', 'usersList', { root: true })
+        dispatch('sync/stop', 'usersList', { root: true })
         const users = r.data.map(user => userFormat(user))
         commit('list', users)
 
         return users
       })
       .catch(e => {
-        dispatch('cml/sync/stop', 'usersList', { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', 'usersList', { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })

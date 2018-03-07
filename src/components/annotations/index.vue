@@ -24,7 +24,7 @@ export default {
   },
 
   created () {
-    this.$store.dispatch('cml/annotations/register', {
+    this.$store.dispatch('annotations/register', {
       uid: this.uid,
       mediaUid: this.mediaUid,
       layersUid: this.layersUid

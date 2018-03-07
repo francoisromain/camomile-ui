@@ -66,8 +66,8 @@ export const state = {
 export const actions = {
   // Add a new media
   add({ state, commit, dispatch, rootState, rootGetters }, { element }) {
-    dispatch('cml/sync/start', `mediasAdd`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `mediasAdd`, { root: true })
+    return rootState.api
       .createMedium(
         element.corpuId,
         element.name,
@@ -75,13 +75,13 @@ export const actions = {
         element.description
       )
       .then(r => {
-        dispatch('cml/sync/stop', `mediasAdd`, { root: true })
+        dispatch('sync/stop', `mediasAdd`, { root: true })
         const media = mediaFormat(r.data)
 
         // Loop over the media-lists to add the new media
         Object.keys(state.lists).forEach(corpuUid => {
           // If the new media belongs to the same corpus as the current media-list
-          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+          if (rootGetters['corpus/id'](corpuUid) === element.corpuId) {
             // Add the new media to the media-list
             commit('add', { media, corpuUid })
             // Loop over the active medias
@@ -94,13 +94,13 @@ export const actions = {
             })
           }
         })
-        dispatch('cml/messages/success', 'Medium added', { root: true })
+        dispatch('messages/success', 'Medium added', { root: true })
 
         return media
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `mediasAdd`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `mediasAdd`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -108,11 +108,11 @@ export const actions = {
 
   // Remove a media
   remove({ state, commit, dispatch, rootState }, { id }) {
-    dispatch('cml/sync/start', `mediasRemove`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `mediasRemove`, { root: true })
+    return rootState.api
       .deleteMedium(id)
       .then(r => {
-        dispatch('cml/sync/stop', `mediasRemove`, { root: true })
+        dispatch('sync/stop', `mediasRemove`, { root: true })
 
         // Loop over the corpuUid
         Object.keys(state.lists).forEach(corpuUid => {
@@ -126,13 +126,13 @@ export const actions = {
 
         // Re-set a new media in every mediaUid where it is active
         dispatch('unsetAll', { id })
-        dispatch('cml/messages/success', 'Medium removed', { root: true })
+        dispatch('messages/success', 'Medium removed', { root: true })
 
         return id
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `mediasRemove`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `mediasRemove`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -140,15 +140,15 @@ export const actions = {
 
   // Update a media
   update({ state, commit, dispatch, rootState, rootGetters }, { element }) {
-    dispatch('cml/sync/start', `mediasUpdate`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `mediasUpdate`, { root: true })
+    return rootState.api
       .updateMedium(element.id, {
         name: element.name,
         description: element.description,
         url: element.url
       })
       .then(r => {
-        dispatch('cml/sync/stop', `mediasUpdate`, { root: true })
+        dispatch('sync/stop', `mediasUpdate`, { root: true })
         const media = Object.assign({}, element)
         media.name = r.data.name
         media.url = r.data.url
@@ -157,18 +157,18 @@ export const actions = {
         // Loop over the corpuUid
         Object.keys(state.lists).forEach(corpuUid => {
           // If the corpu active in this corpuUid equals the media's corpuUid
-          if (rootGetters['cml/corpus/id'](corpuUid) === element.corpuId) {
+          if (rootGetters['corpus/id'](corpuUid) === element.corpuId) {
             // update the media
             commit('update', { media, corpuUid })
           }
         })
-        dispatch('cml/messages/success', 'Medium updated', { root: true })
+        dispatch('messages/success', 'Medium updated', { root: true })
 
         return media
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `mediasUpdate`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `mediasUpdate`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -176,11 +176,11 @@ export const actions = {
 
   // List the medias
   list({ dispatch, commit, rootState }, { corpuId, corpuUid }) {
-    dispatch('cml/sync/start', `mediasList-${corpuUid}`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `mediasList-${corpuUid}`, { root: true })
+    return rootState.api
       .getMedia({ filter: { id_corpus: corpuId } })
       .then(r => {
-        dispatch('cml/sync/stop', `mediasList-${corpuUid}`, { root: true })
+        dispatch('sync/stop', `mediasList-${corpuUid}`, { root: true })
         // Format the server response
         const medias = r.data.map(media => {
           return mediaFormat(media)
@@ -201,8 +201,8 @@ export const actions = {
         return medias
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `mediasList-${corpuUid}`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `mediasList-${corpuUid}`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -236,7 +236,7 @@ export const actions = {
     // If the media id is not defined, get one
     commit('set', { id: id || getters.id({ corpuUid, uid }), corpuUid, uid })
     dispatch(
-      'cml/annotations/mediaSet',
+      'annotations/mediaSet',
       {
         mediaId: state.actives[uid].id,
         mediaUid: uid

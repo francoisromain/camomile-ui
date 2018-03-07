@@ -90,37 +90,37 @@ export default {
 
   computed: {
     corpuUid () {
-      return this.$store.state.cml.layers.actives[this.uid].corpuUid
+      return this.$store.state.layers.actives[this.uid].corpuUid
     },
     layers () {
-      return this.$store.state.cml.layers.lists[this.corpuUid]
+      return this.$store.state.layers.lists[this.corpuUid]
     },
     activeIds () {
-      return this.$store.getters['cml/layers/activeIds'](this.uid)
+      return this.$store.getters['layers/activeIds'](this.uid)
     },
     corpus () {
-      return this.$store.state.cml.corpus.lists[this.corpuUid]
+      return this.$store.state.corpus.lists[this.corpuUid]
     },
     corpuId () {
-      return this.$store.state.cml.corpus.actives[this.corpuUid]
+      return this.$store.state.corpus.actives[this.corpuUid]
     },
     corpuPermission () {
-      return this.$store.getters['cml/corpus/permission'](this.corpuUid)
+      return this.$store.getters['corpus/permission'](this.corpuUid)
     }
   },
 
   methods: {
     popupOpen ({ config, element }) {
-      return this.$store.commit('cml/popup/open', { config, element })
+      return this.$store.commit('popup/open', { config, element })
     },
     set (e) {
       if (e.target.checked) {
-        this.$store.dispatch('cml/layers/set', {
+        this.$store.dispatch('layers/set', {
           id: e.target.value,
           uid: this.uid
         })
       } else {
-        this.$store.dispatch('cml/layers/unset', {
+        this.$store.dispatch('layers/unset', {
           id: e.target.value,
           uid: this.uid
         })

@@ -56,7 +56,7 @@ export default {
 
   computed: {
     activeId () {
-      return this.$store.state.cml.annotations.actives[this.uid]
+      return this.$store.state.annotations.actives[this.uid]
     }
   }
 }

@@ -20,7 +20,7 @@ export default {
 
   computed: {
     messages () {
-      return this.$store.state.cml.messages.list
+      return this.$store.state.messages.list
     }
   }
 }

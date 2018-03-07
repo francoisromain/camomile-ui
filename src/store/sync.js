@@ -4,8 +4,8 @@ export const state = {
 
 export const actions = {
   all({ dispatch }) {
-    dispatch(`cml/set`, {}, { root: true }).then(r => {
-      dispatch('cml/messages/success', 'Synced with server', { root: true })
+    dispatch(`set`, {}, { root: true }).then(r => {
+      dispatch('messages/success', 'Synced with server', { root: true })
     })
   },
 

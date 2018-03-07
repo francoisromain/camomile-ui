@@ -45,28 +45,23 @@ describe('store user actions', () => {
     }
 
     store = new Vuex.Store({
+      state: {
+        api
+      },
+      actions,
+      mutations,
       modules: {
-        cml: {
-          namespaced: true,
-          state: {
-            api
-          },
-          actions,
-          mutations,
-          modules: {
-            users,
-            messages,
-            sync,
-            popup,
-            dropdown,
-            user,
-            groups,
-            corpus,
-            medias,
-            layers,
-            annotations
-          }
-        }
+        users,
+        messages,
+        sync,
+        popup,
+        dropdown,
+        user,
+        groups,
+        corpus,
+        medias,
+        layers,
+        annotations
       }
     })
   })
@@ -74,7 +69,7 @@ describe('store user actions', () => {
   it('logs-in', () => {
     expect.assertions(1)
     return store
-      .dispatch('cml/user/login', {
+      .dispatch('user/login', {
         user: { name: config.user.name, password: config.user.password }
       })
       .then(r => {
@@ -84,7 +79,7 @@ describe('store user actions', () => {
 
   it('logs-in (error)', () => {
     return expect(
-      store.dispatch('cml/user/login', {
+      store.dispatch('user/login', {
         user: { name: config.userName, password: '' }
       })
     ).rejects.toThrow('Incorrect username or password')
@@ -92,7 +87,7 @@ describe('store user actions', () => {
 
   it('returns current user', () => {
     expect.assertions(1)
-    return store.dispatch('cml/user/set').then(u => {
+    return store.dispatch('user/set').then(u => {
       expect(u).toEqual({
         name: 'lu',
         id: 'mocks-user-id-lu',
@@ -107,17 +102,17 @@ describe('store user actions', () => {
 
   it('logs-out', () => {
     expect.assertions(1)
-    return store.dispatch('cml/user/logout').then(r => {
+    return store.dispatch('user/logout').then(r => {
       expect(r).toBe('Logout succeeded.')
     })
   })
 
   it('returns current user (error)', () => {
-    return expect(store.dispatch('cml/user/set')).rejects.toThrow('Api')
+    return expect(store.dispatch('user/set')).rejects.toThrow('Api')
   })
 
   it('logs-out (error)', () => {
-    return expect(store.dispatch('cml/user/logout')).rejects.toThrow('Api')
+    return expect(store.dispatch('user/logout')).rejects.toThrow('Api')
   })
 })
 
@@ -137,13 +132,9 @@ describe('store user getters', () => {
     }
 
     store = new Vuex.Store({
+      namespaced: true,
       modules: {
-        cml: {
-          namespaced: true,
-          modules: {
-            user
-          }
-        }
+        user
       }
     })
   })
@@ -156,7 +147,7 @@ describe('store user getters', () => {
       }
     }
 
-    expect(store.getters['cml/user/isAdmin'](permissions)).toBeTruthy()
+    expect(store.getters['user/isAdmin'](permissions)).toBeTruthy()
   })
 
   it('returns false if is not admin', () => {
@@ -167,7 +158,7 @@ describe('store user getters', () => {
       }
     }
 
-    expect(store.getters['cml/user/isAdmin'](permissions)).toBeFalsy()
+    expect(store.getters['user/isAdmin'](permissions)).toBeFalsy()
   })
 
   it('returns true if is in admin group', () => {
@@ -178,7 +169,7 @@ describe('store user getters', () => {
       }
     }
 
-    expect(store.getters['cml/user/isAdmin'](permissions)).toBeTruthy()
+    expect(store.getters['user/isAdmin'](permissions)).toBeTruthy()
   })
 
   it('returns false if is not in admin group', () => {
@@ -189,7 +180,7 @@ describe('store user getters', () => {
       }
     }
 
-    expect(store.getters['cml/user/isAdmin'](permissions)).toBeFalsy()
+    expect(store.getters['user/isAdmin'](permissions)).toBeFalsy()
   })
 })
 

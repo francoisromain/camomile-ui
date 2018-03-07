@@ -26,51 +26,44 @@ describe('store sync actions', () => {
     }
 
     store = new Vuex.Store({
+      state: {
+        api
+      },
+      actions,
+      mutations,
       modules: {
-        cml: {
-          namespaced: true,
-          state: {
-            api
-          },
-          actions,
-          mutations,
-          modules: {
-            users,
-            messages,
-            sync,
-            corpus,
-            popup,
-            user,
-            groups,
-            medias,
-            layers,
-            annotations
-          }
-        }
+        users,
+        messages,
+        sync,
+        corpus,
+        popup,
+        user,
+        groups,
+        medias,
+        layers,
+        annotations
       }
     })
   })
 
   it('dispatchs all', () => {
     expect.assertions(1)
-    return store.dispatch('cml/sync/all').then(r => {
-      expect(store.state.cml.messages.list[0].content).toBe(
-        'Synced with server'
-      )
+    return store.dispatch('sync/all').then(r => {
+      expect(store.state.messages.list[0].content).toBe('Synced with server')
     })
   })
 
   it('starts', () => {
     expect.assertions(1)
-    return store.dispatch('cml/sync/start', 'annotationsAdd').then(r => {
-      expect(store.state.cml.sync.list).toEqual(['annotationsAdd'])
+    return store.dispatch('sync/start', 'annotationsAdd').then(r => {
+      expect(store.state.sync.list).toEqual(['annotationsAdd'])
     })
   })
 
   it('stops', () => {
     expect.assertions(1)
-    return store.dispatch('cml/sync/stop', 'annotationsAdd').then(r => {
-      expect(store.state.cml.sync.list).toEqual([])
+    return store.dispatch('sync/stop', 'annotationsAdd').then(r => {
+      expect(store.state.sync.list).toEqual([])
     })
   })
 })

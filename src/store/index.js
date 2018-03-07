@@ -2,8 +2,8 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import Camomile from 'camomile-client'
-import Camomile from '../../../camomile-client-javascript/index.js' /* debug with local version */
+import Camomile from 'camomile-client'
+// import Camomile from '../../../camomile-client-javascript/index.js' /* debug with local version */
 
 import viewport from './viewport'
 import sync from './sync'
@@ -47,25 +47,25 @@ export const actions = {
     // to get permissions…
     Promise.all([
       ...['users', 'groups'].map(type =>
-        dispatch(`cml/${type}/list`, {}, { root: true })
+        dispatch(`${type}/list`, {}, { root: true })
           .then(r => r)
           .catch(e => e)
       )
     ]).then(res => {
       // …then list the corpus
-      dispatch('cml/corpus/listAll', null, { root: true })
+      dispatch('corpus/listAll', null, { root: true })
     })
   },
 
   // Reset (on log-out)
   reset({ commit }) {
-    commit('cml/user/reset', null, { root: true })
-    commit('cml/users/reset', null, { root: true })
-    commit('cml/groups/reset', null, { root: true })
-    commit('cml/corpus/resetAll', null, { root: true })
-    commit('cml/medias/resetAll', null, { root: true })
-    commit('cml/layers/resetAll', null, { root: true })
-    commit('cml/annotations/resetAll', null, { root: true })
+    commit('user/reset', null, { root: true })
+    commit('users/reset', null, { root: true })
+    commit('groups/reset', null, { root: true })
+    commit('corpus/resetAll', null, { root: true })
+    commit('medias/resetAll', null, { root: true })
+    commit('layers/resetAll', null, { root: true })
+    commit('annotations/resetAll', null, { root: true })
   }
 }
 
@@ -85,12 +85,7 @@ Vue.use(Vuex)
 Vue.filter('stringEnd', str => str.substr(str.length - 6))
 
 export default new Vuex.Store({
-  modules: {
-    cml: {
-      namespaced: true,
-      actions,
-      mutations,
-      modules
-    }
-  }
+  actions,
+  mutations,
+  modules
 })

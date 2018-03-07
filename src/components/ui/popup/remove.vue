@@ -48,8 +48,8 @@ export default {
 
   computed: {
     ...mapState({
-      element: state => state.cml.popup.element,
-      type: state => state.cml.popup.config.type
+      element: state => state.popup.element,
+      type: state => state.popup.config.type
     })
   },
 
@@ -63,8 +63,8 @@ export default {
 
   methods: {
     remove () {
-      this.$store.dispatch(`cml/${this.type}/remove`, { id: this.element.id })
-      this.$store.commit(`cml/popup/close`)
+      this.$store.dispatch(`${this.type}/remove`, { id: this.element.id })
+      this.$store.commit(`popup/close`)
     },
     keyup (e) {
       if ((e.which || e.keyCode) === 13) {

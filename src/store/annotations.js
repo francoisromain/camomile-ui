@@ -48,8 +48,8 @@ export const state = {
 export const actions = {
   // Add a new annotation
   add({ commit, dispatch, rootState }, { element }) {
-    dispatch('cml/sync/start', `annotationsAdd`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `annotationsAdd`, { root: true })
+    return rootState.api
       .createAnnotation(
         element.layerId,
         element.mediaId || null,
@@ -57,7 +57,7 @@ export const actions = {
         element.metadata
       )
       .then(r => {
-        dispatch('cml/sync/stop', `annotationsAdd`, { root: true })
+        dispatch('sync/stop', `annotationsAdd`, { root: true })
 
         // Format server response
         const annotation = {
@@ -70,13 +70,13 @@ export const actions = {
 
         // Commit response
         commit('add', { annotation, layerId: element.layerId })
-        dispatch('cml/messages/success', 'Annotation added', { root: true })
+        dispatch('messages/success', 'Annotation added', { root: true })
 
         return annotation
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `annotationsAdd`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `annotationsAdd`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -84,19 +84,19 @@ export const actions = {
 
   // Remove an annotation
   remove({ commit, dispatch, rootState }, { id }) {
-    dispatch('cml/sync/start', `annotationsRemove`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `annotationsRemove`, { root: true })
+    return rootState.api
       .deleteAnnotation(id)
       .then(r => {
-        dispatch('cml/sync/stop', `annotationsRemove`, { root: true })
+        dispatch('sync/stop', `annotationsRemove`, { root: true })
         commit('remove', { id })
-        dispatch('cml/messages/success', 'Annotation removed', { root: true })
+        dispatch('messages/success', 'Annotation removed', { root: true })
 
         return id
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `annotationsRemove`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `annotationsRemove`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -104,14 +104,14 @@ export const actions = {
 
   // Update an annotation
   update({ commit, dispatch, rootState }, { element }) {
-    dispatch('cml/sync/start', `annotationsUpdate`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `annotationsUpdate`, { root: true })
+    return rootState.api
       .updateAnnotation(element.id, {
         fragment: element.fragment,
         data: element.metadata
       })
       .then(r => {
-        dispatch('cml/sync/stop', `annotationsUpdate`, { root: true })
+        dispatch('sync/stop', `annotationsUpdate`, { root: true })
 
         // Format server response
         const annotation = Object.assign({}, element)
@@ -120,13 +120,13 @@ export const actions = {
 
         // Commit response
         commit('update', { annotation, layerId: element.layerId })
-        dispatch('cml/messages/success', 'Annotation updated', { root: true })
+        dispatch('messages/success', 'Annotation updated', { root: true })
 
         return annotation
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `annotationsUpdate`, { root: true })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('sync/stop', `annotationsUpdate`, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })
@@ -142,14 +142,14 @@ export const actions = {
       // And if the current list's mediaUid is active
       if (
         state.lists[uid].layersUid === layersUid &&
-        rootState.cml.medias.actives[mediaUid]
+        rootState.medias.actives[mediaUid]
       ) {
         // Get the annotation list
         dispatch('list', {
           uid,
           layerId,
           layersUid,
-          mediaId: rootState.cml.medias.actives[mediaUid].id
+          mediaId: rootState.medias.actives[mediaUid].id
         })
       }
     })
@@ -172,7 +172,7 @@ export const actions = {
       // And if the current list's LayersUid is active
       if (
         list.mediaUid === mediaUid &&
-        rootState.cml.layers.actives[list.layersUid]
+        rootState.layers.actives[list.layersUid]
       ) {
         // Loop over the layers
         Object.keys(list.layers).forEach(layerId => {
@@ -193,8 +193,8 @@ export const actions = {
     { state, dispatch, commit, rootState },
     { uid, layerId, layersUid, mediaId }
   ) {
-    dispatch('cml/sync/start', `annotationsList-${uid}`, { root: true })
-    return rootState.cml.api
+    dispatch('sync/start', `annotationsList-${uid}`, { root: true })
+    return rootState.api
       .getAnnotations({
         filter: {
           id_layer: layerId,
@@ -202,7 +202,7 @@ export const actions = {
         }
       })
       .then(r => {
-        dispatch('cml/sync/stop', `annotationsList-${uid}`, {
+        dispatch('sync/stop', `annotationsList-${uid}`, {
           root: true
         })
 
@@ -221,10 +221,10 @@ export const actions = {
         return annotations
       })
       .catch(e => {
-        dispatch('cml/sync/stop', `annotationsList-${layersUid}`, {
+        dispatch('sync/stop', `annotationsList-${layersUid}`, {
           root: true
         })
-        dispatch('cml/messages/error', e.message, { root: true })
+        dispatch('messages/error', e.message, { root: true })
 
         throw e
       })

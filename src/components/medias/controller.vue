@@ -44,7 +44,7 @@ export default {
 
   computed: {
     properties () {
-      return this.$store.state.cml.medias.properties[this.mediaUid] || {}
+      return this.$store.state.medias.properties[this.mediaUid] || {}
     },
     timeCurrent () {
       return this.properties.timeCurrent || 0
@@ -66,9 +66,9 @@ export default {
   methods: {
     mediaToggle () {
       if (this.properties.isPlaying) {
-        this.$store.commit('cml/medias/pause', { uid: this.mediaUid })
+        this.$store.commit('medias/pause', { uid: this.mediaUid })
       } else {
-        this.$store.commit('cml/medias/play', { uid: this.mediaUid })
+        this.$store.commit('medias/play', { uid: this.mediaUid })
       }
     },
     progressMousemove (e) {
@@ -98,7 +98,7 @@ export default {
     },
     seek (ratio, serverRequest, uid) {
       if (this.properties.isLoaded) {
-        this.$store.dispatch('cml/medias/seek', {
+        this.$store.dispatch('medias/seek', {
           ratio,
           serverRequest,
           uid: this.mediaUid

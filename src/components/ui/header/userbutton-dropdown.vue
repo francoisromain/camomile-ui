@@ -32,22 +32,22 @@ export default {
 
   computed: {
     user () {
-      return this.$store.state.cml.user
+      return this.$store.state.user
     },
     isAdmin () {
-      return this.$store.state.cml.user.isAdmin
+      return this.$store.state.user.isAdmin
     }
   },
 
   methods: {
     close () {
-      this.$store.commit('cml/dropdown/close')
+      this.$store.commit('dropdown/close')
     },
     logout () {
-      return this.$store.dispatch('cml/user/logout')
+      return this.$store.dispatch('user/logout')
     },
     popupOpen ({ config, element }) {
-      this.$store.commit('cml/popup/open', { config, element })
+      this.$store.commit('popup/open', { config, element })
       this.close()
     }
   }

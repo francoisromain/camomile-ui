@@ -37,11 +37,11 @@ export default {
 
   computed: {
     groups () {
-      return this.$store.state.cml.groups.list
+      return this.$store.state.groups.list
     },
     user () {
-      return this.$store.state.cml.users.list.find(
-        u => u.id === this.$store.state.cml.popup.element.id
+      return this.$store.state.users.list.find(
+        u => u.id === this.$store.state.popup.element.id
       )
     }
   },
@@ -49,12 +49,12 @@ export default {
   methods: {
     groupToggle (group) {
       if (this.groupActive(group.id)) {
-        this.$store.dispatch('cml/groups/userRemove', {
+        this.$store.dispatch('groups/userRemove', {
           userId: this.user.id,
           group
         })
       } else {
-        this.$store.dispatch('cml/groups/userAdd', {
+        this.$store.dispatch('groups/userAdd', {
           userId: this.user.id,
           group
         })

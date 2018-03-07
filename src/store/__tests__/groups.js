@@ -92,25 +92,20 @@ describe('store groups actions', () => {
     }
 
     store = new Vuex.Store({
+      state: {
+        api
+      },
       modules: {
-        cml: {
-          namespaced: true,
-          state: {
-            api
-          },
-          modules: {
-            users,
-            messages,
-            sync,
-            corpus,
-            popup,
-            user,
-            groups,
-            medias,
-            layers,
-            annotations
-          }
-        }
+        users,
+        messages,
+        sync,
+        corpus,
+        popup,
+        user,
+        groups,
+        medias,
+        layers,
+        annotations
       }
     })
   })
@@ -122,8 +117,8 @@ describe('store groups actions', () => {
     }
 
     expect.assertions(3)
-    return store.dispatch('cml/groups/add', { element }).then(r => {
-      expect(store.state.cml.groups.list).toEqual([
+    return store.dispatch('groups/add', { element }).then(r => {
+      expect(store.state.groups.list).toEqual([
         {
           description: {},
           id: 'mocks-group-id-1',
@@ -143,14 +138,14 @@ describe('store groups actions', () => {
           userIds: []
         }
       ])
-      expect(
-        store.state.cml.corpus.lists['default'][0].permissions.groups
-      ).toEqual({
-        'mocks-group-id-1': 0,
-        'mocks-group-id-2': 0,
-        'mocks-group-id-new': 0
-      })
-      expect(store.state.cml.messages.list[0].content).toBe('Group added')
+      expect(store.state.corpus.lists['default'][0].permissions.groups).toEqual(
+        {
+          'mocks-group-id-1': 0,
+          'mocks-group-id-2': 0,
+          'mocks-group-id-new': 0
+        }
+      )
+      expect(store.state.messages.list[0].content).toBe('Group added')
     })
   })
 
@@ -159,18 +154,18 @@ describe('store groups actions', () => {
       name: '' // throw an the error
     }
 
-    return expect(
-      store.dispatch('cml/groups/add', { element })
-    ).rejects.toThrow('Incorrect name')
+    return expect(store.dispatch('groups/add', { element })).rejects.toThrow(
+      'Incorrect name'
+    )
   })
 
   it('removes a group', () => {
     const id = 'mocks-group-id-1'
 
     expect.assertions(3)
-    return store.dispatch('cml/groups/remove', { id }).then(r => {
-      expect(store.state.cml.messages.list[0].content).toBe('Group removed')
-      expect(store.state.cml.groups.list).toEqual([
+    return store.dispatch('groups/remove', { id }).then(r => {
+      expect(store.state.messages.list[0].content).toBe('Group removed')
+      expect(store.state.groups.list).toEqual([
         {
           description: {},
           id: 'mocks-group-id-2',
@@ -178,18 +173,18 @@ describe('store groups actions', () => {
           userIds: ['mocks-user-id-ji']
         }
       ])
-      expect(
-        store.state.cml.corpus.lists['default'][0].permissions.groups
-      ).toEqual({
-        'mocks-group-id-2': 0
-      })
+      expect(store.state.corpus.lists['default'][0].permissions.groups).toEqual(
+        {
+          'mocks-group-id-2': 0
+        }
+      )
     })
   })
 
   it('removes a group (error)', () => {
     const id = '' // throw an the error
 
-    return expect(store.dispatch('cml/groups/remove', { id })).rejects.toThrow(
+    return expect(store.dispatch('groups/remove', { id })).rejects.toThrow(
       'Incorrect group Id'
     )
   })
@@ -202,9 +197,9 @@ describe('store groups actions', () => {
     }
 
     expect.assertions(2)
-    return store.dispatch('cml/groups/update', { element }).then(r => {
-      expect(store.state.cml.messages.list[0].content).toBe('Group updated')
-      expect(store.state.cml.groups.list).toEqual([
+    return store.dispatch('groups/update', { element }).then(r => {
+      expect(store.state.messages.list[0].content).toBe('Group updated')
+      expect(store.state.groups.list).toEqual([
         {
           description: { test: 'meoi oiou' },
           id: 'mocks-group-id-1',
@@ -226,15 +221,15 @@ describe('store groups actions', () => {
       id: '' // throw an the error
     }
 
-    return expect(
-      store.dispatch('cml/groups/update', { element })
-    ).rejects.toThrow('Api')
+    return expect(store.dispatch('groups/update', { element })).rejects.toThrow(
+      'Api'
+    )
   })
 
   it('lists all groups', () => {
     expect.assertions(1)
-    return store.dispatch('cml/groups/list').then(r => {
-      expect(store.state.cml.groups.list).toEqual([
+    return store.dispatch('groups/list').then(r => {
+      expect(store.state.groups.list).toEqual([
         {
           description: {},
           id: 'mocks-group-id-1',
@@ -262,11 +257,9 @@ describe('store groups actions', () => {
     }
 
     expect.assertions(3)
-    return store.dispatch('cml/groups/userAdd', { userId, group }).then(r => {
-      expect(store.state.cml.messages.list[0].content).toBe(
-        'User added to group'
-      )
-      expect(store.state.cml.groups.list).toEqual([
+    return store.dispatch('groups/userAdd', { userId, group }).then(r => {
+      expect(store.state.messages.list[0].content).toBe('User added to group')
+      expect(store.state.groups.list).toEqual([
         {
           description: {},
           id: 'mocks-group-id-1',
@@ -280,7 +273,7 @@ describe('store groups actions', () => {
           userIds: ['mocks-user-id-ji', 'mocks-user-id-lu']
         }
       ])
-      expect(store.state.cml.user).toEqual({
+      expect(store.state.user).toEqual({
         description: {},
         groupIds: ['mocks-group-id-1', 'mocks-group-id-2'],
         id: 'mocks-user-id-lu',
@@ -304,7 +297,7 @@ describe('store groups actions', () => {
     }
 
     return expect(
-      store.dispatch('cml/groups/userAdd', { userId, group })
+      store.dispatch('groups/userAdd', { userId, group })
     ).rejects.toThrow('Api')
   })
 
@@ -319,37 +312,35 @@ describe('store groups actions', () => {
     }
 
     expect.assertions(3)
-    return store
-      .dispatch('cml/groups/userRemove', { userId, group })
-      .then(r => {
-        expect(store.state.cml.messages.list[0].content).toBe(
-          'User removed from group'
-        )
-        expect(store.state.cml.groups.list).toEqual([
-          {
-            description: {},
-            id: 'mocks-group-id-1',
-            name: 'group-1',
-            userIds: ['mocks-user-id-ji']
-          },
-          {
-            description: {},
-            id: 'mocks-group-id-2',
-            name: 'group-2',
-            userIds: ['mocks-user-id-ji']
-          }
-        ])
-        expect(store.state.cml.user).toEqual({
+    return store.dispatch('groups/userRemove', { userId, group }).then(r => {
+      expect(store.state.messages.list[0].content).toBe(
+        'User removed from group'
+      )
+      expect(store.state.groups.list).toEqual([
+        {
           description: {},
-          groupIds: [],
-          id: 'mocks-user-id-lu',
-          isAdmin: false,
-          isLogged: true,
-          isRoot: false,
-          name: 'lu',
-          role: 'user'
-        })
+          id: 'mocks-group-id-1',
+          name: 'group-1',
+          userIds: ['mocks-user-id-ji']
+        },
+        {
+          description: {},
+          id: 'mocks-group-id-2',
+          name: 'group-2',
+          userIds: ['mocks-user-id-ji']
+        }
+      ])
+      expect(store.state.user).toEqual({
+        description: {},
+        groupIds: [],
+        id: 'mocks-user-id-lu',
+        isAdmin: false,
+        isLogged: true,
+        isRoot: false,
+        name: 'lu',
+        role: 'user'
       })
+    })
   })
 
   it('removes a user from a group (error)', () => {
@@ -363,7 +354,7 @@ describe('store groups actions', () => {
     }
 
     return expect(
-      store.dispatch('cml/groups/userRemove', { userId, group })
+      store.dispatch('groups/userRemove', { userId, group })
     ).rejects.toThrow('Api')
   })
 })
@@ -391,12 +382,7 @@ describe('store groups getters', () => {
 
     store = new Vuex.Store({
       modules: {
-        cml: {
-          namespaced: true,
-          modules: {
-            groups
-          }
-        }
+        groups
       }
     })
 
@@ -404,7 +390,7 @@ describe('store groups getters', () => {
       'mocks-group-id-1': 2
     }
 
-    expect(store.getters['cml/groups/permissions'](permissions)).toEqual({
+    expect(store.getters['groups/permissions'](permissions)).toEqual({
       'mocks-group-id-1': 2,
       'mocks-group-id-2': 0
     })
