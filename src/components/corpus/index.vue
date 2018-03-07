@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <h2>Corpus</h2>
-    <pre>Corpus: {{ uid }}</pre>
-  </div>
+  <span />
 </template>
 
 <script>

@@ -13,6 +13,8 @@
       :time-total="timeTotal"
       :time-current="timeCurrent"
       class="absolute full" />
+    
+    <slot :media-uid="mediaUid" />
   </div>
 </template>
 
@@ -23,21 +25,9 @@ export default {
   components: { zoningAnnotations },
 
   props: {
-    mediaUid: {
-      type: String,
-      default: 'default'
-    },
-    layersUid: {
-      type: String,
-      default: 'default'
-    },
     uid: {
       type: String,
       default: 'default'
-    },
-    layers: {
-      type: Array,
-      default: () => []
     },
     filter: {
       type: Function,
@@ -53,6 +43,12 @@ export default {
   },
 
   computed: {
+    mediaUid () {
+      return this.$store.state.cml.annotations.lists[this.uid].mediaUid
+    },
+    layersUid () {
+      return this.$store.state.cml.annotations.lists[this.uid].layersUid
+    },
     mediaProperties () {
       return this.$store.state.cml.medias.properties[this.mediaUid] || {}
     },
@@ -64,6 +60,10 @@ export default {
     },
     annotations () {
       return this.$store.getters['cml/annotations/filter'](this.uid, this.filter)
+    },
+    layers () {
+      const active = this.$store.state.cml.layers.actives[this.layersUid]
+      return active ? this.$store.state.cml.layers.lists[active.corpuUid] : []
     }
   }
 }

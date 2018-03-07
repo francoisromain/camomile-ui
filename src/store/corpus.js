@@ -400,9 +400,9 @@ export const actions = {
     // If the id is not defined, get one
     commit('set', { id: id || getters.id(uid), uid })
 
-    // rootState.cml.api.watchCorpus(state.actives[uid], (error, data) => {
-    //   console.log('watcher', error, data)
-    // })
+    rootState.cml.api.watchCorpus(state.actives[uid], (error, data) => {
+      console.log('watcher', error, data)
+    })
     // If the corpu active is set
     // - list the medias
     // - list the layers

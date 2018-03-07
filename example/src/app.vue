@@ -11,12 +11,10 @@
         <cml-admin-groups class="blob-1-2 p bg-bg" />
       </div>
 
-      <div class="blobs">
-        <cml-corpus class="blob-1-2 p bg-bg" />
-        <cml-medias class="blob-1-2 p bg-bg" />
-        <cml-layers class="blob-1-2 p bg-bg" />
-        <cml-annotations class="blob-1-2 p bg-bg" />
-      </div>
+      <cml-corpus />
+      <cml-medias />
+      <cml-layers />
+      <cml-annotations />
       
       <div class="blobs">
         <cml-corpus-list class="blob-1-2 p bg-bg" />
@@ -33,8 +31,9 @@
 
       <cml-annotations-timeline class="mb" />
       <cml-medias-controller class="mb" />
-      <cml-medias-youtube class="mb"/>
-      <cml-medias-videozoning class="mb" />
+      <cml-annotations-zoning class="mb">
+        <cml-medias-video />
+      </cml-annotations-zoning>
 
       <div class="blobs">
         <cml-corpus
@@ -84,21 +83,21 @@ import {
   cmlAdminUsers,
   cmlAdminGroups,
   cmlCorpus,
-  cmlMedias,
-  cmlLayers,
-  cmlAnnotations,
   cmlCorpusList,
+  cmlMedias,
   cmlMediasList,
-  cmlLayersList,
-  cmlAnnotationsList,
   cmlMediasYoutube,
   cmlMediasVideo,
-  cmlMediasVideozoning,
   cmlMediasController,
+  cmlLayers,
+  cmlLayersList,
   cmlLayersAdd,
+  cmlAnnotations,
+  cmlAnnotationsList,
   cmlAnnotationsButtons,
   cmlAnnotationsTimeline,
-  cmlAnnotationsEdit
+  cmlAnnotationsEdit,
+  cmlAnnotationsZoning
 } from '~/app.js'
 
 export default {
@@ -108,21 +107,21 @@ export default {
     cmlAdminUsers,
     cmlAdminGroups,
     cmlCorpus,
-    cmlMedias,
-    cmlLayers,
-    cmlAnnotations,
     cmlCorpusList,
+    cmlMedias,
     cmlMediasList,
-    cmlLayersList,
-    cmlAnnotationsList,
     cmlMediasYoutube,
     cmlMediasVideo,
-    cmlMediasVideozoning,
     cmlMediasController,
+    cmlLayers,
+    cmlLayersList,
     cmlLayersAdd,
+    cmlAnnotations,
+    cmlAnnotationsList,
     cmlAnnotationsButtons,
     cmlAnnotationsTimeline,
-    cmlAnnotationsEdit
+    cmlAnnotationsEdit,
+    cmlAnnotationsZoning
   }
 }
 </script>

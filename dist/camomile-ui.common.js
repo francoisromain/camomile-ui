@@ -1441,9 +1441,9 @@ var actions$6 = {
     // If the id is not defined, get one
     commit('set', { id: id || getters.id(uid), uid: uid });
 
-    // rootState.cml.api.watchCorpus(state.actives[uid], (error, data) => {
-    //   console.log('watcher', error, data)
-    // })
+    rootState.cml.api.watchCorpus(state.actives[uid], function (error, data) {
+      console.log('watcher', error, data);
+    });
     // If the corpu active is set
     // - list the medias
     // - list the layers
@@ -3345,12 +3345,12 @@ var store = new Vuex__default.Store({
   }
 })
 
-(function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css="/* system.css / settings ------------------------------- http://francoisromain.github.io/postcss-structure */ :root { /* Colors ------------------------------- */ --color-text: #666; --color-bg: white; --color-transparent: rgba(248, 247, 243, 0); --color-inverse: #3d3d35; --color-neutral: #bcb9af; --color-alt: #f8f7f3; --color-highlight: #f50; --color-brand: rgb(0, 162, 255); --color-error: #e82239; --color-warning: #ff891c; --color-info: #5798aa; --color-success: #6ea040; /* Base units ------------------------------- */ /* font-size: 1rem = 16 px */ --base-font-size: 16px; --base-font-size: 1rem; /* base: 1.5rem = 24 px */ --unit: 24px; --unit: 1.5rem; /* line: 0.0625rem = 1px */ --unit-line: 1px; --unit-line: 0.0625rem; --unit-line: calc(var(--unit) / 24); /* xxs: 0.1875rem = 3px */ --unit-xxs: 3px; --unit-xxs: 0.1875rem; --unit-xxs: calc(var(--unit) / 8); /* xs: 0.375rem = 6px */ --unit-xs: 6px; --unit-xs: 0.375rem; --unit-xs: calc(var(--unit) / 4); /* s: 0.75rem = 12px */ --unit-s: 12px; --unit-s: 0.75rem; --unit-s: calc(var(--unit) / 2); /* m: 1.125rem = 18px */ --unit-m: 18px; --unit-m: 1.125rem; --unit-m: calc(var(--unit) * 3 / 4); /* l: 2.25rem = 36 px */ --unit-l: 36px; --unit-l: 2.25rem; --unit-l: calc(var(--unit) * 3 / 2); /* xl: 3rem = 48px */ --unit-xl: 48px; --unit-xl: 3rem; --unit-xl: calc(var(--unit) * 2); /* xxl: 3.75rem = 60 px */ --unit-xxl: 60px; --unit-xxl: 3.75rem; --unit-xxl: calc(var(--unit) * 2.5); /* */ --unit-infinity: 9999px; /* Lists ------------------------------- */ --list-postfix: ','; --list-prefix: '―'; /* Grid ------------------------------- */ /* postcss-grid-system configuration https://github.com/francoisromain/postcss-grid-system#configuration */ /* width of a single bloc in rem */ --col-width: 328px; --col-width: 20.5rem; /* width of the gutter in rem */ --gutter: 24px; --gutter: 1.5rem; --gutter: var(--unit); /* padding of the main container in rem */ --container-padding: 24px; --container-padding: 1.5rem; --container-padding: var(--unit); /* transition */ --transition: opacity 0.5s, background-color 0.5s, border 0.5s, box-shadow 0.5s, fill 0.5s; /* hr */ --border-style: dotted; --border-color: #bcb9af; --border-color: var(--color-neutral); --border-width: 1px; --border-width: 0.0625rem; --border-width: var(--unit-line); } /* media queries: x * col-width + gutter */ @media (min-width: 63em) { .home[data-v-24d69054] { background-color: #f50; background-color: var(--color-highlight); } } "; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+(function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css="/* system.css / settings ------------------------------- http://francoisromain.github.io/postcss-structure */ :root { /* Colors ------------------------------- */ --color-text: #666; --color-bg: white; --color-transparent: rgba(248, 247, 243, 0); --color-inverse: #3d3d35; --color-neutral: #bcb9af; --color-alt: #f8f7f3; --color-highlight: #f50; --color-brand: rgb(0, 162, 255); --color-error: #e82239; --color-warning: #ff891c; --color-info: #5798aa; --color-success: #6ea040; /* Base units ------------------------------- */ /* font-size: 1rem = 16 px */ --base-font-size: 16px; --base-font-size: 1rem; /* base: 1.5rem = 24 px */ --unit: 24px; --unit: 1.5rem; /* line: 0.0625rem = 1px */ --unit-line: 1px; --unit-line: 0.0625rem; --unit-line: calc(var(--unit) / 24); /* xxs: 0.1875rem = 3px */ --unit-xxs: 3px; --unit-xxs: 0.1875rem; --unit-xxs: calc(var(--unit) / 8); /* xs: 0.375rem = 6px */ --unit-xs: 6px; --unit-xs: 0.375rem; --unit-xs: calc(var(--unit) / 4); /* s: 0.75rem = 12px */ --unit-s: 12px; --unit-s: 0.75rem; --unit-s: calc(var(--unit) / 2); /* m: 1.125rem = 18px */ --unit-m: 18px; --unit-m: 1.125rem; --unit-m: calc(var(--unit) * 3 / 4); /* l: 2.25rem = 36 px */ --unit-l: 36px; --unit-l: 2.25rem; --unit-l: calc(var(--unit) * 3 / 2); /* xl: 3rem = 48px */ --unit-xl: 48px; --unit-xl: 3rem; --unit-xl: calc(var(--unit) * 2); /* xxl: 3.75rem = 60 px */ --unit-xxl: 60px; --unit-xxl: 3.75rem; --unit-xxl: calc(var(--unit) * 2.5); /* */ --unit-infinity: 9999px; /* Lists ------------------------------- */ --list-postfix: ','; --list-prefix: '―'; /* Grid ------------------------------- */ /* postcss-grid-system configuration https://github.com/francoisromain/postcss-grid-system#configuration */ /* width of a single bloc in rem */ --col-width: 328px; --col-width: 20.5rem; /* width of the gutter in rem */ --gutter: 24px; --gutter: 1.5rem; --gutter: var(--unit); /* padding of the main container in rem */ --container-padding: 24px; --container-padding: 1.5rem; --container-padding: var(--unit); /* transition */ --transition: opacity 0.5s, background-color 0.5s, border 0.5s, box-shadow 0.5s, fill 0.5s; /* hr */ --border-style: dotted; --border-color: #bcb9af; --border-color: var(--color-neutral); --border-width: 1px; --border-width: 0.0625rem; --border-width: var(--unit-line); } /* media queries: x * col-width + gutter */ @media (min-width: 63em) { .home[data-v-9380dc82] { background-color: #f50; background-color: var(--color-highlight); } } "; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
 
 
 
-var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],_scopeId: 'data-v-24d69054',
+var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],_scopeId: 'data-v-9380dc82',
   name: 'CamomileUtilsViewport',
 
   mounted: function mounted () {
@@ -3982,7 +3982,7 @@ var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
 var users$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isAdmin)?_c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {}, role: 'user' } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])]):_vm._e()},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
-  name: 'camomile-users',
+  name: 'CamomileUsers',
 
   data: function data () {
     return {
@@ -4160,6 +4160,129 @@ var groups$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
 
 
 
+var index = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h2',[_vm._v("Corpus")]),_vm._v(" "),_c('pre',[_vm._v("Corpus: "+_vm._s(_vm.uid))])])},staticRenderFns: [],
+  name: 'CamomileCorpus',
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
+
+  created: function created () {
+    this.$store.dispatch('cml/corpus/register', this.uid);
+  }
+}
+
+(function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+
+
+
+
+
+
+
+
+
+var index$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h2',[_vm._v("Medias")]),_vm._v(" "),_c('pre',[_vm._v("Corpus: "+_vm._s(_vm.corpusUid)+"\nMedias: "+_vm._s(_vm.uid))])])},staticRenderFns: [],
+  name: 'CamomileMedias',
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    },
+    corpusUid: {
+      type: String,
+      default: 'default'
+    }
+  },
+
+  created: function created () {
+    this.$store.dispatch('cml/medias/register', { uid: this.uid, corpuUid: this.corpusUid });
+  }
+}
+
+(function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+
+
+
+
+
+
+
+
+
+var index$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h2',[_vm._v("Layers")]),_vm._v(" "),_c('pre',[_vm._v("Corpus: "+_vm._s(_vm.corpusUid)+"\nLayers: "+_vm._s(_vm.uid))])])},staticRenderFns: [],
+  name: 'CamomileLayers',
+
+  props: {
+    uid: {
+      type: String,
+      default: 'default'
+    },
+    corpusUid: {
+      type: String,
+      default: 'default'
+    }
+  },
+
+  created: function created () {
+    this.$store.dispatch('cml/layers/register', {
+      uid: this.uid,
+      corpuUid: this.corpusUid
+    });
+  }
+}
+
+(function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+
+
+
+
+
+
+
+
+
+
+var index$3 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h2',[_vm._v("Annotations")]),_vm._v(" "),_c('pre',[_vm._v("Layers: "+_vm._s(_vm.layersUid)+"\nMedia: "+_vm._s(_vm.mediaUid)+"\nAnnotations: "+_vm._s(_vm.uid))])])},staticRenderFns: [],
+  name: 'CamomileAnnotations',
+
+  props: {
+    mediaUid: {
+      type: String,
+      default: 'default'
+    },
+    layersUid: {
+      type: String,
+      default: 'default'
+    },
+    uid: {
+      type: String,
+      default: 'default'
+    }
+  },
+
+  created: function created () {
+    this.$store.dispatch('cml/annotations/register', {
+      uid: this.uid,
+      mediaUid: this.mediaUid,
+      layersUid: this.layersUid
+    });
+  }
+}
+
+(function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+
+
+
+
+
+
+
+
 
 
 
@@ -4253,8 +4376,8 @@ var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElemen
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
-var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"flex-right btn px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.corpus && _vm.corpus.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
-  name: 'CamomileCorpus',
+var list = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"flex-right btn px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.corpus && _vm.corpus.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+  name: 'CamomileCorpusList',
 
   props: {
     uid: {
@@ -4305,10 +4428,6 @@ var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     }
   },
 
-  created: function created () {
-    this.$store.dispatch('cml/corpus/register', this.uid);
-  },
-
   methods: {
     popupOpen: function popupOpen (ref) {
       var config = ref.config;
@@ -4327,8 +4446,8 @@ var corpus$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
-var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Media")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"flex-right btn px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.setEvent}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
-  name: 'CamomileMedias',
+var list$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Media")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"flex-right btn px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.setEvent}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+  name: 'CamomileMediasList',
 
   props: {
     uid: {
@@ -4379,10 +4498,6 @@ var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     }
   },
 
-  created: function created () {
-    this.$store.dispatch('cml/medias/register', { uid: this.uid, corpuUid: this.corpusUid });
-  },
-
   methods: {
     popupOpen: function popupOpen (ref) {
       var config = ref.config;
@@ -4405,8 +4520,8 @@ var medias$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
-var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Layers")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"flex-right btn px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.layers && _vm.layers.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"checkbox"},domProps:{"value":layer.id,"checked":_vm.activeIds.indexOf(layer.id) !== -1},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
-  name: 'CamomileLayers',
+var list$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Layers")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"flex-right btn px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.layers && _vm.layers.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"checkbox"},domProps:{"value":layer.id,"checked":_vm.activeIds.indexOf(layer.id) !== -1},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+  name: 'CamomileLayersList',
 
   props: {
     uid: {
@@ -4465,13 +4580,6 @@ var layers$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     corpuPermission: function corpuPermission () {
       return this.$store.getters['cml/corpus/permission'](this.corpusUid)
     }
-  },
-
-  created: function created () {
-    this.$store.dispatch('cml/layers/register', {
-      uid: this.uid,
-      corpuUid: this.corpusUid
-    });
   },
 
   methods: {
@@ -4641,8 +4749,8 @@ var annotationsLayer = {render: function(){var _vm=this;var _h=_vm.$createElemen
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
-var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('annotations-layer',{key:layer.id,staticClass:"mt",attrs:{"layer":layer,"annotations":_vm.annotations[layer.id],"active-id":_vm.activeId,"media-id":_vm.mediaId,"media-name":_vm.mediaName}}):_vm._e()})],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Annotations")])])}],
-  name: 'CamomileAnnotations',
+var list$3 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('annotations-layer',{key:layer.id,staticClass:"mt",attrs:{"layer":layer,"annotations":_vm.annotations[layer.id],"active-id":_vm.activeId,"media-id":_vm.mediaId,"media-name":_vm.mediaName}}):_vm._e()})],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Annotations")])])}],
+  name: 'CamomileAnnotationsList',
 
   components: {
     annotationsLayer: annotationsLayer
@@ -4680,14 +4788,6 @@ var annotations$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
       var media = this.$store.getters['cml/medias/active'](this.mediaUid);
       return media ? media.name : ''
     }
-  },
-
-  created: function created () {
-    this.$store.dispatch('cml/annotations/register', {
-      uid: this.uid,
-      mediaUid: this.mediaUid,
-      layersUid: this.layersUid
-    });
   }
 }
 
@@ -6012,12 +6112,16 @@ var edit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm
 }
 
 exports.cmlApp = app;
-exports.cmlUsers = users$1;
-exports.cmlGroups = groups$1;
-exports.cmlCorpus = corpus$1;
-exports.cmlMedias = medias$1;
-exports.cmlLayers = layers$1;
-exports.cmlAnnotations = annotations$1;
+exports.cmlAdminUsers = users$1;
+exports.cmlAdminGroups = groups$1;
+exports.cmlCorpus = index;
+exports.cmlMedias = index$1;
+exports.cmlLayers = index$2;
+exports.cmlAnnotations = index$3;
+exports.cmlCorpusList = list;
+exports.cmlMediasList = list$1;
+exports.cmlLayersList = list$2;
+exports.cmlAnnotationsList = list$3;
 exports.cmlMediasYoutube = youtube;
 exports.cmlMediasVideo = videoPlayer;
 exports.cmlMediasVideozoning = videozoning;

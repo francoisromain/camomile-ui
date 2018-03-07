@@ -55,10 +55,6 @@ export default {
     uid: {
       type: String,
       default: 'default'
-    },
-    corpusUid: {
-      type: String,
-      default: 'default'
     }
   },
 
@@ -87,26 +83,29 @@ export default {
         closeBtn: true,
         title: 'Layer permissions',
         component: popupPermissions,
-        uid: this.corpusUid
+        uid: this.corpuUid
       }
     }
   },
 
   computed: {
+    corpuUid () {
+      return this.$store.state.cml.layers.actives[this.uid].corpuUid
+    },
     layers () {
-      return this.$store.state.cml.layers.lists[this.corpusUid]
+      return this.$store.state.cml.layers.lists[this.corpuUid]
     },
     activeIds () {
       return this.$store.getters['cml/layers/activeIds'](this.uid)
     },
     corpus () {
-      return this.$store.state.cml.corpus.lists[this.corpusUid]
+      return this.$store.state.cml.corpus.lists[this.corpuUid]
     },
     corpuId () {
-      return this.$store.state.cml.corpus.actives[this.corpusUid]
+      return this.$store.state.cml.corpus.actives[this.corpuUid]
     },
     corpuPermission () {
-      return this.$store.getters['cml/corpus/permission'](this.corpusUid)
+      return this.$store.getters['cml/corpus/permission'](this.corpuUid)
     }
   },
 

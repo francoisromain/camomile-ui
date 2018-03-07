@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h2>Medias</h2>
-    <pre>Corpus: {{ corpusUid }}
-Medias: {{ uid }}</pre>
-  </div>
+  <span />
 </template>
 
 <script>

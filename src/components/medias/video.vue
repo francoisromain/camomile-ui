@@ -33,7 +33,7 @@ export default {
   },
 
   props: {
-    mediaUid: {
+    uid: {
       type: String,
       default: 'default'
     },
@@ -56,10 +56,10 @@ export default {
 
   computed: {
     media () {
-      return this.$store.getters['cml/medias/active'](this.mediaUid, this.filter)
+      return this.$store.getters['cml/medias/active'](this.uid, this.filter)
     },
     properties () {
-      return this.$store.getters['cml/medias/properties'](this.mediaUid, this.filter)
+      return this.$store.getters['cml/medias/properties'](this.uid, this.filter)
     },
     isPlaying () {
       return this.properties.isPlaying || false
@@ -110,7 +110,7 @@ export default {
 
   methods: {
     videoEnded () {
-      this.$store.dispatch('cml/medias/stop', { uid: this.mediaUid })
+      this.$store.dispatch('cml/medias/stop', { uid: this.uid })
     },
     videoToggle () {
       if (this.$refs.video.paused) {
@@ -121,9 +121,9 @@ export default {
     },
     buttonToggle () {
       if (this.$refs.video.paused) {
-        this.$store.dispatch('cml/medias/pause', { uid: this.mediaUid })
+        this.$store.dispatch('cml/medias/pause', { uid: this.uid })
       } else {
-        this.$store.dispatch('cml/medias/play', { uid: this.mediaUid })
+        this.$store.dispatch('cml/medias/play', { uid: this.uid })
       }
     },
     videoTimeupdate () {
@@ -138,12 +138,12 @@ export default {
     videoLoad () {
       this.$store.commit('cml/medias/loaded', {
         isLoaded: true,
-        uid: this.mediaUid
+        uid: this.uid
       })
 
       this.$store.commit('cml/medias/timeTotal', {
         time: this.$refs.video.duration * 1000,
-        uid: this.mediaUid
+        uid: this.uid
       })
       this.$refs.video.volume = 0
     }

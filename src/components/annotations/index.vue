@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h2>Annotations</h2>
-    <pre>Layers: {{ layersUid }}
-Media: {{ mediaUid }}
-Annotations: {{ uid }}</pre>
-  </div>
+  <span />
 </template>
+
 
 <script>
 

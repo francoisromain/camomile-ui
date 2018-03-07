@@ -18,10 +18,6 @@ export default {
     uid: {
       type: String,
       default: 'default'
-    },
-    corpusUid: {
-      type: String,
-      default: 'default'
     }
   },
 
@@ -37,11 +33,14 @@ export default {
   },
 
   computed: {
+    corpuUid () {
+      return this.$store.state.cml.layers.actives[this.uid].corpuUid
+    },
     corpuPermission () {
-      return this.$store.getters['cml/corpus/permission'](this.corpusUid)
+      return this.$store.getters['cml/corpus/permission'](this.corpuUid)
     },
     corpuId () {
-      return this.$store.state.cml.corpus.actives[this.corpusUid]
+      return this.$store.state.cml.corpus.actives[this.corpuUid]
     }
   },
 

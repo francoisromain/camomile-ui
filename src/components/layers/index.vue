@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h2>Layers</h2>
-    <pre>Corpus: {{ corpusUid }}
-Layers: {{ uid }}</pre>
-  </div>
+  <span />
 </template>
 
 <script>

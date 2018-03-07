@@ -4,8 +4,8 @@ const merge = require('webpack-merge')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
+const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin')
 const webpackConfigBase = require('./webpack.config.base')
-const MinifyPlugin = require('babel-minify-webpack-plugin')
 // const WebpackMonitor = require('webpack-monitor')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const npmPackage = require('../package.json')
@@ -78,17 +78,7 @@ const webpackConfigDist = {
       excludeAssets: [/app.*.js/]
     }),
     new HtmlWebpackExcludeAssetsPlugin(),
-    new MinifyPlugin(
-      {
-        mangle: {
-          keepFnName: true, // should be false, but creates an error on process.nextTick. wtf?
-          topLevel: true
-        },
-        removeConsole: true,
-        removeDebugger: true
-      },
-      { comments: false }
-    ),
+    new UglifyWebpackPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin()
     // new WebpackMonitor({
     //   capture: true, // -> default 'true'

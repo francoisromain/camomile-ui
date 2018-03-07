@@ -27,14 +27,6 @@ export default {
   },
 
   props: {
-    mediaUid: {
-      type: String,
-      default: 'default'
-    },
-    layersUid: {
-      type: String,
-      default: 'default'
-    },
     uid: {
       type: String,
       default: 'default'
@@ -47,6 +39,12 @@ export default {
     },
     activeId () {
       return this.$store.state.cml.annotations.actives[this.uid] || null
+    },
+    mediaUid () {
+      return this.$store.state.cml.annotations.lists[this.uid].mediaUid
+    },
+    layersUid () {
+      return this.$store.state.cml.annotations.lists[this.uid].layersUid
     },
     layers () {
       return this.$store.getters['cml/layers/actives'](this.layersUid)

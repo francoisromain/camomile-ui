@@ -16,12 +16,12 @@ export default [
       name: 'camomile-ui.umd'
     },
     plugins: [
-      builtins(),
-      json(),
-      commonjs(),
       resolve({
         preferBuiltins: true
       }),
+      commonjs(),
+      builtins(),
+      json(),
       vue({
         css: true
       }),

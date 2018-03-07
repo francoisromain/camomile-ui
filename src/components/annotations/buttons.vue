@@ -23,14 +23,6 @@ export default {
   },
 
   props: {
-    mediaUid: {
-      type: String,
-      default: 'default'
-    },
-    layersUid: {
-      type: String,
-      default: 'default'
-    },
     uid: {
       type: String,
       default: 'default'
@@ -38,6 +30,12 @@ export default {
   },
 
   computed: {
+    mediaUid () {
+      return this.$store.state.cml.annotations.lists[this.uid].mediaUid
+    },
+    layersUid () {
+      return this.$store.state.cml.annotations.lists[this.uid].layersUid
+    },
     mediaProperties () {
       return this.$store.getters['cml/medias/properties'](this.mediaUid)
     },

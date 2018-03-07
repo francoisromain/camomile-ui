@@ -50,10 +50,6 @@ export default {
     uid: {
       type: String,
       default: 'default'
-    },
-    corpusUid: {
-      type: String,
-      default: 'default'
     }
   },
 
@@ -81,17 +77,20 @@ export default {
   },
 
   computed: {
+    corpuUid () {
+      return this.$store.state.cml.medias.actives[this.uid].corpuUid
+    },
     corpuId () {
-      return this.$store.state.cml.corpus.actives[this.corpusUid]
+      return this.$store.state.cml.corpus.actives[this.corpuUid]
     },
     mediaId () {
       return this.$store.state.cml.medias.actives[this.uid].id
     },
     medias () {
-      return this.$store.state.cml.medias.lists[this.corpusUid]
+      return this.$store.state.cml.medias.lists[this.corpuUid]
     },
     corpuPermission () {
-      return this.$store.getters['cml/corpus/permission'](this.corpusUid)
+      return this.$store.getters['cml/corpus/permission'](this.corpuUid)
     }
   },
 
@@ -105,7 +104,7 @@ export default {
     set (id) {
       this.$store.dispatch('cml/medias/set', {
         id,
-        corpuUid: this.corpusUid,
+        corpuUid: this.corpuUid,
         uid: this.uid
       })
     }

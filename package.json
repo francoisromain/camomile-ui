@@ -23,17 +23,21 @@
   "main": "dist/camomile-ui.common.js",
   "module": "dist/camomile-ui.esm.js",
   "browser": "dist/camomile-ui.umd.js",
-  "keywords": ["camomile", "ui", "collaborative", "annotation", "platform"],
+  "keywords": [
+    "camomile",
+    "ui",
+    "collaborative",
+    "annotation",
+    "platform"
+  ],
   "scripts": {
     "jest": "jest --verbose --coverage --watch",
     "test": "jest --verbose && codecov",
     "dist": "cross-env NODE_ENV=production node build/webpack.dist.js",
     "dev": "cross-env NODE_ENV=development node build/webpack.dev.js",
     "build": "rollup -c build/rollup.config.dist.js",
-    "styleguide":
-      "vue-styleguidist --config build/webpack.config.styleguide.js server",
-    "styleguide:build":
-      "vue-styleguidist --config build/webpack.config.styleguide.js build"
+    "styleguide": "vue-styleguidist --config build/webpack.config.styleguide.js server",
+    "styleguide:build": "vue-styleguidist --config build/webpack.config.styleguide.js build"
   },
   "dependencies": {
     "camomile-client": "^0.8.0",
@@ -51,7 +55,6 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^22.4.1",
     "babel-loader": "^8.0.0-beta.0",
-    "babel-minify-webpack-plugin": "^0.3.0",
     "codecov": "^3.0.0",
     "copy-webpack-plugin": "^4.5.0",
     "cross-env": "^5.1.3",
@@ -113,12 +116,13 @@
     "rollup-plugin-commonjs": "^9.0.0",
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-resolve": "^3.0.3",
+    "rollup-plugin-node-resolve": "^3.2.0",
     "rollup-plugin-postcss": "^1.3.3",
     "rollup-plugin-vue": "^3.0.0",
     "style-loader": "^0.20.2",
     "stylelint": "^9.1.1",
     "stylelint-config-standard": "^18.2.0",
+    "uglifyjs-webpack-plugin": "^1.2.2",
     "url-loader": "^1.0.1",
     "vue-hot-reload-api": "^2.3.0",
     "vue-html-loader": "^1.2.4",
