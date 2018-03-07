@@ -5,7 +5,7 @@
       <button
         v-if="corpuPermission === 3"
         class="btn-border flex-right px-s py-xs"
-        @click="popupOpen({ config: popupAddConfig, element: { id: null, corpuId, description: {}, metadataType: {}, fragmentType: {} } })"><i class="icon-24 icon-24-plus" /></button>
+        @click="popupOpen({ config: popupAddConfig, element: layerNew })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div v-if="layers && layers.length > 0">
       <table class="table mb-0">
@@ -95,6 +95,9 @@ export default {
     layers () {
       return this.$store.state.layers.lists[this.corpuUid]
     },
+    layersActive () {
+      return this.$store.state.layers.actives[this.uid]
+    },
     activeIds () {
       return this.$store.getters['layers/activeIds'](this.uid)
     },
@@ -106,6 +109,9 @@ export default {
     },
     corpuPermission () {
       return this.$store.getters['corpus/permission'](this.corpuUid)
+    },
+    layerNew () {
+      return { id: null, corpuId: this.corpuId, description: {}, metadataType: this.layersActive.metadataType, fragmentType: this.layersActive.fragmentType }
     }
   },
 

@@ -31,6 +31,22 @@ export default {
     }
   },
 
+  data () {
+    return {
+      fragmentType: {
+        positions: [
+          {
+            left: 0.25,
+            width: 0.5,
+            time: 0,
+            top: 0.25,
+            height: 0.5
+          }
+        ]
+      }
+    }
+  },
+
   computed: {
     mediaUid () {
       return this.$store.state.annotations.lists[this.uid].mediaUid
@@ -60,6 +76,12 @@ export default {
     this.$store.commit('annotations/filterRegister', {
       uid: this.uid,
       filter: this.filter
+    })
+
+    this.$store.commit('layers/typesRegister', {
+      uid: this.layersUid,
+      fragmentType: this.fragmentType,
+      metadataType: this.metadataType
     })
   },
 

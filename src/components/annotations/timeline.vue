@@ -45,7 +45,16 @@ export default {
     return {
       width: 3000,
       containerWidth: 0,
-      containerLeft: 0
+      containerLeft: 0,
+      fragmentType: {
+        time: {
+          start: 0,
+          end: 0
+        }
+      },
+      metadataType: {
+        label: ""
+      }
     }
   },
 
@@ -82,6 +91,12 @@ export default {
     this.$store.commit('annotations/filterRegister', {
       uid: this.uid,
       filter: this.filter
+    })
+
+    this.$store.commit('layers/typesRegister', {
+      uid: this.layersUid,
+      fragmentType: this.fragmentType,
+      metadataType: this.metadataType
     })
   },
 

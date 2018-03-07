@@ -498,7 +498,22 @@ export const getters = {
 export const mutations = {
   // register a layers uid
   register(state, { uid, corpuUid }) {
-    Vue.set(state.actives, uid, { corpuUid, ids: [] })
+    Vue.set(state.actives, uid, {
+      corpuUid,
+      ids: [],
+      fragmentType: {},
+      metadataType: {}
+    })
+  },
+
+  typesRegister(state, { uid, fragmentType, metadataType }) {
+    if (fragmentType) {
+      Object.assign(state.actives[uid].fragmentType, fragmentType)
+    }
+
+    if (metadataType) {
+      Object.assign(state.actives[uid].metadataType, metadataType)
+    }
   },
 
   // Reset all layers (on log-out)
