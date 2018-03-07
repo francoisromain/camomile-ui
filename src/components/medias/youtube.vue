@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import spinner from '../utils/spinner.vue'
+import spinner from '../ui/utils/spinner.vue'
 
 export default {
   name: 'CamomileMediaYoutube',

@@ -21,12 +21,12 @@
 <script>
 import { mapState } from 'vuex'
 import store from '../store/index'
-import viewport from './utils/viewport.vue'
-import cmlDropdown from './utils/dropdown.vue'
-import cmlPopup from './popup/index.vue'
-import cmlMessages from './utils/messages.vue'
-import cmlHeader from './header/index.vue'
-import cmlLogin from './login.vue'
+import viewport from './ui/utils/viewport.vue'
+import cmlDropdown from './ui/utils/dropdown.vue'
+import cmlPopup from './ui/popup/index.vue'
+import cmlMessages from './ui/utils/messages.vue'
+import cmlHeader from './ui/header/index.vue'
+import cmlLogin from './ui/login.vue'
 
 export default {
   store,

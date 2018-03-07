@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import popupEdit from './popup/edit.vue'
-import popupRemove from './popup/remove.vue'
+import popupEdit from '../../ui/popup/edit.vue'
+import popupRemove from '../../ui/popup/remove.vue'
 
 export default {
   name: 'CamomileAnnotations',

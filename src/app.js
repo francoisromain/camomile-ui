@@ -1,13 +1,13 @@
 import './css/styles.css'
 import cmlApp from './components/app.vue'
 
-import cmlUsers from './components/users.vue'
-import cmlGroups from './components/groups.vue'
+import cmlUsers from './components/admin/users.vue'
+import cmlGroups from './components/admin/groups.vue'
 
-import cmlCorpus from './components/corpus.vue'
-import cmlMedias from './components/medias.vue'
-import cmlLayers from './components/layers.vue'
-import cmlAnnotations from './components/annotations.vue'
+import cmlCorpus from './components/corpus/list.vue'
+import cmlMedias from './components/medias/list.vue'
+import cmlLayers from './components/layers/list.vue'
+import cmlAnnotations from './components/annotations/list.vue'
 
 import cmlMediasYoutube from './components/medias/youtube.vue'
 import cmlMediasVideo from './components/medias/video.vue'

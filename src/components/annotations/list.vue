@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import annotationsLayer from './annotations-layer.vue'
+import annotationsLayer from './list/layer.vue'
 
 export default {
   name: 'CamomileAnnotations',

@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import popupEdit from './popup/edit.vue'
-import annotationsLayerDetail from './annotations-layer-detail.vue'
+import popupEdit from '../../ui/popup/edit.vue'
+import annotationsLayerDetail from './layer-annotation.vue'
 
 export default {
   name: 'CamomileLayers',

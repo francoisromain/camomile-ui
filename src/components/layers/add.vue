@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import popupEdit from '../popup/edit.vue'
+import popupEdit from '../ui/popup/edit.vue'
 
 export default {
   name: 'CamomileLayers',
