@@ -41,7 +41,7 @@
   );
 }
 
-.btn:hover .icon-24-close {
+.btn-border:hover .icon-24-close {
   background-image: svg-load(
     './icons/24-close.svg',
     fill=none,
@@ -67,7 +67,7 @@
 
 .btn-alt .icon-24-plus,
 .btn-alt:hover .icon-24-plus,
-.btn:hover .icon-24-plus {
+.btn-border:hover .icon-24-plus {
   background-image: svg-load(
     './icons/24-plus.svg',
     fill=none,

@@ -3,7 +3,7 @@
     <div class="flex flex-start">
       <h2 class="mt-xs">Users</h2>
       <button
-        class="btn flex-right px-s py-xs"
+        class="btn-border flex-right px-s py-xs"
         @click="popupOpen({ config: popupAddConfig, element: { description: {}, role: 'user' } })" ><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div>
@@ -18,14 +18,14 @@
           <td>{{ user.role }}</td>
           <td class="text-right">
             <button
-              class="btn p-s my--s h6"
+              class="btn-border p-s my--s h6"
               @click="popupOpen({ config: popupGroupsConfig, element: user })">Groups</button>
             <button
-              class="btn p-s my--s h6"
+              class="btn-border p-s my--s h6"
               @click="popupOpen({ config: popupEditConfig, element: user })">Edit</button>
             <button
               v-if="user.id !== userId"
-              class="btn p-s my--s h6"
+              class="btn-border p-s my--s h6"
               @click="popupOpen({ config: popupRemoveConfig, element: user })">Remove</button>
           </td>
         </tr>

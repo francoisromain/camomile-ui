@@ -12,11 +12,11 @@
     <td class="text-right">
       <button
         v-if="layerPermission === 3"
-        class="btn p-s my--s h6"
+        class="btn-border p-s my--s h6"
         @click="popupOpen({ config: popupEditConfig, element: annotation })">Edit</button>
       <button
         v-if="layerPermission === 3"
-        class="btn p-s my--s h6"
+        class="btn-border p-s my--s h6"
         @click="popupOpen({ config: popupRemoveConfig, element: annotation })">Remove</button>
     </td>
   </tr>

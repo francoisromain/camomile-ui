@@ -8,7 +8,7 @@
         <h2>{{ config.title }}</h2>
         <button
           v-if="config.closeBtn"
-          class="flex-right btn p-s mt--m"
+          class="btn-border flex-right px-s py-xs mt--s"
           @click="close"><i class="icon-24 icon-24-close" /></button>
       </div>
       <hr>

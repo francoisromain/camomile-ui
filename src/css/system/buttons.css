@@ -4,10 +4,10 @@
 */
 
 @button default {
-  button-border: var(--unit-line) var(--color-bg) var(--color-bg) var(--color-bg);
+  button-border-width: 0;
   button-color: var(--color-text) var(--color-inverse) var(--color-bg);
   button-background: var(--color-alt) var(--color-alt) var(--color-highlight);
-  button-class: active disabled active;
+  button-class: active disabled;
 }
 
 .btn {
@@ -15,10 +15,9 @@
 }
 
 .btn-border {
-  button-color: var(--color-text) var(--color-inverse) var(--color-inverse);
-  button-background: var(--color-alt) var(--color-bg) var(--color-bg);
-  button-border: var(--unit-line) var(--color-neutral) var(--color-highlight)
-    var(--color-highlight);
+  button-border: var(--unit-line) var(--color-bg) var(--color-bg) var(--color-bg);
+  button-color: var(--color-text) var(--color-inverse) var(--color-bg);
+  button-background: var(--color-alt) var(--color-alt) var(--color-highlight);
   button-class: active disabled;
 }
 
@@ -35,8 +34,11 @@
 .btn-border,
 .btn-transparent {
   transition: var(--transition);
-  border-radius: var(--unit-xs);
   font-weight: 700;
+}
+
+.btn-border {
+  border-radius: var(--unit-xs);
 }
 
 .btn-icon {

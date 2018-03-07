@@ -4,7 +4,7 @@
       <h2 class="mt-xs">Media</h2>
       <button
         v-if="corpuPermission === 3"
-        class="flex-right btn px-s py-xs"
+        class="btn-border flex-right px-s py-xs"
         @click="popupOpen({ config: popupAddConfig, element: { id: null, corpuId, description: {} } })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div v-if="medias && medias.length > 0">
@@ -26,11 +26,11 @@
           <td class="text-right">
             <button
               v-if="corpuPermission === 3"
-              class="btn p-s my--s h6"
+              class="btn-border p-s my--s h6"
               @click="popupOpen({ config: popupEditConfig, element: media })">Edit</button>
             <button
               v-if="corpuPermission === 3"
-              class="btn p-s my--s h6"
+              class="btn-border p-s my--s h6"
               @click="popupOpen({ config: popupRemoveConfig, element: media })">Remove</button>
           </td>
         </tr>

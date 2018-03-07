@@ -262,6 +262,10 @@
   margin-right: auto;
 }
 
+.mt--s {
+  margin-top: calc(var(--unit-s) * -1);
+}
+
 .mt--m {
   margin-top: calc(var(--unit-m) * -1);
 }
