@@ -84,5 +84,5 @@ export default {
       return this.$store.commit('popup/open', { config, element })
     }
   }
-}
+};
 </script>

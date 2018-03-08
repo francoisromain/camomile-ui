@@ -87,5 +87,5 @@ export default {
       return this.$store.dispatch('groups/list')
     }
   }
-}
+};
 </script>

@@ -91,6 +91,7 @@ import {
   cmlAnnotationsEdit,
   cmlAnnotationsZoning
 } from '~/app.js'
+// } from '../../dist/camomile-ui.esm.js'
 
 export default {
   name: 'MyApp',

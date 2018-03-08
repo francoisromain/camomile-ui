@@ -65,5 +65,5 @@ export default {
       return this.group.userIds.indexOf(userId) > -1
     }
   }
-}
+};
 </script>

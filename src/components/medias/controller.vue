@@ -111,5 +111,5 @@ export default {
       return minutes + ':' + (seconds < 10 ? '0' : '') + seconds.toFixed(0)
     }
   }
-}
+};
 </script>

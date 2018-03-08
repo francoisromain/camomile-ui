@@ -72,5 +72,5 @@ export default {
       type: state => state.popup.config.type
     })
   }
-}
+};
 </script>

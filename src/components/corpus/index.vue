@@ -17,5 +17,5 @@ export default {
   created () {
     this.$store.commit('corpus/register', this.uid)
   }
-}
+};
 </script>

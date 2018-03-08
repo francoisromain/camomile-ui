@@ -30,5 +30,5 @@ export default {
       layersUid: this.layersUid
     })
   }
-}
+};
 </script>

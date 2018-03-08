@@ -59,18 +59,5 @@ export default {
       return this.$store.state.annotations.actives[this.uid]
     }
   }
-}
+};
 </script>
-
-<style scoped>
-.annotation {
-  top: 0;
-  bottom: 0;
-  text-align: center;
-}
-
-.annotation.active {
-  z-index: 1;
-  background-color: rgba(255, 0, 0, 1);
-}
-</style>

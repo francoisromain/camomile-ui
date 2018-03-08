@@ -24,5 +24,5 @@ export default {
       corpuUid: this.corpusUid
     })
   }
-}
+};
 </script>

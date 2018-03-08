@@ -88,4 +88,4 @@ export default new Vuex.Store({
   actions,
   mutations,
   modules
-})
+});

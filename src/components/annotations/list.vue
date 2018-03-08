@@ -61,5 +61,5 @@ export default {
       return media ? media.name : ''
     }
   }
-}
+};
 </script>

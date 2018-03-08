@@ -66,5 +66,5 @@ export default {
       el.style.height = `${el.scrollHeight}px`
     }
   }
-}
+};
 </script>

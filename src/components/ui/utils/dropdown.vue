@@ -26,5 +26,5 @@ export default {
       this.$store.commit('dropdown/close')
     }
   }
-}
+};
 </script>

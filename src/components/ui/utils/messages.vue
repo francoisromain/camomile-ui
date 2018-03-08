@@ -23,5 +23,5 @@ export default {
       return this.$store.state.messages.list
     }
   }
-}
+};
 </script>

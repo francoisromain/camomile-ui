@@ -133,5 +133,5 @@ export default {
       }
     }
   }
-}
+};
 </script>

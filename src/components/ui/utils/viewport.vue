@@ -16,15 +16,6 @@ export default {
       return this.$store.dispatch('viewport/set')
     }
   }
-}
+};
 </script>
 
-<style scoped>
-@import '../../../css/settings.css';
-
-@media (--viewport-desktop) {
-  .home {
-    background-color: var(--color-highlight);
-  }
-}
-</style>

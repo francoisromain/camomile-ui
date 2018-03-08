@@ -176,5 +176,5 @@ export default {
       })
     }
   }
-}
+};
 </script>
