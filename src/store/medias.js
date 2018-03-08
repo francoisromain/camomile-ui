@@ -229,7 +229,7 @@ export const actions = {
 
     // Set the active media for this uid
     // If the media id is not defined, get one
-    commit('set', { id: id || getters.id({ corpuUid, uid }), corpuUid, uid })
+    commit('set', { id: id || getters.id({ corpuUid, uid }), uid })
     dispatch(
       'annotations/mediaSet',
       {
@@ -330,8 +330,12 @@ export const getters = {
 export const mutations = {
   // Register a mediaUid in a corpuUid
   register(state, { uid, corpuUid }) {
-    Vue.set(state.actives, uid, { corpuUid })
+    Vue.set(state.actives, uid, { corpuUid, description: {} })
     Vue.set(state.properties, uid, null)
+  },
+
+  descriptionRegister(state, { uid, description }) {
+    Vue.set(state.actives[uid], 'description', description)
   },
 
   // Reset all (on log-out)
@@ -364,8 +368,8 @@ export const mutations = {
   },
 
   // Set the active media in a mediaUid
-  set(state, { id, corpuUid, uid }) {
-    Vue.set(state.actives, uid, { corpuUid, id })
+  set(state, { id, uid }) {
+    Vue.set(state.actives[uid], 'id', id)
     Vue.set(state.properties, uid, {
       timeTotal: 0,
       timeCurrent: 0,

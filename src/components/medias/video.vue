@@ -43,7 +43,10 @@ export default {
     return {
       mousedown: false,
       videoLoaded: false,
-      timeTotal: 0
+      timeTotal: 0,
+      description: {
+        type: 'video'
+      }
     }
   },
 
@@ -99,6 +102,13 @@ export default {
         this.videoLoad()
       }
     }
+  },
+
+  created () {
+    this.$store.commit('medias/descriptionRegister', {
+      uid: this.uid,
+      description: this.description
+    })
   },
 
   methods: {

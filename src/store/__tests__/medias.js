@@ -299,13 +299,13 @@ describe('store medias actions', () => {
     return store
       .dispatch('medias/set', {
         id,
-        corpuUid: 'default-corpu',
-        uid: 'default-media'
+        corpuUid: 'default',
+        uid: 'default'
       })
       .then(r => {
-        expect(store.state.medias.actives['default-media']).toEqual({
+        expect(store.state.medias.actives['default']).toEqual({
           id: 'mocks-media-id-2',
-          corpuUid: 'default-corpu'
+          corpuUid: 'default'
         })
       })
   })

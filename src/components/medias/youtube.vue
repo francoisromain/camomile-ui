@@ -29,7 +29,10 @@ export default {
   data () {
     return {
       player: null,
-      videoNew: false
+      videoNew: false,
+      description: {
+        type: "youtube"
+      }
     }
   },
 
@@ -88,6 +91,13 @@ export default {
         this.videoLoad(media.url)
       }
     }
+  },
+
+  created () {
+    this.$store.commit('medias/descriptionRegister', {
+      uid: this.uid,
+      description: this.description
+    })
   },
 
   mounted () {

@@ -5,7 +5,7 @@
       <button
         v-if="corpuPermission === 3"
         class="btn-border flex-right px-s py-xs"
-        @click="popupOpen({ config: popupAddConfig, element: { id: null, corpuId, description: {} } })"><i class="icon-24 icon-24-plus" /></button>
+        @click="popupOpen({ config: popupAddConfig, element: mediaNew })"><i class="icon-24 icon-24-plus" /></button>
     </div>
     <div v-if="medias && medias.length > 0">
       <table class="table mb-0">
@@ -89,8 +89,14 @@ export default {
     medias () {
       return this.$store.state.medias.lists[this.corpuUid]
     },
+    mediaActive () {
+      return this.$store.state.medias.actives[this.uid]
+    },
     corpuPermission () {
       return this.$store.getters['corpus/permission'](this.corpuUid)
+    },
+    mediaNew () {
+      return { id: null, corpuId: this.corpuId, description: this.mediaActive.description }
     }
   },
 

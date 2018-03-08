@@ -67915,7 +67915,7 @@ var actions$7 = {
 
     // Set the active media for this uid
     // If the media id is not defined, get one
-    commit('set', { id: id || getters.id({ corpuUid: corpuUid, uid: uid }), corpuUid: corpuUid, uid: uid });
+    commit('set', { id: id || getters.id({ corpuUid: corpuUid, uid: uid }), uid: uid });
     dispatch(
       'annotations/mediaSet',
       {
@@ -68046,8 +68046,15 @@ var mutations$8 = {
     var uid = ref.uid;
     var corpuUid = ref.corpuUid;
 
-    Vue$3.set(state.actives, uid, { corpuUid: corpuUid });
+    Vue$3.set(state.actives, uid, { corpuUid: corpuUid, description: {} });
     Vue$3.set(state.properties, uid, null);
+  },
+
+  descriptionRegister: function descriptionRegister(state, ref) {
+    var uid = ref.uid;
+    var description = ref.description;
+
+    Vue$3.set(state.actives[uid], 'description', description);
   },
 
   // Reset all (on log-out)
@@ -68094,10 +68101,9 @@ var mutations$8 = {
   // Set the active media in a mediaUid
   set: function set(state, ref) {
     var id = ref.id;
-    var corpuUid = ref.corpuUid;
     var uid = ref.uid;
 
-    Vue$3.set(state.actives, uid, { corpuUid: corpuUid, id: id });
+    Vue$3.set(state.actives[uid], 'id', id);
     Vue$3.set(state.properties, uid, {
       timeTotal: 0,
       timeCurrent: 0,
@@ -68730,7 +68736,26 @@ var mutations$9 = {
     var uid = ref.uid;
     var corpuUid = ref.corpuUid;
 
-    Vue$3.set(state.actives, uid, { corpuUid: corpuUid, ids: [] });
+    Vue$3.set(state.actives, uid, {
+      corpuUid: corpuUid,
+      ids: [],
+      fragmentType: {},
+      metadataType: {}
+    });
+  },
+
+  typesRegister: function typesRegister(state, ref) {
+    var uid = ref.uid;
+    var fragmentType = ref.fragmentType;
+    var metadataType = ref.metadataType;
+
+    if (fragmentType) {
+      Object.assign(state.actives[uid].fragmentType, fragmentType);
+    }
+
+    if (metadataType) {
+      Object.assign(state.actives[uid].metadataType, metadataType);
+    }
   },
 
   // Reset all layers (on log-out)
@@ -70399,7 +70424,7 @@ var index$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
-var list$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Media")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.setEvent}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var list$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Media")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: _vm.mediaNew });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.setEvent}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'CamomileMediasList',
 
   props: {
@@ -70445,8 +70470,14 @@ var list$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_
     medias: function medias () {
       return this.$store.state.medias.lists[this.corpuUid]
     },
+    mediaActive: function mediaActive () {
+      return this.$store.state.medias.actives[this.uid]
+    },
     corpuPermission: function corpuPermission () {
       return this.$store.getters['corpus/permission'](this.corpuUid)
+    },
+    mediaNew: function mediaNew () {
+      return { id: null, corpuId: this.corpuId, description: this.mediaActive.description }
     }
   },
 
@@ -70501,7 +70532,10 @@ var youtube = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
   data: function data () {
     return {
       player: null,
-      videoNew: false
+      videoNew: false,
+      description: {
+        type: "youtube"
+      }
     }
   },
 
@@ -70560,6 +70594,13 @@ var youtube = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
         this.videoLoad(media$1.url);
       }
     }
+  },
+
+  created: function created () {
+    this.$store.commit('medias/descriptionRegister', {
+      uid: this.uid,
+      description: this.description
+    });
   },
 
   mounted: function mounted () {
@@ -70722,7 +70763,10 @@ var video = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_v
     return {
       mousedown: false,
       videoLoaded: false,
-      timeTotal: 0
+      timeTotal: 0,
+      description: {
+        type: 'video'
+      }
     }
   },
 
@@ -70777,6 +70821,13 @@ var video = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_v
         this.videoLoad();
       }
     }
+  },
+
+  created: function created () {
+    this.$store.commit('medias/descriptionRegister', {
+      uid: this.uid,
+      description: this.description
+    });
   },
 
   methods: {
@@ -70971,7 +71022,7 @@ var index$3 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
-var list$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Layers")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.layers && _vm.layers.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"checkbox"},domProps:{"value":layer.id,"checked":_vm.activeIds.indexOf(layer.id) !== -1},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+var list$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Layers")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: _vm.layerNew });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.layers && _vm.layers.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"checkbox"},domProps:{"value":layer.id,"checked":_vm.activeIds.indexOf(layer.id) !== -1},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
   name: 'CamomileLayersList',
 
   props: {
@@ -71018,6 +71069,9 @@ var list$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_
     layers: function layers () {
       return this.$store.state.layers.lists[this.corpuUid]
     },
+    layersActive: function layersActive () {
+      return this.$store.state.layers.actives[this.uid]
+    },
     activeIds: function activeIds () {
       return this.$store.getters['layers/activeIds'](this.uid)
     },
@@ -71029,6 +71083,9 @@ var list$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_
     },
     corpuPermission: function corpuPermission () {
       return this.$store.getters['corpus/permission'](this.corpuUid)
+    },
+    layerNew: function layerNew () {
+      return { id: null, corpuId: this.corpuId, description: {}, metadataType: this.layersActive.metadataType, fragmentType: this.layersActive.fragmentType }
     }
   },
 
@@ -71057,7 +71114,7 @@ var list$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_
 
 (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
-var add$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h2',[_vm._v("Layers")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, corpuId: _vm.corpuId, description: {}, metadataType: {}, fragmentType: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()])},staticRenderFns: [],
+var add$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h2',[_vm._v("Layers")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: _vm.layerNew });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()])},staticRenderFns: [],
   name: 'CamomileLayers',
 
   props: {
@@ -71087,6 +71144,12 @@ var add$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_v
     },
     corpuId: function corpuId () {
       return this.$store.state.corpus.actives[this.corpuUid]
+    },
+    layersActive: function layersActive () {
+      return this.$store.state.layers.actives[this.uid]
+    },
+    layerNew: function layerNew () {
+      return { id: null, corpuId: this.corpuId, description: {}, metadataType: this.layersActive.metadataType, fragmentType: this.layersActive.fragmentType }
     }
   },
 
@@ -71699,7 +71762,16 @@ var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     return {
       width: 3000,
       containerWidth: 0,
-      containerLeft: 0
+      containerLeft: 0,
+      fragmentType: {
+        time: {
+          start: 0,
+          end: 0
+        }
+      },
+      metadataType: {
+        label: ""
+      }
     }
   },
 
@@ -71736,6 +71808,12 @@ var timeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     this.$store.commit('annotations/filterRegister', {
       uid: this.uid,
       filter: this.filter
+    });
+
+    this.$store.commit('layers/typesRegister', {
+      uid: this.layersUid,
+      fragmentType: this.fragmentType,
+      metadataType: this.metadataType
     });
   },
 
@@ -72057,6 +72135,22 @@ var zoning = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_
     }
   },
 
+  data: function data () {
+    return {
+      fragmentType: {
+        positions: [
+          {
+            left: 0.25,
+            width: 0.5,
+            time: 0,
+            top: 0.25,
+            height: 0.5
+          }
+        ]
+      }
+    }
+  },
+
   computed: {
     mediaUid: function mediaUid () {
       return this.$store.state.annotations.lists[this.uid].mediaUid
@@ -72086,6 +72180,12 @@ var zoning = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_
     this.$store.commit('annotations/filterRegister', {
       uid: this.uid,
       filter: this.filter
+    });
+
+    this.$store.commit('layers/typesRegister', {
+      uid: this.layersUid,
+      fragmentType: this.fragmentType,
+      metadataType: this.metadataType
     });
   },
 
