@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('vue'), require('vuex'), require('camomile-client')) :
   typeof define === 'function' && define.amd ? define(['exports', 'vue', 'vuex', 'camomile-client'], factory) :
-  (factory((global['camomile-ui'] = global['camomile-ui'] || {}, global['camomile-ui'].umd = {}),global.Vue,global.Vuex,global.Camomile));
+  (factory((global['camomile-ui'] = {}),global.Vue,global.Vuex,global.Camomile));
 }(this, (function (exports,Vue,Vuex,Camomile) { 'use strict';
 
   Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;

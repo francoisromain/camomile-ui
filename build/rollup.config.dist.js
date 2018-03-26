@@ -14,7 +14,7 @@ export default [
     output: {
       file: pkg.browser,
       format: 'umd',
-      name: 'camomile-ui.umd',
+      name: 'camomile-ui',
       globals: {
         'camomile-client': 'Camomile',
         vuex: 'Vuex',
