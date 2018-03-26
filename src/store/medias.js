@@ -306,9 +306,8 @@ export const getters = {
     null,
 
   // Get the prpoerties of the active media
-  properties: (state, getters) => (uid, filter) => {
-    return getters.active(uid, filter) ? state.properties[uid] : {}
-  },
+  properties: (state, getters) => (uid, filter) =>
+    getters.active(uid, filter) ? state.properties[uid] : {},
 
   // Get the active media
   filter: state => (uid, filter) => {

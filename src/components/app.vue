@@ -64,9 +64,7 @@ export default {
   computed: {
     ...mapState({
       isLogged: state => state.user.isLogged,
-      popup: state => state.popup,
-      media: state =>
-        state.medias.list.find(m => m.id === state.medias.id)
+      popup: state => state.popup
     })
   },
 
