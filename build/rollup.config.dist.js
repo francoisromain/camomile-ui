@@ -10,10 +10,16 @@ import pkg from '../package.json'
 export default [
   {
     input: 'src/app.js',
+    external: ['vue', 'vuex', 'camomile-client'],
     output: {
       file: pkg.browser,
       format: 'umd',
-      name: 'camomile-ui.umd'
+      name: 'camomile-ui.umd',
+      globals: {
+        'camomile-client': 'Camomile',
+        vuex: 'Vuex',
+        vue: 'Vue'
+      }
     },
     plugins: [
       resolve({
