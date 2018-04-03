@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import app from './app.vue'
+import app from './app-test.vue'
 
 new Vue({
   components: { app },

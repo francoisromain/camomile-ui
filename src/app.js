@@ -17,6 +17,7 @@ import MediasController from './components/medias/controller.vue'
 
 import Layers from './components/layers/index.vue'
 import LayersList from './components/layers/list.vue'
+import LayersListSimple from './components/layers/list-simple.vue'
 import LayersAdd from './components/layers/add.vue'
 
 import Annotations from './components/annotations/index.vue'
@@ -41,6 +42,7 @@ export default {
   MediasController,
   Layers,
   LayersList,
+  LayersListSimple,
   LayersAdd,
   Annotations,
   AnnotationsList,
