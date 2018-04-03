@@ -10,6 +10,7 @@ import CorpusSelect from './components/corpus/select.vue'
 
 import Medias from './components/medias/index.vue'
 import MediasList from './components/medias/list.vue'
+import MediasSelect from './components/medias/select.vue'
 import MediasYoutube from './components/medias/youtube.vue'
 import MediasVideo from './components/medias/video.vue'
 import MediasController from './components/medias/controller.vue'
@@ -34,6 +35,7 @@ export default {
   CorpusSelect,
   Medias,
   MediasList,
+  MediasSelect,
   MediasYoutube,
   MediasVideo,
   MediasController,

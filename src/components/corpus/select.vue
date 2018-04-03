@@ -1,7 +1,9 @@
 <template>
-  <div v-if="corpus && corpus.length > 0">
+  <div>
     <h2 class="mt-xs">Corpora</h2>
-    <select @change="set">
+    <select
+      v-if="corpus && corpus.length > 0"
+      @change="set">
       <option
         v-for="corpu in corpus"
         :key="corpu.id"

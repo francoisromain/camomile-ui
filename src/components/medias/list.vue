@@ -20,7 +20,7 @@
               :value="media.id"
               :checked="media.id === mediaId"
               type="radio"
-              @change="setEvent">
+              @change="set">
           </td>
           <td>{{ media.name }}</td>
           <td class="text-right">
@@ -104,12 +104,9 @@ export default {
     popupOpen ({ config, element }) {
       return this.$store.commit('popup/open', { config, element })
     },
-    setEvent (e) {
-      this.set(e.target.value)
-    },
-    set (id) {
+    set (e) {
       this.$store.dispatch('medias/set', {
-        id,
+        id: e.target.value,
         corpuUid: this.corpuUid,
         uid: this.uid
       })
