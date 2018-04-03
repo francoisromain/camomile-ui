@@ -4357,6 +4357,54 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  var CorpusSelect = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h2',{staticClass:"mt-xs"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.corpus && _vm.corpus.length > 0)?_c('select',{on:{"change":_vm.set}},_vm._l((_vm.corpus),function(corpu){return _c('option',{key:corpu.id,domProps:{"value":corpu.id,"selected":corpu.id === _vm.corpuId}},[_vm._v(" "+_vm._s(corpu.name)+" ")])})):_vm._e()])},staticRenderFns: [],
+    name: 'CamomileCorpusSelect',
+
+    props: {
+      uid: {
+        type: String,
+        default: 'default'
+      }
+    },
+
+    computed: {
+      corpus: function corpus () {
+        return this.$store.state.corpus.lists[this.uid]
+      },
+      corpuId: function corpuId () {
+        return this.$store.state.corpus.actives[this.uid]
+      }
+    },
+
+    methods: {
+      set: function set (e) {
+        this.$store.dispatch('corpus/set', {
+          id: e.target.value,
+          uid: this.uid
+        });
+      }
+    }
+  };
+
+  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+
+
+
+
+
   var Medias = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span')},staticRenderFns: [],
     name: 'CamomileMedias',
 
@@ -4378,7 +4426,7 @@
 
   (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
 
-  var MediasList = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Media")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: _vm.mediaNew });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.setEvent}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+  var MediasList = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Media")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: _vm.mediaNew });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
     name: 'CamomileMediasList',
 
     props: {
@@ -4442,12 +4490,61 @@
 
         return this.$store.commit('popup/open', { config: config, element: element })
       },
-      setEvent: function setEvent (e) {
-        this.set(e.target.value);
-      },
-      set: function set (id) {
+      set: function set (e) {
         this.$store.dispatch('medias/set', {
-          id: id,
+          id: e.target.value,
+          corpuUid: this.corpuUid,
+          uid: this.uid
+        });
+      }
+    }
+  };
+
+  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  var MediasSelect = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h2',{staticClass:"mt-xs"},[_vm._v("Media")]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('select',{on:{"change":_vm.set}},_vm._l((_vm.medias),function(media){return _c('option',{key:media.id,domProps:{"value":media.id,"selected":media.id === _vm.mediaId}},[_vm._v(" "+_vm._s(media.name)+" ")])})):_vm._e()])},staticRenderFns: [],
+    name: 'CamomileMediasSelect',
+
+    props: {
+      uid: {
+        type: String,
+        default: 'default'
+      }
+    },
+
+    computed: {
+      corpuUid: function corpuUid () {
+        return this.$store.state.medias.actives[this.uid].corpuUid
+      },
+      mediaId: function mediaId () {
+        return this.$store.state.medias.actives[this.uid].id
+      },
+      medias: function medias () {
+        return this.$store.state.medias.lists[this.corpuUid]
+      }
+    },
+
+    methods: {
+      set: function set (e) {
+        this.$store.dispatch('medias/set', {
+          id: e.target.value,
           corpuUid: this.corpuUid,
           uid: this.uid
         });
@@ -5050,6 +5147,74 @@
 
         return this.$store.commit('popup/open', { config: config, element: element })
       },
+      set: function set (e) {
+        if (e.target.checked) {
+          this.$store.dispatch('layers/set', {
+            id: e.target.value,
+            uid: this.uid
+          });
+        } else {
+          this.$store.dispatch('layers/unset', {
+            id: e.target.value,
+            uid: this.uid
+          });
+        }
+      }
+    }
+  };
+
+  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  var LayersListSimple = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h2',{staticClass:"mt-xs"},[_vm._v("Layers")]),_vm._v(" "),(_vm.layers && _vm.layers.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"checkbox"},domProps:{"value":layer.id,"checked":_vm.activeIds.indexOf(layer.id) !== -1},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(" "+_vm._s(layer.name)+" ")])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+    name: 'CamomileLayersSelect',
+
+    props: {
+      uid: {
+        type: String,
+        default: 'default'
+      }
+    },
+
+    computed: {
+      corpuUid: function corpuUid () {
+        return this.$store.state.layers.actives[this.uid].corpuUid
+      },
+      layers: function layers () {
+        return this.$store.state.layers.lists[this.corpuUid]
+      },
+      activeIds: function activeIds () {
+        return this.$store.getters['layers/activeIds'](this.uid)
+      }
+    },
+
+    methods: {
       set: function set (e) {
         if (e.target.checked) {
           this.$store.dispatch('layers/set', {
@@ -6162,13 +6327,16 @@
     AdminGroups: AdminGroups,
     Corpus: Corpus,
     CorpusList: CorpusList,
+    CorpusSelect: CorpusSelect,
     Medias: Medias,
     MediasList: MediasList,
+    MediasSelect: MediasSelect,
     MediasYoutube: MediasYoutube,
     MediasVideo: MediasVideo,
     MediasController: MediasController,
     Layers: Layers,
     LayersList: LayersList,
+    LayersListSimple: LayersListSimple,
     LayersAdd: LayersAdd,
     Annotations: Annotations,
     AnnotationsList: AnnotationsList,
