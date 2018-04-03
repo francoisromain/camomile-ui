@@ -6,6 +6,7 @@ import AdminGroups from './components/admin/groups.vue'
 
 import Corpus from './components/corpus/index.vue'
 import CorpusList from './components/corpus/list.vue'
+import CorpusSelect from './components/corpus/select.vue'
 
 import Medias from './components/medias/index.vue'
 import MediasList from './components/medias/list.vue'
@@ -30,6 +31,7 @@ export default {
   AdminGroups,
   Corpus,
   CorpusList,
+  CorpusSelect,
   Medias,
   MediasList,
   MediasYoutube,

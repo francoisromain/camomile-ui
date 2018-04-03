@@ -18,6 +18,7 @@
       
       <div class="blobs">
         <cml-corpus-list class="blob-1-2 p bg-bg" />
+        <cml-corpus-select class="blob-1-2 p bg-bg" />
         <cml-medias-list class="blob-1-2 p bg-bg" />
         <cml-layers-list class="blob-1-2 p bg-bg" />
         <cml-annotations-list class="blob-1-2 p bg-bg" />
@@ -81,6 +82,7 @@ export default {
     cmlAdminGroups: camomileUi.AdminGroups,
     cmlCorpus: camomileUi.Corpus,
     cmlCorpusList: camomileUi.CorpusList,
+    cmlCorpusSelect: camomileUi.CorpusSelect,
     cmlMedias: camomileUi.Medias,
     cmlMediasList: camomileUi.MediasList,
     cmlMediasYoutube: camomileUi.MediasYoutube,
