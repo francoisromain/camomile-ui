@@ -1,18 +1,27 @@
 <template>
   <div class="p bg-bg mb">
-    <h2>Annotation 
-      <span class="h6 bold bg-neutral color-bg py-xxs px-xs rnd right mt-xxs">…{{ annotation ? annotation.id : '' | stringEnd }}</span>
-    </h2>
-    <div>
-      <button
-        v-if="layer.permission === 3"
-        class="btn-border p-s h6"
-        @click="popupEditOpen">Edit</button>
-      <button
-        v-if="layer.permission === 3"
-        class="btn-border p-s h6"
-        @click="popupRemoveOpen">Remove</button>
-    </div>
+    <h2>Annotation</h2>
+    <table class="table mb-0">
+      <tr>
+        <th>Label</th><th>ID</th><th />
+      </tr>
+      <tr v-if="annotation">
+        <td>{{ annotation.metadata.label }}</td>
+        <td>
+          <span class="h6 bold bg-neutral color-bg py-xxs px-xs rnd mt-xxs">…{{ annotation.id | stringEnd }}</span>
+        </td>
+        <td class="text-right">
+          <button
+            v-if="layer.permission === 3"
+            class="btn-border p-s h6"
+            @click="popupEditOpen">Edit</button>
+          <button
+            v-if="layer.permission === 3"
+            class="btn-border p-s h6"
+            @click="popupRemoveOpen">Remove</button>
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 <script>

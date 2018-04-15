@@ -12,6 +12,7 @@
         <slot v-if="isLogged" />
         <cml-login v-else />
       </div>
+
       <transition name="transition-top">
         <cml-popup v-if="popup.visible" />
       </transition>
@@ -19,6 +20,7 @@
       <cml-dropdown />
       <viewport />
     </main>
+
   </div>
 </template>
 

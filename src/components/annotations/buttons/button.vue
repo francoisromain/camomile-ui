@@ -1,9 +1,9 @@
 <template>
   <button
-    class="btn px-s py-xs mr-s h6"
+    class="btn px-s py-s mr-s h5 full-x flex"
     @click="popupAnnotationLabelOpen">
-    <i class="icon-24 icon-24-plus mr-xs" />
     {{ layerName }}
+    <i class="icon-24 icon-24-plus mr-xs flex-right" />
   </button>
 </template>
 

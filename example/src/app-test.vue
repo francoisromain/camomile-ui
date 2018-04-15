@@ -17,16 +17,18 @@
     <div class="tablet-blobs">
       <cml-corpus-select class="tablet-blob-1-2" />
       <cml-medias-select class="tablet-blob-1-2" />
-      <cml-layers-list-simple class="tablet-blob-1-2" />
     </div>
 
     <div class="tablet-blobs">
-      <cml-layers-add class="tablet-blob-1-4" />
-      <cml-annotations-buttons class="tablet-blob-1-2" />
-      <cml-annotations-edit class="tablet-blob-1-4" />
+      <cml-layers-list-simple class="tablet-blob-1-2" />
+      <cml-annotations-edit class="tablet-blob-1-2" />
     </div>
 
-    <cml-annotations-timeline />
+    <div class="tablet-blobs">
+      <cml-annotations-buttons class="tablet-blob-1-4" />
+      <cml-annotations-timeline class="tablet-blob-3-4" />
+    </div>
+
     <cml-medias-controller />
     <cml-medias-video />
   </cml-app>
@@ -53,6 +55,7 @@ export default {
     cmlLayers: camomileUi.Layers,
     cmlLayersList: camomileUi.LayersList,
     cmlLayersListSimple: camomileUi.LayersListSimple,
+    cmlLayersSelect: camomileUi.LayersSelect,
     cmlLayersAdd: camomileUi.LayersAdd,
     cmlAnnotations: camomileUi.Annotations,
     cmlAnnotationsList: camomileUi.AnnotationsList,

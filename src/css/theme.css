@@ -95,10 +95,6 @@
   z-index: 0;
 }
 
-.annotations {
-  height: 40px;
-}
-
 .annotation {
   top: 0;
   bottom: 0;

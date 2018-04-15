@@ -1,11 +1,12 @@
 <template>
   <div
     ref="container"
-    class="mb">
+    class="p bg-bg mb">
+    <h2>Timeline</h2>
     <div
       v-if="layers"
-      :style="{ height: `${40 * layers.length}px` }"
-      class="relative overflow-hidden bg-bg">
+      :style="{ height: `${48 * layers.length}px` }"
+      class="relative overflow-hidden">
       <div class="absolute timeline-cursor"/>
       <div
         :style="{ top: 0, bottom: 0, left: `${left}px`, width: `${width}px` }"
@@ -22,7 +23,8 @@
           :width="width"
           :left="left + containerLeft"
           :fragment-type="layer.fragmentType"
-          class="relative annotations" />
+          :style="{ height: `48px` }"
+          class="relative" />
       </div>
     </div>
   </div>

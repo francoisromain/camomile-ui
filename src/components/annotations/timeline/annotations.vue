@@ -1,5 +1,5 @@
 <template>
-  <div ref="container">
+  <div>
     <annotations-bloc
       v-for="annotation in annotations"
       :key="annotation.id"

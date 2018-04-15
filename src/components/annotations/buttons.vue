@@ -1,6 +1,6 @@
 <template>
   <div class="p bg-bg mb">
-    <h2>Annotations</h2>
+    <h2>Layers</h2>
     <annotation-button 
       v-for="layer in layers" 
       v-if="annotations[layer.id] && layer.permission === 3"
