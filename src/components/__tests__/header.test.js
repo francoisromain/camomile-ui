@@ -62,7 +62,7 @@ describe('header', () => {
     const titleWrapper = mount(headerTitle, { store, localVue })
 
     expect(headerWrapper.html()).toContain(
-      '<header class="bg-inverse color-bg header"><div class="container"><div class="blobs"><div class="blob-1-4 mb-0"><!----></div> <!----> <!----></div></div></header>'
+      '<div class="tablet-blobs"><div class="tablet-blob-1-4"><!----></div> <!----> <!----></div>'
     )
 
     expect(titleWrapper.html()).toBe('<h1 class="mb-0">Camomile-ui</h1>')
@@ -72,7 +72,7 @@ describe('header', () => {
     store.state.user.isLogged = true
     const wrapper = shallow(header, { store, localVue })
     expect(wrapper.html()).toContain(
-      '<header class="bg-inverse color-bg header"><div class="container"><div class="blobs"><div class="blob-1-4 mb-0"><!----></div> <div class="blob-1-2 mb-0"><div class="blobs-default"><div class="blob-default"><!----></div> <div class="blob-auto mb-0"><!----></div></div></div> <div class="blob mb-0 flex-right"><!----></div></div></div></header>'
+      '<div class="tablet-blobs"><div class="tablet-blob-1-4"><!----></div> <div class="tablet-blob-1-2"><div class="blobs"><div class="blob"><!----></div> <div class="blob-auto"><!----></div></div></div> <div class="blob flex-right"><!----></div></div>'
     )
   })
 

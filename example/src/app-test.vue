@@ -4,35 +4,31 @@
     user-password="roO7p4s5wOrD"
     url="http://localhost:3000"
     title="Camomile UI">
-    <div class="container pt">
-      
-      <div class="tablet-blobs">
-        <cml-admin-users class="tablet-blob-1-2" />
-        <cml-admin-groups class="tablet-blob-1-2" />
-      </div>
-
-      <cml-corpus />
-      <cml-medias />
-      <cml-layers />
-      <cml-annotations />
-      
-      <div class="tablet-blobs">
-        <cml-corpus-select class="tablet-blob-1-2" />
-        <cml-medias-select class="tablet-blob-1-2" />
-        <cml-layers-list-simple class="tablet-blob-1-2" />
-      </div>
-
-      <div class="tablet-blobs">
-        <cml-layers-add class="tablet-blob-1-4" />
-        <cml-annotations-buttons class="tablet-blob-1-2" />
-        <cml-annotations-edit class="tablet-blob-1-4" />
-      </div>
-
-      <cml-annotations-timeline />
-      <cml-medias-controller />
-      <cml-medias-video />
-
+    <div class="tablet-blobs">
+      <cml-admin-users class="tablet-blob-1-2" />
+      <cml-admin-groups class="tablet-blob-1-2" />
     </div>
+
+    <cml-corpus />
+    <cml-medias />
+    <cml-layers />
+    <cml-annotations />
+    
+    <div class="tablet-blobs">
+      <cml-corpus-select class="tablet-blob-1-2" />
+      <cml-medias-select class="tablet-blob-1-2" />
+      <cml-layers-list-simple class="tablet-blob-1-2" />
+    </div>
+
+    <div class="tablet-blobs">
+      <cml-layers-add class="tablet-blob-1-4" />
+      <cml-annotations-buttons class="tablet-blob-1-2" />
+      <cml-annotations-edit class="tablet-blob-1-4" />
+    </div>
+
+    <cml-annotations-timeline />
+    <cml-medias-controller />
+    <cml-medias-video />
   </cml-app>
 </template>
 

@@ -11,10 +11,6 @@
   display: none;
 }
 
-.header {
-  box-shadow: color-mod(var(--color-inverse) alpha(25%)) 4px 4px 16px;
-}
-
 .menubar-infos {
   padding-top: 0;
   padding-bottom: var(--unit-s);

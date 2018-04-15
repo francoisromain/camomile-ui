@@ -1,14 +1,14 @@
 <template>
   <div class="page relative">
 
-    <header class="bg-inverse color-bg header">
+    <header class="header bg-inverse color-bg shadow">
       <div class="container">
         <cml-header />
       </div>
     </header>
 
     <main class="main">
-      <div class="container">
+      <div class="container pt">
         <slot v-if="isLogged" />
         <cml-login v-else />
       </div>
