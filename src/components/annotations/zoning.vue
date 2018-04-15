@@ -1,7 +1,7 @@
 <template>
   <div
     ref="container"
-    class="relative full-y">
+    class="relative full-y mb">
     <zoning-annotations
       v-for="layer in layers" 
       v-if="annotations[layer.id]"

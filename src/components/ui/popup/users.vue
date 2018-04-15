@@ -1,19 +1,20 @@
 <template>
   <div>
-    <div class="blobs">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Name</h4>
+    <div class="tablet-blobs">
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Name</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           v-model="group.name"
           type="text"
           placeholder="Name"
-          disabled>
+          disabled
+          class="mb">
       </div>
     </div>
-    <div class="blobs">
-      <div class="blob-1">
+    <div class="tablet-blobs">
+      <div class="tablet-blob-1">
         <h3 class="pt-s mb-s">Users</h3>
         <ul class="list-inline">
           <li

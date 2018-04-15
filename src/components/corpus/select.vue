@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p bg-bg mb">
     <h2 class="mt-xs">Corpora</h2>
     <select
       v-if="corpus && corpus.length > 0"

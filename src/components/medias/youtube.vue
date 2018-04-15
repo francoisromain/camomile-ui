@@ -1,7 +1,8 @@
 <template>
   <div
     v-if="media"
-    ref="container">
+    ref="container"
+    class="mb">
     <div v-show="isLoaded">
       <div id="player" />
     </div>

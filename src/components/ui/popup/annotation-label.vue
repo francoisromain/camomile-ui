@@ -1,28 +1,29 @@
 <template>
   <div>
-    <div class="blobs">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Label</h4>
+    <div class="tablet-blobs">
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Label</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           ref="label"
           v-model="element.metadata.label"
           type="text"
-          placeholder="Label">
+          placeholder="Label"
+          class="mb">
       </div>
     </div>
-    <div class="blobs">
-      <div class="blob-1-4" />
-      <div class="blob-3-4">
+    <div class="tablet-blobs">
+      <div class="tablet-blob-1-4" />
+      <div class="tablet-blob-3-4">
         <button
           :disabled="!element.name && type !== 'annotations'"
-          class="btn-alt p-s full-x"
+          class="btn-alt p-s full-x mb"
           @click="save"
           @keyup.enter="save">Save</button>
         <div
           v-if="error"
-          class="p-s bg-error color-bg italic mt">{{ error }}</div>
+          class="p-s bg-error color-bg italic mt mb">{{ error }}</div>
       </div>
     </div>
   </div>

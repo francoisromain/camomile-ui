@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p bg-bg mb">
     <h2>Layers</h2>
     <button
       v-if="corpuPermission === 3"

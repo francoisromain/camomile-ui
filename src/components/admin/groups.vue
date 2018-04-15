@@ -1,5 +1,7 @@
 <template>
-  <div v-if="isAdmin">
+  <div
+    v-if="isAdmin"
+    class="p bg-bg mb">
     <div class="flex flex-start">
       <h2 class="mt-xs">Groups</h2>
       <button 

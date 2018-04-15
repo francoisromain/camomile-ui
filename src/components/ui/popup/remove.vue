@@ -2,37 +2,39 @@
   <div>
     <div
       v-if="type !== 'annotations'"
-      class="blobs">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Name</h4>
+      class="tablet-blobs">
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Name</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           v-model="element.name"
           :disabled="element.id"
           type="text"
-          placeholder="Name">
+          placeholder="Name"
+          class="mb">
       </div>
     </div>
     <div 
       v-if="type === 'annotations'"
-      class="blobs">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Id</h4>
+      class="tablet-blobs">
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Id</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           v-model="element.id"
           :disabled="element.id"
           type="text"
-          placeholder="Name">
+          placeholder="Name"
+          class="mb">
       </div>
     </div>
-    <div class="blobs">
-      <div class="blob-1-4" />
-      <div class="blob-3-4">
+    <div class="tablet-blobs">
+      <div class="tablet-blob-1-4" />
+      <div class="tablet-blob-3-4">
         <button
-          class="btn-alt p-s full-x"
+          class="btn-alt p-s full-x mb"
           @click="remove"
           @keyup.enter="remove">Remove</button>
       </div>

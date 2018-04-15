@@ -4,18 +4,11 @@
 */
 
 :root {
-  --header-height: calc(var(--unit) * 2);
+  --header-height: calc(var(--unit) * 4);
 }
 
 [v-cloak] {
   display: none;
-}
-
-.container {
-  padding-left: var(--container-padding);
-  padding-right: var(--container-padding);
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .header {
@@ -33,12 +26,6 @@
     var(--color-highlight);
   font-weight: 700;
   height: 3rem;
-}
-
-.page {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
 }
 
 .main {
@@ -62,7 +49,7 @@
 }
 
 .menubar-infos {
-  margin-top: var(--unit-s);
+  margin-top: var(--unit-m);
 }
 
 .annotation {
@@ -127,28 +114,28 @@
   background-color: rgba(255, 0, 0, 1);
 }
 
-.pophover hr {
-  border-top-width: var(--unit-xxs);
-  border-top-style: solid;
-  border-top-color: var(--color-alt);
-  margin-bottom: calc(var(--unit) - var(--unit-xxs));
-  margin-left: calc(var(--unit-l) * -1);
-  margin-right: calc(var(--unit-l) * -1);
+.popup-header {
+  height: calc(4 * var(--unit));
+  border-bottom-width: var(--unit-xxs);
+  border-bottom-style: solid;
+  border-bottom-color: var(--color-alt);
+  margin-bottom: calc(-1 * var(--unit-xxs));
+}
+
+.popup-content {
+  height: calc(100% - 4 * var(--unit));
+  overflow-y: auto;
 }
 
 @media (--viewport-tablet) {
   --header-height: calc(var(--unit) * 2);
-
-  .container {
-    width: calc(2 * var(--col-width) + var(--gutter));
-  }
 
   .menubar-infos {
     padding-top: var(--unit-m);
     margin-top: 0;
   }
 
-  .pophover {
+  .popup {
     width: calc(2 * var(--col-width) - var(--gutter));
     transform: translate(-50%, 0);
     top: var(--header-height);
@@ -156,7 +143,7 @@
     right: auto;
     bottom: auto;
     z-index: 2;
-    box-shadow: color-mod(var(--color-inverse) alpha(25%)) 4px 4px 16px;
+    border-radius: var(--unit-xs);
   }
 
   .messages {
@@ -168,14 +155,4 @@
     right: var(--gutter);
     top: 0;
   }
-}
-
-@media (--viewport-desktop) {
-  .container {
-    width: calc(3 * var(--col-width) + var(--gutter));
-  }
-}
-
-.truncate-demo {
-  height: var(--unit-xl);
 }

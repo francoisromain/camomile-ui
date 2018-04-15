@@ -5,7 +5,7 @@ http://mystrd.at/modern-clean-css-sticky-footer/
 */
 
 :root {
-  --footer-height: 0;
+  --footer-height: calc(var(--unit) * 9);
 }
 
 html {
@@ -14,14 +14,26 @@ html {
 }
 
 body {
-  margin: 0 0 var(--footer-height);
-  height: 100%;
+  min-height: 100%;
 }
 
-footer {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: var(--footer-height);
-  width: 100%;
+.page {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+}
+
+.footer {
+  background-color: var(--color-inverse);
+  color: var(--color-bg);
+}
+
+@media (--viewport-desktop) {
+  .footer {
+    height: var(--footer-height);
+  }
 }

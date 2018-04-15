@@ -1,31 +1,33 @@
 <template>
   <div>
-    <div class="blobs">
+    <div class="tablet-blobs">
       
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Name</h4>
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Name</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           v-model="config.user.name"
           type="text"
-          placeholder="Name">
+          placeholder="Name"
+          class="mb">
       </div>
       
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Password</h4>
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Password</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           v-model="config.user.password"
           type="password"
-          placeholder="Password">
+          placeholder="Password"
+          class="mb">
       </div>
 
-      <div class="blob-1-4" />
-      <div class="blob-3-4">
+      <div class="tablet-blob-1-4" />
+      <div class="tablet-blob-3-4">
         <button
-          class="btn-alt p-s full-x"
+          class="btn-alt p-s full-x mb"
           @click="login(config)">Login</button>
       </div>
     </div>

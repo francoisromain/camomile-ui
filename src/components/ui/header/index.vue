@@ -1,30 +1,26 @@
 <template>
-  <header class="bg-inverse color-bg header">
-    <div class="container">
+  <div class="tablet-blobs">
+    <div class="tablet-blob-1-4">
+      <cml-title />
+    </div>
+    <div
+      v-if="isLogged"
+      class="tablet-blob-1-2">
       <div class="blobs">
-        <div class="blob-1-4 mb-0">
-          <cml-title />
+        <div class="blob">
+          <cml-sync class="mb-0" />
         </div>
-        <div
-          v-if="isLogged"
-          class="blob-1-2 mb-0">
-          <div class="blobs-default">
-            <div class="blob-default">
-              <cml-sync class="mb-0 left" />
-            </div>
-            <div class="blob-auto mb-0">  
-              <cml-infos />
-            </div>
-          </div>
-        </div>
-        <div
-          v-if="isLogged"
-          class="blob mb-0 flex-right">
-          <cml-userbutton />
+        <div class="blob-auto">  
+          <cml-infos />
         </div>
       </div>
     </div>
-  </header>
+    <div
+      v-if="isLogged"
+      class="blob flex-right">
+      <cml-userbutton />
+    </div>
+  </div>
 </template>
 
 <script>

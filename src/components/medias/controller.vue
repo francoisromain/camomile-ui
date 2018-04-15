@@ -1,5 +1,5 @@
 <template>
-  <div class="mediacontroller">
+  <div class="mediacontroller mb">
     <div class="mediacontroller-controls clearfix pb-s">
       <button
         ref="button"

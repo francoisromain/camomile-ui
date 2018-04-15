@@ -1,7 +1,8 @@
 <template>
   <div
     v-if="media"
-    ref="container">
+    ref="container"
+    class="mb">
     <video
       v-cloak
       v-show="isLoaded"

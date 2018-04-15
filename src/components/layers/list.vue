@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p bg-bg mb">
     <div class="flex flex-start">
       <h2 class="mt-xs">Layers</h2>
       <button
@@ -77,13 +77,6 @@ export default {
         closeBtn: true,
         title: 'Remove layer',
         component: popupRemove
-      },
-      popupPermissionsConfig: {
-        type: 'layers',
-        closeBtn: true,
-        title: 'Layer permissions',
-        component: popupPermissions,
-        uid: this.corpuUid
       }
     }
   },
@@ -112,6 +105,15 @@ export default {
     },
     layerNew () {
       return { id: null, corpuId: this.corpuId, description: {}, metadataType: this.layersActive.metadataType, fragmentType: this.layersActive.fragmentType }
+    },
+    popupPermissionsConfig () {
+      return {
+        type: 'layers',
+        closeBtn: true,
+        title: 'Layer permissions',
+        component: popupPermissions,
+        uid: this.corpuUid
+      }
     }
   },
 

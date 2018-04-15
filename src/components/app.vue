@@ -1,19 +1,23 @@
 <template>
-  <div class="page">
-    <cml-header />
-    <main class="main relative">
-      <div class="content">
+  <div class="page relative">
+
+    <header class="bg-inverse color-bg header">
+      <div class="container">
+        <cml-header />
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="container">
         <slot v-if="isLogged" />
         <cml-login v-else />
       </div>
-      <div class="overlay">
-        <transition name="transition-top">
-          <cml-popup v-if="popup.visible" />
-        </transition>
-        <cml-messages />
-        <cml-dropdown />
-        <viewport />
-      </div>
+      <transition name="transition-top">
+        <cml-popup v-if="popup.visible" />
+      </transition>
+      <cml-messages />
+      <cml-dropdown />
+      <viewport />
     </main>
   </div>
 </template>

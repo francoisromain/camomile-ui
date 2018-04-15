@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p bg-bg mb">
     <h2 class="mt-xs">Layers</h2>
     <div v-if="layers && layers.length > 0">
       <table class="table mb-0">

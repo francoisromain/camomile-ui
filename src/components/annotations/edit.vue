@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p bg-bg mb">
     <h2>Annotation 
       <span class="h6 bold bg-neutral color-bg py-xxs px-xs rnd right mt-xxs">…{{ annotation ? annotation.id : '' | stringEnd }}</span>
     </h2>

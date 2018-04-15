@@ -2,17 +2,20 @@
   <div>
     <div
       class="absolute full bg-alpha" 
-      @click="close" />
-    <div class="pophover absolute full bg-bg p-l pb-s">
-      <div class="flex flex-start">
-        <h2>{{ config.title }}</h2>
+      @click="closeDefault" />
+    <div class="popup fixed shadow full bg-bg">
+      <div class="popup-header flex flex-start p">
+        <h2 class="mb-0 mt-s">{{ config.title }}</h2>
         <button
           v-if="config.closeBtn"
-          class="btn-border flex-right px-s py-xs mt--s"
+          class="btn-border flex-right px-s py-xs"
           @click="close"><i class="icon-24 icon-24-close" /></button>
       </div>
-      <hr>
-      <component :is="config.component" />
+      <div class="popup-content px pt">
+        <component
+          :is="config.component"
+          @popup-close="close" />
+      </div>
     </div>
   </div>
 </template>
@@ -41,8 +44,11 @@ export default {
 
   methods: {
     close () {
+      this.$store.commit('popup/close')
+    },
+    closeDefault () {
       if (this.config.closeBtn) {
-        this.$store.commit('popup/close')
+        this.close()
       }
     },
     keyup (e) {

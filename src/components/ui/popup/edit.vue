@@ -2,30 +2,32 @@
   <div>
     <div
       v-if="type !== 'annotations'"
-      class="blobs">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Name</h4>
+      class="tablet-blobs">
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Name</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           ref="name"
           v-model="element.name"
           :disabled="element.id && (type === 'users' || type === 'groups')"
           type="text"
-          placeholder="Name">
+          placeholder="Name"
+          class="mb">
       </div>
     </div>
     <div
       v-if="type === 'users'"
-      class="blobs">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Role</h4>
+      class="tablet-blobs">
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Role</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <select
           v-model="element.role"
           :disabled="!rolesPermission"
-          type="text">
+          type="text"
+          class="mb">
           <option
             v-for="role in roles"
             :value="role"
@@ -37,28 +39,30 @@
     </div>
     <div
       v-if="type === 'users'"
-      class="blobs">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Password</h4>
+      class="tablet-blobs">
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Password</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           v-model="element.password"
           type="password"
-          placeholder="••••••••">
+          placeholder="••••••••"
+          class="mb">
       </div>
     </div>
     <div
       v-if="type === 'medias'"
-      class="blobs">
-      <div class="blob-1-4">
-        <h4 class="pt-s mb-0">Url</h4>
+      class="tablet-blobs">
+      <div class="tablet-blob-1-4">
+        <h4 class="pt-s">Url</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           v-model="element.url"
           type="text"
-          placeholder="http://…">
+          placeholder="http://…"
+          class="mb">
       </div>
     </div>
     <object-field
@@ -81,12 +85,12 @@
       v-if="type !== 'annotations'"
       :name="'description'"
       :title="'Description'" />
-    <div class="blobs">
-      <div class="blob-1-4" />
-      <div class="blob-3-4">
+    <div class="tablet-blobs">
+      <div class="tablet-blob-1-4" />
+      <div class="tablet-blob-3-4">
         <button
           :disabled="!element.name && type !== 'annotations'"
-          class="btn-alt p-s full-x"
+          class="btn-alt p-s full-x mb"
           @click="save"
           @keyup.enter="save">Save</button>
       </div>

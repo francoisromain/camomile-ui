@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p bg-bg mb">
     <h2 class="mt-xs">Media</h2>
     <select
       v-if="medias && medias.length > 0"

@@ -1,27 +1,28 @@
 <template>
   <div>
-    <div class="blobs">
-      <div class="blob-1-4">
+    <div class="tablet-blobs">
+      <div class="tablet-blob-1-4">
         <h4 class="pt-s">Name</h4>
       </div>
-      <div class="blob-3-4">
+      <div class="tablet-blob-3-4">
         <input
           v-model="resource.name"
           type="text"
           placeholder="Name"
-          disabled>
+          disabled
+          class="mb">
       </div>
-      <div class="blob-1-2">
+      <div class="tablet-blob-1-2">
         <h3 class="pt-s">Users</h3>
         <ul class="list-sans">
           <li
             v-for="user in users"
             :key="user.id">
-            <div class="blobs">
-              <div class="blob-1-2 mb-s">
+            <div class="tablet-blobs">
+              <div class="tablet-blob-1-2 mb-s">
                 {{ user.name }}
               </div>
-              <div class="blob-1-2 mb-s">
+              <div class="tablet-blob-1-2 mb-s">
                 <permissions-edit
                   :type="type.slice(0, -1)"
                   :element="{ id: user.id, type: 'user' }" />
@@ -30,17 +31,17 @@
           </li>
         </ul>
       </div>
-      <div class="blob-1-2">
+      <div class="tablet-blob-1-2">
         <h3 class="pt-s">Groups</h3>
         <ul class="list-sans">
           <li
             v-for="group in groups"
             :key="group.id">
-            <div class="blobs">
-              <div class="blob-1-2 mb-s">
+            <div class="tablet-blobs">
+              <div class="tablet-blob-1-2 mb-s">
                 {{ group.name }}
               </div>
-              <div class="blob-1-2 mb-s">
+              <div class="tablet-blob-1-2 mb-s">
                 <permissions-edit
                   :type="type.slice(0, -1)"
                   :element="{ id: group.id, type: 'group'}" />

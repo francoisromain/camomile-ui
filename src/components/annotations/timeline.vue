@@ -1,5 +1,7 @@
 <template>
-  <div ref="container">
+  <div
+    ref="container"
+    class="mb">
     <div
       v-if="layers"
       :style="{ height: `${40 * layers.length}px` }"

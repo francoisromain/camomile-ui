@@ -1,5 +1,5 @@
 module.exports = {
-  processors: ['stylelint-processor-html'],
+  // processors: ['@mapbox/stylelint-processor-arbitrary-tags'],
   extends: 'stylelint-config-standard',
   rules: {
     'property-no-unknown': [

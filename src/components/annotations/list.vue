@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p bg-bg mb">
     <div class="flex flex-start">
       <h2 class="mt-xs">Annotations</h2>
     </div>

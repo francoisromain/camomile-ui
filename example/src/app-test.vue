@@ -6,9 +6,9 @@
     title="Camomile UI">
     <div class="container pt">
       
-      <div class="blobs">
-        <cml-admin-users class="blob-1-2 p bg-bg" />
-        <cml-admin-groups class="blob-1-2 p bg-bg" />
+      <div class="tablet-blobs">
+        <cml-admin-users class="tablet-blob-1-2" />
+        <cml-admin-groups class="tablet-blob-1-2" />
       </div>
 
       <cml-corpus />
@@ -16,21 +16,21 @@
       <cml-layers />
       <cml-annotations />
       
-      <div class="blobs">
-        <cml-corpus-select class="blob-1-2 p bg-bg" />
-        <cml-medias-select class="blob-1-2 p bg-bg" />
-        <cml-layers-list-simple class="blob-1-2 p bg-bg" />
+      <div class="tablet-blobs">
+        <cml-corpus-select class="tablet-blob-1-2" />
+        <cml-medias-select class="tablet-blob-1-2" />
+        <cml-layers-list-simple class="tablet-blob-1-2" />
       </div>
 
-      <div class="blobs">
-        <cml-layers-add class="blob-1-4 p bg-bg" />
-        <cml-annotations-buttons class="blob-1-2 p bg-bg" />
-        <cml-annotations-edit class="blob-1-4 p bg-bg" />
+      <div class="tablet-blobs">
+        <cml-layers-add class="tablet-blob-1-4" />
+        <cml-annotations-buttons class="tablet-blob-1-2" />
+        <cml-annotations-edit class="tablet-blob-1-4" />
       </div>
 
-      <cml-annotations-timeline class="mb" />
-      <cml-medias-controller class="mb" />
-      <cml-medias-video class="mb"/>
+      <cml-annotations-timeline />
+      <cml-medias-controller />
+      <cml-medias-video />
 
     </div>
   </cml-app>
@@ -38,7 +38,6 @@
 
 <script>
 import camomileUi from '~/app.js'
-// } from '../../dist/camomile-ui.esm.js'
 
 export default {
   name: 'MyApp',

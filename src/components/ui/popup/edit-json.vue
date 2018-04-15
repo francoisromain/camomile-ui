@@ -1,14 +1,11 @@
 <template>
   <div>
     <h3 class="pt-s">{{ title }}</h3>
-    <div class="blobs">
-      <div class="blob-1">
-        <textarea
-          ref="field"
-          v-model="fields"
-          @keyup="resize" ></textarea>
-      </div>
-    </div>
+    <textarea
+      ref="field"
+      v-model="fields"
+      @keyup="resize"
+      class="mb"></textarea>
   </div>
 </template>
 

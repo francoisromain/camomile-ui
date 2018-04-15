@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p bg-bg mb">
     <h2>Annotations</h2>
     <annotation-button 
       v-for="layer in layers" 
