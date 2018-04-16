@@ -1,27 +1,27 @@
 <template>
   <div class="p bg-bg mb">
     <h2 class="mt-xs">Layers</h2>
-    <div v-if="layers && layers.length > 0">
-      <table class="table mb-0">
-        <tr>
-          <th /><th>Name</th><th />
-        </tr>
-        <tr
-          v-for="layer in layers"
-          :key="layer.id">
-          <td>
-            <input
-              :value="layer.id"
-              :checked="activeIds.indexOf(layer.id) !== -1"
-              type="checkbox"
-              @change="set">
-          </td>
-          <td>
-            {{ layer.name }}
-          </td>
-        </tr>
-      </table>
-    </div>
+    <table
+      v-if="layers && layers.length > 0"
+      class="table mb-0">
+      <tr>
+        <th /><th>Name</th><th />
+      </tr>
+      <tr
+        v-for="layer in layers"
+        :key="layer.id">
+        <td>
+          <input
+            :value="layer.id"
+            :checked="activeIds.indexOf(layer.id) !== -1"
+            type="checkbox"
+            @change="set">
+        </td>
+        <td>
+          {{ layer.name }}
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 

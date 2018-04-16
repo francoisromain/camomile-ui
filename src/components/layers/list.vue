@@ -7,39 +7,39 @@
         class="btn-border flex-right px-s py-xs"
         @click="popupOpen({ config: popupAddConfig, element: layerNew })"><i class="icon-24 icon-24-plus" /></button>
     </div>
-    <div v-if="layers && layers.length > 0">
-      <table class="table mb-0">
-        <tr>
-          <th /><th>Name</th><th />
-        </tr>
-        <tr
-          v-for="layer in layers"
-          :key="layer.id">
-          <td>
-            <input
-              :value="layer.id"
-              :checked="activeIds.indexOf(layer.id) !== -1"
-              type="checkbox"
-              @change="set">
-          </td>
-          <td>{{ layer.name }}</td>
-          <td class="text-right">
-            <button
-              v-if="layer.permission === 3"
-              class="btn-border p-s my--s h6"
-              @click="popupOpen({ config: popupPermissionsConfig, element: layer })">Permissions</button>
-            <button
-              v-if="layer.permission === 3"
-              class="btn-border p-s my--s h6"
-              @click="popupOpen({ config: popupEditConfig, element: layer })">Edit</button>
-            <button
-              v-if="layer.permission === 3"
-              class="btn-border p-s my--s h6"
-              @click="popupOpen({ config: popupRemoveConfig, element: layer })">Remove</button>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <table
+      v-if="layers && layers.length > 0"
+      class="table mb-0">
+      <tr>
+        <th /><th>Name</th><th />
+      </tr>
+      <tr
+        v-for="layer in layers"
+        :key="layer.id">
+        <td>
+          <input
+            :value="layer.id"
+            :checked="activeIds.indexOf(layer.id) !== -1"
+            type="checkbox"
+            @change="set">
+        </td>
+        <td>{{ layer.name }}</td>
+        <td class="text-right">
+          <button
+            v-if="layer.permission === 3"
+            class="btn-border p-s my--s h6"
+            @click="popupOpen({ config: popupPermissionsConfig, element: layer })">Permissions</button>
+          <button
+            v-if="layer.permission === 3"
+            class="btn-border p-s my--s h6"
+            @click="popupOpen({ config: popupEditConfig, element: layer })">Edit</button>
+          <button
+            v-if="layer.permission === 3"
+            class="btn-border p-s my--s h6"
+            @click="popupOpen({ config: popupRemoveConfig, element: layer })">Remove</button>
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 

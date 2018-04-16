@@ -428,7 +428,7 @@ export const actions = {
         commit('list', { layers, corpuUid })
 
         // Activate every layers in the list
-        dispatch('setAll', { corpuUid })
+        // dispatch('setAll', { corpuUid })
 
         return layers
       })

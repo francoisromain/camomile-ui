@@ -13,11 +13,11 @@
         <td class="text-right">
           <button
             v-if="layer.permission === 3"
-            class="btn-border p-s h6"
+            class="btn-border p-s my--s h6"
             @click="popupEditOpen">Edit</button>
           <button
             v-if="layer.permission === 3"
-            class="btn-border p-s h6"
+            class="btn-border p-s my--s h6"
             @click="popupRemoveOpen">Remove</button>
         </td>
       </tr>
