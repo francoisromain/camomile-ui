@@ -18,7 +18,7 @@ import MediasController from './components/medias/controller.vue'
 import Layers from './components/layers/index.vue'
 import LayersList from './components/layers/list.vue'
 import LayersListSimple from './components/layers/list-simple.vue'
-import LayersSelect from './components/layers/Select.vue'
+import LayersSelect from './components/layers/select.vue'
 import LayersAdd from './components/layers/add.vue'
 
 import Annotations from './components/annotations/index.vue'
