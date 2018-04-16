@@ -26,35 +26,21 @@
     </div>
 
 
-    <h2>Reference</h2>
-
-    <hr>
-
     <div class="tablet-blobs">
-      <cml-layers-select
-        class="tablet-blob-1-2"
-        uid="reference" />
-      <cml-annotations-edit
-        class="tablet-blob-1-2"
-        uid="reference" />
+      <div class="blob-1-2">
+        <h2>Référence</h2>
+        <cml-layers-select uid="reference" />
+        <cml-annotations-edit uid="reference" />
+        <cml-annotations-timeline uid="reference" />
+      </div>
+
+      <div class="blob-1-2">
+        <h2>Hypothèse</h2>
+        <cml-layers-select uid="hypothese" />
+        <cml-annotations-edit uid="hypothese" />
+        <cml-annotations-timeline uid="hypothese" />
+      </div>
     </div>
-
-    <cml-annotations-timeline uid="reference" />
-
-    <h2>Hypothèse</h2>
-
-    <hr>
-
-    <div class="tablet-blobs">
-      <cml-layers-select
-        class="tablet-blob-1-2"
-        uid="hypothese" />
-      <cml-annotations-edit
-        class="tablet-blob-1-2"
-        uid="hypothese" />
-    </div>
-
-    <cml-annotations-timeline uid="hypothese" />
 
     <cml-medias-controller />
     <cml-medias-video />
