@@ -14,11 +14,14 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        loader: 'url-loader',
-        query: {
-          limit: 10000,
-          name: '[name].[ext]?[hash]'
-        }
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192
+            }
+          }
+        ]
       }
     ]
   },

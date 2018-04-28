@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 const webpackConfigBase = require('./webpack.config.base')
 
 const webpackConfigDev = {
@@ -45,6 +46,7 @@ const webpackConfigDev = {
     ]
   },
   plugins: [
+    new VueLoaderPlugin(),
     new webpack.DefinePlugin({
       'process.env': '"development"'
     }),

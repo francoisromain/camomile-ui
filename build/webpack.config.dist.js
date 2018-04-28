@@ -5,6 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 const webpackConfigBase = require('./webpack.config.base')
 // const WebpackMonitor = require('webpack-monitor')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -53,6 +54,7 @@ const webpackConfigDist = {
     ]
   },
   plugins: [
+    new VueLoaderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
