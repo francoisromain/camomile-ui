@@ -669,7 +669,7 @@ var getters$2 = {
       function (p, user) {
           var obj;
 
-          return Object.assign(p, ( obj = {}, obj[user.id] = permissions && permissions[user.id] ? permissions[user.id] : 0, obj));
+          return Object.assign(p, ( obj = {}, obj[user.id] = permissions && permissions[user.id] ? permissions[user.id] : 0, obj ));
     },
       {}
     )
@@ -924,7 +924,7 @@ var getters$3 = {
       function (p, group) {
           var obj;
 
-          return Object.assign(p, ( obj = {}, obj[group.id] = permissions && permissions[group.id] ? permissions[group.id] : 0, obj));
+          return Object.assign(p, ( obj = {}, obj[group.id] = permissions && permissions[group.id] ? permissions[group.id] : 0, obj ));
     },
       {}
     )
@@ -3113,7 +3113,7 @@ var getters$7 = {
       function (layers, layerId) {
           var obj;
 
-          return Object.assign(layers, ( obj = {}, obj[layerId] = state.lists[uid].layers[layerId].filter(function (a) { return filter(a); }), obj));
+          return Object.assign(layers, ( obj = {}, obj[layerId] = state.lists[uid].layers[layerId].filter(function (a) { return filter(a); }), obj ));
       },
       {}
     ); }; },
@@ -3125,7 +3125,7 @@ var getters$7 = {
           function (layersFiltered, layerId) {
               var obj;
 
-              return Object.assign(layersFiltered, ( obj = {}, obj[layerId] = layers[layerId].filter(function (a) { return filter(a); }), obj));
+              return Object.assign(layersFiltered, ( obj = {}, obj[layerId] = layers[layerId].filter(function (a) { return filter(a); }), obj ));
           },
           {}
         ); },
@@ -4247,14 +4247,14 @@ var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement
           ((this.type) + "s/" + (this.element.type) + "PermissionRemove"),
           ( obj = {
             id: this.id
-          }, obj[((this.element.type) + "Id")] = this.element.id, obj)
+          }, obj[((this.element.type) + "Id")] = this.element.id, obj )
         );
       } else {
         this.$store.dispatch(
           ((this.type) + "s/" + (this.element.type) + "PermissionSet"),
           ( obj$1 = {
             id: this.id
-          }, obj$1[((this.element.type) + "Id")] = this.element.id, obj$1.permission = permission, obj$1)
+          }, obj$1[((this.element.type) + "Id")] = this.element.id, obj$1.permission = permission, obj$1 )
         );
       }
     },
@@ -4703,9 +4703,7 @@ var MediasYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;v
         },
         onStateChange: function (event) {
           // console.log('onStateChange', event.data, this.videoNew)
-          if (event.data === -1) {
-            // unstarted
-          } else if (event.data === 1) {
+          if (event.data === -1) ; else if (event.data === 1) {
             // playing
             if (this$1.videoNew) {
               this$1.videoNew = false;
