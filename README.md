@@ -17,8 +17,10 @@
 Camomile UI is a front end application only and requires a connection to a
 [Camomile API server](https://github.com/camomile-project/camomile-server).
 
-To start using this library, you can use
-[camomile-ui-boilerplate](https://github.com/francoisromain/camomile-ui-boilerplate).
+To start using this library, choose either:
+
+* [camomile-ui-boilerplate](https://github.com/francoisromain/camomile-ui-boilerplate)
+* [camomile-ui-boilerplate (with webpack)](https://github.com/francoisromain/camomile-ui-boilerplate-webpack)
 
 ---
 
