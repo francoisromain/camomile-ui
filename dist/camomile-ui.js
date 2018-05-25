@@ -2160,7 +2160,7 @@
   }
   */
 
-  var state$10 = {
+  var state$a = {
     lists: {},
     actives: {}
   };
@@ -2827,7 +2827,7 @@
 
   var layers = {
     namespaced: true,
-    state: state$10,
+    state: state$a,
     actions: actions$8,
     getters: getters$6,
     mutations: mutations$9
@@ -2878,7 +2878,7 @@
     }
   }
   */
-  var state$11 = {
+  var state$b = {
     lists: {},
     actives: {}
   };
@@ -3145,7 +3145,7 @@
       ); }; }
   };
 
-  var mutations$10 = {
+  var mutations$a = {
     // Register an annotation list by uid
     register: function register(state, ref) {
       var uid = ref.uid;
@@ -3277,10 +3277,10 @@
 
   var annotations = {
     namespaced: true,
-    state: state$11,
+    state: state$b,
     actions: actions$9,
     getters: getters$7,
-    mutations: mutations$10
+    mutations: mutations$a
   }
 
   // Vuex Store main entry point
@@ -3300,7 +3300,7 @@
     annotations: annotations
   };
 
-  var actions$10 = {
+  var actions$a = {
     // Bootstrap the application (on log-in)
     set: function set(ref) {
       var dispatch = ref.dispatch;
@@ -3330,7 +3330,7 @@
     }
   };
 
-  var mutations$11 = {
+  var mutations$b = {
     // Register the app, to connect to the api
     register: function register(state$$1, ref) {
       var url = ref.url;
@@ -3350,17 +3350,17 @@
   Vue.filter('stringEnd', function (str) { return str.substr(str.length - 6); });
 
   var store = new Vuex__default.Store({
-    actions: actions$10,
-    mutations: mutations$11,
+    actions: actions$a,
+    mutations: mutations$b,
     modules: modules
   });
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  //
+  //
+  //
+  //
 
-
-
-
-  var viewport$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],
+  var script = {
     name: 'CamomileUtilsViewport',
 
     mounted: function mounted () {
@@ -3375,21 +3375,139 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__ = script;
+              
+  /* template */
+  var __vue_render__ = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div")
+  };
+  var __vue_staticRenderFns__ = [];
+  __vue_render__._withStripped = true;
+
+  var __vue_template__ = typeof __vue_render__ !== 'undefined'
+    ? { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ }
+    : {};
+  /* style */
+  var __vue_inject_styles__ = undefined;
+  /* scoped */
+  var __vue_scope_id__ = undefined;
+  /* module identifier */
+  var __vue_module_identifier__ = undefined;
+  /* functional template */
+  var __vue_is_functional_template__ = false;
+  /* component normalizer */
+  function __vue_normalize__(
+    template, style, script$$1,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script$$1 || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/utils/viewport.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__.styles || (__vue_create_injector__.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var viewport$1 = __vue_normalize__(
+    __vue_template__,
+    __vue_inject_styles__,
+    typeof __vue_script__ === 'undefined' ? {} : __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    typeof __vue_create_injector__ !== 'undefined' ? __vue_create_injector__ : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-
-
-  var cmlDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"name":"transition-top"}},[(_vm.dropdown.visible)?_c('div',{staticClass:"absolute full bg-alpha",on:{"click":function($event){if($event.target !== $event.currentTarget){ return null; }return _vm.close($event)}}},[_c('div',{staticClass:"container relative"},[_c(_vm.dropdown.config.component,{tag:"component"})],1)]):_vm._e()])},staticRenderFns: [],
+  var script$1 = {
     name: 'CamomileUtilsDropdown',
 
     computed: {
@@ -3405,30 +3523,173 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$1 = script$1;
+              
+  /* template */
+  var __vue_render__$1 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("transition", { attrs: { name: "transition-top" } }, [
+      _vm.dropdown.visible
+        ? _c(
+            "div",
+            {
+              staticClass: "absolute full bg-alpha",
+              on: {
+                click: function($event) {
+                  if ($event.target !== $event.currentTarget) {
+                    return null
+                  }
+                  return _vm.close($event)
+                }
+              }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "container relative" },
+                [_c(_vm.dropdown.config.component, { tag: "component" })],
+                1
+              )
+            ]
+          )
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$1 = [];
+  __vue_render__$1._withStripped = true;
+
+  var __vue_template__$1 = typeof __vue_render__$1 !== 'undefined'
+    ? { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 }
+    : {};
+  /* style */
+  var __vue_inject_styles__$1 = undefined;
+  /* scoped */
+  var __vue_scope_id__$1 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$1 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$1 = false;
+  /* component normalizer */
+  function __vue_normalize__$1(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/utils/dropdown.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$1() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$1.styles || (__vue_create_injector__$1.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var cmlDropdown = __vue_normalize__$1(
+    __vue_template__$1,
+    __vue_inject_styles__$1,
+    typeof __vue_script__$1 === 'undefined' ? {} : __vue_script__$1,
+    __vue_scope_id__$1,
+    __vue_is_functional_template__$1,
+    __vue_module_identifier__$1,
+    typeof __vue_create_injector__$1 !== 'undefined' ? __vue_create_injector__$1 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var cmlPopup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"absolute full bg-alpha",on:{"click":_vm.closeDefault}}),_vm._v(" "),_c('div',{staticClass:"popup fixed shadow full bg-bg"},[_c('div',{staticClass:"popup-header flex flex-start p"},[_c('h2',{staticClass:"mb-0 mt-s"},[_vm._v(_vm._s(_vm.config.title))]),_vm._v(" "),(_vm.config.closeBtn)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":_vm.close}},[_c('i',{staticClass:"icon-24 icon-24-close"})]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"popup-content px pt"},[_c(_vm.config.component,{tag:"component",on:{"popup-close":_vm.close}})],1)])])},staticRenderFns: [],
+  var script$2 = {
     name: 'CamomilePopup',
 
     computed: {
@@ -3466,24 +3727,178 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$2 = script$2;
+              
+  /* template */
+  var __vue_render__$2 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", [
+      _c("div", {
+        staticClass: "absolute full bg-alpha",
+        on: { click: _vm.closeDefault }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "popup fixed shadow full bg-bg" }, [
+        _c("div", { staticClass: "popup-header flex flex-start p" }, [
+          _c("h2", { staticClass: "mb-0 mt-s" }, [
+            _vm._v(_vm._s(_vm.config.title))
+          ]),
+          _vm._v(" "),
+          _vm.config.closeBtn
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn-border flex-right px-s py-xs",
+                  on: { click: _vm.close }
+                },
+                [_c("i", { staticClass: "icon-24 icon-24-close" })]
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "popup-content px pt" },
+          [
+            _c(_vm.config.component, {
+              tag: "component",
+              on: { "popup-close": _vm.close }
+            })
+          ],
+          1
+        )
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$2 = [];
+  __vue_render__$2._withStripped = true;
+
+  var __vue_template__$2 = typeof __vue_render__$2 !== 'undefined'
+    ? { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 }
+    : {};
+  /* style */
+  var __vue_inject_styles__$2 = undefined;
+  /* scoped */
+  var __vue_scope_id__$2 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$2 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$2 = false;
+  /* component normalizer */
+  function __vue_normalize__$2(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/index.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$2() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$2.styles || (__vue_create_injector__$2.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var cmlPopup = __vue_normalize__$2(
+    __vue_template__$2,
+    __vue_inject_styles__$2,
+    typeof __vue_script__$2 === 'undefined' ? {} : __vue_script__$2,
+    __vue_scope_id__$2,
+    __vue_is_functional_template__$2,
+    __vue_module_identifier__$2,
+    typeof __vue_create_injector__$2 !== 'undefined' ? __vue_create_injector__$2 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-
-
-
-
-
-  var cmlMessages = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"messages absolute center"},[_c('transition-group',{attrs:{"name":"transition-bottom","tag":"div"}},_vm._l((_vm.messages),function(message){return (message.content)?_c('div',{key:message.id,staticClass:"px-m py-s mb color-bg b",class:("bg-" + (message.type))},[_vm._v(_vm._s(message.content)+" ")]):_vm._e()}))],1)},staticRenderFns: [],
+  var script$3 = {
     name: 'CamomileUtilsMessages',
 
     computed: {
@@ -3493,12 +3908,153 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$3 = script$3;
+              
+  /* template */
+  var __vue_render__$3 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      { staticClass: "messages absolute center" },
+      [
+        _c(
+          "transition-group",
+          { attrs: { name: "transition-bottom", tag: "div" } },
+          _vm._l(_vm.messages, function(message) {
+            return message.content
+              ? _c(
+                  "div",
+                  {
+                    key: message.id,
+                    staticClass: "px-m py-s mb color-bg b",
+                    class: "bg-" + message.type
+                  },
+                  [_vm._v(_vm._s(message.content) + "\n    ")]
+                )
+              : _vm._e()
+          })
+        )
+      ],
+      1
+    )
+  };
+  var __vue_staticRenderFns__$3 = [];
+  __vue_render__$3._withStripped = true;
+
+  var __vue_template__$3 = typeof __vue_render__$3 !== 'undefined'
+    ? { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 }
+    : {};
+  /* style */
+  var __vue_inject_styles__$3 = undefined;
+  /* scoped */
+  var __vue_scope_id__$3 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$3 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$3 = false;
+  /* component normalizer */
+  function __vue_normalize__$3(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/utils/messages.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$3() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$3.styles || (__vue_create_injector__$3.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var cmlMessages = __vue_normalize__$3(
+    __vue_template__$3,
+    __vue_inject_styles__$3,
+    typeof __vue_script__$3 === 'undefined' ? {} : __vue_script__$3,
+    __vue_scope_id__$3,
+    __vue_is_functional_template__$3,
+    __vue_module_identifier__$3,
+    typeof __vue_create_injector__$3 !== 'undefined' ? __vue_create_injector__$3 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
 
-  var cmlTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h1',{staticClass:"mb-0"},[_vm._v(_vm._s(_vm.title))])},staticRenderFns: [],
+  var script$4 = {
     name: 'CamomileHeaderTitle',
 
     computed: {
@@ -3508,12 +4064,130 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$4 = script$4;
+              
+  /* template */
+  var __vue_render__$4 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("h1", { staticClass: "mb-0" }, [_vm._v(_vm._s(_vm.title))])
+  };
+  var __vue_staticRenderFns__$4 = [];
+  __vue_render__$4._withStripped = true;
+
+  var __vue_template__$4 = typeof __vue_render__$4 !== 'undefined'
+    ? { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 }
+    : {};
+  /* style */
+  var __vue_inject_styles__$4 = undefined;
+  /* scoped */
+  var __vue_scope_id__$4 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$4 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$4 = false;
+  /* component normalizer */
+  function __vue_normalize__$4(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/header/title.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$4() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$4.styles || (__vue_create_injector__$4.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var cmlTitle = __vue_normalize__$4(
+    __vue_template__$4,
+    __vue_inject_styles__$4,
+    typeof __vue_script__$4 === 'undefined' ? {} : __vue_script__$4,
+    __vue_scope_id__$4,
+    __vue_is_functional_template__$4,
+    __vue_module_identifier__$4,
+    typeof __vue_create_injector__$4 !== 'undefined' ? __vue_create_injector__$4 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
 
-  var cmlInfos = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h6',{staticClass:"menubar-infos mb-0"},[_vm._v(_vm._s(_vm.url))])},staticRenderFns: [],
+  var script$5 = {
     name: 'CamomileHeaderInfos',
 
     computed: {
@@ -3523,19 +4197,139 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$5 = script$5;
+              
+  /* template */
+  var __vue_render__$5 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("h6", { staticClass: "menubar-infos mb-0" }, [
+      _vm._v(_vm._s(_vm.url))
+    ])
+  };
+  var __vue_staticRenderFns__$5 = [];
+  __vue_render__$5._withStripped = true;
+
+  var __vue_template__$5 = typeof __vue_render__$5 !== 'undefined'
+    ? { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 }
+    : {};
+  /* style */
+  var __vue_inject_styles__$5 = undefined;
+  /* scoped */
+  var __vue_scope_id__$5 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$5 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$5 = false;
+  /* component normalizer */
+  function __vue_normalize__$5(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/header/infos.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$5() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$5.styles || (__vue_create_injector__$5.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var cmlInfos = __vue_normalize__$5(
+    __vue_template__$5,
+    __vue_inject_styles__$5,
+    typeof __vue_script__$5 === 'undefined' ? {} : __vue_script__$5,
+    __vue_scope_id__$5,
+    __vue_is_functional_template__$5,
+    __vue_module_identifier__$5,
+    typeof __vue_create_injector__$5 !== 'undefined' ? __vue_create_injector__$5 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-  var objectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h3',{staticClass:"pt-s"},[_vm._v(_vm._s(_vm.title))]),_vm._v(" "),_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.fields),expression:"fields"}],ref:"field",staticClass:"mb",domProps:{"value":(_vm.fields)},on:{"keyup":_vm.resize,"input":function($event){if($event.target.composing){ return; }_vm.fields=$event.target.value;}}})])},staticRenderFns: [],
+  var script$6 = {
     name: 'CamomilePopupEditJson',
 
     props: {
@@ -3590,9 +4384,152 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$6 = script$6;
+              
+  /* template */
+  var __vue_render__$6 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", [
+      _c("h3", { staticClass: "pt-s" }, [_vm._v(_vm._s(_vm.title))]),
+      _vm._v(" "),
+      _c("textarea", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.fields,
+            expression: "fields"
+          }
+        ],
+        ref: "field",
+        staticClass: "mb",
+        domProps: { value: _vm.fields },
+        on: {
+          keyup: _vm.resize,
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.fields = $event.target.value;
+          }
+        }
+      })
+    ])
+  };
+  var __vue_staticRenderFns__$6 = [];
+  __vue_render__$6._withStripped = true;
 
-  var popupEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"tablet-blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],ref:"name",staticClass:"mb",attrs:{"disabled":_vm.element.id && (_vm.type === 'users' || _vm.type === 'groups'),"type":"text","placeholder":"Name"},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"tablet-blobs"},[_vm._m(1),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.role),expression:"element.role"}],staticClass:"mb",attrs:{"disabled":!_vm.rolesPermission,"type":"text"},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.$set(_vm.element, "role", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);}}},_vm._l((_vm.roles),function(role){return _c('option',{key:role,domProps:{"value":role}},[_vm._v(" "+_vm._s(role)+" ")])}))])]):_vm._e(),_vm._v(" "),(_vm.type === 'users')?_c('div',{staticClass:"tablet-blobs"},[_vm._m(2),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.password),expression:"element.password"}],staticClass:"mb",attrs:{"type":"password","placeholder":"••••••••"},domProps:{"value":(_vm.element.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "password", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'medias')?_c('div',{staticClass:"tablet-blobs"},[_vm._m(3),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.url),expression:"element.url"}],staticClass:"mb",attrs:{"type":"text","placeholder":"http://…"},domProps:{"value":(_vm.element.url)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "url", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'fragment',"title":'Fragment'}}):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('object-field',{attrs:{"name":'metadata',"title":'Meta-data'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'fragmentType',"title":'Fragment type'}}):_vm._e(),_vm._v(" "),(_vm.type === 'layers')?_c('object-field',{attrs:{"name":'metadataType',"title":'Meta-data type'}}):_vm._e(),_vm._v(" "),(_vm.type !== 'annotations')?_c('object-field',{attrs:{"name":'description',"title":'Description'}}):_vm._e(),_vm._v(" "),_c('div',{staticClass:"tablet-blobs"},[_c('div',{staticClass:"tablet-blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x mb",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.save($event)}}},[_vm._v("Save")])])])],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Role")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Password")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Url")])])}],
+  var __vue_template__$6 = typeof __vue_render__$6 !== 'undefined'
+    ? { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 }
+    : {};
+  /* style */
+  var __vue_inject_styles__$6 = undefined;
+  /* scoped */
+  var __vue_scope_id__$6 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$6 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$6 = false;
+  /* component normalizer */
+  function __vue_normalize__$6(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/edit-json.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$6() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$6.styles || (__vue_create_injector__$6.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var objectField = __vue_normalize__$6(
+    __vue_template__$6,
+    __vue_inject_styles__$6,
+    typeof __vue_script__$6 === 'undefined' ? {} : __vue_script__$6,
+    __vue_scope_id__$6,
+    __vue_is_functional_template__$6,
+    __vue_module_identifier__$6,
+    typeof __vue_create_injector__$6 !== 'undefined' ? __vue_create_injector__$6 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$7 = {
     name: 'CamomilePopupEdit',
 
     components: {
@@ -3644,9 +4581,368 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$7 = script$7;
+              
+  /* template */
+  var __vue_render__$7 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      [
+        _vm.type !== "annotations"
+          ? _c("div", { staticClass: "tablet-blobs" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "tablet-blob-3-4" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.element.name,
+                      expression: "element.name"
+                    }
+                  ],
+                  ref: "name",
+                  staticClass: "mb",
+                  attrs: {
+                    disabled:
+                      _vm.element.id &&
+                      (_vm.type === "users" || _vm.type === "groups"),
+                    type: "text",
+                    placeholder: "Name"
+                  },
+                  domProps: { value: _vm.element.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.element, "name", $event.target.value);
+                    }
+                  }
+                })
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.type === "users"
+          ? _c("div", { staticClass: "tablet-blobs" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c("div", { staticClass: "tablet-blob-3-4" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.element.role,
+                        expression: "element.role"
+                      }
+                    ],
+                    staticClass: "mb",
+                    attrs: { disabled: !_vm.rolesPermission, type: "text" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value;
+                            return val
+                          });
+                        _vm.$set(
+                          _vm.element,
+                          "role",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        );
+                      }
+                    }
+                  },
+                  _vm._l(_vm.roles, function(role) {
+                    return _c(
+                      "option",
+                      { key: role, domProps: { value: role } },
+                      [_vm._v("\n          " + _vm._s(role) + "\n        ")]
+                    )
+                  })
+                )
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.type === "users"
+          ? _c("div", { staticClass: "tablet-blobs" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "tablet-blob-3-4" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.element.password,
+                      expression: "element.password"
+                    }
+                  ],
+                  staticClass: "mb",
+                  attrs: { type: "password", placeholder: "••••••••" },
+                  domProps: { value: _vm.element.password },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.element, "password", $event.target.value);
+                    }
+                  }
+                })
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.type === "medias"
+          ? _c("div", { staticClass: "tablet-blobs" }, [
+              _vm._m(3),
+              _vm._v(" "),
+              _c("div", { staticClass: "tablet-blob-3-4" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.element.url,
+                      expression: "element.url"
+                    }
+                  ],
+                  staticClass: "mb",
+                  attrs: { type: "text", placeholder: "http://…" },
+                  domProps: { value: _vm.element.url },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.element, "url", $event.target.value);
+                    }
+                  }
+                })
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.type === "annotations"
+          ? _c("object-field", { attrs: { name: "fragment", title: "Fragment" } })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.type === "annotations"
+          ? _c("object-field", {
+              attrs: { name: "metadata", title: "Meta-data" }
+            })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.type === "layers"
+          ? _c("object-field", {
+              attrs: { name: "fragmentType", title: "Fragment type" }
+            })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.type === "layers"
+          ? _c("object-field", {
+              attrs: { name: "metadataType", title: "Meta-data type" }
+            })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.type !== "annotations"
+          ? _c("object-field", {
+              attrs: { name: "description", title: "Description" }
+            })
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blobs" }, [
+          _c("div", { staticClass: "tablet-blob-1-4" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "tablet-blob-3-4" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn-alt p-s full-x mb",
+                attrs: {
+                  disabled: !_vm.element.name && _vm.type !== "annotations"
+                },
+                on: {
+                  click: _vm.save,
+                  keyup: function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.save($event)
+                  }
+                }
+              },
+              [_vm._v("Save")]
+            )
+          ])
+        ])
+      ],
+      1
+    )
+  };
+  var __vue_staticRenderFns__$7 = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Name")])
+      ])
+    },
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Role")])
+      ])
+    },
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Password")])
+      ])
+    },
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Url")])
+      ])
+    }
+  ];
+  __vue_render__$7._withStripped = true;
 
-  var userbuttonDropdown = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"dropdown"},[(_vm.isAdmin)?_c('div',[_c('button',{staticClass:"btn px-m py-s full-x",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: _vm.user });}}},[_vm._v("Settings…")])]):_vm._e(),_vm._v(" "),_c('div',[_c('button',{staticClass:"btn px-m py-s full-x mr home",on:{"click":_vm.logout}},[_vm._v("Logout")])])])},staticRenderFns: [],
+  var __vue_template__$7 = typeof __vue_render__$7 !== 'undefined'
+    ? { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 }
+    : {};
+  /* style */
+  var __vue_inject_styles__$7 = undefined;
+  /* scoped */
+  var __vue_scope_id__$7 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$7 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$7 = false;
+  /* component normalizer */
+  function __vue_normalize__$7(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/edit.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$7() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$7.styles || (__vue_create_injector__$7.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var popupEdit = __vue_normalize__$7(
+    __vue_template__$7,
+    __vue_inject_styles__$7,
+    typeof __vue_script__$7 === 'undefined' ? {} : __vue_script__$7,
+    __vue_scope_id__$7,
+    __vue_is_functional_template__$7,
+    __vue_module_identifier__$7,
+    typeof __vue_create_injector__$7 !== 'undefined' ? __vue_create_injector__$7 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$8 = {
     name: 'CamomileHeaderUserbuttonDropdown',
 
     data: function data () {
@@ -3686,9 +4982,158 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$8 = script$8;
+              
+  /* template */
+  var __vue_render__$8 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "dropdown" }, [
+      _vm.isAdmin
+        ? _c("div", [
+            _c(
+              "button",
+              {
+                staticClass: "btn px-m py-s full-x",
+                on: {
+                  click: function($event) {
+                    _vm.popupOpen({
+                      config: _vm.popupEditConfig,
+                      element: _vm.user
+                    });
+                  }
+                }
+              },
+              [_vm._v("Settings…")]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", [
+        _c(
+          "button",
+          {
+            staticClass: "btn px-m py-s full-x mr home",
+            on: { click: _vm.logout }
+          },
+          [_vm._v("Logout")]
+        )
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$8 = [];
+  __vue_render__$8._withStripped = true;
 
-  var cmlUserbutton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn-menubar px-m py-s full-x",class:{ active: _vm.visible },on:{"click":_vm.dropdownToggle}},[_vm._v(_vm._s(_vm.user.name))])},staticRenderFns: [],
+  var __vue_template__$8 = typeof __vue_render__$8 !== 'undefined'
+    ? { render: __vue_render__$8, staticRenderFns: __vue_staticRenderFns__$8 }
+    : {};
+  /* style */
+  var __vue_inject_styles__$8 = undefined;
+  /* scoped */
+  var __vue_scope_id__$8 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$8 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$8 = false;
+  /* component normalizer */
+  function __vue_normalize__$8(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/header/userbutton-dropdown.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$8() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$8.styles || (__vue_create_injector__$8.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var userbuttonDropdown = __vue_normalize__$8(
+    __vue_template__$8,
+    __vue_inject_styles__$8,
+    typeof __vue_script__$8 === 'undefined' ? {} : __vue_script__$8,
+    __vue_scope_id__$8,
+    __vue_is_functional_template__$8,
+    __vue_module_identifier__$8,
+    typeof __vue_create_injector__$8 !== 'undefined' ? __vue_create_injector__$8 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$9 = {
     name: 'CamomileHeaderUserbutton',
     computed: Object.assign({}, Vuex.mapState({
         user: function (state) { return state.user; },
@@ -3707,18 +5152,144 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$9 = script$9;
+              
+  /* template */
+  var __vue_render__$9 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "button",
+      {
+        staticClass: "btn-menubar px-m py-s full-x",
+        class: { active: _vm.visible },
+        on: { click: _vm.dropdownToggle }
+      },
+      [_vm._v(_vm._s(_vm.user.name))]
+    )
+  };
+  var __vue_staticRenderFns__$9 = [];
+  __vue_render__$9._withStripped = true;
+
+  var __vue_template__$9 = typeof __vue_render__$9 !== 'undefined'
+    ? { render: __vue_render__$9, staticRenderFns: __vue_staticRenderFns__$9 }
+    : {};
+  /* style */
+  var __vue_inject_styles__$9 = undefined;
+  /* scoped */
+  var __vue_scope_id__$9 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$9 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$9 = false;
+  /* component normalizer */
+  function __vue_normalize__$9(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/header/userbutton.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$9() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$9.styles || (__vue_create_injector__$9.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var cmlUserbutton = __vue_normalize__$9(
+    __vue_template__$9,
+    __vue_inject_styles__$9,
+    typeof __vue_script__$9 === 'undefined' ? {} : __vue_script__$9,
+    __vue_scope_id__$9,
+    __vue_is_functional_template__$9,
+    __vue_module_identifier__$9,
+    typeof __vue_create_injector__$9 !== 'undefined' ? __vue_create_injector__$9 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-  var cmlSync = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn-menubar px-m py-s full-x",on:{"click":_vm.sync}},[_c('i',{staticClass:"icon-24 icon-24-dot",class:{ blink: _vm.active }})])},staticRenderFns: [],
+  var script$a = {
     name: 'CamomileHeaderSyncbutton',
 
     computed: {
@@ -3734,9 +5305,136 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$a = script$a;
+              
+  /* template */
+  var __vue_render__$a = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "button",
+      { staticClass: "btn-menubar px-m py-s full-x", on: { click: _vm.sync } },
+      [
+        _c("i", {
+          staticClass: "icon-24 icon-24-dot",
+          class: { blink: _vm.active }
+        })
+      ]
+    )
+  };
+  var __vue_staticRenderFns__$a = [];
+  __vue_render__$a._withStripped = true;
 
-  var cmlHeader = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blobs"},[_c('div',{staticClass:"tablet-blob-1-4"},[_c('cml-title')],1),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"tablet-blob-1-2"},[_c('div',{staticClass:"blobs"},[_c('div',{staticClass:"blob"},[_c('cml-sync',{staticClass:"mb-0"})],1),_vm._v(" "),_c('div',{staticClass:"blob-auto"},[_c('cml-infos')],1)])]):_vm._e(),_vm._v(" "),(_vm.isLogged)?_c('div',{staticClass:"blob flex-right"},[_c('cml-userbutton')],1):_vm._e()])},staticRenderFns: [],
+  var __vue_template__$a = typeof __vue_render__$a !== 'undefined'
+    ? { render: __vue_render__$a, staticRenderFns: __vue_staticRenderFns__$a }
+    : {};
+  /* style */
+  var __vue_inject_styles__$a = undefined;
+  /* scoped */
+  var __vue_scope_id__$a = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$a = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$a = false;
+  /* component normalizer */
+  function __vue_normalize__$a(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/header/sync.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$a() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$a.styles || (__vue_create_injector__$a.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var cmlSync = __vue_normalize__$a(
+    __vue_template__$a,
+    __vue_inject_styles__$a,
+    typeof __vue_script__$a === 'undefined' ? {} : __vue_script__$a,
+    __vue_scope_id__$a,
+    __vue_is_functional_template__$a,
+    __vue_module_identifier__$a,
+    typeof __vue_create_injector__$a !== 'undefined' ? __vue_create_injector__$a : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$b = {
     name: 'CamomileHeader',
 
     components: {
@@ -3753,44 +5451,183 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$b = script$b;
+              
+  /* template */
+  var __vue_render__$b = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "tablet-blobs" }, [
+      _c("div", { staticClass: "tablet-blob-1-4" }, [_c("cml-title")], 1),
+      _vm._v(" "),
+      _vm.isLogged
+        ? _c("div", { staticClass: "tablet-blob-1-2" }, [
+            _c("div", { staticClass: "blobs" }, [
+              _c(
+                "div",
+                { staticClass: "blob" },
+                [_c("cml-sync", { staticClass: "mb-0" })],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "blob-auto" }, [_c("cml-infos")], 1)
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.isLogged
+        ? _c("div", { staticClass: "blob flex-right" }, [_c("cml-userbutton")], 1)
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$b = [];
+  __vue_render__$b._withStripped = true;
+
+  var __vue_template__$b = typeof __vue_render__$b !== 'undefined'
+    ? { render: __vue_render__$b, staticRenderFns: __vue_staticRenderFns__$b }
+    : {};
+  /* style */
+  var __vue_inject_styles__$b = undefined;
+  /* scoped */
+  var __vue_scope_id__$b = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$b = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$b = false;
+  /* component normalizer */
+  function __vue_normalize__$b(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/header/index.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$b() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$b.styles || (__vue_create_injector__$b.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var cmlHeader = __vue_normalize__$b(
+    __vue_template__$b,
+    __vue_inject_styles__$b,
+    typeof __vue_script__$b === 'undefined' ? {} : __vue_script__$b,
+    __vue_scope_id__$b,
+    __vue_is_functional_template__$b,
+    __vue_module_identifier__$b,
+    typeof __vue_create_injector__$b !== 'undefined' ? __vue_create_injector__$b : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var popupLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"tablet-blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.name),expression:"config.user.name"}],staticClass:"mb",attrs:{"type":"text","placeholder":"Name"},domProps:{"value":(_vm.config.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "name", $event.target.value);}}})]),_vm._v(" "),_vm._m(1),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.config.user.password),expression:"config.user.password"}],staticClass:"mb",attrs:{"type":"password","placeholder":"Password"},domProps:{"value":(_vm.config.user.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.config.user, "password", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"tablet-blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x mb",on:{"click":function($event){_vm.login(_vm.config);}}},[_vm._v("Login")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Password")])])}],
+  var script$c = {
     name: 'CamomileLoginPopup',
 
     computed: {
@@ -3819,9 +5656,215 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$c = script$c;
+              
+  /* template */
+  var __vue_render__$c = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", [
+      _c("div", { staticClass: "tablet-blobs" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-3-4" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.config.user.name,
+                expression: "config.user.name"
+              }
+            ],
+            staticClass: "mb",
+            attrs: { type: "text", placeholder: "Name" },
+            domProps: { value: _vm.config.user.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.config.user, "name", $event.target.value);
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _vm._m(1),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-3-4" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.config.user.password,
+                expression: "config.user.password"
+              }
+            ],
+            staticClass: "mb",
+            attrs: { type: "password", placeholder: "Password" },
+            domProps: { value: _vm.config.user.password },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.config.user, "password", $event.target.value);
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-1-4" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-3-4" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn-alt p-s full-x mb",
+              on: {
+                click: function($event) {
+                  _vm.login(_vm.config);
+                }
+              }
+            },
+            [_vm._v("Login")]
+          )
+        ])
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$c = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Name")])
+      ])
+    },
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Password")])
+      ])
+    }
+  ];
+  __vue_render__$c._withStripped = true;
 
-  var cmlLogin = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')},staticRenderFns: [],
+  var __vue_template__$c = typeof __vue_render__$c !== 'undefined'
+    ? { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c }
+    : {};
+  /* style */
+  var __vue_inject_styles__$c = undefined;
+  /* scoped */
+  var __vue_scope_id__$c = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$c = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$c = false;
+  /* component normalizer */
+  function __vue_normalize__$c(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/login.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$c() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$c.styles || (__vue_create_injector__$c.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var popupLogin = __vue_normalize__$c(
+    __vue_template__$c,
+    __vue_inject_styles__$c,
+    typeof __vue_script__$c === 'undefined' ? {} : __vue_script__$c,
+    __vue_scope_id__$c,
+    __vue_is_functional_template__$c,
+    __vue_module_identifier__$c,
+    typeof __vue_create_injector__$c !== 'undefined' ? __vue_create_injector__$c : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$d = {
     name: 'CamomileLogin',
 
     created: function created () {
@@ -3836,9 +5879,127 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$d = script$d;
+              
+  /* template */
+  var __vue_render__$d = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div")
+  };
+  var __vue_staticRenderFns__$d = [];
+  __vue_render__$d._withStripped = true;
 
-  var App = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page relative"},[_c('header',{staticClass:"header bg-inverse color-bg shadow"},[_c('div',{staticClass:"container"},[_c('cml-header')],1)]),_vm._v(" "),_c('main',{staticClass:"main"},[_c('div',{staticClass:"container pt"},[(_vm.isLogged)?_vm._t("default"):_c('cml-login')],2),_vm._v(" "),_c('transition',{attrs:{"name":"transition-top"}},[(_vm.popup.visible)?_c('cml-popup'):_vm._e()],1),_vm._v(" "),_c('cml-messages'),_vm._v(" "),_c('cml-dropdown'),_vm._v(" "),_c('viewport')],1)])},staticRenderFns: [],
+  var __vue_template__$d = typeof __vue_render__$d !== 'undefined'
+    ? { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d }
+    : {};
+  /* style */
+  var __vue_inject_styles__$d = undefined;
+  /* scoped */
+  var __vue_scope_id__$d = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$d = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$d = false;
+  /* component normalizer */
+  function __vue_normalize__$d(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/login.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$d() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$d.styles || (__vue_create_injector__$d.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var cmlLogin = __vue_normalize__$d(
+    __vue_template__$d,
+    __vue_inject_styles__$d,
+    typeof __vue_script__$d === 'undefined' ? {} : __vue_script__$d,
+    __vue_scope_id__$d,
+    __vue_is_functional_template__$d,
+    __vue_module_identifier__$d,
+    typeof __vue_create_injector__$d !== 'undefined' ? __vue_create_injector__$d : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$e = {
     store: store,
 
     name: 'Camomile',
@@ -3888,9 +6049,158 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$e = script$e;
+              
+  /* template */
+  var __vue_render__$e = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "page relative" }, [
+      _c("header", { staticClass: "header bg-inverse color-bg shadow" }, [
+        _c("div", { staticClass: "container" }, [_c("cml-header")], 1)
+      ]),
+      _vm._v(" "),
+      _c(
+        "main",
+        { staticClass: "main" },
+        [
+          _c(
+            "div",
+            { staticClass: "container pt" },
+            [_vm.isLogged ? _vm._t("default") : _c("cml-login")],
+            2
+          ),
+          _vm._v(" "),
+          _c(
+            "transition",
+            { attrs: { name: "transition-top" } },
+            [_vm.popup.visible ? _c("cml-popup") : _vm._e()],
+            1
+          ),
+          _vm._v(" "),
+          _c("cml-messages"),
+          _vm._v(" "),
+          _c("cml-dropdown"),
+          _vm._v(" "),
+          _c("viewport")
+        ],
+        1
+      )
+    ])
+  };
+  var __vue_staticRenderFns__$e = [];
+  __vue_render__$e._withStripped = true;
 
-  var popupRemove = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.type !== 'annotations')?_c('div',{staticClass:"tablet-blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.name),expression:"element.name"}],staticClass:"mb",attrs:{"disabled":_vm.element.id,"type":"text","placeholder":"Name"},domProps:{"value":(_vm.element.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "name", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),(_vm.type === 'annotations')?_c('div',{staticClass:"tablet-blobs"},[_vm._m(1),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.id),expression:"element.id"}],staticClass:"mb",attrs:{"disabled":_vm.element.id,"type":"text","placeholder":"Name"},domProps:{"value":(_vm.element.id)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element, "id", $event.target.value);}}})])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"tablet-blobs"},[_c('div',{staticClass:"tablet-blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x mb",on:{"click":_vm.remove,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.remove($event)}}},[_vm._v("Remove")])])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])},function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Id")])])}],
+  var __vue_template__$e = typeof __vue_render__$e !== 'undefined'
+    ? { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e }
+    : {};
+  /* style */
+  var __vue_inject_styles__$e = undefined;
+  /* scoped */
+  var __vue_scope_id__$e = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$e = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$e = false;
+  /* component normalizer */
+  function __vue_normalize__$e(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/app.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$e() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$e.styles || (__vue_create_injector__$e.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var App = __vue_normalize__$e(
+    __vue_template__$e,
+    __vue_inject_styles__$e,
+    typeof __vue_script__$e === 'undefined' ? {} : __vue_script__$e,
+    __vue_scope_id__$e,
+    __vue_is_functional_template__$e,
+    __vue_module_identifier__$e,
+    typeof __vue_create_injector__$e !== 'undefined' ? __vue_create_injector__$e : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$f = {
     name: 'CamomilePopupRemove',
 
     computed: Object.assign({}, Vuex.mapState({
@@ -3919,41 +6229,270 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$f = script$f;
+              
+  /* template */
+  var __vue_render__$f = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", [
+      _vm.type !== "annotations"
+        ? _c("div", { staticClass: "tablet-blobs" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "tablet-blob-3-4" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.element.name,
+                    expression: "element.name"
+                  }
+                ],
+                staticClass: "mb",
+                attrs: {
+                  disabled: _vm.element.id,
+                  type: "text",
+                  placeholder: "Name"
+                },
+                domProps: { value: _vm.element.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.element, "name", $event.target.value);
+                  }
+                }
+              })
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.type === "annotations"
+        ? _c("div", { staticClass: "tablet-blobs" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "tablet-blob-3-4" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.element.id,
+                    expression: "element.id"
+                  }
+                ],
+                staticClass: "mb",
+                attrs: {
+                  disabled: _vm.element.id,
+                  type: "text",
+                  placeholder: "Name"
+                },
+                domProps: { value: _vm.element.id },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.element, "id", $event.target.value);
+                  }
+                }
+              })
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "tablet-blobs" }, [
+        _c("div", { staticClass: "tablet-blob-1-4" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-3-4" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn-alt p-s full-x mb",
+              on: {
+                click: _vm.remove,
+                keyup: function($event) {
+                  if (
+                    !("button" in $event) &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.remove($event)
+                }
+              }
+            },
+            [_vm._v("Remove")]
+          )
+        ])
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$f = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Name")])
+      ])
+    },
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Id")])
+      ])
+    }
+  ];
+  __vue_render__$f._withStripped = true;
+
+  var __vue_template__$f = typeof __vue_render__$f !== 'undefined'
+    ? { render: __vue_render__$f, staticRenderFns: __vue_staticRenderFns__$f }
+    : {};
+  /* style */
+  var __vue_inject_styles__$f = undefined;
+  /* scoped */
+  var __vue_scope_id__$f = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$f = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$f = false;
+  /* component normalizer */
+  function __vue_normalize__$f(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/remove.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$f() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$f.styles || (__vue_create_injector__$f.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var popupRemove = __vue_normalize__$f(
+    __vue_template__$f,
+    __vue_inject_styles__$f,
+    typeof __vue_script__$f === 'undefined' ? {} : __vue_script__$f,
+    __vue_scope_id__$f,
+    __vue_is_functional_template__$f,
+    __vue_module_identifier__$f,
+    typeof __vue_create_injector__$f !== 'undefined' ? __vue_create_injector__$f : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var popupGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"tablet-blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.user.name),expression:"user.name"}],attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.user.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.user, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"tablet-blobs"},[_c('div',{staticClass:"tablet-blob-1"},[_c('h3',{staticClass:"mb-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-inline clearfix"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id,staticClass:"tag",class:{ active: _vm.groupActive(group.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.groupToggle(group);}}},[_vm._v(_vm._s(group.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])}],
+  var script$g = {
     name: 'CamomilePopupGroups',
 
     computed: {
@@ -3993,9 +6532,198 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$g = script$g;
+              
+  /* template */
+  var __vue_render__$g = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", [
+      _c("div", { staticClass: "tablet-blobs" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-3-4" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.user.name,
+                expression: "user.name"
+              }
+            ],
+            attrs: { type: "text", placeholder: "Name", disabled: "" },
+            domProps: { value: _vm.user.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.user, "name", $event.target.value);
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "tablet-blobs" }, [
+        _c("div", { staticClass: "tablet-blob-1" }, [
+          _c("h3", { staticClass: "mb-s" }, [_vm._v("Groups")]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            { staticClass: "list-inline clearfix" },
+            _vm._l(_vm.groups, function(group) {
+              return _c(
+                "li",
+                {
+                  key: group.id,
+                  staticClass: "tag",
+                  class: { active: _vm.groupActive(group.id) }
+                },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn px-m py-xs h5 pill",
+                      on: {
+                        click: function($event) {
+                          _vm.groupToggle(group);
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(group.name))]
+                  )
+                ]
+              )
+            })
+          )
+        ])
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$g = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Name")])
+      ])
+    }
+  ];
+  __vue_render__$g._withStripped = true;
 
-  var AdminUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isAdmin)?_c('div',{staticClass:"p bg-bg mb"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {}, role: 'user' } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.users),function(user){return _c('tr',{key:user.id},[_c('td',[_vm._v(_vm._s(user.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(user.role))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupGroupsConfig, element: user });}}},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: user });}}},[_vm._v("Edit")]),_vm._v(" "),(user.id !== _vm.userId)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: user });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])]):_vm._e()},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Role")]),_c('th')])}],
+  var __vue_template__$g = typeof __vue_render__$g !== 'undefined'
+    ? { render: __vue_render__$g, staticRenderFns: __vue_staticRenderFns__$g }
+    : {};
+  /* style */
+  var __vue_inject_styles__$g = undefined;
+  /* scoped */
+  var __vue_scope_id__$g = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$g = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$g = false;
+  /* component normalizer */
+  function __vue_normalize__$g(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/groups.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$g() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$g.styles || (__vue_create_injector__$g.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var popupGroups = __vue_normalize__$g(
+    __vue_template__$g,
+    __vue_inject_styles__$g,
+    typeof __vue_script__$g === 'undefined' ? {} : __vue_script__$g,
+    __vue_scope_id__$g,
+    __vue_is_functional_template__$g,
+    __vue_module_identifier__$g,
+    typeof __vue_create_injector__$g !== 'undefined' ? __vue_create_injector__$g : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$h = {
     name: 'CamomileUsers',
 
     data: function data () {
@@ -4042,42 +6770,264 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$h = script$h;
+              
+  /* template */
+  var __vue_render__$h = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _vm.isAdmin
+      ? _c("div", { staticClass: "p bg-bg mb" }, [
+          _c("div", { staticClass: "flex flex-start" }, [
+            _c("h2", { staticClass: "mt-xs" }, [_vm._v("Users")]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn-border flex-right px-s py-xs",
+                on: {
+                  click: function($event) {
+                    _vm.popupOpen({
+                      config: _vm.popupAddConfig,
+                      element: { description: {}, role: "user" }
+                    });
+                  }
+                }
+              },
+              [_c("i", { staticClass: "icon-24 icon-24-plus" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "table",
+              { staticClass: "table mb-0" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._l(_vm.users, function(user) {
+                  return _c("tr", { key: user.id }, [
+                    _c("td", [_vm._v(_vm._s(user.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.role))]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-right" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn-border p-s my--s h6",
+                          on: {
+                            click: function($event) {
+                              _vm.popupOpen({
+                                config: _vm.popupGroupsConfig,
+                                element: user
+                              });
+                            }
+                          }
+                        },
+                        [_vm._v("Groups")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn-border p-s my--s h6",
+                          on: {
+                            click: function($event) {
+                              _vm.popupOpen({
+                                config: _vm.popupEditConfig,
+                                element: user
+                              });
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      ),
+                      _vm._v(" "),
+                      user.id !== _vm.userId
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn-border p-s my--s h6",
+                              on: {
+                                click: function($event) {
+                                  _vm.popupOpen({
+                                    config: _vm.popupRemoveConfig,
+                                    element: user
+                                  });
+                                }
+                              }
+                            },
+                            [_vm._v("Remove")]
+                          )
+                        : _vm._e()
+                    ])
+                  ])
+                })
+              ],
+              2
+            )
+          ])
+        ])
+      : _vm._e()
+  };
+  var __vue_staticRenderFns__$h = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("tr", [
+        _c("th", [_vm._v("Name")]),
+        _c("th", [_vm._v("Role")]),
+        _c("th")
+      ])
+    }
+  ];
+  __vue_render__$h._withStripped = true;
+
+  var __vue_template__$h = typeof __vue_render__$h !== 'undefined'
+    ? { render: __vue_render__$h, staticRenderFns: __vue_staticRenderFns__$h }
+    : {};
+  /* style */
+  var __vue_inject_styles__$h = undefined;
+  /* scoped */
+  var __vue_scope_id__$h = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$h = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$h = false;
+  /* component normalizer */
+  function __vue_normalize__$h(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/admin/users.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$h() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$h.styles || (__vue_create_injector__$h.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var AdminUsers = __vue_normalize__$h(
+    __vue_template__$h,
+    __vue_inject_styles__$h,
+    typeof __vue_script__$h === 'undefined' ? {} : __vue_script__$h,
+    __vue_scope_id__$h,
+    __vue_is_functional_template__$h,
+    __vue_module_identifier__$h,
+    typeof __vue_create_injector__$h !== 'undefined' ? __vue_create_injector__$h : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var popupUsers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"tablet-blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.group.name),expression:"group.name"}],staticClass:"mb",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.group.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.group, "name", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"tablet-blobs"},[_c('div',{staticClass:"tablet-blob-1"},[_c('h3',{staticClass:"pt-s mb-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-inline"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id,staticClass:"tag",class:{ active: _vm.userActive(user.id) }},[_c('button',{staticClass:"btn px-m py-xs h5 pill",on:{"click":function($event){_vm.userToggle(user.id);}}},[_vm._v(_vm._s(user.name))])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])}],
+  var script$i = {
     name: 'CamomilePopupUsers',
 
     computed: {
@@ -4114,9 +7064,199 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$i = script$i;
+              
+  /* template */
+  var __vue_render__$i = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", [
+      _c("div", { staticClass: "tablet-blobs" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-3-4" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.group.name,
+                expression: "group.name"
+              }
+            ],
+            staticClass: "mb",
+            attrs: { type: "text", placeholder: "Name", disabled: "" },
+            domProps: { value: _vm.group.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.group, "name", $event.target.value);
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "tablet-blobs" }, [
+        _c("div", { staticClass: "tablet-blob-1" }, [
+          _c("h3", { staticClass: "pt-s mb-s" }, [_vm._v("Users")]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            { staticClass: "list-inline" },
+            _vm._l(_vm.users, function(user) {
+              return _c(
+                "li",
+                {
+                  key: user.id,
+                  staticClass: "tag",
+                  class: { active: _vm.userActive(user.id) }
+                },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn px-m py-xs h5 pill",
+                      on: {
+                        click: function($event) {
+                          _vm.userToggle(user.id);
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(user.name))]
+                  )
+                ]
+              )
+            })
+          )
+        ])
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$i = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Name")])
+      ])
+    }
+  ];
+  __vue_render__$i._withStripped = true;
 
-  var AdminGroups = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isAdmin)?_c('div',{staticClass:"p bg-bg mb"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Groups")]),_vm._v(" "),_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})])]),_vm._v(" "),_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.groups),function(group){return _c('tr',{key:group.id},[_c('td',[_vm._v(_vm._s(group.name))]),_vm._v(" "),_c('td',[_vm._v(_vm._s(group.userIds.length))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupUsersConfig, element: group });}}},[_vm._v("Users")]),_vm._v(" "),_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: group });}}},[_vm._v("Edit")]),_vm._v(" "),(_vm.isRoot)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: group });}}},[_vm._v("Remove")]):_vm._e()])])})],2)])]):_vm._e()},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Name")]),_c('th',[_vm._v("Users")]),_c('th')])}],
+  var __vue_template__$i = typeof __vue_render__$i !== 'undefined'
+    ? { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i }
+    : {};
+  /* style */
+  var __vue_inject_styles__$i = undefined;
+  /* scoped */
+  var __vue_scope_id__$i = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$i = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$i = false;
+  /* component normalizer */
+  function __vue_normalize__$i(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/users.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$i() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$i.styles || (__vue_create_injector__$i.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var popupUsers = __vue_normalize__$i(
+    __vue_template__$i,
+    __vue_inject_styles__$i,
+    typeof __vue_script__$i === 'undefined' ? {} : __vue_script__$i,
+    __vue_scope_id__$i,
+    __vue_is_functional_template__$i,
+    __vue_module_identifier__$i,
+    typeof __vue_create_injector__$i !== 'undefined' ? __vue_create_injector__$i : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$j = {
     name: 'CamomileGroups',
 
     data: function data () {
@@ -4166,13 +7306,235 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$j = script$j;
+              
+  /* template */
+  var __vue_render__$j = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _vm.isAdmin
+      ? _c("div", { staticClass: "p bg-bg mb" }, [
+          _c("div", { staticClass: "flex flex-start" }, [
+            _c("h2", { staticClass: "mt-xs" }, [_vm._v("Groups")]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn-border flex-right px-s py-xs",
+                on: {
+                  click: function($event) {
+                    _vm.popupOpen({
+                      config: _vm.popupAddConfig,
+                      element: { description: {} }
+                    });
+                  }
+                }
+              },
+              [_c("i", { staticClass: "icon-24 icon-24-plus" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "table",
+              { staticClass: "table mb-0" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._l(_vm.groups, function(group) {
+                  return _c("tr", { key: group.id }, [
+                    _c("td", [_vm._v(_vm._s(group.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(group.userIds.length))]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-right" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn-border p-s my--s h6",
+                          on: {
+                            click: function($event) {
+                              _vm.popupOpen({
+                                config: _vm.popupUsersConfig,
+                                element: group
+                              });
+                            }
+                          }
+                        },
+                        [_vm._v("Users")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn-border p-s my--s h6",
+                          on: {
+                            click: function($event) {
+                              _vm.popupOpen({
+                                config: _vm.popupEditConfig,
+                                element: group
+                              });
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      ),
+                      _vm._v(" "),
+                      _vm.isRoot
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn-border p-s my--s h6",
+                              on: {
+                                click: function($event) {
+                                  _vm.popupOpen({
+                                    config: _vm.popupRemoveConfig,
+                                    element: group
+                                  });
+                                }
+                              }
+                            },
+                            [_vm._v("Remove")]
+                          )
+                        : _vm._e()
+                    ])
+                  ])
+                })
+              ],
+              2
+            )
+          ])
+        ])
+      : _vm._e()
+  };
+  var __vue_staticRenderFns__$j = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("tr", [
+        _c("th", [_vm._v("Name")]),
+        _c("th", [_vm._v("Users")]),
+        _c("th")
+      ])
+    }
+  ];
+  __vue_render__$j._withStripped = true;
+
+  var __vue_template__$j = typeof __vue_render__$j !== 'undefined'
+    ? { render: __vue_render__$j, staticRenderFns: __vue_staticRenderFns__$j }
+    : {};
+  /* style */
+  var __vue_inject_styles__$j = undefined;
+  /* scoped */
+  var __vue_scope_id__$j = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$j = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$j = false;
+  /* component normalizer */
+  function __vue_normalize__$j(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/admin/groups.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$j() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$j.styles || (__vue_create_injector__$j.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var AdminGroups = __vue_normalize__$j(
+    __vue_template__$j,
+    __vue_inject_styles__$j,
+    typeof __vue_script__$j === 'undefined' ? {} : __vue_script__$j,
+    __vue_scope_id__$j,
+    __vue_is_functional_template__$j,
+    __vue_module_identifier__$j,
+    typeof __vue_create_injector__$j !== 'undefined' ? __vue_create_injector__$j : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+  //
+  //
+  //
 
 
-
-  var Corpus = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span')},staticRenderFns: [],
+  var script$k = {
     name: 'CamomileCorpus',
 
     props: {
@@ -4187,34 +7549,152 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$k = script$k;
+              
+  /* template */
+  var __vue_render__$k = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("span")
+  };
+  var __vue_staticRenderFns__$k = [];
+  __vue_render__$k._withStripped = true;
+
+  var __vue_template__$k = typeof __vue_render__$k !== 'undefined'
+    ? { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k }
+    : {};
+  /* style */
+  var __vue_inject_styles__$k = undefined;
+  /* scoped */
+  var __vue_scope_id__$k = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$k = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$k = false;
+  /* component normalizer */
+  function __vue_normalize__$k(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/corpus/index.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$k() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$k.styles || (__vue_create_injector__$k.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var Corpus = __vue_normalize__$k(
+    __vue_template__$k,
+    __vue_inject_styles__$k,
+    typeof __vue_script__$k === 'undefined' ? {} : __vue_script__$k,
+    __vue_scope_id__$k,
+    __vue_is_functional_template__$k,
+    __vue_module_identifier__$k,
+    typeof __vue_create_injector__$k !== 'undefined' ? __vue_create_injector__$k : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var permissionsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"list-inline"},[_c('li',{staticClass:"tag",class:{ active: _vm.isActive(1) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(1);}}},[_vm._v("R")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(2) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(2);}}},[_vm._v("W")])]),_vm._v(" "),_c('li',{staticClass:"tag",class:{ active: _vm.isActive(3) }},[_c('button',{staticClass:"btn px-s py-xs my--xs h5 mono pill",on:{"click":function($event){_vm.toggle(3);}}},[_vm._v("A")])])])},staticRenderFns: [],
+  var script$l = {
     name: 'CamomilePopupPermissionsEdit',
 
     props: {
@@ -4270,9 +7750,172 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$l = script$l;
+              
+  /* template */
+  var __vue_render__$l = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("ul", { staticClass: "list-inline" }, [
+      _c("li", { staticClass: "tag", class: { active: _vm.isActive(1) } }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn px-s py-xs my--xs h5 mono pill",
+            on: {
+              click: function($event) {
+                _vm.toggle(1);
+              }
+            }
+          },
+          [_vm._v("R")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "tag", class: { active: _vm.isActive(2) } }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn px-s py-xs my--xs h5 mono pill",
+            on: {
+              click: function($event) {
+                _vm.toggle(2);
+              }
+            }
+          },
+          [_vm._v("W")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "tag", class: { active: _vm.isActive(3) } }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn px-s py-xs my--xs h5 mono pill",
+            on: {
+              click: function($event) {
+                _vm.toggle(3);
+              }
+            }
+          },
+          [_vm._v("A")]
+        )
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$l = [];
+  __vue_render__$l._withStripped = true;
 
-  var popupPermissions = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"tablet-blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.resource.name),expression:"resource.name"}],staticClass:"mb",attrs:{"type":"text","placeholder":"Name","disabled":"disabled"},domProps:{"value":(_vm.resource.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.resource, "name", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"tablet-blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Users")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.users),function(user){return _c('li',{key:user.id},[_c('div',{staticClass:"tablet-blobs"},[_c('div',{staticClass:"tablet-blob-1-2 mb-s"},[_vm._v(" "+_vm._s(user.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"tablet-blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"type":_vm.type.slice(0, -1),"element":{ id: user.id, type: 'user' }}})],1)])])}))]),_vm._v(" "),_c('div',{staticClass:"tablet-blob-1-2"},[_c('h3',{staticClass:"pt-s"},[_vm._v("Groups")]),_vm._v(" "),_c('ul',{staticClass:"list-sans"},_vm._l((_vm.groups),function(group){return _c('li',{key:group.id},[_c('div',{staticClass:"tablet-blobs"},[_c('div',{staticClass:"tablet-blob-1-2 mb-s"},[_vm._v(" "+_vm._s(group.name)+" ")]),_vm._v(" "),_c('div',{staticClass:"tablet-blob-1-2 mb-s"},[_c('permissions-edit',{attrs:{"type":_vm.type.slice(0, -1),"element":{ id: group.id, type: 'group'}}})],1)])])}))])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Name")])])}],
+  var __vue_template__$l = typeof __vue_render__$l !== 'undefined'
+    ? { render: __vue_render__$l, staticRenderFns: __vue_staticRenderFns__$l }
+    : {};
+  /* style */
+  var __vue_inject_styles__$l = undefined;
+  /* scoped */
+  var __vue_scope_id__$l = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$l = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$l = false;
+  /* component normalizer */
+  function __vue_normalize__$l(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/permissions-edit.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$l() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$l.styles || (__vue_create_injector__$l.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var permissionsEdit = __vue_normalize__$l(
+    __vue_template__$l,
+    __vue_inject_styles__$l,
+    typeof __vue_script__$l === 'undefined' ? {} : __vue_script__$l,
+    __vue_scope_id__$l,
+    __vue_is_functional_template__$l,
+    __vue_module_identifier__$l,
+    typeof __vue_create_injector__$l !== 'undefined' ? __vue_create_injector__$l : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$m = {
     name: 'CamomilePermissions',
 
     components: {
@@ -4287,9 +7930,232 @@
       }))
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$m = script$m;
+              
+  /* template */
+  var __vue_render__$m = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", [
+      _c("div", { staticClass: "tablet-blobs" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-3-4" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.resource.name,
+                expression: "resource.name"
+              }
+            ],
+            staticClass: "mb",
+            attrs: { type: "text", placeholder: "Name", disabled: "" },
+            domProps: { value: _vm.resource.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.resource, "name", $event.target.value);
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-1-2" }, [
+          _c("h3", { staticClass: "pt-s" }, [_vm._v("Users")]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            { staticClass: "list-sans" },
+            _vm._l(_vm.users, function(user) {
+              return _c("li", { key: user.id }, [
+                _c("div", { staticClass: "tablet-blobs" }, [
+                  _c("div", { staticClass: "tablet-blob-1-2 mb-s" }, [
+                    _vm._v(
+                      "\n              " + _vm._s(user.name) + "\n            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "tablet-blob-1-2 mb-s" },
+                    [
+                      _c("permissions-edit", {
+                        attrs: {
+                          type: _vm.type.slice(0, -1),
+                          element: { id: user.id, type: "user" }
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ])
+            })
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-1-2" }, [
+          _c("h3", { staticClass: "pt-s" }, [_vm._v("Groups")]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            { staticClass: "list-sans" },
+            _vm._l(_vm.groups, function(group) {
+              return _c("li", { key: group.id }, [
+                _c("div", { staticClass: "tablet-blobs" }, [
+                  _c("div", { staticClass: "tablet-blob-1-2 mb-s" }, [
+                    _vm._v(
+                      "\n              " + _vm._s(group.name) + "\n            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "tablet-blob-1-2 mb-s" },
+                    [
+                      _c("permissions-edit", {
+                        attrs: {
+                          type: _vm.type.slice(0, -1),
+                          element: { id: group.id, type: "group" }
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ])
+            })
+          )
+        ])
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$m = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Name")])
+      ])
+    }
+  ];
+  __vue_render__$m._withStripped = true;
 
-  var CorpusList = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.isAdmin)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, description: {} } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.corpus && _vm.corpus.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.corpus),function(corpu){return _c('tr',{key:corpu.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":corpu.id,"checked":corpu.id === _vm.corpuId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(corpu.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(corpu.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: corpu });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(corpu.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: corpu });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.isAdmin && corpu.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: corpu });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+  var __vue_template__$m = typeof __vue_render__$m !== 'undefined'
+    ? { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m }
+    : {};
+  /* style */
+  var __vue_inject_styles__$m = undefined;
+  /* scoped */
+  var __vue_scope_id__$m = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$m = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$m = false;
+  /* component normalizer */
+  function __vue_normalize__$m(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/permissions.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$m() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$m.styles || (__vue_create_injector__$m.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var popupPermissions = __vue_normalize__$m(
+    __vue_template__$m,
+    __vue_inject_styles__$m,
+    typeof __vue_script__$m === 'undefined' ? {} : __vue_script__$m,
+    __vue_scope_id__$m,
+    __vue_is_functional_template__$m,
+    __vue_module_identifier__$m,
+    typeof __vue_create_injector__$m !== 'undefined' ? __vue_create_injector__$m : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$n = {
     name: 'CamomileCorpusList',
 
     props: {
@@ -4357,26 +8223,259 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$n = script$n;
+              
+  /* template */
+  var __vue_render__$n = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "p bg-bg mb" }, [
+      _c("div", { staticClass: "flex flex-start" }, [
+        _c("h2", { staticClass: "mt-xs" }, [_vm._v("Corpora")]),
+        _vm._v(" "),
+        _vm.isAdmin
+          ? _c(
+              "button",
+              {
+                staticClass: "btn-border flex-right px-s py-xs",
+                on: {
+                  click: function($event) {
+                    _vm.popupOpen({
+                      config: _vm.popupAddConfig,
+                      element: { id: null, description: {} }
+                    });
+                  }
+                }
+              },
+              [_c("i", { staticClass: "icon-24 icon-24-plus" })]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm.corpus && _vm.corpus.length > 0
+        ? _c("div", [
+            _c(
+              "table",
+              { staticClass: "table mb-0" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._l(_vm.corpus, function(corpu) {
+                  return _c("tr", { key: corpu.id }, [
+                    _c("td", [
+                      _c("input", {
+                        attrs: { type: "radio" },
+                        domProps: {
+                          value: corpu.id,
+                          checked: corpu.id === _vm.corpuId
+                        },
+                        on: { change: _vm.set }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(corpu.name))]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-right" }, [
+                      corpu.permission === 3
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn-border p-s my--s h6",
+                              on: {
+                                click: function($event) {
+                                  _vm.popupOpen({
+                                    config: _vm.popupPermissionsConfig,
+                                    element: corpu
+                                  });
+                                }
+                              }
+                            },
+                            [_vm._v("Permissions")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      corpu.permission === 3
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn-border p-s my--s h6",
+                              on: {
+                                click: function($event) {
+                                  _vm.popupOpen({
+                                    config: _vm.popupEditConfig,
+                                    element: corpu
+                                  });
+                                }
+                              }
+                            },
+                            [_vm._v("Edit")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.isAdmin && corpu.permission === 3
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn-border p-s my--s h6",
+                              on: {
+                                click: function($event) {
+                                  _vm.popupOpen({
+                                    config: _vm.popupRemoveConfig,
+                                    element: corpu
+                                  });
+                                }
+                              }
+                            },
+                            [_vm._v("Remove")]
+                          )
+                        : _vm._e()
+                    ])
+                  ])
+                })
+              ],
+              2
+            )
+          ])
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$n = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("tr", [_c("th"), _c("th", [_vm._v("Name")]), _c("th")])
+    }
+  ];
+  __vue_render__$n._withStripped = true;
+
+  var __vue_template__$n = typeof __vue_render__$n !== 'undefined'
+    ? { render: __vue_render__$n, staticRenderFns: __vue_staticRenderFns__$n }
+    : {};
+  /* style */
+  var __vue_inject_styles__$n = undefined;
+  /* scoped */
+  var __vue_scope_id__$n = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$n = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$n = false;
+  /* component normalizer */
+  function __vue_normalize__$n(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/corpus/list.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$n() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$n.styles || (__vue_create_injector__$n.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var CorpusList = __vue_normalize__$n(
+    __vue_template__$n,
+    __vue_inject_styles__$n,
+    typeof __vue_script__$n === 'undefined' ? {} : __vue_script__$n,
+    __vue_scope_id__$n,
+    __vue_is_functional_template__$n,
+    __vue_module_identifier__$n,
+    typeof __vue_create_injector__$n !== 'undefined' ? __vue_create_injector__$n : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var CorpusSelect = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Corpora")]),_vm._v(" "),(_vm.corpus && _vm.corpus.length > 0)?_c('select',{on:{"change":_vm.set}},_vm._l((_vm.corpus),function(corpu){return _c('option',{key:corpu.id,domProps:{"value":corpu.id,"selected":corpu.id === _vm.corpuId}},[_vm._v(" "+_vm._s(corpu.name)+" ")])})):_vm._e()])},staticRenderFns: [],
+  var script$o = {
     name: 'CamomileCorpusSelect',
 
     props: {
@@ -4405,13 +8504,153 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$o = script$o;
+              
+  /* template */
+  var __vue_render__$o = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "p bg-bg mb" }, [
+      _c("h2", { staticClass: "mt-xs" }, [_vm._v("Corpora")]),
+      _vm._v(" "),
+      _vm.corpus && _vm.corpus.length > 0
+        ? _c(
+            "select",
+            { on: { change: _vm.set } },
+            _vm._l(_vm.corpus, function(corpu) {
+              return _c(
+                "option",
+                {
+                  key: corpu.id,
+                  domProps: {
+                    value: corpu.id,
+                    selected: corpu.id === _vm.corpuId
+                  }
+                },
+                [_vm._v("\n      " + _vm._s(corpu.name) + "\n    ")]
+              )
+            })
+          )
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$o = [];
+  __vue_render__$o._withStripped = true;
+
+  var __vue_template__$o = typeof __vue_render__$o !== 'undefined'
+    ? { render: __vue_render__$o, staticRenderFns: __vue_staticRenderFns__$o }
+    : {};
+  /* style */
+  var __vue_inject_styles__$o = undefined;
+  /* scoped */
+  var __vue_scope_id__$o = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$o = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$o = false;
+  /* component normalizer */
+  function __vue_normalize__$o(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/corpus/select.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$o() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$o.styles || (__vue_create_injector__$o.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var CorpusSelect = __vue_normalize__$o(
+    __vue_template__$o,
+    __vue_inject_styles__$o,
+    typeof __vue_script__$o === 'undefined' ? {} : __vue_script__$o,
+    __vue_scope_id__$o,
+    __vue_is_functional_template__$o,
+    __vue_module_identifier__$o,
+    typeof __vue_create_injector__$o !== 'undefined' ? __vue_create_injector__$o : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+  //
+  //
+  //
 
 
-
-  var Medias = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span')},staticRenderFns: [],
+  var script$p = {
     name: 'CamomileMedias',
 
     props: {
@@ -4430,9 +8669,127 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$p = script$p;
+              
+  /* template */
+  var __vue_render__$p = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("span")
+  };
+  var __vue_staticRenderFns__$p = [];
+  __vue_render__$p._withStripped = true;
 
-  var MediasList = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Media")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: _vm.mediaNew });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('div',[_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.medias),function(media){return _c('tr',{key:media.id},[_c('td',[_c('input',{attrs:{"type":"radio"},domProps:{"value":media.id,"checked":media.id === _vm.mediaId},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(media.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: media });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: media });}}},[_vm._v("Remove")]):_vm._e()])])})],2)]):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+  var __vue_template__$p = typeof __vue_render__$p !== 'undefined'
+    ? { render: __vue_render__$p, staticRenderFns: __vue_staticRenderFns__$p }
+    : {};
+  /* style */
+  var __vue_inject_styles__$p = undefined;
+  /* scoped */
+  var __vue_scope_id__$p = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$p = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$p = false;
+  /* component normalizer */
+  function __vue_normalize__$p(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/medias/index.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$p() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$p.styles || (__vue_create_injector__$p.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var Medias = __vue_normalize__$p(
+    __vue_template__$p,
+    __vue_inject_styles__$p,
+    typeof __vue_script__$p === 'undefined' ? {} : __vue_script__$p,
+    __vue_scope_id__$p,
+    __vue_is_functional_template__$p,
+    __vue_module_identifier__$p,
+    typeof __vue_create_injector__$p !== 'undefined' ? __vue_create_injector__$p : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$q = {
     name: 'CamomileMediasList',
 
     props: {
@@ -4506,26 +8863,241 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$q = script$q;
+              
+  /* template */
+  var __vue_render__$q = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "p bg-bg mb" }, [
+      _c("div", { staticClass: "flex flex-start" }, [
+        _c("h2", { staticClass: "mt-xs" }, [_vm._v("Media")]),
+        _vm._v(" "),
+        _vm.corpuPermission === 3
+          ? _c(
+              "button",
+              {
+                staticClass: "btn-border flex-right px-s py-xs",
+                on: {
+                  click: function($event) {
+                    _vm.popupOpen({
+                      config: _vm.popupAddConfig,
+                      element: _vm.mediaNew
+                    });
+                  }
+                }
+              },
+              [_c("i", { staticClass: "icon-24 icon-24-plus" })]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm.medias && _vm.medias.length > 0
+        ? _c("div", [
+            _c(
+              "table",
+              { staticClass: "table mb-0" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._l(_vm.medias, function(media) {
+                  return _c("tr", { key: media.id }, [
+                    _c("td", [
+                      _c("input", {
+                        attrs: { type: "radio" },
+                        domProps: {
+                          value: media.id,
+                          checked: media.id === _vm.mediaId
+                        },
+                        on: { change: _vm.set }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(media.name))]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-right" }, [
+                      _vm.corpuPermission === 3
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn-border p-s my--s h6",
+                              on: {
+                                click: function($event) {
+                                  _vm.popupOpen({
+                                    config: _vm.popupEditConfig,
+                                    element: media
+                                  });
+                                }
+                              }
+                            },
+                            [_vm._v("Edit")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.corpuPermission === 3
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn-border p-s my--s h6",
+                              on: {
+                                click: function($event) {
+                                  _vm.popupOpen({
+                                    config: _vm.popupRemoveConfig,
+                                    element: media
+                                  });
+                                }
+                              }
+                            },
+                            [_vm._v("Remove")]
+                          )
+                        : _vm._e()
+                    ])
+                  ])
+                })
+              ],
+              2
+            )
+          ])
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$q = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("tr", [_c("th"), _c("th", [_vm._v("Name")]), _c("th")])
+    }
+  ];
+  __vue_render__$q._withStripped = true;
+
+  var __vue_template__$q = typeof __vue_render__$q !== 'undefined'
+    ? { render: __vue_render__$q, staticRenderFns: __vue_staticRenderFns__$q }
+    : {};
+  /* style */
+  var __vue_inject_styles__$q = undefined;
+  /* scoped */
+  var __vue_scope_id__$q = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$q = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$q = false;
+  /* component normalizer */
+  function __vue_normalize__$q(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/medias/list.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$q() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$q.styles || (__vue_create_injector__$q.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var MediasList = __vue_normalize__$q(
+    __vue_template__$q,
+    __vue_inject_styles__$q,
+    typeof __vue_script__$q === 'undefined' ? {} : __vue_script__$q,
+    __vue_scope_id__$q,
+    __vue_is_functional_template__$q,
+    __vue_module_identifier__$q,
+    typeof __vue_create_injector__$q !== 'undefined' ? __vue_create_injector__$q : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var MediasSelect = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Media")]),_vm._v(" "),(_vm.medias && _vm.medias.length > 0)?_c('select',{on:{"change":_vm.set}},_vm._l((_vm.medias),function(media){return _c('option',{key:media.id,domProps:{"value":media.id,"selected":media.id === _vm.mediaId}},[_vm._v(" "+_vm._s(media.name)+" ")])})):_vm._e()])},staticRenderFns: [],
+  var script$r = {
     name: 'CamomileMediasSelect',
 
     props: {
@@ -4558,21 +9130,292 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$r = script$r;
+              
+  /* template */
+  var __vue_render__$r = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "p bg-bg mb" }, [
+      _c("h2", { staticClass: "mt-xs" }, [_vm._v("Media")]),
+      _vm._v(" "),
+      _vm.medias && _vm.medias.length > 0
+        ? _c(
+            "select",
+            { on: { change: _vm.set } },
+            _vm._l(_vm.medias, function(media) {
+              return _c(
+                "option",
+                {
+                  key: media.id,
+                  domProps: {
+                    value: media.id,
+                    selected: media.id === _vm.mediaId
+                  }
+                },
+                [_vm._v("\n      " + _vm._s(media.name) + "\n    ")]
+              )
+            })
+          )
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$r = [];
+  __vue_render__$r._withStripped = true;
+
+  var __vue_template__$r = typeof __vue_render__$r !== 'undefined'
+    ? { render: __vue_render__$r, staticRenderFns: __vue_staticRenderFns__$r }
+    : {};
+  /* style */
+  var __vue_inject_styles__$r = undefined;
+  /* scoped */
+  var __vue_scope_id__$r = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$r = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$r = false;
+  /* component normalizer */
+  function __vue_normalize__$r(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/medias/select.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$r() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$r.styles || (__vue_create_injector__$r.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var MediasSelect = __vue_normalize__$r(
+    __vue_template__$r,
+    __vue_inject_styles__$r,
+    typeof __vue_script__$r === 'undefined' ? {} : __vue_script__$r,
+    __vue_scope_id__$r,
+    __vue_is_functional_template__$r,
+    __vue_module_identifier__$r,
+    typeof __vue_create_injector__$r !== 'undefined' ? __vue_create_injector__$r : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-  var spinner = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _vm._m(0)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"spinner"},[_c('div',{staticClass:"bounce1"}),_vm._v(" "),_c('div',{staticClass:"bounce2"}),_vm._v(" "),_c('div',{staticClass:"bounce3"})])}],
+  var script$s = {
     name: 'CamomileUtilsSpinner'
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$s = script$s;
+              
+  /* template */
+  var __vue_render__$s = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _vm._m(0)
+  };
+  var __vue_staticRenderFns__$s = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "spinner" }, [
+        _c("div", { staticClass: "bounce1" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "bounce2" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "bounce3" })
+      ])
+    }
+  ];
+  __vue_render__$s._withStripped = true;
 
-  var MediasYoutube = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.media)?_c('div',{ref:"container",staticClass:"mb"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isLoaded),expression:"isLoaded"}]},[_c('div',{attrs:{"id":"player"}})]),_vm._v(" "),(!_vm.isLoaded)?_c('spinner'):_vm._e()],1):_vm._e()},staticRenderFns: [],
+  var __vue_template__$s = typeof __vue_render__$s !== 'undefined'
+    ? { render: __vue_render__$s, staticRenderFns: __vue_staticRenderFns__$s }
+    : {};
+  /* style */
+  var __vue_inject_styles__$s = undefined;
+  /* scoped */
+  var __vue_scope_id__$s = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$s = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$s = false;
+  /* component normalizer */
+  function __vue_normalize__$s(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/utils/spinner.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$s() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$s.styles || (__vue_create_injector__$s.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var spinner = __vue_normalize__$s(
+    __vue_template__$s,
+    __vue_inject_styles__$s,
+    typeof __vue_script__$s === 'undefined' ? {} : __vue_script__$s,
+    __vue_scope_id__$s,
+    __vue_is_functional_template__$s,
+    __vue_module_identifier__$s,
+    typeof __vue_create_injector__$s !== 'undefined' ? __vue_create_injector__$s : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$t = {
     name: 'CamomileMediaYoutube',
 
     components: {
@@ -4798,9 +9641,151 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$t = script$t;
+              
+  /* template */
+  var __vue_render__$t = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _vm.media
+      ? _c(
+          "div",
+          { ref: "container", staticClass: "mb" },
+          [
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.isLoaded,
+                    expression: "isLoaded"
+                  }
+                ]
+              },
+              [_c("div", { attrs: { id: "player" } })]
+            ),
+            _vm._v(" "),
+            !_vm.isLoaded ? _c("spinner") : _vm._e()
+          ],
+          1
+        )
+      : _vm._e()
+  };
+  var __vue_staticRenderFns__$t = [];
+  __vue_render__$t._withStripped = true;
 
-  var MediasVideo = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.media)?_c('div',{ref:"container",staticClass:"mb"},[_c('video',{directives:[{name:"show",rawName:"v-show",value:(_vm.isLoaded),expression:"isLoaded"}],ref:"video",staticClass:"object-fit",attrs:{"id":"bgvid"},on:{"ended":_vm.videoEnded,"click":_vm.videoToggle,"play":_vm.buttonToggle,"pause":_vm.buttonToggle,"timeupdate":_vm.videoTimeupdate,"canplay":_vm.videoLoad}},[_c('source',{attrs:{"src":_vm.media.url,"type":"video/mp4"}})]),_vm._v(" "),(!_vm.isLoaded)?_c('spinner'):_vm._e()],1):_vm._e()},staticRenderFns: [],
+  var __vue_template__$t = typeof __vue_render__$t !== 'undefined'
+    ? { render: __vue_render__$t, staticRenderFns: __vue_staticRenderFns__$t }
+    : {};
+  /* style */
+  var __vue_inject_styles__$t = undefined;
+  /* scoped */
+  var __vue_scope_id__$t = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$t = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$t = false;
+  /* component normalizer */
+  function __vue_normalize__$t(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/medias/youtube.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$t() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$t.styles || (__vue_create_injector__$t.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var MediasYoutube = __vue_normalize__$t(
+    __vue_template__$t,
+    __vue_inject_styles__$t,
+    typeof __vue_script__$t === 'undefined' ? {} : __vue_script__$t,
+    __vue_scope_id__$t,
+    __vue_is_functional_template__$t,
+    __vue_module_identifier__$t,
+    typeof __vue_create_injector__$t !== 'undefined' ? __vue_create_injector__$t : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$u = {
     name: 'CamomileMediaVideo',
 
     components: {
@@ -4932,37 +9917,190 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$u = script$u;
+              
+  /* template */
+  var __vue_render__$u = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _vm.media
+      ? _c(
+          "div",
+          { ref: "container", staticClass: "mb" },
+          [
+            _c(
+              "video",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.isLoaded,
+                    expression: "isLoaded"
+                  }
+                ],
+                ref: "video",
+                staticClass: "object-fit",
+                attrs: { id: "bgvid" },
+                on: {
+                  ended: _vm.videoEnded,
+                  click: _vm.videoToggle,
+                  play: _vm.buttonToggle,
+                  pause: _vm.buttonToggle,
+                  timeupdate: _vm.videoTimeupdate,
+                  canplay: _vm.videoLoad
+                }
+              },
+              [_c("source", { attrs: { src: _vm.media.url, type: "video/mp4" } })]
+            ),
+            _vm._v(" "),
+            !_vm.isLoaded ? _c("spinner") : _vm._e()
+          ],
+          1
+        )
+      : _vm._e()
+  };
+  var __vue_staticRenderFns__$u = [];
+  __vue_render__$u._withStripped = true;
+
+  var __vue_template__$u = typeof __vue_render__$u !== 'undefined'
+    ? { render: __vue_render__$u, staticRenderFns: __vue_staticRenderFns__$u }
+    : {};
+  /* style */
+  var __vue_inject_styles__$u = undefined;
+  /* scoped */
+  var __vue_scope_id__$u = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$u = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$u = false;
+  /* component normalizer */
+  function __vue_normalize__$u(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/medias/video.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$u() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$u.styles || (__vue_create_injector__$u.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var MediasVideo = __vue_normalize__$u(
+    __vue_template__$u,
+    __vue_inject_styles__$u,
+    typeof __vue_script__$u === 'undefined' ? {} : __vue_script__$u,
+    __vue_scope_id__$u,
+    __vue_is_functional_template__$u,
+    __vue_module_identifier__$u,
+    typeof __vue_create_injector__$u !== 'undefined' ? __vue_create_injector__$u : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var MediasController = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"mediacontroller mb"},[_c('div',{staticClass:"mediacontroller-controls clearfix pb-s"},[_c('button',{ref:"button",staticClass:"mediacontroller-button btn-alt",attrs:{"disabled":!_vm.isLoaded},on:{"click":_vm.mediaToggle}},[_vm._v(_vm._s(_vm.playButton))]),_vm._v(" "),_c('div',{ref:"counter",staticClass:"mediacontroller-counter"},[_vm._v(_vm._s(_vm.msToMinutesAndSeconds(_vm.timeCurrent))+" / "+_vm._s(_vm.msToMinutesAndSeconds(_vm.timeTotal))+" ")])]),_vm._v(" "),_c('div',{ref:"progress",staticClass:"mediacontroller-progress",class:{ loaded: _vm.isLoaded },on:{"mousedown":function($event){_vm.progressMousedown($event);}}},[_c('div',{staticClass:"pointer-none full-y bg-bg"},[_c('div',{staticClass:"mediacontroller-progress-bar",style:({ width: _vm.progressBarWidth })})])])])},staticRenderFns: [],
+  var script$v = {
     props: {
       mediaUid: {
         type: String,
@@ -5047,13 +10185,175 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$v = script$v;
+              
+  /* template */
+  var __vue_render__$v = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "mediacontroller mb" }, [
+      _c("div", { staticClass: "mediacontroller-controls clearfix pb-s" }, [
+        _c(
+          "button",
+          {
+            ref: "button",
+            staticClass: "mediacontroller-button btn-alt",
+            attrs: { disabled: !_vm.isLoaded },
+            on: { click: _vm.mediaToggle }
+          },
+          [_vm._v(_vm._s(_vm.playButton))]
+        ),
+        _vm._v(" "),
+        _c("div", { ref: "counter", staticClass: "mediacontroller-counter" }, [
+          _vm._v(
+            _vm._s(_vm.msToMinutesAndSeconds(_vm.timeCurrent)) +
+              " / " +
+              _vm._s(_vm.msToMinutesAndSeconds(_vm.timeTotal)) +
+              "\n    "
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          ref: "progress",
+          staticClass: "mediacontroller-progress",
+          class: { loaded: _vm.isLoaded },
+          on: {
+            mousedown: function($event) {
+              _vm.progressMousedown($event);
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "pointer-none full-y bg-bg" }, [
+            _c("div", {
+              staticClass: "mediacontroller-progress-bar",
+              style: { width: _vm.progressBarWidth }
+            })
+          ])
+        ]
+      )
+    ])
+  };
+  var __vue_staticRenderFns__$v = [];
+  __vue_render__$v._withStripped = true;
+
+  var __vue_template__$v = typeof __vue_render__$v !== 'undefined'
+    ? { render: __vue_render__$v, staticRenderFns: __vue_staticRenderFns__$v }
+    : {};
+  /* style */
+  var __vue_inject_styles__$v = undefined;
+  /* scoped */
+  var __vue_scope_id__$v = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$v = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$v = false;
+  /* component normalizer */
+  function __vue_normalize__$v(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/medias/controller.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$v() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$v.styles || (__vue_create_injector__$v.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var MediasController = __vue_normalize__$v(
+    __vue_template__$v,
+    __vue_inject_styles__$v,
+    typeof __vue_script__$v === 'undefined' ? {} : __vue_script__$v,
+    __vue_scope_id__$v,
+    __vue_is_functional_template__$v,
+    __vue_module_identifier__$v,
+    typeof __vue_create_injector__$v !== 'undefined' ? __vue_create_injector__$v : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+  //
+  //
+  //
 
 
-
-  var Layers = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span')},staticRenderFns: [],
+  var script$w = {
     name: 'CamomileLayers',
 
     props: {
@@ -5075,9 +10375,127 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$w = script$w;
+              
+  /* template */
+  var __vue_render__$w = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("span")
+  };
+  var __vue_staticRenderFns__$w = [];
+  __vue_render__$w._withStripped = true;
 
-  var LayersList = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Layers")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: _vm.layerNew });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),(_vm.layers && _vm.layers.length > 0)?_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"checkbox"},domProps:{"value":layer.id,"checked":_vm.activeIds.indexOf(layer.id) !== -1},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(_vm._s(layer.name))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupPermissionsConfig, element: layer });}}},[_vm._v("Permissions")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: layer });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: layer });}}},[_vm._v("Remove")]):_vm._e()])])})],2):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+  var __vue_template__$w = typeof __vue_render__$w !== 'undefined'
+    ? { render: __vue_render__$w, staticRenderFns: __vue_staticRenderFns__$w }
+    : {};
+  /* style */
+  var __vue_inject_styles__$w = undefined;
+  /* scoped */
+  var __vue_scope_id__$w = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$w = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$w = false;
+  /* component normalizer */
+  function __vue_normalize__$w(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/layers/index.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$w() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$w.styles || (__vue_create_injector__$w.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var Layers = __vue_normalize__$w(
+    __vue_template__$w,
+    __vue_inject_styles__$w,
+    typeof __vue_script__$w === 'undefined' ? {} : __vue_script__$w,
+    __vue_scope_id__$w,
+    __vue_is_functional_template__$w,
+    __vue_module_identifier__$w,
+    typeof __vue_create_injector__$w !== 'undefined' ? __vue_create_injector__$w : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$x = {
     name: 'CamomileLayersList',
 
     props: {
@@ -5169,36 +10587,267 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$x = script$x;
+              
+  /* template */
+  var __vue_render__$x = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "p bg-bg mb" }, [
+      _c("div", { staticClass: "flex flex-start" }, [
+        _c("h2", { staticClass: "mt-xs" }, [_vm._v("Layers")]),
+        _vm._v(" "),
+        _vm.corpuPermission === 3
+          ? _c(
+              "button",
+              {
+                staticClass: "btn-border flex-right px-s py-xs",
+                on: {
+                  click: function($event) {
+                    _vm.popupOpen({
+                      config: _vm.popupAddConfig,
+                      element: _vm.layerNew
+                    });
+                  }
+                }
+              },
+              [_c("i", { staticClass: "icon-24 icon-24-plus" })]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm.layers && _vm.layers.length > 0
+        ? _c(
+            "table",
+            { staticClass: "table mb-0" },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _vm._l(_vm.layers, function(layer) {
+                return _c("tr", { key: layer.id }, [
+                  _c("td", [
+                    _c("input", {
+                      attrs: { type: "checkbox" },
+                      domProps: {
+                        value: layer.id,
+                        checked: _vm.activeIds.indexOf(layer.id) !== -1
+                      },
+                      on: { change: _vm.set }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(layer.name))]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "text-right" }, [
+                    layer.permission === 3
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn-border p-s my--s h6",
+                            on: {
+                              click: function($event) {
+                                _vm.popupOpen({
+                                  config: _vm.popupPermissionsConfig,
+                                  element: layer
+                                });
+                              }
+                            }
+                          },
+                          [_vm._v("Permissions")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    layer.permission === 3
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn-border p-s my--s h6",
+                            on: {
+                              click: function($event) {
+                                _vm.popupOpen({
+                                  config: _vm.popupEditConfig,
+                                  element: layer
+                                });
+                              }
+                            }
+                          },
+                          [_vm._v("Edit")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    layer.permission === 3
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn-border p-s my--s h6",
+                            on: {
+                              click: function($event) {
+                                _vm.popupOpen({
+                                  config: _vm.popupRemoveConfig,
+                                  element: layer
+                                });
+                              }
+                            }
+                          },
+                          [_vm._v("Remove")]
+                        )
+                      : _vm._e()
+                  ])
+                ])
+              })
+            ],
+            2
+          )
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$x = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("tr", [_c("th"), _c("th", [_vm._v("Name")]), _c("th")])
+    }
+  ];
+  __vue_render__$x._withStripped = true;
+
+  var __vue_template__$x = typeof __vue_render__$x !== 'undefined'
+    ? { render: __vue_render__$x, staticRenderFns: __vue_staticRenderFns__$x }
+    : {};
+  /* style */
+  var __vue_inject_styles__$x = undefined;
+  /* scoped */
+  var __vue_scope_id__$x = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$x = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$x = false;
+  /* component normalizer */
+  function __vue_normalize__$x(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/layers/list.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$x() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$x.styles || (__vue_create_injector__$x.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var LayersList = __vue_normalize__$x(
+    __vue_template__$x,
+    __vue_inject_styles__$x,
+    typeof __vue_script__$x === 'undefined' ? {} : __vue_script__$x,
+    __vue_scope_id__$x,
+    __vue_is_functional_template__$x,
+    __vue_module_identifier__$x,
+    typeof __vue_create_injector__$x !== 'undefined' ? __vue_create_injector__$x : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var LayersListSimple = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Layers")]),_vm._v(" "),(_vm.layers && _vm.layers.length > 0)?_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return _c('tr',{key:layer.id},[_c('td',[_c('input',{attrs:{"type":"checkbox"},domProps:{"value":layer.id,"checked":_vm.activeIds.indexOf(layer.id) !== -1},on:{"change":_vm.set}})]),_vm._v(" "),_c('td',[_vm._v(" "+_vm._s(layer.name)+" ")])])})],2):_vm._e()])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Name")]),_c('th')])}],
+  var script$y = {
     name: 'CamomileLayersSelect',
 
     props: {
@@ -5237,26 +10886,183 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$y = script$y;
+              
+  /* template */
+  var __vue_render__$y = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "p bg-bg mb" }, [
+      _c("h2", { staticClass: "mt-xs" }, [_vm._v("Layers")]),
+      _vm._v(" "),
+      _vm.layers && _vm.layers.length > 0
+        ? _c(
+            "table",
+            { staticClass: "table mb-0" },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _vm._l(_vm.layers, function(layer) {
+                return _c("tr", { key: layer.id }, [
+                  _c("td", [
+                    _c("input", {
+                      attrs: { type: "checkbox" },
+                      domProps: {
+                        value: layer.id,
+                        checked: _vm.activeIds.indexOf(layer.id) !== -1
+                      },
+                      on: { change: _vm.set }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v("\n        " + _vm._s(layer.name) + "\n      ")
+                  ])
+                ])
+              })
+            ],
+            2
+          )
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$y = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("tr", [_c("th"), _c("th", [_vm._v("Name")]), _c("th")])
+    }
+  ];
+  __vue_render__$y._withStripped = true;
+
+  var __vue_template__$y = typeof __vue_render__$y !== 'undefined'
+    ? { render: __vue_render__$y, staticRenderFns: __vue_staticRenderFns__$y }
+    : {};
+  /* style */
+  var __vue_inject_styles__$y = undefined;
+  /* scoped */
+  var __vue_scope_id__$y = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$y = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$y = false;
+  /* component normalizer */
+  function __vue_normalize__$y(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/layers/list-simple.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$y() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$y.styles || (__vue_create_injector__$y.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var LayersListSimple = __vue_normalize__$y(
+    __vue_template__$y,
+    __vue_inject_styles__$y,
+    typeof __vue_script__$y === 'undefined' ? {} : __vue_script__$y,
+    __vue_scope_id__$y,
+    __vue_is_functional_template__$y,
+    __vue_module_identifier__$y,
+    typeof __vue_create_injector__$y !== 'undefined' ? __vue_create_injector__$y : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var LayersSelect = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Layers")]),_vm._v(" "),(_vm.layers && _vm.layers.length > 0)?_c('select',{on:{"change":_vm.setTarget}},_vm._l((_vm.layers),function(layer){return _c('option',{key:layer.id,domProps:{"value":layer.id,"selected":_vm.activeIds.indexOf(layer.id) !== -1}},[_vm._v(" "+_vm._s(layer.name)+" ")])})):_vm._e()])},staticRenderFns: [],
+  var script$z = {
     name: 'CamomileLayersSelect',
 
     props: {
@@ -5307,9 +11113,149 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$z = script$z;
+              
+  /* template */
+  var __vue_render__$z = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "p bg-bg mb" }, [
+      _c("h2", { staticClass: "mt-xs" }, [_vm._v("Layers")]),
+      _vm._v(" "),
+      _vm.layers && _vm.layers.length > 0
+        ? _c(
+            "select",
+            { on: { change: _vm.setTarget } },
+            _vm._l(_vm.layers, function(layer) {
+              return _c(
+                "option",
+                {
+                  key: layer.id,
+                  domProps: {
+                    value: layer.id,
+                    selected: _vm.activeIds.indexOf(layer.id) !== -1
+                  }
+                },
+                [_vm._v("\n      " + _vm._s(layer.name) + "\n    ")]
+              )
+            })
+          )
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$z = [];
+  __vue_render__$z._withStripped = true;
 
-  var LayersAdd = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('h2',[_vm._v("Layers")]),_vm._v(" "),(_vm.corpuPermission === 3)?_c('button',{staticClass:"btn px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: _vm.layerNew });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()])},staticRenderFns: [],
+  var __vue_template__$z = typeof __vue_render__$z !== 'undefined'
+    ? { render: __vue_render__$z, staticRenderFns: __vue_staticRenderFns__$z }
+    : {};
+  /* style */
+  var __vue_inject_styles__$z = undefined;
+  /* scoped */
+  var __vue_scope_id__$z = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$z = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$z = false;
+  /* component normalizer */
+  function __vue_normalize__$z(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/layers/select.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$z() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$z.styles || (__vue_create_injector__$z.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var LayersSelect = __vue_normalize__$z(
+    __vue_template__$z,
+    __vue_inject_styles__$z,
+    typeof __vue_script__$z === 'undefined' ? {} : __vue_script__$z,
+    __vue_scope_id__$z,
+    __vue_is_functional_template__$z,
+    __vue_module_identifier__$z,
+    typeof __vue_create_injector__$z !== 'undefined' ? __vue_create_injector__$z : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$A = {
     name: 'CamomileLayers',
 
     props: {
@@ -5358,14 +11304,152 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$A = script$A;
+              
+  /* template */
+  var __vue_render__$A = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "p bg-bg mb" }, [
+      _c("h2", [_vm._v("Layers")]),
+      _vm._v(" "),
+      _vm.corpuPermission === 3
+        ? _c(
+            "button",
+            {
+              staticClass: "btn px-s py-xs",
+              on: {
+                click: function($event) {
+                  _vm.popupOpen({
+                    config: _vm.popupAddConfig,
+                    element: _vm.layerNew
+                  });
+                }
+              }
+            },
+            [_c("i", { staticClass: "icon-24 icon-24-plus" })]
+          )
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$A = [];
+  __vue_render__$A._withStripped = true;
+
+  var __vue_template__$A = typeof __vue_render__$A !== 'undefined'
+    ? { render: __vue_render__$A, staticRenderFns: __vue_staticRenderFns__$A }
+    : {};
+  /* style */
+  var __vue_inject_styles__$A = undefined;
+  /* scoped */
+  var __vue_scope_id__$A = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$A = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$A = false;
+  /* component normalizer */
+  function __vue_normalize__$A(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/layers/add.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$A() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$A.styles || (__vue_create_injector__$A.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var LayersAdd = __vue_normalize__$A(
+    __vue_template__$A,
+    __vue_inject_styles__$A,
+    typeof __vue_script__$A === 'undefined' ? {} : __vue_script__$A,
+    __vue_scope_id__$A,
+    __vue_is_functional_template__$A,
+    __vue_module_identifier__$A,
+    typeof __vue_create_injector__$A !== 'undefined' ? __vue_create_injector__$A : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+  //
+  //
+  //
+  //
 
 
-
-
-  var Annotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span')},staticRenderFns: [],
+  var script$B = {
     name: 'CamomileAnnotations',
 
     props: {
@@ -5392,9 +11476,127 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$B = script$B;
+              
+  /* template */
+  var __vue_render__$B = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("span")
+  };
+  var __vue_staticRenderFns__$B = [];
+  __vue_render__$B._withStripped = true;
 
-  var annotationsLayerDetail = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',{class:{ 'bg-alt': _vm.disabled }},[_c('td',[_c('input',{attrs:{"disabled":_vm.disabled,"type":"radio"},domProps:{"value":_vm.annotation.id,"checked":_vm.activeId && _vm.activeId === _vm.annotation.id},on:{"change":function($event){_vm.set($event);}}})]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(_vm.annotation.id)))])]),_vm._v(" "),_c('td',[_vm._v(_vm._s(_vm.mediaName))]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.layerPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupEditConfig, element: _vm.annotation });}}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.layerPermission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupRemoveConfig, element: _vm.annotation });}}},[_vm._v("Remove")]):_vm._e()])])},staticRenderFns: [],
+  var __vue_template__$B = typeof __vue_render__$B !== 'undefined'
+    ? { render: __vue_render__$B, staticRenderFns: __vue_staticRenderFns__$B }
+    : {};
+  /* style */
+  var __vue_inject_styles__$B = undefined;
+  /* scoped */
+  var __vue_scope_id__$B = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$B = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$B = false;
+  /* component normalizer */
+  function __vue_normalize__$B(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/index.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$B() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$B.styles || (__vue_create_injector__$B.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var Annotations = __vue_normalize__$B(
+    __vue_template__$B,
+    __vue_inject_styles__$B,
+    typeof __vue_script__$B === 'undefined' ? {} : __vue_script__$B,
+    __vue_scope_id__$B,
+    __vue_is_functional_template__$B,
+    __vue_module_identifier__$B,
+    typeof __vue_create_injector__$B !== 'undefined' ? __vue_create_injector__$B : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$C = {
     name: 'CamomileAnnotations',
 
     props: {
@@ -5468,9 +11670,190 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$C = script$C;
+              
+  /* template */
+  var __vue_render__$C = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("tr", { class: { "bg-alt": _vm.disabled } }, [
+      _c("td", [
+        _c("input", {
+          attrs: { disabled: _vm.disabled, type: "radio" },
+          domProps: {
+            value: _vm.annotation.id,
+            checked: _vm.activeId && _vm.activeId === _vm.annotation.id
+          },
+          on: {
+            change: function($event) {
+              _vm.set($event);
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("td", [
+        _c(
+          "span",
+          { staticClass: "h6 bold bg-neutral color-bg py-xxs px-xs rnd" },
+          [_vm._v("…" + _vm._s(_vm._f("stringEnd")(_vm.annotation.id)))]
+        )
+      ]),
+      _vm._v(" "),
+      _c("td", [_vm._v(_vm._s(_vm.mediaName))]),
+      _vm._v(" "),
+      _c("td", { staticClass: "text-right" }, [
+        _vm.layerPermission === 3
+          ? _c(
+              "button",
+              {
+                staticClass: "btn-border p-s my--s h6",
+                on: {
+                  click: function($event) {
+                    _vm.popupOpen({
+                      config: _vm.popupEditConfig,
+                      element: _vm.annotation
+                    });
+                  }
+                }
+              },
+              [_vm._v("Edit")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.layerPermission === 3
+          ? _c(
+              "button",
+              {
+                staticClass: "btn-border p-s my--s h6",
+                on: {
+                  click: function($event) {
+                    _vm.popupOpen({
+                      config: _vm.popupRemoveConfig,
+                      element: _vm.annotation
+                    });
+                  }
+                }
+              },
+              [_vm._v("Remove")]
+            )
+          : _vm._e()
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$C = [];
+  __vue_render__$C._withStripped = true;
 
-  var annotationsLayer = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-s"},[_vm._v(_vm._s(_vm.layer.name))]),_vm._v(" "),(_vm.layer.permission === 3)?_c('button',{staticClass:"btn-border flex-right px-s py-xs",on:{"click":function($event){_vm.popupOpen({ config: _vm.popupAddConfig, element: { id: null, layerId: _vm.layer.id, mediaId: _vm.mediaId, fragment: _vm.layer.fragmentType, metadata: _vm.layer.metadataType } });}}},[_c('i',{staticClass:"icon-24 icon-24-plus"})]):_vm._e()]),_vm._v(" "),_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.annotations),function(annotation){return _c('annotations-layer-detail',{key:annotation.id,attrs:{"annotation":annotation,"disabled":_vm.annotationsFiltered.findIndex(function (a) { return a.id === annotation.id; }) === -1,"uid":_vm.uid,"layer-permission":_vm.layer.permission,"media-name":_vm.mediaName,"media-id":_vm.mediaId,"active-id":_vm.activeId}})})],2)])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th'),_c('th',[_vm._v("Id")]),_c('th',[_vm._v("Medium")]),_c('th')])}],
+  var __vue_template__$C = typeof __vue_render__$C !== 'undefined'
+    ? { render: __vue_render__$C, staticRenderFns: __vue_staticRenderFns__$C }
+    : {};
+  /* style */
+  var __vue_inject_styles__$C = undefined;
+  /* scoped */
+  var __vue_scope_id__$C = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$C = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$C = false;
+  /* component normalizer */
+  function __vue_normalize__$C(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/list/layer-annotation.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$C() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$C.styles || (__vue_create_injector__$C.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var annotationsLayerDetail = __vue_normalize__$C(
+    __vue_template__$C,
+    __vue_inject_styles__$C,
+    typeof __vue_script__$C === 'undefined' ? {} : __vue_script__$C,
+    __vue_scope_id__$C,
+    __vue_is_functional_template__$C,
+    __vue_module_identifier__$C,
+    typeof __vue_create_injector__$C !== 'undefined' ? __vue_create_injector__$C : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$D = {
     name: 'CamomileLayers',
 
     components: {
@@ -5542,9 +11925,194 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$D = script$D;
+              
+  /* template */
+  var __vue_render__$D = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", [
+      _c("div", { staticClass: "flex flex-start" }, [
+        _c("h2", { staticClass: "mt-s" }, [_vm._v(_vm._s(_vm.layer.name))]),
+        _vm._v(" "),
+        _vm.layer.permission === 3
+          ? _c(
+              "button",
+              {
+                staticClass: "btn-border flex-right px-s py-xs",
+                on: {
+                  click: function($event) {
+                    _vm.popupOpen({
+                      config: _vm.popupAddConfig,
+                      element: {
+                        id: null,
+                        layerId: _vm.layer.id,
+                        mediaId: _vm.mediaId,
+                        fragment: _vm.layer.fragmentType,
+                        metadata: _vm.layer.metadataType
+                      }
+                    });
+                  }
+                }
+              },
+              [_c("i", { staticClass: "icon-24 icon-24-plus" })]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c(
+        "table",
+        { staticClass: "table mb-0" },
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._l(_vm.annotations, function(annotation) {
+            return _c("annotations-layer-detail", {
+              key: annotation.id,
+              attrs: {
+                annotation: annotation,
+                disabled:
+                  _vm.annotationsFiltered.findIndex(function(a) {
+                    return a.id === annotation.id
+                  }) === -1,
+                uid: _vm.uid,
+                "layer-permission": _vm.layer.permission,
+                "media-name": _vm.mediaName,
+                "media-id": _vm.mediaId,
+                "active-id": _vm.activeId
+              }
+            })
+          })
+        ],
+        2
+      )
+    ])
+  };
+  var __vue_staticRenderFns__$D = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("tr", [
+        _c("th"),
+        _c("th", [_vm._v("Id")]),
+        _c("th", [_vm._v("Medium")]),
+        _c("th")
+      ])
+    }
+  ];
+  __vue_render__$D._withStripped = true;
 
-  var AnnotationsList = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_vm._m(0),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('annotations-layer',{key:layer.id,staticClass:"mt",attrs:{"layer":layer,"annotations":_vm.annotations[layer.id],"annotations-filtered":_vm.annotationsFiltered[layer.id],"active-id":_vm.activeId,"media-id":_vm.mediaId,"media-name":_vm.mediaName}}):_vm._e()})],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"flex flex-start"},[_c('h2',{staticClass:"mt-xs"},[_vm._v("Annotations")])])}],
+  var __vue_template__$D = typeof __vue_render__$D !== 'undefined'
+    ? { render: __vue_render__$D, staticRenderFns: __vue_staticRenderFns__$D }
+    : {};
+  /* style */
+  var __vue_inject_styles__$D = undefined;
+  /* scoped */
+  var __vue_scope_id__$D = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$D = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$D = false;
+  /* component normalizer */
+  function __vue_normalize__$D(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/list/layer.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$D() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$D.styles || (__vue_create_injector__$D.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var annotationsLayer = __vue_normalize__$D(
+    __vue_template__$D,
+    __vue_inject_styles__$D,
+    typeof __vue_script__$D === 'undefined' ? {} : __vue_script__$D,
+    __vue_scope_id__$D,
+    __vue_is_functional_template__$D,
+    __vue_module_identifier__$D,
+    typeof __vue_create_injector__$D !== 'undefined' ? __vue_create_injector__$D : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$E = {
     name: 'CamomileAnnotationsList',
 
     components: {
@@ -5587,9 +12155,160 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$E = script$E;
+              
+  /* template */
+  var __vue_render__$E = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      { staticClass: "p bg-bg mb" },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._l(_vm.layers, function(layer) {
+          return _vm.annotations[layer.id]
+            ? _c("annotations-layer", {
+                key: layer.id,
+                staticClass: "mt",
+                attrs: {
+                  layer: layer,
+                  annotations: _vm.annotations[layer.id],
+                  "annotations-filtered": _vm.annotationsFiltered[layer.id],
+                  "active-id": _vm.activeId,
+                  "media-id": _vm.mediaId,
+                  "media-name": _vm.mediaName
+                }
+              })
+            : _vm._e()
+        })
+      ],
+      2
+    )
+  };
+  var __vue_staticRenderFns__$E = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "flex flex-start" }, [
+        _c("h2", { staticClass: "mt-xs" }, [_vm._v("Annotations")])
+      ])
+    }
+  ];
+  __vue_render__$E._withStripped = true;
 
-  var popupAnnotationLabel = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"tablet-blobs"},[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.element.metadata.label),expression:"element.metadata.label"}],ref:"label",staticClass:"mb",attrs:{"type":"text","placeholder":"Label"},domProps:{"value":(_vm.element.metadata.label)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.element.metadata, "label", $event.target.value);}}})])]),_vm._v(" "),_c('div',{staticClass:"tablet-blobs"},[_c('div',{staticClass:"tablet-blob-1-4"}),_vm._v(" "),_c('div',{staticClass:"tablet-blob-3-4"},[_c('button',{staticClass:"btn-alt p-s full-x mb",attrs:{"disabled":!_vm.element.name && _vm.type !== 'annotations'},on:{"click":_vm.save,"keyup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.save($event)}}},[_vm._v("Save")]),_vm._v(" "),(_vm.error)?_c('div',{staticClass:"p-s bg-error color-bg italic mt mb"},[_vm._v(_vm._s(_vm.error))]):_vm._e()])])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"tablet-blob-1-4"},[_c('h4',{staticClass:"pt-s"},[_vm._v("Label")])])}],
+  var __vue_template__$E = typeof __vue_render__$E !== 'undefined'
+    ? { render: __vue_render__$E, staticRenderFns: __vue_staticRenderFns__$E }
+    : {};
+  /* style */
+  var __vue_inject_styles__$E = undefined;
+  /* scoped */
+  var __vue_scope_id__$E = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$E = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$E = false;
+  /* component normalizer */
+  function __vue_normalize__$E(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/list.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$E() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$E.styles || (__vue_create_injector__$E.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var AnnotationsList = __vue_normalize__$E(
+    __vue_template__$E,
+    __vue_inject_styles__$E,
+    typeof __vue_script__$E === 'undefined' ? {} : __vue_script__$E,
+    __vue_scope_id__$E,
+    __vue_is_functional_template__$E,
+    __vue_module_identifier__$E,
+    typeof __vue_create_injector__$E !== 'undefined' ? __vue_create_injector__$E : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$F = {
     name: 'CamomileAnnotationsPopupEdit',
 
     data: function data () {
@@ -5633,9 +12352,200 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$F = script$F;
+              
+  /* template */
+  var __vue_render__$F = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", [
+      _c("div", { staticClass: "tablet-blobs" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-3-4" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.element.metadata.label,
+                expression: "element.metadata.label"
+              }
+            ],
+            ref: "label",
+            staticClass: "mb",
+            attrs: { type: "text", placeholder: "Label" },
+            domProps: { value: _vm.element.metadata.label },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.element.metadata, "label", $event.target.value);
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "tablet-blobs" }, [
+        _c("div", { staticClass: "tablet-blob-1-4" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "tablet-blob-3-4" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn-alt p-s full-x mb",
+              attrs: {
+                disabled: !_vm.element.name && _vm.type !== "annotations"
+              },
+              on: {
+                click: _vm.save,
+                keyup: function($event) {
+                  if (
+                    !("button" in $event) &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.save($event)
+                }
+              }
+            },
+            [_vm._v("Save")]
+          ),
+          _vm._v(" "),
+          _vm.error
+            ? _c("div", { staticClass: "p-s bg-error color-bg italic mt mb" }, [
+                _vm._v(_vm._s(_vm.error))
+              ])
+            : _vm._e()
+        ])
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$F = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "tablet-blob-1-4" }, [
+        _c("h4", { staticClass: "pt-s" }, [_vm._v("Label")])
+      ])
+    }
+  ];
+  __vue_render__$F._withStripped = true;
 
-  var annotationButton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn px-s py-s mr-s h5 full-x flex",on:{"click":_vm.popupAnnotationLabelOpen}},[_vm._v(" "+_vm._s(_vm.layerName)+" "),_c('i',{staticClass:"icon-24 icon-24-plus mr-xs flex-right"})])},staticRenderFns: [],
+  var __vue_template__$F = typeof __vue_render__$F !== 'undefined'
+    ? { render: __vue_render__$F, staticRenderFns: __vue_staticRenderFns__$F }
+    : {};
+  /* style */
+  var __vue_inject_styles__$F = undefined;
+  /* scoped */
+  var __vue_scope_id__$F = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$F = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$F = false;
+  /* component normalizer */
+  function __vue_normalize__$F(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/ui/popup/annotation-label.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$F() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$F.styles || (__vue_create_injector__$F.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var popupAnnotationLabel = __vue_normalize__$F(
+    __vue_template__$F,
+    __vue_inject_styles__$F,
+    typeof __vue_script__$F === 'undefined' ? {} : __vue_script__$F,
+    __vue_scope_id__$F,
+    __vue_is_functional_template__$F,
+    __vue_module_identifier__$F,
+    typeof __vue_create_injector__$F !== 'undefined' ? __vue_create_injector__$F : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$G = {
     props: {
       layerId: {
         type: String,
@@ -5704,9 +12614,137 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$G = script$G;
+              
+  /* template */
+  var __vue_render__$G = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "button",
+      {
+        staticClass: "btn px-s py-s mr-s h5 full-x flex",
+        on: { click: _vm.popupAnnotationLabelOpen }
+      },
+      [
+        _vm._v("\n  " + _vm._s(_vm.layerName) + "\n  "),
+        _c("i", { staticClass: "icon-24 icon-24-plus mr-xs flex-right" })
+      ]
+    )
+  };
+  var __vue_staticRenderFns__$G = [];
+  __vue_render__$G._withStripped = true;
 
-  var AnnotationsButtons = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('h2',[_vm._v("Layers")]),_vm._v(" "),_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id] && layer.permission === 3)?_c('annotation-button',{key:("annotation-button-" + (layer.id)),attrs:{"layer-id":layer.id,"layer-name":layer.name,"media-id":_vm.mediaId,"time-current":_vm.timeCurrent,"time-total":_vm.timeTotal,"fragment-type":layer.fragmentType}}):_vm._e()})],2)},staticRenderFns: [],
+  var __vue_template__$G = typeof __vue_render__$G !== 'undefined'
+    ? { render: __vue_render__$G, staticRenderFns: __vue_staticRenderFns__$G }
+    : {};
+  /* style */
+  var __vue_inject_styles__$G = undefined;
+  /* scoped */
+  var __vue_scope_id__$G = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$G = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$G = false;
+  /* component normalizer */
+  function __vue_normalize__$G(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/buttons/button.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$G() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$G.styles || (__vue_create_injector__$G.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var annotationButton = __vue_normalize__$G(
+    __vue_template__$G,
+    __vue_inject_styles__$G,
+    typeof __vue_script__$G === 'undefined' ? {} : __vue_script__$G,
+    __vue_scope_id__$G,
+    __vue_is_functional_template__$G,
+    __vue_module_identifier__$G,
+    typeof __vue_create_injector__$G !== 'undefined' ? __vue_create_injector__$G : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$H = {
     components: {
       annotationButton: annotationButton
     },
@@ -5750,9 +12788,150 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$H = script$H;
+              
+  /* template */
+  var __vue_render__$H = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      { staticClass: "p bg-bg mb" },
+      [
+        _c("h2", [_vm._v("Layers")]),
+        _vm._v(" "),
+        _vm._l(_vm.layers, function(layer) {
+          return _vm.annotations[layer.id] && layer.permission === 3
+            ? _c("annotation-button", {
+                key: "annotation-button-" + layer.id,
+                attrs: {
+                  "layer-id": layer.id,
+                  "layer-name": layer.name,
+                  "media-id": _vm.mediaId,
+                  "time-current": _vm.timeCurrent,
+                  "time-total": _vm.timeTotal,
+                  "fragment-type": layer.fragmentType
+                }
+              })
+            : _vm._e()
+        })
+      ],
+      2
+    )
+  };
+  var __vue_staticRenderFns__$H = [];
+  __vue_render__$H._withStripped = true;
 
-  var annotationsBloc = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"annotation",style:({ left: ((_vm.left) + "px"), right: ((_vm.right) + "px") })},[_c('div',{staticClass:"relative full-y",on:{"mousedown":function($event){_vm.set($event);},"dblclick":_vm.popupAnotationLabelOpen}},[_c('div',{staticClass:"absolute handle handle-left",on:{"mousedown":function($event){_vm.dragLeftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handle handle-right",on:{"mousedown":function($event){_vm.dragRightOn($event);}}})])])},staticRenderFns: [],
+  var __vue_template__$H = typeof __vue_render__$H !== 'undefined'
+    ? { render: __vue_render__$H, staticRenderFns: __vue_staticRenderFns__$H }
+    : {};
+  /* style */
+  var __vue_inject_styles__$H = undefined;
+  /* scoped */
+  var __vue_scope_id__$H = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$H = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$H = false;
+  /* component normalizer */
+  function __vue_normalize__$H(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/buttons.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$H() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$H.styles || (__vue_create_injector__$H.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var AnnotationsButtons = __vue_normalize__$H(
+    __vue_template__$H,
+    __vue_inject_styles__$H,
+    typeof __vue_script__$H === 'undefined' ? {} : __vue_script__$H,
+    __vue_scope_id__$H,
+    __vue_is_functional_template__$H,
+    __vue_module_identifier__$H,
+    typeof __vue_create_injector__$H !== 'undefined' ? __vue_create_injector__$H : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$I = {
     props: {
       uid: {
         type: String,
@@ -5894,9 +13073,166 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$I = script$I;
+              
+  /* template */
+  var __vue_render__$I = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      {
+        ref: "annotation",
+        style: { left: _vm.left + "px", right: _vm.right + "px" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "relative full-y",
+            on: {
+              mousedown: function($event) {
+                _vm.set($event);
+              },
+              dblclick: _vm.popupAnotationLabelOpen
+            }
+          },
+          [
+            _c("div", {
+              staticClass: "absolute handle handle-left",
+              on: {
+                mousedown: function($event) {
+                  _vm.dragLeftOn($event);
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("div", {
+              staticClass: "absolute handle handle-right",
+              on: {
+                mousedown: function($event) {
+                  _vm.dragRightOn($event);
+                }
+              }
+            })
+          ]
+        )
+      ]
+    )
+  };
+  var __vue_staticRenderFns__$I = [];
+  __vue_render__$I._withStripped = true;
 
-  var timelineAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',_vm._l((_vm.annotations),function(annotation){return _c('annotations-bloc',{key:annotation.id,staticClass:"absolute annotation",class:{ active: annotation.id === _vm.activeId },attrs:{"annotation":annotation,"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":_vm.layerId,"time-total":_vm.timeTotal,"container-width":_vm.width,"container-left":_vm.left}})}))},staticRenderFns: [],
+  var __vue_template__$I = typeof __vue_render__$I !== 'undefined'
+    ? { render: __vue_render__$I, staticRenderFns: __vue_staticRenderFns__$I }
+    : {};
+  /* style */
+  var __vue_inject_styles__$I = undefined;
+  /* scoped */
+  var __vue_scope_id__$I = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$I = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$I = false;
+  /* component normalizer */
+  function __vue_normalize__$I(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/timeline/annotations-bloc.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$I() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$I.styles || (__vue_create_injector__$I.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var annotationsBloc = __vue_normalize__$I(
+    __vue_template__$I,
+    __vue_inject_styles__$I,
+    typeof __vue_script__$I === 'undefined' ? {} : __vue_script__$I,
+    __vue_scope_id__$I,
+    __vue_is_functional_template__$I,
+    __vue_module_identifier__$I,
+    typeof __vue_create_injector__$I !== 'undefined' ? __vue_create_injector__$I : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$J = {
     components: {
       annotationsBloc: annotationsBloc
     },
@@ -5939,9 +13275,145 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$J = script$J;
+              
+  /* template */
+  var __vue_render__$J = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      _vm._l(_vm.annotations, function(annotation) {
+        return _c("annotations-bloc", {
+          key: annotation.id,
+          staticClass: "absolute annotation",
+          class: { active: annotation.id === _vm.activeId },
+          attrs: {
+            annotation: annotation,
+            uid: _vm.uid,
+            "layers-uid": _vm.layersUid,
+            "layer-id": _vm.layerId,
+            "time-total": _vm.timeTotal,
+            "container-width": _vm.width,
+            "container-left": _vm.left
+          }
+        })
+      })
+    )
+  };
+  var __vue_staticRenderFns__$J = [];
+  __vue_render__$J._withStripped = true;
 
-  var AnnotationsTimeline = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"p bg-bg mb"},[_c('h2',[_vm._v("Timeline")]),_vm._v(" "),(_vm.layers)?_c('div',{staticClass:"relative overflow-hidden",style:({ height: ((48 * _vm.layers.length) + "px") })},[_c('div',{staticClass:"absolute timeline-cursor"}),_vm._v(" "),_c('div',{staticClass:"absolute timeline-annotations",style:({ top: 0, bottom: 0, left: ((_vm.left) + "px"), width: ((_vm.width) + "px") })},_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('timeline-annotations',{key:("annotations-" + (layer.id)),staticClass:"relative",style:({ height: "48px" }),attrs:{"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":layer.id,"annotations":_vm.annotations[layer.id],"time-total":_vm.timeTotal,"width":_vm.width,"left":_vm.left + _vm.containerLeft,"fragment-type":layer.fragmentType}}):_vm._e()}))]):_vm._e()])},staticRenderFns: [],
+  var __vue_template__$J = typeof __vue_render__$J !== 'undefined'
+    ? { render: __vue_render__$J, staticRenderFns: __vue_staticRenderFns__$J }
+    : {};
+  /* style */
+  var __vue_inject_styles__$J = undefined;
+  /* scoped */
+  var __vue_scope_id__$J = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$J = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$J = false;
+  /* component normalizer */
+  function __vue_normalize__$J(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/timeline/annotations.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$J() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$J.styles || (__vue_create_injector__$J.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var timelineAnnotations = __vue_normalize__$J(
+    __vue_template__$J,
+    __vue_inject_styles__$J,
+    typeof __vue_script__$J === 'undefined' ? {} : __vue_script__$J,
+    __vue_scope_id__$J,
+    __vue_is_functional_template__$J,
+    __vue_module_identifier__$J,
+    typeof __vue_create_injector__$J !== 'undefined' ? __vue_create_injector__$J : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$K = {
     components: {
       timelineAnnotations: timelineAnnotations
     },
@@ -6030,9 +13502,174 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$K = script$K;
+              
+  /* template */
+  var __vue_render__$K = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { ref: "container", staticClass: "p bg-bg mb" }, [
+      _c("h2", [_vm._v("Timeline")]),
+      _vm._v(" "),
+      _vm.layers
+        ? _c(
+            "div",
+            {
+              staticClass: "relative overflow-hidden",
+              style: { height: 48 * _vm.layers.length + "px" }
+            },
+            [
+              _c("div", { staticClass: "absolute timeline-cursor" }),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "absolute timeline-annotations",
+                  style: {
+                    top: 0,
+                    bottom: 0,
+                    left: _vm.left + "px",
+                    width: _vm.width + "px"
+                  }
+                },
+                _vm._l(_vm.layers, function(layer) {
+                  return _vm.annotations[layer.id]
+                    ? _c("timeline-annotations", {
+                        key: "annotations-" + layer.id,
+                        staticClass: "relative",
+                        style: { height: "48px" },
+                        attrs: {
+                          uid: _vm.uid,
+                          "layers-uid": _vm.layersUid,
+                          "layer-id": layer.id,
+                          annotations: _vm.annotations[layer.id],
+                          "time-total": _vm.timeTotal,
+                          width: _vm.width,
+                          left: _vm.left + _vm.containerLeft,
+                          "fragment-type": layer.fragmentType
+                        }
+                      })
+                    : _vm._e()
+                })
+              )
+            ]
+          )
+        : _vm._e()
+    ])
+  };
+  var __vue_staticRenderFns__$K = [];
+  __vue_render__$K._withStripped = true;
 
-  var AnnotationsEdit = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"p bg-bg mb"},[_c('h2',[_vm._v("Annotation")]),_vm._v(" "),_c('table',{staticClass:"table mb-0"},[_vm._m(0),_vm._v(" "),(_vm.annotation)?_c('tr',[_c('td',[_vm._v(_vm._s(_vm.annotation.metadata.label))]),_vm._v(" "),_c('td',[_c('span',{staticClass:"h6 bold bg-neutral color-bg py-xxs px-xs rnd mt-xxs"},[_vm._v("…"+_vm._s(_vm._f("stringEnd")(_vm.annotation.id)))])]),_vm._v(" "),_c('td',{staticClass:"text-right"},[(_vm.layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":_vm.popupEditOpen}},[_vm._v("Edit")]):_vm._e(),_vm._v(" "),(_vm.layer.permission === 3)?_c('button',{staticClass:"btn-border p-s my--s h6",on:{"click":_vm.popupRemoveOpen}},[_vm._v("Remove")]):_vm._e()])]):_vm._e()])])},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',[_vm._v("Label")]),_c('th',[_vm._v("ID")]),_c('th')])}],
+  var __vue_template__$K = typeof __vue_render__$K !== 'undefined'
+    ? { render: __vue_render__$K, staticRenderFns: __vue_staticRenderFns__$K }
+    : {};
+  /* style */
+  var __vue_inject_styles__$K = undefined;
+  /* scoped */
+  var __vue_scope_id__$K = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$K = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$K = false;
+  /* component normalizer */
+  function __vue_normalize__$K(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/timeline.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$K() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$K.styles || (__vue_create_injector__$K.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var AnnotationsTimeline = __vue_normalize__$K(
+    __vue_template__$K,
+    __vue_inject_styles__$K,
+    typeof __vue_script__$K === 'undefined' ? {} : __vue_script__$K,
+    __vue_scope_id__$K,
+    __vue_is_functional_template__$K,
+    __vue_module_identifier__$K,
+    typeof __vue_create_injector__$K !== 'undefined' ? __vue_create_injector__$K : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$L = {
     props: {
       uid: {
         type: String,
@@ -6083,26 +13720,202 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$L = script$L;
+              
+  /* template */
+  var __vue_render__$L = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "p bg-bg mb" }, [
+      _c("h2", [_vm._v("Annotation")]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table mb-0" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm.annotation
+          ? _c("tr", [
+              _c("td", [_vm._v(_vm._s(_vm.annotation.metadata.label))]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "span",
+                  {
+                    staticClass:
+                      "h6 bold bg-neutral color-bg py-xxs px-xs rnd mt-xxs"
+                  },
+                  [_vm._v("…" + _vm._s(_vm._f("stringEnd")(_vm.annotation.id)))]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-right" }, [
+                _vm.layer.permission === 3
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn-border p-s my--s h6",
+                        on: { click: _vm.popupEditOpen }
+                      },
+                      [_vm._v("Edit")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.layer.permission === 3
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn-border p-s my--s h6",
+                        on: { click: _vm.popupRemoveOpen }
+                      },
+                      [_vm._v("Remove")]
+                    )
+                  : _vm._e()
+              ])
+            ])
+          : _vm._e()
+      ])
+    ])
+  };
+  var __vue_staticRenderFns__$L = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("tr", [
+        _c("th", [_vm._v("Label")]),
+        _c("th", [_vm._v("ID")]),
+        _c("th")
+      ])
+    }
+  ];
+  __vue_render__$L._withStripped = true;
+
+  var __vue_template__$L = typeof __vue_render__$L !== 'undefined'
+    ? { render: __vue_render__$L, staticRenderFns: __vue_staticRenderFns__$L }
+    : {};
+  /* style */
+  var __vue_inject_styles__$L = undefined;
+  /* scoped */
+  var __vue_scope_id__$L = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$L = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$L = false;
+  /* component normalizer */
+  function __vue_normalize__$L(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/edit.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$L() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$L.styles || (__vue_create_injector__$L.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
 
 
+  var AnnotationsEdit = __vue_normalize__$L(
+    __vue_template__$L,
+    __vue_inject_styles__$L,
+    typeof __vue_script__$L === 'undefined' ? {} : __vue_script__$L,
+    __vue_scope_id__$L,
+    __vue_is_functional_template__$L,
+    __vue_module_identifier__$L,
+    typeof __vue_create_injector__$L !== 'undefined' ? __vue_create_injector__$L : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var annotationsBloc$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.visible)?_c('div',{ref:"annotation",style:({ left: ((_vm.left) + "%"), top: ((_vm.top) + "%"), width:((_vm.width) + "%"), height:((_vm.height) + "%") })},[_c('div',{staticClass:"relative full-y",on:{"mousedown":function($event){_vm.set($event);}}},[_c('div',{staticClass:"absolute handle handle-topleft",on:{"mousedown":function($event){_vm.dragTopleftOn($event);}}}),_vm._v(" "),_c('div',{staticClass:"absolute handle handle-bottomright",on:{"mousedown":function($event){_vm.dragBottomrightOn($event);}}})])]):_vm._e()},staticRenderFns: [],
+  var script$M = {
     props: {
       uid: {
         type: String,
@@ -6265,8 +14078,171 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
-  var zoningAnnotations = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container"},_vm._l((_vm.annotations),function(annotation){return _c('annotations-bloc',{key:annotation.id,staticClass:"absolute annotation",style:({ zIndex: annotation.id === _vm.activeId ? 1 : 0}),attrs:{"annotation":annotation,"uid":_vm.uid,"layers-uid":_vm.layersUid,"time-total":_vm.timeTotal,"time-current":_vm.timeCurrent,"container-width":_vm.containerWidth,"container-height":_vm.containerHeight}})}))},staticRenderFns: [],
+  var __vue_script__$M = script$M;
+              
+  /* template */
+  var __vue_render__$M = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _vm.visible
+      ? _c(
+          "div",
+          {
+            ref: "annotation",
+            style: {
+              left: _vm.left + "%",
+              top: _vm.top + "%",
+              width: _vm.width + "%",
+              height: _vm.height + "%"
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "relative full-y",
+                on: {
+                  mousedown: function($event) {
+                    _vm.set($event);
+                  }
+                }
+              },
+              [
+                _c("div", {
+                  staticClass: "absolute handle handle-topleft",
+                  on: {
+                    mousedown: function($event) {
+                      _vm.dragTopleftOn($event);
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("div", {
+                  staticClass: "absolute handle handle-bottomright",
+                  on: {
+                    mousedown: function($event) {
+                      _vm.dragBottomrightOn($event);
+                    }
+                  }
+                })
+              ]
+            )
+          ]
+        )
+      : _vm._e()
+  };
+  var __vue_staticRenderFns__$M = [];
+  __vue_render__$M._withStripped = true;
+
+  var __vue_template__$M = typeof __vue_render__$M !== 'undefined'
+    ? { render: __vue_render__$M, staticRenderFns: __vue_staticRenderFns__$M }
+    : {};
+  /* style */
+  var __vue_inject_styles__$M = undefined;
+  /* scoped */
+  var __vue_scope_id__$M = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$M = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$M = false;
+  /* component normalizer */
+  function __vue_normalize__$M(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/zoning/annotations-bloc.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$M() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$M.styles || (__vue_create_injector__$M.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var annotationsBloc$1 = __vue_normalize__$M(
+    __vue_template__$M,
+    __vue_inject_styles__$M,
+    typeof __vue_script__$M === 'undefined' ? {} : __vue_script__$M,
+    __vue_scope_id__$M,
+    __vue_is_functional_template__$M,
+    __vue_module_identifier__$M,
+    typeof __vue_create_injector__$M !== 'undefined' ? __vue_create_injector__$M : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+  var script$N = {
     components: {
       annotationsBloc: annotationsBloc$1
     },
@@ -6318,9 +14294,146 @@
     }
   };
 
-  (function(){ if(typeof document !== 'undefined'){ var head=document.head||document.getElementsByTagName('head')[0], style=document.createElement('style'), css=""; style.type='text/css'; if (style.styleSheet){ style.styleSheet.cssText = css; } else { style.appendChild(document.createTextNode(css)); } head.appendChild(style); } })();
+  var __vue_script__$N = script$N;
+              
+  /* template */
+  var __vue_render__$N = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      { ref: "container" },
+      _vm._l(_vm.annotations, function(annotation) {
+        return _c("annotations-bloc", {
+          key: annotation.id,
+          staticClass: "absolute annotation",
+          style: { zIndex: annotation.id === _vm.activeId ? 1 : 0 },
+          attrs: {
+            annotation: annotation,
+            uid: _vm.uid,
+            "layers-uid": _vm.layersUid,
+            "time-total": _vm.timeTotal,
+            "time-current": _vm.timeCurrent,
+            "container-width": _vm.containerWidth,
+            "container-height": _vm.containerHeight
+          }
+        })
+      })
+    )
+  };
+  var __vue_staticRenderFns__$N = [];
+  __vue_render__$N._withStripped = true;
 
-  var AnnotationsZoning = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"container",staticClass:"relative full-y mb"},[_vm._l((_vm.layers),function(layer){return (_vm.annotations[layer.id])?_c('zoning-annotations',{key:("annotations-" + (layer.id)),staticClass:"absolute full",attrs:{"uid":_vm.uid,"layers-uid":_vm.layersUid,"layer-id":layer.id,"annotations":_vm.annotations[layer.id],"time-total":_vm.timeTotal,"time-current":_vm.timeCurrent}}):_vm._e()}),_vm._v(" "),_vm._t("default",null,{mediaUid:_vm.mediaUid})],2)},staticRenderFns: [],
+  var __vue_template__$N = typeof __vue_render__$N !== 'undefined'
+    ? { render: __vue_render__$N, staticRenderFns: __vue_staticRenderFns__$N }
+    : {};
+  /* style */
+  var __vue_inject_styles__$N = undefined;
+  /* scoped */
+  var __vue_scope_id__$N = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$N = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$N = false;
+  /* component normalizer */
+  function __vue_normalize__$N(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/zoning/annotations.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$N() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$N.styles || (__vue_create_injector__$N.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var zoningAnnotations = __vue_normalize__$N(
+    __vue_template__$N,
+    __vue_inject_styles__$N,
+    typeof __vue_script__$N === 'undefined' ? {} : __vue_script__$N,
+    __vue_scope_id__$N,
+    __vue_is_functional_template__$N,
+    __vue_module_identifier__$N,
+    typeof __vue_create_injector__$N !== 'undefined' ? __vue_create_injector__$N : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
+
+  //
+
+  var script$O = {
     components: { zoningAnnotations: zoningAnnotations },
 
     props: {
@@ -6396,6 +14509,148 @@
       }
     }
   };
+
+  var __vue_script__$O = script$O;
+              
+  /* template */
+  var __vue_render__$O = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      { ref: "container", staticClass: "relative full-y mb" },
+      [
+        _vm._l(_vm.layers, function(layer) {
+          return _vm.annotations[layer.id]
+            ? _c("zoning-annotations", {
+                key: "annotations-" + layer.id,
+                staticClass: "absolute full",
+                attrs: {
+                  uid: _vm.uid,
+                  "layers-uid": _vm.layersUid,
+                  "layer-id": layer.id,
+                  annotations: _vm.annotations[layer.id],
+                  "time-total": _vm.timeTotal,
+                  "time-current": _vm.timeCurrent
+                }
+              })
+            : _vm._e()
+        }),
+        _vm._v(" "),
+        _vm._t("default", null, { mediaUid: _vm.mediaUid })
+      ],
+      2
+    )
+  };
+  var __vue_staticRenderFns__$O = [];
+  __vue_render__$O._withStripped = true;
+
+  var __vue_template__$O = typeof __vue_render__$O !== 'undefined'
+    ? { render: __vue_render__$O, staticRenderFns: __vue_staticRenderFns__$O }
+    : {};
+  /* style */
+  var __vue_inject_styles__$O = undefined;
+  /* scoped */
+  var __vue_scope_id__$O = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$O = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$O = false;
+  /* component normalizer */
+  function __vue_normalize__$O(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    var component = script || {};
+
+    {
+      component.__file = "/Volumes/Fr-01-Work/Sites/camomile-ui/src/components/annotations/zoning.vue";
+    }
+
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+
+      if (functional) { component.functional = true; }
+    }
+
+    component._scopeId = scope;
+
+    return component
+  }
+  /* style inject */
+  function __vue_create_injector__$O() {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var styles = __vue_create_injector__$O.styles || (__vue_create_injector__$O.styles = {});
+    var isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) { return } // SSR styles are present.
+
+      var group = isOldIE ? css.media || 'default' : id;
+      var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+      if (!style.ids.includes(id)) {
+        var code = css.source;
+        var index = style.ids.length;
+
+        style.ids.push(id);
+
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+
+        if (!style.element) {
+          var el = style.element = document.createElement('style');
+          el.type = 'text/css';
+
+          if (css.media) { el.setAttribute('media', css.media); }
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+
+          head.appendChild(el);
+        }
+
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          var textNode = document.createTextNode(code);
+          var nodes = style.element.childNodes;
+          if (nodes[index]) { style.element.removeChild(nodes[index]); }
+          if (nodes.length) { style.element.insertBefore(textNode, nodes[index]); }
+          else { style.element.appendChild(textNode); }
+        }
+      }
+    }
+  }
+  /* style inject SSR */
+
+
+  var AnnotationsZoning = __vue_normalize__$O(
+    __vue_template__$O,
+    __vue_inject_styles__$O,
+    typeof __vue_script__$O === 'undefined' ? {} : __vue_script__$O,
+    __vue_scope_id__$O,
+    __vue_is_functional_template__$O,
+    __vue_module_identifier__$O,
+    typeof __vue_create_injector__$O !== 'undefined' ? __vue_create_injector__$O : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  )
 
   var app = {
     App: App,

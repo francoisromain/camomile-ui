@@ -4,8 +4,8 @@
     <textarea
       ref="field"
       v-model="fields"
-      @keyup="resize"
-      class="mb"></textarea>
+      class="mb"
+      @keyup="resize" />
   </div>
 </template>
 

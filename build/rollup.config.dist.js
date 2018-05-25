@@ -5,7 +5,7 @@ import postcss from 'rollup-plugin-postcss'
 import json from 'rollup-plugin-json'
 import builtins from 'rollup-plugin-node-builtins'
 import buble from 'rollup-plugin-buble'
-import uglify from 'rollup-plugin-uglify'
+import { uglify } from 'rollup-plugin-uglify'
 import pkg from '../package.json'
 
 export default [

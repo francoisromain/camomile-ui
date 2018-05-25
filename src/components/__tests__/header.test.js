@@ -1,4 +1,4 @@
-import { mount, shallow, createLocalVue } from '@vue/test-utils'
+import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import { createRenderer } from 'vue-server-renderer'
 import Vuex from 'vuex'
 import header from '../ui/header/index.vue'
@@ -58,7 +58,7 @@ describe('header', () => {
   })
 
   it('renders the correct markup before login', () => {
-    const headerWrapper = shallow(header, { store, localVue })
+    const headerWrapper = shallowMount(header, { store, localVue })
     const titleWrapper = mount(headerTitle, { store, localVue })
 
     expect(headerWrapper.html()).toContain(
@@ -70,7 +70,7 @@ describe('header', () => {
 
   it('renders the correct markup after login', () => {
     store.state.user.isLogged = true
-    const wrapper = shallow(header, { store, localVue })
+    const wrapper = shallowMount(header, { store, localVue })
     expect(wrapper.html()).toContain(
       '<div class="tablet-blobs"><div class="tablet-blob-1-4"><!----></div> <div class="tablet-blob-1-2"><div class="blobs"><div class="blob"><!----></div> <div class="blob-auto"><!----></div></div></div> <div class="blob flex-right"><!----></div></div>'
     )
@@ -78,7 +78,7 @@ describe('header', () => {
 
   it('has not changed snapshot before login', () => {
     store.state.user.isLogged = false
-    const wrapper = shallow(header, { store, localVue })
+    const wrapper = shallowMount(header, { store, localVue })
     renderer.renderToString(wrapper.vm, (err, str) => {
       if (err) throw err
       expect(str).toMatchSnapshot()
@@ -86,7 +86,7 @@ describe('header', () => {
   })
 
   it('has not changed snapshot after login', () => {
-    const wrapper = shallow(header, { store, localVue })
+    const wrapper = shallowMount(header, { store, localVue })
     store.state.user.isLogged = true
     renderer.renderToString(wrapper.vm, (err, str) => {
       if (err) throw err
