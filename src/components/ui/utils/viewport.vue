@@ -16,6 +16,6 @@ export default {
       return this.$store.dispatch('viewport/set')
     }
   }
-};
+}
 </script>
 

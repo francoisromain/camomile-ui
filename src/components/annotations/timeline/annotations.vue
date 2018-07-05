@@ -59,5 +59,5 @@ export default {
       return this.$store.state.annotations.actives[this.uid]
     }
   }
-};
+}
 </script>

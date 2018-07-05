@@ -157,5 +157,5 @@ export default {
       this.$refs.video.volume = 0
     }
   }
-};
+}
 </script>

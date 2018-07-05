@@ -44,5 +44,5 @@ export default {
       return this.$store.state.user.isLogged
     }
   }
-};
+}
 </script>

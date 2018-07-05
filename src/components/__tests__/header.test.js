@@ -2,7 +2,7 @@ import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
 import { createRenderer } from 'vue-server-renderer'
 import Vuex from 'vuex'
 import header from '../ui/header/index.vue'
-import headerTitle from '../ui/header/title.vue'
+import cmlTitle from '../ui/header/title.vue'
 import headerSync from '../ui/header/sync.vue'
 import headerUserbutton from '../ui/header/userbutton.vue'
 
@@ -58,11 +58,14 @@ describe('header', () => {
   })
 
   it('renders the correct markup before login', () => {
-    const headerWrapper = shallowMount(header, { store, localVue })
-    const titleWrapper = mount(headerTitle, { store, localVue })
+    const headerWrapper = mount(header, {
+      store,
+      localVue
+    })
+    const titleWrapper = mount(cmlTitle, { store, localVue })
 
     expect(headerWrapper.html()).toContain(
-      '<div class="tablet-blobs"><div class="tablet-blob-1-4"><!----></div> <!----> <!----></div>'
+      '<div class="tablet-blobs"><div class="tablet-blob-1-4"><h1 class="mb-0">Camomile-ui</h1></div> <!----> <!----></div>'
     )
 
     expect(titleWrapper.html()).toBe('<h1 class="mb-0">Camomile-ui</h1>')
@@ -70,15 +73,15 @@ describe('header', () => {
 
   it('renders the correct markup after login', () => {
     store.state.user.isLogged = true
-    const wrapper = shallowMount(header, { store, localVue })
+    const wrapper = mount(header, { store, localVue })
     expect(wrapper.html()).toContain(
-      '<div class="tablet-blobs"><div class="tablet-blob-1-4"><!----></div> <div class="tablet-blob-1-2"><div class="blobs"><div class="blob"><!----></div> <div class="blob-auto"><!----></div></div></div> <div class="blob flex-right"><!----></div></div>'
+      '<div class="tablet-blobs"><div class="tablet-blob-1-4"><h1 class="mb-0">Camomile-ui</h1></div> <div class="tablet-blob-1-2"><div class="blobs"><div class="blob"><button class="btn-menubar px-m py-s full-x mb-0"><i class="icon-24 icon-24-dot"></i></button></div> <div class="blob-auto"><h6 class="menubar-infos mb-0"></h6></div></div></div> <div class="blob flex-right"><button class="btn-menubar px-m py-s full-x">lu</button></div></div>'
     )
   })
 
   it('has not changed snapshot before login', () => {
     store.state.user.isLogged = false
-    const wrapper = shallowMount(header, { store, localVue })
+    const wrapper = mount(header, { store, localVue })
     renderer.renderToString(wrapper.vm, (err, str) => {
       if (err) throw err
       expect(str).toMatchSnapshot()
@@ -86,7 +89,7 @@ describe('header', () => {
   })
 
   it('has not changed snapshot after login', () => {
-    const wrapper = shallowMount(header, { store, localVue })
+    const wrapper = mount(header, { store, localVue })
     store.state.user.isLogged = true
     renderer.renderToString(wrapper.vm, (err, str) => {
       if (err) throw err

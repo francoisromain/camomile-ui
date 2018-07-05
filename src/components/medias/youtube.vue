@@ -237,5 +237,5 @@ export default {
       return url.match(regex) ? RegExp.$2 : url
     }
   }
-};
+}
 </script>

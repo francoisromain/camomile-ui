@@ -77,5 +77,5 @@ export default {
       return fragmentType
     }
   }
-};
+}
 </script>

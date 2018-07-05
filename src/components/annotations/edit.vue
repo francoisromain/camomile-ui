@@ -77,5 +77,5 @@ export default {
       return this.$store.commit('popup/open', { config: this.popupRemoveConfig, element: this.annotation })
     }
   }
-};
+}
 </script>

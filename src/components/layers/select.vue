@@ -64,5 +64,5 @@ export default {
       this.set({ id: e.target.value })
     }
   }
-};
+}
 </script>

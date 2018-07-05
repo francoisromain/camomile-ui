@@ -23,5 +23,5 @@ export default {
       this.$store.dispatch('sync/all')
     }
   }
-};
+}
 </script>

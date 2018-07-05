@@ -120,5 +120,5 @@ export default {
     },
     resize () { }
   }
-};
+}
 </script>

@@ -3,20 +3,22 @@
 exports[`header has not changed snapshot after login 1`] = `
 <div class="tablet-blobs">
   <div class="tablet-blob-1-4">
-    <!---->
+    <h1 class="mb-0">Camomile-ui</h1>
   </div>
   <div class="tablet-blob-1-2">
     <div class="blobs">
       <div class="blob">
-        <!---->
+        <button class="btn-menubar px-m py-s full-x mb-0">
+          <i class="icon-24 icon-24-dot"></i>
+        </button>
       </div>
       <div class="blob-auto">
-        <!---->
+        <h6 class="menubar-infos mb-0"></h6>
       </div>
     </div>
   </div>
   <div class="blob flex-right">
-    <!---->
+    <button class="btn-menubar px-m py-s full-x">lu</button>
   </div>
 </div>
 `;
@@ -24,7 +26,7 @@ exports[`header has not changed snapshot after login 1`] = `
 exports[`header has not changed snapshot before login 1`] = `
 <div class="tablet-blobs">
   <div class="tablet-blob-1-4">
-    <!---->
+    <h1 class="mb-0">Camomile-ui</h1>
   </div>
   <!---->
   <!---->

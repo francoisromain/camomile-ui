@@ -21,5 +21,5 @@ export default {
   created () {
     this.$store.commit('medias/register', { uid: this.uid, corpuUid: this.corpusUid })
   }
-};
+}
 </script>

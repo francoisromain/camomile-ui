@@ -78,5 +78,5 @@ export default {
       return this.permission === permission
     }
   }
-};
+}
 </script>

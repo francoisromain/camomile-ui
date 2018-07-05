@@ -11,5 +11,5 @@ export default {
       return this.$store.state.config.url
     }
   }
-};
+}
 </script>
